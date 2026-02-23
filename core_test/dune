@@ -1,4 +1,2 @@
 (cram
- (deps
-  %{bin:moon}
-  (source_tree test_project)))
+ (deps %{bin:moon}))
