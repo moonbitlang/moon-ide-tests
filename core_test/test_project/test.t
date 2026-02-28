@@ -23,11 +23,17 @@ Test peek-def for Heyx (type alias to named type):
   3 | type Heyx = @list.List[Int]
 
 
-TODO wrong output
-Test peek-def --loc for Heyx at usage site (line 5):
-  $ moon ide peek-def Heyx --loc tuple_type_bug.mbt:5 2>&1 | head -2
+  $ moon ide peek-def Heyx --loc tuple_type_bug.mbt:5 2>&1 | head -10
   Definition found at file $TESTCASE_ROOT/tuple_type_bug.mbt
     | type Hello = (Int, String)
+    | 
+  3 | type Heyx = @list.List[Int]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | 
+    | fn hello(x : Hello, y : Heyx ) -> Int {
+    |   0
+    | }
+  Definition found at file $MOON_HOME/lib/core/list/types.mbt
 
 TODO(peek-def-tuple-alias): peek-def --loc for Hello at usage site fails for tuple type alias
   $ moon ide peek-def Hello --loc tuple_type_bug.mbt:5 2>&1
