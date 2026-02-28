@@ -1,3 +1,5 @@
+  $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
+  $ export BUILD_PATH_PREFIX_MAP="\$MOON_HOME=$MOON_HOME:$BUILD_PATH_PREFIX_MAP"
 Test moon ide doc for core library functions (checking header only for stability):
   $ moon ide doc 'String::length' | head -5
   package "moonbitlang/core/string"
@@ -21,10 +23,6 @@ Test moon ide doc for Option type (header only):
   
     pub fn[T, U] Option::bind(T?, (T) -> U? raise?) -> U? raise?
     pub fn[X : Compare] Option::compare(X?, X?) -> Int
-
-TODO(doc-unqualified): moon ide doc 'HashMap' doesn't work without package prefix:
-  $ moon ide doc 'HashMap'
-  No results found for query: 'HashMap'
 
 Test moon ide doc for @hashmap.HashMap (with package prefix, header only):
   $ moon ide doc '@hashmap.HashMap' | head -5
