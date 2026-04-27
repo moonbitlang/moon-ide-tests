@@ -1,0 +1,16 @@
+import {
+  "Yoorkin/ArgParser" @arg_parser,
+  "moonbitlang/core/env",
+  "moonbitlang/core/hashset" @hashset,
+  "moonbitlang/core/strconv",
+  "moonbitlang/parser" @parser,
+  "moonbitlang/parser/basic" @basic,
+  "moonbitlang/parser/syntax" @syntax,
+  "moonbitlang/x/fs" @fs,
+  "moonbitlang/x/path" @path,
+  "moonbitlang/x/sys" @sys,
+}
+
+options(
+  "is-main": true,
+)
