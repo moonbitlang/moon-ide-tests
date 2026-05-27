@@ -17,13 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references trie --loc 'arg.mbt:2:7'
-Error: could not find references for symbol 'trie' at arg.mbt:2:7
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references Trie --loc 'arg.mbt:2:19'
+$ run_moon_ide moon ide find-references 'Trie' --loc 'arg.mbt:2:19'
 Found 3 references for symbol 'Trie':
 <WORKDIR>/arg.mbt:2:19-2:23:
   | ///| (escaped)
@@ -53,7 +47,48 @@ Found 3 references for symbol 'Trie':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references verbose --loc 'arg_test.mbt:3:7'
+$ run_moon_ide moon ide find-references 'Set_string' --loc 'arg.mbt:19:3'
+Found 4 references for symbol 'Set_string':
+<WORKDIR>/arg.mbt:19:3-19:13:
+   | pub(all) enum Spec { (escaped)
+   |   Unit(() -> Unit raise) (escaped)
+   |   String((String) -> Unit raise) (escaped)
+19 |   Set_string(Ref[String]) (escaped)
+   |   ^^^^^^^^^^ (escaped)
+   |   Set(Ref[Bool]) (escaped)
+   |   Clear(Ref[Bool]) (escaped)
+
+<WORKDIR>/arg.mbt:45:16-45:26:
+   |                 f(y) (escaped)
+   |                 continue ys (escaped)
+   |               } (escaped)
+45 |               (Set_string(r), [y, .. ys]) => { (escaped)
+   |                ^^^^^^^^^^ (escaped)
+   |                 r.val = y (escaped)
+   |                 continue ys (escaped)
+
+<WORKDIR>/arg.mbt:49:34-49:44:
+   |                 r.val = y (escaped)
+   |                 continue ys (escaped)
+   |               } (escaped)
+49 |               (String(_), []) | (Set_string(_), []) => (escaped)
+   |                                  ^^^^^^^^^^ (escaped)
+   |                 raise ErrorMsg("missing argument for \\{x}") (escaped)
+   |               (Set(r), _) => { (escaped)
+
+<WORKDIR>/arg_test.mbt:15:24-15:34:
+   |   let files = [] (escaped)
+   |   let options = [ (escaped)
+   |     ("--no-verbose", "-n", @ArgParser.Clear(verbose), "disable verbose message"), (escaped)
+15 |     ("--search", "-s", Set_string(keyword), "search for files"), (escaped)
+   |                        ^^^^^^^^^^ (escaped)
+   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
+   |   ] (escaped)
+
+```
+
+```mooncram
+$ run_moon_ide moon ide find-references 'verbose' --loc 'arg_test.mbt:3:7'
 Found 3 references for symbol 'verbose':
 <WORKDIR>/arg_test.mbt:3:7-3:14:
   | ///| (escaped)
@@ -84,7 +119,7 @@ Found 3 references for symbol 'verbose':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references keyword --loc 'arg_test.mbt:4:7'
+$ run_moon_ide moon ide find-references 'keyword' --loc 'arg_test.mbt:4:7'
 Found 3 references for symbol 'keyword':
 <WORKDIR>/arg_test.mbt:4:7-4:14:
   | ///| (escaped)
@@ -116,35 +151,7 @@ Found 3 references for symbol 'keyword':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'Trie'
-2 symbols found matching 'Trie'
-find-references only works with a single symbol, try to be more specific. (no-eol)
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Spec'
-`pub (all) enum Spec` in package Yoorkin/ArgParser at <WORKDIR>/arg.mbt:4-22
-4 | ///| (escaped)
-  | /// Matched option handler that used to interpret options. (escaped)
-  | ///  (escaped)
-  | ///  Unit - handle with callback   (escaped)
-  | ///  (escaped)
-  | ///  String - handle associated value with callback (escaped)
-  | ///  (escaped)
-  | ///  Set_string - set option to associated value  (escaped)
-  | ///  (escaped)
-  | ///  Set - set reference to true (escaped)
-  | ///  (escaped)
-  | ///  Clear - set reference to false (escaped)
-  | pub(all) enum Spec { (escaped)
-  |   Unit(() -> Unit raise) (escaped)
-  |   String((String) -> Unit raise) (escaped)
-  |   Set_string(Ref[String]) (escaped)
-  |   Set(Ref[Bool]) (escaped)
-  |   Clear(Ref[Bool]) (escaped)
-  | } (escaped)
-
+$ run_moon_ide moon ide find-references 'Spec' --loc 'arg.mbt:16:15'
 Found 5 references for symbol 'Spec':
 <WORKDIR>/arg.mbt:16:15-16:19:
    | ///  Set - set reference to true (escaped)
@@ -194,53 +201,7 @@ Found 5 references for symbol 'Spec':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'interpret'
-`fn interpret` in package Yoorkin/ArgParser at <WORKDIR>/arg.mbt:24-67
-24 | ///| (escaped)
-   | fn interpret( (escaped)
-   |   trie : @trie.T[Spec], (escaped)
-   |   xs : Array[String], (escaped)
-   |   fallback : (String) -> Unit raise, (escaped)
-   | ) -> Unit raise { (escaped)
-   |   for remaining = xs[:] { (escaped)
-   |     match remaining { (escaped)
-   |       [] => break () (escaped)
-   |       [x, .. rest] => (escaped)
-   |         match trie.lookup(x) { (escaped)
-   |           None => { (escaped)
-   |             fallback(x) (escaped)
-   |             continue rest (escaped)
-   |           } (escaped)
-   |           Some(spec) => (escaped)
-   |             match (spec, rest) { (escaped)
-   |               (String(f), [y, .. ys]) => { (escaped)
-   |                 f(y) (escaped)
-   |                 continue ys (escaped)
-   |               } (escaped)
-   |               (Set_string(r), [y, .. ys]) => { (escaped)
-   |                 r.val = y (escaped)
-   |                 continue ys (escaped)
-   |               } (escaped)
-   |               (String(_), []) | (Set_string(_), []) => (escaped)
-   |                 raise ErrorMsg("missing argument for \\{x}") (escaped)
-   |               (Set(r), _) => { (escaped)
-   |                 r.val = true (escaped)
-   |                 continue rest (escaped)
-   |               } (escaped)
-   |               (Clear(r), _) => { (escaped)
-   |                 r.val = false (escaped)
-   |                 continue rest (escaped)
-   |               } (escaped)
-   |               (Unit(f), _) => { (escaped)
-   |                 f() (escaped)
-   |                 continue rest (escaped)
-   |               } (escaped)
-   |             } (escaped)
-   |         } (escaped)
-   |     } (escaped)
-   |   } (escaped)
-   | } (escaped)
-
+$ run_moon_ide moon ide find-references 'interpret' --loc 'arg.mbt:25:4'
 Found 2 references for symbol 'interpret':
 <WORKDIR>/arg.mbt:25:4-25:13:
    | } (escaped)
@@ -263,20 +224,30 @@ Found 2 references for symbol 'interpret':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'parse'
-5 symbols found matching 'parse'
-find-references only works with a single symbol, try to be more specific. (no-eol)
-[1]
+$ run_moon_ide moon ide find-references 'parse' --loc 'arg.mbt:86:8'
+Found 2 references for symbol 'parse':
+<WORKDIR>/arg.mbt:86:8-86:13:
+   | ///  (escaped)
+   | /// If the input arguments contains help option or invalid input, the `parse`  (escaped)
+   | /// function will raise `ErrorMsg` error. (escaped)
+86 | pub fn parse( (escaped)
+   |        ^^^^^ (escaped)
+   |   speclist : Array[(String, String, Spec, String)], (escaped)
+   |   rest : (String) -> Unit raise, (escaped)
+
+<WORKDIR>/arg_test.mbt:19:27-19:32:
+   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
+   |   ] (escaped)
+   |   let argv = ["--search", ".mbt", "--delete", "file1", "file2", "-n"] (escaped)
+19 |   let _ = try? @ArgParser.parse(options, file => files.push(file), usage, argv) (escaped)
+   |                           ^^^^^ (escaped)
+   |   assert_eq(verbose.val, false) (escaped)
+   |   assert_eq(keyword.val, ".mbt") (escaped)
+
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'ErrorMsg'
-`pub error ErrorMsg` in package Yoorkin/ArgParser at <WORKDIR>/arg.mbt:108-111
-108 | ///| (escaped)
-    | pub suberror ErrorMsg { (escaped)
-    |   ErrorMsg(String) (escaped)
-    | } (escaped)
-
+$ run_moon_ide moon ide find-references 'ErrorMsg' --loc 'arg.mbt:109:14'
 Found 1 references for symbol 'ErrorMsg':
 <WORKDIR>/arg.mbt:109:14-109:22:
     | } (escaped)

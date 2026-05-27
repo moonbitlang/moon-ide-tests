@@ -17,35 +17,35 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover Bucket --loc 'src/types.mbt:17:13'
+$ run_moon_ide moon ide hover 'hash' --loc 'src/types.mbt:18:3'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {
-            ^^^^^^
-            ```moonbit
-            struct Bucket[K, V] {
-              hash: Int
-              key: K
-              mut value: V
-              mut next: Int
-              mut prev: Int
-            }
-            ```
-            ---
-            
-             桶结构，包含键值对信息和链表指针
+  hash : Int // 键的哈希值（缓存以避免重复计算）
+  ^^^^
+  ```moonbit
+  Int
+  ```
+  key : K // 键
+  mut value : V // 值
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'key' --loc 'src/types.mbt:19:3'
+/// 桶结构，包含键值对信息和链表指针
+priv struct Bucket[K, V] {
   hash : Int // 键的哈希值（缓存以避免重复计算）
   key : K // 键
+  ^^^
+  ```moonbit
+  K
+  ```
+  mut value : V // 值
+  mut next : Int // 链表后继索引，-1表示没有后继
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover K --loc 'src/types.mbt:17:20'
-No hover information found for symbol 'K' at src/types.mbt:17:20
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide hover Default_init_capacity --loc 'src/IndexMap.mbt:2:7'
+$ run_moon_ide moon ide hover 'Default_init_capacity' --loc 'src/IndexMap.mbt:2:7'
 ///|
 const Default_init_capacity = 8
       ^^^^^^^^^^^^^^^^^^^^^
@@ -58,7 +58,7 @@ const Default_init_capacity = 8
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover calc_grow_threshold --loc 'src/IndexMap.mbt:5:4'
+$ run_moon_ide moon ide hover 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
 const Default_init_capacity = 8
 
 ///|
@@ -72,7 +72,7 @@ fn calc_grow_threshold(capacity : Int) -> Int {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover m --loc 'src/IndexMap_test.mbt:17:7'
+$ run_moon_ide moon ide hover 'm' --loc 'src/IndexMap_test.mbt:17:7'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
@@ -85,7 +85,7 @@ test "new" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover T --loc 'src/IndexMap_test.mbt:17:19'
+$ run_moon_ide moon ide hover 'T' --loc 'src/IndexMap_test.mbt:17:19'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()

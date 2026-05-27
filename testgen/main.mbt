@@ -15,9 +15,14 @@ fn fatal(message : String) -> Unit {
 }
 
 ///|
+fn[T : @debug.Debug] debug_text(value : T) -> String {
+  @debug.render(@debug.to_repr(value))
+}
+
+///|
 fn write_generated_file_or_exit(path : String, content : String) -> Unit {
   @fs.write_string_to_file(path, content) catch {
-    err => fatal("failed to write \{path}: \{err}")
+    err => fatal("failed to write \{path}: \{debug_text(err)}")
   }
   println("generated \{path}")
 }
@@ -27,7 +32,7 @@ fn ensure_dir(path : String) -> Unit {
   if @fs.path_exists(path) {
     let is_dir = @fs.is_dir(path) catch {
       err => {
-        fatal("failed to check \{path}: \{err}")
+        fatal("failed to check \{path}: \{debug_text(err)}")
         false
       }
     }
@@ -36,7 +41,7 @@ fn ensure_dir(path : String) -> Unit {
     }
   } else {
     @fs.create_dir(path) catch {
-      err => fatal("failed to create \{path}: \{err}")
+      err => fatal("failed to create \{path}: \{debug_text(err)}")
     }
   }
 }
@@ -55,6 +60,22 @@ fn ensure_dir_tree(path : String) -> Unit {
     ensure_dir_tree(parent)
   }
   ensure_dir(path)
+}
+
+///|
+fn ensure_repo_dir(path : String) -> Unit {
+  if !@fs.path_exists(path) {
+    fatal("repo path does not exist: \{path}")
+  }
+  let is_dir = @fs.is_dir(path) catch {
+    err => {
+      fatal("failed to check repo path \{path}: \{debug_text(err)}")
+      false
+    }
+  }
+  if !is_dir {
+    fatal("repo path is not a directory: \{path}")
+  }
 }
 
 ///|
@@ -82,17 +103,17 @@ fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
 ///|
 fn without_program_name(args : Array[String]) -> Array[String] {
   let start = if args.length() == 0 { 0 } else { 1 }
-  args[start:].to_array()
+  args[start:].to_owned()
 }
 
 ///|
 fn parse_args(args : Array[String]) -> Args {
-  let repo_path_raw : Ref[String] = Ref::new("")
-  let output_dir_raw : Ref[String] = Ref::new("")
-  let repo_slug_raw : Ref[String] = Ref::new("")
-  let max_per_file_raw : Ref[String] = Ref::new("50")
-  let max_files_raw : Ref[String] = Ref::new("0")
-  let max_toplevel_raw : Ref[String] = Ref::new("20")
+  let repo_path_raw : Ref[String] = Ref("")
+  let output_dir_raw : Ref[String] = Ref("")
+  let repo_slug_raw : Ref[String] = Ref("")
+  let max_per_file_raw : Ref[String] = Ref("50")
+  let max_files_raw : Ref[String] = Ref("0")
+  let max_toplevel_raw : Ref[String] = Ref("20")
   let spec = [
     (
       "--repo",
@@ -138,21 +159,21 @@ fn parse_args(args : Array[String]) -> Args {
     args,
   ) catch {
     @arg_parser.ErrorMsg(message) => fatal(message)
-    err => fatal("\{err}")
+    err => fatal(debug_text(err))
   }
-  let max_per_file = @strconv.parse_int(max_per_file_raw.val) catch {
+  let max_per_file = @string.parse_int(max_per_file_raw.val) catch {
     _ => {
       fatal("invalid --max-per-file value: \{max_per_file_raw.val}")
       0
     }
   }
-  let max_files = @strconv.parse_int(max_files_raw.val) catch {
+  let max_files = @string.parse_int(max_files_raw.val) catch {
     _ => {
       fatal("invalid --max-files value: \{max_files_raw.val}")
       0
     }
   }
-  let max_toplevel = @strconv.parse_int(max_toplevel_raw.val) catch {
+  let max_toplevel = @string.parse_int(max_toplevel_raw.val) catch {
     _ => {
       fatal("invalid --max-toplevel value: \{max_toplevel_raw.val}")
       0
@@ -189,6 +210,7 @@ fn parse_args(args : Array[String]) -> Args {
 ///|
 fn run(args : Array[String]) -> Unit {
   let config = parse_args(args)
+  ensure_repo_dir(config.repo_path)
   let result = collect_cases(
     config.repo_path,
     config.max_per_file,
@@ -200,6 +222,6 @@ fn run(args : Array[String]) -> Unit {
 }
 
 ///|
-fn main {
-  run(without_program_name(@env.args()))
+pub fn run_cli(args : Array[String]) -> Unit {
+  run(without_program_name(args))
 }

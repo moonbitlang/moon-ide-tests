@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def pass --loc 'src/tests/good_test.mbt:4:4'
+$ run_moon_ide moon ide peek-def 'pass' --loc 'src/tests/good_test.mbt:4:4'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql (escaped)
   |  (escaped)
@@ -41,7 +41,7 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def input --loc 'src/tests/good_test.mbt:4:9'
+$ run_moon_ide moon ide peek-def 'input' --loc 'src/tests/good_test.mbt:4:9'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql (escaped)
   |  (escaped)
@@ -65,7 +65,7 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def read_and_parse --loc 'src/tests/tpch_test.mbt:2:4'
+$ run_moon_ide moon ide peek-def 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   | ///| (escaped)
 2 | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
@@ -87,7 +87,7 @@ Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def path --loc 'src/tests/tpch_test.mbt:2:19'
+$ run_moon_ide moon ide peek-def 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   | ///| (escaped)
 2 | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
@@ -109,7 +109,7 @@ Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def sql --loc 'src/tests/dialect_test.mbt:9:7'
+$ run_moon_ide moon ide peek-def 'sql' --loc 'src/tests/dialect_test.mbt:9:7'
 Definition found at file <WORKDIR>/src/tests/dialect_test.mbt
   |  (escaped)
   | // ===== MySQL SHOW Statement Tests (ported from datafusion) ===== (escaped)
@@ -135,7 +135,7 @@ Definition found at file <WORKDIR>/src/tests/dialect_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def parse_sql --loc 'src/tests/dialect_test.mbt:9:24'
+$ run_moon_ide moon ide peek-def 'parse_sql' --loc 'src/tests/dialect_test.mbt:9:24'
 Definition found at file <WORKDIR>/src/export.mbt
   |   LexerError(LexerError) (escaped)
   |   ParserError(ParserError) (escaped)
@@ -158,7 +158,7 @@ Definition found at file <WORKDIR>/src/export.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def pretty_print --loc 'src/ast.mbt:2:24'
+$ run_moon_ide moon ide peek-def 'pretty_print' --loc 'src/ast.mbt:2:24'
 Definition found at file <WORKDIR>/src/ast.mbt
   | ///| (escaped)
 2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String { (escaped)
@@ -180,7 +180,7 @@ Definition found at file <WORKDIR>/src/ast.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def obj --loc 'src/ast.mbt:2:37'
+$ run_moon_ide moon ide peek-def 'obj' --loc 'src/ast.mbt:2:37'
 Definition found at file <WORKDIR>/src/ast.mbt
   | ///| (escaped)
 2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String { (escaped)
@@ -202,7 +202,7 @@ Definition found at file <WORKDIR>/src/ast.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def Parser --loc 'src/dcl.mbt:5:4'
+$ run_moon_ide moon ide peek-def 'Parser' --loc 'src/dcl.mbt:5:4'
 Definition found at file <WORKDIR>/src/parser.mbt
    |  (escaped)
    | ///| (escaped)
@@ -228,7 +228,7 @@ Definition found at file <WORKDIR>/src/parser.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def parse_grant_statement --loc 'src/dcl.mbt:5:12'
+$ run_moon_ide moon ide peek-def 'parse_grant_statement' --loc 'src/dcl.mbt:5:12'
 Definition found at file <WORKDIR>/src/dcl.mbt
   | ///| (escaped)
   | // DCL (Data Control Language) parsing functions (escaped)
@@ -253,89 +253,79 @@ Definition found at file <WORKDIR>/src/dcl.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'pass'
-Found 1 symbols matching 'pass':
-
-`fn pass` in package moonbit-community/sqlparser/tests_blackbox_test at <WORKDIR>/src/tests/good_test.mbt:3-12
-3 | ///| (escaped)
-  | fn pass(input : String) -> Unit { (escaped)
-  |   (@sqlparser.parse_sql(input) catch { (escaped)
-  |     e => { (escaped)
-  |       println(e) (escaped)
-  |       panic() (escaped)
-  |     } (escaped)
-  |   }) (escaped)
-  |   |> ignore (escaped)
-  | } (no-eol) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'read_and_parse'
-Found 1 symbols matching 'read_and_parse':
-
-`fn read_and_parse` in package moonbit-community/sqlparser/tests_blackbox_test at <WORKDIR>/src/tests/tpch_test.mbt:1-19
-1 | ///| (escaped)
-  | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
-  |   let input = @fs.read_file_to_string(path) catch { (escaped)
-  |     e => { (escaped)
-  |       println("Read file error: \\{e.to_string()}") (escaped)
-  |       panic() (escaped)
-  |     } (escaped)
-  |   } (escaped)
-  |   @sqlparser.parse_sql(input) catch { (escaped)
-  |     LexerError(e) => { (escaped)
-  |       println(e) (escaped)
-  |       panic() (escaped)
-  |     } (escaped)
-  |     ParserError(e) => { (escaped)
-  |       println(e) (escaped)
-  |       panic() (escaped)
-  |     } (escaped)
-  |   } (escaped)
-  | } (no-eol) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'pretty_print'
-Found 1 symbols matching 'pretty_print':
-
-`pub fn pretty_print` in package moonbit-community/sqlparser at <WORKDIR>/src/ast.mbt:1-4
-1 | ///| (escaped)
+$ run_moon_ide moon ide peek-def 'structural_print' --loc 'src/ast.mbt:7:18'
+Definition found at file <WORKDIR>/src/ast.mbt
   | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String { (escaped)
   |   @pp.pretty(obj).to_string() (escaped)
-  | } (no-eol) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'structural_print'
-Found 1 symbols matching 'structural_print':
-
-`pub fn structural_print` in package moonbit-community/sqlparser at <WORKDIR>/src/ast.mbt:6-9
-6 | ///| (escaped)
-  | pub fn[T : Show] structural_print(obj : T) -> String { (escaped)
+  | } (escaped)
+  |  (escaped)
+  | ///| (escaped)
+7 | pub fn[T : Show] structural_print(obj : T) -> String { (escaped)
+  |                  ^^^^^^^^^^^^^^^^ (escaped)
   |   obj.to_string() (escaped)
-  | } (no-eol) (escaped)
+  | } (escaped)
+  |  (escaped)
+  | ///| (escaped)
+  | pub(all) struct Statements { (escaped)
+  |   /// The list of SQL statements parsed from the input. (escaped)
+  |   stmts : Array[Statement] (escaped)
+  | } derive(Eq, Debug) (escaped)
+  |  (escaped)
+  | ///| (escaped)
+  | pub impl @pp.Pretty for Statements with pretty(self) { (escaped)
+  |   @pp.separate(@pp.hardline + @pp.hardline, self.stmts.map(@pp.pretty)) (escaped)
+  | } (escaped)
+  |  (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Statements'
-Found 1 symbols matching 'Statements':
-
-`pub (all) struct Statements` in package moonbit-community/sqlparser at <WORKDIR>/src/ast.mbt:11-15
-11 | ///| (escaped)
-   | pub(all) struct Statements { (escaped)
+$ run_moon_ide moon ide peek-def 'Statements' --loc 'src/ast.mbt:12:17'
+Definition found at file <WORKDIR>/src/ast.mbt
+   | pub fn[T : Show] structural_print(obj : T) -> String { (escaped)
+   |   obj.to_string() (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+12 | pub(all) struct Statements { (escaped)
+   |                 ^^^^^^^^^^ (escaped)
    |   /// The list of SQL statements parsed from the input. (escaped)
    |   stmts : Array[Statement] (escaped)
-   | } derive(Eq, Debug) (no-eol) (escaped)
+   | } derive(Eq, Debug) (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | pub impl @pp.Pretty for Statements with pretty(self) { (escaped)
+   |   @pp.separate(@pp.hardline + @pp.hardline, self.stmts.map(@pp.pretty)) (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | pub fn Statements::op_get(self : Self, index : Int) -> Statement { (escaped)
+   |   self.stmts[index] (escaped)
+   | } (escaped)
+   |  (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Pretty::pretty for Statements'
-Found 1 symbols matching 'Pretty::pretty for Statements':
-
-`pub impl Pretty::pretty for Statements` in package moonbit-community/sqlparser at <WORKDIR>/src/ast.mbt:17-20
-17 | ///| (escaped)
-   | pub impl @pp.Pretty for Statements with pretty(self) { (escaped)
+$ run_moon_ide moon ide peek-def 'pretty' --loc 'src/ast.mbt:18:41'
+Definition found at file <WORKDIR>/src/ast.mbt
+   |   /// The list of SQL statements parsed from the input. (escaped)
+   |   stmts : Array[Statement] (escaped)
+   | } derive(Eq, Debug) (escaped)
+   |  (escaped)
+   | ///| (escaped)
+18 | pub impl @pp.Pretty for Statements with pretty(self) { (escaped)
+   |                                         ^^^^^^ (escaped)
    |   @pp.separate(@pp.hardline + @pp.hardline, self.stmts.map(@pp.pretty)) (escaped)
-   | } (no-eol) (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | pub fn Statements::op_get(self : Self, index : Int) -> Statement { (escaped)
+   |   self.stmts[index] (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | pub(all) enum Statement { (escaped)
+   |   Query(QueryStmt) (escaped)
+   |   CreateTable(CreateTableStmt) (escaped)
+   |   CreateView(CreateViewStmt) (escaped)
+   |   CreateIndex(CreateIndexStmt) (escaped)
 ```

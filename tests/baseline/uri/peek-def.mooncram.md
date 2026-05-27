@@ -17,33 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def Uri --loc 'uri.mbt:54:12'
-Definition found at file <WORKDIR>/uri.mbt
-   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
-   | /// - authority: contains user info, host, and port (escaped)
-   | /// - path: hierarchical path to resource (escaped)
-   | /// - query: additional parameters (escaped)
-   | /// - fragment: reference to a secondary resource (escaped)
-54 | pub struct Uri { (escaped)
-   |            ^^^ (escaped)
-   |   scheme : String? (escaped)
-   |   authority : Authority? (escaped)
-   |   path : String (escaped)
-   |   query : String? (escaped)
-   |   fragment : String? (escaped)
-   | } derive(ToJson) (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Authority component of a URI (escaped)
-   | /// Contains optional user info, required host, and optional port (escaped)
-   | pub struct Authority { (escaped)
-   |   userinfo : String? (escaped)
-   |   host : String (escaped)
-   |   port : Int? (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def scheme --loc 'uri.mbt:55:3'
+$ run_moon_ide moon ide peek-def 'scheme' --loc 'uri.mbt:55:3'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - authority: contains user info, host, and port (escaped)
    | /// - path: hierarchical path to resource (escaped)
@@ -69,7 +43,33 @@ Definition found at file <WORKDIR>/uri.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def uri --loc 'uri_test.mbt:5:7'
+$ run_moon_ide moon ide peek-def 'authority' --loc 'uri.mbt:56:3'
+Definition found at file <WORKDIR>/uri.mbt
+   | /// - path: hierarchical path to resource (escaped)
+   | /// - query: additional parameters (escaped)
+   | /// - fragment: reference to a secondary resource (escaped)
+   | pub struct Uri { (escaped)
+   |   scheme : String? (escaped)
+56 |   authority : Authority? (escaped)
+   |   ^^^^^^^^^ (escaped)
+   |   path : String (escaped)
+   |   query : String? (escaped)
+   |   fragment : String? (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// Authority component of a URI (escaped)
+   | /// Contains optional user info, required host, and optional port (escaped)
+   | pub struct Authority { (escaped)
+   |   userinfo : String? (escaped)
+   |   host : String (escaped)
+   |   port : Int? (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'uri' --loc 'uri_test.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test.mbt
   | ///| (escaped)
   | /// Test basic URI parsing functionality (escaped)
@@ -94,7 +94,7 @@ Definition found at file <WORKDIR>/uri_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def parse --loc 'uri_test.mbt:5:18'
+$ run_moon_ide moon ide peek-def 'parse' --loc 'uri_test.mbt:5:18'
 Definition found at file <WORKDIR>/uri.mbt
     | /// (escaped)
     | /// - `UriError::EmptyUri` if the input string is empty (escaped)
@@ -120,7 +120,7 @@ Definition found at file <WORKDIR>/uri.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def encoded --loc 'uri_test_new_features.mbt:5:7'
+$ run_moon_ide moon ide peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | ///| (escaped)
   | /// Test URL encoding functionality (escaped)
@@ -145,7 +145,7 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def Uri --loc 'uri_test_new_features.mbt:5:17'
+$ run_moon_ide moon ide peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
    | /// - authority: contains user info, host, and port (escaped)
@@ -171,93 +171,47 @@ Definition found at file <WORKDIR>/uri.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Uri'
-Found 1 symbols matching 'Uri':
-
-`pub struct Uri` in package bobzhang/uri at <WORKDIR>/uri.mbt:1-60
-1 | ///| (escaped)
-  | /// # MoonBit URI Library (escaped)
-  | /// (escaped)
-  | /// A comprehensive RFC3986-compliant URI parsing and manipulation library for MoonBit. (escaped)
-  | /// This library provides robust URI parsing, validation, and manipulation capabilities (escaped)
-  | /// with full support for all URI components and operations. (escaped)
-  | /// (escaped)
-  | /// ## Features (escaped)
-  | /// (escaped)
-  | /// - **RFC3986 Compliant**: Full compliance with URI specification (escaped)
-  | /// - **Immutable Operations**: All URI modifications return new instances (escaped)
-  | /// - **Comprehensive Parsing**: Support for all URI components (escaped)
-  | /// - **Percent Encoding**: Built-in encoding/decoding utilities (escaped)
-  | /// - **Query Parameter Helpers**: Easy query string manipulation (escaped)
-  | /// - **Path Segment Operations**: Convenient path manipulation (escaped)
-  | /// - **URI Resolution**: Resolve relative URIs against base URIs (escaped)
-  | /// - **Validation**: Robust error handling and validation (escaped)
-  | /// (escaped)
-  | /// ## Quick Start (escaped)
-  | /// (escaped)
-  | /// ```moonbit nocheck (escaped)
-  | /// // Parse a URI (escaped)
-  | /// let uri = @uri.parse("https://user:pass@example.com:8080/path?query=value#fragment") (escaped)
-  | /// (escaped)
-  | /// // Access components (escaped)
-  | /// inspect(uri.scheme(), content="Some(\\"https\\")") (escaped)
-  | /// inspect(uri.host(), content="Some(\\"example.com\\")") (escaped)
-  | /// inspect(uri.port(), content="Some(8080)") (escaped)
-  | /// inspect(uri.path(), content="/path") (escaped)
-  | /// (escaped)
-  | /// // Modify URI (immutable) (escaped)
-  | /// let new_uri = uri.with_host(Some("newhost.com")).with_port(Some(9000)) (escaped)
-  | /// inspect(new_uri.to_string(), content="https://user:pass@newhost.com:9000/path?query=value#fragment") (escaped)
-  | /// (escaped)
-  | /// // Query parameter helpers (escaped)
-  | /// let search_uri = @uri.parse("https://example.com/search") (escaped)
-  | /// let with_params = search_uri.with_query_param("q", "moonbit").with_query_param("lang", "en") (escaped)
-  | /// inspect(with_params.to_string(), content="https://example.com/search?q=moonbit&lang=en") (escaped)
-  | /// ``` (escaped)
-  | /// (escaped)
-  | /// ## URI Structure (escaped)
-  | /// (escaped)
-  | /// URI data structure representing a parsed URI according to RFC3986 (escaped)
-  | ///  (escaped)
-  | /// A URI has the general form: (escaped)
-  | /// scheme://authority/path?query#fragment (escaped)
-  | ///  (escaped)
-  | /// Where: (escaped)
-  | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
-  | /// - authority: contains user info, host, and port (escaped)
-  | /// - path: hierarchical path to resource (escaped)
-  | /// - query: additional parameters (escaped)
-  | /// - fragment: reference to a secondary resource (escaped)
-  | pub struct Uri { (escaped)
-  |   scheme : String? (escaped)
-  |   authority : Authority? (escaped)
-  |   path : String (escaped)
-  |   query : String? (escaped)
-  |   fragment : String? (escaped)
-  | } derive(ToJson) (no-eol) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'Authority'
-Found 1 symbols matching 'Authority':
-
-`pub struct Authority` in package bobzhang/uri at <WORKDIR>/uri.mbt:62-69
-62 | ///| (escaped)
+$ run_moon_ide moon ide peek-def 'Uri' --loc 'uri.mbt:54:12'
+Definition found at file <WORKDIR>/uri.mbt
+   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
+   | /// - authority: contains user info, host, and port (escaped)
+   | /// - path: hierarchical path to resource (escaped)
+   | /// - query: additional parameters (escaped)
+   | /// - fragment: reference to a secondary resource (escaped)
+54 | pub struct Uri { (escaped)
+   |            ^^^ (escaped)
+   |   scheme : String? (escaped)
+   |   authority : Authority? (escaped)
+   |   path : String (escaped)
+   |   query : String? (escaped)
+   |   fragment : String? (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
    | /// Authority component of a URI (escaped)
    | /// Contains optional user info, required host, and optional port (escaped)
    | pub struct Authority { (escaped)
    |   userinfo : String? (escaped)
    |   host : String (escaped)
    |   port : Int? (escaped)
-   | } derive(ToJson) (no-eol) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'UriError'
-Found 1 symbols matching 'UriError':
-
-`pub error UriError` in package bobzhang/uri at <WORKDIR>/uri.mbt:71-81
-71 | ///| (escaped)
+$ run_moon_ide moon ide peek-def 'Authority' --loc 'uri.mbt:65:12'
+Definition found at file <WORKDIR>/uri.mbt
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// Authority component of a URI (escaped)
+   | /// Contains optional user info, required host, and optional port (escaped)
+65 | pub struct Authority { (escaped)
+   |            ^^^^^^^^^ (escaped)
+   |   userinfo : String? (escaped)
+   |   host : String (escaped)
+   |   port : Int? (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
    | /// Result type for URI parsing operations (escaped)
    | pub suberror UriError { (escaped)
    |   InvalidScheme(String) (escaped)
@@ -266,181 +220,70 @@ Found 1 symbols matching 'UriError':
    |   InvalidQuery(String) (escaped)
    |   InvalidFragment(String) (escaped)
    |   InvalidPort(String) (escaped)
-   |   EmptyUri (escaped)
-   | } derive(ToJson) (no-eol) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'empty'
-Found 9 symbols matching 'empty':
-
-`pub fn empty` in package bobzhang/uri at <WORKDIR>/uri.mbt:83-99
-83 | ///| (escaped)
+$ run_moon_ide moon ide peek-def 'UriError' --loc 'uri.mbt:73:14'
+Definition found at file <WORKDIR>/uri.mbt
+   |   port : Int? (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// Result type for URI parsing operations (escaped)
+73 | pub suberror UriError { (escaped)
+   |              ^^^^^^^^ (escaped)
+   |   InvalidScheme(String) (escaped)
+   |   InvalidAuthority(String) (escaped)
+   |   InvalidPath(String) (escaped)
+   |   InvalidQuery(String) (escaped)
+   |   InvalidFragment(String) (escaped)
+   |   InvalidPort(String) (escaped)
+   |   EmptyUri (escaped)
+   | } derive(ToJson) (escaped)
+   |  (escaped)
+   | ///| (escaped)
    | /// Create an empty URI with default values. (escaped)
    | /// (escaped)
    | /// # Example (escaped)
    | /// (escaped)
-   | /// ```moonbit nocheck (escaped)
-   | /// let uri = @uri.empty() (escaped)
-   | /// inspect(uri.path(), content="") (escaped)
-   | /// inspect(uri.scheme(), content="None") (escaped)
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'empty' --loc 'uri.mbt:97:8'
+Definition found at file <WORKDIR>/uri.mbt
    | /// ``` (escaped)
    | /// (escaped)
    | /// # Returns (escaped)
    | /// (escaped)
    | /// A new `Uri` with all components set to their default values. (escaped)
-   | pub fn empty() -> Uri { (escaped)
+97 | pub fn empty() -> Uri { (escaped)
+   |        ^^^^^ (escaped)
    |   { scheme: None, authority: None, path: "", query: None, fragment: None } (escaped)
    | } (escaped)
-
-`pub fn empty` in package moonbitlang/core/bytes/internal/regex_engine at <MOON_HOME>/lib/core/bytes/internal/regex_engine/using.mbt:25-49
-25 | ///| (escaped)
-   | pub using @ast { (escaped)
-   |   type Pattern, (escaped)
-   |   type Assertion, (escaped)
-   |   type Quantifier, (escaped)
-   |   char, (escaped)
-   |   epsilon, (escaped)
-   |   seq, (escaped)
-   |   empty, (escaped)
-   |   alt, (escaped)
-   |   quantifier, (escaped)
-   |   preference, (escaped)
-   |   shortest, (escaped)
-   |   longest, (escaped)
-   |   first, (escaped)
-   |   capture, (escaped)
-   |   assertion, (escaped)
-   |   start_of_input, (escaped)
-   |   end_of_input, (escaped)
-   |   start_of_line, (escaped)
-   |   end_of_line, (escaped)
-   |   start_of_word, (escaped)
-   |   end_of_word, (escaped)
-   |   not_word_boundary, (escaped)
-   | } (escaped)
-
-`pub let empty` in package moonbitlang/core/bytes/internal/regex_engine/ast at <MOON_HOME>/lib/core/bytes/internal/regex_engine/ast/pattern.mbt:117-119
-117 | ///| (escaped)
-    | /// Empty pattern that matches nothing. (escaped)
-    | pub let empty : Pattern = Pattern::{ desc: Alternation([]), nullable: false } (escaped)
-
-`pub fn empty` in package moonbitlang/core/immut/internal/sparse_array at <MOON_HOME>/lib/core/immut/internal/sparse_array/sparse_array.mbt:24-28
-24 | ///| (escaped)
-   | /// Return an empty value. (escaped)
-   | pub fn[X] empty() -> SparseArray[X] { (escaped)
-   |   { elem_info: empty_bitset, data: [] } (escaped)
-   | } (escaped)
-
-`pub fn alias empty` in package moonbitlang/core/lazy_list at <MOON_HOME>/lib/core/lazy_list/lazy_list.mbt:30-44
-30 | ///| (escaped)
-   | /// Creates an empty lazy list. (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// Parse a URI string into a Uri structure according to RFC3986. (escaped)
    | /// (escaped)
    | /// # Example (escaped)
    | /// (escaped)
-   | /// ```mbt check (escaped)
-   | /// test { (escaped)
-   | ///   let xs : @lazy_list.LazyList[Int] = @lazy_list.empty() (escaped)
-   | ///   inspect(xs.is_empty(), content="true") (escaped)
-   | /// } (escaped)
+   | /// ```moonbit nocheck (escaped)
+   | /// let uri = @uri.parse("https://user:pass@example.com:8080/path?query=value#fragment") (escaped)
+   | /// inspect(uri.scheme(), content="Some(\\"https\\")") (escaped)
+   | /// inspect(uri.host(), content="Some(\\"example.com\\")") (escaped)
+   | /// inspect(uri.port(), content="Some(8080)") (escaped)
    | /// ``` (escaped)
-   | #as_free_fn (escaped)
-   | pub fn[A] LazyList::empty() -> LazyList[A] { (escaped)
-   |   { cell: Empty } (escaped)
-   | } (escaped)
-
-`pub fn alias empty` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:15-31
-15 | ///| (escaped)
-   | /// Creates an empty list. (escaped)
-   | /// (escaped)
-   | /// # Example (escaped)
-   | /// (escaped)
-   | /// ```mbt check (escaped)
-   | /// test { (escaped)
-   | ///   let ls : @list.List[Int] = @list.new() (escaped)
-   | ///   @debug.assert_eq(ls, @list.empty()) (escaped)
-   | /// } (escaped)
-   | /// ``` (escaped)
-   | #alias(empty) (escaped)
-   | #as_free_fn (escaped)
-   | #as_free_fn(empty) (escaped)
-   | pub fn[A] List::new() -> List[A] { (escaped)
-   |   Empty (escaped)
-   | } (escaped)
-
-`pub fn empty` in package moonbitlang/core/option at <MOON_HOME>/lib/core/option/deprecated.mbt:37-42
-37 | ///| (escaped)
-   | /// Return an empty value. (escaped)
-   | #deprecated("Use `None` instead") (escaped)
-   | pub fn[T] empty() -> T? { (escaped)
-   |   None (escaped)
-   | } (escaped)
-
-`pub fn empty` in package moonbitlang/core/string/internal/regex_engine at <MOON_HOME>/lib/core/string/internal/regex_engine/using.mbt:25-49
-25 | ///| (escaped)
-   | pub using @ast { (escaped)
-   |   type Pattern, (escaped)
-   |   type Assertion, (escaped)
-   |   type Quantifier, (escaped)
-   |   char, (escaped)
-   |   epsilon, (escaped)
-   |   seq, (escaped)
-   |   empty, (escaped)
-   |   alt, (escaped)
-   |   quantifier, (escaped)
-   |   preference, (escaped)
-   |   shortest, (escaped)
-   |   longest, (escaped)
-   |   first, (escaped)
-   |   capture, (escaped)
-   |   assertion, (escaped)
-   |   start_of_input, (escaped)
-   |   end_of_input, (escaped)
-   |   start_of_line, (escaped)
-   |   end_of_line, (escaped)
-   |   start_of_word, (escaped)
-   |   end_of_word, (escaped)
-   |   not_word_boundary, (escaped)
-   | } (escaped)
-
-`pub let empty` in package moonbitlang/core/string/internal/regex_engine/ast at <MOON_HOME>/lib/core/string/internal/regex_engine/ast/pattern.mbt:117-119
-117 | ///| (escaped)
-    | /// Empty pattern that matches nothing. (escaped)
-    | pub let empty : Pattern = Pattern::{ desc: Alternation([]), nullable: false } (no-eol) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'parse'
-Found 5 symbols matching 'parse':
-
-`pub fn parse` in package bobzhang/uri at <WORKDIR>/uri.mbt:101-156
-101 | ///| (escaped)
-    | /// Parse a URI string into a Uri structure according to RFC3986. (escaped)
-    | /// (escaped)
-    | /// # Example (escaped)
-    | /// (escaped)
-    | /// ```moonbit nocheck (escaped)
-    | /// let uri = @uri.parse("https://user:pass@example.com:8080/path?query=value#fragment") (escaped)
-    | /// inspect(uri.scheme(), content="Some(\\"https\\")") (escaped)
-    | /// inspect(uri.host(), content="Some(\\"example.com\\")") (escaped)
-    | /// inspect(uri.port(), content="Some(8080)") (escaped)
-    | /// ``` (escaped)
-    | /// (escaped)
-    | /// # Parameters (escaped)
-    | /// (escaped)
-    | /// - `uri_str`: The URI string to parse (escaped)
-    | /// (escaped)
-    | /// # Returns (escaped)
-    | /// (escaped)
-    | /// A parsed `Uri` structure (escaped)
-    | /// (escaped)
-    | /// # Raises (escaped)
+$ run_moon_ide moon ide peek-def 'parse' --loc 'uri.mbt:127:8'
+Definition found at file <WORKDIR>/uri.mbt
     | /// (escaped)
     | /// - `UriError::EmptyUri` if the input string is empty (escaped)
     | /// - `UriError::InvalidScheme` if the scheme is malformed (escaped)
     | /// - `UriError::InvalidAuthority` if the authority is malformed (escaped)
     | /// - Other `UriError` variants for various parsing failures (escaped)
-    | pub fn parse(uri_str : String) -> Uri raise UriError { (escaped)
+127 | pub fn parse(uri_str : String) -> Uri raise UriError { (escaped)
+    |        ^^^^^ (escaped)
     |   if uri_str.length() == 0 { (escaped)
     |     raise EmptyUri (escaped)
     |   } (escaped)
@@ -455,105 +298,18 @@ Found 5 symbols matching 'parse':
     |   // Check for scheme (escaped)
     |   if remaining.contains("://") { (escaped)
     |     let parts = remaining.split("://").collect() (escaped)
-    |     if parts.length() >= 2 { (escaped)
-    |       let scheme_part = parts[0].to_owned() (escaped)
-    |       if is_valid_scheme(scheme_part) { (escaped)
-    |         let rest = parts[1].to_owned() (escaped)
-    |         // Parse the rest (escaped)
-    |         return parse_with_scheme(scheme_part, rest) (escaped)
-    |       } else { (escaped)
-    |         raise InvalidScheme(scheme_part) (escaped)
-    |       } (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    |  (escaped)
-    |   // No scheme found, treat as path-only URI (escaped)
-    |   { ..uri, path: remaining } (escaped)
-    | } (escaped)
-
-`pub fn alias parse` in package moonbitlang/core/argparse at <MOON_HOME>/lib/core/argparse/command.mbt:135-164
-135 | ///| (escaped)
-    | /// Parse argv/environment according to this command spec. (escaped)
-    | /// (escaped)
-    | /// Behavior: (escaped)
-    | /// - Help/version requests print output immediately and terminate with exit code (escaped)
-    | ///   `0`. (escaped)
-    | /// - Parse failures raise display-ready error text with full contextual help. (escaped)
-    | /// - Command-definition validation failures raise display-ready validation (escaped)
-    | ///   text (without appended help). (escaped)
-    | /// (escaped)
-    | /// Value precedence is `argv > env > default_values`. (escaped)
-    | #as_free_fn (escaped)
-    | pub fn Command::parse( (escaped)
-    |   self : Command, (escaped)
-    |   argv? : ArrayView[String] = default_argv(), (escaped)
-    |   env? : Map[String, String] = Map([]), (escaped)
-    | ) -> Matches raise { (escaped)
-    |   try { (escaped)
-    |     let raw = parse_command(self, argv, env, [], Map([]), Map([]), self.name) (escaped)
-    |     build_matches(self, raw, []) (escaped)
-    |   } catch { (escaped)
-    |     DisplayHelp::Message(text) => print_and_exit_success(text) (escaped)
-    |     DisplayVersion::Message(text) => print_and_exit_success(text) (escaped)
-    |     ArgError::Message(_) as err => raise err (escaped)
-    |     err => { (escaped)
-    |       println(err.to_string()) (escaped)
-    |       panic() (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    | } (escaped)
-
-`pub fn parse` in package moonbitlang/core/json at <MOON_HOME>/lib/core/json/parse.mbt:26-41
-26 | ///| (escaped)
-   | /// Parse a JSON input string into a Json value, with an optional maximum nesting depth (default is 1024) (escaped)
-   | #label_migration(max_nesting_depth, fill=false) (escaped)
-   | pub fn parse( (escaped)
-   |   input : StringView, (escaped)
-   |   max_nesting_depth? : Int = 1024, (escaped)
-   | ) -> Json raise ParseError { (escaped)
-   |   let ctx = ParseContext::make(input, max_nesting_depth) (escaped)
-   |   let val = ctx.parse_value() (escaped)
-   |   ctx.lex_skip_whitespace() (escaped)
-   |   if ctx.offset >= ctx.end_offset { (escaped)
-   |     val (escaped)
-   |   } else { (escaped)
-   |     ctx.invalid_char() (escaped)
-   |   } (escaped)
-   | } (escaped)
-
-`pub fn parse` in package moonbitlang/core/strconv at <MOON_HOME>/lib/core/strconv/deprecated.mbt:74-79
-74 | ///| (escaped)
-   | /// Parse input into this package's structured value. (escaped)
-   | #deprecated("use `@string.from_str` instead", skip_current_package=true) (escaped)
-   | pub fn[A : FromStr] parse(str : StringView) -> A raise StrConvError { (escaped)
-   |   A::from_str(str) (escaped)
-   | } (escaped)
-
-`pub fn parse` in package moonbitlang/core/string/internal/regex_parser at <MOON_HOME>/lib/core/string/internal/regex_parser/parser.mbt:406-419
-406 | ///| (escaped)
-    | /// Parse input into this package's structured value. (escaped)
-    | pub fn parse( (escaped)
-    |   profile~ : Profile, (escaped)
-    |   mode~ : Mode, (escaped)
-    |   pattern : StringView, (escaped)
-    | ) -> Pattern raise ParserError { (escaped)
-    |   let ctx = ParserContext::new(profile~, base=pattern.start_offset(), mode~) (escaped)
-    |   let (rest, pat) = Parser::disjunction(pattern, ctx~) (escaped)
-    |   if !rest.is_empty() { (escaped)
-    |     raise ctx.error_at(rest, HINT_UNEXPECTED_CHAR) (escaped)
-    |   } (escaped)
-    |   pat (escaped)
-    | } (no-eol) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'parse_with_scheme'
-Found 1 symbols matching 'parse_with_scheme':
-
-`fn parse_with_scheme` in package bobzhang/uri at <WORKDIR>/uri.mbt:158-227
-158 | ///| (escaped)
+$ run_moon_ide moon ide peek-def 'parse_with_scheme' --loc 'uri.mbt:160:4'
+Definition found at file <WORKDIR>/uri.mbt
+    |   { ..uri, path: remaining } (escaped)
+    | } (escaped)
+    |  (escaped)
+    | ///| (escaped)
     | /// Parse URI with known scheme (escaped)
-    | fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError { (escaped)
+160 | fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError { (escaped)
+    |    ^^^^^^^^^^^^^^^^^ (escaped)
     |   let mut uri = empty() (escaped)
     |   uri = { ..uri, scheme: Some(scheme) } (escaped)
     |  (escaped)
@@ -568,57 +324,4 @@ Found 1 symbols matching 'parse_with_scheme':
     |     } (escaped)
     |     Some(frag) (escaped)
     |   } else { (escaped)
-    |     None (escaped)
-    |   } (escaped)
-    |   uri = { ..uri, fragment: fragment_part } (escaped)
-    |  (escaped)
-    |   // Split by query (escaped)
-    |   let parts_query = main_part.split("?").collect() (escaped)
-    |   let path_authority_part = parts_query[0].to_owned() (escaped)
-    |   let query_part = if parts_query.length() > 1 { (escaped)
-    |     let q = parts_query[1].to_owned() (escaped)
-    |     // Basic query validation - no unescaped spaces (escaped)
-    |     if q.contains(" ") { (escaped)
-    |       raise InvalidQuery(q) (escaped)
-    |     } (escaped)
-    |     Some(q) (escaped)
-    |   } else { (escaped)
-    |     None (escaped)
-    |   } (escaped)
-    |   uri = { ..uri, query: query_part } (escaped)
-    |  (escaped)
-    |   // Split authority and path (escaped)
-    |   let parts_path = path_authority_part.split("/").collect() (escaped)
-    |   if parts_path.length() > 0 { (escaped)
-    |     let authority_part = parts_path[0].to_owned() (escaped)
-    |     if authority_part.length() > 0 { (escaped)
-    |       let auth = parse_authority(authority_part) (escaped)
-    |       uri = { ..uri, authority: Some(auth) } (escaped)
-    |     } (escaped)
-    |  (escaped)
-    |     // Reconstruct path from remaining parts (escaped)
-    |     if parts_path.length() > 1 { (escaped)
-    |       let path_parts : Array[String] = [] (escaped)
-    |       for i = 1; i < parts_path.length(); i = i + 1 { (escaped)
-    |         path_parts.push(parts_path[i].to_owned()) (escaped)
-    |       } (escaped)
-    |       let path = "/" + path_parts.join("/") (escaped)
-    |       // Basic path validation - no unescaped spaces (escaped)
-    |       if path.contains(" ") { (escaped)
-    |         raise InvalidPath(path) (escaped)
-    |       } (escaped)
-    |       uri = { ..uri, path, } (escaped)
-    |     } else { (escaped)
-    |       uri = { ..uri, path: "" } (escaped)
-    |     } (escaped)
-    |   } else { (escaped)
-    |     // No authority, remaining is path (escaped)
-    |     if path_authority_part.contains(" ") { (escaped)
-    |       raise InvalidPath(path_authority_part) (escaped)
-    |     } (escaped)
-    |     uri = { ..uri, path: path_authority_part } (escaped)
-    |   } (escaped)
-    |  (escaped)
-    |   uri (escaped)
-    | } (no-eol) (escaped)
 ```

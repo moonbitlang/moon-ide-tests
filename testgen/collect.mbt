@@ -1,6 +1,6 @@
 ///|
 fn should_keep_symbol(sym : String) -> Bool {
-  if not(sym lexmatch? "[A-Za-z_][A-Za-z0-9_]*") {
+  if !(sym =~ re"[A-Za-z_][A-Za-z0-9_]*") {
     false
   } else {
     // Keep in sync with prelude/builtin symbols that should not become ide test targets.
@@ -121,7 +121,7 @@ fn HoverCollector::append_symbol(
   line : Int,
   col : Int,
 ) -> Unit {
-  if not(should_keep_symbol(sym)) {
+  if !should_keep_symbol(sym) {
     return
   }
   if self.count.val >= self.max_per_file {
@@ -191,9 +191,8 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDeclBinder(
   env,
   type_decl_binder,
 ) {
-  if type_decl_binder.name is Some(name) {
-    env.append_from_loc(name, type_decl_binder.loc)
-  }
+  ignore(env)
+  ignore(type_decl_binder)
 }
 
 ///|
@@ -201,11 +200,33 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDecl(
   env,
   type_decl,
 ) {
-  env.append_from_loc(type_decl.tycon, type_decl.tycon_loc)
-  type_decl.params.each(x => env.visit_TypeDeclBinder(x))
+  ignore(type_decl.tycon)
+  ignore(type_decl.tycon_loc)
+  ignore(type_decl.params)
   env.visit_TypeDesc(type_decl.components)
   type_decl.deriving.each(x => env.visit_DerivingDirective(x))
   env.visit_Visibility(type_decl.type_vis)
+}
+
+///|
+impl @syntax.IterVisitor for HoverCollector with fn visit_Impl_TopUsing(
+  env,
+  pkg~,
+  names~,
+  vis~,
+  attrs~,
+  loc~,
+  doc~,
+) {
+  ignore(pkg)
+  ignore(vis)
+  ignore(attrs)
+  ignore(loc)
+  ignore(doc)
+  for pair in names {
+    env.visit_AliasTarget(pair.0)
+    env.visit_UsingKind(pair.1)
+  }
 }
 
 ///|
@@ -449,13 +470,13 @@ fn collect_toplevel_symbols(
   impls : @syntax.Impls,
 ) -> Array[ToplevelCase] {
   let symbols = Array::new()
-  let seen : @hashset.HashSet[ToplevelCase] = @hashset.HashSet::new()
+  let seen : @hashset.HashSet[ToplevelCase] = @hashset.HashSet([])
   for impl_ in impls {
     for test_case in render_toplevel_cases(file, impl_) {
       if test_case.query is "" {
         continue
       }
-      if not(should_keep_symbol(test_case.rename_sym)) {
+      if !should_keep_symbol(test_case.rename_sym) {
         continue
       }
       if seen.contains(test_case) {
@@ -475,13 +496,13 @@ fn collect_hover_cases(
   max_per_file : Int,
 ) -> Array[TestCase] {
   let cases = Array::new()
-  let seen : @hashset.HashSet[TestCase] = @hashset.HashSet::new()
+  let seen : @hashset.HashSet[TestCase] = @hashset.HashSet([])
   let collector = HoverCollector::{
     file,
     max_per_file,
     out: cases,
     seen,
-    count: Ref::new(0),
+    count: Ref(0),
   }
   for impl_ in impls {
     collector.visit_Impl(impl_)
@@ -545,7 +566,7 @@ fn walk_dir(
       value => value
     }
     if is_dir {
-      if not(should_skip_dir(name)) {
+      if !should_skip_dir(name) {
         walk_dir(abs_path, rel_path, out, max_files)
       }
       continue

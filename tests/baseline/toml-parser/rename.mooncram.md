@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename str_val str_val_renamed --loc 'cmd/main/main.mbt:7:7'
+$ run_moon_ide moon ide rename 'str_val' 'str_val_renamed' --loc 'cmd/main/main.mbt:7:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/cmd/main/main.mbt
 @@
@@ -38,7 +38,7 @@ $ run_moon_ide moon ide rename str_val str_val_renamed --loc 'cmd/main/main.mbt:
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename TomlString TomlStringRenamed --loc 'cmd/main/main.mbt:7:23'
+$ run_moon_ide moon ide rename 'TomlString' 'TomlStringRenamed' --loc 'cmd/main/main.mbt:7:23'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@
@@ -733,33 +733,7 @@ $ run_moon_ide moon ide rename TomlString TomlStringRenamed --loc 'cmd/main/main
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename TestResult TestResultRenamed --loc 'e2e/runner.mbt:7:12'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- /// `failures` carries one entry per failing case (typically including the
- /// fixture path and a short reason) so that the test harness can print a
- /// summary at the end without re-walking the corpus.
--pub struct TestResult {
-+pub struct TestResultRenamed {
-   passed : Int
-   failed : Int
-   failures : Array[String]
-@@
- 
- ///|
- /// Create an empty `TestResult` with zero counts and no failures recorded.
--pub fn TestResult::new() -> TestResult {
-+pub fn TestResultRenamed::new() -> TestResultRenamed {
-   { passed: 0, failed: 0, failures: [] }
- }
- 
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename passed passed_renamed --loc 'e2e/runner.mbt:8:3'
+$ run_moon_ide moon ide rename 'passed' 'passed_renamed' --loc 'e2e/runner.mbt:8:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
 @@
@@ -785,7 +759,33 @@ $ run_moon_ide moon ide rename passed passed_renamed --loc 'e2e/runner.mbt:8:3'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename to_test_json to_test_json_renamed --loc 'e2e/convert.mbt:5:8'
+$ run_moon_ide moon ide rename 'failed' 'failed_renamed' --loc 'e2e/runner.mbt:9:3'
+*** Begin Patch
+*** Update File: <WORKDIR>/e2e/runner.mbt
+@@
+ /// summary at the end without re-walking the corpus.
+ pub struct TestResult {
+   passed : Int
+-  failed : Int
++  failed_renamed : Int
+   failures : Array[String]
+ }
+ 
+@@
+ ///|
+ /// Create an empty `TestResult` with zero counts and no failures recorded.
+ pub fn TestResult::new() -> TestResult {
+-  { passed: 0, failed: 0, failures: [] }
++  { passed: 0, failed_renamed: 0, failures: [] }
+ }
+ 
+ ///|
+*** End Patch
+
+```
+
+```mooncram
+$ run_moon_ide moon ide rename 'to_test_json' 'to_test_json_renamed' --loc 'e2e/convert.mbt:5:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/convert.mbt
 @@
@@ -835,7 +835,7 @@ $ run_moon_ide moon ide rename to_test_json to_test_json_renamed --loc 'e2e/conv
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename value value_renamed --loc 'e2e/convert.mbt:5:21'
+$ run_moon_ide moon ide rename 'value' 'value_renamed' --loc 'e2e/convert.mbt:5:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/convert.mbt
 @@
@@ -871,7 +871,7 @@ $ run_moon_ide moon ide rename value value_renamed --loc 'e2e/convert.mbt:5:21'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename files files_renamed --loc 'e2e/e2e_test.mbt:3:7'
+$ run_moon_ide moon ide rename 'files' 'files_renamed' --loc 'e2e/e2e_test.mbt:3:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@
@@ -896,7 +896,7 @@ $ run_moon_ide moon ide rename files files_renamed --loc 'e2e/e2e_test.mbt:3:7'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename collect_toml_files collect_toml_files_renamed --loc 'e2e/e2e_test.mbt:4:8'
+$ run_moon_ide moon ide rename 'collect_toml_files' 'collect_toml_files_renamed' --loc 'e2e/e2e_test.mbt:4:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@
@@ -941,7 +941,7 @@ $ run_moon_ide moon ide rename collect_toml_files collect_toml_files_renamed --l
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename result result_renamed --loc 'e2e/known_failures_test.mbt:10:7'
+$ run_moon_ide moon ide rename 'result' 'result_renamed' --loc 'e2e/known_failures_test.mbt:10:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/known_failures_test.mbt
 @@
@@ -961,7 +961,7 @@ $ run_moon_ide moon ide rename result result_renamed --loc 'e2e/known_failures_t
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename parse parse_renamed --loc 'e2e/known_failures_test.mbt:10:27'
+$ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures_test.mbt:10:27'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@
@@ -2412,7 +2412,7 @@ $ run_moon_ide moon ide rename parse parse_renamed --loc 'e2e/known_failures_tes
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'TestResult' TestResultRenamed
+$ run_moon_ide moon ide rename 'TestResult' 'TestResultRenamed' --loc 'e2e/runner.mbt:7:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
 @@
@@ -2438,7 +2438,7 @@ $ run_moon_ide moon ide rename 'TestResult' TestResultRenamed
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'TestResult::new' new_renamed
+$ run_moon_ide moon ide rename 'new' 'new_renamed' --loc 'e2e/runner.mbt:15:20'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
 @@
@@ -2455,7 +2455,7 @@ $ run_moon_ide moon ide rename 'TestResult::new' new_renamed
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'collect_toml_files' collect_toml_files_renamed
+$ run_moon_ide moon ide rename 'collect_toml_files' 'collect_toml_files_renamed' --loc 'e2e/runner.mbt:21:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@
@@ -2500,7 +2500,7 @@ $ run_moon_ide moon ide rename 'collect_toml_files' collect_toml_files_renamed
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'run_single_valid_test' run_single_valid_test_renamed
+$ run_moon_ide moon ide rename 'run_single_valid_test' 'run_single_valid_test_renamed' --loc 'e2e/runner.mbt:39:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
 @@
@@ -2517,7 +2517,7 @@ $ run_moon_ide moon ide rename 'run_single_valid_test' run_single_valid_test_ren
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'run_single_invalid_test' run_single_invalid_test_renamed
+$ run_moon_ide moon ide rename 'run_single_invalid_test' 'run_single_invalid_test_renamed' --loc 'e2e/runner.mbt:68:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@
@@ -2544,7 +2544,7 @@ $ run_moon_ide moon ide rename 'run_single_invalid_test' run_single_invalid_test
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'json_equal' json_equal_renamed
+$ run_moon_ide moon ide rename 'json_equal' 'json_equal_renamed' --loc 'e2e/runner.mbt:84:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@

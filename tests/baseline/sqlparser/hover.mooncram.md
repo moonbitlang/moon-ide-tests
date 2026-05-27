@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover pass --loc 'src/tests/good_test.mbt:4:4'
+$ run_moon_ide moon ide hover 'pass' --loc 'src/tests/good_test.mbt:4:4'
 // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
 
 ///|
@@ -31,7 +31,7 @@ fn pass(input : String) -> Unit {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover input --loc 'src/tests/good_test.mbt:4:9'
+$ run_moon_ide moon ide hover 'input' --loc 'src/tests/good_test.mbt:4:9'
 // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
 
 ///|
@@ -45,7 +45,7 @@ fn pass(input : String) -> Unit {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover read_and_parse --loc 'src/tests/tpch_test.mbt:2:4'
+$ run_moon_ide moon ide hover 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 ///|
 fn read_and_parse(path : String) -> @sqlparser.Statements {
    ^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ fn read_and_parse(path : String) -> @sqlparser.Statements {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover path --loc 'src/tests/tpch_test.mbt:2:19'
+$ run_moon_ide moon ide hover 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 ///|
 fn read_and_parse(path : String) -> @sqlparser.Statements {
                   ^^^^
@@ -69,7 +69,7 @@ fn read_and_parse(path : String) -> @sqlparser.Statements {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover sql --loc 'src/tests/dialect_test.mbt:9:7'
+$ run_moon_ide moon ide hover 'sql' --loc 'src/tests/dialect_test.mbt:9:7'
 ///|
 test "MySQL SHOW TABLES statement" {
   let sql = @sqlparser.parse_sql("SHOW TABLES;")
@@ -82,7 +82,7 @@ test "MySQL SHOW TABLES statement" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover parse_sql --loc 'src/tests/dialect_test.mbt:9:24'
+$ run_moon_ide moon ide hover 'parse_sql' --loc 'src/tests/dialect_test.mbt:9:24'
 ///|
 test "MySQL SHOW TABLES statement" {
   let sql = @sqlparser.parse_sql("SHOW TABLES;")
@@ -95,7 +95,7 @@ test "MySQL SHOW TABLES statement" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover pretty_print --loc 'src/ast.mbt:2:24'
+$ run_moon_ide moon ide hover 'pretty_print' --loc 'src/ast.mbt:2:24'
 ///|
 pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
                        ^^^^^^^^^^^^
@@ -107,7 +107,7 @@ pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover obj --loc 'src/ast.mbt:2:37'
+$ run_moon_ide moon ide hover 'obj' --loc 'src/ast.mbt:2:37'
 ///|
 pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
                                     ^^^
@@ -119,7 +119,7 @@ pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover Parser --loc 'src/dcl.mbt:5:4'
+$ run_moon_ide moon ide hover 'Parser' --loc 'src/dcl.mbt:5:4'
 // DCL (Data Control Language) parsing functions
 
 ///|
@@ -135,7 +135,7 @@ fn Parser::parse_grant_statement(
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover parse_grant_statement --loc 'src/dcl.mbt:5:12'
+$ run_moon_ide moon ide hover 'parse_grant_statement' --loc 'src/dcl.mbt:5:12'
 // DCL (Data Control Language) parsing functions
 
 ///|

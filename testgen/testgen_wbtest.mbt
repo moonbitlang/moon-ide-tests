@@ -115,7 +115,6 @@ test "collect_cases_for_text includes toplevel symbols" {
       #|{
       #|  source_files: ["a.mbt"],
       #|  hover_cases: [
-      #|    { file: "a.mbt", line: 1, col: 6, sym: "T" },
       #|    { file: "a.mbt", line: 2, col: 4, sym: "f" },
       #|    { file: "a.mbt", line: 3, col: 5, sym: "x" },
       #|    { file: "a.mbt", line: 4, col: 7, sym: "Tr" },
@@ -123,7 +122,6 @@ test "collect_cases_for_text includes toplevel symbols" {
       #|    { file: "a.mbt", line: 7, col: 6, sym: "Tr" },
       #|    { file: "a.mbt", line: 7, col: 22, sym: "g" },
       #|    { file: "a.mbt", line: 7, col: 24, sym: "self" },
-      #|    { file: "a.mbt", line: 8, col: 7, sym: "pkg" },
       #|    { file: "a.mbt", line: 8, col: 21, sym: "func2" },
       #|  ],
       #|  toplevel_symbols: [
@@ -289,6 +287,21 @@ test "render_cram_files emits mooncram markdown commands" {
     files[0].content.contains("$ run_moon_ide moon ide outline 'a.mbt'"),
   )
   assert_true(files[1].content.contains("<MOON_HOME>"))
+  assert_true(
+    files[2].content.contains(
+      "$ run_moon_ide moon ide peek-def 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+  assert_true(
+    files[3].content.contains(
+      "$ run_moon_ide moon ide find-references 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+  assert_true(
+    files[4].content.contains(
+      "$ run_moon_ide moon ide rename 'f' 'f_renamed' --loc 'a.mbt:1:4'",
+    ),
+  )
 }
 
 ///|

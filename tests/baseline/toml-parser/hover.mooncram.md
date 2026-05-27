@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover str_val --loc 'cmd/main/main.mbt:7:7'
+$ run_moon_ide moon ide hover 'str_val' --loc 'cmd/main/main.mbt:7:7'
   // Demo 1: Basic value types
   println("\n--- Basic Value Types ---")
   let str_val = @toml.TomlString("Hello, TOML!")
@@ -30,7 +30,7 @@ $ run_moon_ide moon ide hover str_val --loc 'cmd/main/main.mbt:7:7'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover TomlString --loc 'cmd/main/main.mbt:7:23'
+$ run_moon_ide moon ide hover 'TomlString' --loc 'cmd/main/main.mbt:7:23'
   // Demo 1: Basic value types
   println("\n--- Basic Value Types ---")
   let str_val = @toml.TomlString("Hello, TOML!")
@@ -43,32 +43,7 @@ $ run_moon_ide moon ide hover TomlString --loc 'cmd/main/main.mbt:7:23'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover TestResult --loc 'e2e/runner.mbt:7:12'
-/// `failures` carries one entry per failing case (typically including the
-/// fixture path and a short reason) so that the test harness can print a
-/// summary at the end without re-walking the corpus.
-pub struct TestResult {
-           ^^^^^^^^^^
-           ```moonbit
-           struct TestResult {
-             passed: Int
-             failed: Int
-             failures: Array[String]
-           }
-           ```
-           ---
-           
-            Aggregate of a test-suite run: counts and per-failure messages.
-           
-            `failures` carries one entry per failing case (typically including the
-            fixture path and a short reason) so that the test harness can print a
-            summary at the end without re-walking the corpus.
-  passed : Int
-  failed : Int
-```
-
-```mooncram
-$ run_moon_ide moon ide hover passed --loc 'e2e/runner.mbt:8:3'
+$ run_moon_ide moon ide hover 'passed' --loc 'e2e/runner.mbt:8:3'
 /// fixture path and a short reason) so that the test harness can print a
 /// summary at the end without re-walking the corpus.
 pub struct TestResult {
@@ -82,7 +57,21 @@ pub struct TestResult {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover to_test_json --loc 'e2e/convert.mbt:5:8'
+$ run_moon_ide moon ide hover 'failed' --loc 'e2e/runner.mbt:9:3'
+/// summary at the end without re-walking the corpus.
+pub struct TestResult {
+  passed : Int
+  failed : Int
+  ^^^^^^
+  ```moonbit
+  Int
+  ```
+  failures : Array[String]
+}
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'to_test_json' --loc 'e2e/convert.mbt:5:8'
 /// Convert a TomlValue to the toml-test JSON format.
 /// Leaf values become {"type": "...", "value": "..."}
 /// Tables become plain JSON objects, arrays become JSON arrays.
@@ -101,7 +90,7 @@ pub fn to_test_json(value : @toml.TomlValue) -> Json {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover value --loc 'e2e/convert.mbt:5:21'
+$ run_moon_ide moon ide hover 'value' --loc 'e2e/convert.mbt:5:21'
 /// Convert a TomlValue to the toml-test JSON format.
 /// Leaf values become {"type": "...", "value": "..."}
 /// Tables become plain JSON objects, arrays become JSON arrays.
@@ -115,7 +104,7 @@ pub fn to_test_json(value : @toml.TomlValue) -> Json {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover files --loc 'e2e/e2e_test.mbt:3:7'
+$ run_moon_ide moon ide hover 'files' --loc 'e2e/e2e_test.mbt:3:7'
 ///|
 async test "valid toml-test suite" {
   let files : Array[String] = []
@@ -128,7 +117,7 @@ async test "valid toml-test suite" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover collect_toml_files --loc 'e2e/e2e_test.mbt:4:8'
+$ run_moon_ide moon ide hover 'collect_toml_files' --loc 'e2e/e2e_test.mbt:4:8'
 ///|
 async test "valid toml-test suite" {
   let files : Array[String] = []
@@ -145,7 +134,7 @@ async test "valid toml-test suite" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover result --loc 'e2e/known_failures_test.mbt:10:7'
+$ run_moon_ide moon ide hover 'result' --loc 'e2e/known_failures_test.mbt:10:7'
 ///|
 test "fixed: [a-a-a] table header parses correctly" {
   let result = try? @toml.parse("[a-a-a]\n_ = false\n")
@@ -158,7 +147,7 @@ test "fixed: [a-a-a] table header parses correctly" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover parse --loc 'e2e/known_failures_test.mbt:10:27'
+$ run_moon_ide moon ide hover 'parse' --loc 'e2e/known_failures_test.mbt:10:27'
 ///|
 test "fixed: [a-a-a] table header parses correctly" {
   let result = try? @toml.parse("[a-a-a]\n_ = false\n")

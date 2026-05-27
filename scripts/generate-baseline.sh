@@ -13,7 +13,7 @@ while IFS=$'\t' read -r slug path _url _branch max_files max_per_file max_toplev
   fi
 
   mkdir -p "$out_dir"
-  moon -C "$ROOT/testgen" run . -- \
+  moon -C "$ROOT/testgen" run cmd/main -- \
     --repo "$repo_path" \
     --output-dir "$out_dir" \
     --repo-slug "$slug" \

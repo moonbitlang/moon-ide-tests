@@ -41,7 +41,7 @@ while IFS=$'\t' read -r slug path _url branch max_files max_per_file max_topleve
   echo "canary: $(git -C "$repo_path" rev-parse HEAD)" >>"$SUMMARY"
   mkdir -p "$out_dir"
 
-  if ! moon -C "$ROOT/testgen" run . -- \
+  if ! moon -C "$ROOT/testgen" run cmd/main -- \
     --repo "$repo_path" \
     --output-dir "$out_dir" \
     --repo-slug "$slug" \

@@ -17,13 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename trie trie_renamed --loc 'arg.mbt:2:7'
-Error: could not find references for symbol 'trie' at arg.mbt:2:7
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide rename Trie TrieRenamed --loc 'arg.mbt:2:19'
+$ run_moon_ide moon ide rename 'Trie' 'TrieRenamed' --loc 'arg.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
 @@
@@ -56,7 +50,48 @@ $ run_moon_ide moon ide rename Trie TrieRenamed --loc 'arg.mbt:2:19'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename verbose verbose_renamed --loc 'arg_test.mbt:3:7'
+$ run_moon_ide moon ide rename 'Set_string' 'Set_stringRenamed' --loc 'arg.mbt:19:3'
+*** Begin Patch
+*** Update File: <WORKDIR>/arg.mbt
+@@
+ pub(all) enum Spec {
+   Unit(() -> Unit raise)
+   String((String) -> Unit raise)
+-  Set_string(Ref[String])
++  Set_stringRenamed(Ref[String])
+   Set(Ref[Bool])
+   Clear(Ref[Bool])
+ }
+@@
+                 f(y)
+                 continue ys
+               }
+-              (Set_string(r), [y, .. ys]) => { (escaped)
++              (Set_stringRenamed(r), [y, .. ys]) => { (escaped)
+                 r.val = y
+                 continue ys
+               }
+-              (String(_), []) | (Set_string(_), []) => (escaped)
++              (String(_), []) | (Set_stringRenamed(_), []) => (escaped)
+                 raise ErrorMsg("missing argument for \{x}")
+               (Set(r), _) => { (escaped)
+                 r.val = true
+*** Update File: <WORKDIR>/arg_test.mbt
+@@
+   let files = []
+   let options = [
+     ("--no-verbose", "-n", @ArgParser.Clear(verbose), "disable verbose message"),
+-    ("--search", "-s", Set_string(keyword), "search for files"),
++    ("--search", "-s", Set_stringRenamed(keyword), "search for files"),
+     ("--delete", "-d", Set(delete_files), "delete listed files"),
+   ]
+   let argv = ["--search", ".mbt", "--delete", "file1", "file2", "-n"]
+*** End Patch
+
+```
+
+```mooncram
+$ run_moon_ide moon ide rename 'verbose' 'verbose_renamed' --loc 'arg_test.mbt:3:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg_test.mbt
 @@
@@ -88,7 +123,7 @@ $ run_moon_ide moon ide rename verbose verbose_renamed --loc 'arg_test.mbt:3:7'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename keyword keyword_renamed --loc 'arg_test.mbt:4:7'
+$ run_moon_ide moon ide rename 'keyword' 'keyword_renamed' --loc 'arg_test.mbt:4:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg_test.mbt
 @@
@@ -121,14 +156,7 @@ $ run_moon_ide moon ide rename keyword keyword_renamed --loc 'arg_test.mbt:4:7'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'Trie' TrieRenamed
-2 symbols found matching 'Trie'
-rename only works with a single symbol, try to be more specific. (no-eol)
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Spec' SpecRenamed
+$ run_moon_ide moon ide rename 'Spec' 'SpecRenamed' --loc 'arg.mbt:16:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
 @@
@@ -178,7 +206,7 @@ $ run_moon_ide moon ide rename 'Spec' SpecRenamed
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'interpret' interpret_renamed
+$ run_moon_ide moon ide rename 'interpret' 'interpret_renamed' --loc 'arg.mbt:25:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
 @@
@@ -204,14 +232,34 @@ $ run_moon_ide moon ide rename 'interpret' interpret_renamed
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'parse' parse_renamed
-5 symbols found matching 'parse'
-rename only works with a single symbol, try to be more specific. (no-eol)
-[1]
+$ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'arg.mbt:86:8'
+*** Begin Patch
+*** Update File: <WORKDIR>/arg.mbt
+@@
+ /// 
+ /// If the input arguments contains help option or invalid input, the `parse` 
+ /// function will raise `ErrorMsg` error.
+-pub fn parse(
++pub fn parse_renamed(
+   speclist : Array[(String, String, Spec, String)],
+   rest : (String) -> Unit raise,
+   usage_msg : String,
+*** Update File: <WORKDIR>/arg_test.mbt
+@@
+     ("--delete", "-d", Set(delete_files), "delete listed files"),
+   ]
+   let argv = ["--search", ".mbt", "--delete", "file1", "file2", "-n"]
+-  let _ = try? @ArgParser.parse(options, file => files.push(file), usage, argv) (escaped)
++  let _ = try? @ArgParser.parse_renamed(options, file => files.push(file), usage, argv) (escaped)
+   assert_eq(verbose.val, false)
+   assert_eq(keyword.val, ".mbt")
+   assert_eq(files.length(), 2)
+*** End Patch
+
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'ErrorMsg' ErrorMsgRenamed
+$ run_moon_ide moon ide rename 'ErrorMsg' 'ErrorMsgRenamed' --loc 'arg.mbt:109:14'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
 @@

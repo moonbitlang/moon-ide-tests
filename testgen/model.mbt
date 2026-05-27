@@ -36,4 +36,4 @@ priv struct CramFile {
 priv struct ExpectedBlock {
   command : String
   output : Array[String]
-} derive(Debug)
+}

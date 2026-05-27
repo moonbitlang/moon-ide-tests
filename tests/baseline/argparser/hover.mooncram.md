@@ -17,13 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover trie --loc 'arg.mbt:2:7'
-No hover information found for symbol 'trie' at arg.mbt:2:7
-[1]
-```
-
-```mooncram
-$ run_moon_ide moon ide hover Trie --loc 'arg.mbt:2:19'
+$ run_moon_ide moon ide hover 'Trie' --loc 'arg.mbt:2:19'
 ///|
 using @trie {type Trie}
                   ^^^^
@@ -36,7 +30,21 @@ using @trie {type Trie}
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover verbose --loc 'arg_test.mbt:3:7'
+$ run_moon_ide moon ide hover 'Set_string' --loc 'arg.mbt:19:3'
+pub(all) enum Spec {
+  Unit(() -> Unit raise)
+  String((String) -> Unit raise)
+  Set_string(Ref[String])
+  ^^^^^^^^^^
+  ```moonbit
+  (@ref.Ref[String]) -> Spec
+  ```
+  Set(Ref[Bool])
+  Clear(Ref[Bool])
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'verbose' --loc 'arg_test.mbt:3:7'
 ///|
 test {
   let verbose : Ref[Bool] = Ref(true)
@@ -49,7 +57,7 @@ test {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover keyword --loc 'arg_test.mbt:4:7'
+$ run_moon_ide moon ide hover 'keyword' --loc 'arg_test.mbt:4:7'
 ///|
 test {
   let verbose : Ref[Bool] = Ref(true)
