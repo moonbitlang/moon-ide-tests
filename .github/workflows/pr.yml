@@ -1,0 +1,34 @@
+name: PR
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Show Moon Cram help
+        run: moon cram help
+
+      - name: Test generator
+        run: moon -C testgen test
+
+      - name: Verify generated baseline
+        run: |
+          scripts/generate-baseline.sh
+          git diff --exit-code -- tests/baseline
+
+      - name: Run baseline
+        run: scripts/run-baseline.sh

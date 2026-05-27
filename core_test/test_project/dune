@@ -1,4 +1,0 @@
-(cram
- (deps
-  %{bin:moon}
-  (source_tree .)))
