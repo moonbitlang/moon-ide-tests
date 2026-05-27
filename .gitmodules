@@ -1,0 +1,24 @@
+[submodule "fixtures/repos/argparser"]
+	path = fixtures/repos/argparser
+	url = https://github.com/moonbit-community/ArgParser
+	branch = main
+[submodule "fixtures/repos/indexmap"]
+	path = fixtures/repos/indexmap
+	url = https://github.com/moonbit-community/IndexMap
+	branch = master
+[submodule "fixtures/repos/json"]
+	path = fixtures/repos/json
+	url = https://github.com/moonbit-community/json
+	branch = master
+[submodule "fixtures/repos/sqlparser"]
+	path = fixtures/repos/sqlparser
+	url = https://github.com/moonbit-community/sqlparser
+	branch = main
+[submodule "fixtures/repos/toml-parser"]
+	path = fixtures/repos/toml-parser
+	url = https://github.com/moonbit-community/toml-parser
+	branch = main
+[submodule "fixtures/repos/uri"]
+	path = fixtures/repos/uri
+	url = https://github.com/moonbit-community/uri
+	branch = main

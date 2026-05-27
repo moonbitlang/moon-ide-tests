@@ -1,0 +1,43 @@
+repos:
+  - slug: argparser
+    path: fixtures/repos/argparser
+    url: https://github.com/moonbit-community/ArgParser
+    branch: main
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6
+  - slug: indexmap
+    path: fixtures/repos/indexmap
+    url: https://github.com/moonbit-community/IndexMap
+    branch: master
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6
+  - slug: json
+    path: fixtures/repos/json
+    url: https://github.com/moonbit-community/json
+    branch: master
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6
+  - slug: sqlparser
+    path: fixtures/repos/sqlparser
+    url: https://github.com/moonbit-community/sqlparser
+    branch: main
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6
+  - slug: toml-parser
+    path: fixtures/repos/toml-parser
+    url: https://github.com/moonbit-community/toml-parser
+    branch: main
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6
+  - slug: uri
+    path: fixtures/repos/uri
+    url: https://github.com/moonbit-community/uri
+    branch: main
+    max_files: 5
+    max_per_file: 2
+    max_toplevel: 6

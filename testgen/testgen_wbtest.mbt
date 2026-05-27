@@ -1,19 +1,40 @@
 ///|
-test "parse_args accepts positional project argument" {
-  let config = parse_args(["core_test/test_project", "--max-per-file", "7"])
-  inspect(config.project_root, content="core_test/test_project")
+test "parse_args accepts required generation arguments" {
+  let config = parse_args([
+    "--repo",
+    "fixtures/repos/argparser",
+    "--output-dir",
+    "tests/baseline/argparser",
+    "--repo-slug",
+    "argparser",
+    "--max-per-file",
+    "7",
+    "--max-files",
+    "3",
+    "--max-toplevel",
+    "4",
+  ])
+  inspect(config.repo_path, content="fixtures/repos/argparser")
+  inspect(config.output_dir, content="tests/baseline/argparser")
+  inspect(config.repo_slug, content="argparser")
   inspect(config.max_per_file, content="7")
+  inspect(config.max_files, content="3")
+  inspect(config.max_toplevel, content="4")
 }
 
 ///|
-test "parse_args defaults project to current dir when omitted" {
-  let config = parse_args(["--max-per-file", "9"])
-  let expected_root = match @env.current_dir() {
-    Some(dir) => dir
-    None => "."
-  }
-  inspect(config.project_root, content=expected_root)
-  inspect(config.max_per_file, content="9")
+test "parse_args defaults limits" {
+  let config = parse_args([
+    "--repo",
+    "repo",
+    "--output-dir",
+    "out",
+    "--repo-slug",
+    "slug",
+  ])
+  inspect(config.max_per_file, content="50")
+  inspect(config.max_files, content="0")
+  inspect(config.max_toplevel, content="20")
 }
 
 ///|
@@ -255,6 +276,77 @@ test "collect_cases_for_text excludes main function" {
       #|  hover_cases: [{ file: "a.mbt", line: 2, col: 4, sym: "f" }],
       #|  toplevel_symbols: [{ file: "a.mbt", line: 2, col: 4, query: "f", rename_sym: "f" }],
       #|}
+    ),
+  )
+}
+
+///|
+test "render_cram_files emits mooncram markdown commands" {
+  let result = CollectResult::{
+    source_files: ["a.mbt"],
+    hover_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
+    toplevel_symbols: [
+      ToplevelCase::{
+        file: "a.mbt",
+        line: 1,
+        col: 4,
+        query: "f",
+        rename_sym: "f",
+      },
+    ],
+  }
+  let files = render_cram_files(result, "example")
+  inspect(files.length(), content="5")
+  inspect(files[0].name, content="outline.mooncram.md")
+  assert_true(files[0].content.contains("```mooncram"))
+  assert_true(
+    files[0].content.contains("$ run_moon_ide moon ide outline 'a.mbt'"),
+  )
+  assert_true(files[1].content.contains("<MOON_HOME>"))
+}
+
+///|
+test "preserve_expected_output keeps matching command output" {
+  let generated =
+    #|# example hover
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|```
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+    #|```
+    #|
+  let existing =
+    #|# example hover
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|hover output
+    #|  detail
+    #|```
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover old --loc 'a.mbt:3:4'
+    #|stale output
+    #|```
+    #|
+  inspect(
+    preserve_expected_output(generated, existing),
+    content=(
+      #|# example hover
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|hover output
+      #|  detail
+      #|```
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|```
+      #|
     ),
   )
 }

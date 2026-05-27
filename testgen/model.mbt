@@ -31,3 +31,9 @@ priv struct CramFile {
   name : String
   content : String
 } derive(Debug)
+
+///|
+priv struct ExpectedBlock {
+  command : String
+  output : Array[String]
+} derive(Debug)

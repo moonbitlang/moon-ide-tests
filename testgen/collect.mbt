@@ -256,7 +256,6 @@ impl @syntax.IterVisitor for HoverCollector with visit_Expr_DotApply(
   method_name~,
   args~,
   return_self~,
-  attr~,
   loc~,
 ) {
   ignore(return_self)
@@ -264,7 +263,6 @@ impl @syntax.IterVisitor for HoverCollector with visit_Expr_DotApply(
   env.append_from_loc(method_name.name, method_name.loc)
   env.visit_Expr(self)
   args.each(arg => env.visit_Argument(arg))
-  env.visit_ApplyAttr(attr)
 }
 
 ///|
@@ -510,7 +508,15 @@ fn should_skip_dir(name : String) -> Bool {
 }
 
 ///|
-fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
+fn walk_dir(
+  abs_dir : String,
+  rel_dir : String,
+  out : Array[String],
+  max_files : Int,
+) -> Unit {
+  if max_files > 0 && out.length() >= max_files {
+    return
+  }
   let entries = try @fs.read_dir(abs_dir) catch {
     _ => []
   } noraise {
@@ -531,9 +537,12 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
     }
     if is_dir {
       if not(should_skip_dir(name)) {
-        walk_dir(abs_path, rel_path, out)
+        walk_dir(abs_path, rel_path, out, max_files)
       }
       continue
+    }
+    if max_files > 0 && out.length() >= max_files {
+      return
     }
     let is_file = try @fs.is_file(abs_path) catch {
       _ => false
@@ -547,15 +556,20 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
 }
 
 ///|
-fn collect_files(project_root : String) -> Array[String] {
+fn collect_files(project_root : String, max_files : Int) -> Array[String] {
   let files = Array::new()
-  walk_dir(project_root, "", files)
+  walk_dir(project_root, "", files, max_files)
   files
 }
 
 ///|
-fn collect_cases(project_root : String, max_per_file : Int) -> CollectResult {
-  let source_files = collect_files(project_root)
+fn collect_cases(
+  project_root : String,
+  max_per_file : Int,
+  max_files : Int,
+  max_toplevel : Int,
+) -> CollectResult {
+  let source_files = collect_files(project_root, max_files)
   let hover_cases = Array::new()
   let toplevel_symbols = Array::new()
   for rel_path in source_files {
@@ -572,6 +586,9 @@ fn collect_cases(project_root : String, max_per_file : Int) -> CollectResult {
           hover_cases.push(test_case)
         }
         for test_case in result.toplevel_symbols {
+          if max_toplevel > 0 && toplevel_symbols.length() >= max_toplevel {
+            break
+          }
           toplevel_symbols.push(test_case)
         }
       }
