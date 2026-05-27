@@ -5,7 +5,11 @@ fn append_line(sb : StringBuilder, line : String) -> Unit {
 }
 
 ///|
-fn append_markdown_header(sb : StringBuilder, repo_slug : String, suite : String) -> Unit {
+fn append_markdown_header(
+  sb : StringBuilder,
+  repo_slug : String,
+  suite : String,
+) -> Unit {
   append_line(sb, "# \{repo_slug} \{suite}")
 }
 
@@ -22,12 +26,10 @@ fn append_fixed_header(sb : StringBuilder) -> Unit {
   append_mooncram_block(sb, "$ export MOON_HOME=\"${MOON_HOME:-$HOME/.moon}\"")
   append_mooncram_block(sb, "$ export TEST_REPO_ROOT=\"$PWD\"")
   append_mooncram_block(
-    sb,
-    "$ normalize_moon_ide_output() { sed -e \"s|$TEST_REPO_ROOT|<WORKDIR>|g\" -e \"s|$MOON_HOME|<MOON_HOME>|g\"; }",
+    sb, "$ normalize_moon_ide_output() { sed -e \"s|$TEST_REPO_ROOT|<WORKDIR>|g\" -e \"s|$MOON_HOME|<MOON_HOME>|g\"; }",
   )
   append_mooncram_block(
-    sb,
-    "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
+    sb, "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
   )
 }
 
@@ -170,7 +172,9 @@ fn render_peek_file(
     test_case => {
       "$ run_moon_ide moon ide peek-def \{test_case.sym} --loc \{quoted_location(test_case)}"
     },
-    test_case => "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.query)}",
+    test_case => {
+      "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.query)}"
+    },
   )
 }
 
@@ -187,7 +191,9 @@ fn render_refs_file(
     test_case => {
       "$ run_moon_ide moon ide find-references \{test_case.sym} --loc \{quoted_location(test_case)}"
     },
-    test_case => "$ run_moon_ide moon ide find-references \{shell_quote(test_case.query)}",
+    test_case => {
+      "$ run_moon_ide moon ide find-references \{shell_quote(test_case.query)}"
+    },
   )
 }
 
@@ -231,7 +237,10 @@ fn append_if_some(files : Array[CramFile], maybe_file : CramFile?) -> Unit {
 let current_repo_slug : Ref[String] = Ref::new("")
 
 ///|
-fn render_cram_files(result : CollectResult, repo_slug : String) -> Array[CramFile] {
+fn render_cram_files(
+  result : CollectResult,
+  repo_slug : String,
+) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
   let files = Array::new()
   append_if_some(files, render_outline_file(result.source_files))
@@ -276,7 +285,9 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
       let command = line
       let output = Array::new()
       i = i + 1
-      while i < lines.length() && !lines[i].has_prefix("$ ") && lines[i] != "```" {
+      while i < lines.length() &&
+            !lines[i].has_prefix("$ ") &&
+            lines[i] != "```" {
         output.push(lines[i])
         i = i + 1
       }

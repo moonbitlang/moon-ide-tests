@@ -133,9 +133,7 @@ fn parse_args(args : Array[String]) -> Args {
   ]
   @arg_parser.parse(
     spec,
-    arg => {
-      fatal("unexpected positional argument: \{arg}")
-    },
+    arg => fatal("unexpected positional argument: \{arg}"),
     "Usage: testgen --repo <path> --output-dir <dir> --repo-slug <slug> [options]",
     args,
   ) catch {

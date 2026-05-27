@@ -1,17 +1,8 @@
 ///|
 test "parse_args accepts required generation arguments" {
   let config = parse_args([
-    "--repo",
-    "fixtures/repos/argparser",
-    "--output-dir",
-    "tests/baseline/argparser",
-    "--repo-slug",
-    "argparser",
-    "--max-per-file",
-    "7",
-    "--max-files",
-    "3",
-    "--max-toplevel",
+    "--repo", "fixtures/repos/argparser", "--output-dir", "tests/baseline/argparser",
+    "--repo-slug", "argparser", "--max-per-file", "7", "--max-files", "3", "--max-toplevel",
     "4",
   ])
   inspect(config.repo_path, content="fixtures/repos/argparser")
@@ -25,12 +16,7 @@ test "parse_args accepts required generation arguments" {
 ///|
 test "parse_args defaults limits" {
   let config = parse_args([
-    "--repo",
-    "repo",
-    "--output-dir",
-    "out",
-    "--repo-slug",
-    "slug",
+    "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
   ])
   inspect(config.max_per_file, content="50")
   inspect(config.max_files, content="0")

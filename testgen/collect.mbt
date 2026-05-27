@@ -169,12 +169,12 @@ fn HoverCollector::append_from_long_ident(
 impl @syntax.IterVisitor for HoverCollector
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Binder(env, binder) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_Binder(env, binder) {
   env.append_from_loc(binder.name, binder.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_FieldName(
+impl @syntax.IterVisitor for HoverCollector with fn visit_FieldName(
   env,
   field_name,
 ) {
@@ -182,12 +182,12 @@ impl @syntax.IterVisitor for HoverCollector with visit_FieldName(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Label(env, label) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_Label(env, label) {
   env.append_from_loc(label.name, label.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_TypeDeclBinder(
+impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDeclBinder(
   env,
   type_decl_binder,
 ) {
@@ -197,7 +197,10 @@ impl @syntax.IterVisitor for HoverCollector with visit_TypeDeclBinder(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_TypeDecl(env, type_decl) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDecl(
+  env,
+  type_decl,
+) {
   env.append_from_loc(type_decl.tycon, type_decl.tycon_loc)
   type_decl.params.each(x => env.visit_TypeDeclBinder(x))
   env.visit_TypeDesc(type_decl.components)
@@ -206,22 +209,28 @@ impl @syntax.IterVisitor for HoverCollector with visit_TypeDecl(env, type_decl) 
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Var(env, var_) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_Var(env, var_) {
   env.append_from_long_ident(var_.name, var_.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_TypeName(env, type_name) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_TypeName(
+  env,
+  type_name,
+) {
   env.append_from_long_ident(type_name.name, type_name.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_ConstrId(env, constr_id) {
+impl @syntax.IterVisitor for HoverCollector with fn visit_ConstrId(
+  env,
+  constr_id,
+) {
   env.append_from_long_ident(constr_id.id, constr_id.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_ConstrDecl(
+impl @syntax.IterVisitor for HoverCollector with fn visit_ConstrDecl(
   env,
   constr_decl,
 ) {
@@ -233,7 +242,7 @@ impl @syntax.IterVisitor for HoverCollector with visit_ConstrDecl(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Constructor(
+impl @syntax.IterVisitor for HoverCollector with fn visit_Constructor(
   env,
   constructor_,
 ) {
@@ -242,7 +251,7 @@ impl @syntax.IterVisitor for HoverCollector with visit_Constructor(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Accessor_Label(
+impl @syntax.IterVisitor for HoverCollector with fn visit_Accessor_Label(
   env,
   label,
 ) {
@@ -250,7 +259,7 @@ impl @syntax.IterVisitor for HoverCollector with visit_Accessor_Label(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with visit_Expr_DotApply(
+impl @syntax.IterVisitor for HoverCollector with fn visit_Expr_DotApply(
   env,
   self~,
   method_name~,
