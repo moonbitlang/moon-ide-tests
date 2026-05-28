@@ -17,6 +17,26 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
+$ run_moon_ide moon ide hover 'Context' --loc 'src/lib/json.mbt:2:13'
+///|
+priv struct Context {
+            ^^^^^^^
+            ```moonbit
+            struct Context {
+              original: Array[Char]
+              rest: ArrayView[Char]
+              skip: Int
+              arr_acc: Array[Json]
+              obj_acc: Map[String, Json]
+              stack: Array[Frame]
+              decode: &Decode
+            }
+            ```
+  original : Array[Char]
+  rest : ArrayView[Char]
+```
+
+```mooncram
 $ run_moon_ide moon ide hover 'original' --loc 'src/lib/json.mbt:3:3'
 ///|
 priv struct Context {
@@ -30,17 +50,17 @@ priv struct Context {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'rest' --loc 'src/lib/json.mbt:4:3'
+$ run_moon_ide moon ide hover 'ParseError' --loc 'src/lib/error.mbt:2:14'
 ///|
-priv struct Context {
-  original : Array[Char]
-  rest : ArrayView[Char]
-  ^^^^
-  ```moonbit
-  ArrayView[Char]
-  ```
-  skip : Int
-  arr_acc : Array[Json]
+pub suberror ParseError {
+             ^^^^^^^^^^
+             ```moonbit
+             suberror ParseError {
+               ParseError(Reason)
+             } derive(@debug.Debug)
+             ```
+  ParseError(Reason)
+} derive(Debug)
 ```
 
 ```mooncram
@@ -57,20 +77,18 @@ pub suberror ParseError {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'Reason' --loc 'src/lib/error.mbt:3:14'
+$ run_moon_ide moon ide hover 'Value' --loc 'src/lib/value.mbt:2:10'
 ///|
-pub suberror ParseError {
-  ParseError(Reason)
-             ^^^^^^
-             ```moonbit
-             enum Reason {
-               InvalidByte(Int, Char)
-               UnexpectedEnd(Checkpoint)
-               UnexpectedSequence(Array[Char], Int)
-             } derive(@debug.Debug)
-             ```
-} derive(Debug)
-
+pub enum Value {
+         ^^^^^
+         ```moonbit
+         enum Value {
+           Continue(ContinueValue)
+           Finish(FinishValue)
+         }
+         ```
+  Continue(ContinueValue)
+  Finish(FinishValue)
 ```
 
 ```mooncram
@@ -82,26 +100,6 @@ pub enum Value {
   ```moonbit
   (ContinueValue) -> Value
   ```
-  Finish(FinishValue)
-}
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'ContinueValue' --loc 'src/lib/value.mbt:3:12'
-///|
-pub enum Value {
-  Continue(ContinueValue)
-           ^^^^^^^^^^^^^
-           ```moonbit
-           struct ContinueValue {
-             rest: ArrayView[Char]
-             arr_acc: Array[Json]
-             obj_acc: Map[String, Json]
-             stack: Array[Frame]
-             decode: &Decode
-             checkpoint: Checkpoint
-           }
-           ```
   Finish(FinishValue)
 }
 ```

@@ -106,7 +106,7 @@ fn should_keep_symbol(sym : String) -> Bool {
 }
 
 ///|
-priv struct HoverCollector {
+priv struct LocCollector {
   file : String
   max_per_file : Int
   out : Array[TestCase]
@@ -115,8 +115,8 @@ priv struct HoverCollector {
 }
 
 ///|
-fn HoverCollector::append_symbol(
-  self : HoverCollector,
+fn LocCollector::append_symbol(
+  self : LocCollector,
   sym : String,
   line : Int,
   col : Int,
@@ -138,8 +138,8 @@ fn HoverCollector::append_symbol(
 }
 
 ///|
-fn HoverCollector::append_from_loc(
-  self : HoverCollector,
+fn LocCollector::append_from_loc(
+  self : LocCollector,
   sym : String,
   loc : @basic.Location,
 ) -> Unit {
@@ -149,8 +149,8 @@ fn HoverCollector::append_from_loc(
 }
 
 ///|
-fn HoverCollector::append_from_long_ident(
-  self : HoverCollector,
+fn LocCollector::append_from_long_ident(
+  self : LocCollector,
   long_ident : @syntax.LongIdent,
   loc : @basic.Location,
 ) -> Unit {
@@ -166,15 +166,15 @@ fn HoverCollector::append_from_long_ident(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector
+impl @syntax.IterVisitor for LocCollector
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Binder(env, binder) {
+impl @syntax.IterVisitor for LocCollector with fn visit_Binder(env, binder) {
   env.append_from_loc(binder.name, binder.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_FieldName(
+impl @syntax.IterVisitor for LocCollector with fn visit_FieldName(
   env,
   field_name,
 ) {
@@ -182,12 +182,12 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_FieldName(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Label(env, label) {
+impl @syntax.IterVisitor for LocCollector with fn visit_Label(env, label) {
   env.append_from_loc(label.name, label.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDeclBinder(
+impl @syntax.IterVisitor for LocCollector with fn visit_TypeDeclBinder(
   env,
   type_decl_binder,
 ) {
@@ -196,12 +196,10 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDeclBinder(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDecl(
-  env,
-  type_decl,
-) {
-  ignore(type_decl.tycon)
-  ignore(type_decl.tycon_loc)
+impl @syntax.IterVisitor for LocCollector with fn visit_TypeDecl(env, type_decl) {
+  if should_collect_type_decl(type_decl.components) {
+    env.append_from_loc(type_decl.tycon, type_decl.tycon_loc)
+  }
   ignore(type_decl.params)
   env.visit_TypeDesc(type_decl.components)
   type_decl.deriving.each(x => env.visit_DerivingDirective(x))
@@ -209,7 +207,15 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_TypeDecl(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Impl_TopUsing(
+fn should_collect_type_decl(type_desc : @syntax.TypeDesc) -> Bool {
+  match type_desc {
+    @syntax.TypeDesc::Alias(_) | @syntax.TypeDesc::Abstract => false
+    _ => true
+  }
+}
+
+///|
+impl @syntax.IterVisitor for LocCollector with fn visit_Impl_TopUsing(
   env,
   pkg~,
   names~,
@@ -230,28 +236,22 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_Impl_TopUsing(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Var(env, var_) {
+impl @syntax.IterVisitor for LocCollector with fn visit_Var(env, var_) {
   env.append_from_long_ident(var_.name, var_.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_TypeName(
-  env,
-  type_name,
-) {
+impl @syntax.IterVisitor for LocCollector with fn visit_TypeName(env, type_name) {
   env.append_from_long_ident(type_name.name, type_name.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_ConstrId(
-  env,
-  constr_id,
-) {
+impl @syntax.IterVisitor for LocCollector with fn visit_ConstrId(env, constr_id) {
   env.append_from_long_ident(constr_id.id, constr_id.loc)
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_ConstrDecl(
+impl @syntax.IterVisitor for LocCollector with fn visit_ConstrDecl(
   env,
   constr_decl,
 ) {
@@ -263,7 +263,7 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_ConstrDecl(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Constructor(
+impl @syntax.IterVisitor for LocCollector with fn visit_Constructor(
   env,
   constructor_,
 ) {
@@ -272,7 +272,7 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_Constructor(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Accessor_Label(
+impl @syntax.IterVisitor for LocCollector with fn visit_Accessor_Label(
   env,
   label,
 ) {
@@ -280,7 +280,7 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_Accessor_Label(
 }
 
 ///|
-impl @syntax.IterVisitor for HoverCollector with fn visit_Expr_DotApply(
+impl @syntax.IterVisitor for LocCollector with fn visit_Expr_DotApply(
   env,
   self~,
   method_name~,
@@ -296,208 +296,14 @@ impl @syntax.IterVisitor for HoverCollector with fn visit_Expr_DotApply(
 }
 
 ///|
-fn long_ident_tail(long_ident : @syntax.LongIdent) -> String {
-  match long_ident {
-    @syntax.LongIdent::Ident(name~) => name
-    @syntax.LongIdent::Dot(pkg~, id~) => {
-      ignore(pkg)
-      id
-    }
-  }
-}
-
-///|
-fn type_to_query(ty : @syntax.Type) -> String? {
-  match ty {
-    @syntax.Type::Any(..) | @syntax.Type::Arrow(..) => None
-    @syntax.Type::Tuple(tys~, ..) => {
-      let parts = Array::new()
-      for item in tys {
-        match type_to_query(item) {
-          Some(part) => parts.push(part)
-          None => return None
-        }
-      }
-      let joined = parts.join(", ")
-      Some("(\{joined})")
-    }
-    @syntax.Type::Name(constr_id~, tys~, ..) => {
-      let base = long_ident_tail(constr_id.id)
-      if tys.is_empty() {
-        Some(base)
-      } else {
-        let args = Array::new()
-        for item in tys {
-          match type_to_query(item) {
-            Some(part) => args.push(part)
-            None => return None
-          }
-        }
-        let joined = args.join(", ")
-        Some("\{base}[\{joined}]")
-      }
-    }
-    @syntax.Type::Option(ty~, ..) =>
-      match type_to_query(ty) {
-        Some(name) => Some("\{name}?")
-        None => None
-      }
-    @syntax.Type::Object(constr_id) => Some(long_ident_tail(constr_id.id))
-  }
-}
-
-///|
-fn make_toplevel_case(
-  file : String,
-  query : String,
-  rename_sym : String,
-  loc : @basic.Location,
-) -> ToplevelCase {
-  let col = loc.start.column()
-  let normalized_col = if col <= 0 { 1 } else { col }
-  ToplevelCase::{
-    file,
-    line: loc.start.lnum,
-    col: normalized_col,
-    query,
-    rename_sym,
-  }
-}
-
-///|
-fn render_toplevel_cases(
-  file : String,
-  impl_ : @syntax.Impl,
-) -> Array[ToplevelCase] {
-  let queries = Array::new()
-  match impl_ {
-    @syntax.Impl::TopTypeDef(type_decl) =>
-      queries.push(
-        make_toplevel_case(
-          file,
-          type_decl.tycon,
-          type_decl.tycon,
-          type_decl.tycon_loc,
-        ),
-      )
-    @syntax.Impl::TopFuncDef(fun_decl~, ..) => {
-      let func_name = fun_decl.name.name
-      match fun_decl.type_name {
-        Some(type_name) =>
-          queries.push(
-            make_toplevel_case(
-              file,
-              "\{long_ident_tail(type_name.name)}::\{func_name}",
-              func_name,
-              fun_decl.name.loc,
-            ),
-          )
-        None =>
-          queries.push(
-            make_toplevel_case(file, func_name, func_name, fun_decl.name.loc),
-          )
-      }
-    }
-    @syntax.Impl::TopLetDef(binder~, ..) =>
-      queries.push(
-        make_toplevel_case(file, binder.name, binder.name, binder.loc),
-      )
-    @syntax.Impl::TopTrait(trait_decl) =>
-      queries.push(
-        make_toplevel_case(
-          file,
-          trait_decl.name.name,
-          trait_decl.name.name,
-          trait_decl.name.loc,
-        ),
-      )
-    @syntax.Impl::TopImpl(self_ty~, trait_~, method_name~, ..) => {
-      let trait_name = long_ident_tail(trait_.name)
-      let meth = method_name.name
-      match self_ty {
-        None =>
-          queries.push(
-            make_toplevel_case(
-              file,
-              "\{trait_name}::\{meth}",
-              meth,
-              method_name.loc,
-            ),
-          )
-        Some(ty) =>
-          match type_to_query(ty) {
-            Some(type_name) =>
-              queries.push(
-                make_toplevel_case(
-                  file,
-                  "\{trait_name}::\{meth} for \{type_name}",
-                  meth,
-                  method_name.loc,
-                ),
-              )
-            None => ()
-          }
-      }
-    }
-    @syntax.Impl::TopView(view_type_name~, view_type_loc~, view_func_name~, ..) => {
-      queries.push(
-        make_toplevel_case(file, view_type_name, view_type_name, view_type_loc),
-      )
-      queries.push(
-        make_toplevel_case(
-          file,
-          view_func_name.name,
-          view_func_name.name,
-          view_func_name.loc,
-        ),
-      )
-    }
-    @syntax.Impl::TopUsing(names~, ..) =>
-      for pair in names {
-        let binder = pair.0.binder
-        queries.push(
-          make_toplevel_case(file, binder.name, binder.name, binder.loc),
-        )
-      }
-    _ => ()
-  }
-  queries
-}
-
-///|
-fn collect_toplevel_symbols(
-  file : String,
-  impls : @syntax.Impls,
-) -> Array[ToplevelCase] {
-  let symbols = Array::new()
-  let seen : @hashset.HashSet[ToplevelCase] = @hashset.HashSet([])
-  for impl_ in impls {
-    for test_case in render_toplevel_cases(file, impl_) {
-      if test_case.query is "" {
-        continue
-      }
-      if !should_keep_symbol(test_case.rename_sym) {
-        continue
-      }
-      if seen.contains(test_case) {
-        continue
-      }
-      seen.add(test_case)
-      symbols.push(test_case)
-    }
-  }
-  symbols
-}
-
-///|
-fn collect_hover_cases(
+fn collect_loc_cases(
   file : String,
   impls : @syntax.Impls,
   max_per_file : Int,
 ) -> Array[TestCase] {
   let cases = Array::new()
   let seen : @hashset.HashSet[TestCase] = @hashset.HashSet([])
-  let collector = HoverCollector::{
+  let collector = LocCollector::{
     file,
     max_per_file,
     out: cases,
@@ -511,16 +317,41 @@ fn collect_hover_cases(
 }
 
 ///|
+fn parser_report_lines(
+  file : String,
+  reports : Array[@basic.Report],
+) -> Array[String] {
+  let lines = Array::new()
+  if reports.length() == 0 {
+    return lines
+  }
+  let plural = if reports.length() == 1 { "report" } else { "reports" }
+  lines.push(
+    "testgen: parser emitted \{reports.length()} \{plural} for \{file}",
+  )
+  for report in reports {
+    lines.push("testgen:   \{report.to_string()}")
+  }
+  lines
+}
+
+///|
+fn emit_parser_reports(file : String, reports : Array[@basic.Report]) -> Unit {
+  for line in parser_report_lines(file, reports) {
+    println(line)
+  }
+}
+
+///|
 fn collect_cases_for_text(
   file : String,
   text : String,
   max_per_file : Int,
 ) -> CollectResult {
   let (impls, reports) = @parser.parse_string(text, name=file)
-  ignore(reports)
-  let hover_cases = collect_hover_cases(file, impls, max_per_file)
-  let toplevel_symbols = collect_toplevel_symbols(file, impls)
-  CollectResult::{ source_files: [file], hover_cases, toplevel_symbols }
+  emit_parser_reports(file, reports)
+  let loc_cases = collect_loc_cases(file, impls, max_per_file)
+  CollectResult::{ source_files: [file], loc_cases }
 }
 
 ///|
@@ -597,11 +428,9 @@ fn collect_cases(
   project_root : String,
   max_per_file : Int,
   max_files : Int,
-  max_toplevel : Int,
 ) -> CollectResult {
   let source_files = collect_files(project_root, max_files)
-  let hover_cases = Array::new()
-  let toplevel_symbols = Array::new()
+  let loc_cases = Array::new()
   for rel_path in source_files {
     let abs_path = @path.Path::join(project_root, rel_path).to_string()
     let maybe_text = try @fs.read_file_to_string(abs_path) catch {
@@ -612,18 +441,12 @@ fn collect_cases(
     match maybe_text {
       Some(text) => {
         let result = collect_cases_for_text(rel_path, text, max_per_file)
-        for test_case in result.hover_cases {
-          hover_cases.push(test_case)
-        }
-        for test_case in result.toplevel_symbols {
-          if max_toplevel > 0 && toplevel_symbols.length() >= max_toplevel {
-            break
-          }
-          toplevel_symbols.push(test_case)
+        for test_case in result.loc_cases {
+          loc_cases.push(test_case)
         }
       }
       None => ()
     }
   }
-  CollectResult::{ source_files, hover_cases, toplevel_symbols }
+  CollectResult::{ source_files, loc_cases }
 }

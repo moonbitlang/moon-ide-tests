@@ -47,43 +47,52 @@ Found 3 references for symbol 'Trie':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'Set_string' --loc 'arg.mbt:19:3'
-Found 4 references for symbol 'Set_string':
-<WORKDIR>/arg.mbt:19:3-19:13:
-   | pub(all) enum Spec { (escaped)
+$ run_moon_ide moon ide find-references 'Spec' --loc 'arg.mbt:16:15'
+Found 5 references for symbol 'Spec':
+<WORKDIR>/arg.mbt:16:15-16:19:
+   | ///  Set - set reference to true (escaped)
+   | ///  (escaped)
+   | ///  Clear - set reference to false (escaped)
+16 | pub(all) enum Spec { (escaped)
+   |               ^^^^ (escaped)
    |   Unit(() -> Unit raise) (escaped)
    |   String((String) -> Unit raise) (escaped)
-19 |   Set_string(Ref[String]) (escaped)
-   |   ^^^^^^^^^^ (escaped)
-   |   Set(Ref[Bool]) (escaped)
-   |   Clear(Ref[Bool]) (escaped)
 
-<WORKDIR>/arg.mbt:45:16-45:26:
-   |                 f(y) (escaped)
-   |                 continue ys (escaped)
-   |               } (escaped)
-45 |               (Set_string(r), [y, .. ys]) => { (escaped)
-   |                ^^^^^^^^^^ (escaped)
-   |                 r.val = y (escaped)
-   |                 continue ys (escaped)
+<WORKDIR>/arg.mbt:26:18-26:22:
+   |  (escaped)
+   | ///| (escaped)
+   | fn interpret( (escaped)
+26 |   trie : @trie.T[Spec], (escaped)
+   |                  ^^^^ (escaped)
+   |   xs : Array[String], (escaped)
+   |   fallback : (String) -> Unit raise, (escaped)
 
-<WORKDIR>/arg.mbt:49:34-49:44:
-   |                 r.val = y (escaped)
-   |                 continue ys (escaped)
-   |               } (escaped)
-49 |               (String(_), []) | (Set_string(_), []) => (escaped)
-   |                                  ^^^^^^^^^^ (escaped)
-   |                 raise ErrorMsg("missing argument for \\{x}") (escaped)
-   |               (Set(r), _) => { (escaped)
+<WORKDIR>/arg.mbt:87:37-87:41:
+   | /// If the input arguments contains help option or invalid input, the `parse`  (escaped)
+   | /// function will raise `ErrorMsg` error. (escaped)
+   | pub fn parse( (escaped)
+87 |   speclist : Array[(String, String, Spec, String)], (escaped)
+   |                                     ^^^^ (escaped)
+   |   rest : (String) -> Unit raise, (escaped)
+   |   usage_msg : String, (escaped)
 
-<WORKDIR>/arg_test.mbt:15:24-15:34:
-   |   let files = [] (escaped)
-   |   let options = [ (escaped)
-   |     ("--no-verbose", "-n", @ArgParser.Clear(verbose), "disable verbose message"), (escaped)
-15 |     ("--search", "-s", Set_string(keyword), "search for files"), (escaped)
-   |                        ^^^^^^^^^^ (escaped)
-   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
-   |   ] (escaped)
+<WORKDIR>/arg.mbt:92:28-92:32:
+   |   usage_msg : String, (escaped)
+   |   argv : Array[String], (escaped)
+   | ) -> Unit raise { (escaped)
+92 |   let aux = fn(acc : (Trie[Spec], String), it) { (escaped)
+   |                            ^^^^ (escaped)
+   |     let (trie, help_msg) = acc (escaped)
+   |     let (a, b, spec, help) = it (escaped)
+
+<WORKDIR>/arg.mbt:103:19-103:23:
+    |     aux, (escaped)
+    |     init=(Trie::empty(), usage_msg + "\\n options:\\n"), (escaped)
+    |   ) (escaped)
+103 |   let help_spec = Spec::Unit(() => raise ErrorMsg(help_msg)) (escaped)
+    |                   ^^^^ (escaped)
+    |   let trie = trie.add("--help", help_spec).add("-h", help_spec) (escaped)
+    |   interpret(trie, argv, rest) (escaped)
 
 ```
 
@@ -147,115 +156,5 @@ Found 3 references for symbol 'keyword':
    |             ^^^^^^^ (escaped)
    |   assert_eq(files.length(), 2) (escaped)
    |   assert_eq(files[0], "file1") (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Spec' --loc 'arg.mbt:16:15'
-Found 5 references for symbol 'Spec':
-<WORKDIR>/arg.mbt:16:15-16:19:
-   | ///  Set - set reference to true (escaped)
-   | ///  (escaped)
-   | ///  Clear - set reference to false (escaped)
-16 | pub(all) enum Spec { (escaped)
-   |               ^^^^ (escaped)
-   |   Unit(() -> Unit raise) (escaped)
-   |   String((String) -> Unit raise) (escaped)
-
-<WORKDIR>/arg.mbt:26:18-26:22:
-   |  (escaped)
-   | ///| (escaped)
-   | fn interpret( (escaped)
-26 |   trie : @trie.T[Spec], (escaped)
-   |                  ^^^^ (escaped)
-   |   xs : Array[String], (escaped)
-   |   fallback : (String) -> Unit raise, (escaped)
-
-<WORKDIR>/arg.mbt:87:37-87:41:
-   | /// If the input arguments contains help option or invalid input, the `parse`  (escaped)
-   | /// function will raise `ErrorMsg` error. (escaped)
-   | pub fn parse( (escaped)
-87 |   speclist : Array[(String, String, Spec, String)], (escaped)
-   |                                     ^^^^ (escaped)
-   |   rest : (String) -> Unit raise, (escaped)
-   |   usage_msg : String, (escaped)
-
-<WORKDIR>/arg.mbt:92:28-92:32:
-   |   usage_msg : String, (escaped)
-   |   argv : Array[String], (escaped)
-   | ) -> Unit raise { (escaped)
-92 |   let aux = fn(acc : (Trie[Spec], String), it) { (escaped)
-   |                            ^^^^ (escaped)
-   |     let (trie, help_msg) = acc (escaped)
-   |     let (a, b, spec, help) = it (escaped)
-
-<WORKDIR>/arg.mbt:103:19-103:23:
-    |     aux, (escaped)
-    |     init=(Trie::empty(), usage_msg + "\\n options:\\n"), (escaped)
-    |   ) (escaped)
-103 |   let help_spec = Spec::Unit(() => raise ErrorMsg(help_msg)) (escaped)
-    |                   ^^^^ (escaped)
-    |   let trie = trie.add("--help", help_spec).add("-h", help_spec) (escaped)
-    |   interpret(trie, argv, rest) (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'interpret' --loc 'arg.mbt:25:4'
-Found 2 references for symbol 'interpret':
-<WORKDIR>/arg.mbt:25:4-25:13:
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-25 | fn interpret( (escaped)
-   |    ^^^^^^^^^ (escaped)
-   |   trie : @trie.T[Spec], (escaped)
-   |   xs : Array[String], (escaped)
-
-<WORKDIR>/arg.mbt:105:3-105:12:
-    |   ) (escaped)
-    |   let help_spec = Spec::Unit(() => raise ErrorMsg(help_msg)) (escaped)
-    |   let trie = trie.add("--help", help_spec).add("-h", help_spec) (escaped)
-105 |   interpret(trie, argv, rest) (escaped)
-    |   ^^^^^^^^^ (escaped)
-    | } (escaped)
-    |  (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'parse' --loc 'arg.mbt:86:8'
-Found 2 references for symbol 'parse':
-<WORKDIR>/arg.mbt:86:8-86:13:
-   | ///  (escaped)
-   | /// If the input arguments contains help option or invalid input, the `parse`  (escaped)
-   | /// function will raise `ErrorMsg` error. (escaped)
-86 | pub fn parse( (escaped)
-   |        ^^^^^ (escaped)
-   |   speclist : Array[(String, String, Spec, String)], (escaped)
-   |   rest : (String) -> Unit raise, (escaped)
-
-<WORKDIR>/arg_test.mbt:19:27-19:32:
-   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
-   |   ] (escaped)
-   |   let argv = ["--search", ".mbt", "--delete", "file1", "file2", "-n"] (escaped)
-19 |   let _ = try? @ArgParser.parse(options, file => files.push(file), usage, argv) (escaped)
-   |                           ^^^^^ (escaped)
-   |   assert_eq(verbose.val, false) (escaped)
-   |   assert_eq(keyword.val, ".mbt") (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'ErrorMsg' --loc 'arg.mbt:109:14'
-Found 1 references for symbol 'ErrorMsg':
-<WORKDIR>/arg.mbt:109:14-109:22:
-    | } (escaped)
-    |  (escaped)
-    | ///| (escaped)
-109 | pub suberror ErrorMsg { (escaped)
-    |              ^^^^^^^^ (escaped)
-    |   ErrorMsg(String) (escaped)
-    | } (escaped)
 
 ```

@@ -5,7 +5,6 @@ priv struct Args {
   repo_slug : String
   max_per_file : Int
   max_files : Int
-  max_toplevel : Int
 }
 
 ///|
@@ -113,7 +112,6 @@ fn parse_args(args : Array[String]) -> Args {
   let repo_slug_raw : Ref[String] = Ref("")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
-  let max_toplevel_raw : Ref[String] = Ref("20")
   let spec = [
     (
       "--repo",
@@ -145,12 +143,6 @@ fn parse_args(args : Array[String]) -> Args {
       @arg_parser.Spec::Set_string(max_files_raw),
       "Cap scanned MoonBit source files per repository; 0 means no cap (default: 0)",
     ),
-    (
-      "--max-toplevel",
-      "-t",
-      @arg_parser.Spec::Set_string(max_toplevel_raw),
-      "Cap generated top-level symbol query commands per repository; 0 means no cap (default: 20)",
-    ),
   ]
   @arg_parser.parse(
     spec,
@@ -173,12 +165,6 @@ fn parse_args(args : Array[String]) -> Args {
       0
     }
   }
-  let max_toplevel = @string.parse_int(max_toplevel_raw.val) catch {
-    _ => {
-      fatal("invalid --max-toplevel value: \{max_toplevel_raw.val}")
-      0
-    }
-  }
   if repo_path_raw.val == "" {
     fatal("--repo is required")
   }
@@ -194,16 +180,12 @@ fn parse_args(args : Array[String]) -> Args {
   if max_files < 0 {
     fatal("--max-files must be non-negative")
   }
-  if max_toplevel < 0 {
-    fatal("--max-toplevel must be non-negative")
-  }
   Args::{
     repo_path: repo_path_raw.val,
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
     max_per_file,
     max_files,
-    max_toplevel,
   }
 }
 
@@ -215,7 +197,6 @@ fn run(args : Array[String]) -> Unit {
     config.repo_path,
     config.max_per_file,
     config.max_files,
-    config.max_toplevel,
   )
   let files = render_cram_files(result, config.repo_slug)
   write_cram_files(config.output_dir, files)

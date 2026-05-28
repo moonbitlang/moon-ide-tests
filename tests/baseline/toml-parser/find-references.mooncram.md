@@ -980,6 +980,38 @@ Found 104 references for symbol 'TomlString':
 ```
 
 ```mooncram
+$ run_moon_ide moon ide find-references 'TestResult' --loc 'e2e/runner.mbt:7:12'
+Found 3 references for symbol 'TestResult':
+<WORKDIR>/e2e/runner.mbt:7:12-7:22:
+  | /// `failures` carries one entry per failing case (typically including the (escaped)
+  | /// fixture path and a short reason) so that the test harness can print a (escaped)
+  | /// summary at the end without re-walking the corpus. (escaped)
+7 | pub struct TestResult { (escaped)
+  |            ^^^^^^^^^^ (escaped)
+  |   passed : Int (escaped)
+  |   failed : Int (escaped)
+
+<WORKDIR>/e2e/runner.mbt:15:8-15:18:
+   |  (escaped)
+   | ///| (escaped)
+   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
+15 | pub fn TestResult::new() -> TestResult { (escaped)
+   |        ^^^^^^^^^^ (escaped)
+   |   { passed: 0, failed: 0, failures: [] } (escaped)
+   | } (escaped)
+
+<WORKDIR>/e2e/runner.mbt:15:29-15:39:
+   |  (escaped)
+   | ///| (escaped)
+   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
+15 | pub fn TestResult::new() -> TestResult { (escaped)
+   |                             ^^^^^^^^^^ (escaped)
+   |   { passed: 0, failed: 0, failures: [] } (escaped)
+   | } (escaped)
+
+```
+
+```mooncram
 $ run_moon_ide moon ide find-references 'passed' --loc 'e2e/runner.mbt:8:3'
 Found 2 references for symbol 'passed':
 <WORKDIR>/e2e/runner.mbt:8:3-8:9:
@@ -997,29 +1029,6 @@ Found 2 references for symbol 'passed':
    | pub fn TestResult::new() -> TestResult { (escaped)
 16 |   { passed: 0, failed: 0, failures: [] } (escaped)
    |     ^^^^^^ (escaped)
-   | } (escaped)
-   |  (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'failed' --loc 'e2e/runner.mbt:9:3'
-Found 2 references for symbol 'failed':
-<WORKDIR>/e2e/runner.mbt:9:3-9:9:
-  | /// summary at the end without re-walking the corpus. (escaped)
-  | pub struct TestResult { (escaped)
-  |   passed : Int (escaped)
-9 |   failed : Int (escaped)
-  |   ^^^^^^ (escaped)
-  |   failures : Array[String] (escaped)
-  | } (escaped)
-
-<WORKDIR>/e2e/runner.mbt:16:16-16:22:
-   | ///| (escaped)
-   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-   | pub fn TestResult::new() -> TestResult { (escaped)
-16 |   { passed: 0, failed: 0, failures: [] } (escaped)
-   |                ^^^^^^ (escaped)
    | } (escaped)
    |  (escaped)
 
@@ -2723,179 +2732,5 @@ Found 167 references for symbol 'parse':
     |                            ^^^^^ (escaped)
     |   assert_eq(value, roundtripped) (escaped)
     | } (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'TestResult' --loc 'e2e/runner.mbt:7:12'
-Found 3 references for symbol 'TestResult':
-<WORKDIR>/e2e/runner.mbt:7:12-7:22:
-  | /// `failures` carries one entry per failing case (typically including the (escaped)
-  | /// fixture path and a short reason) so that the test harness can print a (escaped)
-  | /// summary at the end without re-walking the corpus. (escaped)
-7 | pub struct TestResult { (escaped)
-  |            ^^^^^^^^^^ (escaped)
-  |   passed : Int (escaped)
-  |   failed : Int (escaped)
-
-<WORKDIR>/e2e/runner.mbt:15:8-15:18:
-   |  (escaped)
-   | ///| (escaped)
-   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-15 | pub fn TestResult::new() -> TestResult { (escaped)
-   |        ^^^^^^^^^^ (escaped)
-   |   { passed: 0, failed: 0, failures: [] } (escaped)
-   | } (escaped)
-
-<WORKDIR>/e2e/runner.mbt:15:29-15:39:
-   |  (escaped)
-   | ///| (escaped)
-   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-15 | pub fn TestResult::new() -> TestResult { (escaped)
-   |                             ^^^^^^^^^^ (escaped)
-   |   { passed: 0, failed: 0, failures: [] } (escaped)
-   | } (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'new' --loc 'e2e/runner.mbt:15:20'
-Found 1 references for symbol 'new':
-<WORKDIR>/e2e/runner.mbt:15:20-15:23:
-   |  (escaped)
-   | ///| (escaped)
-   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-15 | pub fn TestResult::new() -> TestResult { (escaped)
-   |                    ^^^ (escaped)
-   |   { passed: 0, failed: 0, failures: [] } (escaped)
-   | } (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'collect_toml_files' --loc 'e2e/runner.mbt:21:8'
-Found 4 references for symbol 'collect_toml_files':
-<WORKDIR>/e2e/e2e_test.mbt:4:8-4:26:
-  | ///| (escaped)
-  | async test "valid toml-test suite" { (escaped)
-  |   let files : Array[String] = [] (escaped)
-4 |   @e2e.collect_toml_files("e2e/testdata/valid", files) (escaped)
-  |        ^^^^^^^^^^^^^^^^^^ (escaped)
-  |   files.sort() (escaped)
-  |   let mut passed = 0 (escaped)
-
-<WORKDIR>/e2e/e2e_test.mbt:60:8-60:26:
-   | ///| (escaped)
-   | async test "invalid toml-test suite" { (escaped)
-   |   let files : Array[String] = [] (escaped)
-60 |   @e2e.collect_toml_files("e2e/testdata/invalid", files) (escaped)
-   |        ^^^^^^^^^^^^^^^^^^ (escaped)
-   |   files.sort() (escaped)
-   |   let mut passed = 0 (escaped)
-
-<WORKDIR>/e2e/runner.mbt:21:8-21:26:
-   |  (escaped)
-   | ///| (escaped)
-   | /// Recursively collect all .toml files in a directory. (escaped)
-21 | pub fn collect_toml_files( (escaped)
-   |        ^^^^^^^^^^^^^^^^^^ (escaped)
-   |   dir : String, (escaped)
-   |   files : Array[String], (escaped)
-
-<WORKDIR>/e2e/runner.mbt:29:7-29:25:
-   |   for entry in entries { (escaped)
-   |     let path = "\\{dir}/\\{entry}" (escaped)
-   |     if @fs.is_dir(path) { (escaped)
-29 |       collect_toml_files(path, files) (escaped)
-   |       ^^^^^^^^^^^^^^^^^^ (escaped)
-   |     } else if entry.has_suffix(".toml") { (escaped)
-   |       files.push(path) (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'run_single_valid_test' --loc 'e2e/runner.mbt:39:8'
-Found 1 references for symbol 'run_single_valid_test':
-<WORKDIR>/e2e/runner.mbt:39:8-39:29:
-   | ///| (escaped)
-   | /// Run a single valid test: parse .toml, convert to test JSON, compare with .json. (escaped)
-   | /// Returns None on success, Some(error_message) on failure. (escaped)
-39 | pub fn run_single_valid_test(toml_path : String) -> String? raise @fs.IOError { (escaped)
-   |        ^^^^^^^^^^^^^^^^^^^^^ (escaped)
-   |   let json_path = "\\{toml_path[:toml_path.length() - 5]}.json" (escaped)
-   |   if !@fs.path_exists(json_path) { (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'run_single_invalid_test' --loc 'e2e/runner.mbt:68:8'
-Found 2 references for symbol 'run_single_invalid_test':
-<WORKDIR>/e2e/e2e_test.mbt:66:16-66:39:
-   |   let mut failed = 0 (escaped)
-   |   let failures : Array[String] = [] (escaped)
-   |   for toml_path in files { (escaped)
-66 |     match @e2e.run_single_invalid_test(toml_path) { (escaped)
-   |                ^^^^^^^^^^^^^^^^^^^^^^^ (escaped)
-   |       None => passed += 1 (escaped)
-   |       Some(msg) => { (escaped)
-
-<WORKDIR>/e2e/runner.mbt:68:8-68:31:
-   | ///| (escaped)
-   | /// Run a single invalid test: parse .toml and expect failure. (escaped)
-   | /// Returns None on success (parse failed as expected), Some(error) if parse succeeded. (escaped)
-68 | pub fn run_single_invalid_test(toml_path : String) -> String? raise @fs.IOError { (escaped)
-   |        ^^^^^^^^^^^^^^^^^^^^^^^ (escaped)
-   |   let toml_bytes = @fs.read_file_to_bytes(toml_path) (escaped)
-   |   // Try decoding as UTF-8, skip non-UTF-8 files (they should fail anyway) (escaped)
-
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'json_equal' --loc 'e2e/runner.mbt:84:8'
-Found 5 references for symbol 'json_equal':
-<WORKDIR>/e2e/e2e_test.mbt:31:18-31:28:
-   |       } (escaped)
-   |       Ok(value) => { (escaped)
-   |         let actual = @e2e.to_test_json(value) (escaped)
-31 |         if !@e2e.json_equal(actual, expected) { (escaped)
-   |                  ^^^^^^^^^^ (escaped)
-   |           failures.push( (escaped)
-   |             "[MISMATCH] \\{toml_path}\\n    expected: \\{expected.stringify()}\\n    actual:   \\{actual.stringify()}", (escaped)
-
-<WORKDIR>/e2e/runner.mbt:54:11-54:21:
-   |     Err(e) => Some("[PARSE-ERROR] \\{toml_path}: \\{e}") (escaped)
-   |     Ok(value) => { (escaped)
-   |       let actual = to_test_json(value) (escaped)
-54 |       if !json_equal(actual, expected) { (escaped)
-   |           ^^^^^^^^^^ (escaped)
-   |         Some( (escaped)
-   |           "[MISMATCH] \\{toml_path}\\n    expected: \\{expected.stringify()}\\n    actual:   \\{actual.stringify()}", (escaped)
-
-<WORKDIR>/e2e/runner.mbt:84:8-84:18:
-   |  (escaped)
-   | ///| (escaped)
-   | /// Compare two JSON values for equality. (escaped)
-84 | pub fn json_equal(a : Json, b : Json) -> Bool { (escaped)
-   |        ^^^^^^^^^^ (escaped)
-   |   match (a, b) { (escaped)
-   |     (Object(ma), Object(mb)) => { (escaped)
-
-<WORKDIR>/e2e/runner.mbt:99:40-99:50:
-   |         return datetime_values_equal(ma, mb) (escaped)
-   |       } (escaped)
-   |       for k, va in ma { (escaped)
-99 |         guard mb.get(k) is Some(vb) && json_equal(va, vb) else { return false } (escaped)
-   |                                        ^^^^^^^^^^ (escaped)
-   |       } (escaped)
-   |       true (escaped)
-
-<WORKDIR>/e2e/runner.mbt:108:13-108:23:
-    |         return false (escaped)
-    |       } (escaped)
-    |       for i, va in aa { (escaped)
-108 |         if !json_equal(va, ab[i]) { (escaped)
-    |             ^^^^^^^^^^ (escaped)
-    |           return false (escaped)
-    |         } (escaped)
 
 ```

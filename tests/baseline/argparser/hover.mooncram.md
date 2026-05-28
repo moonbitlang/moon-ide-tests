@@ -30,17 +30,36 @@ using @trie {type Trie}
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'Set_string' --loc 'arg.mbt:19:3'
+$ run_moon_ide moon ide hover 'Spec' --loc 'arg.mbt:16:15'
+///  Set - set reference to true
+/// 
+///  Clear - set reference to false
 pub(all) enum Spec {
+              ^^^^
+              ```moonbit
+              enum Spec {
+                Unit(() -> Unit raise)
+                String((String) -> Unit raise)
+                Set_string(@ref.Ref[String])
+                Set(@ref.Ref[Bool])
+                Clear(@ref.Ref[Bool])
+              }
+              ```
+              ---
+              
+               Matched option handler that used to interpret options.
+               
+                Unit - handle with callback  
+               
+                String - handle associated value with callback
+               
+                Set_string - set option to associated value 
+               
+                Set - set reference to true
+               
+                Clear - set reference to false
   Unit(() -> Unit raise)
   String((String) -> Unit raise)
-  Set_string(Ref[String])
-  ^^^^^^^^^^
-  ```moonbit
-  (@ref.Ref[String]) -> Spec
-  ```
-  Set(Ref[Bool])
-  Clear(Ref[Bool])
 ```
 
 ```mooncram

@@ -17,6 +17,28 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( "$@"; ech
 ```
 
 ```mooncram
+$ run_moon_ide moon ide hover 'Bucket' --loc 'src/types.mbt:17:13'
+///|
+/// 桶结构，包含键值对信息和链表指针
+priv struct Bucket[K, V] {
+            ^^^^^^
+            ```moonbit
+            struct Bucket[K, V] {
+              hash: Int
+              key: K
+              mut value: V
+              mut next: Int
+              mut prev: Int
+            }
+            ```
+            ---
+            
+             桶结构，包含键值对信息和链表指针
+  hash : Int // 键的哈希值（缓存以避免重复计算）
+  key : K // 键
+```
+
+```mooncram
 $ run_moon_ide moon ide hover 'hash' --loc 'src/types.mbt:18:3'
 ///|
 /// 桶结构，包含键值对信息和链表指针
@@ -28,20 +50,6 @@ priv struct Bucket[K, V] {
   ```
   key : K // 键
   mut value : V // 值
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'key' --loc 'src/types.mbt:19:3'
-/// 桶结构，包含键值对信息和链表指针
-priv struct Bucket[K, V] {
-  hash : Int // 键的哈希值（缓存以避免重复计算）
-  key : K // 键
-  ^^^
-  ```moonbit
-  K
-  ```
-  mut value : V // 值
-  mut next : Int // 链表后继索引，-1表示没有后继
 ```
 
 ```mooncram

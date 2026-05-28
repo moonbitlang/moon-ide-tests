@@ -15,7 +15,7 @@ mkdir -p "$TESTS_DIR" "$LOGS_DIR" "$DIFFS_DIR"
 
 git -C "$ROOT" submodule update --init --recursive
 
-while IFS=$'\t' read -r slug path _url branch max_files max_per_file max_toplevel; do
+while IFS=$'\t' read -r slug path _url branch max_files max_per_file; do
   repo_path="$ROOT/$path"
   out_dir="$TESTS_DIR/$slug"
   log_prefix="$LOGS_DIR/$slug"
@@ -46,8 +46,7 @@ while IFS=$'\t' read -r slug path _url branch max_files max_per_file max_topleve
     --output-dir "$out_dir" \
     --repo-slug "$slug" \
     --max-files "$max_files" \
-    --max-per-file "$max_per_file" \
-    --max-toplevel "$max_toplevel" >"$log_prefix.generate.log" 2>&1; then
+    --max-per-file "$max_per_file" >"$log_prefix.generate.log" 2>&1; then
     echo "generate failed: $slug" >>"$SUMMARY"
     status=1
     continue

@@ -44,16 +44,6 @@ fn quoted_location(test_case : TestCase) -> String {
 }
 
 ///|
-fn toplevel_location(test_case : ToplevelCase) -> String {
-  "\{test_case.file}:\{test_case.line}:\{test_case.col}"
-}
-
-///|
-fn quoted_toplevel_location(test_case : ToplevelCase) -> String {
-  shell_quote(toplevel_location(test_case))
-}
-
-///|
 fn append_unique_command(
   sb : StringBuilder,
   seen : @hashset.HashSet[String],
@@ -74,22 +64,6 @@ fn append_case_commands(
   seen : @hashset.HashSet[String],
   cases : Array[TestCase],
   to_command : (TestCase) -> String,
-) -> Bool {
-  let mut has_command = false
-  for test_case in cases {
-    if append_unique_command(sb, seen, to_command(test_case)) {
-      has_command = true
-    }
-  }
-  has_command
-}
-
-///|
-fn append_toplevel_commands(
-  sb : StringBuilder,
-  seen : @hashset.HashSet[String],
-  cases : Array[ToplevelCase],
-  to_command : (ToplevelCase) -> String,
 ) -> Bool {
   let mut has_command = false
   for test_case in cases {
@@ -133,22 +107,15 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
 fn render_symbol_file(
   name : String,
   suite : String,
-  hover_cases : Array[TestCase],
-  toplevel_symbols : Array[ToplevelCase],
-  hover_command : (TestCase) -> String,
-  toplevel_command : (ToplevelCase) -> String,
+  loc_cases : Array[TestCase],
+  to_command : (TestCase) -> String,
 ) -> CramFile? {
   let sb = StringBuilder::new()
   append_markdown_header(sb, current_repo_slug.val, suite)
   append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
-  let hover_has_command = append_case_commands(
-    sb, seen, hover_cases, hover_command,
-  )
-  let toplevel_has_command = append_toplevel_commands(
-    sb, seen, toplevel_symbols, toplevel_command,
-  )
-  if hover_has_command || toplevel_has_command {
+  let has_command = append_case_commands(sb, seen, loc_cases, to_command)
+  if has_command {
     Some(CramFile::{ name, content: sb.to_string() })
   } else {
     None
@@ -157,54 +124,23 @@ fn render_symbol_file(
 
 ///|
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
-  render_symbol_file(
-    "hover.mooncram.md",
-    "hover",
-    cases,
-    [],
-    test_case => {
-      "$ run_moon_ide moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
-    },
-    _ => "",
-  )
+  render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
+    "$ run_moon_ide moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+  })
 }
 
 ///|
-fn render_peek_file(
-  hover_cases : Array[TestCase],
-  toplevel_symbols : Array[ToplevelCase],
-) -> CramFile? {
-  render_symbol_file(
-    "peek-def.mooncram.md",
-    "peek-def",
-    hover_cases,
-    toplevel_symbols,
-    test_case => {
-      "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
-    },
-    test_case => {
-      "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.rename_sym)} --loc \{quoted_toplevel_location(test_case)}"
-    },
-  )
+fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
+  render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
+    "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+  })
 }
 
 ///|
-fn render_refs_file(
-  hover_cases : Array[TestCase],
-  toplevel_symbols : Array[ToplevelCase],
-) -> CramFile? {
-  render_symbol_file(
-    "find-references.mooncram.md",
-    "find-references",
-    hover_cases,
-    toplevel_symbols,
-    test_case => {
-      "$ run_moon_ide moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
-    },
-    test_case => {
-      "$ run_moon_ide moon ide find-references \{shell_quote(test_case.rename_sym)} --loc \{quoted_toplevel_location(test_case)}"
-    },
-  )
+fn render_refs_file(cases : Array[TestCase]) -> CramFile? {
+  render_symbol_file("find-references.mooncram.md", "find-references", cases, test_case => {
+    "$ run_moon_ide moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+  })
 }
 
 ///|
@@ -217,22 +153,10 @@ fn rename_target(symbol : String) -> String {
 }
 
 ///|
-fn render_rename_file(
-  hover_cases : Array[TestCase],
-  toplevel_symbols : Array[ToplevelCase],
-) -> CramFile? {
-  render_symbol_file(
-    "rename.mooncram.md",
-    "rename",
-    hover_cases,
-    toplevel_symbols,
-    test_case => {
-      "$ run_moon_ide moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}"
-    },
-    test_case => {
-      "$ run_moon_ide moon ide rename \{shell_quote(test_case.rename_sym)} \{shell_quote(rename_target(test_case.rename_sym))} --loc \{quoted_toplevel_location(test_case)}"
-    },
-  )
+fn render_rename_file(cases : Array[TestCase]) -> CramFile? {
+  render_symbol_file("rename.mooncram.md", "rename", cases, test_case => {
+    "$ run_moon_ide moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}"
+  })
 }
 
 ///|
@@ -254,19 +178,10 @@ fn render_cram_files(
   current_repo_slug.val = repo_slug
   let files = Array::new()
   append_if_some(files, render_outline_file(result.source_files))
-  append_if_some(files, render_hover_file(result.hover_cases))
-  append_if_some(
-    files,
-    render_peek_file(result.hover_cases, result.toplevel_symbols),
-  )
-  append_if_some(
-    files,
-    render_refs_file(result.hover_cases, result.toplevel_symbols),
-  )
-  append_if_some(
-    files,
-    render_rename_file(result.hover_cases, result.toplevel_symbols),
-  )
+  append_if_some(files, render_hover_file(result.loc_cases))
+  append_if_some(files, render_peek_file(result.loc_cases))
+  append_if_some(files, render_refs_file(result.loc_cases))
+  append_if_some(files, render_rename_file(result.loc_cases))
   files
 }
 

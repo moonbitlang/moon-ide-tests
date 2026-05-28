@@ -733,6 +733,32 @@ $ run_moon_ide moon ide rename 'TomlString' 'TomlStringRenamed' --loc 'cmd/main/
 ```
 
 ```mooncram
+$ run_moon_ide moon ide rename 'TestResult' 'TestResultRenamed' --loc 'e2e/runner.mbt:7:12'
+*** Begin Patch
+*** Update File: <WORKDIR>/e2e/runner.mbt
+@@
+ /// `failures` carries one entry per failing case (typically including the
+ /// fixture path and a short reason) so that the test harness can print a
+ /// summary at the end without re-walking the corpus.
+-pub struct TestResult {
++pub struct TestResultRenamed {
+   passed : Int
+   failed : Int
+   failures : Array[String]
+@@
+ 
+ ///|
+ /// Create an empty `TestResult` with zero counts and no failures recorded.
+-pub fn TestResult::new() -> TestResult {
++pub fn TestResultRenamed::new() -> TestResultRenamed {
+   { passed: 0, failed: 0, failures: [] }
+ }
+ 
+*** End Patch
+
+```
+
+```mooncram
 $ run_moon_ide moon ide rename 'passed' 'passed_renamed' --loc 'e2e/runner.mbt:8:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
@@ -751,32 +777,6 @@ $ run_moon_ide moon ide rename 'passed' 'passed_renamed' --loc 'e2e/runner.mbt:8
  pub fn TestResult::new() -> TestResult {
 -  { passed: 0, failed: 0, failures: [] }
 +  { passed_renamed: 0, failed: 0, failures: [] }
- }
- 
- ///|
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'failed' 'failed_renamed' --loc 'e2e/runner.mbt:9:3'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- /// summary at the end without re-walking the corpus.
- pub struct TestResult {
-   passed : Int
--  failed : Int
-+  failed_renamed : Int
-   failures : Array[String]
- }
- 
-@@
- ///|
- /// Create an empty `TestResult` with zero counts and no failures recorded.
- pub fn TestResult::new() -> TestResult {
--  { passed: 0, failed: 0, failures: [] }
-+  { passed: 0, failed_renamed: 0, failures: [] }
  }
  
  ///|
@@ -2407,192 +2407,6 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
 +  let roundtripped = @toml.parse_renamed(value.to_string())
    assert_eq(value, roundtripped)
  }
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'TestResult' 'TestResultRenamed' --loc 'e2e/runner.mbt:7:12'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- /// `failures` carries one entry per failing case (typically including the
- /// fixture path and a short reason) so that the test harness can print a
- /// summary at the end without re-walking the corpus.
--pub struct TestResult {
-+pub struct TestResultRenamed {
-   passed : Int
-   failed : Int
-   failures : Array[String]
-@@
- 
- ///|
- /// Create an empty `TestResult` with zero counts and no failures recorded.
--pub fn TestResult::new() -> TestResult {
-+pub fn TestResultRenamed::new() -> TestResultRenamed {
-   { passed: 0, failed: 0, failures: [] }
- }
- 
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'new' 'new_renamed' --loc 'e2e/runner.mbt:15:20'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- 
- ///|
- /// Create an empty `TestResult` with zero counts and no failures recorded.
--pub fn TestResult::new() -> TestResult {
-+pub fn TestResult::new_renamed() -> TestResult {
-   { passed: 0, failed: 0, failures: [] }
- }
- 
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'collect_toml_files' 'collect_toml_files_renamed' --loc 'e2e/runner.mbt:21:8'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/e2e_test.mbt
-@@
- ///|
- async test "valid toml-test suite" {
-   let files : Array[String] = []
--  @e2e.collect_toml_files("e2e/testdata/valid", files)
-+  @e2e.collect_toml_files_renamed("e2e/testdata/valid", files)
-   files.sort()
-   let mut passed = 0
-   let mut failed = 0
-@@
- ///|
- async test "invalid toml-test suite" {
-   let files : Array[String] = []
--  @e2e.collect_toml_files("e2e/testdata/invalid", files)
-+  @e2e.collect_toml_files_renamed("e2e/testdata/invalid", files)
-   files.sort()
-   let mut passed = 0
-   let mut failed = 0
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- 
- ///|
- /// Recursively collect all .toml files in a directory.
--pub fn collect_toml_files(
-+pub fn collect_toml_files_renamed(
-   dir : String,
-   files : Array[String],
- ) -> Unit raise @fs.IOError {
-@@
-   for entry in entries {
-     let path = "\{dir}/\{entry}"
-     if @fs.is_dir(path) {
--      collect_toml_files(path, files)
-+      collect_toml_files_renamed(path, files)
-     } else if entry.has_suffix(".toml") {
-       files.push(path)
-     }
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'run_single_valid_test' 'run_single_valid_test_renamed' --loc 'e2e/runner.mbt:39:8'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- ///|
- /// Run a single valid test: parse .toml, convert to test JSON, compare with .json.
- /// Returns None on success, Some(error_message) on failure.
--pub fn run_single_valid_test(toml_path : String) -> String? raise @fs.IOError {
-+pub fn run_single_valid_test_renamed(toml_path : String) -> String? raise @fs.IOError {
-   let json_path = "\{toml_path[:toml_path.length() - 5]}.json"
-   if !@fs.path_exists(json_path) {
-     return None
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'run_single_invalid_test' 'run_single_invalid_test_renamed' --loc 'e2e/runner.mbt:68:8'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/e2e_test.mbt
-@@
-   let mut failed = 0
-   let failures : Array[String] = []
-   for toml_path in files {
--    match @e2e.run_single_invalid_test(toml_path) {
-+    match @e2e.run_single_invalid_test_renamed(toml_path) {
-       None => passed += 1 (escaped)
-       Some(msg) => { (escaped)
-         failures.push(msg)
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
- ///|
- /// Run a single invalid test: parse .toml and expect failure.
- /// Returns None on success (parse failed as expected), Some(error) if parse succeeded.
--pub fn run_single_invalid_test(toml_path : String) -> String? raise @fs.IOError {
-+pub fn run_single_invalid_test_renamed(toml_path : String) -> String? raise @fs.IOError {
-   let toml_bytes = @fs.read_file_to_bytes(toml_path)
-   // Try decoding as UTF-8, skip non-UTF-8 files (they should fail anyway)
-   let toml_content = @utf8.decode(toml_bytes) catch {
-*** End Patch
-
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'json_equal' 'json_equal_renamed' --loc 'e2e/runner.mbt:84:8'
-*** Begin Patch
-*** Update File: <WORKDIR>/e2e/e2e_test.mbt
-@@
-       }
-       Ok(value) => { (escaped)
-         let actual = @e2e.to_test_json(value)
--        if !@e2e.json_equal(actual, expected) {
-+        if !@e2e.json_equal_renamed(actual, expected) {
-           failures.push(
-             "[MISMATCH] \{toml_path}\n    expected: \{expected.stringify()}\n    actual:   \{actual.stringify()}",
-           )
-*** Update File: <WORKDIR>/e2e/runner.mbt
-@@
-     Err(e) => Some("[PARSE-ERROR] \\{toml_path}: \\{e}") (escaped)
-     Ok(value) => { (escaped)
-       let actual = to_test_json(value)
--      if !json_equal(actual, expected) {
-+      if !json_equal_renamed(actual, expected) {
-         Some(
-           "[MISMATCH] \{toml_path}\n    expected: \{expected.stringify()}\n    actual:   \{actual.stringify()}",
-         )
-@@
- 
- ///|
- /// Compare two JSON values for equality.
--pub fn json_equal(a : Json, b : Json) -> Bool {
-+pub fn json_equal_renamed(a : Json, b : Json) -> Bool {
-   match (a, b) {
-     (Object(ma), Object(mb)) => { (escaped)
-       if ma.length() != mb.length() {
-@@
-         return datetime_values_equal(ma, mb)
-       }
-       for k, va in ma {
--        guard mb.get(k) is Some(vb) && json_equal(va, vb) else { return false }
-+        guard mb.get(k) is Some(vb) && json_equal_renamed(va, vb) else { return false }
-       }
-       true
-     }
-@@
-         return false
-       }
-       for i, va in aa {
--        if !json_equal(va, ab[i]) {
-+        if !json_equal_renamed(va, ab[i]) {
-           return false
-         }
-       }
 *** End Patch
 
 ```

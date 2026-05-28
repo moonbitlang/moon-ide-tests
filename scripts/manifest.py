@@ -11,7 +11,6 @@ FIELDS = (
     "branch",
     "max_files",
     "max_per_file",
-    "max_toplevel",
 )
 
 
@@ -41,7 +40,6 @@ def parse_manifest(path: pathlib.Path) -> list[dict[str, str]]:
             raise SystemExit(f"manifest entry is missing required fields: {', '.join(missing)}")
         repo.setdefault("max_files", "0")
         repo.setdefault("max_per_file", "50")
-        repo.setdefault("max_toplevel", "20")
     return repos
 
 

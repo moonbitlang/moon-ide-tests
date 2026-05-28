@@ -67,6 +67,32 @@ Definition found at file <WORKDIR>/toml.mbt
 ```
 
 ```mooncram
+$ run_moon_ide moon ide peek-def 'TestResult' --loc 'e2e/runner.mbt:7:12'
+Definition found at file <WORKDIR>/e2e/runner.mbt
+  | /// Aggregate of a test-suite run: counts and per-failure messages. (escaped)
+  | /// (escaped)
+  | /// `failures` carries one entry per failing case (typically including the (escaped)
+  | /// fixture path and a short reason) so that the test harness can print a (escaped)
+  | /// summary at the end without re-walking the corpus. (escaped)
+7 | pub struct TestResult { (escaped)
+  |            ^^^^^^^^^^ (escaped)
+  |   passed : Int (escaped)
+  |   failed : Int (escaped)
+  |   failures : Array[String] (escaped)
+  | } (escaped)
+  |  (escaped)
+  | ///| (escaped)
+  | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
+  | pub fn TestResult::new() -> TestResult { (escaped)
+  |   { passed: 0, failed: 0, failures: [] } (escaped)
+  | } (escaped)
+  |  (escaped)
+  | ///| (escaped)
+  | /// Recursively collect all .toml files in a directory. (escaped)
+  | pub fn collect_toml_files( (escaped)
+```
+
+```mooncram
 $ run_moon_ide moon ide peek-def 'passed' --loc 'e2e/runner.mbt:8:3'
 Definition found at file <WORKDIR>/e2e/runner.mbt
   | /// (escaped)
@@ -90,32 +116,6 @@ Definition found at file <WORKDIR>/e2e/runner.mbt
   | /// Recursively collect all .toml files in a directory. (escaped)
   | pub fn collect_toml_files( (escaped)
   |   dir : String, (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'failed' --loc 'e2e/runner.mbt:9:3'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-  | /// `failures` carries one entry per failing case (typically including the (escaped)
-  | /// fixture path and a short reason) so that the test harness can print a (escaped)
-  | /// summary at the end without re-walking the corpus. (escaped)
-  | pub struct TestResult { (escaped)
-  |   passed : Int (escaped)
-9 |   failed : Int (escaped)
-  |   ^^^^^^ (escaped)
-  |   failures : Array[String] (escaped)
-  | } (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-  | pub fn TestResult::new() -> TestResult { (escaped)
-  |   { passed: 0, failed: 0, failures: [] } (escaped)
-  | } (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | /// Recursively collect all .toml files in a directory. (escaped)
-  | pub fn collect_toml_files( (escaped)
-  |   dir : String, (escaped)
-  |   files : Array[String], (escaped)
 ```
 
 ```mooncram
@@ -267,160 +267,4 @@ Definition found at file <WORKDIR>/parser.mbt
     |         parser.update_view(rest) (escaped)
     |         let table_path = parser.parse_table_path() (escaped)
     |         match parser.view() { (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'TestResult' --loc 'e2e/runner.mbt:7:12'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-  | /// Aggregate of a test-suite run: counts and per-failure messages. (escaped)
-  | /// (escaped)
-  | /// `failures` carries one entry per failing case (typically including the (escaped)
-  | /// fixture path and a short reason) so that the test harness can print a (escaped)
-  | /// summary at the end without re-walking the corpus. (escaped)
-7 | pub struct TestResult { (escaped)
-  |            ^^^^^^^^^^ (escaped)
-  |   passed : Int (escaped)
-  |   failed : Int (escaped)
-  |   failures : Array[String] (escaped)
-  | } (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-  | pub fn TestResult::new() -> TestResult { (escaped)
-  |   { passed: 0, failed: 0, failures: [] } (escaped)
-  | } (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | /// Recursively collect all .toml files in a directory. (escaped)
-  | pub fn collect_toml_files( (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'new' --loc 'e2e/runner.mbt:15:20'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-   |   failures : Array[String] (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Create an empty `TestResult` with zero counts and no failures recorded. (escaped)
-15 | pub fn TestResult::new() -> TestResult { (escaped)
-   |                    ^^^ (escaped)
-   |   { passed: 0, failed: 0, failures: [] } (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Recursively collect all .toml files in a directory. (escaped)
-   | pub fn collect_toml_files( (escaped)
-   |   dir : String, (escaped)
-   |   files : Array[String], (escaped)
-   | ) -> Unit raise @fs.IOError { (escaped)
-   |   let entries = @fs.read_dir(dir) (escaped)
-   |   for entry in entries { (escaped)
-   |     let path = "\\{dir}/\\{entry}" (escaped)
-   |     if @fs.is_dir(path) { (escaped)
-   |       collect_toml_files(path, files) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'collect_toml_files' --loc 'e2e/runner.mbt:21:8'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-   |   { passed: 0, failed: 0, failures: [] } (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Recursively collect all .toml files in a directory. (escaped)
-21 | pub fn collect_toml_files( (escaped)
-   |        ^^^^^^^^^^^^^^^^^^ (escaped)
-   |   dir : String, (escaped)
-   |   files : Array[String], (escaped)
-   | ) -> Unit raise @fs.IOError { (escaped)
-   |   let entries = @fs.read_dir(dir) (escaped)
-   |   for entry in entries { (escaped)
-   |     let path = "\\{dir}/\\{entry}" (escaped)
-   |     if @fs.is_dir(path) { (escaped)
-   |       collect_toml_files(path, files) (escaped)
-   |     } else if entry.has_suffix(".toml") { (escaped)
-   |       files.push(path) (escaped)
-   |     } (escaped)
-   |   } (escaped)
-   | } (escaped)
-   |  (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'run_single_valid_test' --loc 'e2e/runner.mbt:39:8'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Run a single valid test: parse .toml, convert to test JSON, compare with .json. (escaped)
-   | /// Returns None on success, Some(error_message) on failure. (escaped)
-39 | pub fn run_single_valid_test(toml_path : String) -> String? raise @fs.IOError { (escaped)
-   |        ^^^^^^^^^^^^^^^^^^^^^ (escaped)
-   |   let json_path = "\\{toml_path[:toml_path.length() - 5]}.json" (escaped)
-   |   if !@fs.path_exists(json_path) { (escaped)
-   |     return None (escaped)
-   |   } (escaped)
-   |   let toml_content = @fs.read_file_to_string(toml_path) (escaped)
-   |   let expected_json_str = @fs.read_file_to_string(json_path) (escaped)
-   |   let expected : Json = @json.parse(expected_json_str) catch { (escaped)
-   |     e => return Some("\\{toml_path}: failed to parse expected JSON: \\{e}") (escaped)
-   |   } (escaped)
-   |   let parsed = try? @toml.parse(toml_content) (escaped)
-   |   match parsed { (escaped)
-   |     Err(e) => Some("[PARSE-ERROR] \\{toml_path}: \\{e}") (escaped)
-   |     Ok(value) => { (escaped)
-   |       let actual = to_test_json(value) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'run_single_invalid_test' --loc 'e2e/runner.mbt:68:8'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Run a single invalid test: parse .toml and expect failure. (escaped)
-   | /// Returns None on success (parse failed as expected), Some(error) if parse succeeded. (escaped)
-68 | pub fn run_single_invalid_test(toml_path : String) -> String? raise @fs.IOError { (escaped)
-   |        ^^^^^^^^^^^^^^^^^^^^^^^ (escaped)
-   |   let toml_bytes = @fs.read_file_to_bytes(toml_path) (escaped)
-   |   // Try decoding as UTF-8, skip non-UTF-8 files (they should fail anyway) (escaped)
-   |   let toml_content = @utf8.decode(toml_bytes) catch { (escaped)
-   |     // Non-UTF-8 file: parser would reject this, count as pass (escaped)
-   |     _ => return None (escaped)
-   |   } (escaped)
-   |   let parsed = try? @toml.parse(toml_content) (escaped)
-   |   match parsed { (escaped)
-   |     Ok(_) => Some("[PASS-BUT-SHOULD-FAIL] \\{toml_path}") (escaped)
-   |     Err(_) => None (escaped)
-   |   } (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'json_equal' --loc 'e2e/runner.mbt:84:8'
-Definition found at file <WORKDIR>/e2e/runner.mbt
-   |   } (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// Compare two JSON values for equality. (escaped)
-84 | pub fn json_equal(a : Json, b : Json) -> Bool { (escaped)
-   |        ^^^^^^^^^^ (escaped)
-   |   match (a, b) { (escaped)
-   |     (Object(ma), Object(mb)) => { (escaped)
-   |       if ma.length() != mb.length() { (escaped)
-   |         return false (escaped)
-   |       } (escaped)
-   |       // Special case: float typed values — compare numerically (escaped)
-   |       if is_float_typed_value(ma) && is_float_typed_value(mb) { (escaped)
-   |         return float_values_equal(ma, mb) (escaped)
-   |       } (escaped)
-   |       // Special case: datetime typed values — compare with normalized fractional seconds (escaped)
-   |       if is_datetime_typed_value(ma) && is_datetime_typed_value(mb) { (escaped)
-   |         return datetime_values_equal(ma, mb) (escaped)
-   |       } (escaped)
-   |       for k, va in ma { (escaped)
 ```

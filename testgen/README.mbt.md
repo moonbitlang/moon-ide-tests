@@ -29,16 +29,14 @@ moon -C testgen run cmd/main -- \
 - `--repo-slug <slug>`: stable name used in generated markdown titles
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max scanned `.mbt` files; `0` means no cap (default: `0`)
-- `--max-toplevel <n>`: max collected top-level symbols; `0` means no cap (default: `20`)
 
 ## Notes
 
 - The tool scans `.mbt` files recursively under project root.
 - `_build`, `target`, and `node_modules` are skipped.
 - Symbol collection is AST-based (`moonbitlang/parser/syntax` visitor), not string scanning.
-- `hover` uses only location-based nodes (`--loc`).
-- `peek-def`, `find-references`, and `rename` use location-based commands.
-- Toplevel collection records symbol kind for stable selection, then renders commands using the concrete symbol at its collected location.
+- Parser diagnostics are printed to the generation log and do not change generated files.
+- `hover`, `peek-def`, `find-references`, and `rename` share one location-based case collection (`--loc`).
 - `main` function symbols are excluded from collection.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `$MOON_HOME` and the test repository root in `moon ide` output.

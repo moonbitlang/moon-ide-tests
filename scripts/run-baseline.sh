@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
-while IFS=$'\t' read -r slug path _url _branch _max_files _max_per_file _max_toplevel; do
+while IFS=$'\t' read -r slug path _url _branch _max_files _max_per_file; do
   moon cram test --cram-compat \
     -w "$ROOT/$path" \
     "$ROOT/tests/baseline/$slug"
