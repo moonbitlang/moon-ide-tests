@@ -2,6 +2,7 @@
 set -u -o pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+source "$ROOT/scripts/static-core-suites.sh"
 ARTIFACT_DIR="${1:-$ROOT/artifacts/canary}"
 TESTS_DIR="$ARTIFACT_DIR/tests"
 LOGS_DIR="$ARTIFACT_DIR/logs"
@@ -70,5 +71,43 @@ while IFS=$'\t' read -r slug path _url branch max_files max_per_file; do
   diff -ru "$ROOT/tests/baseline/$slug" "$out_dir" >"$DIFFS_DIR/$slug.diff" 2>&1 || true
   echo >>"$SUMMARY"
 done < <("$ROOT/scripts/manifest.py")
+
+while IFS=$'\t' read -r slug path; do
+  repo_path="$ROOT/$path"
+  out_dir="$TESTS_DIR/$slug"
+  log_prefix="$LOGS_DIR/$slug"
+
+  {
+    echo "repo: $slug"
+    echo "path: $path"
+    echo "mode: static-core"
+  } >>"$SUMMARY"
+
+  rm -rf "$out_dir"
+  mkdir -p "$out_dir"
+  if ! cp -R "$ROOT/tests/baseline/$slug/." "$out_dir/" >"$log_prefix.copy.log" 2>&1; then
+    echo "copy failed: $slug" >>"$SUMMARY"
+    status=1
+    continue
+  fi
+
+  if ! moon cram update --replace --assume-yes --cram-compat \
+    -w "$repo_path" \
+    "$out_dir" >"$log_prefix.update.log" 2>&1; then
+    echo "update failed: $slug" >>"$SUMMARY"
+    status=1
+  fi
+  "$ROOT/scripts/escape-mooncram-output.py" "$out_dir"
+
+  if ! moon cram test --cram-compat \
+    -w "$repo_path" \
+    "$out_dir" >"$log_prefix.test.log" 2>&1; then
+    echo "test failed: $slug" >>"$SUMMARY"
+    status=1
+  fi
+
+  diff -ru "$ROOT/tests/baseline/$slug" "$out_dir" >"$DIFFS_DIR/$slug.diff" 2>&1 || true
+  echo >>"$SUMMARY"
+done < <(static_core_suites)
 
 exit "$status"
