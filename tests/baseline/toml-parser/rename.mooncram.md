@@ -856,16 +856,6 @@ $ run_moon_ide moon ide rename 'value' 'value_renamed' --loc 'e2e/convert.mbt:5:
        match kind {
          "OffsetDateTime" => typed_value("datetime", normalize_datetime(s)) (escaped)
          "LocalDateTime" => typed_value("datetime-local", normalize_datetime(s)) (escaped)
-*** Update File: <WORKDIR>/e2e/e2e_test.mbt
-@@
-         continue
-       }
-     }
--    let parsed = try? @toml.parse(toml_content)
-+    let parsed = try? @toml.parse(value_renamed)
-     match parsed {
-       Err(e) => { (escaped)
-         failures.push("[PARSE-ERROR] \{toml_path}: \{e}")
 *** End Patch
 
 ```

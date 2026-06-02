@@ -21,6 +21,9 @@ jobs:
       - name: Update fixture repos
         run: scripts/update-submodules.sh
 
+      - name: Update MoonBit registry
+        run: moon update
+
       - name: Update generated tests
         run: scripts/update-tests.sh
 

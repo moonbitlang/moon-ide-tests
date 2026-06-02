@@ -1086,7 +1086,7 @@ Found 5 references for symbol 'to_test_json':
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'value' --loc 'e2e/convert.mbt:5:21'
-Found 4 references for symbol 'value':
+Found 3 references for symbol 'value':
 <WORKDIR>/e2e/convert.mbt:5:21-5:26:
   | /// Convert a TomlValue to the toml-test JSON format. (escaped)
   | /// Leaf values become {"type": "...", "value": "..."} (escaped)
@@ -1113,15 +1113,6 @@ Found 4 references for symbol 'value':
    |                       ^^^^^ (escaped)
    |       match kind { (escaped)
    |         "OffsetDateTime" => typed_value("datetime", normalize_datetime(s)) (escaped)
-
-<WORKDIR>/e2e/e2e_test.mbt:23:35-23:47:
-   |         continue (escaped)
-   |       } (escaped)
-   |     } (escaped)
-23 |     let parsed = try? @toml.parse(toml_content) (escaped)
-   |                                   ^^^^^^^^^^^^ (escaped)
-   |     match parsed { (escaped)
-   |       Err(e) => { (escaped)
 
 ```
 
