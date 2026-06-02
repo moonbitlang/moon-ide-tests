@@ -3,6 +3,7 @@ priv struct Args {
   repo_path : String
   output_dir : String
   repo_slug : String
+  test_repo_path : String
   max_per_file : Int
   max_files : Int
 }
@@ -110,6 +111,7 @@ fn parse_args(args : Array[String]) -> Args {
   let repo_path_raw : Ref[String] = Ref("")
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
+  let test_repo_path_raw : Ref[String] = Ref("")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
   let spec = [
@@ -130,6 +132,12 @@ fn parse_args(args : Array[String]) -> Args {
       "-s",
       @arg_parser.Spec::Set_string(repo_slug_raw),
       "Stable repository slug used in generated markdown titles",
+    ),
+    (
+      "--test-repo",
+      "-t",
+      @arg_parser.Spec::Set_string(test_repo_path_raw),
+      "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
       "--max-per-file",
@@ -180,10 +188,16 @@ fn parse_args(args : Array[String]) -> Args {
   if max_files < 0 {
     fatal("--max-files must be non-negative")
   }
+  let test_repo_path = if test_repo_path_raw.val == "" {
+    repo_path_raw.val
+  } else {
+    test_repo_path_raw.val
+  }
   Args::{
     repo_path: repo_path_raw.val,
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
+    test_repo_path,
     max_per_file,
     max_files,
   }
@@ -198,7 +212,7 @@ fn run(args : Array[String]) -> Unit {
     config.max_per_file,
     config.max_files,
   )
-  let files = render_cram_files(result, config.repo_slug)
+  let files = render_cram_files(result, config.repo_slug, config.test_repo_path)
   write_cram_files(config.output_dir, files)
 }
 

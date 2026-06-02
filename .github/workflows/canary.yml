@@ -18,8 +18,24 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      - name: Run canary
-        run: scripts/run-canary.sh
+      - name: Update fixture repos
+        run: scripts/update-submodules.sh
+
+      - name: Update generated tests
+        run: scripts/update-tests.sh
+
+      - name: Refresh snapshots
+        run: moon cram update --replace --assume-yes --cram-compat tests/baseline
+
+      - name: Run tests
+        run: moon cram test --cram-compat tests/baseline
+
+      - name: Collect canary diff
+        if: always()
+        run: |
+          mkdir -p artifacts/canary
+          git submodule status --recursive > artifacts/canary/summary.txt
+          git diff -- fixtures/repos tests/baseline > artifacts/canary/diff.patch || true
 
       - name: Upload canary artifacts
         if: always()

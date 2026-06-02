@@ -7,6 +7,7 @@ test "parse_args accepts required generation arguments" {
   inspect(config.repo_path, content="fixtures/repos/argparser")
   inspect(config.output_dir, content="tests/baseline/argparser")
   inspect(config.repo_slug, content="argparser")
+  inspect(config.test_repo_path, content="fixtures/repos/argparser")
   inspect(config.max_per_file, content="7")
   inspect(config.max_files, content="3")
 }
@@ -16,6 +17,7 @@ test "parse_args defaults limits" {
   let config = parse_args([
     "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
   ])
+  inspect(config.test_repo_path, content="repo")
   inspect(config.max_per_file, content="50")
   inspect(config.max_files, content="0")
 }
@@ -250,10 +252,15 @@ test "render_cram_files emits mooncram markdown commands" {
     source_files: ["a.mbt"],
     loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
   }
-  let files = render_cram_files(result, "example")
+  let files = render_cram_files(result, "example", "fixtures/repos/example")
   inspect(files.length(), content="5")
   inspect(files[0].name, content="outline.mooncram.md")
   assert_true(files[0].content.contains("```mooncram"))
+  assert_true(
+    files[0].content.contains(
+      "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../fixtures/repos/example\" && pwd)\"",
+    ),
+  )
   assert_true(
     files[0].content.contains("$ run_moon_ide moon ide outline 'a.mbt'"),
   )

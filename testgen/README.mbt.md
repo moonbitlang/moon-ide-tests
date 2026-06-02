@@ -19,7 +19,8 @@ Run from this repository root:
 moon -C testgen run cmd/main -- \
   --repo "$PWD/fixtures/repos/argparser" \
   --output-dir "$PWD/tests/baseline/argparser" \
-  --repo-slug argparser
+  --repo-slug argparser \
+  --test-repo fixtures/repos/argparser
 ```
 
 ## Options
@@ -27,6 +28,7 @@ moon -C testgen run cmd/main -- \
 - `--repo <path>`: project root to scan
 - `--output-dir <path>`: directory for generated Moon Cram files
 - `--repo-slug <slug>`: stable name used in generated markdown titles
+- `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max scanned `.mbt` files; `0` means no cap (default: `0`)
 
@@ -40,3 +42,4 @@ moon -C testgen run cmd/main -- \
 - `main` function symbols are excluded from collection.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `$MOON_HOME` and the test repository root in `moon ide` output.
+- Generated tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/baseline`.

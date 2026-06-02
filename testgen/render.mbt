@@ -24,12 +24,15 @@ fn append_mooncram_block(sb : StringBuilder, command : String) -> Unit {
 ///|
 fn append_fixed_header(sb : StringBuilder) -> Unit {
   append_mooncram_block(sb, "$ export MOON_HOME=\"${MOON_HOME:-$HOME/.moon}\"")
-  append_mooncram_block(sb, "$ export TEST_REPO_ROOT=\"$PWD\"")
+  append_mooncram_block(
+    sb,
+    "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../\{current_repo_path.val}\" && pwd)\"",
+  )
   append_mooncram_block(
     sb, "$ normalize_moon_ide_output() { sed -e \"s|$TEST_REPO_ROOT|<WORKDIR>|g\" -e \"s|$MOON_HOME|<MOON_HOME>|g\"; }",
   )
   append_mooncram_block(
-    sb, "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
+    sb, "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( cd \"$TEST_REPO_ROOT\" && \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
   )
 }
 
@@ -171,11 +174,16 @@ fn append_if_some(files : Array[CramFile], maybe_file : CramFile?) -> Unit {
 let current_repo_slug : Ref[String] = Ref("")
 
 ///|
+let current_repo_path : Ref[String] = Ref("")
+
+///|
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
+  repo_path : String,
 ) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
+  current_repo_path.val = repo_path
   let files = Array::new()
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
