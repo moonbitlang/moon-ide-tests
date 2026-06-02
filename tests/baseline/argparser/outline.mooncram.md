@@ -1,22 +1,22 @@
 # argparser outline
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/argparser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'arg.mbt'
  L002 | using @trie {type Trie}
         ...
@@ -38,11 +38,11 @@ $ run_moon_ide moon ide outline 'arg.mbt'
  L109 | pub suberror ErrorMsg {
         ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'arg_test.mbt'
  L2 | test {
       ...
 
-```
+````

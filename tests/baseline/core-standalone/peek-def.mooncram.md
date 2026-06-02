@@ -1,22 +1,22 @@
 # core-standalone peek-def
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../core_test" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
@@ -43,9 +43,9 @@ Found 1 symbols matching 'Array::map':
     |   } (escaped)
     |   arr (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
@@ -85,9 +85,9 @@ Found 1 symbols matching 'Array::filter':
     |   } (escaped)
     |   arr (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
@@ -123,9 +123,9 @@ Found 1 symbols matching 'Array::fold':
      |     acc (escaped)
      |   } (escaped)
      | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
@@ -152,9 +152,9 @@ Found 1 symbols matching 'String::length':
      | /// ``` (escaped)
      | #alias(charcode_length, deprecated) (escaped)
      | pub fn String::length(self : String) -> Int = "%string_length" (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
@@ -171,9 +171,9 @@ Found 1 symbols matching 'String::split':
      | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] { (escaped)
      |   self[:].split(sep) (escaped)
      | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
@@ -195,9 +195,9 @@ Found 1 symbols matching 'StringBuilder::new':
    |   let data : FixedArray[UInt16] = FixedArray::make(initial, 0) (escaped)
    |   { data, len: 0 } (escaped)
    | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Int::abs'
 Found 1 symbols matching 'Int::abs':
 
@@ -227,9 +227,9 @@ Found 1 symbols matching 'Int::abs':
     |     self (escaped)
     |   } (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Int::to_string'
 Found 2 symbols matching 'Int::to_string':
 
@@ -306,9 +306,9 @@ Found 2 symbols matching 'Int::to_string':
     | pub fn Int::to_string(self : Int, radix? : Int = 10) -> String { (escaped)
     |   int_to_string_js(self, radix) (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Option::map'
 Found 1 symbols matching 'Option::map':
 
@@ -332,9 +332,9 @@ Found 1 symbols matching 'Option::map':
     |     None => None (escaped)
     |   } (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Result::map'
 Found 1 symbols matching 'Result::map':
 
@@ -357,9 +357,9 @@ Found 1 symbols matching 'Result::map':
    |     Err(err) => Err(err) (escaped)
    |   } (escaped)
    | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
@@ -394,9 +394,9 @@ Found 1 symbols matching 'Iter::map':
     |     size_hint: self.size_hint, (escaped)
     |   } (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
@@ -430,9 +430,9 @@ Found 1 symbols matching 'Iter::filter':
     |     } (escaped)
     |   }) (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
@@ -451,9 +451,9 @@ Found 1 symbols matching 'Iter::to_array':
     |   } (escaped)
     |   result (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List'
 Found 1 symbols matching '@moonbitlang/core/list.List':
 
@@ -465,9 +465,9 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
    |   Empty (escaped)
    |   More(A, mut tail~ : List[A]) (escaped)
    | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
@@ -506,9 +506,9 @@ Found 1 symbols matching '@moonbitlang/core/list.List::map':
     |     } (escaped)
     |   } (escaped)
     | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::get'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 
@@ -557,9 +557,9 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
    |     Some(node) => node.get_with_path(key, @path.of(key)) (escaped)
    |   } (escaped)
    | } (no-eol) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
@@ -610,4 +610,4 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
     |     Some(node) => Some(go(node)) (escaped)
     |   } (escaped)
     | } (no-eol) (escaped)
-```
+````

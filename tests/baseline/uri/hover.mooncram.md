@@ -1,22 +1,22 @@
 # uri hover
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'Uri' --loc 'uri.mbt:54:12'
 /// - path: hierarchical path to resource
 /// - query: additional parameters
@@ -88,9 +88,9 @@ pub struct Uri {
             - fragment: reference to a secondary resource
   scheme : String?
   authority : Authority?
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'scheme' --loc 'uri.mbt:55:3'
 /// - query: additional parameters
 /// - fragment: reference to a secondary resource
@@ -102,9 +102,9 @@ pub struct Uri {
   ```
   authority : Authority?
   path : String
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'uri' --loc 'uri_test.mbt:5:7'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
@@ -116,9 +116,9 @@ test "basic_uri_parsing" {
       ```
   json_inspect(uri, content={
     "scheme": "https",
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'parse' --loc 'uri_test.mbt:5:18'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
@@ -157,9 +157,9 @@ test "basic_uri_parsing" {
              - Other `UriError` variants for various parsing failures
   json_inspect(uri, content={
     "scheme": "https",
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 /// Test URL encoding functionality
 test "url_encoding" {
@@ -171,9 +171,9 @@ test "url_encoding" {
       ```
   json_inspect(encoded, content="hello%20world%21")
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 /// Test URL encoding functionality
 test "url_encoding" {
@@ -245,4 +245,4 @@ test "url_encoding" {
                  - fragment: reference to a secondary resource
   json_inspect(encoded, content="hello%20world%21")
 
-```
+````

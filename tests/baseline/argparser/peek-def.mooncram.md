@@ -1,22 +1,22 @@
 # argparser peek-def
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/argparser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Trie' --loc 'arg.mbt:2:19'
 Definition found at file <WORKDIR>/.mooncakes/Yoorkin/trie/trie.mbt
   | ///| (escaped)
@@ -37,9 +37,9 @@ Definition found at file <WORKDIR>/.mooncakes/Yoorkin/trie/trie.mbt
   |         Some(subtree) => continue (xs, subtree) (escaped)
   |       } (escaped)
   |   } (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Spec' --loc 'arg.mbt:16:15'
 Definition found at file <WORKDIR>/arg.mbt
    | ///  Set_string - set option to associated value  (escaped)
@@ -63,9 +63,9 @@ Definition found at file <WORKDIR>/arg.mbt
    |   fallback : (String) -> Unit raise, (escaped)
    | ) -> Unit raise { (escaped)
    |   for remaining = xs[:] { (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'verbose' --loc 'arg_test.mbt:3:7'
 Definition found at file <WORKDIR>/arg_test.mbt
   | ///| (escaped)
@@ -86,9 +86,9 @@ Definition found at file <WORKDIR>/arg_test.mbt
   |     ("--search", "-s", Set_string(keyword), "search for files"), (escaped)
   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
   |   ] (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'keyword' --loc 'arg_test.mbt:4:7'
 Definition found at file <WORKDIR>/arg_test.mbt
   | ///| (escaped)
@@ -110,4 +110,4 @@ Definition found at file <WORKDIR>/arg_test.mbt
   |     ("--delete", "-d", Set(delete_files), "delete listed files"), (escaped)
   |   ] (escaped)
   |   let argv = ["--search", ".mbt", "--delete", "file1", "file2", "-n"] (escaped)
-```
+````

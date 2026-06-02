@@ -1,22 +1,22 @@
 # uri outline
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'uri.mbt'
  L0054 | pub struct Uri {
          ...
@@ -123,9 +123,9 @@ $ run_moon_ide moon ide outline 'uri.mbt'
  L1580 | fn int_to_hex(value : Int) -> String {
          ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'uri_test.mbt'
  L003 | test "basic_uri_parsing" {
         ...
@@ -170,9 +170,9 @@ $ run_moon_ide moon ide outline 'uri_test.mbt'
  L335 | test "show_trait_implementation" {
         ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'uri_test_new_features.mbt'
  L003 | test "url_encoding" {
         ...
@@ -199,4 +199,4 @@ $ run_moon_ide moon ide outline 'uri_test_new_features.mbt'
  L291 | test "rfc3986_compliance" {
         ...
 
-```
+````

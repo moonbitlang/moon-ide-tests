@@ -1,22 +1,22 @@
 # sqlparser find-references
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'pass' --loc 'src/tests/good_test.mbt:4:4'
 Found 39 references for symbol 'pass':
 <WORKDIR>/src/tests/good_test.mbt:4:4-4:8:
@@ -369,9 +369,9 @@ Found 39 references for symbol 'pass':
     |                                                                      ^^^^ (escaped)
     | } (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'input' --loc 'src/tests/good_test.mbt:4:9'
 Found 2 references for symbol 'input':
 <WORKDIR>/src/tests/good_test.mbt:4:9-4:14:
@@ -392,9 +392,9 @@ Found 2 references for symbol 'input':
   |     e => { (escaped)
   |       println(e) (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 Found 23 references for symbol 'read_and_parse':
 <WORKDIR>/src/tests/tpch_test.mbt:2:4-2:18:
@@ -602,9 +602,9 @@ Found 23 references for symbol 'read_and_parse':
     |   inspect( (escaped)
     |     stmt, (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 Found 2 references for symbol 'path':
 <WORKDIR>/src/tests/tpch_test.mbt:2:19-2:23:
@@ -622,9 +622,9 @@ Found 2 references for symbol 'path':
   |     e => { (escaped)
   |       println("Read file error: \\{e.to_string()}") (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'sql' --loc 'src/tests/dialect_test.mbt:9:7'
 Found 3 references for symbol 'sql':
 <WORKDIR>/src/tests/dialect_test.mbt:9:7-9:10:
@@ -654,9 +654,9 @@ Found 3 references for symbol 'sql':
    |   inspect(pretty, content="SHOW TABLES;") (escaped)
    | } (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'parse_sql' --loc 'src/tests/dialect_test.mbt:9:24'
 Found 290 references for symbol 'parse_sql':
 <WORKDIR>/src/bigquery.mbt:71:14-71:23:
@@ -3269,9 +3269,9 @@ Found 290 references for symbol 'parse_sql':
   |     LexerError(e) => { (escaped)
   |       println(e) (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'pretty_print' --loc 'src/ast.mbt:2:24'
 Found 298 references for symbol 'pretty_print':
 <WORKDIR>/src/ast.mbt:2:24-2:36:
@@ -5954,9 +5954,9 @@ Found 298 references for symbol 'pretty_print':
     |   inspect( (escaped)
     |     stmt, (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'obj' --loc 'src/ast.mbt:2:37'
 Found 2 references for symbol 'obj':
 <WORKDIR>/src/ast.mbt:2:37-2:40:
@@ -5974,9 +5974,9 @@ Found 2 references for symbol 'obj':
   | } (escaped)
   |  (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'Parser' --loc 'src/dcl.mbt:5:4'
 Found 200 references for symbol 'Parser':
 <WORKDIR>/src/ansi.mbt:43:13-43:19:
@@ -7773,9 +7773,9 @@ Found 200 references for symbol 'Parser':
     |   tokens : ArrayView[Token], (escaped)
     | ) -> ParserResult[ReleaseSavepointStmt] raise ParserError { (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'parse_grant_statement' --loc 'src/dcl.mbt:5:12'
 Found 2 references for symbol 'parse_grant_statement':
 <WORKDIR>/src/dcl.mbt:5:12-5:33:
@@ -7796,4 +7796,4 @@ Found 2 references for symbol 'parse_grant_statement':
     |     [Keyword(Revoke), .. _rest] => (escaped)
     |       self.parse_revoke_statement(tokens).map(stmt => Statement::Revoke(stmt)) (escaped)
 
-```
+````

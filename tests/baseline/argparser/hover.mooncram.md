@@ -1,22 +1,22 @@
 # argparser hover
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/argparser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'Trie' --loc 'arg.mbt:2:19'
 ///|
 using @trie {type Trie}
@@ -27,9 +27,9 @@ using @trie {type Trie}
                   ```
 
 ///|
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'Spec' --loc 'arg.mbt:16:15'
 ///  Set - set reference to true
 /// 
@@ -60,9 +60,9 @@ pub(all) enum Spec {
                 Clear - set reference to false
   Unit(() -> Unit raise)
   String((String) -> Unit raise)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'verbose' --loc 'arg_test.mbt:3:7'
 ///|
 test {
@@ -73,9 +73,9 @@ test {
       ```
   let keyword : Ref[String] = Ref("")
   let delete_files : Ref[Bool] = Ref(false)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide hover 'keyword' --loc 'arg_test.mbt:4:7'
 ///|
 test {
@@ -87,4 +87,4 @@ test {
       ```
   let delete_files : Ref[Bool] = Ref(false)
   let usage =
-```
+````

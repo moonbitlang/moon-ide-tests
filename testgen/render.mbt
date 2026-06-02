@@ -16,9 +16,9 @@ fn append_markdown_header(
 ///|
 fn append_mooncram_block(sb : StringBuilder, command : String) -> Unit {
   append_line(sb, "")
-  append_line(sb, "```mooncram")
+  append_line(sb, "````mooncram")
   append_line(sb, command)
-  append_line(sb, "```")
+  append_line(sb, "````")
 }
 
 ///|
@@ -208,6 +208,11 @@ fn is_generated_command(line : String) -> Bool {
 }
 
 ///|
+fn is_mooncram_fence_close(line : String) -> Bool {
+  line == "```" || line == "````"
+}
+
+///|
 fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
   let lines = split_lines(existing)
   let blocks = Array::new()
@@ -220,7 +225,7 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
       i = i + 1
       while i < lines.length() &&
             !lines[i].has_prefix("$ ") &&
-            lines[i] != "```" {
+            !is_mooncram_fence_close(lines[i]) {
         output.push(lines[i])
         i = i + 1
       }

@@ -1,22 +1,22 @@
 # json rename
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -326,9 +326,9 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
    func_data : Checkpoint,
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -490,9 +490,9 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
  
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'ParseError' 'ParseErrorRenamed' --loc 'src/lib/error.mbt:2:14'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/error.mbt
@@ -524,9 +524,9 @@ $ run_moon_ide moon ide rename 'ParseError' 'ParseErrorRenamed' --loc 'src/lib/e
  }
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'ParseError' 'ParseErrorRenamed' --loc 'src/lib/error.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/error.mbt
@@ -597,9 +597,9 @@ $ run_moon_ide moon ide rename 'ParseError' 'ParseErrorRenamed' --loc 'src/lib/e
          "expected JSONTestSuite accept or parser rejection, got non-parser error: " +
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -892,9 +892,9 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
    type ParseError,
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Continue' 'ContinueRenamed' --loc 'src/lib/value.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -973,9 +973,9 @@ $ run_moon_ide moon ide rename 'Continue' 'ContinueRenamed' --loc 'src/lib/value
  }
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
@@ -1100,9 +1100,9 @@ $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mb
    decode_continue,
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'array_start' 'array_start_renamed' --loc 'src/lib/decode.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
@@ -1145,9 +1145,9 @@ $ run_moon_ide moon ide rename 'array_start' 'array_start_renamed' --loc 'src/li
      }
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'decode_start' 'decode_start_renamed' --loc 'src/tests/top.mbt:2:14'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/incr.mbt
@@ -1176,9 +1176,9 @@ $ run_moon_ide moon ide rename 'decode_start' 'decode_start_renamed' --loc 'src/
 +using @json {decode_start_renamed, decode_continue, type Value}
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'decode_continue' 'decode_continue_renamed' --loc 'src/tests/top.mbt:2:28'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/incr.mbt
@@ -1198,4 +1198,4 @@ $ run_moon_ide moon ide rename 'decode_continue' 'decode_continue_renamed' --loc
 +using @json {decode_start, decode_continue_renamed, type Value}
 *** End Patch
 
-```
+````

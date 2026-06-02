@@ -1,22 +1,22 @@
 # sqlparser outline
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'src/tests/good_test.mbt'
  L004 | fn pass(input : String) -> Unit {
         ...
@@ -97,9 +97,9 @@ $ run_moon_ide moon ide outline 'src/tests/good_test.mbt'
  L219 | test {
         ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'src/tests/tpch_test.mbt'
  L002 | fn read_and_parse(path : String) -> @sqlparser.Statements {
         ...
@@ -148,9 +148,9 @@ $ run_moon_ide moon ide outline 'src/tests/tpch_test.mbt'
  L826 | test "TPCH 22" {
         ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'src/tests/dialect_test.mbt'
  L008 | test "MySQL SHOW TABLES statement" {
         ...
@@ -199,9 +199,9 @@ $ run_moon_ide moon ide outline 'src/tests/dialect_test.mbt'
  L184 | test "MySQL boolean literals in WHERE" {
         ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'src/ast.mbt'
  L0002 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
          ...
@@ -636,9 +636,9 @@ $ run_moon_ide moon ide outline 'src/ast.mbt'
  L2958 | pub impl @pp.Pretty for DeallocateStmt with pretty(self) {
          ...
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide outline 'src/dcl.mbt'
  L005 | fn Parser::parse_grant_statement(
  L006 |   self : Parser,
@@ -690,4 +690,4 @@ $ run_moon_ide moon ide outline 'src/dcl.mbt'
  L317 | test "REVOKE GRANT OPTION FOR" {
         ...
 
-```
+````

@@ -1,22 +1,22 @@
 # toml-parser peek-def
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'str_val' --loc 'cmd/main/main.mbt:7:7'
 Definition found at file <WORKDIR>/cmd/main/main.mbt
   | fn main { (escaped)
@@ -40,9 +40,9 @@ Definition found at file <WORKDIR>/cmd/main/main.mbt
   |  (escaped)
   |   // Demo 3: Parse simple TOML (escaped)
   |   println("\\n--- Parse Simple TOML ---") (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'TomlString' --loc 'cmd/main/main.mbt:7:23'
 Definition found at file <WORKDIR>/toml.mbt
   | ///| (escaped)
@@ -64,9 +64,9 @@ Definition found at file <WORKDIR>/toml.mbt
   | /// "OffsetDateTime", "LocalDateTime", "LocalDate", "LocalTime" (escaped)
   | pub fn TomlValue::datetime_info(self : TomlValue) -> (String, String)? { (escaped)
   |   match self { (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'TestResult' --loc 'e2e/runner.mbt:7:12'
 Definition found at file <WORKDIR>/e2e/runner.mbt
   | /// Aggregate of a test-suite run: counts and per-failure messages. (escaped)
@@ -90,9 +90,9 @@ Definition found at file <WORKDIR>/e2e/runner.mbt
   | ///| (escaped)
   | /// Recursively collect all .toml files in a directory. (escaped)
   | pub fn collect_toml_files( (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'passed' --loc 'e2e/runner.mbt:8:3'
 Definition found at file <WORKDIR>/e2e/runner.mbt
   | /// (escaped)
@@ -116,9 +116,9 @@ Definition found at file <WORKDIR>/e2e/runner.mbt
   | /// Recursively collect all .toml files in a directory. (escaped)
   | pub fn collect_toml_files( (escaped)
   |   dir : String, (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'to_test_json' --loc 'e2e/convert.mbt:5:8'
 Definition found at file <WORKDIR>/e2e/convert.mbt
   | ///| (escaped)
@@ -141,9 +141,9 @@ Definition found at file <WORKDIR>/e2e/convert.mbt
   |         _ => typed_value("date-local", s) (escaped)
   |       } (escaped)
   |     } (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'value' --loc 'e2e/convert.mbt:5:21'
 Definition found at file <WORKDIR>/e2e/convert.mbt
   | ///| (escaped)
@@ -166,9 +166,9 @@ Definition found at file <WORKDIR>/e2e/convert.mbt
   |         _ => typed_value("date-local", s) (escaped)
   |       } (escaped)
   |     } (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'files' --loc 'e2e/e2e_test.mbt:3:7'
 Definition found at file <WORKDIR>/e2e/e2e_test.mbt
   | ///| (escaped)
@@ -189,9 +189,9 @@ Definition found at file <WORKDIR>/e2e/e2e_test.mbt
   |     let expected_json_str = @fs.read_file_to_string(json_path) (escaped)
   |     let expected : Json = @json.parse(expected_json_str) catch { (escaped)
   |       e => { (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'collect_toml_files' --loc 'e2e/e2e_test.mbt:4:8'
 Definition found at file <WORKDIR>/e2e/runner.mbt
    |   { passed: 0, failed: 0, failures: [] } (escaped)
@@ -215,9 +215,9 @@ Definition found at file <WORKDIR>/e2e/runner.mbt
    |   } (escaped)
    | } (escaped)
    |  (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'result' --loc 'e2e/known_failures_test.mbt:10:7'
 Definition found at file <WORKDIR>/e2e/known_failures_test.mbt
    | // FIXED: Tokenizer infinite loop on dashed bare keys in table headers (escaped)
@@ -241,9 +241,9 @@ Definition found at file <WORKDIR>/e2e/known_failures_test.mbt
    |   debug_inspect( (escaped)
    |     result, (escaped)
    |     content=( (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'parse' --loc 'e2e/known_failures_test.mbt:10:27'
 Definition found at file <WORKDIR>/parser.mbt
     | /// escapes, inline-table newlines) are accepted. (escaped)
@@ -267,4 +267,4 @@ Definition found at file <WORKDIR>/parser.mbt
     |         parser.update_view(rest) (escaped)
     |         let table_path = parser.parse_table_path() (escaped)
     |         match parser.view() { (escaped)
-```
+````

@@ -1,22 +1,22 @@
 # uri find-references
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'Uri' --loc 'uri.mbt:54:12'
 Found 104 references for symbol 'Uri':
 <WORKDIR>/uri.mbt:54:12-54:15:
@@ -955,9 +955,9 @@ Found 104 references for symbol 'Uri':
     |   json_inspect(query_params, content=[ (escaped)
     |     ["query", "value=with&special"], (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'scheme' --loc 'uri.mbt:55:3'
 Found 15 references for symbol 'scheme':
 <WORKDIR>/uri.mbt:55:3-55:9:
@@ -1095,9 +1095,9 @@ Found 15 references for symbol 'scheme':
      |           authority: base.authority, (escaped)
      |           path: resolved_path, (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'uri' --loc 'uri_test.mbt:5:7'
 Found 2 references for symbol 'uri':
 <WORKDIR>/uri_test.mbt:5:7-5:10:
@@ -1118,9 +1118,9 @@ Found 2 references for symbol 'uri':
   |     "scheme": "https", (escaped)
   |     "authority": { "host": "example.com" }, (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'parse' --loc 'uri_test.mbt:5:18'
 Found 47 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:36:18-36:23:
@@ -1546,9 +1546,9 @@ Found 47 references for symbol 'parse':
     |   json_inspect(ipv6_uri.host(), content=["[2001:db8::1]"]) (escaped)
     |   json_inspect(ipv6_uri.port(), content=[8080]) (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Found 2 references for symbol 'encoded':
 <WORKDIR>/uri_test_new_features.mbt:5:7-5:14:
@@ -1569,9 +1569,9 @@ Found 2 references for symbol 'encoded':
   |  (escaped)
   |   // Test unreserved characters (should not be encoded) (escaped)
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide find-references 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Found 104 references for symbol 'Uri':
 <WORKDIR>/uri.mbt:54:12-54:15:
@@ -2510,4 +2510,4 @@ Found 104 references for symbol 'Uri':
     |   json_inspect(query_params, content=[ (escaped)
     |     ["query", "value=with&special"], (escaped)
 
-```
+````

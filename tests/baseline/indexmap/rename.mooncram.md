@@ -1,22 +1,22 @@
 # indexmap rename
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/indexmap" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Bucket' 'BucketRenamed' --loc 'src/types.mbt:17:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/types.mbt
@@ -40,9 +40,9 @@ $ run_moon_ide moon ide rename 'Bucket' 'BucketRenamed' --loc 'src/types.mbt:17:
    mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
@@ -103,9 +103,9 @@ $ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
    mut next : Int // 链表后继索引，-1表示没有后继
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'Default_init_capacity' 'Default_init_capacityRenamed' --loc 'src/IndexMap.mbt:2:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
@@ -127,9 +127,9 @@ $ run_moon_ide moon ide rename 'Default_init_capacity' 'Default_init_capacityRen
        hash_to_idx: @hashmap.HashMap([], capacity~),
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_renamed' --loc 'src/IndexMap.mbt:5:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
@@ -162,9 +162,9 @@ $ run_moon_ide moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_rename
    self.core.head = -1
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'm' 'm_renamed' --loc 'src/IndexMap_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap_test.mbt
@@ -183,9 +183,9 @@ $ run_moon_ide moon ide rename 'm' 'm_renamed' --loc 'src/IndexMap_test.mbt:17:7
  ///|
 *** End Patch
 
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
@@ -780,4 +780,4 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
    mut capacity : Int // 当前哈希表容量
 *** End Patch
 
-```
+````

@@ -1,22 +1,22 @@
 # json peek-def
 
-```mooncram
+````mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
+````
 
-```mooncram
+````mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
+````
 
-```mooncram
+````mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Context' --loc 'src/lib/json.mbt:2:13'
 Definition found at file <WORKDIR>/src/lib/json.mbt
   | ///| (escaped)
@@ -36,9 +36,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
   |   Array(Array[Json]) (escaped)
   |   Map(Map[String, Json]) (escaped)
   |   Key(String) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'original' --loc 'src/lib/json.mbt:3:3'
 Definition found at file <WORKDIR>/src/lib/json.mbt
   | ///| (escaped)
@@ -59,9 +59,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
   |   Map(Map[String, Json]) (escaped)
   |   Key(String) (escaped)
   | } derive(Debug) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'ParseError' --loc 'src/lib/error.mbt:2:14'
 Definition found at file <WORKDIR>/src/lib/error.mbt
   | ///| (escaped)
@@ -76,9 +76,9 @@ Definition found at file <WORKDIR>/src/lib/error.mbt
   |   UnexpectedEnd(Checkpoint) (escaped)
   |   UnexpectedSequence(Array[Char], Int) (escaped)
   | } derive(Debug) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'ParseError' --loc 'src/lib/error.mbt:3:3'
 Definition found at file <WORKDIR>/src/lib/error.mbt
   | ///| (escaped)
@@ -93,9 +93,9 @@ Definition found at file <WORKDIR>/src/lib/error.mbt
   |   UnexpectedEnd(Checkpoint) (escaped)
   |   UnexpectedSequence(Array[Char], Int) (escaped)
   | } derive(Debug) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Value' --loc 'src/lib/value.mbt:2:10'
 Definition found at file <WORKDIR>/src/lib/value.mbt
   | ///| (escaped)
@@ -115,9 +115,9 @@ Definition found at file <WORKDIR>/src/lib/value.mbt
   |   checkpoint : Checkpoint (escaped)
   | } (escaped)
   |  (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Continue' --loc 'src/lib/value.mbt:3:3'
 Definition found at file <WORKDIR>/src/lib/value.mbt
   | ///| (escaped)
@@ -138,9 +138,9 @@ Definition found at file <WORKDIR>/src/lib/value.mbt
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'Decode' --loc 'src/lib/decode.mbt:8:11'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
   |  (escaped)
@@ -174,9 +174,9 @@ Definition found at file <WORKDIR>/src/lib/decode.mbt
   | ///| (escaped)
   | impl Decode for Unit with array_finish(_self, acc, old_acc) { (escaped)
   |   (acc.rev(), old_acc) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'array_start' --loc 'src/lib/decode.mbt:9:3'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
   | ///| (escaped)
@@ -200,9 +200,9 @@ Definition found at file <WORKDIR>/src/lib/decode.mbt
   | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray { (escaped)
   |   [] (escaped)
   | } (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'decode_start' --loc 'src/tests/top.mbt:2:14'
 Definition found at file <WORKDIR>/src/top.mbt
   | ///| (escaped)
@@ -240,9 +240,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     decode, (escaped)
    |   } (escaped)
    |   value(ctx) (escaped)
-```
+````
 
-```mooncram
+````mooncram
 $ run_moon_ide moon ide peek-def 'decode_continue' --loc 'src/tests/top.mbt:2:28'
 Definition found at file <WORKDIR>/src/top.mbt
   | ///| (escaped)
@@ -280,4 +280,4 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     Value | NumberI(_) | NumberD(_) | FloatError(_, _) => value(ctx) (escaped)
    |     ArrayPush(v) => array_push(ctx, v) (escaped)
    |     ObjectKey => object_key(ctx) (escaped)
-```
+````
