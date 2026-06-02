@@ -36,7 +36,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/types.mbt
    | } (escaped)
    |  (escaped)
    | ///| (escaped)
-   | pub impl[K : Hash + Eq, V : Eq] Eq for HashMap[K, V] with equal( (escaped)
+   | pub impl[K : Hash + Eq, V : Eq] Eq for HashMap[K, V] with fn equal(
    |   self : HashMap[K, V], (escaped)
    |   that : HashMap[K, V], (escaped)
    | ) -> Bool { (escaped)
@@ -191,8 +191,8 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    |  (escaped)
    | ///| (escaped)
    | /// Writes a string to the StringBuilder. (escaped)
-82 | pub impl Logger for StringBuilder with write_string(self, str) { (escaped)
-   |                                        ^^^^^^^^^^^^ (escaped)
+82 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+   |                                           ^^^^^^^^^^^^
    |   let str_len = str.length() (escaped)
    |   self.grow_if_necessary(self.len + str_len) (escaped)
    |   self.data.unsafe_blit_from_string(self.len, str, 0, str_len) (escaped)
@@ -201,7 +201,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    |  (escaped)
    | ///| (escaped)
    | /// Writes a character to the StringBuilder. (escaped)
-   | pub impl Logger for StringBuilder with write_char(self, ch) { (escaped)
+   | pub impl Logger for StringBuilder with fn write_char(self, ch) {
    |   let code = ch.to_uint() (escaped)
    |   if code <= 0xFFFFU { (escaped)
    |     self.grow_if_necessary(self.len + 1) (escaped)
