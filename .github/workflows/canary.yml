@@ -22,7 +22,16 @@ jobs:
         run: scripts/update-submodules.sh
 
       - name: Update MoonBit registry
-        run: moon update
+        run: |
+          for attempt in 1 2 3; do
+            if moon update; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+          done
 
       - name: Update generated tests
         run: scripts/update-tests.sh

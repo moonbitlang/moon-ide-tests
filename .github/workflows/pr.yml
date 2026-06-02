@@ -20,7 +20,16 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Update MoonBit registry
-        run: moon update
+        run: |
+          for attempt in 1 2 3; do
+            if moon update; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+          done
 
       - name: Test generator
         run: moon -C testgen test
