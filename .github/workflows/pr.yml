@@ -1,0 +1,43 @@
+name: PR
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Update MoonBit registry
+        run: |
+          for attempt in 1 2 3; do
+            if moon update; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+          done
+
+      - name: Test generator
+        run: moon -C testgen test
+
+      - name: Verify generated baseline
+        run: |
+          scripts/update-tests.sh
+          git diff --exit-code -- tests/baseline
+
+      - name: Run baseline
+        run: moon cram test --cram-compat tests/baseline

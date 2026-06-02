@@ -1,19 +1,25 @@
 ///|
-test "parse_args accepts positional project argument" {
-  let config = parse_args(["core_test/test_project", "--max-per-file", "7"])
-  inspect(config.project_root, content="core_test/test_project")
+test "parse_args accepts required generation arguments" {
+  let config = parse_args([
+    "--repo", "fixtures/repos/argparser", "--output-dir", "tests/baseline/argparser",
+    "--repo-slug", "argparser", "--max-per-file", "7", "--max-files", "3",
+  ])
+  inspect(config.repo_path, content="fixtures/repos/argparser")
+  inspect(config.output_dir, content="tests/baseline/argparser")
+  inspect(config.repo_slug, content="argparser")
+  inspect(config.test_repo_path, content="fixtures/repos/argparser")
   inspect(config.max_per_file, content="7")
+  inspect(config.max_files, content="3")
 }
 
 ///|
-test "parse_args defaults project to current dir when omitted" {
-  let config = parse_args(["--max-per-file", "9"])
-  let expected_root = match @env.current_dir() {
-    Some(dir) => dir
-    None => "."
-  }
-  inspect(config.project_root, content=expected_root)
-  inspect(config.max_per_file, content="9")
+test "parse_args defaults limits" {
+  let config = parse_args([
+    "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
+  ])
+  inspect(config.test_repo_path, content="repo")
+  inspect(config.max_per_file, content="50")
+  inspect(config.max_files, content="0")
 }
 
 ///|
@@ -49,7 +55,7 @@ test "collect_cases_for_text uses ast nodes" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [
+      #|  loc_cases: [
       #|    { file: "a.mbt", line: 1, col: 4, sym: "f" },
       #|    { file: "a.mbt", line: 2, col: 7, sym: "x" },
       #|    { file: "a.mbt", line: 3, col: 5, sym: "dotcall" },
@@ -59,7 +65,6 @@ test "collect_cases_for_text uses ast nodes" {
       #|    { file: "a.mbt", line: 5, col: 8, sym: "dotvalue" },
       #|    { file: "a.mbt", line: 6, col: 8, sym: "PkgType" },
       #|  ],
-      #|  toplevel_symbols: [{ file: "a.mbt", line: 1, col: 4, query: "f", rename_sym: "f" }],
       #|}
     ),
   )
@@ -79,20 +84,21 @@ test "collect_cases_for_text enforces max_per_file for loc nodes" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [
+      #|  loc_cases: [
       #|    { file: "a.mbt", line: 1, col: 4, sym: "f" },
       #|    { file: "a.mbt", line: 2, col: 7, sym: "x" },
       #|  ],
-      #|  toplevel_symbols: [{ file: "a.mbt", line: 1, col: 4, query: "f", rename_sym: "f" }],
       #|}
     ),
   )
 }
 
 ///|
-test "collect_cases_for_text includes toplevel symbols" {
+test "collect_cases_for_text uses shared loc cases" {
   let text =
-    #|type T = Int
+    #|struct T {
+    #|  value : Int
+    #|}
     #|fn f() { () }
     #|let x = 1
     #|trait Tr {
@@ -107,37 +113,17 @@ test "collect_cases_for_text includes toplevel symbols" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [
-      #|    { file: "a.mbt", line: 1, col: 6, sym: "T" },
-      #|    { file: "a.mbt", line: 2, col: 4, sym: "f" },
-      #|    { file: "a.mbt", line: 3, col: 5, sym: "x" },
-      #|    { file: "a.mbt", line: 4, col: 7, sym: "Tr" },
-      #|    { file: "a.mbt", line: 5, col: 3, sym: "g" },
-      #|    { file: "a.mbt", line: 7, col: 6, sym: "Tr" },
-      #|    { file: "a.mbt", line: 7, col: 22, sym: "g" },
-      #|    { file: "a.mbt", line: 7, col: 24, sym: "self" },
-      #|    { file: "a.mbt", line: 8, col: 7, sym: "pkg" },
-      #|    { file: "a.mbt", line: 8, col: 21, sym: "func2" },
-      #|  ],
-      #|  toplevel_symbols: [
-      #|    { file: "a.mbt", line: 1, col: 6, query: "T", rename_sym: "T" },
-      #|    { file: "a.mbt", line: 2, col: 4, query: "f", rename_sym: "f" },
-      #|    { file: "a.mbt", line: 3, col: 5, query: "x", rename_sym: "x" },
-      #|    { file: "a.mbt", line: 4, col: 7, query: "Tr", rename_sym: "Tr" },
-      #|    {
-      #|      file: "a.mbt",
-      #|      line: 7,
-      #|      col: 22,
-      #|      query: "Tr::g for Int",
-      #|      rename_sym: "g",
-      #|    },
-      #|    {
-      #|      file: "a.mbt",
-      #|      line: 8,
-      #|      col: 21,
-      #|      query: "func2",
-      #|      rename_sym: "func2",
-      #|    },
+      #|  loc_cases: [
+      #|    { file: "a.mbt", line: 1, col: 8, sym: "T" },
+      #|    { file: "a.mbt", line: 2, col: 3, sym: "value" },
+      #|    { file: "a.mbt", line: 4, col: 4, sym: "f" },
+      #|    { file: "a.mbt", line: 5, col: 5, sym: "x" },
+      #|    { file: "a.mbt", line: 6, col: 7, sym: "Tr" },
+      #|    { file: "a.mbt", line: 7, col: 3, sym: "g" },
+      #|    { file: "a.mbt", line: 9, col: 6, sym: "Tr" },
+      #|    { file: "a.mbt", line: 9, col: 22, sym: "g" },
+      #|    { file: "a.mbt", line: 9, col: 24, sym: "self" },
+      #|    { file: "a.mbt", line: 10, col: 21, sym: "func2" },
       #|  ],
       #|}
     ),
@@ -145,7 +131,7 @@ test "collect_cases_for_text includes toplevel symbols" {
 }
 
 ///|
-test "collect_cases_for_text renders generic impl self type in query" {
+test "collect_cases_for_text collects generic impl method by loc token" {
   let text =
     #|trait Tr {
     #|  g(Self) -> Unit = _
@@ -154,39 +140,32 @@ test "collect_cases_for_text renders generic impl self type in query" {
     #|
   let result = collect_cases_for_text("a.mbt", text, 50)
   debug_inspect(
-    result.toplevel_symbols,
+    result.loc_cases,
     content=(
       #|[
-      #|  { file: "a.mbt", line: 1, col: 7, query: "Tr", rename_sym: "Tr" },
-      #|  {
-      #|    file: "a.mbt",
-      #|    line: 4,
-      #|    col: 29,
-      #|    query: "Tr::g for Array[Int]",
-      #|    rename_sym: "g",
-      #|  },
+      #|  { file: "a.mbt", line: 1, col: 7, sym: "Tr" },
+      #|  { file: "a.mbt", line: 2, col: 3, sym: "g" },
+      #|  { file: "a.mbt", line: 4, col: 6, sym: "Tr" },
+      #|  { file: "a.mbt", line: 4, col: 29, sym: "g" },
+      #|  { file: "a.mbt", line: 4, col: 31, sym: "self" },
       #|]
     ),
   )
 }
 
 ///|
-test "collect_cases_for_text renders type function query" {
+test "collect_cases_for_text collects type function loc token" {
   let text =
     #|fn Int::local_abs(self : Int) -> Int { self }
     #|
   let result = collect_cases_for_text("a.mbt", text, 50)
   debug_inspect(
-    result.toplevel_symbols,
+    result.loc_cases,
     content=(
       #|[
-      #|  {
-      #|    file: "a.mbt",
-      #|    line: 1,
-      #|    col: 9,
-      #|    query: "Int::local_abs",
-      #|    rename_sym: "local_abs",
-      #|  },
+      #|  { file: "a.mbt", line: 1, col: 9, sym: "local_abs" },
+      #|  { file: "a.mbt", line: 1, col: 19, sym: "self" },
+      #|  { file: "a.mbt", line: 1, col: 40, sym: "self" },
       #|]
     ),
   )
@@ -204,11 +183,10 @@ test "collect_cases_for_text excludes Self type symbol" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [
+      #|  loc_cases: [
       #|    { file: "a.mbt", line: 1, col: 7, sym: "Tr" },
       #|    { file: "a.mbt", line: 2, col: 3, sym: "g" },
       #|  ],
-      #|  toplevel_symbols: [{ file: "a.mbt", line: 1, col: 7, query: "Tr", rename_sym: "Tr" }],
       #|}
     ),
   )
@@ -227,7 +205,7 @@ test "collect_cases_for_text excludes operator symbols" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [
+      #|  loc_cases: [
       #|    { file: "a.mbt", line: 1, col: 4, sym: "f" },
       #|    { file: "a.mbt", line: 1, col: 6, sym: "x" },
       #|    { file: "a.mbt", line: 2, col: 7, sym: "n" },
@@ -235,7 +213,6 @@ test "collect_cases_for_text excludes operator symbols" {
       #|    { file: "a.mbt", line: 2, col: 21, sym: "x" },
       #|    { file: "a.mbt", line: 3, col: 3, sym: "n" },
       #|  ],
-      #|  toplevel_symbols: [{ file: "a.mbt", line: 1, col: 4, query: "f", rename_sym: "f" }],
       #|}
     ),
   )
@@ -252,9 +229,147 @@ test "collect_cases_for_text excludes main function" {
     content=(
       #|{
       #|  source_files: ["a.mbt"],
-      #|  hover_cases: [{ file: "a.mbt", line: 2, col: 4, sym: "f" }],
-      #|  toplevel_symbols: [{ file: "a.mbt", line: 2, col: 4, query: "f", rename_sym: "f" }],
+      #|  loc_cases: [{ file: "a.mbt", line: 2, col: 4, sym: "f" }],
       #|}
+    ),
+  )
+}
+
+///|
+test "parser_report_lines formats parser diagnostics" {
+  let (_, reports) = @parser.parse_string("fn f( {", name="bad.mbt")
+  assert_true(reports.length() > 0)
+  let lines = parser_report_lines("bad.mbt", reports)
+  assert_true(lines.length() > 1)
+  assert_true(lines[0].contains("testgen: parser emitted"))
+  assert_true(lines[0].contains("bad.mbt"))
+  assert_true(lines[1].has_prefix("testgen:   "))
+}
+
+///|
+test "render_cram_files emits mooncram markdown commands" {
+  let result = CollectResult::{
+    source_files: ["a.mbt"],
+    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
+  }
+  let files = render_cram_files(result, "example", "fixtures/repos/example")
+  inspect(files.length(), content="5")
+  inspect(files[0].name, content="outline.mooncram.md")
+  assert_true(files[0].content.contains("````mooncram"))
+  assert_true(
+    files[0].content.contains(
+      "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../fixtures/repos/example\" && pwd)\"",
+    ),
+  )
+  assert_true(
+    files[0].content.contains("$ run_moon_ide moon ide outline 'a.mbt'"),
+  )
+  assert_true(files[1].content.contains("<MOON_HOME>"))
+  assert_true(
+    files[1].content.contains(
+      "$ run_moon_ide moon ide hover 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+  assert_true(
+    files[2].content.contains(
+      "$ run_moon_ide moon ide peek-def 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+  assert_true(
+    files[3].content.contains(
+      "$ run_moon_ide moon ide find-references 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+  assert_true(
+    files[4].content.contains(
+      "$ run_moon_ide moon ide rename 'f' 'f_renamed' --loc 'a.mbt:1:4'",
+    ),
+  )
+}
+
+///|
+test "preserve_expected_output keeps matching command output" {
+  let generated =
+    #|# example hover
+    #|
+    #|````mooncram
+    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|````
+    #|
+    #|````mooncram
+    #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+    #|````
+    #|
+  let existing =
+    #|# example hover
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|hover output
+    #|  detail
+    #|```
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide hover old --loc 'a.mbt:3:4'
+    #|stale output
+    #|```
+    #|
+  inspect(
+    preserve_expected_output(generated, existing),
+    content=(
+      #|# example hover
+      #|
+      #|````mooncram
+      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|hover output
+      #|  detail
+      #|````
+      #|
+      #|````mooncram
+      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|````
+      #|
+    ),
+  )
+}
+
+///|
+test "preserve_expected_output keeps embedded indented markdown fences" {
+  let generated =
+    #|# example doc
+    #|
+    #|````mooncram
+    #|$ run_moon_ide moon ide doc Array::map
+    #|````
+    #|
+  let existing =
+    #|# example doc
+    #|
+    #|```mooncram
+    #|$ run_moon_ide moon ide doc Array::map
+    #|package "moonbitlang/core/array"
+    #|  ```mbt check
+    #|  test {
+    #|    let v2 = [1].map(x => x + 1) (escaped)
+    #|  }
+    #|  ```
+    #|```
+    #|
+  inspect(
+    preserve_expected_output(generated, existing),
+    content=(
+      #|# example doc
+      #|
+      #|````mooncram
+      #|$ run_moon_ide moon ide doc Array::map
+      #|package "moonbitlang/core/array"
+      #|  ```mbt check
+      #|  test {
+      #|    let v2 = [1].map(x => x + 1) (escaped)
+      #|  }
+      #|  ```
+      #|````
+      #|
     ),
   )
 }

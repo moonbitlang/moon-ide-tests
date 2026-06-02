@@ -1,7 +1,0 @@
-// import {
-//   "bzy-debug/sample" @lib,
-// }
-
-options(
-  "is-main": true,
-)

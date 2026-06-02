@@ -1,0 +1,8 @@
+import {
+  "moonbitlang/core/env",
+  "username/testgen",
+}
+
+options(
+  "is-main": true,
+)
