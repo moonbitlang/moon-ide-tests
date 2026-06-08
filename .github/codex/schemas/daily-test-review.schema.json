@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "has_problem": {
+      "type": "boolean"
+    },
+    "comment_body": {
+      "type": "string"
+    }
+  },
+  "required": ["has_problem", "comment_body"]
+}
