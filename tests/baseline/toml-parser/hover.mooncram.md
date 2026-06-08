@@ -17,29 +17,30 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'str_val' --loc 'cmd/main/main.mbt:7:7'
-  // Demo 1: Basic value types
-  println("\n--- Basic Value Types ---")
-  let str_val = @toml.TomlString("Hello, TOML!")
-      ^^^^^^^
-      ```moonbit
-      @toml.TomlValue
-      ```
-  let int_val = @toml.TomlInteger(42L)
-  let bool_val = @toml.TomlBoolean(true)
+$ run_moon_ide moon ide hover 'version' --loc 'cmd/toml/main.mbt:2:5'
+///|
+let version : String = "0.2.3"
+    ^^^^^^^
+    ```moonbit
+    String
+    ```
+    ---
+
+///|
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'TomlString' --loc 'cmd/main/main.mbt:7:23'
-  // Demo 1: Basic value types
-  println("\n--- Basic Value Types ---")
-  let str_val = @toml.TomlString("Hello, TOML!")
-                      ^^^^^^^^^^
-                      ```moonbit
-                      (String) -> @toml.TomlValue
-                      ```
-  let int_val = @toml.TomlInteger(42L)
-  let bool_val = @toml.TomlBoolean(true)
+$ run_moon_ide moon ide hover 'toml_command' --loc 'cmd/toml/main.mbt:5:4'
+let version : String = "0.2.3"
+
+///|
+fn toml_command() -> @argparse.Command {
+   ^^^^^^^^^^^^
+   ```moonbit
+   fn toml_command() -> @argparse.Command
+   ```
+  Command(
+    "toml",
 ```
 
 ```mooncram
@@ -148,36 +149,36 @@ async test "valid toml-test suite" {
 $ run_moon_ide moon ide hover 'result' --loc 'e2e/known_failures_test.mbt:10:7'
 ///|
 test "fixed: [a-a-a] table header parses correctly" {
-  let result = try? @toml.parse("[a-a-a]\n_ = false\n")
+  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
       ^^^^^^
       ```moonbit
       Result[@toml.TomlValue, Error]
       ```
-  debug_inspect(
-    result,
+    err => Err(err)
+  } noraise {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'parse' --loc 'e2e/known_failures_test.mbt:10:27'
+$ run_moon_ide moon ide hover 'parse' --loc 'e2e/known_failures_test.mbt:10:26'
 ///|
 test "fixed: [a-a-a] table header parses correctly" {
-  let result = try? @toml.parse("[a-a-a]\n_ = false\n")
-                    ^^^^^^^^^^^
-                    ```moonbit
-                    fn @bobzhang/toml.parse(input : String) -> @toml.TomlValue raise
-                    ```
-                    ---
-                    
-                     Parse a TOML document and return its root table as a `TomlValue`.
-                    
-                     On success the result is always a `TomlTable` whose contents reflect the
-                     document's top-level keys, `[section]` headers, and `[[array]]` of
-                     tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
-                     escapes, inline-table newlines) are accepted.
-                    
-                     On any lexical or syntactic error, `parse` raises with a message
-                     containing the source location. Wrap the call in `try?` to receive a
-                     `Result[TomlValue, Error]` instead.
-  debug_inspect(
-    result,
+  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
+                   ^^^^^^^^^^^
+                   ```moonbit
+                   fn @bobzhang/toml.parse(input : String) -> @toml.TomlValue raise
+                   ```
+                   ---
+                   
+                    Parse a TOML document and return its root table as a `TomlValue`.
+                   
+                    On success the result is always a `TomlTable` whose contents reflect the
+                    document's top-level keys, `[section]` headers, and `[[array]]` of
+                    tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
+                    escapes, inline-table newlines) are accepted.
+                   
+                    On any lexical or syntactic error, `parse` raises with a message
+                    containing the source location. Wrap the call in `try?` to receive a
+                    `Result[TomlValue, Error]` instead.
+    err => Err(err)
+  } noraise {
 ```

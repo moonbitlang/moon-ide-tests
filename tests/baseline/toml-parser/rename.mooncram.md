@@ -17,717 +17,51 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'str_val' 'str_val_renamed' --loc 'cmd/main/main.mbt:7:7'
+$ run_moon_ide moon ide rename 'version' 'version_renamed' --loc 'cmd/toml/main.mbt:2:5'
 *** Begin Patch
-*** Update File: <WORKDIR>/cmd/main/main.mbt
+*** Update File: <WORKDIR>/cmd/toml/main.mbt
 @@
+ ///|
+-let version : String = "0.2.3"
++let version_renamed : String = "0.2.3"
  
-   // Demo 1: Basic value types
-   println("\n--- Basic Value Types ---")
--  let str_val = @toml.TomlString("Hello, TOML!")
-+  let str_val_renamed = @toml.TomlString("Hello, TOML!")
-   let int_val = @toml.TomlInteger(42L)
-   let bool_val = @toml.TomlBoolean(true)
--  println("String value: \{str_val}")
-+  println("String value: \{str_val_renamed}")
-   println("Integer value: \{int_val}")
-   println("Boolean value: \{bool_val}")
- 
+ ///|
+ fn toml_command() -> @argparse.Command {
+@@
+   Command(
+     "toml",
+     about="Parse, validate, and format TOML files.",
+-    version~,
++    version_renamed~,
+     arg_required_else_help=true,
+     positionals=[
+       PositionArg("file", about="Parse TOML and print normalized TOML."),
 *** End Patch
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'TomlString' 'TomlStringRenamed' --loc 'cmd/main/main.mbt:7:23'
+$ run_moon_ide moon ide rename 'toml_command' 'toml_command_renamed' --loc 'cmd/toml/main.mbt:5:4'
 *** Begin Patch
-*** Update File: <WORKDIR>/README.mbt.md
+*** Update File: <WORKDIR>/cmd/toml/main.mbt
 @@
-   guard config
-     is TomlTable(
-       {
--        "title": TomlString("My App"),
-+        "title": TomlStringRenamed("My App"),
--        "version": TomlString("1.0.0"),
-+        "version": TomlStringRenamed("1.0.0"),
-         "database": TomlTable(
--          { "host": TomlString("localhost"), "port": TomlInteger(5432L), .. }
-+          { "host": TomlStringRenamed("localhost"), "port": TomlInteger(5432L), .. }
-         ),
-         ..
-       }
-@@
- test {
-   // Constructing TomlValue programmatically
-   let table : Map[String, @toml.TomlValue] = {
--    "name": TomlString("Alice"),
-+    "name": TomlStringRenamed("Alice"),
-     "age": TomlInteger(30L),
-     "active": TomlBoolean(true),
-     "scores": TomlArray([TomlInteger(95L), TomlInteger(87L), TomlInteger(92L)]),
-@@
-       {
-         "database": TomlTable(
-           {
--            "host": TomlString("localhost"),
-+            "host": TomlStringRenamed("localhost"),
-             "port": TomlInteger(5432L),
-             "enabled": TomlBoolean(true),
-             ..
-*** Update File: <WORKDIR>/additional_official_tests_test.mbt
-@@
-   // Invalid nested structure - outer array contains arrays but inner arrays have different types
-   let invalid_nested_array = [
-     @toml.TomlArray([TomlInteger(1L), TomlInteger(2L)]),
--    TomlArray([TomlString("hello"), TomlString("world")]),
-+    TomlArray([TomlStringRenamed("hello"), TomlStringRenamed("world")]),
-   ]
-   debug_inspect(
-     @toml.TomlValue::is_homogeneous_array(invalid_nested_array),
-*** Update File: <WORKDIR>/cmd/main/main.mbt
-@@
- 
-   // Demo 1: Basic value types
-   println("\n--- Basic Value Types ---")
--  let str_val = @toml.TomlString("Hello, TOML!")
-+  let str_val = @toml.TomlStringRenamed("Hello, TOML!")
-   let int_val = @toml.TomlInteger(42L)
-   let bool_val = @toml.TomlBoolean(true)
-   println("String value: \{str_val}")
-*** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
-@@
- /// Test nested validation failure in arrays
- test "nested_validation_failure_in_array" {
-   // Create a heterogeneous nested array (which should be invalid)
--  let nested_arr = [@toml.TomlInteger(1L), TomlString("test")]
-+  let nested_arr = [@toml.TomlInteger(1L), TomlStringRenamed("test")]
-   let invalid_nested = @toml.TomlArray(nested_arr)
-   let outer_arr = [invalid_nested]
-   let outer_array_value = @toml.TomlArray(outer_arr)
-@@
- /// Test to increase coverage of main function components
- test "main_function_components_coverage" {
-   // This test exercises the same functions as main() to improve coverage
--  let str_val = @toml.TomlString("Hello, TOML!")
-+  let str_val = @toml.TomlStringRenamed("Hello, TOML!")
-   let int_val = @toml.TomlInteger(42L)
-   let bool_val = @toml.TomlBoolean(true)
- 
-@@
- test "multiline_string_line_ending_backslash" {
-   let toml_input = "multiline = \"\"\"\nLine 1 \\\n    Line 2\"\"\""
-   let result = @toml.parse(toml_input)
--  guard result is TomlTable({ "multiline": TomlString(str), .. }) else {
-+  guard result is TomlTable({ "multiline": TomlStringRenamed(str), .. }) else {
-     fail("Expected table with multiline string")
-   }
-   // Should have whitespace trimmed after backslash
-*** Update File: <WORKDIR>/datetime_test.mbt
-@@
- /// Test datetime in complex nested structures
- test "datetime in nested structures" {
-   let event_table : Map[String, @toml.TomlValue] = Map([])
--  event_table["name"] = TomlString("Conference 2023")
-+  event_table["name"] = TomlStringRenamed("Conference 2023")
-   event_table["start_date"] = TomlDateTime(LocalDate("2023-06-15"))
-   event_table["start_time"] = TomlDateTime(LocalTime("09:00:00"))
-   event_table["end_datetime"] = TomlDateTime(
-@@
-   )
-   let sessions = Array::new()
-   let session1 : Map[String, @toml.TomlValue] = Map([])
--  session1["title"] = TomlString("Opening Keynote")
-+  session1["title"] = TomlStringRenamed("Opening Keynote")
-   session1["scheduled_at"] = TomlDateTime(
-     OffsetDateTime("2023-06-15T09:00:00+00:00"),
-   )
-   sessions.push(@toml.TomlTable(session1))
-   let session2 : Map[String, @toml.TomlValue] = Map([])
--  session2["title"] = TomlString("Technical Workshop")
-+  session2["title"] = TomlStringRenamed("Technical Workshop")
-   session2["scheduled_at"] = TomlDateTime(
-     OffsetDateTime("2023-06-15T14:00:00+00:00"),
-   )
-*** Update File: <WORKDIR>/e2e/convert.mbt
-@@
- /// Tables become plain JSON objects, arrays become JSON arrays.
- pub fn to_test_json(value : @toml.TomlValue) -> Json {
-   match value {
--    TomlString(s) => typed_value("string", s) (escaped)
-+    TomlStringRenamed(s) => typed_value("string", s) (escaped)
-     TomlInteger(i) => typed_value("integer", i.to_string()) (escaped)
-     TomlFloat(f) => typed_value("float", format_test_float(f)) (escaped)
-     TomlBoolean(b) => typed_value("bool", if b { "true" } else { "false" }) (escaped)
-*** Update File: <WORKDIR>/internal/qc_model/model.mbt
-@@
- /// re-projected via `from_toml`, must yield the original `SimpleValue`.
- pub fn SimpleValue::to_toml(self : SimpleValue) -> @toml.TomlValue {
-   match self {
--    SString(s) => TomlString(s) (escaped)
-+    SString(s) => TomlStringRenamed(s) (escaped)
-     SInteger(n) => TomlInteger(n) (escaped)
-     SBoolean(b) => TomlBoolean(b) (escaped)
-     SDateTime(value) => TomlDateTime(value) (escaped)
-     SDateTimeArray(values) => TomlArray([ for v in values => TomlDateTime(v) ]) (escaped)
-     SEmptyArray => TomlArray([]) (escaped)
--    SStringArray(values) => TomlArray([ for v in values => TomlString(v) ]) (escaped)
-+    SStringArray(values) => TomlArray([ for v in values => TomlStringRenamed(v) ]) (escaped)
-     SIntegerArray(values) => TomlArray([ for v in values => TomlInteger(v) ]) (escaped)
-     SBooleanArray(values) => TomlArray([ for v in values => TomlBoolean(v) ]) (escaped)
-     STable(fields) => (escaped)
-@@
- ///|
- fn project_string(value : @toml.TomlValue) -> String? {
-   match value {
--    TomlString(s) => Some(s) (escaped)
-+    TomlStringRenamed(s) => Some(s) (escaped)
-     _ => None (escaped)
-   }
- }
-@@
- /// equal to the input; that property is what the round-trip test checks.
- pub fn SimpleValue::from_toml(value : @toml.TomlValue) -> SimpleValue? {
-   match value {
--    TomlString(text) => Some(SString(text)) (escaped)
-+    TomlStringRenamed(text) => Some(SString(text)) (escaped)
-     TomlInteger(number) => Some(SInteger(number)) (escaped)
-     TomlBoolean(boolean) => Some(SBoolean(boolean)) (escaped)
-     TomlDateTime(datetime) => Some(SDateTime(datetime)) (escaped)
-@@
-           collect_toml_array(values, project_datetime).map(items => { (escaped)
-             SDateTimeArray(items)
-           })
--        [TomlString(_), ..] => (escaped)
-+        [TomlStringRenamed(_), ..] => (escaped)
-           collect_toml_array(values, project_string).map(items => { (escaped)
-             SStringArray(items)
-           })
-*** Update File: <WORKDIR>/official_toml_test_suite_test.mbt
-@@
-   // which is required by the TOML specification
-   let mixed_array = [
-     @toml.TomlInteger(1L),
--    TomlString("hello"),
-+    TomlStringRenamed("hello"),
-     TomlBoolean(true),
-   ]
-   debug_inspect(
-*** Update File: <WORKDIR>/parser.mbt
-@@
-   match self.view(skip_newlines~) {
-     [StringToken(s, ..), .. rest] => { (escaped)
-       self.update_view(rest)
--      TomlString(s)
-+      TomlStringRenamed(s)
-     }
-     [IntegerToken(i, ..), .. rest] => { (escaped)
-       self.update_view(rest)
-*** Update File: <WORKDIR>/toml.mbt
-@@
- ///|
- /// TOML Value types that represent different TOML data types
- pub(all) enum TomlValue {
--  TomlString(String)
-+  TomlStringRenamed(String)
-   TomlInteger(Int64)
-   TomlFloat(Double)
-   TomlBoolean(Bool)
-@@
-     [first, .. rest] => { (escaped)
-       fn type_id(value : TomlValue) -> Int {
-         match value {
--          TomlString(_) => 0 (escaped)
-+          TomlStringRenamed(_) => 0 (escaped)
-           TomlInteger(_) => 1 (escaped)
-           TomlFloat(_) => 2 (escaped)
-           TomlBoolean(_) => 3 (escaped)
-@@
- /// Get the type name of a TomlValue for error messages
- pub fn TomlValue::type_name(self : TomlValue) -> String {
-   match self {
--    TomlString(_) => "string" (escaped)
-+    TomlStringRenamed(_) => "string" (escaped)
-     TomlInteger(_) => "integer" (escaped)
-     TomlFloat(_) => "float" (escaped)
-     TomlBoolean(_) => "boolean" (escaped)
-*** Update File: <WORKDIR>/toml_test.mbt
-@@
- ///|
- /// Basic tests for TOML value types
- test "toml string value" {
--  let value = @toml.TomlString("hello world")
-+  let value = @toml.TomlStringRenamed("hello world")
-   debug_inspect(
-     value.to_string(),
-     content=(
-@@
- ///|
- test "toml table value" {
-   let table : Map[String, @toml.TomlValue] = Map([])
--  table["key1"] = TomlString("value1")
-+  table["key1"] = TomlStringRenamed("value1")
-   table["key2"] = TomlInteger(42L)
-   let value = @toml.TomlTable(table)
-   // Note: Map iteration order might vary, we'll test the contains functionality
-@@
-     @toml.TomlValue::is_homogeneous_array(int_array),
-     content="true",
-   )
--  let string_array = [@toml.TomlString("a"), TomlString("b"), TomlString("c")]
-+  let string_array = [@toml.TomlStringRenamed("a"), TomlStringRenamed("b"), TomlStringRenamed("c")]
-   debug_inspect(
-     @toml.TomlValue::is_homogeneous_array(string_array),
-     content="true",
-@@
-   // Mixed types (should be invalid)
-   let mixed_array = [
-     @toml.TomlInteger(1L),
--    TomlString("hello"),
-+    TomlStringRenamed("hello"),
-     TomlBoolean(true),
-   ]
-   debug_inspect(
-@@
-   // Mixed datetime and string (should be invalid)
-   let mixed_dt_string = [
-     @toml.TomlDateTime(LocalDate("2023-01-01")),
--    TomlString("not a date"),
-+    TomlStringRenamed("not a date"),
-   ]
-   debug_inspect(
-     @toml.TomlValue::is_homogeneous_array(mixed_dt_string),
-@@
-   debug_inspect(valid_toml_array.validate(), content="true")
- 
-   // Invalid heterogeneous array
--  let invalid_array = [@toml.TomlInteger(1L), TomlString("mixed")]
-+  let invalid_array = [@toml.TomlInteger(1L), TomlStringRenamed("mixed")]
-   let invalid_toml_array = @toml.TomlArray(invalid_array)
-   debug_inspect(invalid_toml_array.validate(), content="false")
- 
-   // Valid nested structure
-   let valid_table : Map[String, @toml.TomlValue] = Map([])
--  let nested_array = [@toml.TomlString("item1"), TomlString("item2")]
-+  let nested_array = [@toml.TomlStringRenamed("item1"), TomlStringRenamed("item2")]
-   valid_table["items"] = TomlArray(nested_array)
-   valid_table["count"] = TomlInteger(2L)
-   let valid_nested = @toml.TomlTable(valid_table)
-@@
-   // Invalid nested structure (contains invalid array)
-   let invalid_table : Map[String, @toml.TomlValue] = Map([])
-   let bad_nested_array = [
--    @toml.TomlString("item1"),
-+    @toml.TomlStringRenamed("item1"),
-     TomlInteger(42L), // Mixed types
-   ]
-   invalid_table["items"] = TomlArray(bad_nested_array)
-@@
-   debug_inspect(invalid_nested.validate(), content="false")
- 
-   // Simple values should always be valid
--  debug_inspect(@toml.TomlString("hello").validate(), content="true")
-+  debug_inspect(@toml.TomlStringRenamed("hello").validate(), content="true")
-   debug_inspect(@toml.TomlInteger(42L).validate(), content="true")
-   debug_inspect(@toml.TomlFloat(3.14).validate(), content="true")
-   debug_inspect(@toml.TomlBoolean(true).validate(), content="true")
-*** Update File: <WORKDIR>/toml_to_string.mbt
-@@
-   path : Array[String], // Current table path for nested tables
- ) -> Unit {
-   match self {
--    TomlString(s) => output <+ "\\"\\{escape_toml_string(s)}\\"" (escaped)
-+    TomlStringRenamed(s) => output <+ "\\"\\{escape_toml_string(s)}\\"" (escaped)
-     TomlInteger(i) => output <+ "\\{i}" (escaped)
-     TomlFloat(f) => (escaped)
-       // Handle special float values
-*** Update File: <WORKDIR>/toml_to_string_test.mbt
-@@
- ///|
- test "serialize simple string" {
--  let value = @toml.TomlString("hello world")
-+  let value = @toml.TomlStringRenamed("hello world")
-   inspect(value, content="\"hello world\"")
- }
+ let version : String = "0.2.3"
  
  ///|
- test "serialize string with escapes" {
--  let value = @toml.TomlString("hello\nworld\t\"quoted\"\\backslash")
-+  let value = @toml.TomlStringRenamed("hello\nworld\t\"quoted\"\\backslash")
-   inspect(value, content="\"hello\\nworld\\t\\\"quoted\\\"\\\\backslash\"")
- }
- 
- ///|
- test "serialize string with control characters" {
--  let value = @toml.TomlString("null:\u0000 bell:\u0007 delete:\u007F")
-+  let value = @toml.TomlStringRenamed("null:\u0000 bell:\u0007 delete:\u007F")
-   inspect(value, content="\"null:\\u0000 bell:\\u0007 delete:\\u007F\"")
- }
- 
+-fn toml_command() -> @argparse.Command {
++fn toml_command_renamed() -> @argparse.Command {
+   Command(
+     "toml",
+     about="Parse, validate, and format TOML files.",
 @@
  
  ///|
- test "serialize mixed type inline array" {
--  let array = @toml.TomlArray([TomlString("hello"), TomlString("world")])
-+  let array = @toml.TomlArray([TomlStringRenamed("hello"), TomlStringRenamed("world")])
-   inspect(array, content="[\"hello\", \"world\"]")
- }
- 
-@@
- ///|
- test "serialize simple table" {
-   let table = Map::from_array([
--    ("name", @toml.TomlString("Alice")),
-+    ("name", @toml.TomlStringRenamed("Alice")),
-     ("age", TomlInteger(30L)),
-     ("active", TomlBoolean(true)),
-   ])
-@@
- ///|
- test "serialize table with arrays" {
-   let table = Map::from_array([
--    ("title", @toml.TomlString("Example")),
-+    ("title", @toml.TomlStringRenamed("Example")),
-     ("numbers", TomlArray([TomlInteger(1L), TomlInteger(2L), TomlInteger(3L)])),
-   ])
-   inspect(
-@@
-     ("y", TomlInteger(2L)),
-   ])
-   let outer_table = Map::from_array([
--    ("name", @toml.TomlString("test")),
-+    ("name", @toml.TomlStringRenamed("test")),
-     ("position", TomlTable(inner_table)),
-   ])
-   inspect(
-@@
- 
- ///|
- test "serialize deeply nested tables" {
--  let level3 = Map::from_array([("deep", @toml.TomlString("value"))])
-+  let level3 = Map::from_array([("deep", @toml.TomlStringRenamed("value"))])
-   let level2 = Map::from_array([("nested", @toml.TomlTable(level3))])
-   let level1 = Map::from_array([
--    ("top", @toml.TomlString("level")),
-+    ("top", @toml.TomlStringRenamed("level")),
-     ("sub", TomlTable(level2)),
-   ])
-   inspect(
-@@
- ///|
- test "serialize array of tables" {
-   let table1 = Map::from_array([
--    ("name", @toml.TomlString("Alice")),
-+    ("name", @toml.TomlStringRenamed("Alice")),
-     ("score", TomlInteger(100L)),
-   ])
-   let table2 = Map::from_array([
--    ("name", @toml.TomlString("Bob")),
-+    ("name", @toml.TomlStringRenamed("Bob")),
-     ("score", TomlInteger(95L)),
-   ])
-   let root = Map::from_array([
--    ("title", @toml.TomlString("High Scores")),
-+    ("title", @toml.TomlStringRenamed("High Scores")),
-     ("players", TomlArray([TomlTable(table1), TomlTable(table2)])),
-   ])
-   inspect(
-@@
- ///|
- test "serialize complex nested structure" {
-   let database = Map::from_array([
--    ("host", @toml.TomlString("localhost")),
-+    ("host", @toml.TomlStringRenamed("localhost")),
-     ("port", TomlInteger(5432L)),
--    ("username", TomlString("admin")),
-+    ("username", TomlStringRenamed("admin")),
--    ("password", TomlString("secret123")),
-+    ("password", TomlStringRenamed("secret123")),
-   ])
-   let server = Map::from_array([
--    ("ip", @toml.TomlString("0.0.0.0")),
-+    ("ip", @toml.TomlStringRenamed("0.0.0.0")),
-     ("port", TomlInteger(8080L)),
-     ("timeout", TomlInteger(30L)),
-   ])
-   let staging = Map::from_array([
--    ("url", @toml.TomlString("https://staging.example.com")),
-+    ("url", @toml.TomlStringRenamed("https://staging.example.com")),
-     ("debug", TomlBoolean(true)),
-   ])
-   let production = Map::from_array([
--    ("url", @toml.TomlString("https://example.com")),
-+    ("url", @toml.TomlStringRenamed("https://example.com")),
-     ("debug", TomlBoolean(false)),
-   ])
-   let environments = Map::from_array([
-@@
-     ("production", TomlTable(production)),
-   ])
-   let root = Map::from_array([
--    ("title", @toml.TomlString("Application Config")),
-+    ("title", @toml.TomlStringRenamed("Application Config")),
--    ("version", TomlString("1.0.0")),
-+    ("version", TomlStringRenamed("1.0.0")),
-     ("database", TomlTable(database)),
-     ("server", TomlTable(server)),
-     ("environments", TomlTable(environments)),
-@@
- ///|
- test "serialize table with special key names" {
-   let table = Map::from_array([
--    ("normal-key", @toml.TomlString("value1")),
-+    ("normal-key", @toml.TomlStringRenamed("value1")),
--    ("key with spaces", TomlString("value2")),
-+    ("key with spaces", TomlStringRenamed("value2")),
--    ("key.with.dots", TomlString("value3")),
-+    ("key.with.dots", TomlStringRenamed("value3")),
--    ("key\"with\"quotes", TomlString("value4")),
-+    ("key\"with\"quotes", TomlStringRenamed("value4")),
--    ("key#with#hash", TomlString("value5")),
-+    ("key#with#hash", TomlStringRenamed("value5")),
-   ])
-   inspect(
-     @toml.TomlTable(table),
-@@
- ///|
- test "serialize table with multiple array of tables" {
-   let product1 = Map::from_array([
--    ("name", @toml.TomlString("Hammer")),
-+    ("name", @toml.TomlStringRenamed("Hammer")),
-     ("sku", TomlInteger(738594937L)),
-   ])
-   let product2 = Map::from_array([
--    ("name", @toml.TomlString("Nail")),
-+    ("name", @toml.TomlStringRenamed("Nail")),
-     ("sku", TomlInteger(284758393L)),
--    ("color", TomlString("gray")),
-+    ("color", TomlStringRenamed("gray")),
-   ])
-   let root = Map::from_array([
-     ("products", @toml.TomlArray([TomlTable(product1), TomlTable(product2)])),
-@@
- ///|
- test "roundtrip simple example" {
-   let doc = Map::from_array([
--    ("title", @toml.TomlString("TOML Example")),
-+    ("title", @toml.TomlStringRenamed("TOML Example")),
-     (
-       "owner",
-       TomlTable(
-         Map::from_array([
--          ("name", TomlString("Tom Preston-Werner")),
-+          ("name", TomlStringRenamed("Tom Preston-Werner")),
-           ("dob", TomlDateTime(OffsetDateTime("1979-05-27T07:32:00-08:00"))),
-         ]),
-       ),
-*** Update File: <WORKDIR>/toml_utils.mbt
-@@
-   let new_table = create_array_of_tables(root_table, ["servers"])
- 
-   // Add some data to the new table
--  new_table["name"] = TomlString("alpha")
-+  new_table["name"] = TomlStringRenamed("alpha")
--  new_table["ip"] = TomlString("10.0.0.1")
-+  new_table["ip"] = TomlStringRenamed("10.0.0.1")
-   inspect(
-     TomlTable(root_table),
-     content=(
-@@
- 
-   // Create first table
-   let table1 = create_array_of_tables(root_table, ["products"])
--  table1["name"] = TomlString("Hammer")
-+  table1["name"] = TomlStringRenamed("Hammer")
-   table1["sku"] = TomlInteger(738594937)
- 
-   // Append second table to same array
-   let table2 = create_array_of_tables(root_table, ["products"])
--  table2["name"] = TomlString("Nail")
-+  table2["name"] = TomlStringRenamed("Nail")
-   table2["sku"] = TomlInteger(284758393)
- 
-   // Append third table
-   let table3 = create_array_of_tables(root_table, ["products"])
--  table3["name"] = TomlString("Screwdriver")
-+  table3["name"] = TomlStringRenamed("Screwdriver")
-   table3["sku"] = TomlInteger(987654321)
-   inspect(
-     TomlTable(root_table),
-@@
-   let color_table1 = create_array_of_tables(root_table, [
-     "fruit", "physical", "color",
-   ])
--  color_table1["name"] = TomlString("red")
-+  color_table1["name"] = TomlStringRenamed("red")
--  color_table1["code"] = TomlString("#FF0000")
-+  color_table1["code"] = TomlStringRenamed("#FF0000")
- 
-   // Add another color
-   let color_table2 = create_array_of_tables(root_table, [
-     "fruit", "physical", "color",
-   ])
--  color_table2["name"] = TomlString("green")
-+  color_table2["name"] = TomlStringRenamed("green")
--  color_table2["code"] = TomlString("#00FF00")
-+  color_table2["code"] = TomlStringRenamed("#00FF00")
-   inspect(
-     TomlTable(root_table),
-     content=(
-@@
-   let root_table : Map[String, TomlValue] = Map([])
- 
-   // First create a regular table structure
--  set_dotted_key_value(root_table, ["owner", "name"], TomlString("Tom"))
-+  set_dotted_key_value(root_table, ["owner", "name"], TomlStringRenamed("Tom"))
--  set_dotted_key_value(root_table, ["owner", "dob"], TomlString("1979-05-27"))
-+  set_dotted_key_value(root_table, ["owner", "dob"], TomlStringRenamed("1979-05-27"))
- 
-   // Now create array of tables at a different path
-   let db1 = create_array_of_tables(root_table, ["database", "servers"])
--  db1["host"] = TomlString("192.168.1.1")
-+  db1["host"] = TomlStringRenamed("192.168.1.1")
-   db1["port"] = TomlInteger(5432)
-   let db2 = create_array_of_tables(root_table, ["database", "servers"])
--  db2["host"] = TomlString("192.168.1.2")
-+  db2["host"] = TomlStringRenamed("192.168.1.2")
-   db2["port"] = TomlInteger(5433)
-   debug_inspect(
-     root_table,
-@@
-   let root_table : Map[String, TomlValue] = Map([])
- 
-   // Set a string value at "products"
--  root_table["products"] = TomlString("not a table")
-+  root_table["products"] = TomlStringRenamed("not a table")
- 
-   // Try to create array of tables at ["products", "items"]
-   // This should fail because "products" is not a table
-@@
-   set_dotted_key_value(
-     root_table,
-     ["servers", "alpha"],
--    TomlTable(Map::from_array([("name", TomlString("main"))])),
-+    TomlTable(Map::from_array([("name", TomlStringRenamed("main"))])),
-   )
- 
-   // Try to treat servers.alpha as array of tables
-@@
- 
-   // Create first [[fruits]]
-   let fruit1 = create_array_of_tables(root_table, ["fruits"])
--  fruit1["name"] = TomlString("apple")
-+  fruit1["name"] = TomlStringRenamed("apple")
- 
-   // Create second [[fruits]]
-   let fruit2 = create_array_of_tables(root_table, ["fruits"])
--  fruit2["name"] = TomlString("banana")
-+  fruit2["name"] = TomlStringRenamed("banana")
- 
-   // Create [[vegetables]]
-   let veg1 = create_array_of_tables(root_table, ["vegetables"])
--  veg1["name"] = TomlString("carrot")
-+  veg1["name"] = TomlStringRenamed("carrot")
--  veg1["color"] = TomlString("orange")
-+  veg1["color"] = TomlStringRenamed("orange")
-   let veg2 = create_array_of_tables(root_table, ["vegetables"])
--  veg2["name"] = TomlString("lettuce")
-+  veg2["name"] = TomlStringRenamed("lettuce")
--  veg2["color"] = TomlString("green")
-+  veg2["color"] = TomlStringRenamed("green")
-   debug_inspect(
-     root_table,
-     content=(
-@@
- test "set dotted key value - simple key" {
-   // Test setting a simple key (path length 1)
-   let table : Map[String, TomlValue] = Map([])
--  set_dotted_key_value(table, ["name"], TomlString("Alice"))
-+  set_dotted_key_value(table, ["name"], TomlStringRenamed("Alice"))
-   debug_inspect(
-     table,
-     content=(
-@@
- test "set dotted key value - nested keys creating tables" {
-   // Test creating nested tables automatically
-   let table : Map[String, TomlValue] = Map([])
--  set_dotted_key_value(table, ["server", "host"], TomlString("localhost"))
-+  set_dotted_key_value(table, ["server", "host"], TomlStringRenamed("localhost"))
-   set_dotted_key_value(table, ["server", "port"], TomlInteger(8080))
-   debug_inspect(
-     table,
-@@
-   set_dotted_key_value(
-     table,
-     ["a", "b", "c", "d", "e"],
--    TomlString("deep value"),
-+    TomlStringRenamed("deep value"),
-   )
-   debug_inspect(
-     table,
-@@
-   let table : Map[String, TomlValue] = Map([])
- 
-   // Add multiple values at different levels
--  set_dotted_key_value(table, ["database", "server"], TomlString("postgres"))
-+  set_dotted_key_value(table, ["database", "server"], TomlStringRenamed("postgres"))
-   set_dotted_key_value(table, ["database", "port"], TomlInteger(5432))
-   set_dotted_key_value(
-     table,
-     ["database", "credentials", "user"],
--    TomlString("admin"),
-+    TomlStringRenamed("admin"),
-   )
-   set_dotted_key_value(
-     table,
-     ["database", "credentials", "password"],
--    TomlString("secret"),
-+    TomlStringRenamed("secret"),
-   )
-   set_dotted_key_value(table, ["database", "options", "ssl"], TomlBoolean(true))
-   debug_inspect(
-@@
-   let table : Map[String, TomlValue] = Map([])
- 
-   // Create initial structure
--  set_dotted_key_value(table, ["app", "name"], TomlString("MyApp"))
-+  set_dotted_key_value(table, ["app", "name"], TomlStringRenamed("MyApp"))
--  set_dotted_key_value(table, ["app", "version"], TomlString("1.0.0"))
-+  set_dotted_key_value(table, ["app", "version"], TomlStringRenamed("1.0.0"))
- 
-   // Add more values to the same table later
--  set_dotted_key_value(table, ["app", "author"], TomlString("Developer"))
-+  set_dotted_key_value(table, ["app", "author"], TomlStringRenamed("Developer"))
--  set_dotted_key_value(table, ["app", "license"], TomlString("MIT"))
-+  set_dotted_key_value(table, ["app", "license"], TomlStringRenamed("MIT"))
-   debug_inspect(
-     table,
-     content=(
-@@
-   let table : Map[String, TomlValue] = {}
- 
-   // Set a string value at "config"
--  set_dotted_key_value(table, ["config"], TomlString("simple value"))
-+  set_dotted_key_value(table, ["config"], TomlStringRenamed("simple value"))
- 
-   // Try to treat "config" as a table - this should raise an error
-   try
--    set_dotted_key_value(table, ["config", "nested"], TomlString("value"))
-+    set_dotted_key_value(table, ["config", "nested"], TomlStringRenamed("value"))
-   catch {
-     err => (escaped)
-       debug_inspect(
-@@
-   let table : Map[String, TomlValue] = Map([])
- 
-   // Set a value first
--  set_dotted_key_value(table, ["key"], TomlString("value"))
-+  set_dotted_key_value(table, ["key"], TomlStringRenamed("value"))
- 
-   // Try with empty path - currently does nothing
--  set_dotted_key_value(table, [], TomlString("should not appear"))
-+  set_dotted_key_value(table, [], TomlStringRenamed("should not appear"))
- 
-   // Table should only have the first key
-   debug_inspect(table, content="")
+ fn run(args : ArrayView[String]) -> Int {
+-  let matches = @argparse.parse(toml_command(), argv=args, env={}) catch {
++  let matches = @argparse.parse(toml_command_renamed(), argv=args, env={}) catch {
+     err => {
+       println(err)
+       return 2
 *** End Patch
 
 ```
@@ -938,8 +272,12 @@ $ run_moon_ide moon ide rename 'result' 'result_renamed' --loc 'e2e/known_failur
  
  ///|
  test "fixed: [a-a-a] table header parses correctly" {
--  let result = try? @toml.parse("[a-a-a]\n_ = false\n")
-+  let result_renamed = try? @toml.parse("[a-a-a]\n_ = false\n")
+-  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
++  let result_renamed = try @toml.parse("[a-a-a]\n_ = false\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
+   }
    debug_inspect(
 -    result,
 +    result_renamed,
@@ -951,7 +289,7 @@ $ run_moon_ide moon ide rename 'result' 'result_renamed' --loc 'e2e/known_failur
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures_test.mbt:10:27'
+$ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures_test.mbt:10:26'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@
@@ -969,25 +307,27 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
    let invalid_toml = "invalid = [unclosed"
 -  let config = @toml.parse(invalid_toml) catch {
 +  let config = @toml.parse_renamed(invalid_toml) catch {
-     _ => TomlTable(Map([])) // Return default value on error (escaped)
+     _ => TomlTable(Map([])) // Return default value on error
    }
    guard config is TomlTable(table) else { fail("Expected table") }
 @@
    assert_eq(table.length(), 0) // Empty table from error handler
  
    // Error handling with try? - converts to Result type
--  let result = try? @toml.parse("key = \"value\"")
-+  let result = try? @toml.parse_renamed("key = \"value\"")
-   guard result is Ok(TomlTable({ "key": _, .. })) else {
-     fail("Should have parsed successfully with key")
+-  let result = try @toml.parse("key = \"value\"") catch {
++  let result = try @toml.parse_renamed("key = \"value\"") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
+@@
    }
  
    // Parsing error example
--  let bad_result = try? @toml.parse("bad syntax here")
-+  let bad_result = try? @toml.parse_renamed("bad syntax here")
-   assert_true(bad_result is Err(_))
- }
- ```
+-  let bad_result = try @toml.parse("bad syntax here") catch {
++  let bad_result = try @toml.parse_renamed("bad syntax here") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
      #|max_connections = 100
      #|
@@ -1165,34 +505,25 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
      content=(
        #|TomlTable(
        #|  {
-*** Update File: <WORKDIR>/cmd/main/main.mbt
+*** Update File: <WORKDIR>/cmd/toml/main.mbt
 @@
-   println("Input TOML:")
-   println(toml_input)
-   try {
--    let result = @toml.parse(toml_input)
-+    let result = @toml.parse_renamed(toml_input)
-     println("\nParsed result:")
-     println(result.to_string())
-   } catch {
+       return 1
+     }
+   }
+-  let value = @toml_lib.parse(source) catch {
++  let value = @toml_lib.parse_renamed(source) catch {
+     err => {
+       println("error: failed to parse \{path}: \{err}")
+       return 1
 @@
-   println("Input TOML:")
-   println(toml_array)
-   try {
--    let result = @toml.parse(toml_array)
-+    let result = @toml.parse_renamed(toml_array)
-     println("\nParsed result:")
-     println(result.to_string())
-   } catch {
-@@
-   println("Input TOML:")
-   println(toml_table)
-   try {
--    let result = @toml.parse(toml_table)
-+    let result = @toml.parse_renamed(toml_table)
-     println("\nParsed result:")
-     println(result.to_string())
-   } catch {
+       return 1
+     }
+   }
+-  let _ = @toml_lib.parse(source) catch {
++  let _ = @toml_lib.parse_renamed(source) catch {
+     err => {
+       println("error: failed to parse \{path}: \{err}")
+       return 1
 *** Update File: <WORKDIR>/comprehensive_test.mbt
 @@
      #|ports = [8000, 8001, 8002]
@@ -1324,11 +655,11 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
  
    // Test 5: Invalid syntax after comma
    debug_inspect(
--    try? @toml.parse("table = {key1 = \"val1\", }"),
-+    try? @toml.parse_renamed("table = {key1 = \"val1\", }"),
-     content=(
-       #|Ok(TomlTable({ "table": TomlTable({ "key1": TomlString("val1") }) }))
-     ),
+-    try @toml.parse("table = {key1 = \"val1\", }") catch {
++    try @toml.parse_renamed("table = {key1 = \"val1\", }") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  test "edge cases" {
    // Empty input should result in empty table
@@ -1378,11 +709,11 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
      #|]  
      #|
    debug_inspect(
--    try? @toml.parse(data3),
-+    try? @toml.parse_renamed(data3),
-     content=(
-       #|Ok(TomlTable({ "x": TomlArray([TomlInteger(1), TomlInteger(2)]) }))
-     ),
+-    try @toml.parse(data3) catch {
++    try @toml.parse_renamed(data3) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
 @@
  /// Test EOF handling in parser - covered by creating empty token arrays
@@ -1554,203 +885,203 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
      #|
    // This now successfully parses with nested tables support
    debug_inspect(
--    try? @toml.parse(complex_toml),
-+    try? @toml.parse_renamed(complex_toml),
-     content=(
-       #|Ok(
-       #|  TomlTable(
+-    try @toml.parse(complex_toml) catch {
++    try @toml.parse_renamed(complex_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|quote = "say \"hello\""
      #|
    debug_inspect(
--    try? @toml.parse(toml_with_escapes),
-+    try? @toml.parse_renamed(toml_with_escapes),
-     content=(
-       #|Ok(
-       #|  TomlTable(
+-    try @toml.parse(toml_with_escapes) catch {
++    try @toml.parse_renamed(toml_with_escapes) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|key2 = "value2"
      #|
    debug_inspect(
--    try? @toml.parse(toml_with_whitespace),
-+    try? @toml.parse_renamed(toml_with_whitespace),
-     content=(
-       #|Ok(TomlTable({ "key1": TomlString("value1"), "key2": TomlString("value2") }))
-     ),
+-    try @toml.parse(toml_with_whitespace) catch {
++    try @toml.parse_renamed(toml_with_whitespace) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
 @@
          continue
        }
      }
--    let parsed = try? @toml.parse(toml_content)
-+    let parsed = try? @toml.parse_renamed(toml_content)
-     match parsed {
-       Err(e) => { (escaped)
-         failures.push("[PARSE-ERROR] \{toml_path}: \{e}")
+-    let parsed = try @toml.parse(toml_content) catch {
++    let parsed = try @toml.parse_renamed(toml_content) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 *** Update File: <WORKDIR>/e2e/known_failures_test.mbt
 @@
  
  ///|
  test "fixed: [a-a-a] table header parses correctly" {
--  let result = try? @toml.parse("[a-a-a]\n_ = false\n")
-+  let result = try? @toml.parse_renamed("[a-a-a]\n_ = false\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
++  let result = try @toml.parse_renamed("[a-a-a]\n_ = false\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: leading underscore value rejected (not infinite loop)" {
--  let result = try? @toml.parse("x = _1.2\n")
-+  let result = try? @toml.parse_renamed("x = _1.2\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("x = _1.2\n") catch {
++  let result = try @toml.parse_renamed("x = _1.2\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: positive prefix '+' tokenized for integers" {
--  let result = try? @toml.parse("pos = +99\n")
-+  let result = try? @toml.parse_renamed("pos = +99\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("pos = +99\n") catch {
++  let result = try @toml.parse_renamed("pos = +99\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: positive prefix '+' tokenized for floats" {
--  let result = try? @toml.parse("pos = +1.0\n")
-+  let result = try? @toml.parse_renamed("pos = +1.0\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("pos = +1.0\n") catch {
++  let result = try @toml.parse_renamed("pos = +1.0\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: CRLF line ending handled" {
--  let result = try? @toml.parse("key = \"val\"\r\n")
-+  let result = try? @toml.parse_renamed("key = \"val\"\r\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("key = \"val\"\r\n") catch {
++  let result = try @toml.parse_renamed("key = \"val\"\r\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: datetime with space separator" {
--  let result = try? @toml.parse("dt = 1987-07-05 17:45:00Z\n")
-+  let result = try? @toml.parse_renamed("dt = 1987-07-05 17:45:00Z\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("dt = 1987-07-05 17:45:00Z\n") catch {
++  let result = try @toml.parse_renamed("dt = 1987-07-05 17:45:00Z\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: numeric key leading zeros preserved" {
--  let result = try? @toml.parse("0123 = true\n")
-+  let result = try? @toml.parse_renamed("0123 = true\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("0123 = true\n") catch {
++  let result = try @toml.parse_renamed("0123 = true\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
      #|
      #|  fox jumps over the lazy dog."""
      #|
--  let result = try? @toml.parse(input)
-+  let result = try? @toml.parse_renamed(input)
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse(input) catch {
++  let result = try @toml.parse_renamed(input) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: hex escape \\xHH" {
--  let result = try? @toml.parse("esc = \"\\x41\"\n")
-+  let result = try? @toml.parse_renamed("esc = \"\\x41\"\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("esc = \"\\x41\"\n") catch {
++  let result = try @toml.parse_renamed("esc = \"\\x41\"\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: escape \\e (ESC)" {
--  let result = try? @toml.parse("esc = \"\\e\"\n")
-+  let result = try? @toml.parse_renamed("esc = \"\\e\"\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("esc = \"\\e\"\n") catch {
++  let result = try @toml.parse_renamed("esc = \"\\e\"\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
      #|[[fruits]]
      #|name = "banana"
      #|
--  let _ = try? @toml.parse(input)
-+  let _ = try? @toml.parse_renamed(input)
-   // Should parse without error
- }
- 
+-  let _ = try @toml.parse(input) catch {
++  let _ = try @toml.parse_renamed(input) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: keyword as table name" {
--  let result = try? @toml.parse("[true]\nx = 1\n")
-+  let result = try? @toml.parse_renamed("[true]\nx = 1\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("[true]\nx = 1\n") catch {
++  let result = try @toml.parse_renamed("[true]\nx = 1\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
      #|  b = 2
      #|}
      #|
--  let _ = try? @toml.parse(input)
-+  let _ = try? @toml.parse_renamed(input)
- }
- 
- // ============================================================
+-  let _ = try @toml.parse(input) catch {
++  let _ = try @toml.parse_renamed(input) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  ///|
  #skip
  test "bug: datetime millisecond trailing zeros" {
--  let result = try? @toml.parse("dt = 1987-07-05T17:45:56.600Z\n")
-+  let result = try? @toml.parse_renamed("dt = 1987-07-05T17:45:56.600Z\n")
-   // Should preserve .600, not truncate to .6
-   debug_inspect(result, content="")
- }
+-  let result = try @toml.parse("dt = 1987-07-05T17:45:56.600Z\n") catch {
++  let result = try @toml.parse_renamed("dt = 1987-07-05T17:45:56.600Z\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
    let input =
      #|str = """Here are two quotes: "". Cool."""
      #|
--  let result = try? @toml.parse(input)
-+  let result = try? @toml.parse_renamed(input)
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse(input) catch {
++  let result = try @toml.parse_renamed(input) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
  
  ///|
  test "fixed: dashed bare key starting with dash" {
--  let result = try? @toml.parse("-key = 1\n")
-+  let result = try? @toml.parse_renamed("-key = 1\n")
-   debug_inspect(
-     result,
-     content=(
+-  let result = try @toml.parse("-key = 1\n") catch {
++  let result = try @toml.parse_renamed("-key = 1\n") catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 *** Update File: <WORKDIR>/e2e/runner.mbt
 @@
    let expected : Json = @json.parse(expected_json_str) catch {
-     e => return Some("\\{toml_path}: failed to parse expected JSON: \\{e}") (escaped)
+     e => return Some("\{toml_path}: failed to parse expected JSON: \{e}")
    }
--  let parsed = try? @toml.parse(toml_content)
-+  let parsed = try? @toml.parse_renamed(toml_content)
-   match parsed {
-     Err(e) => Some("[PARSE-ERROR] \\{toml_path}: \\{e}") (escaped)
-     Ok(value) => { (escaped)
+-  let parsed = try @toml.parse(toml_content) catch {
++  let parsed = try @toml.parse_renamed(toml_content) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 @@
      // Non-UTF-8 file: parser would reject this, count as pass
-     _ => return None (escaped)
+     _ => return None
    }
--  let parsed = try? @toml.parse(toml_content)
-+  let parsed = try? @toml.parse_renamed(toml_content)
-   match parsed {
-     Ok(_) => Some("[PASS-BUT-SHOULD-FAIL] \\{toml_path}") (escaped)
-     Err(_) => None (escaped)
+-  let parsed = try @toml.parse(toml_content) catch {
++  let parsed = try @toml.parse_renamed(toml_content) catch {
+     err => Err(err)
+   } noraise {
+     value => Ok(value)
 *** Update File: <WORKDIR>/internal/qc_model/roundtrip_test.mbt
 @@
    doc : @qc_model.SimpleDocument,
@@ -1758,7 +1089,7 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
  ) -> Result[Unit, String] {
 -  try @toml.parse(rendered) catch {
 +  try @toml.parse_renamed(rendered) catch {
-     error => (escaped)
+     error =>
        Err(
          "parser rejected generated TOML\nrendered:\n\{rendered}\nerror:\n\{error}",
 *** Update File: <WORKDIR>/official_toml_test_suite_test.mbt
@@ -2004,7 +1335,7 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
 -pub fn parse(input : String) -> TomlValue raise {
 +pub fn parse_renamed(input : String) -> TomlValue raise {
    let tokens = @tokenize.tokenize(input)
-   let parser = Parser::new(tokens)
+   let parser = Parser::Parser(tokens)
    let main_table = {}
 *** Update File: <WORKDIR>/parser_test.mbt
 @@
@@ -2062,14 +1393,14 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
        #|numbers = [1, 2, 3]
      ),
 @@
- 
  ///|
  test "parse array ending with exponent float" {
--  let result = try? @toml.parse(
-+  let result = try? @toml.parse_renamed(
-     (
-       #|numbers = [-1e2]
-     ),
+   let result = try
+-    @toml.parse(
++    @toml.parse_renamed(
+       (
+         #|numbers = [-1e2]
+       ),
 @@
    let inline_table_toml =
      #|person = {name = "Bob", age = 25}
@@ -2083,142 +1414,146 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
  ///|
  test "test parser EOF handling in peek" {
    debug_inspect(
--    try? @toml.parse(""),
-+    try? @toml.parse_renamed(""),
-     content=(
-       #|Ok(TomlTable({}))
-     ),
+-    try @toml.parse("") catch {
++    try @toml.parse_renamed("") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  test "test inline table with string keys" {
    debug_inspect(
--    try? @toml.parse("table = {\"string key\" = \"value\"}"),
-+    try? @toml.parse_renamed("table = {\"string key\" = \"value\"}"),
-     content=(
-       #|Ok(TomlTable({ "table": TomlTable({ "string key": TomlString("value") }) }))
-     ),
+-    try @toml.parse("table = {\"string key\" = \"value\"}") catch {
++    try @toml.parse_renamed("table = {\"string key\" = \"value\"}") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|key = "value"
      #|
    debug_inspect(
--    try? @toml.parse(string_table_name_toml),
-+    try? @toml.parse_renamed(string_table_name_toml),
-     content=(
-       #|Ok(TomlTable({ "table name": TomlTable({ "key": TomlString("value") }) }))
-     ),
+-    try @toml.parse(string_table_name_toml) catch {
++    try @toml.parse_renamed(string_table_name_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|key = "value"
      #|
    debug_inspect(
--    try? @toml.parse(numeric_table_name_toml),
-+    try? @toml.parse_renamed(numeric_table_name_toml),
-     content=(
-       #|Ok(TomlTable({ "123": TomlTable({ "key": TomlString("value") }) }))
-     ),
+-    try @toml.parse(numeric_table_name_toml) catch {
++    try @toml.parse_renamed(numeric_table_name_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|-10e-1 = "d"
      #|
    debug_inspect(
--    try? @toml.parse(exponent_like_keys_toml),
-+    try? @toml.parse_renamed(exponent_like_keys_toml),
-     content=(
-       #|Ok(
-       #|  TomlTable(
+-    try @toml.parse(exponent_like_keys_toml) catch {
++    try @toml.parse_renamed(exponent_like_keys_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
      #|value = "d"
      #|
    debug_inspect(
--    try? @toml.parse(exponent_like_table_names_toml),
-+    try? @toml.parse_renamed(exponent_like_table_names_toml),
-     content=(
-       #|Ok(
-       #|  TomlTable(
+-    try @toml.parse(exponent_like_table_names_toml) catch {
++    try @toml.parse_renamed(exponent_like_table_names_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  test "overflow float accepted as bare key" {
    // The same overflow token is valid as a bare key (all chars are A-Za-z0-9_-)
    debug_inspect(
--    try? @toml.parse("-31e368 = \"ok\"\n"),
-+    try? @toml.parse_renamed("-31e368 = \"ok\"\n"),
-     content=(
-       #|Ok(TomlTable({ "-31e368": TomlString("ok") }))
-     ),
+-    try @toml.parse("-31e368 = \"ok\"\n") catch {
++    try @toml.parse_renamed("-31e368 = \"ok\"\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  test "special float keywords as keys" {
    // inf, nan, +inf, -inf, etc. are valid bare keys in TOML
    debug_inspect(
--    try? @toml.parse("+inf = 1\n"),
-+    try? @toml.parse_renamed("+inf = 1\n"),
-     content=(
-       #|Ok(TomlTable({ "+inf": TomlInteger(1) }))
+-    try @toml.parse("+inf = 1\n") catch {
++    try @toml.parse_renamed("+inf = 1\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
+@@
      ),
    )
    debug_inspect(
--    try? @toml.parse("-inf = 2\n"),
-+    try? @toml.parse_renamed("-inf = 2\n"),
-     content=(
-       #|Ok(TomlTable({ "-inf": TomlInteger(2) }))
+-    try @toml.parse("-inf = 2\n") catch {
++    try @toml.parse_renamed("-inf = 2\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
+@@
      ),
    )
    debug_inspect(
--    try? @toml.parse("nan = 3\n"),
-+    try? @toml.parse_renamed("nan = 3\n"),
-     content=(
-       #|Ok(TomlTable({ "nan": TomlInteger(3) }))
-     ),
+-    try @toml.parse("nan = 3\n") catch {
++    try @toml.parse_renamed("nan = 3\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  test "dotted key with float-like segments" {
    // Float token with dot in raw string should split into dotted keys
    debug_inspect(
--    try? @toml.parse("1.2 = \"a\"\n"),
-+    try? @toml.parse_renamed("1.2 = \"a\"\n"),
-     content=(
-       #|Ok(TomlTable({ "1": TomlTable({ "2": TomlString("a") }) }))
-     ),
+-    try @toml.parse("1.2 = \"a\"\n") catch {
++    try @toml.parse_renamed("1.2 = \"a\"\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
    )
    // Float-like key followed by dotted sub-key
    debug_inspect(
--    try? @toml.parse("[-80e-2.sub]\nval = 1\n"),
-+    try? @toml.parse_renamed("[-80e-2.sub]\nval = 1\n"),
-     content=(
-       #|Ok(TomlTable({ "-80e-2": TomlTable({ "sub": TomlTable({ "val": TomlInteger(1) }) }) }))
-     ),
+-    try @toml.parse("[-80e-2.sub]\nval = 1\n") catch {
++    try @toml.parse_renamed("[-80e-2.sub]\nval = 1\n") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  /// Tests for inline table edge cases  
  test "test empty inline table" {
    debug_inspect(
--    try? @toml.parse("empty = {}"),
-+    try? @toml.parse_renamed("empty = {}"),
-     content=(
-       #|Ok(TomlTable({ "empty": TomlTable({}) }))
-     ),
+-    try @toml.parse("empty = {}") catch {
++    try @toml.parse_renamed("empty = {}") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  test "test nested inline tables" {
    debug_inspect(
--    try? @toml.parse("table = {inner = {key = \"value\"}}"),
-+    try? @toml.parse_renamed("table = {inner = {key = \"value\"}}"),
-     content=(
-       #|Ok(TomlTable({ "table": TomlTable({ "inner": TomlTable({ "key": TomlString("value") }) }) }))
-     ),
+-    try @toml.parse("table = {inner = {key = \"value\"}}") catch {
++    try @toml.parse_renamed("table = {inner = {key = \"value\"}}") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  test "test inline table with multiple key types" {
    debug_inspect(
--    try? @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}"),
-+    try? @toml.parse_renamed("mixed = {\"quoted\" = 1, unquoted = 2}"),
-     content=(
-       #|Ok(TomlTable({ "mixed": TomlTable({ "quoted": TomlInteger(1), "unquoted": TomlInteger(2) }) }))
-     ),
+-    try @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
++    try @toml.parse_renamed("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  test "test inline table with array values" {
    debug_inspect(
--    try? @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}"),
-+    try? @toml.parse_renamed("table = {arr = [1, 2, 3], str = \"test\"}"),
-     content=(
-       #|Ok(
-       #|  TomlTable(
+-    try @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}") catch {
++    try @toml.parse_renamed("table = {arr = [1, 2, 3], str = \"test\"}") catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  /// Test dotted key notation - simple case
@@ -2283,22 +1618,33 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
        #|a.b.c.d.e.f = "deep"
      ),
 @@
-     #|server."port number".8080.config = 3
      #|
    // TODO: fix
--  debug_inspect(try? @toml.parse(data), content="")
-+  debug_inspect(try? @toml.parse_renamed(data), content="")
- }
+   debug_inspect(
+-    try @toml.parse(data) catch {
++    try @toml.parse_renamed(data) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 *** Update File: <WORKDIR>/test_utils_test.mbt
 @@
  ///|
  fn parse_expect_to_fail(input : String) -> String {
 -  try @toml.parse(input) catch {
 +  try @toml.parse_renamed(input) catch {
-     e => { (escaped)
+     e => {
        let s = e.to_string()
        // e.to_string() gives: Failure("...FAILED: actual_message")
 *** Update File: <WORKDIR>/toml_to_string_test.mbt
+@@
+       #|
+     ),
+   )
+-  assert_eq(@toml.parse(serialized), original)
++  assert_eq(@toml.parse_renamed(serialized), original)
+ }
+ 
+ ///|
 @@
      #|debug = true
      #|max_connections = 100

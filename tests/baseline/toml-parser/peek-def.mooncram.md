@@ -17,53 +17,50 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'str_val' --loc 'cmd/main/main.mbt:7:7'
-Definition found at file <WORKDIR>/cmd/main/main.mbt
-  | fn main { (escaped)
-  |   println("TOML Parser Demo") (escaped)
-  |  (escaped)
-  |   // Demo 1: Basic value types (escaped)
-  |   println("\\n--- Basic Value Types ---") (escaped)
-7 |   let str_val = @toml.TomlString("Hello, TOML!") (escaped)
-  |       ^^^^^^^ (escaped)
-  |   let int_val = @toml.TomlInteger(42L) (escaped)
-  |   let bool_val = @toml.TomlBoolean(true) (escaped)
-  |   println("String value: \\{str_val}") (escaped)
-  |   println("Integer value: \\{int_val}") (escaped)
-  |   println("Boolean value: \\{bool_val}") (escaped)
-  |  (escaped)
-  |   // Demo 2: Array example (escaped)
-  |   println("\\n--- Array Example ---") (escaped)
-  |   let arr = [@toml.TomlInteger(1L), TomlInteger(2L), TomlInteger(3L)] (escaped)
-  |   let array_val = @toml.TomlArray(arr) (escaped)
-  |   println("Array value: \\{array_val}") (escaped)
-  |  (escaped)
-  |   // Demo 3: Parse simple TOML (escaped)
-  |   println("\\n--- Parse Simple TOML ---") (escaped)
+$ run_moon_ide moon ide peek-def 'version' --loc 'cmd/toml/main.mbt:2:5'
+Definition found at file <WORKDIR>/cmd/toml/main.mbt
+  | ///|
+2 | let version : String = "0.2.3"
+  |     ^^^^^^^
+  | 
+  | ///|
+  | fn toml_command() -> @argparse.Command {
+  |   Command(
+  |     "toml",
+  |     about="Parse, validate, and format TOML files.",
+  |     version~,
+  |     arg_required_else_help=true,
+  |     positionals=[
+  |       PositionArg("file", about="Parse TOML and print normalized TOML."),
+  |     ],
+  |     subcommands=[
+  |       Command("format", about="Parse TOML and print normalized TOML.", positionals=[
+  |         PositionArg(
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'TomlString' --loc 'cmd/main/main.mbt:7:23'
-Definition found at file <WORKDIR>/toml.mbt
-  | ///| (escaped)
-  | /// TOML Value types that represent different TOML data types (escaped)
-  | pub(all) enum TomlValue { (escaped)
-4 |   TomlString(String) (escaped)
-  |   ^^^^^^^^^^ (escaped)
-  |   TomlInteger(Int64) (escaped)
-  |   TomlFloat(Double) (escaped)
-  |   TomlBoolean(Bool) (escaped)
-  |   TomlArray(Array[TomlValue]) (escaped)
-  |   TomlTable(Map[String, TomlValue]) (escaped)
-  |   TomlDateTime(@tokenize.TomlDateTime) (escaped)
-  | } derive(Eq, Debug) (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | /// Extract datetime variant name and value string from a TomlDateTime value. (escaped)
-  | /// Returns `(kind, value)` where kind is one of: (escaped)
-  | /// "OffsetDateTime", "LocalDateTime", "LocalDate", "LocalTime" (escaped)
-  | pub fn TomlValue::datetime_info(self : TomlValue) -> (String, String)? { (escaped)
-  |   match self { (escaped)
+$ run_moon_ide moon ide peek-def 'toml_command' --loc 'cmd/toml/main.mbt:5:4'
+Definition found at file <WORKDIR>/cmd/toml/main.mbt
+  | ///|
+  | let version : String = "0.2.3"
+  | 
+  | ///|
+5 | fn toml_command() -> @argparse.Command {
+  |    ^^^^^^^^^^^^
+  |   Command(
+  |     "toml",
+  |     about="Parse, validate, and format TOML files.",
+  |     version~,
+  |     arg_required_else_help=true,
+  |     positionals=[
+  |       PositionArg("file", about="Parse TOML and print normalized TOML."),
+  |     ],
+  |     subcommands=[
+  |       Command("format", about="Parse TOML and print normalized TOML.", positionals=[
+  |         PositionArg(
+  |           "file",
+  |           about="TOML file to format.",
+  |           num_args=@argparse.ValueRange::single(),
 ```
 
 ```mooncram
@@ -225,8 +222,12 @@ Definition found at file <WORKDIR>/e2e/known_failures_test.mbt
    |  (escaped)
    | ///| (escaped)
    | test "fixed: [a-a-a] table header parses correctly" { (escaped)
-10 |   let result = try? @toml.parse("[a-a-a]\\n_ = false\\n") (escaped)
+10 |   let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
    |       ^^^^^^ (escaped)
+   |     err => Err(err)
+   |   } noraise {
+   |     value => Ok(value)
+   |   }
    |   debug_inspect( (escaped)
    |     result, (escaped)
    |     content=( (escaped)
@@ -237,34 +238,30 @@ Definition found at file <WORKDIR>/e2e/known_failures_test.mbt
    |  (escaped)
    | ///| (escaped)
    | test "fixed: leading underscore value rejected (not infinite loop)" { (escaped)
-   |   let result = try? @toml.parse("x = _1.2\\n") (escaped)
-   |   debug_inspect( (escaped)
-   |     result, (escaped)
-   |     content=( (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'parse' --loc 'e2e/known_failures_test.mbt:10:27'
+$ run_moon_ide moon ide peek-def 'parse' --loc 'e2e/known_failures_test.mbt:10:26'
 Definition found at file <WORKDIR>/parser.mbt
-    | /// escapes, inline-table newlines) are accepted. (escaped)
-    | /// (escaped)
-    | /// On any lexical or syntactic error, `parse` raises with a message (escaped)
-    | /// containing the source location. Wrap the call in `try?` to receive a (escaped)
-    | /// `Result[TomlValue, Error]` instead. (escaped)
-300 | pub fn parse(input : String) -> TomlValue raise { (escaped)
-    |        ^^^^^ (escaped)
-    |   let tokens = @tokenize.tokenize(input) (escaped)
-    |   let parser = Parser::new(tokens) (escaped)
-    |   let main_table = {} (escaped)
-    |   for current_table = main_table { (escaped)
-    |     parser.skip_newlines() (escaped)
-    |     match parser.view() { (escaped)
-    |       [EOF, ..] => break (escaped)
-    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => { (escaped)
-    |         if !loc1.adjacent(loc2) { (escaped)
-    |           parser.error("Invalid table header: space between '[' and '['") (escaped)
-    |         } (escaped)
-    |         parser.update_view(rest) (escaped)
-    |         let table_path = parser.parse_table_path() (escaped)
-    |         match parser.view() { (escaped)
+    | /// escapes, inline-table newlines) are accepted.
+    | ///
+    | /// On any lexical or syntactic error, `parse` raises with a message
+    | /// containing the source location. Wrap the call in `try?` to receive a
+    | /// `Result[TomlValue, Error]` instead.
+300 | pub fn parse(input : String) -> TomlValue raise {
+    |        ^^^^^
+    |   let tokens = @tokenize.tokenize(input)
+    |   let parser = Parser::Parser(tokens)
+    |   let main_table = {}
+    |   for current_table = main_table {
+    |     parser.skip_newlines()
+    |     match parser.view() {
+    |       [EOF, ..] => break
+    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
+    |         if !loc1.adjacent(loc2) {
+    |           parser.error("Invalid table header: space between '[' and '['")
+    |         }
+    |         parser.update_view(rest)
+    |         let table_path = parser.parse_table_path()
+    |         match parser.view() {
 ```
