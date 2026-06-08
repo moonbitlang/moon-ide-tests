@@ -255,7 +255,7 @@ test "render_cram_files emits mooncram markdown commands" {
   let files = render_cram_files(result, "example", "fixtures/repos/example")
   inspect(files.length(), content="5")
   inspect(files[0].name, content="outline.mooncram.md")
-  assert_true(files[0].content.contains("````mooncram"))
+  assert_true(files[0].content.contains("```mooncram"))
   assert_true(
     files[0].content.contains(
       "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../fixtures/repos/example\" && pwd)\"",
@@ -292,13 +292,13 @@ test "preserve_expected_output keeps matching command output" {
   let generated =
     #|# example hover
     #|
-    #|````mooncram
+    #|```mooncram
     #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
-    #|````
+    #|```
     #|
-    #|````mooncram
+    #|```mooncram
     #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
-    #|````
+    #|```
     #|
   let existing =
     #|# example hover
@@ -319,15 +319,15 @@ test "preserve_expected_output keeps matching command output" {
     content=(
       #|# example hover
       #|
-      #|````mooncram
+      #|```mooncram
       #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
       #|hover output
       #|  detail
-      #|````
+      #|```
       #|
-      #|````mooncram
+      #|```mooncram
       #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
-      #|````
+      #|```
       #|
     ),
   )
@@ -338,9 +338,9 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
   let generated =
     #|# example doc
     #|
-    #|````mooncram
+    #|```mooncram
     #|$ run_moon_ide moon ide doc Array::map
-    #|````
+    #|```
     #|
   let existing =
     #|# example doc
@@ -360,7 +360,7 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
     content=(
       #|# example doc
       #|
-      #|````mooncram
+      #|```mooncram
       #|$ run_moon_ide moon ide doc Array::map
       #|package "moonbitlang/core/array"
       #|  ```mbt check
@@ -368,7 +368,7 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
       #|    let v2 = [1].map(x => x + 1) (escaped)
       #|  }
       #|  ```
-      #|````
+      #|```
       #|
     ),
   )

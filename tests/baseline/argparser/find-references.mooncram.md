@@ -1,22 +1,22 @@
 # argparser find-references
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/argparser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Trie' --loc 'arg.mbt:2:19'
 Found 3 references for symbol 'Trie':
 <WORKDIR>/arg.mbt:2:19-2:23:
@@ -44,9 +44,9 @@ Found 3 references for symbol 'Trie':
     |   ) (escaped)
     |   let help_spec = Spec::Unit(() => raise ErrorMsg(help_msg)) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Spec' --loc 'arg.mbt:16:15'
 Found 5 references for symbol 'Spec':
 <WORKDIR>/arg.mbt:16:15-16:19:
@@ -94,9 +94,9 @@ Found 5 references for symbol 'Spec':
     |   let trie = trie.add("--help", help_spec).add("-h", help_spec) (escaped)
     |   interpret(trie, argv, rest) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'verbose' --loc 'arg_test.mbt:3:7'
 Found 3 references for symbol 'verbose':
 <WORKDIR>/arg_test.mbt:3:7-3:14:
@@ -125,9 +125,9 @@ Found 3 references for symbol 'verbose':
    |   assert_eq(keyword.val, ".mbt") (escaped)
    |   assert_eq(files.length(), 2) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'keyword' --loc 'arg_test.mbt:4:7'
 Found 3 references for symbol 'keyword':
 <WORKDIR>/arg_test.mbt:4:7-4:14:
@@ -157,4 +157,4 @@ Found 3 references for symbol 'keyword':
    |   assert_eq(files.length(), 2) (escaped)
    |   assert_eq(files[0], "file1") (escaped)
 
-````
+```

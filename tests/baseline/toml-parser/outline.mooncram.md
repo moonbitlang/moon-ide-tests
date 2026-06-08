@@ -1,29 +1,29 @@
 # toml-parser outline
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'cmd/main/main.mbt'
  L2 | fn main {
       ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/runner.mbt'
  L007 | pub struct TestResult {
         ...
@@ -51,9 +51,9 @@ $ run_moon_ide moon ide outline 'e2e/runner.mbt'
  L190 | fn float_values_equal(a : Map[String, Json], b : Map[String, Json]) -> Bool {
         ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/convert.mbt'
  L005 | pub fn to_test_json(value : @toml.TomlValue) -> Json {
         ...
@@ -68,18 +68,18 @@ $ run_moon_ide moon ide outline 'e2e/convert.mbt'
  L114 | fn format_test_float(f : Double) -> String {
         ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/e2e_test.mbt'
  L02 | async test "valid toml-test suite" {
        ...
  L58 | async test "invalid toml-test suite" {
        ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/known_failures_test.mbt'
  L009 | test "fixed: [a-a-a] table header parses correctly" {
         ...
@@ -114,4 +114,4 @@ $ run_moon_ide moon ide outline 'e2e/known_failures_test.mbt'
  L238 | test "fixed: dashed bare key starting with dash" {
         ...
 
-````
+```

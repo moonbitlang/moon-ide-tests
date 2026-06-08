@@ -1,22 +1,22 @@
 # json find-references
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Context' --loc 'src/lib/json.mbt:2:13'
 Found 34 references for symbol 'Context':
 <WORKDIR>/src/lib/json.mbt:2:13-2:20:
@@ -323,9 +323,9 @@ Found 34 references for symbol 'Context':
     |   pos : Int, (escaped)
     |   len : Int, (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'original' --loc 'src/lib/json.mbt:3:3'
 Found 18 references for symbol 'original':
 <WORKDIR>/src/lib/json.mbt:3:3-3:11:
@@ -489,9 +489,9 @@ Found 18 references for symbol 'original':
     |   } (escaped)
     | } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'ParseError' --loc 'src/lib/error.mbt:2:14'
 Found 3 references for symbol 'ParseError':
 <WORKDIR>/src/lib/error.mbt:2:14-2:24:
@@ -519,9 +519,9 @@ Found 3 references for symbol 'ParseError':
    |   type Reason, (escaped)
    | } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'ParseError' --loc 'src/lib/error.mbt:3:3'
 Found 8 references for symbol 'ParseError':
 <WORKDIR>/src/lib/error.mbt:3:3-3:13:
@@ -594,9 +594,9 @@ Found 8 references for symbol 'ParseError':
    |     _ => (escaped)
    |       json_testsuite_fail( (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Value' --loc 'src/lib/value.mbt:2:10'
 Found 33 references for symbol 'Value':
 <WORKDIR>/src/lib/json.mbt:48:59-48:64:
@@ -894,9 +894,9 @@ Found 33 references for symbol 'Value':
   |   type ContinueValue, (escaped)
   |   type FinishValue, (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Continue' --loc 'src/lib/value.mbt:3:3'
 Found 10 references for symbol 'Continue':
 <WORKDIR>/src/lib/json.mbt:37:5-37:13:
@@ -988,9 +988,9 @@ Found 10 references for symbol 'Continue':
     |       incr_fail("expected chunked parser to finish with trailing rest") (escaped)
     |   } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Decode' --loc 'src/lib/decode.mbt:8:11'
 Found 17 references for symbol 'Decode':
 <WORKDIR>/src/lib/decode.mbt:8:11-8:17:
@@ -1145,9 +1145,9 @@ Found 17 references for symbol 'Decode':
   |   decode, (escaped)
   |   decode_start, (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'array_start' --loc 'src/lib/decode.mbt:9:3'
 Found 4 references for symbol 'array_start':
 <WORKDIR>/src/lib/decode.mbt:9:3-9:14:
@@ -1186,9 +1186,9 @@ Found 4 references for symbol 'array_start':
     |       ctx.stack.push(Frame::Array(arr_acc)) (escaped)
     |       value({ ..ctx, rest, skip: skip + len, arr_acc: new_acc }) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'decode_start' --loc 'src/tests/top.mbt:2:14'
 Found 3 references for symbol 'decode_start':
 <WORKDIR>/src/tests/incr.mbt:21:31-21:43:
@@ -1214,9 +1214,9 @@ Found 3 references for symbol 'decode_start':
 2 | using @json {decode_start, decode_continue, type Value} (escaped)
   |              ^^^^^^^^^^^^ (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'decode_continue' --loc 'src/tests/top.mbt:2:28'
 Found 2 references for symbol 'decode_continue':
 <WORKDIR>/src/tests/incr.mbt:11:29-11:44:
@@ -1233,4 +1233,4 @@ Found 2 references for symbol 'decode_continue':
 2 | using @json {decode_start, decode_continue, type Value} (escaped)
   |                            ^^^^^^^^^^^^^^^ (escaped)
 
-````
+```

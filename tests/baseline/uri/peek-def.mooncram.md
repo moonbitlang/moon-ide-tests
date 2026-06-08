@@ -1,22 +1,22 @@
 # uri peek-def
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'Uri' --loc 'uri.mbt:54:12'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
@@ -40,9 +40,9 @@ Definition found at file <WORKDIR>/uri.mbt
    |   userinfo : String? (escaped)
    |   host : String (escaped)
    |   port : Int? (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'scheme' --loc 'uri.mbt:55:3'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - authority: contains user info, host, and port (escaped)
@@ -66,9 +66,9 @@ Definition found at file <WORKDIR>/uri.mbt
    |   host : String (escaped)
    |   port : Int? (escaped)
    | } derive(ToJson) (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'uri' --loc 'uri_test.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test.mbt
   | ///| (escaped)
@@ -91,9 +91,9 @@ Definition found at file <WORKDIR>/uri_test.mbt
   |   json_inspect(empty_uri, content={ "path": "" }) (escaped)
   | } (escaped)
   |  (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'parse' --loc 'uri_test.mbt:5:18'
 Definition found at file <WORKDIR>/uri.mbt
     | /// (escaped)
@@ -117,9 +117,9 @@ Definition found at file <WORKDIR>/uri.mbt
     |   // Check for scheme (escaped)
     |   if remaining.contains("://") { (escaped)
     |     let parts = remaining.split("://").collect() (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | ///| (escaped)
@@ -142,9 +142,9 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
@@ -168,4 +168,4 @@ Definition found at file <WORKDIR>/uri.mbt
    |   userinfo : String? (escaped)
    |   host : String (escaped)
    |   port : Int? (escaped)
-````
+```

@@ -1,22 +1,22 @@
 # toml-parser find-references
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'str_val' --loc 'cmd/main/main.mbt:7:7'
 Found 2 references for symbol 'str_val':
 <WORKDIR>/cmd/main/main.mbt:7:7-7:14:
@@ -37,9 +37,9 @@ Found 2 references for symbol 'str_val':
    |   println("Integer value: \\{int_val}") (escaped)
    |   println("Boolean value: \\{bool_val}") (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'TomlString' --loc 'cmd/main/main.mbt:7:23'
 Found 104 references for symbol 'TomlString':
 <WORKDIR>/README.mbt.md:101:18-101:28:
@@ -977,9 +977,9 @@ Found 104 references for symbol 'TomlString':
     |  (escaped)
     |   // Table should only have the first key (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'TestResult' --loc 'e2e/runner.mbt:7:12'
 Found 3 references for symbol 'TestResult':
 <WORKDIR>/e2e/runner.mbt:7:12-7:22:
@@ -1009,9 +1009,9 @@ Found 3 references for symbol 'TestResult':
    |   { passed: 0, failed: 0, failures: [] } (escaped)
    | } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'passed' --loc 'e2e/runner.mbt:8:3'
 Found 2 references for symbol 'passed':
 <WORKDIR>/e2e/runner.mbt:8:3-8:9:
@@ -1032,9 +1032,9 @@ Found 2 references for symbol 'passed':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'to_test_json' --loc 'e2e/convert.mbt:5:8'
 Found 5 references for symbol 'to_test_json':
 <WORKDIR>/e2e/convert.mbt:5:8-5:20:
@@ -1082,9 +1082,9 @@ Found 5 references for symbol 'to_test_json':
    |       if !json_equal(actual, expected) { (escaped)
    |         Some( (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'value' --loc 'e2e/convert.mbt:5:21'
 Found 3 references for symbol 'value':
 <WORKDIR>/e2e/convert.mbt:5:21-5:26:
@@ -1114,9 +1114,9 @@ Found 3 references for symbol 'value':
    |       match kind { (escaped)
    |         "OffsetDateTime" => typed_value("datetime", normalize_datetime(s)) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'files' --loc 'e2e/e2e_test.mbt:3:7'
 Found 4 references for symbol 'files':
 <WORKDIR>/e2e/e2e_test.mbt:3:7-3:12:
@@ -1154,9 +1154,9 @@ Found 4 references for symbol 'files':
   |     let json_path = "\\{toml_path[:toml_path.length() - 5]}.json" (escaped)
   |     if !@fs.path_exists(json_path) { (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'collect_toml_files' --loc 'e2e/e2e_test.mbt:4:8'
 Found 4 references for symbol 'collect_toml_files':
 <WORKDIR>/e2e/e2e_test.mbt:4:8-4:26:
@@ -1195,9 +1195,9 @@ Found 4 references for symbol 'collect_toml_files':
    |     } else if entry.has_suffix(".toml") { (escaped)
    |       files.push(path) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'result' --loc 'e2e/known_failures_test.mbt:10:7'
 Found 2 references for symbol 'result':
 <WORKDIR>/e2e/known_failures_test.mbt:10:7-10:13:
@@ -1218,9 +1218,9 @@ Found 2 references for symbol 'result':
    |     content=( (escaped)
    |       #|Ok(TomlTable({ "a-a-a": TomlTable({ "_": TomlBoolean(false) }) })) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'parse' --loc 'e2e/known_failures_test.mbt:10:27'
 Found 167 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:86:22-86:27:
@@ -2724,4 +2724,4 @@ Found 167 references for symbol 'parse':
     |   assert_eq(value, roundtripped) (escaped)
     | } (escaped)
 
-````
+```

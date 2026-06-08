@@ -1,22 +1,22 @@
 # core-project find-references
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../core_test/test_project" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:12:22'
 Found 3 references for symbol 'map':
 <MOON_HOME>/lib/core/builtin/array.mbt:588:21-588:24:
@@ -45,9 +45,9 @@ Found 3 references for symbol 'map':
   |  (escaped)
   |   // `inspect` is used to check the output of the function (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'filter' --loc 'core_ide_cases.mbt:13:23'
 Found 2 references for symbol 'filter':
 <MOON_HOME>/lib/core/builtin/array.mbt:692:18-692:24:
@@ -68,9 +68,9 @@ Found 2 references for symbol 'filter':
    |   large.fold(init=0, (sum, x) => sum + x) (escaped)
    | } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 2 references for symbol 'fold':
 <MOON_HOME>/lib/core/builtin/array.mbt:1289:21-1289:25:
@@ -91,9 +91,9 @@ Found 2 references for symbol 'fold':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'length' --loc 'core_ide_cases.mbt:21:9'
 Found 2 references for symbol 'length':
 <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1734:16-1734:22:
@@ -114,9 +114,9 @@ Found 2 references for symbol 'length':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'split' --loc 'core_ide_cases.mbt:21:24'
 Found 3 references for symbol 'split':
 <MOON_HOME>/lib/core/builtin/string_methods.mbt:1122:16-1122:21:
@@ -146,9 +146,9 @@ Found 3 references for symbol 'split':
    |   .map(part => part.length()) (escaped)
    |   .filter(length => length > 0) (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'abs' --loc 'core_ide_cases.mbt:26:5'
 Found 5 references for symbol 'abs':
 <MOON_HOME>/lib/core/builtin/int.mbt:176:13-176:16:
@@ -196,9 +196,9 @@ Found 5 references for symbol 'abs':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'to_string' --loc 'core_ide_cases.mbt:26:11'
 Found 7 references for symbol 'to_string':
 <MOON_HOME>/lib/core/builtin/to_string.mbt:210:13-210:22:
@@ -264,9 +264,9 @@ Found 7 references for symbol 'to_string':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:31:9'
 Found 3 references for symbol 'map':
 <MOON_HOME>/lib/core/builtin/option.mbt:132:22-132:25:
@@ -296,9 +296,9 @@ Found 3 references for symbol 'map':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:38:9'
 Found 2 references for symbol 'map':
 <MOON_HOME>/lib/core/builtin/result.mbt:27:25-27:28:
@@ -319,16 +319,16 @@ Found 2 references for symbol 'map':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 3 references for symbol 'map':
-<MOON_HOME>/lib/core/builtin/iterator.mbt:357:20-357:23:
+<MOON_HOME>/lib/core/builtin/iterator.mbt:358:20-358:23:
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-357 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] { (escaped)
+358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
@@ -351,16 +351,16 @@ Found 3 references for symbol 'map':
    |   .filter(length => length > 0) (escaped)
    |   .to_array() (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:48:6'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/list/list.mbt:254:20-254:23:
+<MOON_HOME>/lib/core/list/list.mbt:255:20-255:23:
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-254 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? { (escaped)
+255 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -374,9 +374,9 @@ Found 2 references for symbol 'map':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'get' --loc 'core_ide_cases.mbt:53:10'
 Found 2 references for symbol 'get':
 <MOON_HOME>/lib/core/hashmap/hashmap.mbt:205:35-205:38:
@@ -397,16 +397,16 @@ Found 2 references for symbol 'get':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:60:10'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/hashmap/hashmap.mbt:798:27-798:30:
+<MOON_HOME>/lib/core/hashmap/hashmap.mbt:823:27-823:30:
     | ///| (escaped)
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
-798 | pub fn[K, V, V2] HashMap::map( (escaped)
+823 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
     |   f : (K, V) -> V2, (escaped)
@@ -420,9 +420,9 @@ Found 2 references for symbol 'map':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:65:13'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:65:13-65:16:
@@ -443,9 +443,9 @@ Found 2 references for symbol 'map':
    |   match self { (escaped)
    |     Empty => Empty (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'List' --loc 'tuple_type_bug.mbt:3:19'
 Found 3 references for symbol 'List':
 <WORKDIR>/core_ide_cases.mbt:8:26-8:30:
@@ -474,9 +474,9 @@ Found 3 references for symbol 'List':
   |  (escaped)
   | fn hello(x : Hello, y : Heyx ) -> Int { (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Found 2 references for symbol 'HashMap':
 <WORKDIR>/core_ide_cases.mbt:5:28-5:35:
@@ -497,9 +497,9 @@ Found 2 references for symbol 'HashMap':
    |   scores.map((key, value) => key + ":" + value.to_string()) (escaped)
    | } (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:79:12'
 Found 2 references for symbol 'from_array':
 <MOON_HOME>/lib/core/hashmap/hashmap.mbt:59:13-59:23:
@@ -520,16 +520,16 @@ Found 2 references for symbol 'from_array':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Found 2 references for symbol 'from_array':
-<MOON_HOME>/lib/core/list/list.mbt:168:17-168:27:
+<MOON_HOME>/lib/core/list/list.mbt:169:17-169:27:
     | #as_free_fn (escaped)
     | #alias(of, deprecated="Use from_array instead") (escaped)
     | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-168 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] { (escaped)
+169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
@@ -542,4 +542,4 @@ Found 2 references for symbol 'from_array':
    |         ^^^^^^^^^^ (escaped)
    | } (escaped)
 
-````
+```

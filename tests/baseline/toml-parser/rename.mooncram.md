@@ -1,22 +1,22 @@
 # toml-parser rename
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'str_val' 'str_val_renamed' --loc 'cmd/main/main.mbt:7:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/cmd/main/main.mbt
@@ -35,9 +35,9 @@ $ run_moon_ide moon ide rename 'str_val' 'str_val_renamed' --loc 'cmd/main/main.
  
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'TomlString' 'TomlStringRenamed' --loc 'cmd/main/main.mbt:7:23'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
@@ -730,9 +730,9 @@ $ run_moon_ide moon ide rename 'TomlString' 'TomlStringRenamed' --loc 'cmd/main/
    debug_inspect(table, content="")
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'TestResult' 'TestResultRenamed' --loc 'e2e/runner.mbt:7:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
@@ -756,9 +756,9 @@ $ run_moon_ide moon ide rename 'TestResult' 'TestResultRenamed' --loc 'e2e/runne
  
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'passed' 'passed_renamed' --loc 'e2e/runner.mbt:8:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/runner.mbt
@@ -782,9 +782,9 @@ $ run_moon_ide moon ide rename 'passed' 'passed_renamed' --loc 'e2e/runner.mbt:8
  ///|
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'to_test_json' 'to_test_json_renamed' --loc 'e2e/convert.mbt:5:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/convert.mbt
@@ -832,9 +832,9 @@ $ run_moon_ide moon ide rename 'to_test_json' 'to_test_json_renamed' --loc 'e2e/
            "[MISMATCH] \{toml_path}\n    expected: \{expected.stringify()}\n    actual:   \{actual.stringify()}",
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'value' 'value_renamed' --loc 'e2e/convert.mbt:5:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/convert.mbt
@@ -858,9 +858,9 @@ $ run_moon_ide moon ide rename 'value' 'value_renamed' --loc 'e2e/convert.mbt:5:
          "LocalDateTime" => typed_value("datetime-local", normalize_datetime(s)) (escaped)
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'files' 'files_renamed' --loc 'e2e/e2e_test.mbt:3:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
@@ -883,9 +883,9 @@ $ run_moon_ide moon ide rename 'files' 'files_renamed' --loc 'e2e/e2e_test.mbt:3
        continue
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'collect_toml_files' 'collect_toml_files_renamed' --loc 'e2e/e2e_test.mbt:4:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/e2e_test.mbt
@@ -928,9 +928,9 @@ $ run_moon_ide moon ide rename 'collect_toml_files' 'collect_toml_files_renamed'
      }
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'result' 'result_renamed' --loc 'e2e/known_failures_test.mbt:10:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/known_failures_test.mbt
@@ -948,9 +948,9 @@ $ run_moon_ide moon ide rename 'result' 'result_renamed' --loc 'e2e/known_failur
      ),
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures_test.mbt:10:27'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
@@ -2399,4 +2399,4 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'e2e/known_failures
  }
 *** End Patch
 
-````
+```
