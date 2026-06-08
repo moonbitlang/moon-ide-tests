@@ -324,11 +324,11 @@ Found 2 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 3 references for symbol 'map':
-<MOON_HOME>/lib/core/builtin/iterator.mbt:358:20-358:23:
+<MOON_HOME>/lib/core/builtin/iterator.mbt:357:20-357:23:
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+357 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
@@ -356,11 +356,11 @@ Found 3 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:48:6'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/list/list.mbt:255:20-255:23:
+<MOON_HOME>/lib/core/list/list.mbt:254:20-254:23:
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-255 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+254 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -402,11 +402,11 @@ Found 2 references for symbol 'get':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:60:10'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/hashmap/hashmap.mbt:823:27-823:30:
+<MOON_HOME>/lib/core/hashmap/hashmap.mbt:798:27-798:30:
     | ///| (escaped)
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
-823 | pub fn[K, V, V2] HashMap::map(
+798 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
     |   f : (K, V) -> V2, (escaped)
@@ -525,11 +525,11 @@ Found 2 references for symbol 'from_array':
 ```mooncram
 $ run_moon_ide moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Found 2 references for symbol 'from_array':
-<MOON_HOME>/lib/core/list/list.mbt:169:17-169:27:
+<MOON_HOME>/lib/core/list/list.mbt:168:17-168:27:
     | #as_free_fn (escaped)
     | #alias(of, deprecated="Use from_array instead") (escaped)
     | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+168 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
