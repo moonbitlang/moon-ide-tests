@@ -16,9 +16,9 @@ fn append_markdown_header(
 ///|
 fn append_mooncram_block(sb : StringBuilder, command : String) -> Unit {
   append_line(sb, "")
-  append_line(sb, "````mooncram")
+  append_line(sb, "```mooncram")
   append_line(sb, command)
-  append_line(sb, "````")
+  append_line(sb, "```")
 }
 
 ///|

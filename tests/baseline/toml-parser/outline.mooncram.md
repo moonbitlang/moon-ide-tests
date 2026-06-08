@@ -1,29 +1,41 @@
 # toml-parser outline
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
-$ run_moon_ide moon ide outline 'cmd/main/main.mbt'
- L2 | fn main {
-      ...
+```mooncram
+$ run_moon_ide moon ide outline 'cmd/toml/main.mbt'
+ L02 | let version : String = "0.2.3"
+       ...
+ L05 | fn toml_command() -> @argparse.Command {
+       ...
+ L34 | fn main {
+       ...
+ L42 | fn run(args : ArrayView[String]) -> Int {
+       ...
+ L61 | fn dispatch_file(matches : @argparse.Matches, action : (String) -> Int) -> Int {
+       ...
+ L69 | fn format_file(path : String) -> Int {
+       ...
+ L87 | fn check_file(path : String) -> Int {
+       ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/runner.mbt'
  L007 | pub struct TestResult {
         ...
@@ -36,24 +48,24 @@ $ run_moon_ide moon ide outline 'e2e/runner.mbt'
         ...
  L039 | pub fn run_single_valid_test(toml_path : String) -> String? raise @fs.IOError {
         ...
- L068 | pub fn run_single_invalid_test(toml_path : String) -> String? raise @fs.IOError {
+ L072 | pub fn run_single_invalid_test(toml_path : String) -> String? raise @fs.IOError {
         ...
- L084 | pub fn json_equal(a : Json, b : Json) -> Bool {
+ L092 | pub fn json_equal(a : Json, b : Json) -> Bool {
         ...
- L126 | fn is_datetime_typed_value(m : Map[String, Json]) -> Bool {
+ L134 | fn is_datetime_typed_value(m : Map[String, Json]) -> Bool {
         ...
- L139 | fn datetime_values_equal(a : Map[String, Json], b : Map[String, Json]) -> Bool {
+ L147 | fn datetime_values_equal(a : Map[String, Json], b : Map[String, Json]) -> Bool {
         ...
- L152 | fn normalize_frac_seconds(s : String) -> String {
+ L160 | fn normalize_frac_seconds(s : String) -> String {
         ...
- L184 | fn is_float_typed_value(m : Map[String, Json]) -> Bool {
+ L192 | fn is_float_typed_value(m : Map[String, Json]) -> Bool {
         ...
- L190 | fn float_values_equal(a : Map[String, Json], b : Map[String, Json]) -> Bool {
+ L198 | fn float_values_equal(a : Map[String, Json], b : Map[String, Json]) -> Bool {
         ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/convert.mbt'
  L005 | pub fn to_test_json(value : @toml.TomlValue) -> Json {
         ...
@@ -68,50 +80,50 @@ $ run_moon_ide moon ide outline 'e2e/convert.mbt'
  L114 | fn format_test_float(f : Double) -> String {
         ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/e2e_test.mbt'
  L02 | async test "valid toml-test suite" {
        ...
- L58 | async test "invalid toml-test suite" {
+ L62 | async test "invalid toml-test suite" {
        ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'e2e/known_failures_test.mbt'
  L009 | test "fixed: [a-a-a] table header parses correctly" {
         ...
- L020 | test "fixed: leading underscore value rejected (not infinite loop)" {
+ L024 | test "fixed: leading underscore value rejected (not infinite loop)" {
         ...
- L035 | test "fixed: positive prefix '+' tokenized for integers" {
+ L043 | test "fixed: positive prefix '+' tokenized for integers" {
         ...
- L046 | test "fixed: positive prefix '+' tokenized for floats" {
+ L058 | test "fixed: positive prefix '+' tokenized for floats" {
         ...
- L061 | test "fixed: CRLF line ending handled" {
+ L077 | test "fixed: CRLF line ending handled" {
         ...
- L076 | test "fixed: datetime with space separator" {
+ L096 | test "fixed: datetime with space separator" {
         ...
- L091 | test "fixed: numeric key leading zeros preserved" {
+ L115 | test "fixed: numeric key leading zeros preserved" {
         ...
- L106 | test "fixed: multiline string line ending backslash" {
+ L134 | test "fixed: multiline string line ending backslash" {
         ...
- L127 | test "fixed: hex escape \\xHH" {
+ L159 | test "fixed: hex escape \\xHH" {
         ...
- L138 | test "fixed: escape \\e (ESC)" {
+ L174 | test "fixed: escape \\e (ESC)" {
         ...
- L154 | #skip
+ L194 | #skip
         ...
- L175 | test "fixed: keyword as table name" {
+ L219 | test "fixed: keyword as table name" {
         ...
- L191 | #skip
+ L239 | #skip
         ...
- L208 | #skip
+ L260 | #skip
         ...
- L220 | test "fixed: multiline string with consecutive quotes" {
+ L276 | test "fixed: multiline string with consecutive quotes" {
         ...
- L238 | test "fixed: dashed bare key starting with dash" {
+ L298 | test "fixed: dashed bare key starting with dash" {
         ...
 
-````
+```

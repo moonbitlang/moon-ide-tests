@@ -1,22 +1,22 @@
 # sqlparser rename
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'pass' 'pass_renamed' --loc 'src/tests/good_test.mbt:4:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/good_test.mbt
@@ -279,9 +279,9 @@ $ run_moon_ide moon ide rename 'pass' 'pass_renamed' --loc 'src/tests/good_test.
  }
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'input' 'input_renamed' --loc 'src/tests/good_test.mbt:4:9'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/good_test.mbt
@@ -298,9 +298,9 @@ $ run_moon_ide moon ide rename 'input' 'input_renamed' --loc 'src/tests/good_tes
        panic()
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'read_and_parse' 'read_and_parse_renamed' --loc 'src/tests/tpch_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/tpch_test.mbt
@@ -511,9 +511,9 @@ $ run_moon_ide moon ide rename 'read_and_parse' 'read_and_parse_renamed' --loc '
      content=(
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'path' 'path_renamed' --loc 'src/tests/tpch_test.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/tpch_test.mbt
@@ -528,9 +528,9 @@ $ run_moon_ide moon ide rename 'path' 'path_renamed' --loc 'src/tests/tpch_test.
        panic()
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'sql' 'sql_renamed' --loc 'src/tests/dialect_test.mbt:9:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/dialect_test.mbt
@@ -549,9 +549,9 @@ $ run_moon_ide moon ide rename 'sql' 'sql_renamed' --loc 'src/tests/dialect_test
  
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'parse_sql' 'parse_sql_renamed' --loc 'src/tests/dialect_test.mbt:9:24'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/bigquery.mbt
@@ -3149,9 +3149,9 @@ $ run_moon_ide moon ide rename 'parse_sql' 'parse_sql_renamed' --loc 'src/tests/
        panic()
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/ast.mbt:2:24'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ast.mbt
@@ -5828,9 +5828,9 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
      content=(
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'obj' 'obj_renamed' --loc 'src/ast.mbt:2:37'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ast.mbt
@@ -5845,9 +5845,9 @@ $ run_moon_ide moon ide rename 'obj' 'obj_renamed' --loc 'src/ast.mbt:2:37'
  ///|
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dcl.mbt:5:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ansi.mbt
@@ -7013,9 +7013,9 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dcl.mbt:5:4'
    let tokens = self.expect_token(tokens, Keyword(Release))
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'parse_grant_statement' 'parse_grant_statement_renamed' --loc 'src/dcl.mbt:5:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/dcl.mbt
@@ -7040,4 +7040,4 @@ $ run_moon_ide moon ide rename 'parse_grant_statement' 'parse_grant_statement_re
      [Keyword(Use), .. _rest] => (escaped)
 *** End Patch
 
-````
+```

@@ -1,22 +1,22 @@
 # core-project hover
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../core_test/test_project" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 type CoreIntArray = Array[Int]
 
@@ -46,9 +46,9 @@ type CoreScores = @hashmap.HashMap[String, Int]
                    ```
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'List' --loc 'core_ide_cases.mbt:8:26'
 type CoreScores = @hashmap.HashMap[String, Int]
 
@@ -67,9 +67,9 @@ type CoreIntList = @list.List[Int]
                     Type `List` used by this package APIs.
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:12:22'
 ///|
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
@@ -92,9 +92,9 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
                       ```
   let large = doubled.filter(x => x > 3) (escaped)
   large.fold(init=0, (sum, x) => sum + x) (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'filter' --loc 'core_ide_cases.mbt:13:23'
 ///|
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
@@ -129,9 +129,9 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
                        ```
   large.fold(init=0, (sum, x) => sum + x) (escaped)
 }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'fold' --loc 'core_ide_cases.mbt:14:9'
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
   let doubled = nums.map(x => x * 2) (escaped)
@@ -162,9 +162,9 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
          ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'new' --loc 'core_ide_cases.mbt:19:32'
 ///|
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
@@ -186,9 +186,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
                                 Returns a new `StringBuilder` instance with the specified initial capacity.
   builder.write_string(text)
   (text.length(), text.split(" ").to_array(), builder.to_string())
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'write_string' --loc 'core_ide_cases.mbt:20:11'
 ///|
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
@@ -203,9 +203,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
            Writes a string to the StringBuilder.
   (text.length(), text.split(" ").to_array(), builder.to_string())
 }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'length' --loc 'core_ide_cases.mbt:21:9'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
@@ -238,9 +238,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
          ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'split' --loc 'core_ide_cases.mbt:21:24'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
@@ -262,9 +262,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
                         characters in the string as single elements.
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'to_array' --loc 'core_ide_cases.mbt:21:35'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
@@ -280,9 +280,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
                                    The old iterator `self` must not be used again.
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'abs' --loc 'core_ide_cases.mbt:26:5'
 ///|
 pub fn exercise_int_core(n : Int) -> String {
@@ -312,9 +312,9 @@ pub fn exercise_int_core(n : Int) -> String {
      ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'to_string' --loc 'core_ide_cases.mbt:26:11'
 ///|
 pub fn exercise_int_core(n : Int) -> String {
@@ -333,9 +333,9 @@ pub fn exercise_int_core(n : Int) -> String {
            ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:31:9'
 ///|
 pub fn exercise_option_core(value : Int?) -> Int? {
@@ -360,9 +360,9 @@ pub fn exercise_option_core(value : Int?) -> Int? {
          ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:38:9'
 pub fn exercise_result_core(
   value : Result[Int, String],
@@ -387,9 +387,9 @@ pub fn exercise_result_core(
          ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:43:15'
 ///|
 pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
@@ -420,9 +420,9 @@ pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
                The old iterator `self` must not be used again after calling `map`.
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'to_array' --loc 'core_ide_cases.mbt:43:45'
 ///|
 pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
@@ -437,9 +437,9 @@ pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
                                              The old iterator `self` must not be used again.
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:48:6'
 ///|
 pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
@@ -464,9 +464,9 @@ pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
       ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'get' --loc 'core_ide_cases.mbt:53:10'
 ///|
 pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
@@ -497,9 +497,9 @@ pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
           ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:53:22'
 ///|
 pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
@@ -524,9 +524,9 @@ pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
                       ```
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:60:10'
 pub fn exercise_hashmap_map(
   scores : CoreScores,
@@ -542,9 +542,9 @@ pub fn exercise_hashmap_map(
           returns a new map with the results, using the original keys.
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'map' --loc 'core_ide_cases.mbt:65:13'
 ///|
 pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
@@ -558,9 +558,9 @@ pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
              Maps a function over the container
 }
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'split' --loc 'core_ide_cases.mbt:71:4'
 ///|
 pub fn exercise_chained_core(text : String) -> Array[Int] {
@@ -582,9 +582,9 @@ pub fn exercise_chained_core(text : String) -> Array[Int] {
     characters in the string as single elements.
   .map(part => part.length()) (escaped)
   .filter(length => length > 0) (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'filter' --loc 'core_ide_cases.mbt:73:4'
   text
   .split(",")
@@ -615,9 +615,9 @@ $ run_moon_ide moon ide hover 'filter' --loc 'core_ide_cases.mbt:73:4'
     The old iterator `self` must not be used again after calling `filter`.
   .to_array()
 }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide hover 'from_array' --loc 'core_ide_cases.mbt:79:12'
 ///|
 pub fn build_core_scores() -> CoreScores {
@@ -653,4 +653,4 @@ pub fn build_core_scores() -> CoreScores {
    ```
 }
 
-````
+```

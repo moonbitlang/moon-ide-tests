@@ -1,22 +1,22 @@
 # argparser rename
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/argparser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'Trie' 'TrieRenamed' --loc 'arg.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
@@ -47,9 +47,9 @@ $ run_moon_ide moon ide rename 'Trie' 'TrieRenamed' --loc 'arg.mbt:2:19'
    let trie = trie.add("--help", help_spec).add("-h", help_spec)
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'Spec' 'SpecRenamed' --loc 'arg.mbt:16:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg.mbt
@@ -97,9 +97,9 @@ $ run_moon_ide moon ide rename 'Spec' 'SpecRenamed' --loc 'arg.mbt:16:15'
  }
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'verbose' 'verbose_renamed' --loc 'arg_test.mbt:3:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg_test.mbt
@@ -129,9 +129,9 @@ $ run_moon_ide moon ide rename 'verbose' 'verbose_renamed' --loc 'arg_test.mbt:3
    assert_eq(files[0], "file1")
 *** End Patch
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide rename 'keyword' 'keyword_renamed' --loc 'arg_test.mbt:4:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/arg_test.mbt
@@ -162,4 +162,4 @@ $ run_moon_ide moon ide rename 'keyword' 'keyword_renamed' --loc 'arg_test.mbt:4
    assert_eq(files[1], "file2")
 *** End Patch
 
-````
+```

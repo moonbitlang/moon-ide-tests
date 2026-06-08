@@ -1,22 +1,22 @@
 # indexmap find-references
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/indexmap" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Bucket' --loc 'src/types.mbt:17:13'
 Found 2 references for symbol 'Bucket':
 <WORKDIR>/src/types.mbt:17:13-17:19:
@@ -37,9 +37,9 @@ Found 2 references for symbol 'Bucket':
    |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
    |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'hash' --loc 'src/types.mbt:18:3'
 Found 6 references for symbol 'hash':
 <WORKDIR>/src/IndexMap.mbt:112:5-112:9:
@@ -96,9 +96,9 @@ Found 6 references for symbol 'hash':
    |   key : K // 键 (escaped)
    |   mut value : V // 值 (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'Default_init_capacity' --loc 'src/IndexMap.mbt:2:7'
 Found 2 references for symbol 'Default_init_capacity':
 <WORKDIR>/src/IndexMap.mbt:2:7-2:28:
@@ -117,9 +117,9 @@ Found 2 references for symbol 'Default_init_capacity':
    |   { (escaped)
    |     core: { (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
 Found 3 references for symbol 'calc_grow_threshold':
 <WORKDIR>/src/IndexMap.mbt:5:4-5:23:
@@ -149,9 +149,9 @@ Found 3 references for symbol 'calc_grow_threshold':
     |   self.core.hash_to_idx = @hashmap.HashMap([], capacity=self.capacity) (escaped)
     |   self.core.entries = [] (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'm' --loc 'src/IndexMap_test.mbt:17:7'
 Found 3 references for symbol 'm':
 <WORKDIR>/src/IndexMap_test.mbt:17:7-17:8:
@@ -181,9 +181,9 @@ Found 3 references for symbol 'm':
    | } (escaped)
    |  (escaped)
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide find-references 'T' --loc 'src/IndexMap_test.mbt:17:19'
 Found 116 references for symbol 'T':
 <WORKDIR>/src/IndexMap.mbt:27:62-27:63:
@@ -1230,4 +1230,4 @@ Found 116 references for symbol 'T':
    |   core : IndexMapCore[K, V] // 包含核心数据结构 (escaped)
    |   mut size : Int // 元素数量 (escaped)
 
-````
+```

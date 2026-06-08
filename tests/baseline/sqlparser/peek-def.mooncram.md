@@ -1,22 +1,22 @@
 # sqlparser peek-def
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'pass' --loc 'src/tests/good_test.mbt:4:4'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql (escaped)
@@ -38,9 +38,9 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
   |   "SELECT * FROM orders;" |> pass (escaped)
   | } (escaped)
   |  (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'input' --loc 'src/tests/good_test.mbt:4:9'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql (escaped)
@@ -62,9 +62,9 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
   |   "SELECT * FROM orders;" |> pass (escaped)
   | } (escaped)
   |  (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   | ///| (escaped)
@@ -84,9 +84,9 @@ Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   |     ParserError(e) => { (escaped)
   |       println(e) (escaped)
   |       panic() (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   | ///| (escaped)
@@ -106,9 +106,9 @@ Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
   |     ParserError(e) => { (escaped)
   |       println(e) (escaped)
   |       panic() (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'sql' --loc 'src/tests/dialect_test.mbt:9:7'
 Definition found at file <WORKDIR>/src/tests/dialect_test.mbt
   |  (escaped)
@@ -132,9 +132,9 @@ Definition found at file <WORKDIR>/src/tests/dialect_test.mbt
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'parse_sql' --loc 'src/tests/dialect_test.mbt:9:24'
 Definition found at file <WORKDIR>/src/export.mbt
   |   LexerError(LexerError) (escaped)
@@ -155,9 +155,9 @@ Definition found at file <WORKDIR>/src/export.mbt
   |   } (escaped)
   |   { stmts, } (escaped)
   | } (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'pretty_print' --loc 'src/ast.mbt:2:24'
 Definition found at file <WORKDIR>/src/ast.mbt
   | ///| (escaped)
@@ -177,9 +177,9 @@ Definition found at file <WORKDIR>/src/ast.mbt
   |   stmts : Array[Statement] (escaped)
   | } derive(Eq, Debug) (escaped)
   |  (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'obj' --loc 'src/ast.mbt:2:37'
 Definition found at file <WORKDIR>/src/ast.mbt
   | ///| (escaped)
@@ -199,9 +199,9 @@ Definition found at file <WORKDIR>/src/ast.mbt
   |   stmts : Array[Statement] (escaped)
   | } derive(Eq, Debug) (escaped)
   |  (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'Parser' --loc 'src/dcl.mbt:5:4'
 Definition found at file <WORKDIR>/src/parser.mbt
    |  (escaped)
@@ -225,9 +225,9 @@ Definition found at file <WORKDIR>/src/parser.mbt
    | } (escaped)
    |  (escaped)
    | ///| (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide peek-def 'parse_grant_statement' --loc 'src/dcl.mbt:5:12'
 Definition found at file <WORKDIR>/src/dcl.mbt
   | ///| (escaped)
@@ -250,4 +250,4 @@ Definition found at file <WORKDIR>/src/dcl.mbt
   |   // Parse objects (tables, views, etc.) (escaped)
   |   let (objects, tokens) = self.parse_object_name_list(tokens) (escaped)
   |  (escaped)
-````
+```

@@ -1,22 +1,22 @@
 # json outline
 
-````mooncram
+```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-````
+```
 
-````mooncram
+```mooncram
 $ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-````
+```
 
-````mooncram
+```mooncram
 $ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'src/lib/json.mbt'
  L002 | priv struct Context {
         ...
@@ -126,18 +126,18 @@ $ run_moon_ide moon ide outline 'src/lib/json.mbt'
  L639 | fn invalid_byte(arr : Array[Char], skip : Int) -> ParseError {
         ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'src/lib/error.mbt'
  L2 | pub suberror ParseError {
       ...
  L7 | pub enum Reason {
       ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'src/lib/value.mbt'
  L02 | pub enum Value {
        ...
@@ -148,9 +148,9 @@ $ run_moon_ide moon ide outline 'src/lib/value.mbt'
  L26 | enum Checkpoint {
        ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'src/lib/decode.mbt'
  L02 | pub type JsonArray = Array[Json]
        ...
@@ -177,11 +177,11 @@ $ run_moon_ide moon ide outline 'src/lib/decode.mbt'
  L64 | impl Decode for Unit with string(_self, s) {
        ...
 
-````
+```
 
-````mooncram
+```mooncram
 $ run_moon_ide moon ide outline 'src/tests/top.mbt'
  L2 | using @json {decode_start, decode_continue, type Value}
       ...
 
-````
+```
