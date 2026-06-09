@@ -16,11 +16,12 @@ Generated files are written to the configured output directory.
 Run from this repository root:
 
 ```sh
-moon -C testgen run cmd/main -- \
+moon -C testgen run --target wasm cmd/main -- \
   --repo "$PWD/fixtures/repos/argparser" \
-  --output-dir "$PWD/tests/baseline/argparser" \
+  --output-dir "$PWD/tests/unix/argparser" \
   --repo-slug argparser \
-  --test-repo fixtures/repos/argparser
+  --test-repo fixtures/repos/argparser \
+  --platform unix
 ```
 
 ## Options
@@ -29,6 +30,7 @@ moon -C testgen run cmd/main -- \
 - `--output-dir <path>`: directory for generated Moon Cram files
 - `--repo-slug <slug>`: stable name used in generated markdown titles
 - `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
+- `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max scanned `.mbt` files; `0` means no cap (default: `0`)
 
@@ -41,5 +43,6 @@ moon -C testgen run cmd/main -- \
 - `hover`, `peek-def`, `find-references`, and `rename` share one location-based case collection (`--loc`).
 - `main` function symbols are excluded from collection.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
-- Every generated file normalizes `$MOON_HOME` and the test repository root in `moon ide` output.
-- Generated tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/baseline`.
+- Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
+- Generated Unix tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/unix`.
+- Generated Windows tests use PowerShell syntax and should be run with `moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows`.

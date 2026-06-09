@@ -1,13 +1,14 @@
 ///|
 test "parse_args accepts required generation arguments" {
   let config = parse_args([
-    "--repo", "fixtures/repos/argparser", "--output-dir", "tests/baseline/argparser",
+    "--repo", "fixtures/repos/argparser", "--output-dir", "tests/unix/argparser",
     "--repo-slug", "argparser", "--max-per-file", "7", "--max-files", "3",
   ])
   inspect(config.repo_path, content="fixtures/repos/argparser")
-  inspect(config.output_dir, content="tests/baseline/argparser")
+  inspect(config.output_dir, content="tests/unix/argparser")
   inspect(config.repo_slug, content="argparser")
   inspect(config.test_repo_path, content="fixtures/repos/argparser")
+  debug_inspect(config.platform, content="Unix")
   inspect(config.max_per_file, content="7")
   inspect(config.max_files, content="3")
 }
@@ -18,6 +19,7 @@ test "parse_args defaults limits" {
     "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
   ])
   inspect(config.test_repo_path, content="repo")
+  debug_inspect(config.platform, content="Unix")
   inspect(config.max_per_file, content="50")
   inspect(config.max_files, content="0")
 }
@@ -252,7 +254,12 @@ test "render_cram_files emits mooncram markdown commands" {
     source_files: ["a.mbt"],
     loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
   }
-  let files = render_cram_files(result, "example", "fixtures/repos/example")
+  let files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Unix,
+  )
   inspect(files.length(), content="5")
   inspect(files[0].name, content="outline.mooncram.md")
   assert_true(files[0].content.contains("```mooncram"))
@@ -288,6 +295,32 @@ test "render_cram_files emits mooncram markdown commands" {
 }
 
 ///|
+test "render_cram_files emits windows powershell bootstrap" {
+  let result = CollectResult::{
+    source_files: ["a.mbt"],
+    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
+  }
+  let files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Windows,
+  )
+  inspect(files.length(), content="5")
+  inspect(files[0].name, content="outline.mooncram.md")
+  assert_true(
+    files[0].content.contains(
+      "$ run_moon_ide '..\\..\\..\\fixtures\\repos\\example' moon ide outline 'a.mbt'",
+    ),
+  )
+  assert_true(
+    files[1].content.contains(
+      "$ run_moon_ide '..\\..\\..\\fixtures\\repos\\example' moon ide hover 'f' --loc 'a.mbt:1:4'",
+    ),
+  )
+}
+
+///|
 test "preserve_expected_output keeps matching command output" {
   let generated =
     #|# example hover
@@ -316,6 +349,23 @@ test "preserve_expected_output keeps matching command output" {
     #|
   inspect(
     preserve_expected_output(generated, existing),
+    content=(
+      #|# example hover
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|hover output
+      #|  detail
+      #|```
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|```
+      #|
+    ),
+  )
+  inspect(
+    preserve_expected_output(generated, existing.replace(old="\n", new="\r\n")),
     content=(
       #|# example hover
       #|

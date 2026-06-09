@@ -20,7 +20,7 @@ env:
 
 jobs:
   daily-test:
-    name: Daily Test
+    name: Unix Baselines
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,52 +57,183 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test
+        run: moon -C testgen test --target wasm
 
-      - name: Update generated tests
+      - name: Update generated Unix tests
         run: scripts/update-tests.sh
 
-      - name: Refresh snapshots
+      - name: Refresh Unix snapshots
         run: |
           mkdir -p .daily-test
-          moon cram update --replace --assume-yes --cram-compat tests/baseline \
-            > .daily-test/cram-update.log 2>&1
+          moon cram update --replace --assume-yes --cram-compat tests/unix \
+            > .daily-test/unix-cram-update.log 2>&1
 
-      - name: Run cram tests
-        id: cram
+      - name: Run Unix cram tests
+        id: unix-cram
         run: |
           set +e
-          moon cram test --cram-compat tests/baseline \
-            > .daily-test/cram-test.log 2>&1
+          moon cram test --cram-compat tests/unix \
+            > .daily-test/unix-cram-test.log 2>&1
           status=$?
           set -e
-          echo "$status" > .daily-test/cram-test-status.txt
+          echo "$status" > .daily-test/unix-cram-test-status.txt
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
-      - name: Collect review inputs
+      - name: Collect Unix review inputs
         if: always()
         run: |
           mkdir -p .daily-test
           git submodule status --recursive > .daily-test/submodules.txt
+          git status --short > .daily-test/unix-status.txt
+
+      - name: Commit Unix daily changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- fixtures/repos tests/unix; then
+            git add fixtures/repos tests/unix
+            git commit -m "chore: update daily Unix IDE baselines"
+          fi
+
+      - name: Push daily branch
+        run: git push --force-with-lease origin "$DAILY_BRANCH"
+
+      - name: Upload Unix review inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-unix-review-inputs
+          path: .daily-test
+          if-no-files-found: ignore
+
+  windows-baseline:
+    name: Windows Baselines
+    runs-on: windows-latest
+    needs: daily-test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install MoonBit
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Prepare daily branch
+        shell: powershell
+        run: |
+          git fetch --no-tags origin main
+          $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
+          git fetch --no-tags origin $refspec
+          git checkout -B $env:DAILY_BRANCH "origin/$($env:DAILY_BRANCH)"
+          New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
+          ".daily-test/" | Out-File -FilePath .git\info\exclude -Encoding utf8 -Append
+
+      - name: Update MoonBit registry
+        shell: powershell
+        run: |
+          foreach ($attempt in 1, 2, 3) {
+            moon update
+            if ($LASTEXITCODE -eq 0) {
+              break
+            }
+            if ($attempt -eq 3) {
+              exit 1
+            }
+            Start-Sleep -Seconds ($attempt * 10)
+          }
+
+      - name: Update Windows snapshots
+        shell: powershell
+        run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
+
+      - name: Run Windows cram tests
+        id: windows-cram
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
+          & moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows *> .daily-test\windows-cram-test.log
+          $status = $LASTEXITCODE
+          Set-Content -Path .daily-test\windows-cram-test-status.txt -Value $status -Encoding utf8
+          "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          exit 0
+
+      - name: Collect Windows review inputs
+        if: always()
+        shell: powershell
+        run: git status --short > .daily-test\windows-status.txt
+
+      - name: Commit Windows daily changes
+        shell: powershell
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git diff --quiet -- tests/windows
+          $diffStatus = $LASTEXITCODE
+          if ($diffStatus -eq 1) {
+            git add tests/windows
+            git commit -m "chore: update daily Windows IDE baselines"
+            git push --force-with-lease origin $env:DAILY_BRANCH
+          } elseif ($diffStatus -ne 0) {
+            exit $diffStatus
+          }
+
+      - name: Upload Windows review inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-windows-review-inputs
+          path: .daily-test
+          if-no-files-found: ignore
+
+  daily-review:
+    name: Daily Review
+    runs-on: ubuntu-latest
+    needs:
+      - daily-test
+      - windows-baseline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Checkout daily branch
+        run: |
+          git fetch --no-tags origin main
+          git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
+          git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
+          git submodule update --init --recursive
+
+      - name: Download Unix review inputs
+        uses: actions/download-artifact@v4
+        with:
+          name: daily-unix-review-inputs
+          path: .daily-test
+
+      - name: Download Windows review inputs
+        uses: actions/download-artifact@v4
+        with:
+          name: daily-windows-review-inputs
+          path: .daily-test
+
+      - name: Collect final review inputs
+        run: |
+          mkdir -p .daily-test
           git status --short > .daily-test/status.txt
 
       - name: Detect daily diff
         id: diff
         run: |
-          if git diff --quiet -- fixtures/repos tests/baseline; then
+          if git diff --quiet origin/main...HEAD -- fixtures/repos tests/unix tests/windows; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Commit daily changes
-        if: steps.diff.outputs.has_changes == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add fixtures/repos tests/baseline
-          git commit -m "chore: update daily IDE baselines"
-          git push --force-with-lease origin "$DAILY_BRANCH"
 
       - name: Create or update pull request
         id: pr
@@ -120,7 +251,7 @@ jobs:
           body="$(printf '%s\n\n%s\n%s\n' \
             "This PR was generated by the Daily Test workflow." \
             "It refreshes fixture submodules, regenerates IDE baseline tests with testgen," \
-            "and promotes Moon Cram snapshots.")"
+            "promotes Unix Moon Cram snapshots, and promotes Windows Moon Cram snapshots.")"
 
           if [ -z "$pr_number" ]; then
             pr_url="$(gh pr create \
@@ -224,7 +355,13 @@ jobs:
             });
 
       - name: Fail if cram tests failed without a diff
-        if: steps.diff.outputs.has_changes == 'false' && steps.cram.outputs.status != '0'
+        if: steps.diff.outputs.has_changes == 'false'
         run: |
-          cat .daily-test/cram-test.log
-          exit 1
+          unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
+          windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
+
+          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
+            cat .daily-test/unix-cram-test.log 2>/dev/null || true
+            cat .daily-test/windows-cram-test.log 2>/dev/null || true
+            exit 1
+          fi

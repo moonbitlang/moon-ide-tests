@@ -21,6 +21,13 @@ priv struct CramFile {
 } derive(Debug)
 
 ///|
+#warnings("-unused_value")
+priv enum TestPlatform {
+  Unix
+  Windows
+} derive(Eq, Debug)
+
+///|
 priv struct ExpectedBlock {
   command : String
   output : Array[String]
