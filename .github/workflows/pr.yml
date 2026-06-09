@@ -37,7 +37,7 @@ jobs:
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
-          git diff --exit-code -- tests/unix tests/windows
+          git diff --exit-code -- tests/unix
 
       - name: Run Unix baselines
         run: moon cram test --cram-compat tests/unix
@@ -69,6 +69,12 @@ jobs:
             }
             Start-Sleep -Seconds ($attempt * 10)
           }
+
+      - name: Verify generated Windows baselines
+        shell: powershell
+        run: |
+          .\scripts\update-windows-tests.ps1
+          git diff --exit-code -- tests\windows
 
       - name: Run Windows baselines
         shell: powershell

@@ -9,10 +9,15 @@ git status --short
 git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows
 git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows
 cat .daily-test/status.txt
+cat .daily-test/unix-status.txt
+cat .daily-test/windows-status.txt
 cat .daily-test/submodules.txt
-cat .daily-test/cram-test-status.txt
-cat .daily-test/cram-test.log
-cat .daily-test/cram-update.log
+cat .daily-test/unix-cram-test-status.txt
+cat .daily-test/windows-cram-test-status.txt
+cat .daily-test/unix-cram-test.log
+cat .daily-test/windows-cram-test.log
+cat .daily-test/unix-cram-update.log
+cat .daily-test/windows-cram-update.log
 ```
 
 Decide whether the daily refresh contains a failed test, wrong expected output, suspicious baseline promotion, or another issue that needs human attention.
