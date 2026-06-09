@@ -269,7 +269,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-810 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+811 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::new(capacity=n) (escaped)
@@ -391,7 +391,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-357 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
@@ -417,7 +417,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-810 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+811 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::new(capacity=n) (escaped)
@@ -443,7 +443,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-254 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+255 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -521,7 +521,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
     | ///| (escaped)
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
-798 | pub fn[K, V, V2] HashMap::map(
+823 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
     |   f : (K, V) -> V2, (escaped)
@@ -599,7 +599,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `filter`. (escaped)
-326 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+327 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
     |                 ^^^^^^ (escaped)
     |   Iter::new(fn() { (escaped)
     |     while self.next() is Some(x) { (escaped)
@@ -625,7 +625,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | #as_free_fn (escaped)
     | #alias(of, deprecated="Use from_array instead") (escaped)
     | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-168 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
@@ -647,7 +647,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | #as_free_fn (escaped)
     | #alias(of, deprecated="Use from_array instead") (escaped)
     | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-168 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)

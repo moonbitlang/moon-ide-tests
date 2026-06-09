@@ -363,8 +363,8 @@ Found 1 symbols matching 'Result::map':
 $ run_moon_ide moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:338-367
-338 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:339-368
+339 | ///|
     | /// Transforms the elements of the iterator using a mapping function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -400,8 +400,8 @@ Found 1 symbols matching 'Iter::map':
 $ run_moon_ide moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:308-336
-308 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:309-337
+309 | ///|
     | /// Filters the elements of the iterator based on a predicate function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -436,8 +436,8 @@ Found 1 symbols matching 'Iter::filter':
 $ run_moon_ide moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:806-819
-806 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:807-820
+807 | ///|
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
@@ -471,8 +471,8 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
-`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:240-273
-240 | ///|
+`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:241-274
+241 | ///|
     | /// Maps the list. (escaped)
     | /// (escaped)
     | /// # Example (escaped)
@@ -563,8 +563,8 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
-`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:795-817
-795 | ///|
+`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:820-842
+820 | ///|
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
     | pub fn[K, V, V2] HashMap::map( (escaped)
