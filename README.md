@@ -10,7 +10,8 @@ fixture set for local development.
 
 ## Repository Layout
 
-- `tests/baseline/`: checked-in Moon Cram markdown baselines.
+- `tests/unix/`: checked-in Moon Cram markdown baselines for Unix-like shells.
+- `tests/windows/`: checked-in Moon Cram markdown baselines for PowerShell.
 - `core_test/test_project/`: handcrafted project fixture for core-library IDE
   cases.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
@@ -36,15 +37,26 @@ moon update
 Run the generator tests and all checked-in baselines:
 
 ```sh
-moon -C testgen test
-moon cram test --cram-compat tests/baseline
+moon -C testgen test --target wasm
+moon cram test --cram-compat tests/unix
 ```
 
 To run one baseline while iterating:
 
 ```sh
-moon cram test --cram-compat tests/baseline/core-project/doc.mooncram.md
+moon cram test --cram-compat tests/unix/core-project/doc.mooncram.md
 ```
+
+On Windows, run the generated PowerShell baselines through the repository's
+Moon Cram PowerShell adapter:
+
+```powershell
+moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows
+```
+
+The Windows suite omits `sqlparser` `find-references` and `rename` snapshots
+because those two generated files overflow Moon Cram's Windows markdown parser.
+The Unix suite keeps the full `sqlparser` coverage.
 
 ## Updating Baselines
 
@@ -53,14 +65,14 @@ or fixture source locations:
 
 ```sh
 scripts/update-tests.sh
-git diff -- tests/baseline
+git diff -- tests/unix tests/windows
 ```
 
 Refresh expected Moon Cram output when the `moon ide` behavior changes:
 
 ```sh
-moon cram update --replace --assume-yes --cram-compat tests/baseline
-moon cram test --cram-compat tests/baseline
+moon cram update --replace --assume-yes --cram-compat tests/unix
+moon cram test --cram-compat tests/unix
 ```
 
 Generated Moon Cram files use four-backtick outer fences so expected IDE output
@@ -74,8 +86,8 @@ To refresh fixture submodules to the branches configured in
 ```sh
 scripts/update-submodules.sh
 scripts/update-tests.sh
-moon cram update --replace --assume-yes --cram-compat tests/baseline
-moon cram test --cram-compat tests/baseline
+moon cram update --replace --assume-yes --cram-compat tests/unix
+moon cram test --cram-compat tests/unix
 ```
 
 Canary CI runs this flow on a schedule and uploads the resulting fixture and
@@ -86,10 +98,11 @@ baseline diff as an artifact.
 The PR workflow:
 
 ```sh
-moon -C testgen test
+moon -C testgen test --target wasm
 scripts/update-tests.sh
-git diff --exit-code -- tests/baseline
-moon cram test --cram-compat tests/baseline
+git diff --exit-code -- tests/unix tests/windows
+moon cram test --cram-compat tests/unix
+moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows
 ```
 
 This verifies that generated baselines are up to date and that all checked-in

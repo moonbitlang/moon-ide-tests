@@ -32,12 +32,44 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test
+        run: moon -C testgen test --target wasm
 
-      - name: Verify generated baseline
+      - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
-          git diff --exit-code -- tests/baseline
+          git diff --exit-code -- tests/unix tests/windows
 
-      - name: Run baseline
-        run: moon cram test --cram-compat tests/baseline
+      - name: Run Unix baselines
+        run: moon cram test --cram-compat tests/unix
+
+  windows-baseline:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install MoonBit
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Update MoonBit registry
+        shell: powershell
+        run: |
+          foreach ($attempt in 1, 2, 3) {
+            moon update
+            if ($LASTEXITCODE -eq 0) {
+              break
+            }
+            if ($attempt -eq 3) {
+              exit 1
+            }
+            Start-Sleep -Seconds ($attempt * 10)
+          }
+
+      - name: Run Windows baselines
+        shell: powershell
+        run: moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows

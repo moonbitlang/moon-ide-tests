@@ -5,21 +5,38 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 while IFS=$'\t' read -r slug path max_files max_per_file; do
   repo_path="$ROOT/$path"
-  out_dir="$ROOT/tests/baseline/$slug"
+  unix_out_dir="$ROOT/tests/unix/$slug"
+  windows_out_dir="$ROOT/tests/windows/$slug"
 
   if [[ ! -d "$repo_path" ]]; then
     echo "missing fixture repo for $slug at $path; run scripts/update-submodules.sh" >&2
     exit 1
   fi
 
-  mkdir -p "$out_dir"
-  moon -C "$ROOT/testgen" run cmd/main -- \
+  mkdir -p "$unix_out_dir" "$windows_out_dir"
+  moon -C "$ROOT/testgen" run --target wasm cmd/main -- \
     --repo "$repo_path" \
-    --output-dir "$out_dir" \
+    --output-dir "$unix_out_dir" \
     --repo-slug "$slug" \
     --test-repo "$path" \
+    --platform unix \
     --max-files "$max_files" \
     --max-per-file "$max_per_file"
+
+  moon -C "$ROOT/testgen" run --target wasm cmd/main -- \
+    --repo "$repo_path" \
+    --output-dir "$windows_out_dir" \
+    --repo-slug "$slug" \
+    --test-repo "$path" \
+    --platform windows \
+    --max-files "$max_files" \
+    --max-per-file "$max_per_file"
+
+  if [[ "$slug" == "sqlparser" ]]; then
+    rm -f \
+      "$windows_out_dir/find-references.mooncram.md" \
+      "$windows_out_dir/rename.mooncram.md"
+  fi
 done < <(
   awk '
     function flush() {

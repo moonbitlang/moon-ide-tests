@@ -6,8 +6,8 @@ Use the repository checkout and local command-line tools to inspect the result. 
 
 ```sh
 git status --short
-git diff --stat origin/main...HEAD -- fixtures/repos tests/baseline
-git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/baseline
+git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows
+git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows
 cat .daily-test/status.txt
 cat .daily-test/submodules.txt
 cat .daily-test/cram-test-status.txt

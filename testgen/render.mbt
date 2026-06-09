@@ -22,7 +22,7 @@ fn append_mooncram_block(sb : StringBuilder, command : String) -> Unit {
 }
 
 ///|
-fn append_fixed_header(sb : StringBuilder) -> Unit {
+fn append_unix_header(sb : StringBuilder) -> Unit {
   append_mooncram_block(sb, "$ export MOON_HOME=\"${MOON_HOME:-$HOME/.moon}\"")
   append_mooncram_block(
     sb,
@@ -34,6 +34,39 @@ fn append_fixed_header(sb : StringBuilder) -> Unit {
   append_mooncram_block(
     sb, "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( cd \"$TEST_REPO_ROOT\" && \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
   )
+}
+
+///|
+fn powershell_single_quote(arg : String) -> String {
+  let escaped = arg.replace(old="'", new="''")
+  "'\{escaped}'"
+}
+
+///|
+fn replace_all(text : String, old : String, new : String) -> String {
+  let mut result = text
+  while result.contains(old) {
+    result = result.replace(old=old, new=new)
+  }
+  result
+}
+
+///|
+fn windows_repo_path(repo_path : String) -> String {
+  replace_all(repo_path, "/", "\\")
+}
+
+///|
+fn append_windows_header(sb : StringBuilder) -> Unit {
+  ignore(sb)
+}
+
+///|
+fn append_fixed_header(sb : StringBuilder) -> Unit {
+  match current_platform.val {
+    TestPlatform::Unix => append_unix_header(sb)
+    TestPlatform::Windows => append_windows_header(sb)
+  }
 }
 
 ///|
@@ -84,6 +117,21 @@ fn shell_quote(arg : String) -> String {
 }
 
 ///|
+fn test_repo_root_arg() -> String {
+  powershell_single_quote(
+    "..\\..\\..\\\{windows_repo_path(current_repo_path.val)}",
+  )
+}
+
+///|
+fn run_moon_ide_command(invocation : String) -> String {
+  match current_platform.val {
+    TestPlatform::Unix => "$ run_moon_ide \{invocation}"
+    TestPlatform::Windows => "$ run_moon_ide \{test_repo_root_arg()} \{invocation}"
+  }
+}
+
+///|
 fn render_outline_file(source_files : Array[String]) -> CramFile? {
   let sb = StringBuilder::new()
   append_markdown_header(sb, current_repo_slug.val, "outline")
@@ -94,7 +142,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
     if append_unique_command(
         sb,
         seen,
-        "$ run_moon_ide moon ide outline \{shell_quote(file)}",
+        run_moon_ide_command("moon ide outline \{shell_quote(file)}"),
       ) {
       has_command = true
     }
@@ -128,21 +176,27 @@ fn render_symbol_file(
 ///|
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
-    "$ run_moon_ide moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+    run_moon_ide_command(
+      "moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+    )
   })
 }
 
 ///|
 fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
-    "$ run_moon_ide moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+    run_moon_ide_command(
+      "moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+    )
   })
 }
 
 ///|
 fn render_refs_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("find-references.mooncram.md", "find-references", cases, test_case => {
-    "$ run_moon_ide moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}"
+    run_moon_ide_command(
+      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+    )
   })
 }
 
@@ -158,7 +212,9 @@ fn rename_target(symbol : String) -> String {
 ///|
 fn render_rename_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("rename.mooncram.md", "rename", cases, test_case => {
-    "$ run_moon_ide moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}"
+    run_moon_ide_command(
+      "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}",
+    )
   })
 }
 
@@ -177,13 +233,18 @@ let current_repo_slug : Ref[String] = Ref("")
 let current_repo_path : Ref[String] = Ref("")
 
 ///|
+let current_platform : Ref[TestPlatform] = Ref(TestPlatform::Unix)
+
+///|
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
   repo_path : String,
+  platform : TestPlatform,
 ) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
   current_repo_path.val = repo_path
+  current_platform.val = platform
   let files = Array::new()
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
