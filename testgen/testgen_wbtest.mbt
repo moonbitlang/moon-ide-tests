@@ -364,6 +364,23 @@ test "preserve_expected_output keeps matching command output" {
       #|
     ),
   )
+  inspect(
+    preserve_expected_output(generated, existing.replace(old="\n", new="\r\n")),
+    content=(
+      #|# example hover
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|hover output
+      #|  detail
+      #|```
+      #|
+      #|```mooncram
+      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|```
+      #|
+    ),
+  )
 }
 
 ///|

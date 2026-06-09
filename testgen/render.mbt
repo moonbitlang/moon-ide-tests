@@ -258,7 +258,11 @@ fn render_cram_files(
 fn split_lines(text : String) -> Array[String] {
   let lines = Array::new()
   for line in text.split("\n") {
-    lines.push(line.to_owned())
+    if line.length() > 0 && line[line.length() - 1] == '\r' {
+      lines.push(line[:line.length() - 1].to_owned())
+    } else {
+      lines.push(line.to_owned())
+    }
   }
   lines
 }
