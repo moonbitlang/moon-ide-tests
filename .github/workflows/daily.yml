@@ -105,6 +105,7 @@ jobs:
           name: daily-unix-review-inputs
           path: .daily-test
           if-no-files-found: ignore
+          include-hidden-files: true
 
   windows-baseline:
     name: Windows Baselines
@@ -156,7 +157,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          & moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows *> .daily-test\windows-cram-test.log
+          cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
           $status = $LASTEXITCODE
           Set-Content -Path .daily-test\windows-cram-test-status.txt -Value $status -Encoding utf8
           "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
@@ -189,6 +190,7 @@ jobs:
           name: daily-windows-review-inputs
           path: .daily-test
           if-no-files-found: ignore
+          include-hidden-files: true
 
   daily-review:
     name: Daily Review
