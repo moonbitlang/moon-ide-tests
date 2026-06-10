@@ -159,7 +159,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
           cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
           $status = $LASTEXITCODE
-          Set-Content -Path .daily-test\windows-cram-test-status.txt -Value $status -Encoding utf8
+          [System.IO.File]::WriteAllText(".daily-test\windows-cram-test-status.txt", [string]$status, [System.Text.Encoding]::ASCII)
           "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
