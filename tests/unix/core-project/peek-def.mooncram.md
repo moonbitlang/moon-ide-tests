@@ -20,7 +20,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 $ run_moon_ide moon ide peek-def 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Definition found at file <MOON_HOME>/lib/core/hashmap/types.mbt
    | ///   map.set(3, "updated") (escaped)
-   | ///   assert_eq(map.get(3), Some("updated")) (escaped)
+   | ///   @test.assert_eq(map.get(3), Some("updated"))
    | /// } (escaped)
    | /// ``` (escaped)
    | #alias(T, deprecated) (escaped)
@@ -61,11 +61,11 @@ Definition found at file <MOON_HOME>/lib/core/list/types.mbt
 $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:12:22'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
     | ///   let v2 = v.map(x => x + 1) (escaped)
-    | ///   assert_eq(v2, [4, 5, 6]) (escaped)
+    | ///   @test.assert_eq(v2, [4, 5, 6])
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-588 | pub fn[T, U] Array::map( (escaped)
+593 | pub fn[T, U] Array::map(
     |                     ^^^ (escaped)
     |   self : Array[T], (escaped)
     |   f : (T) -> U raise?, (escaped)
@@ -91,7 +91,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-692 | pub fn[T] Array::filter( (escaped)
+697 | pub fn[T] Array::filter(
     |                  ^^^^^^ (escaped)
     |   self : Array[T], (escaped)
     |   f : (T) -> Bool raise?, (escaped)
@@ -112,12 +112,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'fold' --loc 'core_ide_cases.mbt:14:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
-     | ///   assert_eq(sum, 15) (escaped)
+     | ///   @test.assert_eq(sum, 15)
      | /// } (escaped)
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1289 | pub fn[A, B] Array::fold( (escaped)
+1336 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -191,7 +191,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    |  (escaped)
    | ///| (escaped)
    | /// Writes a string to the StringBuilder. (escaped)
-82 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+86 | pub impl Logger for StringBuilder with fn write_string(self, str) {
    |                                           ^^^^^^^^^^^^
    |   let str_len = str.length() (escaped)
    |   self.grow_if_necessary(self.len + str_len) (escaped)
@@ -217,7 +217,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
      | /// } (escaped)
      | /// ``` (escaped)
      | #alias(charcode_length, deprecated) (escaped)
-1734 | pub fn String::length(self : String) -> Int = "%string_length" (escaped)
+1735 | pub fn String::length(self : String) -> Int = "%string_length"
      |                ^^^^^^ (escaped)
      |  (escaped)
      | ///| (escaped)
@@ -243,7 +243,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1122 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] { (escaped)
+1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -269,7 +269,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-811 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+842 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::new(capacity=n) (escaped)
@@ -334,9 +334,9 @@ Definition found at file <MOON_HOME>/lib/core/builtin/to_string.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:31:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
-    | ///   assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+    | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
     | ///   let b = None (escaped)
-    | ///   assert_eq(b.map(x => x * 2), None) (escaped)
+    | ///   @test.assert_eq(b.map(x => x * 2), None)
     | /// } (escaped)
     | /// ``` (escaped)
 132 | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? { (escaped)
@@ -362,7 +362,7 @@ $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:38:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
    | ///   let x : Result[Int, Unit] = Ok(6) (escaped)
    | ///   let y = x.map((v : Int) => v * 7) (escaped)
-   | ///   assert_eq(y, Ok(42)) (escaped)
+   | ///   @test.assert_eq(y, Ok(42))
    | /// } (escaped)
    | /// ``` (escaped)
 27 | pub fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E] { (escaped)
@@ -391,7 +391,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+389 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
@@ -417,7 +417,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-811 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+842 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::new(capacity=n) (escaped)
@@ -490,9 +490,9 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:53:22'
 Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
-    | ///   assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+    | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
     | ///   let b = None (escaped)
-    | ///   assert_eq(b.map(x => x * 2), None) (escaped)
+    | ///   @test.assert_eq(b.map(x => x * 2), None)
     | /// } (escaped)
     | /// ``` (escaped)
 132 | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? { (escaped)
@@ -521,7 +521,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
     | ///| (escaped)
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
-823 | pub fn[K, V, V2] HashMap::map(
+820 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
     |   f : (K, V) -> V2, (escaped)
@@ -573,7 +573,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1122 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] { (escaped)
+1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -599,7 +599,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `filter`. (escaped)
-327 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+358 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
     |                 ^^^^^^ (escaped)
     |   Iter::new(fn() { (escaped)
     |     while self.next() is Some(x) { (escaped)
