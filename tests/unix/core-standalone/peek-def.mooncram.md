@@ -20,8 +20,8 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 $ run_moon_ide moon ide peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
-`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:576-597
-576 | ///| (escaped)
+`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:581-602
+581 | ///|
     | /// Maps a function over the elements of the array. (escaped)
     | /// (escaped)
     | /// # Example (escaped)
@@ -29,7 +29,7 @@ Found 1 symbols matching 'Array::map':
     | /// test { (escaped)
     | ///   let v = [3, 4, 5] (escaped)
     | ///   let v2 = v.map(x => x + 1) (escaped)
-    | ///   assert_eq(v2, [4, 5, 6]) (escaped)
+    | ///   @test.assert_eq(v2, [4, 5, 6])
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
@@ -49,8 +49,8 @@ Found 1 symbols matching 'Array::map':
 $ run_moon_ide moon ide peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
-`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:669-703
-669 | ///| (escaped)
+`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:674-708
+674 | ///|
     | /// Creates a new array containing all elements from the input array that satisfy (escaped)
     | /// the given predicate function. (escaped)
     | /// (escaped)
@@ -91,8 +91,8 @@ Found 1 symbols matching 'Array::filter':
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1269-1299
-1269 | ///| (escaped)
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1316-1346
+1316 | ///|
      | /// Fold out values from an array according to certain rules. (escaped)
      | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
      | /// bounds are fixed when folding starts. (escaped)
@@ -107,7 +107,7 @@ Found 1 symbols matching 'Array::fold':
      | /// ```mbt check (escaped)
      | /// test { (escaped)
      | ///   let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem) (escaped)
-     | ///   assert_eq(sum, 15) (escaped)
+     | ///   @test.assert_eq(sum, 15)
      | /// } (escaped)
      | /// ``` (escaped)
      | #locals(f) (escaped)
@@ -129,8 +129,8 @@ Found 1 symbols matching 'Array::fold':
 $ run_moon_ide moon ide peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
-`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1713-1734
-1713 | ///| (escaped)
+`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1714-1735
+1714 | ///|
      | /// Returns the number of UTF-16 code units in the string. Note that this is not (escaped)
      | /// necessarily equal to the number of Unicode characters (code points) in the (escaped)
      | /// string, as some characters may be represented by multiple UTF-16 code units. (escaped)
@@ -158,8 +158,8 @@ Found 1 symbols matching 'String::length':
 $ run_moon_ide moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1113-1124
-1113 | ///| (escaped)
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1161-1172
+1161 | ///|
      | /// Splits the string into all substrings separated by the given separator. (escaped)
      | ///  (escaped)
      | /// If the string does not contain the separator and the separator is not empty, (escaped)
@@ -321,9 +321,9 @@ Found 1 symbols matching 'Option::map':
     | /// ```mbt check (escaped)
     | /// test { (escaped)
     | ///   let a = Some(5) (escaped)
-    | ///   assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+    | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
     | ///   let b = None (escaped)
-    | ///   assert_eq(b.map(x => x * 2), None) (escaped)
+    | ///   @test.assert_eq(b.map(x => x * 2), None)
     | /// } (escaped)
     | /// ``` (escaped)
     | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? { (escaped)
@@ -348,7 +348,7 @@ Found 1 symbols matching 'Result::map':
    | /// test { (escaped)
    | ///   let x : Result[Int, Unit] = Ok(6) (escaped)
    | ///   let y = x.map((v : Int) => v * 7) (escaped)
-   | ///   assert_eq(y, Ok(42)) (escaped)
+   | ///   @test.assert_eq(y, Ok(42))
    | /// } (escaped)
    | /// ``` (escaped)
    | pub fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E] { (escaped)
@@ -363,8 +363,8 @@ Found 1 symbols matching 'Result::map':
 $ run_moon_ide moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:339-368
-339 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:370-399
+370 | ///|
     | /// Transforms the elements of the iterator using a mapping function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -400,8 +400,8 @@ Found 1 symbols matching 'Iter::map':
 $ run_moon_ide moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:309-337
-309 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:340-368
+340 | ///|
     | /// Filters the elements of the iterator based on a predicate function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -436,8 +436,8 @@ Found 1 symbols matching 'Iter::filter':
 $ run_moon_ide moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:807-820
-807 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:838-851
+838 | ///|
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
@@ -563,8 +563,8 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
-`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:820-842
-820 | ///|
+`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:817-839
+817 | ///|
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
     | pub fn[K, V, V2] HashMap::map( (escaped)

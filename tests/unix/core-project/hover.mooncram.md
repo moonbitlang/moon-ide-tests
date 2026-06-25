@@ -38,10 +38,10 @@ type CoreScores = @hashmap.HashMap[String, Int]
                    ```mbt check
                    test {
                      let map = @hashmap.HashMap([(3, "three"), (8, "eight"), (1, "one")])
-                     assert_eq(map.get(2), None)
-                     assert_eq(map.get(3), Some("three"))
+                     @test.assert_eq(map.get(2), None)
+                     @test.assert_eq(map.get(3), Some("three"))
                      map.set(3, "updated")
-                     assert_eq(map.get(3), Some("updated"))
+                     @test.assert_eq(map.get(3), Some("updated"))
                    }
                    ```
 
@@ -87,7 +87,7 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
                       test {
                         let v = [3, 4, 5]
                         let v2 = v.map(x => x + 1) (escaped)
-                        assert_eq(v2, [4, 5, 6])
+                        @test.assert_eq(v2, [4, 5, 6])
                       }
                       ```
   let large = doubled.filter(x => x > 3) (escaped)
@@ -157,7 +157,7 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
          ```mbt check
          test {
            let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem) (escaped)
-           assert_eq(sum, 15)
+           @test.assert_eq(sum, 15)
          }
          ```
 }
@@ -353,9 +353,9 @@ pub fn exercise_option_core(value : Int?) -> Int? {
          ```mbt check
          test {
            let a = Some(5)
-           assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+           @test.assert_eq(a.map(x => x * 2), Some(10))
            let b = None
-           assert_eq(b.map(x => x * 2), None) (escaped)
+           @test.assert_eq(b.map(x => x * 2), None)
          }
          ```
 }
@@ -382,7 +382,7 @@ pub fn exercise_result_core(
          test {
            let x : Result[Int, Unit] = Ok(6)
            let y = x.map((v : Int) => v * 7) (escaped)
-           assert_eq(y, Ok(42))
+           @test.assert_eq(y, Ok(42))
          }
          ```
 }
@@ -517,9 +517,9 @@ pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
                       ```mbt check
                       test {
                         let a = Some(5)
-                        assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+                        @test.assert_eq(a.map(x => x * 2), Some(10))
                         let b = None
-                        assert_eq(b.map(x => x * 2), None) (escaped)
+                        @test.assert_eq(b.map(x => x * 2), None)
                       }
                       ```
 }
@@ -645,7 +645,7 @@ pub fn build_core_scores() -> CoreScores {
   
    ```mbt check
    test {
-     let arr = [(1, "one"), (2, "two"), (1, "ONE")]
+     let arr : ReadOnlyArray[(Int, String)] = [(1, "one"), (2, "two"), (1, "ONE")]
      let map = @hashmap.HashMap(arr)
      debug_inspect(map.get(1), content="Some(\"ONE\")")
      debug_inspect(map.get(2), content="Some(\"two\")")

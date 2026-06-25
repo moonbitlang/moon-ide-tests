@@ -19,11 +19,11 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:12:22'
 Found 3 references for symbol 'map':
-<MOON_HOME>/lib/core/builtin/array.mbt:588:21-588:24:
+<MOON_HOME>/lib/core/builtin/array.mbt:593:21-593:24:
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-588 | pub fn[T, U] Array::map( (escaped)
+593 | pub fn[T, U] Array::map(
     |                     ^^^ (escaped)
     |   self : Array[T], (escaped)
     |   f : (T) -> U raise?, (escaped)
@@ -50,11 +50,11 @@ Found 3 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'filter' --loc 'core_ide_cases.mbt:13:23'
 Found 2 references for symbol 'filter':
-<MOON_HOME>/lib/core/builtin/array.mbt:692:18-692:24:
+<MOON_HOME>/lib/core/builtin/array.mbt:697:18-697:24:
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-692 | pub fn[T] Array::filter( (escaped)
+697 | pub fn[T] Array::filter(
     |                  ^^^^^^ (escaped)
     |   self : Array[T], (escaped)
     |   f : (T) -> Bool raise?, (escaped)
@@ -73,11 +73,11 @@ Found 2 references for symbol 'filter':
 ```mooncram
 $ run_moon_ide moon ide find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 2 references for symbol 'fold':
-<MOON_HOME>/lib/core/builtin/array.mbt:1289:21-1289:25:
+<MOON_HOME>/lib/core/builtin/array.mbt:1336:21-1336:25:
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1289 | pub fn[A, B] Array::fold( (escaped)
+1336 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -96,11 +96,11 @@ Found 2 references for symbol 'fold':
 ```mooncram
 $ run_moon_ide moon ide find-references 'length' --loc 'core_ide_cases.mbt:21:9'
 Found 2 references for symbol 'length':
-<MOON_HOME>/lib/core/builtin/intrinsics.mbt:1734:16-1734:22:
+<MOON_HOME>/lib/core/builtin/intrinsics.mbt:1735:16-1735:22:
      | /// } (escaped)
      | /// ``` (escaped)
      | #alias(charcode_length, deprecated) (escaped)
-1734 | pub fn String::length(self : String) -> Int = "%string_length" (escaped)
+1735 | pub fn String::length(self : String) -> Int = "%string_length"
      |                ^^^^^^ (escaped)
      |  (escaped)
      | ///| (escaped)
@@ -119,11 +119,11 @@ Found 2 references for symbol 'length':
 ```mooncram
 $ run_moon_ide moon ide find-references 'split' --loc 'core_ide_cases.mbt:21:24'
 Found 3 references for symbol 'split':
-<MOON_HOME>/lib/core/builtin/string_methods.mbt:1122:16-1122:21:
+<MOON_HOME>/lib/core/builtin/string_methods.mbt:1170:16-1170:21:
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1122 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] { (escaped)
+1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -270,7 +270,7 @@ Found 7 references for symbol 'to_string':
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:31:9'
 Found 3 references for symbol 'map':
 <MOON_HOME>/lib/core/builtin/option.mbt:132:22-132:25:
-    | ///   assert_eq(b.map(x => x * 2), None) (escaped)
+    | ///   @test.assert_eq(b.map(x => x * 2), None)
     | /// } (escaped)
     | /// ``` (escaped)
 132 | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? { (escaped)
@@ -302,7 +302,7 @@ Found 3 references for symbol 'map':
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:38:9'
 Found 2 references for symbol 'map':
 <MOON_HOME>/lib/core/builtin/result.mbt:27:25-27:28:
-   | ///   assert_eq(y, Ok(42)) (escaped)
+   | ///   @test.assert_eq(y, Ok(42))
    | /// } (escaped)
    | /// ``` (escaped)
 27 | pub fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E] { (escaped)
@@ -324,11 +324,11 @@ Found 2 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 3 references for symbol 'map':
-<MOON_HOME>/lib/core/builtin/iterator.mbt:358:20-358:23:
+<MOON_HOME>/lib/core/builtin/iterator.mbt:389:20-389:23:
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+389 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
@@ -402,11 +402,11 @@ Found 2 references for symbol 'get':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:60:10'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/hashmap/hashmap.mbt:823:27-823:30:
+<MOON_HOME>/lib/core/hashmap/hashmap.mbt:820:27-820:30:
     | ///| (escaped)
     | /// Applies a function to each key-value pair in the map and  (escaped)
     | /// returns a new map with the results, using the original keys. (escaped)
-823 | pub fn[K, V, V2] HashMap::map(
+820 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
     |   f : (K, V) -> V2, (escaped)

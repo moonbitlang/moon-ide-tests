@@ -26,7 +26,7 @@ pub fn[T, U] Array::map(Self[T], (T) -> U raise?) -> Self[U] raise?
    test {
      let v = [3, 4, 5]
      let v2 = v.map(x => x + 1) (escaped)
-     assert_eq(v2, [4, 5, 6])
+     @test.assert_eq(v2, [4, 5, 6])
    }
    ```
 ```
@@ -69,7 +69,7 @@ pub fn[A, B] Array::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
    ```mbt check
    test {
      let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem) (escaped)
-     assert_eq(sum, 15)
+     @test.assert_eq(sum, 15)
    }
    ```
 ```
@@ -186,9 +186,9 @@ pub fn[T, U] Option::map(T?, (T) -> U raise?) -> U? raise?
    ```mbt check
    test {
      let a = Some(5)
-     assert_eq(a.map(x => x * 2), Some(10)) (escaped)
+     @test.assert_eq(a.map(x => x * 2), Some(10))
      let b = None
-     assert_eq(b.map(x => x * 2), None) (escaped)
+     @test.assert_eq(b.map(x => x * 2), None)
    }
    ```
 ```
@@ -203,7 +203,7 @@ pub fn[T, E, U] Result::map(Self[T, E], (T) -> U) -> Self[U, E]
    test {
      let x : Result[Int, Unit] = Ok(6)
      let y = x.map((v : Int) => v * 7) (escaped)
-     assert_eq(y, Ok(42))
+     @test.assert_eq(y, Ok(42))
    }
    ```
 ```
