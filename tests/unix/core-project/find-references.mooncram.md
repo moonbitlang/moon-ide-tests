@@ -73,11 +73,11 @@ Found 2 references for symbol 'filter':
 ```mooncram
 $ run_moon_ide moon ide find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 2 references for symbol 'fold':
-<MOON_HOME>/lib/core/builtin/array.mbt:1336:21-1336:25:
+<MOON_HOME>/lib/core/builtin/array.mbt:1333:21-1333:25:
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1336 | pub fn[A, B] Array::fold(
+1333 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -119,11 +119,11 @@ Found 2 references for symbol 'length':
 ```mooncram
 $ run_moon_ide moon ide find-references 'split' --loc 'core_ide_cases.mbt:21:24'
 Found 3 references for symbol 'split':
-<MOON_HOME>/lib/core/builtin/string_methods.mbt:1170:16-1170:21:
+<MOON_HOME>/lib/core/builtin/string_methods.mbt:1168:16-1168:21:
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1168 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -356,11 +356,11 @@ Found 3 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:48:6'
 Found 2 references for symbol 'map':
-<MOON_HOME>/lib/core/list/list.mbt:255:20-255:23:
+<MOON_HOME>/lib/core/list/list.mbt:276:20-276:23:
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-255 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+276 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -525,11 +525,11 @@ Found 2 references for symbol 'from_array':
 ```mooncram
 $ run_moon_ide moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Found 2 references for symbol 'from_array':
-<MOON_HOME>/lib/core/list/list.mbt:169:17-169:27:
-    | #as_free_fn (escaped)
-    | #alias(of, deprecated="Use from_array instead") (escaped)
-    | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+<MOON_HOME>/lib/core/list/list.mbt:170:17-170:27:
+    | #alias(of, deprecated="Use @list.List([...]) instead")
+    | #as_free_fn(of, deprecated="Use @list.List([...]) instead")
+    | #deprecated("Use @list.List([...]) instead")
+170 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
