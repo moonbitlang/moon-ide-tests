@@ -117,7 +117,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1336 | pub fn[A, B] Array::fold(
+1333 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -243,7 +243,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1168 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -438,12 +438,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:48:6'
 Definition found at file <MOON_HOME>/lib/core/list/list.mbt
-    | ///     @list.from_array([2, 4, 6, 8, 10]), (escaped)
+    | ///     List([2, 4, 6, 8, 10]),
     | ///   ) (escaped)
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-255 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+276 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -573,7 +573,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1170 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1168 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -620,12 +620,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Definition found at file <MOON_HOME>/lib/core/list/list.mbt
-    | /// } (escaped)
     | /// ``` (escaped)
-    | #as_free_fn (escaped)
-    | #alias(of, deprecated="Use from_array instead") (escaped)
-    | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+    | #as_free_fn(deprecated="Use @list.List([...]) instead")
+    | #alias(of, deprecated="Use @list.List([...]) instead")
+    | #as_free_fn(of, deprecated="Use @list.List([...]) instead")
+    | #deprecated("Use @list.List([...]) instead")
+170 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
@@ -635,19 +635,19 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | } (escaped)
     |  (escaped)
     | ///| (escaped)
-    | /// Get the length of the list. (escaped)
-    | pub fn[A] List::length(self : List[A]) -> Int { (escaped)
-    |   for x = self, acc = 0 { (escaped)
-    |     match (x, acc) { (escaped)
-    |       (Empty, len) => break len (escaped)
-    |       (More(_, tail=rest), acc) => continue rest, acc + 1 (escaped)
+    | /// ```mbt check
+    | /// test {
+    | ///   let lst = @list.List([1, 2, 3, 4, 5])
+    | ///   debug_inspect(
+    | ///     lst,
+    | ///     content=(
 Definition found at file <MOON_HOME>/lib/core/list/list.mbt
-    | /// } (escaped)
     | /// ``` (escaped)
-    | #as_free_fn (escaped)
-    | #alias(of, deprecated="Use from_array instead") (escaped)
-    | #as_free_fn(of, deprecated="Use from_array instead") (escaped)
-169 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+    | #as_free_fn(deprecated="Use @list.List([...]) instead")
+    | #alias(of, deprecated="Use @list.List([...]) instead")
+    | #as_free_fn(of, deprecated="Use @list.List([...]) instead")
+    | #deprecated("Use @list.List([...]) instead")
+170 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   for i = arr.length() - 1, list = Empty; i >= 0; { (escaped)
     |     continue i - 1, More(arr[i], tail=list) (escaped)
@@ -657,10 +657,10 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | } (escaped)
     |  (escaped)
     | ///| (escaped)
-    | /// Get the length of the list. (escaped)
-    | pub fn[A] List::length(self : List[A]) -> Int { (escaped)
-    |   for x = self, acc = 0 { (escaped)
-    |     match (x, acc) { (escaped)
-    |       (Empty, len) => break len (escaped)
-    |       (More(_, tail=rest), acc) => continue rest, acc + 1 (escaped)
+    | /// ```mbt check
+    | /// test {
+    | ///   let lst = @list.List([1, 2, 3, 4, 5])
+    | ///   debug_inspect(
+    | ///     lst,
+    | ///     content=(
 ```

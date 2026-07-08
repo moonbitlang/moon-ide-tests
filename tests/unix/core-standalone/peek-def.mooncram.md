@@ -91,8 +91,8 @@ Found 1 symbols matching 'Array::filter':
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1316-1346
-1316 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1313-1343
+1313 | ///|
      | /// Fold out values from an array according to certain rules. (escaped)
      | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
      | /// bounds are fixed when folding starts. (escaped)
@@ -158,8 +158,8 @@ Found 1 symbols matching 'String::length':
 $ run_moon_ide moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1161-1172
-1161 | ///|
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1159-1170
+1159 | ///|
      | /// Splits the string into all substrings separated by the given separator. (escaped)
      | ///  (escaped)
      | /// If the string does not contain the separator and the separator is not empty, (escaped)
@@ -471,8 +471,8 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
-`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:241-274
-241 | ///|
+`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:262-295
+262 | ///|
     | /// Maps the list. (escaped)
     | /// (escaped)
     | /// # Example (escaped)
@@ -480,8 +480,8 @@ Found 1 symbols matching '@moonbitlang/core/list.List::map':
     | /// ```mbt check (escaped)
     | /// test { (escaped)
     | ///   @debug.assert_eq( (escaped)
-    | ///     @list.from_array([1, 2, 3, 4, 5]).map(x => x * 2), (escaped)
-    | ///     @list.from_array([2, 4, 6, 8, 10]), (escaped)
+    | ///     @list.List([1, 2, 3, 4, 5]).map(x => x * 2),
+    | ///     List([2, 4, 6, 8, 10]),
     | ///   ) (escaped)
     | /// } (escaped)
     | /// ``` (escaped)
@@ -552,7 +552,7 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
    | /// Lookup a key from a hash map (escaped)
    | #alias(find, deprecated) (escaped)
    | pub fn[K : Eq + Hash, V] HashMap::get(self : HashMap[K, V], key : K) -> V? { (escaped)
-   |   match self.0 { (escaped)
+   |   match self.data {
    |     None => None (escaped)
    |     Some(node) => node.get_with_path(key, @path.of(key)) (escaped)
    |   } (escaped)
@@ -588,8 +588,8 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
     |   other (escaped)
     | } (escaped)
 
-`pub fn HashMap::map` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:235-255
-235 | ///| (escaped)
+`pub fn HashMap::map` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:237-259
+237 | ///|
     | /// Maps over the key-value pairs in the map (escaped)
     | #alias(map_with_key, deprecated) (escaped)
     | pub fn[K, V, A] HashMap::map( (escaped)
@@ -605,9 +605,11 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
     |     } (escaped)
     |   } (escaped)
     |  (escaped)
-    |   match self.0 { (escaped)
-    |     None => None (escaped)
-    |     Some(node) => Some(go(node)) (escaped)
+    |   {
+    |     data: match self.data {
+    |       None => None
+    |       Some(node) => Some(go(node))
+    |     },
     |   } (escaped)
     | } (no-eol) (escaped)
 ```

@@ -259,8 +259,8 @@ pub fn[A, B] List::map(Self[A], (A) -> B raise?) -> Self[B] raise?
    ```mbt check
    test {
      @debug.assert_eq(
-       @list.from_array([1, 2, 3, 4, 5]).map(x => x * 2), (escaped)
-       @list.from_array([2, 4, 6, 8, 10]),
+       @list.List([1, 2, 3, 4, 5]).map(x => x * 2),
+       List([2, 4, 6, 8, 10]),
      )
    }
    ```
@@ -271,14 +271,15 @@ $ run_moon_ide moon ide doc List::from_array
 package "moonbitlang/core/list"
 #alias(of, deprecated)
 #as_free_fn(of, deprecated)
-#as_free_fn
+#as_free_fn(deprecated)
+#deprecated
 pub fn[A] List::from_array(ArrayView[A]) -> Self[A]
   Convert array to list.
    # Example
    ```mbt check
    test {
-     let ls = @list.from_array([1, 2, 3, 4, 5])
-     @debug.assert_eq(ls, @list.from_array([1, 2, 3, 4, 5]))
+     let ls = @list.List([1, 2, 3, 4, 5])
+     @debug.assert_eq(ls, List([1, 2, 3, 4, 5]))
    }
    ```
 ```
@@ -292,6 +293,7 @@ enum List[A] {
 }
   Type `List` used by this package APIs.
 
+  pub fn[A] List::List(ArrayView[A]) -> Self[A]
   pub fn[A] List::all(Self[A], (A) -> Bool raise?) -> Bool raise?
   pub fn[A] List::any(Self[A], (A) -> Bool raise?) -> Bool raise?
   pub fn[X : @quickcheck.Arbitrary] List::arbitrary(Int, @splitmix.RandomState) -> Self[X]
@@ -315,8 +317,6 @@ enum List[A] {
   pub fn[A] List::flatten(Self[Self[A]]) -> Self[A]
   pub fn[A, B] List::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
   pub fn[A, B] List::foldi(Self[A], init~ : B, (Int, B, A) -> B raise?) -> B raise?
-  #as_free_fn
-  pub fn[A] List::from_array(ArrayView[A]) -> Self[A]
   #as_free_fn
   pub fn[A] List::from_iter(Iter[A]) -> Self[A]
   #as_free_fn

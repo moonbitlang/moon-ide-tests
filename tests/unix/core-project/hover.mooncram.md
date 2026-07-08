@@ -25,9 +25,7 @@ type CoreScores = @hashmap.HashMap[String, Int]
                   ^^^^^^^^^^^^^^^^
                   ```moonbit
                   #alias(T, deprecated="`T` is deprecated, use `HashMap` instead")
-                  struct @hashmap.HashMap[K, V] {
-                    // private fields
-                  }
+                  type @hashmap.HashMap[K, V]
                   ```
                   ---
                   
@@ -457,8 +455,8 @@ pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
       ```mbt check
       test {
         @debug.assert_eq(
-          @list.from_array([1, 2, 3, 4, 5]).map(x => x * 2), (escaped)
-          @list.from_array([2, 4, 6, 8, 10]),
+          @list.List([1, 2, 3, 4, 5]).map(x => x * 2),
+          List([2, 4, 6, 8, 10]),
         )
       }
       ```
