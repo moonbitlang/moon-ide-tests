@@ -303,9 +303,8 @@ jobs:
         id: codex
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          codex exec \
+          codex --ask-for-approval never exec \
             --sandbox read-only \
-            --ask-for-approval never \
             --ephemeral \
             --output-schema .github/codex/schemas/daily-test-review.schema.json \
             -o .daily-test/codex-review.json \
