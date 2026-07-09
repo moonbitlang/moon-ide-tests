@@ -1,0 +1,77 @@
+# rabbita peek-def
+
+```mooncram
+$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
+```
+
+```mooncram
+$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/rabbita/rabbita" && pwd)"
+```
+
+```mooncram
+$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
+```
+
+```mooncram
+$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Cast' --loc 'js/cast.mbt:7:17'
+Error: could not find definition for symbol 'Cast' at js/cast.mbt:7:17
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'into' --loc 'js/cast.mbt:8:6'
+Error: could not find definition for symbol 'into' at js/cast.mbt:8:6
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Nullable' --loc 'js/null.mbt:8:11'
+Error: could not find definition for symbol 'Nullable' at js/null.mbt:8:11
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'is_null' --loc 'js/null.mbt:8:21'
+Error: could not find definition for symbol 'is_null' at js/null.mbt:8:21
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'suspend' --loc 'js/async.mbt:3:28'
+Error: could not find definition for symbol 'suspend' at js/async.mbt:3:28
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'f' --loc 'js/async.mbt:4:3'
+Error: could not find definition for symbol 'f' at js/async.mbt:4:3
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Error_' --loc 'js/error.mbt:3:14'
+Error: could not find definition for symbol 'Error_' at js/error.mbt:3:14
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Error_' --loc 'js/error.mbt:4:3'
+Error: could not find definition for symbol 'Error_' at js/error.mbt:4:3
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Union2' --loc 'js/union.mbt:9:21'
+Error: could not find definition for symbol 'Union2' at js/union.mbt:9:21
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'to0' --loc 'js/union.mbt:9:29'
+Error: could not find definition for symbol 'to0' at js/union.mbt:9:29
+[1]
+```

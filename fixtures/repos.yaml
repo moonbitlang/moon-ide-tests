@@ -5,6 +5,18 @@ repos:
     branch: main
     max_files: 5
     max_per_file: 2
+  - slug: async
+    path: fixtures/repos/async
+    url: https://github.com/moonbitlang/async
+    branch: main
+    max_files: 5
+    max_per_file: 2
+  - slug: core
+    path: fixtures/repos/core
+    url: https://github.com/moonbitlang/core
+    branch: main
+    max_files: 5
+    max_per_file: 2
   - slug: indexmap
     path: fixtures/repos/indexmap
     url: https://github.com/moonbit-community/IndexMap
@@ -15,6 +27,12 @@ repos:
     path: fixtures/repos/json
     url: https://github.com/moonbit-community/json
     branch: master
+    max_files: 5
+    max_per_file: 2
+  - slug: rabbita
+    path: fixtures/repos/rabbita/rabbita
+    url: https://github.com/moonbit-community/rabbita
+    branch: main
     max_files: 5
     max_per_file: 2
   - slug: sqlparser
