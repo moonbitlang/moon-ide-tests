@@ -5,7 +5,7 @@ $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
 ```
 
 ```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/rabbita/rabbita" && pwd)"
+$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/rabbita" && pwd)"
 ```
 
 ```mooncram
@@ -17,7 +17,573 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'js/cast.mbt'
+$ run_moon_ide moon ide outline 'doc/005_http/using_test.mbt'
+2 |using @rabbita {type Cell, type Emit, type Cmd, type Html, none}
+  |...
+5 |using @html {div, p, button}
+  |...
+8 |test {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/001_intro/using_test.mbt'
+2 |using @rabbita {type Cell}
+  |...
+5 |using @html {div, h1, button}
+  |...
+8 |test {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/003_router/using_test.mbt'
+2 |using @rabbita {type Emit, type Cmd, type Html, none}
+  |...
+5 |using @html {ul, div, li, a, p, h1}
+  |...
+8 |using @url {type Url, type UrlRequest}
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/002_writing_html/using_test.mbt'
+ 2 |using @rabbita {type Emit, type Html}
+   |...
+ 5 |using @html {
+ 6 |  type Attrs,
+ 7 |  type Mouse,
+ 8 |  ul,
+ 9 |  div,
+10 |  li,
+11 |  p,
+12 |  h1,
+13 |  h2,
+14 |  button,
+15 |  span,
+16 |  canvas,
+17 |  text,
+18 |  nothing,
+19 |  node,
+20 |}
+   |...
+23 |test {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/004_using_command/using_test.mbt'
+2 |using @rabbita {type Emit, type Cmd, type Html, none, batch}
+  |...
+5 |using @html {div, h1, p, button}
+  |...
+8 |test {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/using_subscriptions/using_test.mbt'
+ 2 |using @rabbita {type Emit, type Cell, none}
+   |...
+ 5 |using @html {div, h1, p}
+   |...
+ 8 |test {
+   |...
+25 |test {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'doc/suberror_as_extensible_enum/using_test.mbt'
+2 |test {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'utils/shiki/shiki.mbt'
+  2 |extern "js" fn load_shiki() -> @js.Promise =
+    |...
+ 20 |extern "js" fn load_langs(
+ 21 |  highlighter : @js.Value,
+ 22 |  langs : Array[String],
+ 23 |) -> @js.Promise =
+    |...
+ 32 |extern "js" fn load_themes(
+ 33 |  highlighter : @js.Value,
+ 34 |  themes : Array[String],
+ 35 |) -> @js.Promise =
+    |...
+ 44 |extern "js" fn code_to_html(
+ 45 |  highlighter : @js.Value,
+ 46 |  code : String,
+ 47 |  lang : String,
+ 48 |  theme : String,
+ 49 |) -> String =
+    |...
+ 60 |using @rabbita {type Cmd}
+    |...
+ 63 |struct Highlighter(@js.Value)
+    |...
+ 66 |extern "js" fn is_highlighter(x : @js.Value) -> Bool =
+    |...
+ 73 |pub fn load(
+ 74 |  langs : Array[String],
+ 75 |  themes : Array[String],
+ 76 |  msg : (Result[Highlighter, Error]) -> Cmd,
+ 77 |) -> Cmd {
+    |...
+ 98 |pub async fn Highlighter::add_theme(self : Self, theme : String) -> Unit {
+    |...
+103 |pub async fn Highlighter::add_lang(self : Self, lang : String) -> Unit {
+    |...
+109 |#warnings("-alert_xss_vulnerable")
+110 |pub fn Highlighter::code_to_html(
+111 |  self : Self,
+112 |  code : String,
+113 |  lang~ : String,
+114 |  theme~ : String,
+115 |) -> @rabbita.Html {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/log/log.mbt'
+2 |pub fn log(tag : String, msg : String) -> Unit {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/vfs/vfs.mbt'
+  2 |using @path {type SourcePath}
+    |...
+  5 |pub(all) enum VirtualFs {
+    |...
+ 13 |struct VirtualFileSystem {
+    |...
+ 18 |#as_free_fn
+ 19 |pub fn VirtualFileSystem::new(map : Map[String, VirtualFs]) -> Self {
+    |...
+ 29 |pub fn VirtualFileSystem::mount(
+ 30 |  self : Self,
+ 31 |  path : String,
+ 32 |  vfs : VirtualFs,
+ 33 |) -> Unit {
+    |...
+ 65 |pub fn VirtualFileSystem::unmount(self : Self, path : String) -> Unit {
+    |...
+104 |pub fn VirtualFileSystem::clear(self : Self) -> Unit {
+    |...
+109 |pub async fn VirtualFileSystem::read(self : Self, path : String) -> &@io.Data? {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/path/artifact_path.mbt'
+ 2 |struct ArtifactPath {
+   |...
+ 9 |pub(all) enum Target {
+   |...
+17 |pub(all) enum Build {
+   |...
+23 |pub(all) enum Mode {
+   |...
+29 |pub impl Debug for ArtifactPath with fn to_repr(self) {
+   |...
+34 |pub fn ArtifactPath::join_module_path(
+35 |  self : Self,
+36 |  mod : MooncakesPath,
+37 |) -> ArtifactPath {
+   |...
+42 |pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
+   |...
+47 |pub fn ArtifactPath::join_relative(s1 : Self, s2 : String) -> ArtifactPath {
+   |...
+52 |pub fn ArtifactPath::to_string(
+53 |  self : Self,
+54 |  target : Target,
+55 |  build : Build,
+56 |  mode : Mode,
+57 |) -> SourcePath {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/path/mooncakeio_path.mbt'
+ 2 |struct MooncakesPath(String) derive(Eq, Compare)
+   |...
+ 5 |pub fn MooncakesPath::new(s : String) -> Self {
+   |...
+10 |pub fn MooncakesPath::to_string(s : Self) -> String {
+   |...
+15 |pub fn MooncakesPath::join(a : Self, b : String) -> Self {
+   |...
+20 |pub impl Debug for MooncakesPath with fn to_repr(self) {
+   |...
+25 |pub impl Show for MooncakesPath with fn output(self, buf) {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/path/sourcetree_path.mbt'
+ 2 |pub type Path = @p.Path
+   |...
+ 5 |struct SourcePath(String) derive(Eq, Compare, Hash)
+   |...
+ 8 |pub impl Debug for SourcePath with fn to_repr(self) {
+   |...
+13 |pub fn SourcePath::new(s : String) -> Self {
+   |...
+18 |pub impl Show for SourcePath with fn output(self, buf) {
+   |...
+23 |pub fn SourcePath::join(a : Self, b : String) -> Self {
+   |...
+28 |pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/devhub/devhub.mbt'
+  2 |pub(all) enum BroadcastMsg {
+    |...
+  9 |pub(all) enum ClientMsg {
+    |...
+ 14 |pub struct Devhub {
+    |...
+ 23 |#cfg(not(platform="windows"))
+ 24 |async fn check_port(port : UInt) -> Unit {
+    |...
+ 84 |#cfg(platform="windows")
+ 85 |async fn check_port(port : UInt) -> Unit {
+    |...
+148 |pub async fn Devhub::Devhub(port : UInt, vfs : @vfs.VirtualFileSystem) -> Self {
+    |...
+164 |pub fn Devhub::port(self : Self) -> Int {
+    |...
+169 |pub fn Devhub::broadcast(self : Self, msg : BroadcastMsg) -> Unit {
+    |...
+179 |pub async fn Devhub::run_forever(self : Self) -> Unit {
+    |...
+188 |pub async fn Devhub::wait_client(self : Self) -> ClientMsg {
+    |...
+193 |async fn Devhub::handle_request(
+194 |  self : Self,
+195 |  request : @http.Request,
+196 |  conn : @http.ServerConnection,
+197 |) -> Unit {
+    |...
+250 |async fn Devhub::handle_ws(
+251 |  self : Self,
+252 |  request : @http.Request,
+253 |  conn : @http.ServerConnection,
+254 |) -> Unit {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/devtool/main.mbt'
+  2 |using @rabbita {type Cmd, type Emit, type Html, delay, new, none}
+    |...
+  5 |using @common {type Mouse, type Viewport}
+    |...
+  8 |using @html {button, div, iframe, pre, span}
+    |...
+ 11 |let min_tab_left = 12
+    |...
+ 14 |let default_tab_left = 24
+    |...
+ 17 |let desktop_tab_width = 92
+    |...
+ 20 |let mobile_tab_width = 84
+    |...
+ 23 |let mobile_breakpoint = 560
+    |...
+ 26 |struct DragState {
+    |...
+ 33 |enum DevStatus {
+    |...
+ 41 |struct Model {
+    |...
+ 56 |enum Msg {
+    |...
+ 73 |fn tab_width(viewport_width : Int) -> Int {
+    |...
+ 82 |fn clamp_tab_left(left : Int, viewport_width : Int) -> Int {
+    |...
+ 95 |fn dev_status_class(status : DevStatus) -> String {
+    |...
+105 |fn dev_status_label(status : DevStatus) -> String {
+    |...
+115 |fn dev_status_is_loading(status : DevStatus) -> Bool {
+    |...
+123 |fn panel_expanded(model : Model) -> Bool {
+    |...
+128 |fn mouse_client_x(mouse : Mouse) -> Int {
+    |...
+133 |let build_failed_message = "build_failed"
+    |...
+136 |let build_failed_prefix = "build_failed\n"
+    |...
+139 |fn build_failed_diagnostics(message : String) -> String? {
+    |...
+150 |fn websocket_url() -> String {
+    |...
+169 |fn initial_model() -> Model {
+    |...
+187 |fn update(emit : Emit[Msg], msg : Msg, model : Model) -> (Cmd, Model) {
+    |...
+277 |fn subscriptions(emit : Emit[Msg], model : Model) -> @sub.Sub {
+    |...
+307 |fn drag_layer(emit : Emit[Msg], model : Model) -> Html {
+    |...
+320 |fn pin_icon() -> Html {
+    |...
+335 |fn diagnostics_panel(model : Model) -> Html {
+    |...
+344 |fn view(emit : Emit[Msg], model : Model) -> Html {
+    |...
+431 |fn main {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/log.mbt'
+2 |fn log(tag : String, msg : String) -> Unit {
+  |...
+7 |pub fn debug_log(tag : String, msg : String) -> Unit {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/main.mbt'
+  2 |using @path {type SourcePath, type Path}
+    |...
+  5 |using @devhub {type BroadcastMsg, type Devhub}
+    |...
+  8 |using @string {parse_int}
+    |...
+ 11 |let shell_html_template =
+    |...
+ 27 |let preview_html_template =
+    |...
+ 42 |let preview_assets_patch =
+    |...
+ 48 |let preview_base_patch =
+    |...
+ 52 |let preview_entry_script_patch =
+    |...
+ 56 |let preview_stylesheet_patch =
+    |...
+ 60 |async fn main {
+    |...
+183 |fn inject_preview_assets(html : String) -> String {
+    |...
+205 |fn inject_preview_base(html : String) -> String {
+    |...
+218 |fn preview_assets_for(html : String) -> String {
+    |...
+233 |test "inject_preview_assets puts base before relative assets" {
+    |...
+258 |fn build_failure_diagnostics(output : String, code : Int) -> String {
+    |...
+268 |async fn dev_server(
+269 |  main_pkg_dir~ : String,
+270 |  target_dir~ : String,
+271 |  public_dir~ : String?,
+272 |  port~ : UInt,
+273 |) -> Unit {
+    |...
+386 |async fn find_js_in(dir : String) -> Array[String] {
+    |...
+408 |fn[A] abort(s : String) -> A {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/build.mbt'
+  2 |let build_entry_script =
+    |...
+  6 |fn source_path_to_string(path : SourcePath) -> String {
+    |...
+ 11 |fn has_build_entry_script(html : String) -> Bool {
+    |...
+ 18 |fn inject_build_entry_script(html : String) -> String {
+    |...
+ 42 |fn default_build_html(has_stylesheet : Bool) -> String {
+    |...
+ 68 |async fn ensure_clean_dir(path : SourcePath) -> Unit {
+    |...
+ 86 |async fn copy_dir_contents(src : SourcePath, dst : SourcePath) -> Unit {
+    |...
+ 93 |async fn run_release_build(
+ 94 |  main_pkg_dir : SourcePath,
+ 95 |  target_dir : SourcePath,
+ 96 |) -> Unit {
+    |...
+117 |async fn has_command(cmd : String) -> Bool {
+    |...
+127 |async fn run_minifier(
+128 |  cmd : String,
+129 |  args : Array[String],
+130 |  cwd : SourcePath,
+131 |  label : String,
+132 |) -> Bool {
+    |...
+152 |async fn write_index_html(dist_dir : SourcePath) -> Unit {
+    |...
+177 |async fn minify_or_copy_js(
+178 |  src : SourcePath,
+179 |  dst : SourcePath,
+180 |  mod_root : SourcePath,
+181 |) -> Unit {
+    |...
+216 |pub async fn build_project(
+217 |  main_pkg_dir : SourcePath,
+218 |  dist_dir? : SourcePath,
+219 |) -> Unit {
+    |...
+260 |async test "inject_build_entry_script inserts before head" {
+    |...
+281 |async test "inject_build_entry_script does not duplicate existing entry" {
+    |...
+292 |async test "default_build_html optionally links stylesheet" {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/templates/default/main/main.mbt'
+ 2 |using @html {a, button, div, h1, h2, li, text, ul}
+   |...
+ 5 |using @rabbita {new, simple_cell}
+   |...
+ 8 |enum Msg {
+   |...
+13 |fn main {
+   |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/templates/minimized/main.mbt'
+1 |using @rabbita { new, simple_cell }
+  |...
+2 |using @html { button, div, h1 }
+  |...
+4 |enum Msg {
+  |...
+9 |fn main {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/utils.mbt'
+2 |pub async fn copy(src~ : SourcePath, dst~ : SourcePath) -> Unit {
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/new_project.mbt'
+  2 |let new_project_name_placeholder = "__WARREN_PROJECT_NAME__"
+    |...
+  5 |let default_new_project_template = "default"
+    |...
+  8 |enum TemplateEntry {
+    |...
+ 14 |let default_template_dir : TemplateEntry = Dir("", [
+    |...
+ 28 |let minimized_template_dir : TemplateEntry = Dir("", [
+    |...
+ 35 |fn render_new_project_file(content : String, project_name : String) -> String {
+    |...
+ 40 |fn is_valid_project_name(name : String) -> Bool {
+    |...
+ 52 |async fn write_new_project_file(
+ 53 |  root : String,
+ 54 |  relative_path : String,
+ 55 |  content : String,
+ 56 |) -> Unit {
+    |...
+ 66 |async fn write_template_entry(
+ 67 |  root : String,
+ 68 |  parent : String,
+ 69 |  entry : TemplateEntry,
+ 70 |  project_name : String,
+ 71 |) -> Unit {
+    |...
+101 |async fn new_project(dir : String, template_name : String) -> Unit {
+    |...
+134 |test "render_new_project_file replaces placeholders" {
+    |...
+142 |test "is_valid_project_name rejects empty and path-like names" {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/embbed_devtool.mbt'
+2 |#warnings("-unused_value")
+  |...
+7 |#warnings("-unused_value")
+  |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'warren/templates_bundle.mbt'
+  4 |let _embed_main_mbt : String =
+    |...
+ 55 |let _embed_moon_pkg : String =
+    |...
+ 69 |let _embed_index_html : String =
+    |...
+ 85 |let _embed_styles_css : String =
+    |...
+179 |let _embed_moon_mod : String =
+    |...
+202 |let _embed_readme_md : String =
+    |...
+217 |let _embed_main_mbt_2 : String =
+    |...
+246 |let _embed_moon_mod_2 : String =
+    |...
+269 |let _embed_moon_pkg_2 : String =
+    |...
+283 |pub struct TemplatesFixture {
+    |...
+289 |pub struct DefaultFixture {
+    |...
+297 |pub struct MainFixture {
+    |...
+303 |pub struct PublicFixture {
+    |...
+309 |pub struct MinimizedFixture {
+    |...
+316 |pub let templates : TemplatesFixture = {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'rabbita/js/cast.mbt'
   6 |#cfg(target="js")
   7 |pub(open) trait Cast {
     |...
@@ -65,439 +631,6 @@ $ run_moon_ide moon ide outline 'js/cast.mbt'
     |...
 113 |#cfg(target="js")
 114 |pub impl[A : Cast] Cast for Array[A] with fn from(value) {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'js/null.mbt'
- 2 |#cfg(target="js")
- 3 |#external
- 4 |type Nullable[_]
-   |...
- 7 |#cfg(target="js")
- 8 |pub fn[T] Nullable::is_null(self : Nullable[T]) -> Bool {
-   |...
-13 |#cfg(target="js")
-14 |#deprecated("get_exn does not check for null values. Use unwrap instead", skip_current_package=true)
-15 |pub fn[T] Nullable::get_exn(self : Nullable[T]) -> T = "%identity"
-   |...
-19 |#cfg(target="js")
-20 |pub fn[T] Nullable::unwrap(self : Nullable[T]) -> T {
-   |...
-28 |#cfg(target="js")
-29 |pub fn[T] Nullable::to_option(self : Nullable[T]) -> T? {
-   |...
-35 |#cfg(target="js")
-36 |pub fn[T] Nullable::null() -> Nullable[T] {
-   |...
-41 |#cfg(target="js")
-42 |pub fn[T] Nullable::from_option(value : T?) -> Nullable[T] {
-   |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'js/async.mbt'
- 2 |#cfg(target="js")
- 3 |pub async fn[T, E : Error] suspend(
- 4 |  f : ((T) -> Unit, (E) -> Unit) -> Unit,
- 5 |) -> T raise E = "%async.suspend"
-   |...
- 8 |#cfg(target="js")
- 9 |pub fn async_run(f : async () -> Unit noraise) -> Unit = "%async.run"
-   |...
-19 |#cfg(target="js")
-20 |#external
-21 |pub type Promise
-   |...
-24 |#cfg(target="js")
-25 |extern "js" fn Promise::wait_ffi(
-26 |  self : Promise,
-27 |  on_ok : (Value) -> Unit,
-28 |  on_err : (Value) -> Unit,
-29 |) -> Unit =
-   |...
-33 |#cfg(target="js")
-34 |pub async fn Promise::wait(self : Promise) -> Value {
-   |...
-47 |#cfg(target="js")
-48 |pub fn[T] Promise::unsafe_new(op : async () -> T) -> Promise {
-   |...
-53 |#cfg(target="js")
-54 |extern "js" fn Promise::new_ffi(op : async () -> Value) -> Promise =
-   |...
-58 |#cfg(target="js")
-59 |pub fn[T, E : Error] spawn_detach(op : async () -> T raise E) -> Unit {
-   |...
-70 |#cfg(target="js")
-71 |pub extern "js" fn Promise::all(promises : Array[Promise]) -> Promise = "(ps) => Promise.all(ps)"
-   |...
-75 |#cfg(target="js")
-76 |pub async fn[T] async_all(ops : Array[async () -> T]) -> Array[T] {
-   |...
-83 |#cfg(target="js")
-84 |async fn async_all_raw(ops : Array[async () -> Value]) -> Array[Value] {
-   |...
-89 |#cfg(target="js")
-90 |pub fn async_test(op : async () -> Unit) -> Unit {
-   |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'js/error.mbt'
- 2 |#cfg(target="js")
- 3 |pub suberror Error_ {
-   |...
- 8 |#cfg(target="js")
- 9 |extern "js" fn Error_::cause_ffi(self : Value) -> Value = "(self) => self.cause"
-   |...
-12 |#cfg(target="js")
-13 |pub fn Error_::cause(self : Error_) -> Value? {
-   |...
-21 |#cfg(target="js")
-22 |pub impl Show for Error_ with fn output(self, logger) {
-   |...
-32 |#cfg(target="js")
-33 |extern "js" fn Error_::wrap_ffi(
-34 |  op : () -> Value,
-35 |  on_ok : (Value) -> Unit,
-36 |  on_error : (Value) -> Unit,
-37 |) -> Unit =
-   |...
-41 |#cfg(target="js")
-42 |pub fn[T] Error_::wrap(
-43 |  op : () -> Value,
-44 |  map_ok? : (Value) -> T = Value::cast,
-45 |) -> T raise Error_ {
-   |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'js/union.mbt'
-  3 |#cfg(target="js")
-  4 |#external
-  5 |type Union2[_, _]
-    |...
-  8 |#cfg(target="js")
-  9 |pub fn[A : Cast, B] Union2::to0(self : Union2[A, B]) -> A? {
-    |...
- 14 |#cfg(target="js")
- 15 |pub fn[A, B : Cast] Union2::to1(self : Union2[A, B]) -> B? {
-    |...
- 20 |#cfg(target="js")
- 21 |pub fn[A : Cast, B] Union2::from0(value : A) -> Union2[A, B] {
-    |...
- 26 |#cfg(target="js")
- 27 |pub fn[A, B : Cast] Union2::from1(value : B) -> Union2[A, B] {
-    |...
- 33 |#cfg(target="js")
- 34 |#external
- 35 |type Union3[_, _, _]
-    |...
- 38 |#cfg(target="js")
- 39 |pub fn[A : Cast, B, C] Union3::to0(self : Union3[A, B, C]) -> A? {
-    |...
- 44 |#cfg(target="js")
- 45 |pub fn[A, B : Cast, C] Union3::to1(self : Union3[A, B, C]) -> B? {
-    |...
- 50 |#cfg(target="js")
- 51 |pub fn[A, B, C : Cast] Union3::to2(self : Union3[A, B, C]) -> C? {
-    |...
- 56 |#cfg(target="js")
- 57 |pub fn[A : Cast, B, C] Union3::from0(value : A) -> Union3[A, B, C] {
-    |...
- 62 |#cfg(target="js")
- 63 |pub fn[A, B : Cast, C] Union3::from1(value : B) -> Union3[A, B, C] {
-    |...
- 68 |#cfg(target="js")
- 69 |pub fn[A, B, C : Cast] Union3::from2(value : C) -> Union3[A, B, C] {
-    |...
- 75 |#cfg(target="js")
- 76 |#external
- 77 |type Union4[_, _, _, _]
-    |...
- 80 |#cfg(target="js")
- 81 |pub fn[A : Cast, B, C, D] Union4::to0(self : Union4[A, B, C, D]) -> A? {
-    |...
- 86 |#cfg(target="js")
- 87 |pub fn[A, B : Cast, C, D] Union4::to1(self : Union4[A, B, C, D]) -> B? {
-    |...
- 92 |#cfg(target="js")
- 93 |pub fn[A, B, C : Cast, D] Union4::to2(self : Union4[A, B, C, D]) -> C? {
-    |...
- 98 |#cfg(target="js")
- 99 |pub fn[A, B, C, D : Cast] Union4::to3(self : Union4[A, B, C, D]) -> D? {
-    |...
-104 |#cfg(target="js")
-105 |pub fn[A : Cast, B, C, D] Union4::from0(value : A) -> Union4[A, B, C, D] {
-    |...
-110 |#cfg(target="js")
-111 |pub fn[A, B : Cast, C, D] Union4::from1(value : B) -> Union4[A, B, C, D] {
-    |...
-116 |#cfg(target="js")
-117 |pub fn[A, B, C : Cast, D] Union4::from2(value : C) -> Union4[A, B, C, D] {
-    |...
-122 |#cfg(target="js")
-123 |pub fn[A, B, C, D : Cast] Union4::from3(value : D) -> Union4[A, B, C, D] {
-    |...
-129 |#cfg(target="js")
-130 |#external
-131 |type Union5[_, _, _, _, _]
-    |...
-134 |#cfg(target="js")
-135 |pub fn[A : Cast, B, C, D, E] Union5::to0(self : Union5[A, B, C, D, E]) -> A? {
-    |...
-140 |#cfg(target="js")
-141 |pub fn[A, B : Cast, C, D, E] Union5::to1(self : Union5[A, B, C, D, E]) -> B? {
-    |...
-146 |#cfg(target="js")
-147 |pub fn[A, B, C : Cast, D, E] Union5::to2(self : Union5[A, B, C, D, E]) -> C? {
-    |...
-152 |#cfg(target="js")
-153 |pub fn[A, B, C, D : Cast, E] Union5::to3(self : Union5[A, B, C, D, E]) -> D? {
-    |...
-158 |#cfg(target="js")
-159 |pub fn[A, B, C, D, E : Cast] Union5::to4(self : Union5[A, B, C, D, E]) -> E? {
-    |...
-164 |#cfg(target="js")
-165 |pub fn[A : Cast, B, C, D, E] Union5::from0(value : A) -> Union5[A, B, C, D, E] {
-    |...
-170 |#cfg(target="js")
-171 |pub fn[A, B : Cast, C, D, E] Union5::from1(value : B) -> Union5[A, B, C, D, E] {
-    |...
-176 |#cfg(target="js")
-177 |pub fn[A, B, C : Cast, D, E] Union5::from2(value : C) -> Union5[A, B, C, D, E] {
-    |...
-182 |#cfg(target="js")
-183 |pub fn[A, B, C, D : Cast, E] Union5::from3(value : D) -> Union5[A, B, C, D, E] {
-    |...
-188 |#cfg(target="js")
-189 |pub fn[A, B, C, D, E : Cast] Union5::from4(value : E) -> Union5[A, B, C, D, E] {
-    |...
-195 |#cfg(target="js")
-196 |#external
-197 |type Union6[_, _, _, _, _, _]
-    |...
-200 |#cfg(target="js")
-201 |pub fn[A : Cast, B, C, D, E, F] Union6::to0(
-202 |  self : Union6[A, B, C, D, E, F],
-203 |) -> A? {
-    |...
-208 |#cfg(target="js")
-209 |pub fn[A, B : Cast, C, D, E, F] Union6::to1(
-210 |  self : Union6[A, B, C, D, E, F],
-211 |) -> B? {
-    |...
-216 |#cfg(target="js")
-217 |pub fn[A, B, C : Cast, D, E, F] Union6::to2(
-218 |  self : Union6[A, B, C, D, E, F],
-219 |) -> C? {
-    |...
-224 |#cfg(target="js")
-225 |pub fn[A, B, C, D : Cast, E, F] Union6::to3(
-226 |  self : Union6[A, B, C, D, E, F],
-227 |) -> D? {
-    |...
-232 |#cfg(target="js")
-233 |pub fn[A, B, C, D, E : Cast, F] Union6::to4(
-234 |  self : Union6[A, B, C, D, E, F],
-235 |) -> E? {
-    |...
-240 |#cfg(target="js")
-241 |pub fn[A, B, C, D, E, F : Cast] Union6::to5(
-242 |  self : Union6[A, B, C, D, E, F],
-243 |) -> F? {
-    |...
-248 |#cfg(target="js")
-249 |pub fn[A : Cast, B, C, D, E, F] Union6::from0(
-250 |  value : A,
-251 |) -> Union6[A, B, C, D, E, F] {
-    |...
-256 |#cfg(target="js")
-257 |pub fn[A, B : Cast, C, D, E, F] Union6::from1(
-258 |  value : B,
-259 |) -> Union6[A, B, C, D, E, F] {
-    |...
-264 |#cfg(target="js")
-265 |pub fn[A, B, C : Cast, D, E, F] Union6::from2(
-266 |  value : C,
-267 |) -> Union6[A, B, C, D, E, F] {
-    |...
-272 |#cfg(target="js")
-273 |pub fn[A, B, C, D : Cast, E, F] Union6::from3(
-274 |  value : D,
-275 |) -> Union6[A, B, C, D, E, F] {
-    |...
-280 |#cfg(target="js")
-281 |pub fn[A, B, C, D, E : Cast, F] Union6::from4(
-282 |  value : E,
-283 |) -> Union6[A, B, C, D, E, F] {
-    |...
-288 |#cfg(target="js")
-289 |pub fn[A, B, C, D, E, F : Cast] Union6::from5(
-290 |  value : F,
-291 |) -> Union6[A, B, C, D, E, F] {
-    |...
-297 |#cfg(target="js")
-298 |#external
-299 |type Union7[_, _, _, _, _, _, _]
-    |...
-302 |#cfg(target="js")
-303 |pub fn[A : Cast, B, C, D, E, F, G] Union7::to0(
-304 |  self : Union7[A, B, C, D, E, F, G],
-305 |) -> A? {
-    |...
-310 |#cfg(target="js")
-311 |pub fn[A, B : Cast, C, D, E, F, G] Union7::to1(
-312 |  self : Union7[A, B, C, D, E, F, G],
-313 |) -> B? {
-    |...
-318 |#cfg(target="js")
-319 |pub fn[A, B, C : Cast, D, E, F, G] Union7::to2(
-320 |  self : Union7[A, B, C, D, E, F, G],
-321 |) -> C? {
-    |...
-326 |#cfg(target="js")
-327 |pub fn[A, B, C, D : Cast, E, F, G] Union7::to3(
-328 |  self : Union7[A, B, C, D, E, F, G],
-329 |) -> D? {
-    |...
-334 |#cfg(target="js")
-335 |pub fn[A, B, C, D, E : Cast, F, G] Union7::to4(
-336 |  self : Union7[A, B, C, D, E, F, G],
-337 |) -> E? {
-    |...
-342 |#cfg(target="js")
-343 |pub fn[A, B, C, D, E, F : Cast, G] Union7::to5(
-344 |  self : Union7[A, B, C, D, E, F, G],
-345 |) -> F? {
-    |...
-350 |#cfg(target="js")
-351 |pub fn[A, B, C, D, E, F, G : Cast] Union7::to6(
-352 |  self : Union7[A, B, C, D, E, F, G],
-353 |) -> G? {
-    |...
-358 |#cfg(target="js")
-359 |pub fn[A : Cast, B, C, D, E, F, G] Union7::from0(
-360 |  value : A,
-361 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-366 |#cfg(target="js")
-367 |pub fn[A, B : Cast, C, D, E, F, G] Union7::from1(
-368 |  value : B,
-369 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-374 |#cfg(target="js")
-375 |pub fn[A, B, C : Cast, D, E, F, G] Union7::from2(
-376 |  value : C,
-377 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-382 |#cfg(target="js")
-383 |pub fn[A, B, C, D : Cast, E, F, G] Union7::from3(
-384 |  value : D,
-385 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-390 |#cfg(target="js")
-391 |pub fn[A, B, C, D, E : Cast, F, G] Union7::from4(
-392 |  value : E,
-393 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-398 |#cfg(target="js")
-399 |pub fn[A, B, C, D, E, F : Cast, G] Union7::from5(
-400 |  value : F,
-401 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-406 |#cfg(target="js")
-407 |pub fn[A, B, C, D, E, F, G : Cast] Union7::from6(
-408 |  value : G,
-409 |) -> Union7[A, B, C, D, E, F, G] {
-    |...
-415 |#cfg(target="js")
-416 |#external
-417 |type Union8[_, _, _, _, _, _, _, _]
-    |...
-420 |#cfg(target="js")
-421 |pub fn[A : Cast, B, C, D, E, F, G, H] Union8::to0(
-422 |  self : Union8[A, B, C, D, E, F, G, H],
-423 |) -> A? {
-    |...
-428 |#cfg(target="js")
-429 |pub fn[A, B : Cast, C, D, E, F, G, H] Union8::to1(
-430 |  self : Union8[A, B, C, D, E, F, G, H],
-431 |) -> B? {
-    |...
-436 |#cfg(target="js")
-437 |pub fn[A, B, C : Cast, D, E, F, G, H] Union8::to2(
-438 |  self : Union8[A, B, C, D, E, F, G, H],
-439 |) -> C? {
-    |...
-444 |#cfg(target="js")
-445 |pub fn[A, B, C, D : Cast, E, F, G, H] Union8::to3(
-446 |  self : Union8[A, B, C, D, E, F, G, H],
-447 |) -> D? {
-    |...
-452 |#cfg(target="js")
-453 |pub fn[A, B, C, D, E : Cast, F, G, H] Union8::to4(
-454 |  self : Union8[A, B, C, D, E, F, G, H],
-455 |) -> E? {
-    |...
-460 |#cfg(target="js")
-461 |pub fn[A, B, C, D, E, F : Cast, G, H] Union8::to5(
-462 |  self : Union8[A, B, C, D, E, F, G, H],
-463 |) -> F? {
-    |...
-468 |#cfg(target="js")
-469 |pub fn[A, B, C, D, E, F, G : Cast, H] Union8::to6(
-470 |  self : Union8[A, B, C, D, E, F, G, H],
-471 |) -> G? {
-    |...
-476 |#cfg(target="js")
-477 |pub fn[A, B, C, D, E, F, G, H : Cast] Union8::to7(
-478 |  self : Union8[A, B, C, D, E, F, G, H],
-479 |) -> H? {
-    |...
-484 |#cfg(target="js")
-485 |pub fn[A : Cast, B, C, D, E, F, G, H] Union8::from0(
-486 |  value : A,
-487 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-492 |#cfg(target="js")
-493 |pub fn[A, B : Cast, C, D, E, F, G, H] Union8::from1(
-494 |  value : B,
-495 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-500 |#cfg(target="js")
-501 |pub fn[A, B, C : Cast, D, E, F, G, H] Union8::from2(
-502 |  value : C,
-503 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-508 |#cfg(target="js")
-509 |pub fn[A, B, C, D : Cast, E, F, G, H] Union8::from3(
-510 |  value : D,
-511 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-516 |#cfg(target="js")
-517 |pub fn[A, B, C, D, E : Cast, F, G, H] Union8::from4(
-518 |  value : E,
-519 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-524 |#cfg(target="js")
-525 |pub fn[A, B, C, D, E, F : Cast, G, H] Union8::from5(
-526 |  value : F,
-527 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-532 |#cfg(target="js")
-533 |pub fn[A, B, C, D, E, F, G : Cast, H] Union8::from6(
-534 |  value : G,
-535 |) -> Union8[A, B, C, D, E, F, G, H] {
-    |...
-540 |#cfg(target="js")
-541 |pub fn[A, B, C, D, E, F, G, H : Cast] Union8::from7(
-542 |  value : H,
-543 |) -> Union8[A, B, C, D, E, F, G, H] {
     |...
 
 ```

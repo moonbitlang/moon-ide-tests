@@ -30,10 +30,10 @@ repos:
     max_files: 5
     max_per_file: 2
   - slug: rabbita
-    path: fixtures/repos/rabbita/rabbita
+    path: fixtures/repos/rabbita
     url: https://github.com/moonbit-community/rabbita
     branch: main
-    max_files: 5
+    max_files: 25
     max_per_file: 2
   - slug: sqlparser
     path: fixtures/repos/sqlparser
