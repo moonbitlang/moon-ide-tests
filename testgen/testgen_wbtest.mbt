@@ -22,6 +22,7 @@ test "parse_args defaults limits" {
   debug_inspect(config.platform, content="Unix")
   inspect(config.max_per_file, content="50")
   inspect(config.max_files, content="0")
+  inspect(config.max_file_size, content="102400")
 }
 
 ///|
@@ -38,6 +39,66 @@ test "should_skip_dir covers dependency and vcs dirs" {
       should_skip_dir("src"),
     ],
     content="[true, true, true, true, true, true, true, false]",
+  )
+}
+
+///|
+test "select_files samples deterministically and emits path order" {
+  let files = () => {
+    ["src/deep/a.mbt", "src/deep/b.mbt", "lib/c.mbt", "lib/d.mbt", "top.mbt"]
+  }
+  let picked = select_files(files(), "example", 3)
+  debug_inspect(
+    picked,
+    content=(
+      #|["lib/c.mbt", "src/deep/a.mbt", "top.mbt"]
+    ),
+  )
+  // Same inputs in any discovery order select the same files.
+  let shuffled = files()
+  shuffled.rev_in_place()
+  debug_inspect(
+    select_files(shuffled, "example", 3),
+    content=(
+      #|["lib/c.mbt", "src/deep/a.mbt", "top.mbt"]
+    ),
+  )
+  // Windows-style separators normalize to the same selection.
+  let windows = [
+    "src\\deep\\a.mbt", "src\\deep\\b.mbt", "lib\\c.mbt", "lib\\d.mbt", "top.mbt",
+  ]
+  debug_inspect(
+    select_files(windows, "example", 3),
+    content=(
+      #|["lib\\c.mbt", "src\\deep\\a.mbt", "top.mbt"]
+    ),
+  )
+  // A different seed draws a different sample.
+  debug_inspect(
+    select_files(files(), "json", 3),
+    content=(
+      #|["lib/d.mbt", "src/deep/a.mbt", "top.mbt"]
+    ),
+  )
+  // No cap (or a cap at least as large as the set) keeps every file.
+  debug_inspect(
+    select_files(files(), "example", 0),
+    content=(
+      #|[
+      #|  "lib/c.mbt",
+      #|  "lib/d.mbt",
+      #|  "src/deep/a.mbt",
+      #|  "src/deep/b.mbt",
+      #|  "top.mbt",
+      #|]
+    ),
+  )
+  // Skipped files give their slot to the next-ranked candidate.
+  debug_inspect(
+    select_files(files(), "example", 3, skip=f => f == "lib/c.mbt"),
+    content=(
+      #|["src/deep/a.mbt", "src/deep/b.mbt", "top.mbt"]
+    ),
   )
 }
 
@@ -282,15 +343,100 @@ test "render_cram_files emits mooncram markdown commands" {
       "$ run_moon_ide moon ide peek-def 'f' --loc 'a.mbt:1:4'",
     ),
   )
+  inspect(files[3].name, content="find-references-a.mbt-1-4-f.mooncram.md")
+  assert_true(
+    files[3].content.contains("# example find-references f a.mbt:1:4"),
+  )
   assert_true(
     files[3].content.contains(
       "$ run_moon_ide moon ide find-references 'f' --loc 'a.mbt:1:4'",
     ),
   )
+  inspect(files[4].name, content="rename-a.mbt-1-4-f.mooncram.md")
   assert_true(
     files[4].content.contains(
       "$ run_moon_ide moon ide rename 'f' 'f_renamed' --loc 'a.mbt:1:4'",
     ),
+  )
+}
+
+///|
+test "render_split_symbol_files emits one file per case" {
+  current_repo_slug.val = "example"
+  current_repo_path.val = "fixtures/repos/example"
+  current_platform.val = TestPlatform::Unix
+  let cases = [
+    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f" },
+    TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g" },
+    // Duplicate case collapses into the first file.
+    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f" },
+  ]
+  let files = render_split_symbol_files("find-references", cases, test_case => {
+    run_moon_ide_command(
+      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+    )
+  })
+  debug_inspect(
+    files.map(file => file.name),
+    content=(
+      #|[
+      #|  "find-references-src-deep-a.mbt-3-5-f.mooncram.md",
+      #|  "find-references-src-deep-a.mbt-9-1-g.mooncram.md",
+      #|]
+    ),
+  )
+  assert_true(
+    files[0].content.contains("# example find-references f src/deep/a.mbt:3:5"),
+  )
+  assert_true(
+    files[0].content.contains(
+      "$ run_moon_ide moon ide find-references 'f' --loc 'src/deep/a.mbt:3:5'",
+    ),
+  )
+}
+
+///|
+test "split_case_file_name disambiguates sanitization collisions" {
+  let used : @hashset.HashSet[String] = @hashset.HashSet([])
+  let first = split_case_file_name("rename", TestCase::{
+    file: "a/b.mbt",
+    line: 1,
+    col: 2,
+    sym: "f",
+  }, used)
+  let second = split_case_file_name("rename", TestCase::{
+    file: "a-b.mbt",
+    line: 1,
+    col: 2,
+    sym: "f",
+  }, used)
+  inspect(first, content="rename-a-b.mbt-1-2-f.mooncram.md")
+  inspect(second, content="rename-a-b.mbt-1-2-f-2.mooncram.md")
+}
+
+///|
+test "split suite output detection covers legacy and per-case names" {
+  debug_inspect(
+    [
+      is_split_suite_output("find-references.mooncram.md"),
+      is_split_suite_output("rename.mooncram.md"),
+      is_split_suite_output("find-references-a.mbt-1-4-f.mooncram.md"),
+      is_split_suite_output("rename-a.mbt-1-4-f.mooncram.md"),
+      is_split_suite_output("hover.mooncram.md"),
+      is_split_suite_output("outline.mooncram.md"),
+      is_split_suite_output("find-references-notes.md"),
+    ],
+    content="[true, true, true, true, false, false, false]",
+  )
+  debug_inspect(
+    split_suite_prefix_of("find-references-a.mbt-1-4-f.mooncram.md"),
+    content=(
+      #|Some("find-references")
+    ),
+  )
+  debug_inspect(
+    split_suite_prefix_of("find-references.mooncram.md"),
+    content="None",
   )
 }
 

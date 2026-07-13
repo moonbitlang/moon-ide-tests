@@ -17,221 +17,145 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'doc/005_http/using_test.mbt'
-2 |using @rabbita {type Cell, type Emit, type Cmd, type Html, none}
-  |...
-5 |using @html {div, p, button}
-  |...
-8 |test {
+$ run_moon_ide moon ide outline 'rabbita/clipboard/aliases.mbt'
+2 |using @cmd {type Cmd}
   |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'doc/001_intro/using_test.mbt'
-2 |using @rabbita {type Cell}
-  |...
-5 |using @html {div, h1, button}
-  |...
-8 |test {
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'doc/003_router/using_test.mbt'
-2 |using @rabbita {type Emit, type Cmd, type Html, none}
-  |...
-5 |using @html {ul, div, li, a, p, h1}
-  |...
-8 |using @url {type Url, type UrlRequest}
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'doc/002_writing_html/using_test.mbt'
- 2 |using @rabbita {type Emit, type Html}
+$ run_moon_ide moon ide outline 'rabbita/clipboard/clipboard.mbt'
+ 2 |pub(all) enum Item {
    |...
- 5 |using @html {
- 6 |  type Attrs,
- 7 |  type Mouse,
- 8 |  ul,
- 9 |  div,
-10 |  li,
-11 |  p,
-12 |  h1,
-13 |  h2,
-14 |  button,
-15 |  span,
-16 |  canvas,
-17 |  text,
-18 |  nothing,
-19 |  node,
-20 |}
+13 |#cfg(target="js")
+14 |pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
    |...
-23 |test {
+41 |#cfg(target="js")
+42 |pub fn paste(pasted~ : (Item) -> Cmd, failed? : (String) -> Cmd) -> Cmd {
    |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'doc/004_using_command/using_test.mbt'
-2 |using @rabbita {type Emit, type Cmd, type Html, none, batch}
-  |...
-5 |using @html {div, h1, p, button}
-  |...
-8 |test {
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'doc/using_subscriptions/using_test.mbt'
- 2 |using @rabbita {type Emit, type Cell, none}
+$ run_moon_ide moon ide outline 'rabbita/dom/clipboard_event.mbt'
+ 2 |#cfg(target="js")
+ 3 |#external
+ 4 |type ClipboardEvent
    |...
- 5 |using @html {div, h1, p}
+ 7 |#cfg(target="js")
    |...
- 8 |test {
+11 |#cfg(target="js")
+12 |pub impl @js.Cast for ClipboardEvent with fn into(value) {
    |...
-25 |test {
+17 |#cfg(target="js")
+18 |pub impl @js.Cast for ClipboardEvent with fn from(value) {
+   |...
+23 |#cfg(target="js")
+24 |pub extern "js" fn ClipboardEvent::clipboard_data(self : Self) -> DataTransfer = "(e) => e.clipboardData"
    |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'doc/suberror_as_extensible_enum/using_test.mbt'
-2 |test {
+$ run_moon_ide moon ide outline 'rabbita/dom/gpu_canvas_context.mbt'
+2 |#cfg(target="js")
+3 |#external
+4 |type GPUCanvasContext
   |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'utils/shiki/shiki.mbt'
-  2 |extern "js" fn load_shiki() -> @js.Promise =
-    |...
- 20 |extern "js" fn load_langs(
- 21 |  highlighter : @js.Value,
- 22 |  langs : Array[String],
- 23 |) -> @js.Promise =
-    |...
- 32 |extern "js" fn load_themes(
- 33 |  highlighter : @js.Value,
- 34 |  themes : Array[String],
- 35 |) -> @js.Promise =
-    |...
- 44 |extern "js" fn code_to_html(
- 45 |  highlighter : @js.Value,
- 46 |  code : String,
- 47 |  lang : String,
- 48 |  theme : String,
- 49 |) -> String =
-    |...
- 60 |using @rabbita {type Cmd}
-    |...
- 63 |struct Highlighter(@js.Value)
-    |...
- 66 |extern "js" fn is_highlighter(x : @js.Value) -> Bool =
-    |...
- 73 |pub fn load(
- 74 |  langs : Array[String],
- 75 |  themes : Array[String],
- 76 |  msg : (Result[Highlighter, Error]) -> Cmd,
- 77 |) -> Cmd {
-    |...
- 98 |pub async fn Highlighter::add_theme(self : Self, theme : String) -> Unit {
-    |...
-103 |pub async fn Highlighter::add_lang(self : Self, lang : String) -> Unit {
-    |...
-109 |#warnings("-alert_xss_vulnerable")
-110 |pub fn Highlighter::code_to_html(
-111 |  self : Self,
-112 |  code : String,
-113 |  lang~ : String,
-114 |  theme~ : String,
-115 |) -> @rabbita.Html {
-    |...
+$ run_moon_ide moon ide outline 'rabbita/dom/image_data.mbt'
+ 2 |#cfg(target="js")
+ 3 |#external
+ 4 |type ImageData
+   |...
+ 7 |#cfg(target="js")
+ 8 |pub extern "js" fn ImageData::new(
+ 9 |  sw : Int,
+10 |  sh : Int,
+11 |  settings : @js.Optional[ImageDataSettings],
+12 |) -> ImageData = "(sw,sh,settings) => new ImageData(sw,sh,settings)"
+   |...
+15 |#cfg(target="js")
+16 |pub extern "js" fn ImageData::new_with_data(
+17 |  data : Uint8ClampedArray,
+18 |  sw : Int,
+19 |  sh : Int,
+20 |  settings? : @js.Optional[ImageDataSettings] = @js.Optional::undefined(),
+21 |) -> ImageData = "(data,sw,sh,settings) => new ImageData(data,sw,sh,settings)"
+   |...
+24 |#cfg(target="js")
+25 |pub extern "js" fn ImageData::get_width(self : Self) -> Int = "(self) => self.width"
+   |...
+28 |#cfg(target="js")
+29 |pub extern "js" fn ImageData::get_height(self : Self) -> Int = "(self) => self.height"
+   |...
+32 |#cfg(target="js")
+33 |pub extern "js" fn ImageData::get_data(self : Self) -> Uint8ClampedArray = "(self) => self.data"
+   |...
+38 |#cfg(target="js")
+39 |pub extern "js" fn ImageData::get_color_space(
+40 |  self : ImageData,
+41 |) -> PredefinedColorSpace = "(self) => self.colorSpace"
+   |...
+45 |#cfg(target="js")
+46 |pub type PredefinedColorSpace = String
+   |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'warren/log/log.mbt'
-2 |pub fn log(tag : String, msg : String) -> Unit {
+$ run_moon_ide moon ide outline 'rabbita/dom/webgl_rendering_context.mbt'
+2 |#cfg(target="js")
+3 |#external
+4 |type WebGLRenderingContext
   |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'warren/vfs/vfs.mbt'
-  2 |using @path {type SourcePath}
+$ run_moon_ide moon ide outline 'rabbita/internal/runtime/sandbox.mbt'
+  2 |#cfg(target="js")
+  3 |using @queue {type Queue}
     |...
-  5 |pub(all) enum VirtualFs {
+ 16 |#cfg(target="js")
+ 17 |pub(all) struct Sandbox {
     |...
- 13 |struct VirtualFileSystem {
+ 31 |#cfg(target="js")
+ 32 |pub fn Sandbox::new(root : &IsCell) -> Sandbox {
     |...
- 18 |#as_free_fn
- 19 |pub fn VirtualFileSystem::new(map : Map[String, VirtualFs]) -> Self {
+ 71 |#cfg(target="js")
+ 72 |pub fn Sandbox::initialize(self : Self) -> Unit {
     |...
- 29 |pub fn VirtualFileSystem::mount(
- 30 |  self : Self,
- 31 |  path : String,
- 32 |  vfs : VirtualFs,
- 33 |) -> Unit {
+ 90 |#cfg(target="js")
+ 91 |fn Sandbox::drop_live_subtree(self : Self, root : Instance) -> Unit {
     |...
- 65 |pub fn VirtualFileSystem::unmount(self : Self, path : String) -> Unit {
+122 |#cfg(target="js")
+123 |pub fn Sandbox::flush(self : Self) -> Unit {
     |...
-104 |pub fn VirtualFileSystem::clear(self : Self) -> Unit {
+168 |#cfg(target="js")
+169 |pub impl Scheduler for Sandbox with fn run_effect(self, kind, f) {
     |...
-109 |pub async fn VirtualFileSystem::read(self : Self, path : String) -> &@io.Data? {
+177 |#cfg(target="js")
+178 |pub impl Scheduler for Sandbox with fn queue_message(self, id, send_message) {
+    |...
+185 |#cfg(target="js")
+186 |pub impl Scheduler for Sandbox with fn drain_message(self) {
+    |...
+201 |#cfg(target="js")
+202 |pub impl Scheduler for Sandbox with fn hooks(self) {
     |...
 
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'warren/path/artifact_path.mbt'
- 2 |struct ArtifactPath {
-   |...
- 9 |pub(all) enum Target {
-   |...
-17 |pub(all) enum Build {
-   |...
-23 |pub(all) enum Mode {
-   |...
-29 |pub impl Debug for ArtifactPath with fn to_repr(self) {
-   |...
-34 |pub fn ArtifactPath::join_module_path(
-35 |  self : Self,
-36 |  mod : MooncakesPath,
-37 |) -> ArtifactPath {
-   |...
-42 |pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
-   |...
-47 |pub fn ArtifactPath::join_relative(s1 : Self, s2 : String) -> ArtifactPath {
-   |...
-52 |pub fn ArtifactPath::to_string(
-53 |  self : Self,
-54 |  target : Target,
-55 |  build : Build,
-56 |  mode : Mode,
-57 |) -> SourcePath {
-   |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/path/mooncakeio_path.mbt'
- 2 |struct MooncakesPath(String) derive(Eq, Compare)
-   |...
- 5 |pub fn MooncakesPath::new(s : String) -> Self {
-   |...
-10 |pub fn MooncakesPath::to_string(s : Self) -> String {
-   |...
-15 |pub fn MooncakesPath::join(a : Self, b : String) -> Self {
-   |...
-20 |pub impl Debug for MooncakesPath with fn to_repr(self) {
-   |...
-25 |pub impl Show for MooncakesPath with fn output(self, buf) {
-   |...
+$ run_moon_ide moon ide outline 'warren/embbed_devtool.mbt'
+2 |#warnings("-unused_value")
+  |...
+7 |#warnings("-unused_value")
+  |...
 
 ```
 
@@ -255,232 +179,6 @@ $ run_moon_ide moon ide outline 'warren/path/sourcetree_path.mbt'
 ```
 
 ```mooncram
-$ run_moon_ide moon ide outline 'warren/devhub/devhub.mbt'
-  2 |pub(all) enum BroadcastMsg {
-    |...
-  9 |pub(all) enum ClientMsg {
-    |...
- 14 |pub struct Devhub {
-    |...
- 23 |#cfg(not(platform="windows"))
- 24 |async fn check_port(port : UInt) -> Unit {
-    |...
- 84 |#cfg(platform="windows")
- 85 |async fn check_port(port : UInt) -> Unit {
-    |...
-148 |pub async fn Devhub::Devhub(port : UInt, vfs : @vfs.VirtualFileSystem) -> Self {
-    |...
-164 |pub fn Devhub::port(self : Self) -> Int {
-    |...
-169 |pub fn Devhub::broadcast(self : Self, msg : BroadcastMsg) -> Unit {
-    |...
-179 |pub async fn Devhub::run_forever(self : Self) -> Unit {
-    |...
-188 |pub async fn Devhub::wait_client(self : Self) -> ClientMsg {
-    |...
-193 |async fn Devhub::handle_request(
-194 |  self : Self,
-195 |  request : @http.Request,
-196 |  conn : @http.ServerConnection,
-197 |) -> Unit {
-    |...
-250 |async fn Devhub::handle_ws(
-251 |  self : Self,
-252 |  request : @http.Request,
-253 |  conn : @http.ServerConnection,
-254 |) -> Unit {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/devtool/main.mbt'
-  2 |using @rabbita {type Cmd, type Emit, type Html, delay, new, none}
-    |...
-  5 |using @common {type Mouse, type Viewport}
-    |...
-  8 |using @html {button, div, iframe, pre, span}
-    |...
- 11 |let min_tab_left = 12
-    |...
- 14 |let default_tab_left = 24
-    |...
- 17 |let desktop_tab_width = 92
-    |...
- 20 |let mobile_tab_width = 84
-    |...
- 23 |let mobile_breakpoint = 560
-    |...
- 26 |struct DragState {
-    |...
- 33 |enum DevStatus {
-    |...
- 41 |struct Model {
-    |...
- 56 |enum Msg {
-    |...
- 73 |fn tab_width(viewport_width : Int) -> Int {
-    |...
- 82 |fn clamp_tab_left(left : Int, viewport_width : Int) -> Int {
-    |...
- 95 |fn dev_status_class(status : DevStatus) -> String {
-    |...
-105 |fn dev_status_label(status : DevStatus) -> String {
-    |...
-115 |fn dev_status_is_loading(status : DevStatus) -> Bool {
-    |...
-123 |fn panel_expanded(model : Model) -> Bool {
-    |...
-128 |fn mouse_client_x(mouse : Mouse) -> Int {
-    |...
-133 |let build_failed_message = "build_failed"
-    |...
-136 |let build_failed_prefix = "build_failed\n"
-    |...
-139 |fn build_failed_diagnostics(message : String) -> String? {
-    |...
-150 |fn websocket_url() -> String {
-    |...
-169 |fn initial_model() -> Model {
-    |...
-187 |fn update(emit : Emit[Msg], msg : Msg, model : Model) -> (Cmd, Model) {
-    |...
-277 |fn subscriptions(emit : Emit[Msg], model : Model) -> @sub.Sub {
-    |...
-307 |fn drag_layer(emit : Emit[Msg], model : Model) -> Html {
-    |...
-320 |fn pin_icon() -> Html {
-    |...
-335 |fn diagnostics_panel(model : Model) -> Html {
-    |...
-344 |fn view(emit : Emit[Msg], model : Model) -> Html {
-    |...
-431 |fn main {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/log.mbt'
-2 |fn log(tag : String, msg : String) -> Unit {
-  |...
-7 |pub fn debug_log(tag : String, msg : String) -> Unit {
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/main.mbt'
-  2 |using @path {type SourcePath, type Path}
-    |...
-  5 |using @devhub {type BroadcastMsg, type Devhub}
-    |...
-  8 |using @string {parse_int}
-    |...
- 11 |let shell_html_template =
-    |...
- 27 |let preview_html_template =
-    |...
- 42 |let preview_assets_patch =
-    |...
- 48 |let preview_base_patch =
-    |...
- 52 |let preview_entry_script_patch =
-    |...
- 56 |let preview_stylesheet_patch =
-    |...
- 60 |async fn main {
-    |...
-183 |fn inject_preview_assets(html : String) -> String {
-    |...
-205 |fn inject_preview_base(html : String) -> String {
-    |...
-218 |fn preview_assets_for(html : String) -> String {
-    |...
-233 |test "inject_preview_assets puts base before relative assets" {
-    |...
-258 |fn build_failure_diagnostics(output : String, code : Int) -> String {
-    |...
-268 |async fn dev_server(
-269 |  main_pkg_dir~ : String,
-270 |  target_dir~ : String,
-271 |  public_dir~ : String?,
-272 |  port~ : UInt,
-273 |) -> Unit {
-    |...
-386 |async fn find_js_in(dir : String) -> Array[String] {
-    |...
-408 |fn[A] abort(s : String) -> A {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/build.mbt'
-  2 |let build_entry_script =
-    |...
-  6 |fn source_path_to_string(path : SourcePath) -> String {
-    |...
- 11 |fn has_build_entry_script(html : String) -> Bool {
-    |...
- 18 |fn inject_build_entry_script(html : String) -> String {
-    |...
- 42 |fn default_build_html(has_stylesheet : Bool) -> String {
-    |...
- 68 |async fn ensure_clean_dir(path : SourcePath) -> Unit {
-    |...
- 86 |async fn copy_dir_contents(src : SourcePath, dst : SourcePath) -> Unit {
-    |...
- 93 |async fn run_release_build(
- 94 |  main_pkg_dir : SourcePath,
- 95 |  target_dir : SourcePath,
- 96 |) -> Unit {
-    |...
-117 |async fn has_command(cmd : String) -> Bool {
-    |...
-127 |async fn run_minifier(
-128 |  cmd : String,
-129 |  args : Array[String],
-130 |  cwd : SourcePath,
-131 |  label : String,
-132 |) -> Bool {
-    |...
-152 |async fn write_index_html(dist_dir : SourcePath) -> Unit {
-    |...
-177 |async fn minify_or_copy_js(
-178 |  src : SourcePath,
-179 |  dst : SourcePath,
-180 |  mod_root : SourcePath,
-181 |) -> Unit {
-    |...
-216 |pub async fn build_project(
-217 |  main_pkg_dir : SourcePath,
-218 |  dist_dir? : SourcePath,
-219 |) -> Unit {
-    |...
-260 |async test "inject_build_entry_script inserts before head" {
-    |...
-281 |async test "inject_build_entry_script does not duplicate existing entry" {
-    |...
-292 |async test "default_build_html optionally links stylesheet" {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/templates/default/main/main.mbt'
- 2 |using @html {a, button, div, h1, h2, li, text, ul}
-   |...
- 5 |using @rabbita {new, simple_cell}
-   |...
- 8 |enum Msg {
-   |...
-13 |fn main {
-   |...
-
-```
-
-```mooncram
 $ run_moon_ide moon ide outline 'warren/templates/minimized/main.mbt'
 1 |using @rabbita { new, simple_cell }
   |...
@@ -490,147 +188,5 @@ $ run_moon_ide moon ide outline 'warren/templates/minimized/main.mbt'
   |...
 9 |fn main {
   |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/utils.mbt'
-2 |pub async fn copy(src~ : SourcePath, dst~ : SourcePath) -> Unit {
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/new_project.mbt'
-  2 |let new_project_name_placeholder = "__WARREN_PROJECT_NAME__"
-    |...
-  5 |let default_new_project_template = "default"
-    |...
-  8 |enum TemplateEntry {
-    |...
- 14 |let default_template_dir : TemplateEntry = Dir("", [
-    |...
- 28 |let minimized_template_dir : TemplateEntry = Dir("", [
-    |...
- 35 |fn render_new_project_file(content : String, project_name : String) -> String {
-    |...
- 40 |fn is_valid_project_name(name : String) -> Bool {
-    |...
- 52 |async fn write_new_project_file(
- 53 |  root : String,
- 54 |  relative_path : String,
- 55 |  content : String,
- 56 |) -> Unit {
-    |...
- 66 |async fn write_template_entry(
- 67 |  root : String,
- 68 |  parent : String,
- 69 |  entry : TemplateEntry,
- 70 |  project_name : String,
- 71 |) -> Unit {
-    |...
-101 |async fn new_project(dir : String, template_name : String) -> Unit {
-    |...
-134 |test "render_new_project_file replaces placeholders" {
-    |...
-142 |test "is_valid_project_name rejects empty and path-like names" {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/embbed_devtool.mbt'
-2 |#warnings("-unused_value")
-  |...
-7 |#warnings("-unused_value")
-  |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'warren/templates_bundle.mbt'
-  4 |let _embed_main_mbt : String =
-    |...
- 55 |let _embed_moon_pkg : String =
-    |...
- 69 |let _embed_index_html : String =
-    |...
- 85 |let _embed_styles_css : String =
-    |...
-179 |let _embed_moon_mod : String =
-    |...
-202 |let _embed_readme_md : String =
-    |...
-217 |let _embed_main_mbt_2 : String =
-    |...
-246 |let _embed_moon_mod_2 : String =
-    |...
-269 |let _embed_moon_pkg_2 : String =
-    |...
-283 |pub struct TemplatesFixture {
-    |...
-289 |pub struct DefaultFixture {
-    |...
-297 |pub struct MainFixture {
-    |...
-303 |pub struct PublicFixture {
-    |...
-309 |pub struct MinimizedFixture {
-    |...
-316 |pub let templates : TemplatesFixture = {
-    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'rabbita/js/cast.mbt'
-  6 |#cfg(target="js")
-  7 |pub(open) trait Cast {
-    |...
- 25 |#cfg(target="js")
- 26 |extern "js" fn checked_cast_string_ffi(value : Value) -> Nullable[String] =
-    |...
- 30 |#cfg(target="js")
- 31 |extern "js" fn checked_cast_int_ffi(value : Value) -> Nullable[Int] =
-    |...
- 35 |#cfg(target="js")
- 36 |extern "js" fn checked_cast_double_ffi(value : Value) -> Nullable[Double] =
-    |...
- 40 |#cfg(target="js")
- 41 |extern "js" fn checked_cast_bool_ffi(value : Value) -> Nullable[Bool] =
-    |...
- 45 |#cfg(target="js")
- 46 |extern "js" fn checked_cast_array_ffi(value : Value) -> Nullable[Array[Value]] =
-    |...
- 50 |#cfg(target="js")
- 51 |pub impl Cast for String with fn into(value) {
-    |...
- 56 |#cfg(target="js")
- 57 |pub impl Cast for String with fn from(value) {
-    |...
- 62 |#cfg(target="js")
- 63 |pub impl Cast for Int with fn into(value) {
-    |...
- 68 |#cfg(target="js")
- 69 |pub impl Cast for Int with fn from(value) {
-    |...
- 74 |#cfg(target="js")
- 75 |pub impl Cast for Double with fn into(value) {
-    |...
- 80 |#cfg(target="js")
- 81 |pub impl Cast for Double with fn from(value) {
-    |...
- 86 |#cfg(target="js")
- 87 |pub impl Cast for Bool with fn into(value) {
-    |...
- 92 |#cfg(target="js")
- 93 |pub impl Cast for Bool with fn from(value) {
-    |...
- 98 |#cfg(target="js")
- 99 |pub impl[A : Cast] Cast for Array[A] with fn into(value) {
-    |...
-113 |#cfg(target="js")
-114 |pub impl[A : Cast] Cast for Array[A] with fn from(value) {
-    |...
 
 ```

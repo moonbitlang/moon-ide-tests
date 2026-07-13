@@ -46,7 +46,7 @@ fn powershell_single_quote(arg : String) -> String {
 fn replace_all(text : String, old : String, new : String) -> String {
   let mut result = text
   while result.contains(old) {
-    result = result.replace(old=old, new=new)
+    result = result.replace(old~, new~)
   }
   result
 }
@@ -127,7 +127,8 @@ fn test_repo_root_arg() -> String {
 fn run_moon_ide_command(invocation : String) -> String {
   match current_platform.val {
     TestPlatform::Unix => "$ run_moon_ide \{invocation}"
-    TestPlatform::Windows => "$ run_moon_ide \{test_repo_root_arg()} \{invocation}"
+    TestPlatform::Windows =>
+      "$ run_moon_ide \{test_repo_root_arg()} \{invocation}"
   }
 }
 
@@ -192,8 +193,68 @@ fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
 }
 
 ///|
-fn render_refs_file(cases : Array[TestCase]) -> CramFile? {
-  render_symbol_file("find-references.mooncram.md", "find-references", cases, test_case => {
+/// find-references and rename output can list every reference in the
+/// repository, so a monolithic suite file grows past what Moon Cram's
+/// markdown parser handles (~190 KB overflows its stack on Windows).
+/// These suites emit one .mooncram.md per test case instead.
+fn split_case_file_name(
+  prefix : String,
+  test_case : TestCase,
+  used : @hashset.HashSet[String],
+) -> String {
+  let sanitized = StringBuilder::new()
+  for ch in location(test_case) {
+    if ch == '/' || ch == '\\' || ch == ':' {
+      sanitized.write_char('-')
+    } else {
+      sanitized.write_char(ch)
+    }
+  }
+  let base = "\{prefix}-\{sanitized}-\{test_case.sym}"
+  let mut name = "\{base}.mooncram.md"
+  let mut suffix = 2
+  while used.contains(name) {
+    name = "\{base}-\{suffix}.mooncram.md"
+    suffix += 1
+  }
+  used.add(name)
+  name
+}
+
+///|
+fn render_split_symbol_files(
+  prefix : String,
+  loc_cases : Array[TestCase],
+  to_command : (TestCase) -> String,
+) -> Array[CramFile] {
+  let files = Array::new()
+  let used : @hashset.HashSet[String] = @hashset.HashSet([])
+  let seen : @hashset.HashSet[String] = @hashset.HashSet([])
+  for test_case in loc_cases {
+    let command = to_command(test_case)
+    if seen.contains(command) {
+      continue
+    }
+    seen.add(command)
+    let sb = StringBuilder::new()
+    append_markdown_header(
+      sb,
+      current_repo_slug.val,
+      "\{prefix} \{test_case.sym} \{location(test_case)}",
+    )
+    append_fixed_header(sb)
+    append_mooncram_block(sb, command)
+    files.push(CramFile::{
+      name: split_case_file_name(prefix, test_case, used),
+      content: sb.to_string(),
+    })
+  }
+  files
+}
+
+///|
+fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
+  render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
       "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
     )
@@ -210,8 +271,8 @@ fn rename_target(symbol : String) -> String {
 }
 
 ///|
-fn render_rename_file(cases : Array[TestCase]) -> CramFile? {
-  render_symbol_file("rename.mooncram.md", "rename", cases, test_case => {
+fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
+  render_split_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
       "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}",
     )
@@ -249,8 +310,12 @@ fn render_cram_files(
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
   append_if_some(files, render_peek_file(result.loc_cases))
-  append_if_some(files, render_refs_file(result.loc_cases))
-  append_if_some(files, render_rename_file(result.loc_cases))
+  for file in render_refs_files(result.loc_cases) {
+    files.push(file)
+  }
+  for file in render_rename_files(result.loc_cases) {
+    files.push(file)
+  }
   files
 }
 

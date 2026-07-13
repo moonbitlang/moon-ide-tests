@@ -17,58 +17,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Bucket' --loc 'src/types.mbt:17:13'
-Definition found at file <WORKDIR>/src/types.mbt
-   | // See the License for the specific language governing permissions and (escaped)
-   | // limitations under the License. (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// 桶结构，包含键值对信息和链表指针 (escaped)
-17 | priv struct Bucket[K, V] { (escaped)
-   |             ^^^^^^ (escaped)
-   |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
-   |   key : K // 键 (escaped)
-   |   mut value : V // 值 (escaped)
-   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
-   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
-   | priv struct IndexMapCore[K, V] { (escaped)
-   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
-   |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
-   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
-   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'hash' --loc 'src/types.mbt:18:3'
-Definition found at file <WORKDIR>/src/types.mbt
-   | // limitations under the License. (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// 桶结构，包含键值对信息和链表指针 (escaped)
-   | priv struct Bucket[K, V] { (escaped)
-18 |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
-   |   ^^^^ (escaped)
-   |   key : K // 键 (escaped)
-   |   mut value : V // 值 (escaped)
-   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
-   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
-   | priv struct IndexMapCore[K, V] { (escaped)
-   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
-   |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
-   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
-   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
-   |   mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问 (escaped)
-```
-
-```mooncram
 $ run_moon_ide moon ide peek-def 'Default_init_capacity' --loc 'src/IndexMap.mbt:2:7'
 Definition found at file <WORKDIR>/src/IndexMap.mbt
   | ///| (escaped)
@@ -157,4 +105,56 @@ Definition found at file <WORKDIR>/src/types.mbt
    |   mut growAt : Int // 扩容阈值 (escaped)
    |   mut key_to_idx : @hashmap.HashMap[K, Int] // 键到索引的直接映射，用于O(1)查找 (escaped)
    | } (escaped)
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Bucket' --loc 'src/types.mbt:17:13'
+Definition found at file <WORKDIR>/src/types.mbt
+   | // See the License for the specific language governing permissions and (escaped)
+   | // limitations under the License. (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// 桶结构，包含键值对信息和链表指针 (escaped)
+17 | priv struct Bucket[K, V] { (escaped)
+   |             ^^^^^^ (escaped)
+   |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
+   |   key : K // 键 (escaped)
+   |   mut value : V // 值 (escaped)
+   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
+   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
+   | priv struct IndexMapCore[K, V] { (escaped)
+   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
+   |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
+   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
+   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'hash' --loc 'src/types.mbt:18:3'
+Definition found at file <WORKDIR>/src/types.mbt
+   | // limitations under the License. (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// 桶结构，包含键值对信息和链表指针 (escaped)
+   | priv struct Bucket[K, V] { (escaped)
+18 |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
+   |   ^^^^ (escaped)
+   |   key : K // 键 (escaped)
+   |   mut value : V // 值 (escaped)
+   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
+   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
+   | } (escaped)
+   |  (escaped)
+   | ///| (escaped)
+   | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
+   | priv struct IndexMapCore[K, V] { (escaped)
+   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
+   |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
+   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
+   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
+   |   mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问 (escaped)
 ```

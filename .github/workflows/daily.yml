@@ -67,6 +67,7 @@ jobs:
           mkdir -p .daily-test
           moon cram update --replace --assume-yes --cram-compat tests/unix \
             > .daily-test/unix-cram-update.log 2>&1
+          scripts/escape-cram-empty-parens.sh tests/unix
 
       - name: Run Unix cram tests
         id: unix-cram
