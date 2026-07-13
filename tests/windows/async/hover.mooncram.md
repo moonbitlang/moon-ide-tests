@@ -1,64 +1,179 @@
 # async hover
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'mkdir' --loc 'src\fs\dir.mbt:24:14'
-///
-/// If `recursive=true` (`false` by default), non-existing parent directories
-/// of `path` will be recursively created, too.
-pub async fn mkdir(
-             ^^^^^
-             ```moonbit
-             async fn mkdir(path : StringView, permission? : Int, recursive? : Bool) -> Unit
-             ```
-             ---
-             
-              Create a directory at `path`.
-             
-              The Unix-style permission of the created directory can be set in `permission`,
-              the default value is `0o755` (anyone can read and traverse, only owner can write).
-              The `permission` parameter is currently ignored on Windows.
-             
-              If `recursive=true` (`false` by default), non-existing parent directories
-              of `path` will be recursively created, too.
-  path : StringView,
-  permission? : Int = 0o755,
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'path' --loc 'src\fs\dir.mbt:25:3'
-/// If `recursive=true` (`false` by default), non-existing parent directories
-/// of `path` will be recursively created, too.
-pub async fn mkdir(
-  path : StringView,
-  ^^^^
-  ```moonbit
-  StringView
-  ```
-  permission? : Int = 0o755,
-  recursive? : Bool = false,
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'File' --loc 'src\fs\file.mbt:16:8'
-// limitations under the License.
-
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'log' --loc 'src\aqueue\blocking_test.mbt:17:7'
 ///|
-struct File {
-       ^^^^
+async test "blocking unbuffered" {
+  let log = []
+      ^^^
+      ```moonbit
+      Array[String]
+      ```
+  @async.with_task_group() <| group => {
+    let q = @async.Queue(kind=Blocking(1))
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'with_task_group' --loc 'src\aqueue\blocking_test.mbt:18:10'
+///|
+async test "blocking unbuffered" {
+  let log = []
+  @async.with_task_group() <| group => {
+  ^^^^^^^^^^^^^^^^^^^^^^
+  ```moonbit
+  async fn[X] @moonbitlang/async.with_task_group(f : async (@async.TaskGroup[X]) -> X) -> X
+  ```
+  ---
+  
+   `with_task_group(f)` creates a new task group and run `f` with the new group.
+   `f` itself will be run in a child task of the new group.
+   `with_task_group` exits after all the whole group terminates,
+   which means all child tasks in the group have terminated, including `f`.
+  
+   If all children task terminate successfully,
+   `with_task_group` will return the result of `f`.
+    let q = @async.Queue(kind=Blocking(1))
+    group.spawn_bg() <| () => {
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'mkfifo' --loc 'src\fs\named_pipe_test.mbt:18:15'
+No hover information found for symbol 'mkfifo' at src\fs\named_pipe_test.mbt:18:15
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'path' --loc 'src\fs\named_pipe_test.mbt:18:22'
+No hover information found for symbol 'path' at src\fs\named_pipe_test.mbt:18:22
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'IoHandle' --loc 'src\internal\event_loop\io_unix.mbt:17:14'
+No hover information found for symbol 'IoHandle' at src\internal\event_loop\io_unix.mbt:17:14
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'wait_read' --loc 'src\internal\event_loop\io_unix.mbt:17:24'
+No hover information found for symbol 'wait_read' at src\internal\event_loop\io_unix.mbt:17:24
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'kind_of_fd_sync_ffi' --loc 'src\internal\event_loop\stdio.mbt:17:15'
+No hover information found for symbol 'kind_of_fd_sync_ffi' at src\internal\event_loop\stdio.mbt:17:15
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'fd' --loc 'src\internal\event_loop\stdio.mbt:17:35'
+No hover information found for symbol 'fd' at src\internal\event_loop\stdio.mbt:17:35
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\js_async\unimplemented.mbt:17:5'
+///|
+#coverage.skip
+let _ignore_unused_import : Unit = {
+    ^^^^^^^^^^^^^^^^^^^^^
+    ```moonbit
+    Unit
+    ```
+    ---
+    
+  ignore(@coroutine.spawn)
+  ignore(@event_loop.Timer::new)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'spawn' --loc 'src\js_async\unimplemented.mbt:18:21'
+///|
+#coverage.skip
+let _ignore_unused_import : Unit = {
+  ignore(@coroutine.spawn)
+         ^^^^^^^^^^^^^^^^
+         ```moonbit
+         fn @moonbitlang/async/internal/coroutine.spawn(f : async () -> Unit) -> @coroutine.Coroutine
+         ```
+  ignore(@event_loop.Timer::new)
+}
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'buf' --loc 'src\pipe\read_exactly_test.mbt:17:7'
+///|
+async test "read_exactly" {
+  let buf = StringBuilder::new()
+      ^^^
+      ```moonbit
+      StringBuilder
+      ```
+  fn log(msg) {
+    buf..write_string(msg).write_char('\n')
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'new' --loc 'src\pipe\read_exactly_test.mbt:17:28'
+///|
+async test "read_exactly" {
+  let buf = StringBuilder::new()
+                           ^^^
+                           ```moonbit
+                           fn StringBuilder::new(size_hint? : Int) -> StringBuilder
+                           ```
+                           ---
+                           
+                            Creates a new string builder with an optional initial capacity hint.
+                           
+                            Parameters:
+                           
+                            * `size_hint` : An optional initial capacity hint for the internal buffer. If
+                            less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes, 
+                            not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
+                           
+                            Returns a new `StringBuilder` instance with the specified initial capacity.
+  fn log(msg) {
+    buf..write_string(msg).write_char('\n')
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\pipe\unimplemented_test.mbt:17:5'
+No hover information found for symbol '_ignore_unused_import' at src\pipe\unimplemented_test.mbt:17:5
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17'
+No hover information found for symbol 'sleep' at src\pipe\unimplemented_test.mbt:18:17
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'ReadFromProcess' --loc 'src\process\redirect.mbt:17:8'
+///|
+/// A temporary pipe used to read output from a spawned process
+struct ReadFromProcess {
+       ^^^^^^^^^^^^^^^
        ```moonbit
-       struct File {
+       struct ReadFromProcess {
          io: @event_loop.IoHandle
          read_buf: @io.ReaderBuffer
        }
        ```
+       ---
+       
+        A temporary pipe used to read output from a spawned process
   io : @event_loop.IoHandle
   read_buf : @io.ReaderBuffer
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'io' --loc 'src\fs\file.mbt:17:3'
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'io' --loc 'src\process\redirect.mbt:18:3'
 ///|
-struct File {
+/// A temporary pipe used to read output from a spawned process
+struct ReadFromProcess {
   io : @event_loop.IoHandle
   ^^
   ```moonbit
@@ -69,108 +184,25 @@ struct File {
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'kind' --loc 'src\fs\utils.mbt:19:14'
-/// Get the kind of a file at `path`.
-/// If `path` is a symbolic link and `follow_symlink` is `true` (`true` by default),
-/// the kind of the target of the link will be returned.
-pub async fn kind(path : StringView, follow_symlink? : Bool = true) -> FileKind {
-             ^^^^
-             ```moonbit
-             async fn kind(path : StringView, follow_symlink? : Bool) -> FileKind
-             ```
-             ---
-             
-              Get the kind of a file at `path`.
-              If `path` is a symbolic link and `follow_symlink` is `true` (`true` by default),
-              the kind of the target of the link will be returned.
-  @event_loop.file_kind_by_path(
-    path,
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9'
+No hover information found for symbol 'unimplemented' at src\socket\unimplemented.mbt:19:9
+[1]
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'path' --loc 'src\fs\utils.mbt:19:19'
-/// Get the kind of a file at `path`.
-/// If `path` is a symbolic link and `follow_symlink` is `true` (`true` by default),
-/// the kind of the target of the link will be returned.
-pub async fn kind(path : StringView, follow_symlink? : Bool = true) -> FileKind {
-                  ^^^^
-                  ```moonbit
-                  StringView
-                  ```
-  @event_loop.file_kind_by_path(
-    path,
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'pipe' --loc 'src\socket\unimplemented.mbt:20:14'
+No hover information found for symbol 'pipe' at src\socket\unimplemented.mbt:20:14
+[1]
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'FileIdentity' --loc 'src\fs\watch.mbt:16:25'
-// limitations under the License.
-
-///|
-using @event_loop {type FileIdentity}
-                        ^^^^^^^^^^^^
-                        ```moonbit
-                        #valtype
-                        struct @event_loop.FileIdentity {
-                          dev_id: UInt64
-                          file_id: UInt64
-                        } derive(Eq, Hash)
-                        ```
-
-///|
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\tls\unimplemented_test.mbt:17:5'
+No hover information found for symbol '_ignore_unused_import' at src\tls\unimplemented_test.mbt:17:5
+[1]
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'WatchedFile' --loc 'src\fs\watch.mbt:19:13'
-using @event_loop {type FileIdentity}
-
-///|
-priv struct WatchedFile {
-            ^^^^^^^^^^^
-            ```moonbit
-            struct WatchedFile {
-              wd: @moonbitlang/async/types.Fd
-              file_id: @event_loop.FileIdentity
-              paths: @set.Set[(@event_loop.FileIdentity, String)]
-              is_dir: Bool
-              children: Map[String, @event_loop.FileIdentity]
-              mut modified: Bool
-              dirty_children: Map[String, @event_loop.FileIdentity]
-            }
-            ```
-  wd : @fd_util.Fd
-  file_id : FileIdentity
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'tmpdir_seed' --loc 'src\fs\tmpdir.mbt:16:5'
-// limitations under the License.
-
-///|
-let tmpdir_seed : @random.Rand = {
-    ^^^^^^^^^^^
-    ```moonbit
-    @random.Rand
-    ```
-    ---
-    
-  let seed = Buffer()
-  let now = @env.now()
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'Rand' --loc 'src\fs\tmpdir.mbt:16:22'
-// limitations under the License.
-
-///|
-let tmpdir_seed : @random.Rand = {
-                  ^^^^^^^^^^^^
-                  ```moonbit
-                  type @random.Rand
-                  ```
-                  ---
-                  
-                   `Rand` is a pseudo-random number generator (PRNG) that provides various
-                   methods to generate random numbers of different types.
-  let seed = Buffer()
-  let now = @env.now()
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'sleep' --loc 'src\tls\unimplemented_test.mbt:18:17'
+No hover information found for symbol 'sleep' at src\tls\unimplemented_test.mbt:18:17
+[1]
 ```
