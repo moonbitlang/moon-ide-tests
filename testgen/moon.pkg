@@ -4,7 +4,7 @@ import {
   "moonbitlang/core/hashset",
   "moonbitlang/core/string",
   "moonbitlang/parser",
-  "moonbitlang/parser/basic",
+  "moonbitlang/lexer/basic",
   "moonbitlang/parser/syntax",
   "moonbitlang/x/fs",
   "moonbitlang/x/path",
