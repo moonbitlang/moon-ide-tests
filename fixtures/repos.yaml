@@ -1,10 +1,4 @@
 repos:
-  - slug: argparser
-    path: fixtures/repos/argparser
-    url: https://github.com/moonbit-community/ArgParser
-    branch: main
-    max_files: 5
-    max_per_file: 2
   - slug: async
     path: fixtures/repos/async
     url: https://github.com/moonbitlang/async

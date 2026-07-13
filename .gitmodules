@@ -1,7 +1,3 @@
-[submodule "fixtures/repos/argparser"]
-	path = fixtures/repos/argparser
-	url = https://github.com/moonbit-community/ArgParser
-	branch = main
 [submodule "fixtures/repos/indexmap"]
 	path = fixtures/repos/indexmap
 	url = https://github.com/moonbit-community/IndexMap
