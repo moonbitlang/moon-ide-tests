@@ -17,6 +17,46 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
+$ run_moon_ide moon ide hover 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
+///|
+/// Test key names with various characters
+test "key name variations" {
+  let key_variations_toml =
+      ^^^^^^^^^^^^^^^^^^^
+      ```moonbit
+      String
+      ```
+    #|bare_key = "value"
+    #|bare-key = "value"
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'parse' --loc 'additional_official_tests_test.mbt:17:11'
+    #|"ʎǝʞ" = "value"
+    #|
+  debug_inspect(
+    @toml.parse(key_variations_toml),
+    ^^^^^^^^^^^
+    ```moonbit
+    fn @bobzhang/toml.parse(input : String) -> @toml.TomlValue raise
+    ```
+    ---
+    
+     Parse a TOML document and return its root table as a `TomlValue`.
+    
+     On success the result is always a `TomlTable` whose contents reflect the
+     document's top-level keys, `[section]` headers, and `[[array]]` of
+     tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
+     escapes, inline-table newlines) are accepted.
+    
+     On any lexical or syntactic error, `parse` raises with a message
+     containing the source location. Wrap the call in `try?` to receive a
+     `Result[TomlValue, Error]` instead.
+    content=(
+      #|TomlTable(
+```
+
+```mooncram
 $ run_moon_ide moon ide hover 'version' --loc 'cmd/toml/main.mbt:2:5'
 ///|
 let version : String = "0.2.3"
@@ -45,141 +85,265 @@ fn toml_command() -> @argparse.Command {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'TestResult' --loc 'e2e/runner.mbt:7:12'
-/// `failures` carries one entry per failing case (typically including the
-/// fixture path and a short reason) so that the test harness can print a
-/// summary at the end without re-walking the corpus.
-pub struct TestResult {
-           ^^^^^^^^^^
+$ run_moon_ide moon ide hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
+/// Values are stored as their original string form. The parser preserves
+/// the spelling supplied in the TOML source; it does not normalize or
+/// validate the underlying calendar arithmetic.
+pub(all) enum TomlDateTime {
+              ^^^^^^^^^^^^
+              ```moonbit
+              enum TomlDateTime {
+                OffsetDateTime(String)
+                LocalDateTime(String)
+                LocalDate(String)
+                LocalTime(String)
+              } derive(Eq, @debug.Debug)
+              ```
+              ---
+              
+               TOML datetime variants (RFC 3339 subset).
+              
+               TOML distinguishes four kinds of datetime literals:
+               - `OffsetDateTime` — full date + time + UTC offset (e.g. `1979-05-27T07:32:00Z`)
+               - `LocalDateTime` — date + time, no offset (e.g. `1979-05-27T07:32:00`)
+               - `LocalDate` — date only (e.g. `1979-05-27`)
+               - `LocalTime` — time only (e.g. `07:32:00`)
+              
+               Values are stored as their original string form. The parser preserves
+               the spelling supplied in the TOML source; it does not normalize or
+               validate the underlying calendar arithmetic.
+  OffsetDateTime(String)
+  LocalDateTime(String)
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
+/// the spelling supplied in the TOML source; it does not normalize or
+/// validate the underlying calendar arithmetic.
+pub(all) enum TomlDateTime {
+  OffsetDateTime(String)
+  ^^^^^^^^^^^^^^
+  ```moonbit
+  (String) -> TomlDateTime
+  ```
+  LocalDateTime(String)
+  LocalDate(String)
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
+///|
+/// Extended datetime tests for improved coverage
+test "test TomlDateTime types and equality" {
+  let offset_dt1 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
+      ^^^^^^^^^^
+      ```moonbit
+      @datetime.TomlDateTime
+      ```
+  let offset_dt2 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
+  let offset_dt3 = @datetime.OffsetDateTime("1980-05-27T07:32:00Z")
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
+///|
+/// Extended datetime tests for improved coverage
+test "test TomlDateTime types and equality" {
+  let offset_dt1 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
+                             ^^^^^^^^^^^^^^
+                             ```moonbit
+                             (String) -> @datetime.TomlDateTime
+                             ```
+  let offset_dt2 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
+  let offset_dt3 = @datetime.OffsetDateTime("1980-05-27T07:32:00Z")
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'tokens' --loc 'internal/tokenize/lexer_test.mbt:4:7'
+///|
+/// Tests for the TOML lexer
+test "tokenize simple key-value" {
+  let tokens = @tokenize.tokenize(
+      ^^^^^^
+      ```moonbit
+      Array[@tokenize.Token]
+      ```
+    (
+      #|key = "value"
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
+///|
+/// Tests for the TOML lexer
+test "tokenize simple key-value" {
+  let tokens = @tokenize.tokenize(
+               ^^^^^^^^^^^^^^^^^^
+               ```moonbit
+               fn @bobzhang/toml/internal/tokenize.tokenize(input : String) -> Array[@tokenize.Token] raise
+               ```
+               ---
+               
+                Tokenize entire input
+    (
+      #|key = "value"
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
+/// `adjacent` (no gap) when one's `end` equals the other's `start`, which
+/// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
+/// (a nested array literal opening a normal table header).
+pub(all) struct Loc {
+                ^^^
+                ```moonbit
+                struct Loc {
+                  start: @lexer.Position
+                  end: @lexer.Position
+                } derive(Eq, @debug.Debug)
+                ```
+                ---
+                
+                 Half-open source span `[start, end)` measured in lexer `Position`s.
+                
+                 `start` is the position of the first character of the lexeme and `end`
+                 is the position immediately after its last character. Two locations are
+                 `adjacent` (no gap) when one's `end` equals the other's `start`, which
+                 the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
+                 (a nested array literal opening a normal table header).
+  start : @lexer.Position
+  end : @lexer.Position
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'start' --loc 'internal/tokenize/token.mbt:10:3'
+/// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
+/// (a nested array literal opening a normal table header).
+pub(all) struct Loc {
+  start : @lexer.Position
+  ^^^^^
+  ```moonbit
+  @lexer.Position
+  ```
+  end : @lexer.Position
+} derive(Eq, Debug)
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'Parser' --loc 'parser.mbt:3:4'
+///|
+/// Skip newline tokens
+fn Parser::skip_newlines(self : Parser) -> Unit {
+   ^^^^^^
+   ```moonbit
+   struct Parser {
+     tokens: Array[@tokenize.Token]
+     mut position: Int
+   }
+   ```
+   ---
+   
+    Parser state (will implement methods later)
+  let next_view = for view = self.view() {
+    match view {
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'skip_newlines' --loc 'parser.mbt:3:12'
+///|
+/// Skip newline tokens
+fn Parser::skip_newlines(self : Parser) -> Unit {
+           ^^^^^^^^^^^^^
            ```moonbit
-           struct TestResult {
-             passed: Int
-             failed: Int
-             failures: Array[String]
-           }
+           fn Parser::skip_newlines(self : Parser) -> Unit
            ```
            ---
            
-            Aggregate of a test-suite run: counts and per-failure messages.
-           
-            `failures` carries one entry per failing case (typically including the
-            fixture path and a short reason) so that the test harness can print a
-            summary at the end without re-walking the corpus.
-  passed : Int
-  failed : Int
+            Skip newline tokens
+  let next_view = for view = self.view() {
+    match view {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'passed' --loc 'e2e/runner.mbt:8:3'
-/// fixture path and a short reason) so that the test harness can print a
-/// summary at the end without re-walking the corpus.
-pub struct TestResult {
-  passed : Int
-  ^^^^^^
-  ```moonbit
-  Int
-  ```
-  failed : Int
-  failures : Array[String]
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'to_test_json' --loc 'e2e/convert.mbt:5:8'
-/// Convert a TomlValue to the toml-test JSON format.
-/// Leaf values become {"type": "...", "value": "..."}
-/// Tables become plain JSON objects, arrays become JSON arrays.
-pub fn to_test_json(value : @toml.TomlValue) -> Json {
-       ^^^^^^^^^^^^
-       ```moonbit
-       fn to_test_json(value : @toml.TomlValue) -> Json
-       ```
-       ---
-       
-        Convert a TomlValue to the toml-test JSON format.
-        Leaf values become {"type": "...", "value": "..."}
-        Tables become plain JSON objects, arrays become JSON arrays.
-  match value {
-    TomlString(s) => typed_value("string", s) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'value' --loc 'e2e/convert.mbt:5:21'
-/// Convert a TomlValue to the toml-test JSON format.
-/// Leaf values become {"type": "...", "value": "..."}
-/// Tables become plain JSON objects, arrays become JSON arrays.
-pub fn to_test_json(value : @toml.TomlValue) -> Json {
-                    ^^^^^
-                    ```moonbit
-                    @toml.TomlValue
-                    ```
-  match value {
-    TomlString(s) => typed_value("string", s) (escaped)
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'files' --loc 'e2e/e2e_test.mbt:3:7'
+$ run_moon_ide moon ide hover 'tokens' --loc 'parser_wbtest.mbt:7:7'
 ///|
-async test "valid toml-test suite" {
-  let files : Array[String] = []
-      ^^^^^
-      ```moonbit
-      Array[String]
-      ```
-  @e2e.collect_toml_files("e2e/testdata/valid", files)
-  files.sort()
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'collect_toml_files' --loc 'e2e/e2e_test.mbt:4:8'
-///|
-async test "valid toml-test suite" {
-  let files : Array[String] = []
-  @e2e.collect_toml_files("e2e/testdata/valid", files)
-  ^^^^^^^^^^^^^^^^^^^^^^^
-  ```moonbit
-  fn @bobzhang/toml-e2e.collect_toml_files(dir : String, files : Array[String]) -> Unit raise @fs.IOError
-  ```
-  ---
-  
-   Recursively collect all .toml files in a directory.
-  files.sort()
-  let mut passed = 0
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'result' --loc 'e2e/known_failures_test.mbt:10:7'
-///|
-test "fixed: [a-a-a] table header parses correctly" {
-  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
+test "parse_dotted_key - simple identifier" {
+  // Test parsing a simple identifier key
+  let tokens = @tokenize.tokenize("simple")
       ^^^^^^
       ```moonbit
-      Result[@toml.TomlValue, Error]
+      Array[@tokenize.Token]
       ```
-    err => Err(err)
-  } noraise {
+  let parser = Parser::Parser(tokens)
+  let result = parser.parse_dotted_key()
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'parse' --loc 'e2e/known_failures_test.mbt:10:26'
+$ run_moon_ide moon ide hover 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 ///|
-test "fixed: [a-a-a] table header parses correctly" {
-  let result = try @toml.parse("[a-a-a]\n_ = false\n") catch {
-                   ^^^^^^^^^^^
-                   ```moonbit
-                   fn @bobzhang/toml.parse(input : String) -> @toml.TomlValue raise
-                   ```
-                   ---
-                   
-                    Parse a TOML document and return its root table as a `TomlValue`.
-                   
-                    On success the result is always a `TomlTable` whose contents reflect the
-                    document's top-level keys, `[section]` headers, and `[[array]]` of
-                    tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
-                    escapes, inline-table newlines) are accepted.
-                   
-                    On any lexical or syntactic error, `parse` raises with a message
-                    containing the source location. Wrap the call in `try?` to receive a
-                    `Result[TomlValue, Error]` instead.
-    err => Err(err)
-  } noraise {
+test "parse_dotted_key - simple identifier" {
+  // Test parsing a simple identifier key
+  let tokens = @tokenize.tokenize("simple")
+               ^^^^^^^^^^^^^^^^^^
+               ```moonbit
+               fn @bobzhang/toml/internal/tokenize.tokenize(input : String) -> Array[@tokenize.Token] raise
+               ```
+               ---
+               
+                Tokenize entire input
+  let parser = Parser::Parser(tokens)
+  let result = parser.parse_dotted_key()
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
+///|
+fn parse_expect_to_fail(input : String) -> String {
+   ^^^^^^^^^^^^^^^^^^^^
+   ```moonbit
+   fn parse_expect_to_fail(input : String) -> String
+   ```
+  try @toml.parse(input) catch {
+    e => {
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'input' --loc 'test_utils_test.mbt:2:25'
+///|
+fn parse_expect_to_fail(input : String) -> String {
+                        ^^^^^
+                        ```moonbit
+                        String
+                        ```
+  try @toml.parse(input) catch {
+    e => {
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
+///|
+/// Helper function to escape strings according to TOML spec
+fn escape_toml_string(s : String) -> String {
+   ^^^^^^^^^^^^^^^^^^
+   ```moonbit
+   fn escape_toml_string(s : String) -> String
+   ```
+   ---
+   
+    Helper function to escape strings according to TOML spec
+  let result = StringBuilder()
+  for char in s {
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 's' --loc 'toml_to_string.mbt:3:23'
+///|
+/// Helper function to escape strings according to TOML spec
+fn escape_toml_string(s : String) -> String {
+                      ^
+                      ```moonbit
+                      String
+                      ```
+  let result = StringBuilder()
+  for char in s {
 ```

@@ -3,7 +3,8 @@ name = "username/testgen"
 version = "0.1.0"
 
 import {
-  "moonbitlang/parser@0.3.2",
+  "moonbitlang/lexer@0.3.9",
+  "moonbitlang/parser@0.3.9",
   "moonbitlang/x@0.4.43",
   "Yoorkin/ArgParser@0.2.1",
 }

@@ -1,7 +1,3 @@
-[submodule "fixtures/repos/argparser"]
-	path = fixtures/repos/argparser
-	url = https://github.com/moonbit-community/ArgParser
-	branch = main
 [submodule "fixtures/repos/indexmap"]
 	path = fixtures/repos/indexmap
 	url = https://github.com/moonbit-community/IndexMap
@@ -21,4 +17,16 @@
 [submodule "fixtures/repos/uri"]
 	path = fixtures/repos/uri
 	url = https://github.com/moonbit-community/uri
+	branch = main
+[submodule "fixtures/repos/async"]
+	path = fixtures/repos/async
+	url = https://github.com/moonbitlang/async
+	branch = main
+[submodule "fixtures/repos/core"]
+	path = fixtures/repos/core
+	url = https://github.com/moonbitlang/core
+	branch = main
+[submodule "fixtures/repos/rabbita"]
+	path = fixtures/repos/rabbita
+	url = https://github.com/moonbit-community/rabbita
 	branch = main

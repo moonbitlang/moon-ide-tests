@@ -54,9 +54,11 @@ Moon Cram PowerShell adapter:
 moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows
 ```
 
-The Windows suite omits `sqlparser` `find-references` and `rename` snapshots
-because those two generated files overflow Moon Cram's Windows markdown parser.
-The Unix suite keeps the full `sqlparser` coverage.
+The `find-references` and `rename` suites are generated as one
+`.mooncram.md` file per test case (for example
+`find-references-src-ast.mbt-2-24-pretty_print.mooncram.md`), because a
+monolithic suite file can grow past what Moon Cram's markdown parser
+handles — around 190 KB used to overflow its stack on Windows.
 
 ## Updating Baselines
 
@@ -72,8 +74,16 @@ Refresh expected Moon Cram output when the `moon ide` behavior changes:
 
 ```sh
 moon cram update --replace --assume-yes --cram-compat tests/unix
+scripts/escape-cram-empty-parens.sh tests/unix
 moon cram test --cram-compat tests/unix
 ```
+
+`escape-cram-empty-parens.sh` works around a `moon cram` round-trip bug:
+`moon cram update` writes expected-output lines ending in ` ()` verbatim, but
+the snapshot parser rejects them (the trailing parens parse as an annotation
+with an empty rule name). The script appends the `(escaped)` annotation, which
+parses and still matches the raw output. `update-windows-tests.ps1` applies the
+same normalization to the Windows suite.
 
 Generated Moon Cram files use four-backtick outer fences so expected IDE output
 can safely contain Markdown examples with triple-backtick fences.

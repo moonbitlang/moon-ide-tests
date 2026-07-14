@@ -1,37 +1,49 @@
 repos:
-  - slug: argparser
-    path: fixtures/repos/argparser
-    url: https://github.com/moonbit-community/ArgParser
+  - slug: async
+    path: fixtures/repos/async
+    url: https://github.com/moonbitlang/async
     branch: main
-    max_files: 5
+    max_files: 10
+    max_per_file: 2
+  - slug: core
+    path: fixtures/repos/core
+    url: https://github.com/moonbitlang/core
+    branch: main
+    max_files: 10
     max_per_file: 2
   - slug: indexmap
     path: fixtures/repos/indexmap
     url: https://github.com/moonbit-community/IndexMap
     branch: master
-    max_files: 5
+    max_files: 10
     max_per_file: 2
   - slug: json
     path: fixtures/repos/json
     url: https://github.com/moonbit-community/json
     branch: master
-    max_files: 5
+    max_files: 10
+    max_per_file: 2
+  - slug: rabbita
+    path: fixtures/repos/rabbita
+    url: https://github.com/moonbit-community/rabbita
+    branch: main
+    max_files: 10
     max_per_file: 2
   - slug: sqlparser
     path: fixtures/repos/sqlparser
     url: https://github.com/moonbit-community/sqlparser
     branch: main
-    max_files: 5
+    max_files: 10
     max_per_file: 2
   - slug: toml-parser
     path: fixtures/repos/toml-parser
     url: https://github.com/moonbit-community/toml-parser
     branch: main
-    max_files: 5
+    max_files: 10
     max_per_file: 2
   - slug: uri
     path: fixtures/repos/uri
     url: https://github.com/moonbit-community/uri
     branch: main
-    max_files: 5
+    max_files: 10
     max_per_file: 2

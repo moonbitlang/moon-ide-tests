@@ -369,15 +369,7 @@ fn should_skip_dir(name : String) -> Bool {
 }
 
 ///|
-fn walk_dir(
-  abs_dir : String,
-  rel_dir : String,
-  out : Array[String],
-  max_files : Int,
-) -> Unit {
-  if max_files > 0 && out.length() >= max_files {
-    return
-  }
+fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
   let entries = try @fs.read_dir(abs_dir) catch {
     _ => []
   } noraise {
@@ -398,12 +390,9 @@ fn walk_dir(
     }
     if is_dir {
       if !should_skip_dir(name) {
-        walk_dir(abs_path, rel_path, out, max_files)
+        walk_dir(abs_path, rel_path, out)
       }
       continue
-    }
-    if max_files > 0 && out.length() >= max_files {
-      return
     }
     let is_file = try @fs.is_file(abs_path) catch {
       _ => false
@@ -417,19 +406,132 @@ fn walk_dir(
 }
 
 ///|
-fn collect_files(project_root : String, max_files : Int) -> Array[String] {
+/// String::replace only rewrites the first occurrence, so replace each
+/// separator character individually: Windows relative paths contain one
+/// backslash per directory level.
+fn normalize_separators(path : String) -> String {
+  let sb = StringBuilder::new()
+  for ch in path {
+    if ch == '\\' {
+      sb.write_char('/')
+    } else {
+      sb.write_char(ch)
+    }
+  }
+  sb.to_string()
+}
+
+///|
+/// FNV-1a hash of the slug-seeded, separator-normalized relative path.
+/// Selection must be identical across platforms and independent of
+/// directory read order, so it may depend only on the file set itself.
+fn selection_key(seed : String, rel_path : String) -> UInt {
+  let mut hash : UInt = 2166136261
+  fn mix(text : String) -> Unit {
+    for ch in text {
+      hash = (hash ^ ch.to_int().reinterpret_as_uint()) * 16777619
+    }
+  }
+
+  mix(seed)
+  mix("|")
+  mix(normalize_separators(rel_path))
+  hash
+}
+
+///|
+/// Character-wise path comparison. The default String order compares
+/// length first, which scatters files from one directory across the
+/// generated suites; this keeps them grouped.
+fn compare_paths(left : String, right : String) -> Int {
+  let a = normalize_separators(left)
+  let b = normalize_separators(right)
+  let shorter = if a.length() < b.length() { a.length() } else { b.length() }
+  for i in 0..<shorter {
+    let diff = a[i].to_int() - b[i].to_int()
+    if diff != 0 {
+      return diff
+    }
+  }
+  a.length() - b.length()
+}
+
+///|
+fn select_files(
+  files : Array[String],
+  seed : String,
+  max_files : Int,
+  skip? : (String) -> Bool = _ => false,
+) -> Array[String] {
+  files.sort_by_key(rel_path => {
+    (selection_key(seed, rel_path), normalize_separators(rel_path))
+  })
+  let selected = Array::new()
+  for rel_path in files {
+    if max_files > 0 && selected.length() >= max_files {
+      break
+    }
+    if !skip(rel_path) {
+      selected.push(rel_path)
+    }
+  }
+  selected.sort_by(compare_paths)
+  selected
+}
+
+///|
+/// CRLF-insensitive character count, so Windows checkouts measure the
+/// same size as Unix ones and both platforms skip the same files.
+fn normalized_char_count(text : String) -> Int {
+  let mut count = 0
+  for ch in text {
+    if ch != '\r' {
+      count += 1
+    }
+  }
+  count
+}
+
+///|
+fn collect_files(
+  project_root : String,
+  seed : String,
+  max_files : Int,
+  max_file_size : Int,
+) -> Array[String] {
   let files = Array::new()
-  walk_dir(project_root, "", files, max_files)
-  files
+  walk_dir(project_root, "", files)
+  select_files(files, seed, max_files, skip=rel_path => {
+    if max_file_size <= 0 {
+      return false
+    }
+    let abs_path = @path.Path::join(project_root, rel_path).to_string()
+    let text = try @fs.read_file_to_string(abs_path) catch {
+      _ => return false
+    } noraise {
+      text => text
+    }
+    let size = normalized_char_count(text)
+    if size > max_file_size {
+      println(
+        "testgen: skipped \{rel_path} (\{size} chars exceeds --max-file-size \{max_file_size})",
+      )
+      true
+    } else {
+      false
+    }
+  })
 }
 
 ///|
 fn collect_cases(
   project_root : String,
+  seed : String,
   max_per_file : Int,
   max_files : Int,
+  max_file_size : Int,
 ) -> CollectResult {
-  let source_files = collect_files(project_root, max_files)
+  let source_files = collect_files(project_root, seed, max_files, max_file_size)
   let loc_cases = Array::new()
   for rel_path in source_files {
     let abs_path = @path.Path::join(project_root, rel_path).to_string()

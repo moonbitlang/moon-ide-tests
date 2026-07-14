@@ -73,6 +73,23 @@ function Normalize-MoonCramFiles {
   }
 }
 
+# moon cram's parser rejects expected-output lines ending with " ()" (the
+# parens parse as an annotation with an empty rule name), yet moon cram
+# update writes such lines verbatim. Appending "(escaped)" round-trips.
+# Keep in sync with scripts/escape-cram-empty-parens.sh.
+function Escape-EmptyParenLines {
+  param([string] $TestsRoot)
+
+  foreach ($file in Get-ChildItem -LiteralPath $TestsRoot -Filter "*.mooncram.md" -Recurse) {
+    $text = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
+    $updated = [System.Text.RegularExpressions.Regex]::Replace(
+      $text, '(?m)^(?!\$ )(.*) \(\)$', '$1 () (escaped)')
+    if ($updated -ne $text) {
+      [System.IO.File]::WriteAllText($file.FullName, $updated, [System.Text.UTF8Encoding]::new($false))
+    }
+  }
+}
+
 $repos = Get-FixtureRepos (Join-Path $root "fixtures\repos.yaml")
 
 foreach ($repo in $repos) {
@@ -100,14 +117,6 @@ foreach ($repo in $repos) {
     "--max-per-file", $repo.MaxPerFile
   )
 
-  if ($repo.Slug -eq "sqlparser") {
-    # These two generated Windows snapshots overflow Moon Cram's Windows
-    # markdown parser. The Unix suite keeps the full sqlparser coverage.
-    Remove-Item -LiteralPath @(
-      (Join-Path $windowsOutDir "find-references.mooncram.md"),
-      (Join-Path $windowsOutDir "rename.mooncram.md")
-    ) -Force -ErrorAction SilentlyContinue
-  }
 }
 
 if ($RefreshSnapshots) {
@@ -129,4 +138,5 @@ if ($RefreshSnapshots) {
   }
 
   Normalize-MoonCramFiles (Join-Path $root "tests\windows")
+  Escape-EmptyParenLines (Join-Path $root "tests\windows")
 }

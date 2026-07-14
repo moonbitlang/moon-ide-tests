@@ -1,17 +1,6 @@
 # indexmap outline
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\types.mbt'
-17 |priv struct Bucket[K, V] {
-   |...
-27 |priv struct IndexMapCore[K, V] {
-   |...
-54 |struct T[K, V] {
-   |...
-
-```
-
-```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap.mbt'
    2 |const Default_init_capacity = 8
      |...
@@ -340,5 +329,16 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap
      |...
 1250 |test "set_with_hash_growth_from_zero_capacity" {
      |...
+
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\types.mbt'
+17 |priv struct Bucket[K, V] {
+   |...
+27 |priv struct IndexMapCore[K, V] {
+   |...
+54 |struct T[K, V] {
+   |...
 
 ```
