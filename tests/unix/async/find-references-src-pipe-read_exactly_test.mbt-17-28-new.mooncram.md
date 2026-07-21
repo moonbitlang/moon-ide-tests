@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'new' --loc 'src/pipe/read_exactly_test.mbt:17:28'
-Found 117 references for symbol 'new':
+Found 118 references for symbol 'new':
 <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:32:8-32:11:
    | ///
    | /// Returns a new `StringBuilder` instance with the specified initial capacity.
@@ -106,7 +106,7 @@ Found 117 references for symbol 'new':
    | async test "aqueue cancellation" {
 83 |   let log = StringBuilder::new()
    |                            ^^^
-   |   let queue : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+   |   let queue : @aqueue.Queue[Int] = Queue(kind=Unbounded)
    |   @async.with_timeout(350, () => {
 
 <WORKDIR>/src/aqueue/aqueue_test.mbt:109:28-109:31:
@@ -237,7 +237,7 @@ Found 117 references for symbol 'new':
 
 <WORKDIR>/src/fs/tmpdir.mbt:59:31-59:34:
    |     hasher.combine_uint64(tmpdir_seed.uint64())
-   |     hasher.combine_uint64(@env.now())
+   |     hasher.combine_int64(@event_loop.now())
    |     let h = hasher.finalize().reinterpret_as_uint()
 59 |     let path = StringBuilder::new()
    |                               ^^^
@@ -307,122 +307,131 @@ Found 117 references for symbol 'new':
    |   @async.with_task_group() <| group => {
    |     let port = test_server(group, log)
 
-<WORKDIR>/src/http/parser_wbtest.mbt:36:28-36:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:39:28-39:31:
    | 
    | ///|
    | async test "read_request basic" {
-36 |   let log = StringBuilder::new()
+39 |   let log = StringBuilder::new()
    |                            ^^^
    |   @async.with_task_group() <| root => {
    |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:65:28-65:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:68:28-68:31:
    | 
    | ///|
    | async test "read_request fixed body" {
-65 |   let log = StringBuilder::new()
+68 |   let log = StringBuilder::new()
    |                            ^^^
    |   @async.with_task_group() <| root => {
    |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:122:28-122:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:125:28-125:31:
     | 
     | ///|
     | async test "read_request chunked" {
-122 |   let log = StringBuilder::new()
+125 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:158:28-158:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:161:28-161:31:
     | 
     | ///|
     | async test "read_request stream" {
-158 |   let log = StringBuilder::new()
+161 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:208:28-208:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:211:28-211:31:
     | 
     | ///|
     | async test "multiple request" {
-208 |   let log = StringBuilder::new()
+211 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:270:28-270:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:273:28-273:31:
     | 
     | ///|
     | async test "read_response basic" {
-270 |   let log = StringBuilder::new()
+273 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:301:28-301:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:304:28-304:31:
     | 
     | ///|
     | async test "read_response passthrough fallback (no length headers)" {
-301 |   let log = StringBuilder::new()
+304 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:338:28-338:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:341:28-341:31:
     | 
     | ///|
     | async test "read_response 204 No Content (no body)" {
-338 |   let log = StringBuilder::new()
+341 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:375:28-375:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:378:28-378:31:
     | 
     | ///|
     | async test "read_response 205 Reset Content (no body)" {
-375 |   let log = StringBuilder::new()
+378 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:412:28-412:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:415:28-415:31:
     | 
     | ///|
     | async test "read_response 304 Not Modified (no body)" {
-412 |   let log = StringBuilder::new()
+415 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:449:28-449:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:452:28-452:31:
     | 
     | ///|
     | async test "read_response 100 Continue (no body)" {
-449 |   let log = StringBuilder::new()
+452 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:481:28-481:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:484:28-484:31:
     | 
     | ///|
     | async test "read_response CONNECT 200 (no body, tunnel mode)" {
-481 |   let log = StringBuilder::new()
+484 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:515:28-515:31:
+<WORKDIR>/src/http/parser_wbtest.mbt:518:28-518:31:
     | 
     | ///|
     | async test "read_response HEAD 200 (no body)" {
-515 |   let log = StringBuilder::new()
+518 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group() <| root => {
     |     let (r, w) = @io.pipe()
+
+<WORKDIR>/src/http/send.mbt:52:30-52:33:
+   |       // fast path: no CRLF detected, return immediately
+   |       s
+   |     }
+52 |     let buf = StringBuilder::new(size_hint=s.length() - crlf_count)
+   |                              ^^^
+   |     for c in s {
+   |       buf.write_char(c)
 
 <WORKDIR>/src/internal/bytes_util/util.mbt:33:32-33:35:
    | /// }
@@ -487,29 +496,29 @@ Found 117 references for symbol 'new':
     |   @async.with_task_group() <| root => {
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/io/README.mbt.md:420:28-420:31:
+<WORKDIR>/src/io/README.mbt.md:419:28-419:31:
     | 
     | ///|
     | async test "write_reader - copy from reader to writer" {
-420 |   let log = StringBuilder::new()
+419 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group(root => {
     |     let (r1, w1) = @io.pipe()
 
-<WORKDIR>/src/io/README.mbt.md:488:28-488:31:
+<WORKDIR>/src/io/README.mbt.md:487:28-487:31:
     | ```moonbit check
     | ///|
     | async test "BufferedWriter - basic buffering" {
-488 |   let log = StringBuilder::new()
+487 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group(root => {
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/io/README.mbt.md:564:28-564:31:
+<WORKDIR>/src/io/README.mbt.md:563:28-563:31:
     | 
     | ///|
     | async test "BufferedWriter::write_reader - buffered copy" {
-564 |   let log = StringBuilder::new()
+563 |   let log = StringBuilder::new()
     |                            ^^^
     |   @async.with_task_group(root => {
     |     let (r1, w1) = @io.pipe()
@@ -586,11 +595,11 @@ Found 117 references for symbol 'new':
    |   @async.with_task_group() <| root => {
    |     let (r1, w1) = @io.pipe()
 
-<WORKDIR>/src/io/writer_test.mbt:92:28-92:31:
+<WORKDIR>/src/io/writer_test.mbt:95:28-95:31:
    | 
    | ///|
    | async test "write cancel" {
-92 |   let log = StringBuilder::new()
+95 |   let log = StringBuilder::new()
    |                            ^^^
    |   let writer = { logger: log, base_timeout: 300 }
    |   @async.with_timeout_opt(450, () => writer.write(b"abcd")) |> ignore

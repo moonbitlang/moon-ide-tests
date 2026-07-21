@@ -1,4 +1,4 @@
-# rabbita find-references ImageData rabbita/dom/image_data.mbt:8:20
+# rabbita find-references render_incremental_date_picker rui/date_picker_test.mbt:13:4
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'ImageData' --loc 'rabbita/dom/image_data.mbt:8:20'
-Error: could not find references for symbol 'ImageData' at rabbita/dom/image_data.mbt:8:20
+$ run_moon_ide moon ide find-references 'render_incremental_date_picker' --loc 'rui/date_picker_test.mbt:13:4'
+Error: could not get package of file <WORKDIR>/rui/date_picker_test.mbt
 [1]
 ```

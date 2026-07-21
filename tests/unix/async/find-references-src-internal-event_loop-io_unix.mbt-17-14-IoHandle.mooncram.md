@@ -46,14 +46,14 @@ Found 107 references for symbol 'IoHandle':
    |   read_buf : @io.ReaderBuffer
    | }
 
-<WORKDIR>/src/fs/watch.mbt:85:22-85:30:
-   | #cfg(not(platform="windows"))
-   | fn Watcher::new_backend(
-   |   self : Watcher,
-85 |   root : @event_loop.IoHandle,
-   |                      ^^^^^^^^
-   |   root_id~ : FileIdentity,
-   |   debounce_timeout~ : Int,
+<WORKDIR>/src/fs/watch.mbt:182:22-182:30:
+    | #cfg(not(platform="windows"))
+    | fn Watcher::new_backend(
+    |   self : Watcher,
+182 |   root : @event_loop.IoHandle,
+    |                      ^^^^^^^^
+    |   root_id~ : FileIdentity,
+    |   debounce_timeout~ : Int,
 
 <WORKDIR>/src/fs/watch_inotify.mbt:18:25-18:33:
    | ///|
@@ -76,7 +76,7 @@ Found 107 references for symbol 'IoHandle':
 <WORKDIR>/src/fs/watch_kqueue.mbt:19:20-19:28:
    | #cfg(not(platform="windows"))
    | priv struct KqueueWatchedFile {
-   |   file_id : FileIdentity
+   |   identity : FileIdentity
 19 |   io : @event_loop.IoHandle
    |                    ^^^^^^^^
    | }
@@ -181,14 +181,14 @@ Found 107 references for symbol 'IoHandle':
     |   buf : @c_buffer.Buffer,
     |   len : Int,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:27:8-27:16:
+<WORKDIR>/src/internal/event_loop/io.mbt:27:12-27:20:
    | ///|
    | /// A managed file descriptor/`HANDLE`,
    | /// capable of performing async IO operations.
-27 | struct IoHandle {
-   |        ^^^^^^^^
-   |   mut fd : @fd_util.Fd
-   |   kind : @fd_util.FileKind
+27 | pub struct IoHandle {
+   |            ^^^^^^^^
+   |   priv mut fd : @fd_util.Fd
+   |   priv kind : @fd_util.FileKind
 
 <WORKDIR>/src/internal/event_loop/io.mbt:50:8-50:16:
    | }
@@ -394,8 +394,8 @@ Found 107 references for symbol 'IoHandle':
    | #cfg(not(platform="windows"))
 17 | pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
    |              ^^^^^^^^
+   |   guard curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
-   |     abort("file descriptor already closed")
 
 <WORKDIR>/src/internal/event_loop/io_unix.mbt:17:43-17:51:
    | 
@@ -403,95 +403,95 @@ Found 107 references for symbol 'IoHandle':
    | #cfg(not(platform="windows"))
 17 | pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
    |                                           ^^^^^^^^
+   |   guard curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
-   |     abort("file descriptor already closed")
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:31:10-31:18:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:32:10-32:18:
    | 
    | ///|
    | #cfg(not(platform="windows"))
-31 | async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
+32 | async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
    |          ^^^^^^^^
+   |   guard curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
-   |     abort("file descriptor already closed")
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:31:40-31:48:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:32:40-32:48:
    | 
    | ///|
    | #cfg(not(platform="windows"))
-31 | async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
+32 | async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
    |                                        ^^^^^^^^
+   |   guard curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
-   |     abort("file descriptor already closed")
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:67:10-67:18:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:69:10-69:18:
    | 
    | ///|
    | #cfg(not(platform="windows"))
-67 | async fn IoHandle::read_via_event_bus_unix(
+69 | async fn IoHandle::read_via_event_bus_unix(
    |          ^^^^^^^^
    |   handle : IoHandle,
    |   buf : FixedArray[Byte],
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:68:12-68:20:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:70:12-70:20:
    | ///|
    | #cfg(not(platform="windows"))
    | async fn IoHandle::read_via_event_bus_unix(
-68 |   handle : IoHandle,
+70 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
    |   offset~ : Int,
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:95:10-95:18:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:97:10-97:18:
    | 
    | ///|
    | #cfg(all(target="native", not(platform="windows")))
-95 | async fn IoHandle::read_via_event_bus(
+97 | async fn IoHandle::read_via_event_bus(
    |          ^^^^^^^^
    |   handle : IoHandle,
    |   buf : FixedArray[Byte],
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:96:12-96:20:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:98:12-98:20:
    | ///|
    | #cfg(all(target="native", not(platform="windows")))
    | async fn IoHandle::read_via_event_bus(
-96 |   handle : IoHandle,
+98 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
    |   offset~ : Int,
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:128:10-128:18:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:130:10-130:18:
     | 
     | ///|
     | #cfg(not(platform="windows"))
-128 | async fn IoHandle::write_via_event_bus_unix(
+130 | async fn IoHandle::write_via_event_bus_unix(
     |          ^^^^^^^^
     |   handle : IoHandle,
     |   buf : Bytes,
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:129:12-129:20:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:131:12-131:20:
     | ///|
     | #cfg(not(platform="windows"))
     | async fn IoHandle::write_via_event_bus_unix(
-129 |   handle : IoHandle,
+131 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
     |   offset~ : Int,
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:156:10-156:18:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:158:10-158:18:
     | 
     | ///|
     | #cfg(all(target="native", not(platform="windows")))
-156 | async fn IoHandle::write_via_event_bus(
+158 | async fn IoHandle::write_via_event_bus(
     |          ^^^^^^^^
     |   handle : IoHandle,
     |   buf : Bytes,
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:157:12-157:20:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:159:12-159:20:
     | ///|
     | #cfg(all(target="native", not(platform="windows")))
     | async fn IoHandle::write_via_event_bus(
-157 |   handle : IoHandle,
+159 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
     |   offset~ : Int,
@@ -666,20 +666,20 @@ Found 107 references for symbol 'IoHandle':
    | }
    | 
 
-<WORKDIR>/src/internal/event_loop/process.mbt:39:5-39:13:
+<WORKDIR>/src/internal/event_loop/process.mbt:45:5-45:13:
    |     @os_error.check_errno(context)
    |     None
    |   } else {
-39 |     IoHandle::from_fd(
+45 |     IoHandle::from_fd(
    |     ^^^^^^^^
    |       handle,
    |       kind=Unknown,
 
-<WORKDIR>/src/internal/event_loop/process_unix.mbt:37:10-37:18:
+<WORKDIR>/src/internal/event_loop/process_unix.mbt:49:10-49:18:
    |   let handle = if !@fd_util.fd_is_valid(pidfd) {
    |     None
    |   } else {
-37 |     Some(IoHandle::from_fd(pidfd, kind=Unknown, read_only=true))
+49 |     Some(IoHandle::from_fd(pidfd, kind=Unknown, read_only=true))
    |          ^^^^^^^^
    |   }
    |   { pid, handle }
@@ -688,13 +688,13 @@ Found 107 references for symbol 'IoHandle':
    | fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
    | 
    | ///|
-46 | let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
+46 | let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
    |                                      ^^^^^^^^
    | 
    | ///|
 
 <WORKDIR>/src/internal/event_loop/stdio.mbt:49:48-49:56:
-   | let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
+   | let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
    | 
    | ///|
 49 | fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {

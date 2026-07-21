@@ -54,7 +54,7 @@ Definition found at file <WORKDIR>/parser.mbt
     |        ^^^^^
     |   let tokens = @tokenize.tokenize(input)
     |   let parser = Parser::Parser(tokens)
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
     |     parser.skip_newlines()
     |     match parser.view() {
@@ -132,13 +132,13 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
 ```
 
 ```mooncram
@@ -157,14 +157,14 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
-   |     LocalDateTime(s) =>
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
+   | ///|
 ```
 
 ```mooncram
@@ -207,14 +207,14 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
-   |     LocalDateTime(s) =>
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
+   | ///|
 ```
 
 ```mooncram
@@ -249,7 +249,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1350 | pub fn tokenize(input : String) -> Array[Token] raise {
+1351 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = Array::new()
@@ -282,15 +282,15 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
   | } derive(Eq, Debug)
   | 
   | ///|
-  | /// Token types for the lexer
-  | pub(all) enum Token {
-  |   // Literals
-  |   StringToken(String, loc~ : Loc, multiline~ : Bool)
-  |   IntegerToken(Int64, loc~ : Loc)
-  |   FloatToken(Double, loc~ : Loc, raw~ : String)
-  |   BooleanToken(Bool, loc~ : Loc)
-  |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
+  | #deprecated("compare with `==`; the Eq impl is unaffected")
+  | pub extend Loc with Eq::{not_equal, equal}
   | 
+  | ///|
+  | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+  | pub extend Loc with Debug::{to_repr}
+  | 
+  | ///|
+  | /// Token types for the lexer
 ```
 
 ```mooncram
@@ -307,16 +307,16 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend Loc with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend Loc with Debug::{to_repr}
+   | 
+   | ///|
    | /// Token types for the lexer
    | pub(all) enum Token {
-   |   // Literals
-   |   StringToken(String, loc~ : Loc, multiline~ : Bool)
-   |   IntegerToken(Int64, loc~ : Loc)
-   |   FloatToken(Double, loc~ : Loc, raw~ : String)
-   |   BooleanToken(Bool, loc~ : Loc)
-   |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
-   | 
-   |   // Symbols
 ```
 
 ```mooncram
@@ -327,7 +327,7 @@ Definition found at file <WORKDIR>/toml.mbt
    | 
    | ///|
    | /// Parser state (will implement methods later)
-34 | priv struct Parser {
+42 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
    |   mut position : Int
@@ -402,7 +402,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1350 | pub fn tokenize(input : String) -> Array[Token] raise {
+1351 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = Array::new()

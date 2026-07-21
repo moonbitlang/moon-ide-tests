@@ -19,6 +19,16 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc 'src/aqueue/blocking_test.mbt:18:10'
 *** Begin Patch
+*** Update File: <WORKDIR>/examples/dead_lock/main.mbt
+@@
+ async fn main {
+   let mutex1 = @async.Mutex()
+   let mutex2 = @async.Mutex()
+-  @async.with_task_group <| group => {
++  @async.with_task_group_renamed <| group => {
+     group.spawn_bg() <| () => {
+       mutex1.acquire()
+       defer mutex1.release()
 *** Update File: <WORKDIR>/examples/http_file_server/main.mbt
 @@
    } else {
@@ -174,7 +184,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
      group.spawn_bg() <| () => {
        for i in 0..<3 {
 @@
@@ -219,7 +229,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let received = []
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[String] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[String] = Queue(kind=Unbounded)
      // Producer A puts items at time 0, 100, 200 ms.
      group.spawn_bg() <| () => {
 @@
@@ -228,7 +238,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let work_by_worker : Array[Array[Int]] = [[], [], []]
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Blocking(1))
+     let q : @aqueue.Queue[Int] = Queue(kind=Blocking(1))
      for w in 0..<3 {
        group.spawn_bg(allow_failure=true) <| () => {
 @@
@@ -237,7 +247,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
      // Reader 1 starts waiting at ~0 ms.
      root.spawn_bg(() => log.push("r1 got \{q.get()}"))
 *** Update File: <WORKDIR>/src/aqueue/aqueue_test.mbt
@@ -402,7 +412,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    q.put(1)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
@@ -411,22 +421,22 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let q = @async.Queue(kind=Blocking(0))
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
  ///|
  async test "close with blocking get" {
-   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
  ///|
  async test "close with completed get" {
-   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      group.spawn_bg() <| () => {
@@ -651,7 +661,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let path = "_build/create_exclusive_test"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     for create_mode in [@fs.OpenExisting, @fs.TruncateExisting] {
+     for create_mode in [@fs.OpenExisting, TruncateExisting] {
        @test_util.assert_raise_async <| () => {
          @fs.open(path, mode=WriteOnly, create_mode~)
 *** Update File: <WORKDIR>/src/fs/dir.mbt
@@ -783,6 +793,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let base_path = "_build/recursive_mkdir"
      let path = "\{base_path}/test//directory"
      @fs.mkdir(path, recursive=true)
+@@
+   if !(@event_loop.platform is Windows) {
+     return
+   }
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let base_path = "_build\\recursive_mkdir_windows"
+     let path = "\{base_path}\\test\\\\directory"
+     @fs.mkdir(path, recursive=true)
 *** Update File: <WORKDIR>/src/fs/named_pipe_test.mbt
 @@
  ///|
@@ -804,18 +823,18 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        @os_error.check_errno("mkfifo")
 *** Update File: <WORKDIR>/src/fs/realpath_test.mbt
 @@
- ///|
- #cfg(not(platform="windows"))
- async test "realpath link to absolute" {
+   if @event_loop.platform is Windows {
+     return
+   }
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      guard @env.current_dir() is Some(cwd)
      let path = match cwd {
        [.., '/'] => cwd + "src/fs/realpath_test.mbt"
 @@
- ///|
- #cfg(not(platform="windows"))
- async test "realpath link to relative" {
+   if @event_loop.platform is Windows {
+     return
+   }
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      guard @env.current_dir() is Some(cwd)
@@ -831,8 +850,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let path = match cwd {
        [.., '/'] => cwd + "src/fs"
 @@
- #cfg(not(platform="windows"))
- async test "realpath link to dir relative" {
+     return
+   }
    guard @env.current_dir() is Some(cwd)
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
@@ -881,7 +900,25 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
      return
    }
+   let path = "_build/timestamp_test"
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
+     group.add_defer(() => @fs.remove(path))
+     let mtime_1 = @fs.mtime(path)
+@@
+     return
+   }
    let path = "/tmp/opened_file_timestamp_test"
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
+     group.add_defer(() => @fs.remove(path))
+     let file = @fs.open(path, mode=ReadWrite, sync=Full)
+@@
+     return
+   }
+   let path = "_build/opened_file_timestamp_test"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
@@ -899,50 +936,50 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        @async.protect_from_cancel(() => @fs.rmdir(t1, recursive=true))
 *** Update File: <WORKDIR>/src/fs/watch_test.mbt
 @@
- ///|
- async test "watch basic" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_basic_test"
      let test_dir = Dir({
        "root_file": File("abcd"),
+       "inner_dir": Dir({ "inner_file": File("efgh") }),
 @@
- ///|
- async test "watch rename within" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_rename_within_test"
      let test_dir = Dir({
        "root_file": File("abcd"),
+       "inner_dir": Dir({ "inner_file": File("efgh") }),
 @@
- ///|
- async test "watch rename inout test" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let base_path = "_build/watch_rename_inout_test"
      let test_dir = Dir({
        "watched": Dir({
+         "root_file": File("abcd"),
 @@
+ 
  ///|
  async test "watch horizontal swap" {
-   let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
      let path = "_build/watch_swap_test"
      let test_dir = Dir({ "file1": File("abcd"), "file2": File("efgh") })
      test_dir.instantiate(path)
 @@
- ///|
- async test "watch vertical swap" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_vertical_swap_test"
      let test_dir = Dir({
        "outer": Dir({
+         "file": File("abcd"),
 @@
  ///|
  async test "watch ignored path" {
@@ -952,6 +989,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let path = "_build/watch_ignored_path_test"
      let test_dir = Dir({
        "ignored": Dir({ "file": File("abcd") }),
+@@
+     "root_file": File("abcd"),
+     "inner_dir": Dir({ "inner_file": File("efgh") }),
+   })
+-  @async.with_task_group <| group => {
++  @async.with_task_group_renamed <| group => {
+     let path = "_build/watch_init_event_test"
+     test_dir.instantiate(path)
+     group.add_defer(() => {
 *** Update File: <WORKDIR>/src/group_defer_test.mbt
 @@
  ///|
@@ -2164,12 +2210,12 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
    let log = []
    let sleep = sleep_prog.wait()
-   let t0 = @env.now()
+   let t0 = @async.now()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let _ = @process.spawn(group, sleep, ["500"])
      @async.sleep(250)
-     let t = (@env.now() - t0).to_int() / 250
+     let t = (@async.now() - t0).to_int() / 250
 @@
  ///|
  async test "spawn_in_group cancel" {
@@ -2189,11 +2235,11 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "Process::wait" {
    let sleep = sleep_prog.wait()
-   let mut t0 = 0UL
+   let mut t0 = 0L
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let child = @process.spawn(group, sleep, ["500", "-exit-code", "42"])
-     t0 = @env.now()
+     t0 = @async.now()
      let result = child.wait()
 @@
  ///|
@@ -2207,7 +2253,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "Process:cancel" {
    let sleep = sleep_prog.wait()
-   let mut t0 = 0UL
+   let mut t0 = 0L
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @process.read_from_process()
@@ -2780,7 +2826,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let mut i = 0
-     let start = @env.now()
+     let start = @async.now()
      fn tick() {
 *** Update File: <WORKDIR>/src/spawn_test.mbt
 @@
@@ -2840,14 +2886,14 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      }
 *** Update File: <WORKDIR>/src/task_group.mbt
 @@
- ///
  /// If all children task terminate successfully,
  /// `with_task_group` will return the result of `f`.
--pub async fn[X] with_task_group(f : async (TaskGroup[X]) -> X) -> X {
-+pub async fn[X] with_task_group_renamed(f : async (TaskGroup[X]) -> X) -> X {
-   let tg = {
-     children: Set([]),
-     parent: @coroutine.current_coroutine(),
+ #callsite(autofill(loc))
+-pub async fn[X] with_task_group(
++pub async fn[X] with_task_group_renamed(
+   f : async (TaskGroup[X]) -> X,
+   loc~ : SourceLoc,
+ ) -> X {
 *** Update File: <WORKDIR>/src/timer_test.mbt
 @@
  ///|
@@ -2877,7 +2923,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          group.spawn_bg() <| () => {
            timer.wait()
 @@
-     (@env.now() - start + 50).to_int() / 150
+     (@async.now() - start + 50).to_int() / 150
    }
    let timer = @async.Timer(450)
 -  @async.with_task_group() <| group => {

@@ -28,11 +28,11 @@ Found 4 references for symbol 'start':
    |   end : @lexer.Position
    | } derive(Eq, Debug)
 
-<WORKDIR>/internal/tokenize/token.mbt:44:24-44:29:
+<WORKDIR>/internal/tokenize/token.mbt:60:24-60:29:
    | ///|
    | /// Check if two locations are adjacent (end of first equals start of second).
    | pub fn Loc::adjacent(self : Loc, other : Loc) -> Bool {
-44 |   self.end.equal(other.start)
+60 |   self.end.equal(other.start)
    |                        ^^^^^
    | }
    | 
@@ -46,11 +46,11 @@ Found 4 references for symbol 'start':
   | }
   | 
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:14:5-14:10:
+<WORKDIR>/internal/tokenize/tokenize.mbt:22:5-22:10:
    | ///|
    | /// Create a location from lexer positions
    | fn make_loc(start_pos : @lexer.Position, end_pos : @lexer.Position) -> Loc {
-14 |   { start: start_pos, end: end_pos }
+22 |   { start: start_pos, end: end_pos }
    |     ^^^^^
    | }
    | 

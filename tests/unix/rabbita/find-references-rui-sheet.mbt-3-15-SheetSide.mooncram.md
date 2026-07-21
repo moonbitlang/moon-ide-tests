@@ -1,4 +1,4 @@
-# rabbita rename Cmd rabbita/clipboard/aliases.mbt:2:18
+# rabbita find-references SheetSide rui/sheet.mbt:3:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'Cmd' 'CmdRenamed' --loc 'rabbita/clipboard/aliases.mbt:2:18'
-Error: could not get package of file <WORKDIR>/rabbita/clipboard/aliases.mbt
+$ run_moon_ide moon ide find-references 'SheetSide' --loc 'rui/sheet.mbt:3:15'
+Error: could not get package of file <WORKDIR>/rui/sheet.mbt
 [1]
 ```

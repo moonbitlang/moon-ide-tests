@@ -32,7 +32,7 @@ Found 2 references for symbol 'toml_command':
    | 
    | ///|
    | fn run(args : ArrayView[String]) -> Int {
-43 |   let matches = @argparse.parse(toml_command(), argv=args, env={}) catch {
+43 |   let matches = @argparse.parse(toml_command(), argv=args, env=Map([])) catch {
    |                                 ^^^^^^^^^^^^
    |     err => {
    |       println(err)

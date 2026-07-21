@@ -1293,7 +1293,7 @@ $ run_moon_ide moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal/tok
 -  let tokens = @tokenize.tokenize(input)
 +  let tokens = @tokenize.tokenize_renamed(input)
    let parser = Parser::Parser(tokens)
-   let main_table = {}
+   let main_table = Map([])
    for current_table = main_table {
 *** Update File: <WORKDIR>/parser_test.mbt
 @@

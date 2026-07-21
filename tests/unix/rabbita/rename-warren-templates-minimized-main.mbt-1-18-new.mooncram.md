@@ -21,15 +21,15 @@ $ run_moon_ide moon ide rename 'new' 'new_renamed' --loc 'warren/templates/minim
 *** Begin Patch
 *** Update File: <WORKDIR>/warren/templates/minimized/main.mbt
 @@
--using @rabbita { new, simple_cell }
-+using @rabbita { new_renamed, simple_cell }
+-using @rabbita { new, create_pure_state }
++using @rabbita { new_renamed, create_pure_state }
  using @html { button, div, h1 }
  
  enum Msg {
 @@
        ],
-     ],
-   )
+     ])
+   }
 -  new(app).mount("app")
 +  new_renamed(app).mount("app")
  }

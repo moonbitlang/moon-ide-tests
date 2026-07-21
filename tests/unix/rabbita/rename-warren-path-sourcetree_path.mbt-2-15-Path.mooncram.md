@@ -36,7 +36,7 @@ $ run_moon_ide moon ide rename 'Path' 'PathRenamed' --loc 'warren/path/sourcetre
 +using @path {type SourcePath, type PathRenamed}
  
  ///|
- using @devhub {type BroadcastMsg, type Devhub}
+ using @devhub {type Devhub}
 *** Update File: <WORKDIR>/warren/path/artifact_path.mbt
 @@
  

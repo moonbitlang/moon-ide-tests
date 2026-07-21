@@ -1,4 +1,4 @@
-# rabbita find-references Cmd rabbita/clipboard/aliases.mbt:2:18
+# rabbita find-references Sm rui/card.mbt:4:3
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'Cmd' --loc 'rabbita/clipboard/aliases.mbt:2:18'
-Error: could not get package of file <WORKDIR>/rabbita/clipboard/aliases.mbt
+$ run_moon_ide moon ide find-references 'Sm' --loc 'rui/card.mbt:4:3'
+Error: could not get package of file <WORKDIR>/rui/card.mbt
 [1]
 ```

@@ -61,7 +61,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
  /// No trailing comma allowed unlike Array
 -fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
 +fn ParserRenamed::parse_inline_table(self : ParserRenamed) -> TomlValue raise {
-   let table = {}
+   let table = Map([])
    self.skip_newlines() // TOML 1.1: allow newlines in inline tables
    if self.view() is [RightBrace, .. rest] {
 @@
@@ -103,7 +103,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
    let tokens = @tokenize.tokenize(input)
 -  let parser = Parser::Parser(tokens)
 +  let parser = ParserRenamed::ParserRenamed(tokens)
-   let main_table = {}
+   let main_table = Map([])
    for current_table = main_table {
      parser.skip_newlines()
 *** Update File: <WORKDIR>/parser_wbtest.mbt

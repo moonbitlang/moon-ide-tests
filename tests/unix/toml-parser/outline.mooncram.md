@@ -64,7 +64,18 @@ $ run_moon_ide moon ide outline 'cmd/toml/main.mbt'
 $ run_moon_ide moon ide outline 'datetime/datetime.mbt'
 13 |pub(all) enum TomlDateTime {
    |...
-23 |pub impl Show for TomlDateTime with fn output(self, logger) {
+21 |#deprecated("compare with `==`; the Eq impl is unaffected")
+22 |pub extend TomlDateTime with Eq::{not_equal, equal}
+   |...
+25 |#deprecated("render via the Debug trait, e.g. `debug_inspect`")
+26 |pub extend TomlDateTime with Debug::{to_repr}
+   |...
+29 |pub extend TomlDateTime with Show::{to_string}
+   |...
+32 |#deprecated("render via the Show trait, e.g. `inspect` or `\\{value}`")
+33 |pub extend TomlDateTime with Show::{output}
+   |...
+38 |pub impl Show for TomlDateTime with fn output(self, logger) {
    |...
 
 ```
@@ -233,11 +244,23 @@ $ run_moon_ide moon ide outline 'internal/tokenize/lexer_test.mbt'
 $ run_moon_ide moon ide outline 'internal/tokenize/token.mbt'
  9 |pub(all) struct Loc {
    |...
-16 |pub(all) enum Token {
+15 |#deprecated("compare with `==`; the Eq impl is unaffected")
+16 |pub extend Loc with Eq::{not_equal, equal}
    |...
-43 |pub fn Loc::adjacent(self : Loc, other : Loc) -> Bool {
+19 |#deprecated("render via the Debug trait, e.g. `debug_inspect`")
+20 |pub extend Loc with Debug::{to_repr}
    |...
-53 |pub fn Token::loc(self : Self) -> Loc {
+24 |pub(all) enum Token {
+   |...
+50 |#deprecated("compare with `==`; the Eq impl is unaffected")
+51 |pub extend Token with Eq::{not_equal, equal}
+   |...
+54 |#deprecated("render via the Debug trait, e.g. `debug_inspect`")
+55 |pub extend Token with Debug::{to_repr}
+   |...
+59 |pub fn Loc::adjacent(self : Loc, other : Loc) -> Bool {
+   |...
+69 |pub fn Token::loc(self : Self) -> Loc {
    |...
 
 ```
@@ -344,26 +367,29 @@ $ run_moon_ide moon ide outline 'toml_to_string.mbt'
     |...
 114 |pub fn TomlValue::to_string(self : TomlValue) -> String {
     |...
-122 |pub impl Show for TomlValue with fn output(self, logger) {
+121 |#deprecated("render via the Show trait, e.g. `inspect` or `\\{value}`")
+122 |pub extend TomlValue with Show::{output}
     |...
-128 |fn TomlValue::write_toml(
-129 |  self : TomlValue,
-130 |  output : StringBuilder,
-131 |  path : Array[String], // Current table path for nested tables
-132 |) -> Unit {
+126 |pub impl Show for TomlValue with fn output(self, logger) {
     |...
-198 |fn write_table_contents(
-199 |  table : Map[String, TomlValue],
-200 |  output : StringBuilder,
-201 |  path : Array[String],
-202 |) -> Unit {
+132 |fn TomlValue::write_toml(
+133 |  self : TomlValue,
+134 |  output : StringBuilder,
+135 |  path : Array[String], // Current table path for nested tables
+136 |) -> Unit {
     |...
-299 |fn write_inline_table(
-300 |  table : Map[String, TomlValue],
-301 |  output : StringBuilder,
-302 |) -> Unit {
+202 |fn write_table_contents(
+203 |  table : Map[String, TomlValue],
+204 |  output : StringBuilder,
+205 |  path : Array[String],
+206 |) -> Unit {
     |...
-323 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
+303 |fn write_inline_table(
+304 |  table : Map[String, TomlValue],
+305 |  output : StringBuilder,
+306 |) -> Unit {
+    |...
+327 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
     |...
 
 ```

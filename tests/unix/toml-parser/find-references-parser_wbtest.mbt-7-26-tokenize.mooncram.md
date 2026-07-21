@@ -1261,20 +1261,20 @@ Found 161 references for symbol 'tokenize':
    |     error => unwrap_failure_message(error)
    |   } noraise {
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:1350:8-1350:16:
+<WORKDIR>/internal/tokenize/tokenize.mbt:1351:8-1351:16:
      | 
      | ///|
      | /// Tokenize entire input
-1350 | pub fn tokenize(input : String) -> Array[Token] raise {
+1351 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = Array::new()
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:1511:16-1511:24:
+<WORKDIR>/internal/tokenize/tokenize.mbt:1512:16-1512:24:
      | ///|
      | /// Test datetime tokenization
      | test "datetime tokenization" {
-1511 |   let tokens = tokenize("date = 1979-05-27T07:32:00Z")
+1512 |   let tokens = tokenize("date = 1979-05-27T07:32:00Z")
      |                ^^^^^^^^
      |   debug_inspect(
      |     tokens,
@@ -1286,7 +1286,7 @@ Found 161 references for symbol 'tokenize':
 301 |   let tokens = @tokenize.tokenize(input)
     |                          ^^^^^^^^
     |   let parser = Parser::Parser(tokens)
-    |   let main_table = {}
+    |   let main_table = Map([])
 
 <WORKDIR>/parser_test.mbt:253:15-253:23:
     | test "tokenize exponent-like bare keys" {

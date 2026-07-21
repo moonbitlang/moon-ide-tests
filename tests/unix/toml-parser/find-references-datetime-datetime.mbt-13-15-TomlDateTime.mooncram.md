@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
-Found 15 references for symbol 'TomlDateTime':
+Found 19 references for symbol 'TomlDateTime':
 <WORKDIR>/datetime/datetime.mbt:13:15-13:27:
    | /// Values are stored as their original string form. The parser preserves
    | /// the spelling supplied in the TOML source; it does not normalize or
@@ -28,58 +28,94 @@ Found 15 references for symbol 'TomlDateTime':
    |   OffsetDateTime(String)
    |   LocalDateTime(String)
 
-<WORKDIR>/datetime/datetime.mbt:23:19-23:31:
+<WORKDIR>/datetime/datetime.mbt:22:12-22:24:
+   | 
+   | ///|
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+22 | pub extend TomlDateTime with Eq::{not_equal, equal}
+   |            ^^^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/datetime/datetime.mbt:26:12-26:24:
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+26 | pub extend TomlDateTime with Debug::{to_repr}
+   |            ^^^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/datetime/datetime.mbt:29:12-29:24:
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
+   | ///|
+29 | pub extend TomlDateTime with Show::{to_string}
+   |            ^^^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/datetime/datetime.mbt:33:12-33:24:
+   | 
+   | ///|
+   | #deprecated("render via the Show trait, e.g. `inspect` or `\\{value}`")
+33 | pub extend TomlDateTime with Show::{output}
+   |            ^^^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/datetime/datetime.mbt:38:19-38:31:
    | ///|
    | /// Render the variant for human-readable diagnostics:
    | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-23 | pub impl Show for TomlDateTime with fn output(self, logger) {
+38 | pub impl Show for TomlDateTime with fn output(self, logger) {
    |                   ^^^^^^^^^^^^
    |   match self {
    |     OffsetDateTime(s) =>
 
-<WORKDIR>/internal/qc_model/gen_test.mbt:270:42-270:54:
+<WORKDIR>/internal/qc_model/gen_test.mbt:270:43-270:55:
     | }
     | 
     | ///|
-270 | fn local_date_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |                                          ^^^^^^^^^^^^
+270 | fn local_date_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |                                           ^^^^^^^^^^^^
     |   date_string_gen().fmap(fn(value) { LocalDate(value) })
     | }
 
-<WORKDIR>/internal/qc_model/gen_test.mbt:275:42-275:54:
+<WORKDIR>/internal/qc_model/gen_test.mbt:275:43-275:55:
     | }
     | 
     | ///|
-275 | fn local_time_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |                                          ^^^^^^^^^^^^
+275 | fn local_time_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |                                           ^^^^^^^^^^^^
     |   time_string_gen().fmap(fn(value) { LocalTime(value) })
     | }
 
-<WORKDIR>/internal/qc_model/gen_test.mbt:280:46-280:58:
+<WORKDIR>/internal/qc_model/gen_test.mbt:280:47-280:59:
     | }
     | 
     | ///|
-280 | fn local_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |                                              ^^^^^^^^^^^^
-    |   @qc.liftA2(
+280 | fn local_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |                                               ^^^^^^^^^^^^
+    |   @gen.liftA2(
     |     fn(date : String, time : String) { LocalDateTime("\{date}T\{time}") },
 
-<WORKDIR>/internal/qc_model/gen_test.mbt:289:47-289:59:
+<WORKDIR>/internal/qc_model/gen_test.mbt:289:48-289:60:
     | }
     | 
     | ///|
-289 | fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |                                               ^^^^^^^^^^^^
-    |   @qc.liftA3(
+289 | fn offset_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |                                                ^^^^^^^^^^^^
+    |   @gen.liftA3(
     |     fn(date : String, time : String, offset : String) {
 
-<WORKDIR>/internal/qc_model/gen_test.mbt:301:45-301:57:
+<WORKDIR>/internal/qc_model/gen_test.mbt:301:46-301:58:
     | }
     | 
     | ///|
-301 | fn toml_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |                                             ^^^^^^^^^^^^
-    |   @qc.frequency([
+301 | fn toml_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |                                              ^^^^^^^^^^^^
+    |   @gen.frequency([
     |     (2U, local_date_gen()),
 
 <WORKDIR>/internal/qc_model/model.mbt:25:23-25:35:
@@ -100,20 +136,20 @@ Found 15 references for symbol 'TomlDateTime':
    |   SEmptyArray
    |   SStringArray(Array[String])
 
-<WORKDIR>/internal/qc_model/model.mbt:92:59-92:71:
-   | }
-   | 
-   | ///|
-92 | fn project_datetime(value : @toml.TomlValue) -> @datetime.TomlDateTime? {
-   |                                                           ^^^^^^^^^^^^
-   |   match value {
-   |     TomlDateTime(dt) => Some(dt)
-
-<WORKDIR>/internal/qc_model/model.mbt:236:57-236:69:
+<WORKDIR>/internal/qc_model/model.mbt:116:59-116:71:
     | }
     | 
     | ///|
-236 | fn datetime_has_fractional_seconds(datetime : @datetime.TomlDateTime) -> Bool {
+116 | fn project_datetime(value : @toml.TomlValue) -> @datetime.TomlDateTime? {
+    |                                                           ^^^^^^^^^^^^
+    |   match value {
+    |     TomlDateTime(dt) => Some(dt)
+
+<WORKDIR>/internal/qc_model/model.mbt:260:57-260:69:
+    | }
+    | 
+    | ///|
+260 | fn datetime_has_fractional_seconds(datetime : @datetime.TomlDateTime) -> Bool {
     |                                                         ^^^^^^^^^^^^
     |   match datetime {
     |     OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
@@ -136,20 +172,20 @@ Found 15 references for symbol 'TomlDateTime':
    |   Array::makei(values.length(), fn(i) {
    |     let next = values.copy()
 
-<WORKDIR>/internal/tokenize/token.mbt:22:27-22:39:
+<WORKDIR>/internal/tokenize/token.mbt:30:27-30:39:
    |   IntegerToken(Int64, loc~ : Loc)
    |   FloatToken(Double, loc~ : Loc, raw~ : String)
    |   BooleanToken(Bool, loc~ : Loc)
-22 |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
+30 |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
    |                           ^^^^^^^^^^^^
    | 
    |   // Symbols
 
-<WORKDIR>/toml.mbt:16:27-16:39:
+<WORKDIR>/toml.mbt:24:27-24:39:
    | ///|
    | /// Re-export `TomlDateTime` so consumers see the type as `@toml.TomlDateTime`
    | /// instead of having to import the `datetime` subpackage directly.
-16 | pub using @datetime {type TomlDateTime}
+24 | pub using @datetime {type TomlDateTime}
    |                           ^^^^^^^^^^^^
    | 
    | ///|

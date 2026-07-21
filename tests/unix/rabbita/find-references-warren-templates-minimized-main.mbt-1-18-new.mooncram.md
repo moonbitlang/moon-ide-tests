@@ -20,16 +20,16 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 $ run_moon_ide moon ide find-references 'new' --loc 'warren/templates/minimized/main.mbt:1:18'
 Found 2 references for symbol 'new':
 <WORKDIR>/warren/templates/minimized/main.mbt:1:18-1:21:
-1 | using @rabbita { new, simple_cell }
+1 | using @rabbita { new, create_pure_state }
   |                  ^^^
   | using @html { button, div, h1 }
   | 
 
-<WORKDIR>/warren/templates/minimized/main.mbt:24:3-24:6:
+<WORKDIR>/warren/templates/minimized/main.mbt:27:3-27:6:
    |       ],
-   |     ],
-   |   )
-24 |   new(app).mount("app")
+   |     ])
+   |   }
+27 |   new(app).mount("app")
    |   ^^^
    | }
 

@@ -30,7 +30,7 @@ Found 6 references for symbol 'skip_newlines':
 <WORKDIR>/parser.mbt:141:8-141:21:
     | /// No trailing comma allowed unlike Array
     | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
-    |   let table = {}
+    |   let table = Map([])
 141 |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
     |        ^^^^^^^^^^^^^
     |   if self.view() is [RightBrace, .. rest] {
@@ -47,7 +47,7 @@ Found 6 references for symbol 'skip_newlines':
 
 <WORKDIR>/parser.mbt:163:10-163:23:
     |     set_dotted_key_value(table, key_path, value) catch {
-    |       error => self.error(error.to_string())
+    |       error => self.error("\{error}")
     |     }
 163 |     self.skip_newlines()
     |          ^^^^^^^^^^^^^
@@ -65,7 +65,7 @@ Found 6 references for symbol 'skip_newlines':
 
 <WORKDIR>/parser.mbt:305:12-305:25:
     |   let parser = Parser::Parser(tokens)
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
 305 |     parser.skip_newlines()
     |            ^^^^^^^^^^^^^

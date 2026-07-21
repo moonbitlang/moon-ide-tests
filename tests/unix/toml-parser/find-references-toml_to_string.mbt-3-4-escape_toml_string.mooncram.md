@@ -36,11 +36,11 @@ Found 3 references for symbol 'escape_toml_string':
    |   } else {
    |     key
 
-<WORKDIR>/toml_to_string.mbt:134:37-134:55:
+<WORKDIR>/toml_to_string.mbt:138:37-138:55:
     |   path : Array[String], // Current table path for nested tables
     | ) -> Unit {
     |   match self {
-134 |     TomlString(s) => output <+ "\"\{escape_toml_string(s)}\""
+138 |     TomlString(s) => output <+ "\"\{escape_toml_string(s)}\""
     |                                     ^^^^^^^^^^^^^^^^^^
     |     TomlInteger(i) => output <+ "\{i}"
     |     TomlFloat(f) =>

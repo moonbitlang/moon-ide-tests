@@ -37,74 +37,74 @@ Found 15 references for symbol 'Test':
     | 
     |   // Generate some output
 
-<WORKDIR>/test/test.mbt:191:8-191:12:
+<WORKDIR>/test/test.mbt:192:8-192:12:
     | /// Write data to snapshot buffer, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::writeln`
-191 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
     |        ^^^^
     |   self.buffer.write_string(obj.to_string())
     | }
 
-<WORKDIR>/test/test.mbt:191:27-191:31:
+<WORKDIR>/test/test.mbt:192:27-192:31:
     | /// Write data to snapshot buffer, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::writeln`
-191 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
     |                           ^^^^
     |   self.buffer.write_string(obj.to_string())
     | }
 
-<WORKDIR>/test/test.mbt:199:8-199:12:
+<WORKDIR>/test/test.mbt:200:8-200:12:
     | /// Write data to snapshot buffer and newline, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::write`
-199 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
     |        ^^^^
     |   self.write(obj)
     |   self.buffer.write_char('\n')
 
-<WORKDIR>/test/test.mbt:199:29-199:33:
+<WORKDIR>/test/test.mbt:200:29-200:33:
     | /// Write data to snapshot buffer and newline, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::write`
-199 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
     |                             ^^^^
     |   self.write(obj)
     |   self.buffer.write_char('\n')
 
-<WORKDIR>/test/test.mbt:209:21-209:25:
+<WORKDIR>/test/test.mbt:210:21-210:25:
     | /// 
     | /// ```mbt check
     | /// test {
-209 | ///   let t = @test.Test("test.txt")
+210 | ///   let t = @test.Test("test.txt")
     |                     ^^^^
     | ///   t.writeln("hello")
     | ///   t.snapshot(filename="test.txt") // actual test block end
 
-<WORKDIR>/test/test.mbt:217:8-217:12:
+<WORKDIR>/test/test.mbt:218:8-218:12:
     | ///
     | /// Currently it can only be used once and should be used as the last step.
     | #callsite(autofill(args_loc, loc))
-217 | pub fn Test::snapshot(
+218 | pub fn Test::snapshot(
     |        ^^^^
     |   self : Test,
     |   filename~ : String,
 
-<WORKDIR>/test/test.mbt:218:10-218:14:
+<WORKDIR>/test/test.mbt:219:10-219:14:
     | /// Currently it can only be used once and should be used as the last step.
     | #callsite(autofill(args_loc, loc))
     | pub fn Test::snapshot(
-218 |   self : Test,
+219 |   self : Test,
     |          ^^^^
     |   filename~ : String,
     |   loc~ : SourceLoc,
 
-<WORKDIR>/test/test.mbt:235:8-235:12:
+<WORKDIR>/test/test.mbt:238:8-238:12:
     | 
     | ///|
     | /// Return the name of the test.
-235 | pub fn Test::name(self : Self) -> String {
+238 | pub fn Test::name(self : Self) -> String {
     |        ^^^^
     |   self.name
     | }

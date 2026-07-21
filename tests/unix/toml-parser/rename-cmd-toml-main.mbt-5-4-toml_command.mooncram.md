@@ -33,8 +33,8 @@ $ run_moon_ide moon ide rename 'toml_command' 'toml_command_renamed' --loc 'cmd/
  
  ///|
  fn run(args : ArrayView[String]) -> Int {
--  let matches = @argparse.parse(toml_command(), argv=args, env={}) catch {
-+  let matches = @argparse.parse(toml_command_renamed(), argv=args, env={}) catch {
+-  let matches = @argparse.parse(toml_command(), argv=args, env=Map([])) catch {
++  let matches = @argparse.parse(toml_command_renamed(), argv=args, env=Map([])) catch {
      err => {
        println(err)
        return 2

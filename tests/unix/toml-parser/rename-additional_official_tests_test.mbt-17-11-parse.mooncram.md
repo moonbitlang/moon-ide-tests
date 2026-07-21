@@ -1064,7 +1064,7 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
 +pub fn parse_renamed(input : String) -> TomlValue raise {
    let tokens = @tokenize.tokenize(input)
    let parser = Parser::Parser(tokens)
-   let main_table = {}
+   let main_table = Map([])
 *** Update File: <WORKDIR>/parser_test.mbt
 @@
  ///|

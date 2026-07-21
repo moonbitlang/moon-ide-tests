@@ -77,7 +77,7 @@ Found 59 references for symbol 'Parser':
     | /// No trailing comma allowed unlike Array
 139 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
     |    ^^^^^^
-    |   let table = {}
+    |   let table = Map([])
     |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
 
 <WORKDIR>/parser.mbt:139:38-139:44:
@@ -86,7 +86,7 @@ Found 59 references for symbol 'Parser':
     | /// No trailing comma allowed unlike Array
 139 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
     |                                      ^^^^^^
-    |   let table = {}
+    |   let table = Map([])
     |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
 
 <WORKDIR>/parser.mbt:187:4-187:10:
@@ -167,7 +167,7 @@ Found 59 references for symbol 'Parser':
     |   let tokens = @tokenize.tokenize(input)
 302 |   let parser = Parser::Parser(tokens)
     |                ^^^^^^
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
 
 <WORKDIR>/parser.mbt:302:24-302:30:
@@ -176,7 +176,7 @@ Found 59 references for symbol 'Parser':
     |   let tokens = @tokenize.tokenize(input)
 302 |   let parser = Parser::Parser(tokens)
     |                        ^^^^^^
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
 
 <WORKDIR>/parser_wbtest.mbt:8:16-8:22:
@@ -467,85 +467,85 @@ Found 59 references for symbol 'Parser':
     |   let result = parser.parse_dotted_key()
     |   debug_inspect(
 
-<WORKDIR>/toml.mbt:34:13-34:19:
+<WORKDIR>/toml.mbt:42:13-42:19:
    | 
    | ///|
    | /// Parser state (will implement methods later)
-34 | priv struct Parser {
+42 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
    |   mut position : Int
 
-<WORKDIR>/toml.mbt:47:4-47:10:
+<WORKDIR>/toml.mbt:55:4-55:10:
    | /// breaks are insignificant (e.g. between top-level statements). The
    | /// parser's position is not advanced — callers commit progress by passing
    | /// the consumed tail back through `update_view`.
-47 | fn Parser::view(
+55 | fn Parser::view(
    |    ^^^^^^
    |   self : Self,
    |   skip_newlines? : Bool = false,
 
-<WORKDIR>/toml.mbt:75:4-75:10:
+<WORKDIR>/toml.mbt:83:4-83:10:
    | /// from that point. The new position is read from the view's start offset
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
-75 | fn Parser::update_view(
+83 | fn Parser::update_view(
    |    ^^^^^^
    |   self : Parser,
    |   view : ArrayView[@tokenize.Token],
 
-<WORKDIR>/toml.mbt:76:10-76:16:
+<WORKDIR>/toml.mbt:84:10-84:16:
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
    | fn Parser::update_view(
-76 |   self : Parser,
+84 |   self : Parser,
    |          ^^^^^^
    |   view : ArrayView[@tokenize.Token],
    | ) -> Unit {
 
-<WORKDIR>/toml.mbt:85:4-85:10:
+<WORKDIR>/toml.mbt:93:4-93:10:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |    ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:85:12-85:18:
+<WORKDIR>/toml.mbt:93:12-93:18:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |            ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:85:55-85:61:
+<WORKDIR>/toml.mbt:93:55-93:61:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |                                                       ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:98:16-98:22:
-   |     Equals(loc~),
-   |     StringToken("value", loc~, multiline=false),
-   |   ]
-98 |   let parser = Parser::Parser(tokens)
-   |                ^^^^^^
-   |   debug_inspect(parser.position, content="0")
-   |   debug_inspect(parser.tokens.length(), content="3")
+<WORKDIR>/toml.mbt:106:16-106:22:
+    |     Equals(loc~),
+    |     StringToken("value", loc~, multiline=false),
+    |   ]
+106 |   let parser = Parser::Parser(tokens)
+    |                ^^^^^^
+    |   debug_inspect(parser.position, content="0")
+    |   debug_inspect(parser.tokens.length(), content="3")
 
-<WORKDIR>/toml.mbt:98:24-98:30:
-   |     Equals(loc~),
-   |     StringToken("value", loc~, multiline=false),
-   |   ]
-98 |   let parser = Parser::Parser(tokens)
-   |                        ^^^^^^
-   |   debug_inspect(parser.position, content="0")
-   |   debug_inspect(parser.tokens.length(), content="3")
+<WORKDIR>/toml.mbt:106:24-106:30:
+    |     Equals(loc~),
+    |     StringToken("value", loc~, multiline=false),
+    |   ]
+106 |   let parser = Parser::Parser(tokens)
+    |                        ^^^^^^
+    |   debug_inspect(parser.position, content="0")
+    |   debug_inspect(parser.tokens.length(), content="3")
 
 ```
