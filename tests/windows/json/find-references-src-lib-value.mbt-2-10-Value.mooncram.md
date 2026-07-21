@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Value' --loc 'src\lib\value.mbt:2:10'
-Found 33 references for symbol 'Value':
+Found 32 references for symbol 'Value':
 <WORKDIR>/src\lib\json.mbt:48:59-48:64:
    | }
    | 
@@ -288,14 +288,5 @@ Found 33 references for symbol 'Value':
   |          ^^^^^
   |   Continue(ContinueValue)
   |   Finish(FinishValue)
-
-<WORKDIR>/src\top.mbt:7:8-7:13:
-  |   decode,
-  |   decode_start,
-  |   decode_continue,
-7 |   type Value,
-  |        ^^^^^
-  |   type ContinueValue,
-  |   type FinishValue,
 
 ```

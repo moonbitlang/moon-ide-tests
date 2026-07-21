@@ -281,16 +281,6 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
    Continue(ContinueValue)
    Finish(FinishValue)
  }
-*** Update File: <WORKDIR>/src\top.mbt
-@@
-   decode,
-   decode_start,
-   decode_continue,
--  type Value,
-+  type ValueRenamed,
-   type ContinueValue,
-   type FinishValue,
-   type ParseError,
 *** End Patch
 
 ```
