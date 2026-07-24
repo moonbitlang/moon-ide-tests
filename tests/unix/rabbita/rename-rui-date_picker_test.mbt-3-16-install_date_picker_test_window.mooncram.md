@@ -1,4 +1,4 @@
-# rabbita rename ImageData rabbita/dom/image_data.mbt:8:20
+# rabbita rename install_date_picker_test_window rui/date_picker_test.mbt:3:16
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'ImageData' 'ImageDataRenamed' --loc 'rabbita/dom/image_data.mbt:8:20'
-Error: could not find references for symbol 'ImageData' at rabbita/dom/image_data.mbt:8:20
+$ run_moon_ide moon ide rename 'install_date_picker_test_window' 'install_date_picker_test_window_renamed' --loc 'rui/date_picker_test.mbt:3:16'
+Error: could not get package of file <WORKDIR>/rui/date_picker_test.mbt
 [1]
 ```

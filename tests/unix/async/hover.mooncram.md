@@ -37,7 +37,7 @@ async test "blocking unbuffered" {
   @async.with_task_group() <| group => {
   ^^^^^^^^^^^^^^^^^^^^^^
   ```moonbit
-  async fn[X] @moonbitlang/async.with_task_group(f : async (@async.TaskGroup[X]) -> X) -> X
+  async fn[X] @moonbitlang/async.with_task_group(f : async (@async.TaskGroup[X]) -> X, loc~ : SourceLoc = _) -> X
   ```
   ---
   
@@ -79,14 +79,15 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
                mut read_offset: Int64
                mut write: IoStatus
                mut write_offset: Int64
+               // private fields
              }
              ```
              ---
              
               A managed file descriptor/`HANDLE`,
               capable of performing async IO operations.
+  guard curr_loop.val is Some(evloop)
   guard @fd_util.fd_is_valid(handle.fd) else {
-    abort("file descriptor already closed")
 ```
 
 ```mooncram
@@ -98,8 +99,8 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
                        ```moonbit
                        async fn IoHandle::wait_read(handle : IoHandle) -> Unit
                        ```
+  guard curr_loop.val is Some(evloop)
   guard @fd_util.fd_is_valid(handle.fd) else {
-    abort("file descriptor already closed")
 ```
 
 ```mooncram
@@ -125,19 +126,22 @@ let _ignore_unused_import : Unit = {
     ```
     ---
     
-  ignore(@coroutine.spawn)
+  ignore(@coroutine.Coroutine::wake)
   ignore(@event_loop.Timer::new)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'spawn' --loc 'src/js_async/unimplemented.mbt:18:21'
+$ run_moon_ide moon ide hover 'Coroutine' --loc 'src/js_async/unimplemented.mbt:18:21'
 ///|
 #coverage.skip
 let _ignore_unused_import : Unit = {
-  ignore(@coroutine.spawn)
-         ^^^^^^^^^^^^^^^^
+  ignore(@coroutine.Coroutine::wake)
+         ^^^^^^^^^^^^^^^^^^^^
          ```moonbit
-         fn @moonbitlang/async/internal/coroutine.spawn(f : async () -> Unit) -> @coroutine.Coroutine
+         struct @coroutine.Coroutine {
+           loc: SourceLoc
+           // private fields
+         }
          ```
   ignore(@event_loop.Timer::new)
 }

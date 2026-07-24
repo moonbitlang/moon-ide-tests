@@ -1,4 +1,4 @@
-# rabbita rename new rabbita/dom/image_data.mbt:8:31
+# rabbita rename Sm rui/card.mbt:4:3
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'new' 'new_renamed' --loc 'rabbita/dom/image_data.mbt:8:31'
-Error: could not find references for symbol 'new' at rabbita/dom/image_data.mbt:8:31
+$ run_moon_ide moon ide rename 'Sm' 'SmRenamed' --loc 'rui/card.mbt:4:3'
+Error: could not get package of file <WORKDIR>/rui/card.mbt
 [1]
 ```

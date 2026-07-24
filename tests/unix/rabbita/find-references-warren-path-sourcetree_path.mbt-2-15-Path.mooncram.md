@@ -19,11 +19,11 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
 Found 9 references for symbol 'Path':
-<WORKDIR>/warren/devhub/devhub.mbt:217:42-217:46:
+<WORKDIR>/warren/devhub/devhub.mbt:214:42-214:46:
     |     path =>
     |       match self.vfs.read(path) {
     |         Some(content) => {
-217 |           let content_type = match @path.Path::extname(path) {
+214 |           let content_type = match @path.Path::extname(path) {
     |                                          ^^^^
     |             ".png" => "image/png"
     |             ".jpg" | ".jpeg" => "image/jpeg"

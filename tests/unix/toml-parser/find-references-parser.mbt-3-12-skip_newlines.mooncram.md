@@ -27,47 +27,47 @@ Found 6 references for symbol 'skip_newlines':
   |   let next_view = for view = self.view() {
   |     match view {
 
-<WORKDIR>/parser.mbt:141:8-141:21:
+<WORKDIR>/parser.mbt:166:8-166:21:
     | /// No trailing comma allowed unlike Array
     | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
-    |   let table = {}
-141 |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
+    |   let table = Map([])
+166 |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
     |        ^^^^^^^^^^^^^
     |   if self.view() is [RightBrace, .. rest] {
     |     self.update_view(rest)
 
-<WORKDIR>/parser.mbt:148:10-148:23:
+<WORKDIR>/parser.mbt:173:10-173:23:
     |     return TomlTable(table)
     |   }
     |   while true {
-148 |     self.skip_newlines()
+173 |     self.skip_newlines()
     |          ^^^^^^^^^^^^^
     |     // Parse dotted key
     |     let key_path = self.parse_dotted_key()
 
-<WORKDIR>/parser.mbt:163:10-163:23:
+<WORKDIR>/parser.mbt:188:10-188:23:
     |     set_dotted_key_value(table, key_path, value) catch {
-    |       error => self.error(error.to_string())
+    |       error => self.error("\{error}")
     |     }
-163 |     self.skip_newlines()
+188 |     self.skip_newlines()
     |          ^^^^^^^^^^^^^
     |     match self.view() {
     |       [Comma, .. rest] => {
 
-<WORKDIR>/parser.mbt:167:14-167:27:
+<WORKDIR>/parser.mbt:192:14-192:27:
     |     match self.view() {
     |       [Comma, .. rest] => {
     |         self.update_view(rest)
-167 |         self.skip_newlines()
+192 |         self.skip_newlines()
     |              ^^^^^^^^^^^^^
     |         // Trailing comma: check for closing brace after comma
     |         if self.view() is [RightBrace, .. rest2] {
 
-<WORKDIR>/parser.mbt:305:12-305:25:
+<WORKDIR>/parser.mbt:338:12-338:25:
     |   let parser = Parser::Parser(tokens)
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
-305 |     parser.skip_newlines()
+338 |     parser.skip_newlines()
     |            ^^^^^^^^^^^^^
     |     match parser.view() {
     |       [EOF, ..] => break

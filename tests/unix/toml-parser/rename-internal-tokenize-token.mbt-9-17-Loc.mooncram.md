@@ -30,13 +30,25 @@ $ run_moon_ide moon ide rename 'Loc' 'LocRenamed' --loc 'internal/tokenize/token
    end : @lexer.Position
  } derive(Eq, Debug)
 @@
+ 
+ ///|
+ #deprecated("compare with `==`; the Eq impl is unaffected")
+-pub extend Loc with Eq::{not_equal, equal}
++pub extend LocRenamed with Eq::{not_equal, equal}
+ 
+ ///|
+ #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+-pub extend Loc with Debug::{to_repr}
++pub extend LocRenamed with Debug::{to_repr}
+ 
+ ///|
  /// Token types for the lexer
  pub(all) enum Token {
    // Literals
 -  StringToken(String, loc~ : Loc, multiline~ : Bool)
 +  StringToken(String, loc~ : LocRenamed, multiline~ : Bool)
--  IntegerToken(Int64, loc~ : Loc)
-+  IntegerToken(Int64, loc~ : LocRenamed)
+-  IntegerToken(Int64, loc~ : Loc, raw~ : String)
++  IntegerToken(Int64, loc~ : LocRenamed, raw~ : String)
 -  FloatToken(Double, loc~ : Loc, raw~ : String)
 +  FloatToken(Double, loc~ : LocRenamed, raw~ : String)
 -  BooleanToken(Bool, loc~ : Loc)
@@ -72,6 +84,9 @@ $ run_moon_ide moon ide rename 'Loc' 'LocRenamed' --loc 'internal/tokenize/token
  } derive(Eq, Debug)
  
  ///|
+@@
+ 
+ ///|
  /// Check if two locations are adjacent (end of first equals start of second).
 -pub fn Loc::adjacent(self : Loc, other : Loc) -> Bool {
 +pub fn LocRenamed::adjacent(self : LocRenamed, other : LocRenamed) -> Bool {
@@ -86,7 +101,7 @@ $ run_moon_ide moon ide rename 'Loc' 'LocRenamed' --loc 'internal/tokenize/token
 +pub fn Token::loc(self : Self) -> LocRenamed {
    match self {
      StringToken(_, loc~, ..) => loc
-     IntegerToken(_, loc~) => loc
+     IntegerToken(_, loc~, ..) => loc
 *** Update File: <WORKDIR>/internal/tokenize/tokenize.mbt
 @@
  ///|

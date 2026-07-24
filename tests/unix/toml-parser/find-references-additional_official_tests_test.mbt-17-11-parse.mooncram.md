@@ -18,138 +18,138 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'parse' --loc 'additional_official_tests_test.mbt:17:11'
-Found 167 references for symbol 'parse':
-<WORKDIR>/README.mbt.md:102:22-102:27:
+Found 191 references for symbol 'parse':
+<WORKDIR>/README.mbt.md:109:22-109:27:
     | ///|
     | test {
     |   // Quick start example - parsing and accessing values
-102 |   let config = @toml.parse(
+109 |   let config = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|title = "My App"
 
-<WORKDIR>/README.mbt.md:223:22-223:27:
+<WORKDIR>/README.mbt.md:230:22-230:27:
     | test {
     |   // Error handling with try-catch
     |   let invalid_toml = "invalid = [unclosed"
-223 |   let config = @toml.parse(invalid_toml) catch {
+230 |   let config = @toml.parse(invalid_toml) catch {
     |                      ^^^^^
     |     _ => TomlTable(Map([])) // Return default value on error
     |   }
 
-<WORKDIR>/README.mbt.md:230:26-230:31:
+<WORKDIR>/README.mbt.md:237:26-237:31:
     |   assert_eq(table.length(), 0) // Empty table from error handler
     | 
     |   // Error handling with try? - converts to Result type
-230 |   let result = try @toml.parse("key = \"value\"") catch {
+237 |   let result = try @toml.parse("key = \"value\"") catch {
     |                          ^^^^^
     |     err => Err(err)
     |   } noraise {
 
-<WORKDIR>/README.mbt.md:240:30-240:35:
+<WORKDIR>/README.mbt.md:247:30-247:35:
     |   }
     | 
     |   // Parsing error example
-240 |   let bad_result = try @toml.parse("bad syntax here") catch {
+247 |   let bad_result = try @toml.parse("bad syntax here") catch {
     |                              ^^^^^
     |     err => Err(err)
     |   } noraise {
 
-<WORKDIR>/README.mbt.md:274:11-274:16:
+<WORKDIR>/README.mbt.md:281:11-281:16:
     |     #|max_connections = 100
     |     #|
     |   debug_inspect(
-274 |     @toml.parse(toml),
+281 |     @toml.parse(toml),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:301:11-301:16:
+<WORKDIR>/README.mbt.md:308:11-308:16:
     |     #|booleans = [true, false, true]
     |     #|
     |   debug_inspect(
-301 |     @toml.parse(toml_arrays),
+308 |     @toml.parse(toml_arrays),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:345:11-345:16:
+<WORKDIR>/README.mbt.md:352:11-352:16:
     |     #|sku = 284758393
     |     #|
     |   debug_inspect(
-345 |     @toml.parse(toml_tables),
+352 |     @toml.parse(toml_tables),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:377:11-377:16:
+<WORKDIR>/README.mbt.md:384:11-384:16:
     |     #|meeting_time = 14:30:00
     |     #|
     |   debug_inspect(
-377 |     @toml.parse(toml_datetime),
+384 |     @toml.parse(toml_datetime),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:405:11-405:16:
+<WORKDIR>/README.mbt.md:412:11-412:16:
     |     #|cache = {enabled = true, ttl = 300}
     |     #|
     |   debug_inspect(
-405 |     @toml.parse(toml_inline),
+412 |     @toml.parse(toml_inline),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:443:22-443:27:
+<WORKDIR>/README.mbt.md:450:22-450:27:
     |     #|  2023-08-20T02:00:00
     |     #|]
     |     #|
-443 |   let result = @toml.parse(config)
+450 |   let result = @toml.parse(config)
     |                      ^^^^^
     |   assert_true(result.validate())
     |   // Verify the structure contains expected keys
 
-<WORKDIR>/README.mbt.md:495:11-495:16:
+<WORKDIR>/README.mbt.md:502:11-502:16:
     |     #|weight = 0.5
     |     #|
     |   debug_inspect(
-495 |     @toml.parse(toml_advanced),
+502 |     @toml.parse(toml_advanced),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/README.mbt.md:588:27-588:32:
+<WORKDIR>/README.mbt.md:595:27-595:32:
     | ///|
     | test {
     |   // Working with nested tables
-588 |   let parsed_toml = @toml.parse(
+595 |   let parsed_toml = @toml.parse(
     |                           ^^^^^
     |     (
     |       #|[database]
 
-<WORKDIR>/README.mbt.md:628:21-628:26:
+<WORKDIR>/README.mbt.md:635:21-635:26:
     | ///|
     | test {
     |   // Valid: all integers
-628 |   let valid = @toml.parse("numbers = [1, 2, 3]")
+635 |   let valid = @toml.parse("numbers = [1, 2, 3]")
     |                     ^^^^^
     |   assert_true(valid.validate())
     | 
 
-<WORKDIR>/README.mbt.md:632:21-632:26:
+<WORKDIR>/README.mbt.md:639:21-639:26:
     |   assert_true(valid.validate())
     | 
     |   // Mixed types are allowed during parsing but fail validation
-632 |   let mixed = @toml.parse("mixed = [1, \"two\", 3.0]")
+639 |   let mixed = @toml.parse("mixed = [1, \"two\", 3.0]")
     |                     ^^^^^
     |   assert_false(mixed.validate()) // Validation catches the type mismatch
     | }
 
-<WORKDIR>/README.mbt.md:643:27-643:32:
+<WORKDIR>/README.mbt.md:650:27-650:32:
     | ///|
     | test {
     |   // Working with all 4 datetime types
-643 |   let parsed_toml = @toml.parse(
+650 |   let parsed_toml = @toml.parse(
     |                           ^^^^^
     |     (
     |       #|offset_dt = 2023-01-15T10:30:00Z
@@ -234,24 +234,6 @@ Found 167 references for symbol 'parse':
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
-
-<WORKDIR>/cmd/toml/main.mbt:76:25-76:30:
-   |       return 1
-   |     }
-   |   }
-76 |   let value = @toml_lib.parse(source) catch {
-   |                         ^^^^^
-   |     err => {
-   |       println("error: failed to parse \{path}: \{err}")
-
-<WORKDIR>/cmd/toml/main.mbt:94:21-94:26:
-   |       return 1
-   |     }
-   |   }
-94 |   let _ = @toml_lib.parse(source) catch {
-   |                     ^^^^^
-   |     err => {
-   |       println("error: failed to parse \{path}: \{err}")
 
 <WORKDIR>/comprehensive_test.mbt:13:11-13:16:
    |     #|ports = [8000, 8001, 8002]
@@ -622,20 +604,20 @@ Found 167 references for symbol 'parse':
    |       err => Err(err)
    |     } noraise {
 
-<WORKDIR>/coverage_improvement_test.mbt:152:15-152:20:
+<WORKDIR>/coverage_improvement_test.mbt:166:15-166:20:
     |     #|quote = "say \"hello\""
     |     #|
     |   debug_inspect(
-152 |     try @toml.parse(toml_with_escapes) catch {
+166 |     try @toml.parse(toml_with_escapes) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/coverage_improvement_test.mbt:182:15-182:20:
+<WORKDIR>/coverage_improvement_test.mbt:196:15-196:20:
     |     #|key2 = "value2"
     |     #|
     |   debug_inspect(
-182 |     try @toml.parse(toml_with_whitespace) catch {
+196 |     try @toml.parse(toml_with_whitespace) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
@@ -819,6 +801,222 @@ Found 167 references for symbol 'parse':
   |             ^^^^^
   |     error =>
   |       Err(
+
+<WORKDIR>/key_value_disambiguation_test.mbt:13:11-13:16:
+   |   // These used to fail with "Expected value": a number followed by `]` and
+   |   // newline/EOF was mistaken for a table-header key.
+   |   debug_inspect(
+13 |     @toml.parse("arr = [1_0]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlInteger(10)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:19:11-19:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+19 |     @toml.parse("arr = [1_000.5]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlFloat(1000.5)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:25:11-25:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+25 |     @toml.parse("arr = [1e3]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlFloat(1000)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:31:11-31:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+31 |     @toml.parse("arr = [\n  1_000.5,\n  2.5_5,\n]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlFloat(1000.5), TomlFloat(2.55)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:42:11-42:16:
+   | test "'+' signed numbers as last array element" {
+   |   // The old key-position lookahead rejected any `+number]` at end of line.
+   |   debug_inspect(
+42 |     @toml.parse("arr = [+5]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlInteger(5)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:48:11-48:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+48 |     @toml.parse("arr = [+5.5]\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "arr": TomlArray([TomlFloat(5.5)]) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:58:11-58:16:
+   | ///|
+   | test "number-like bare keys keep their raw text" {
+   |   debug_inspect(
+58 |     @toml.parse("[1_0]\nx = 1\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "1_0": TomlTable({ "x": TomlInteger(1) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:64:11-64:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+64 |     @toml.parse("[-1_0]\nx = 1\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "-1_0": TomlTable({ "x": TomlInteger(1) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:70:11-70:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+70 |     @toml.parse("[0xAB]\nx = 1\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "0xAB": TomlTable({ "x": TomlInteger(1) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:76:11-76:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+76 |     @toml.parse("0xAB.cd = 1\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "0xAB": TomlTable({ "cd": TomlInteger(1) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:82:11-82:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+82 |     @toml.parse("1_000.5 = 3\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "1_000": TomlTable({ "5": TomlInteger(3) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:88:11-88:16:
+   |     ),
+   |   )
+   |   debug_inspect(
+88 |     @toml.parse("-5y = 3\n"),
+   |           ^^^^^
+   |     content=(
+   |       #|TomlTable({ "-5y": TomlInteger(3) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:104:11-104:16:
+    |   }
+    |   // ...but they are still valid bare keys.
+    |   debug_inspect(
+104 |     @toml.parse("[0XAB]\nx = 1\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "0XAB": TomlTable({ "x": TomlInteger(1) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:156:11-156:16:
+    | ///|
+    | test "signed number values still work" {
+    |   debug_inspect(
+156 |     @toml.parse("x = +5\ny = -5\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "x": TomlInteger(5), "y": TomlInteger(-5) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:162:11-162:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+162 |     @toml.parse("x = +5.5\ny = -5.5\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "x": TomlFloat(5.5), "y": TomlFloat(-5.5) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:195:11-195:16:
+    |   )
+    |   // The boundaries of the Int64 range still parse.
+    |   debug_inspect(
+195 |     @toml.parse("x = 0x7FFFFFFFFFFFFFFF\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "x": TomlInteger(9223372036854775807) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:201:11-201:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+201 |     @toml.parse("x = -9223372036854775808\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "x": TomlInteger(-9223372036854775808) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:243:11-243:16:
+    |   // Tables created implicitly by [a.b] headers (not by dotted keys) may be
+    |   // defined by a later [a] header.
+    |   debug_inspect(
+243 |     @toml.parse("[a.b]\nx = 1\n[a]\ny = 2\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "a": TomlTable({ "b": TomlTable({ "x": TomlInteger(1) }), "y": TomlInteger(2) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:250:11-250:16:
+    |   )
+    |   // Defining a new sub-table under a dotted-key table is also fine.
+    |   debug_inspect(
+250 |     @toml.parse("a.b = 1\n[a.c]\nx = 2\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "a": TomlTable({ "b": TomlInteger(1), "c": TomlTable({ "x": TomlInteger(2) }) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:276:11-276:16:
+    |   // (Regression: these used to fail numeric validation before the parser
+    |   // could use the raw text as a key.)
+    |   debug_inspect(
+276 |     @toml.parse("1__0 = 1\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "1__0": TomlInteger(1) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:282:11-282:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+282 |     @toml.parse("[1_]\nx = 2\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "1_": TomlTable({ "x": TomlInteger(2) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:288:11-288:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+288 |     @toml.parse("1_.5 = 3\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "1_": TomlTable({ "5": TomlInteger(3) }) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:294:11-294:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+294 |     @toml.parse("99999999999999999999 = 1\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "99999999999999999999": TomlInteger(1) })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:300:11-300:16:
+    |     ),
+    |   )
+    |   debug_inspect(
+300 |     @toml.parse("-99999999999999999999 = 1\n"),
+    |           ^^^^^
+    |     content=(
+    |       #|TomlTable({ "-99999999999999999999": TomlInteger(1) })
 
 <WORKDIR>/official_toml_test_suite_test.mbt:14:11-14:16:
    |     #|basic = "value"
@@ -1054,11 +1252,11 @@ Found 167 references for symbol 'parse':
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/parser.mbt:300:8-300:13:
+<WORKDIR>/parser.mbt:333:8-333:13:
     | /// On any lexical or syntactic error, `parse` raises with a message
     | /// containing the source location. Wrap the call in `try?` to receive a
     | /// `Result[TomlValue, Error]` instead.
-300 | pub fn parse(input : String) -> TomlValue raise {
+333 | pub fn parse(input : String) -> TomlValue raise {
     |        ^^^^^
     |   let tokens = @tokenize.tokenize(input)
     |   let parser = Parser::Parser(tokens)
@@ -1171,182 +1369,182 @@ Found 167 references for symbol 'parse':
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:336:15-336:20:
+<WORKDIR>/parser_test.mbt:338:15-338:20:
     |     #|-10e-1 = "d"
     |     #|
     |   debug_inspect(
-336 |     try @toml.parse(exponent_like_keys_toml) catch {
+338 |     try @toml.parse(exponent_like_keys_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:369:15-369:20:
+<WORKDIR>/parser_test.mbt:371:15-371:20:
     |     #|value = "d"
     |     #|
     |   debug_inspect(
-369 |     try @toml.parse(exponent_like_table_names_toml) catch {
+371 |     try @toml.parse(exponent_like_table_names_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:411:15-411:20:
+<WORKDIR>/parser_test.mbt:413:15-413:20:
     | test "overflow float accepted as bare key" {
     |   // The same overflow token is valid as a bare key (all chars are A-Za-z0-9_-)
     |   debug_inspect(
-411 |     try @toml.parse("-31e368 = \"ok\"\n") catch {
+413 |     try @toml.parse("-31e368 = \"ok\"\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:426:15-426:20:
-    | test "special float keywords as keys" {
-    |   // inf, nan, +inf, -inf, etc. are valid bare keys in TOML
+<WORKDIR>/parser_test.mbt:429:15-429:20:
+    |   // inf, nan, -inf, etc. are valid bare keys in TOML, but +inf is not:
+    |   // '+' is not a bare-key character, so `+inf = 1` must be rejected.
     |   debug_inspect(
-426 |     try @toml.parse("+inf = 1\n") catch {
+429 |     try @toml.parse("+inf = 1\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:436:15-436:20:
+<WORKDIR>/parser_test.mbt:439:15-439:20:
     |     ),
     |   )
     |   debug_inspect(
-436 |     try @toml.parse("-inf = 2\n") catch {
+439 |     try @toml.parse("-inf = 2\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:446:15-446:20:
+<WORKDIR>/parser_test.mbt:449:15-449:20:
     |     ),
     |   )
     |   debug_inspect(
-446 |     try @toml.parse("nan = 3\n") catch {
+449 |     try @toml.parse("nan = 3\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:461:15-461:20:
+<WORKDIR>/parser_test.mbt:464:15-464:20:
     | test "dotted key with float-like segments" {
     |   // Float token with dot in raw string should split into dotted keys
     |   debug_inspect(
-461 |     try @toml.parse("1.2 = \"a\"\n") catch {
+464 |     try @toml.parse("1.2 = \"a\"\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:472:15-472:20:
+<WORKDIR>/parser_test.mbt:475:15-475:20:
     |   )
     |   // Float-like key followed by dotted sub-key
     |   debug_inspect(
-472 |     try @toml.parse("[-80e-2.sub]\nval = 1\n") catch {
+475 |     try @toml.parse("[-80e-2.sub]\nval = 1\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:518:15-518:20:
+<WORKDIR>/parser_test.mbt:521:15-521:20:
     | /// Tests for inline table edge cases  
     | test "test empty inline table" {
     |   debug_inspect(
-518 |     try @toml.parse("empty = {}") catch {
+521 |     try @toml.parse("empty = {}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:532:15-532:20:
+<WORKDIR>/parser_test.mbt:535:15-535:20:
     | ///|
     | test "test nested inline tables" {
     |   debug_inspect(
-532 |     try @toml.parse("table = {inner = {key = \"value\"}}") catch {
+535 |     try @toml.parse("table = {inner = {key = \"value\"}}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:546:15-546:20:
+<WORKDIR>/parser_test.mbt:549:15-549:20:
     | ///|
     | test "test inline table with multiple key types" {
     |   debug_inspect(
-546 |     try @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
+549 |     try @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:560:15-560:20:
+<WORKDIR>/parser_test.mbt:563:15-563:20:
     | ///|
     | test "test inline table with array values" {
     |   debug_inspect(
-560 |     try @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}") catch {
+563 |     try @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:585:22-585:27:
+<WORKDIR>/parser_test.mbt:588:22-588:27:
     | ///|
     | /// Test dotted key notation - simple case
     | test "dotted key notation simple" {
-585 |   let result = @toml.parse(
+588 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|a.b.c = "value"
 
-<WORKDIR>/parser_test.mbt:608:11-608:16:
+<WORKDIR>/parser_test.mbt:611:11-611:16:
     |     #|f = "value4"
     |     #|
     |   debug_inspect(
-608 |     @toml.parse(dotted_multiple_toml),
+611 |     @toml.parse(dotted_multiple_toml),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/parser_test.mbt:636:11-636:16:
+<WORKDIR>/parser_test.mbt:639:11-639:16:
     |     #|server.tags = ["web", "api"]
     |     #|
     |   debug_inspect(
-636 |     @toml.parse(dotted_types_toml),
+639 |     @toml.parse(dotted_types_toml),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/parser_test.mbt:658:22-658:27:
+<WORKDIR>/parser_test.mbt:661:22-661:27:
     | ///|
     | /// Test dotted key notation - quoted keys
     | test "dotted key notation quoted keys" {
-658 |   let result = @toml.parse(
+661 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|"first.part"."second.part" = "value"
 
-<WORKDIR>/parser_test.mbt:674:22-674:27:
+<WORKDIR>/parser_test.mbt:677:22-677:27:
     | ///|
     | /// Test dotted key notation - integer keys
     | test "dotted key notation integer keys" {
-674 |   let result = @toml.parse(
+677 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|1.2.3 = "numeric path"
 
-<WORKDIR>/parser_test.mbt:696:11-696:16:
+<WORKDIR>/parser_test.mbt:701:15-701:20:
     |     #|c = "table"
     |     #|
     |   debug_inspect(
-696 |     @toml.parse(conflict_toml),
-    |           ^^^^^
-    |     content=(
-    |       #|TomlTable({ "a": TomlTable({ "b": TomlString("dotted"), "c": TomlString("table") }) })
+701 |     try @toml.parse(conflict_toml) catch {
+    |               ^^^^^
+    |       err => Err(err)
+    |     } noraise {
 
-<WORKDIR>/parser_test.mbt:706:22-706:27:
+<WORKDIR>/parser_test.mbt:715:22-715:27:
     | ///|
     | /// Test dotted key notation - deep nesting
     | test "dotted key notation deep nesting" {
-706 |   let result = @toml.parse(
+715 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|a.b.c.d.e.f = "deep"
 
-<WORKDIR>/parser_test.mbt:730:15-730:20:
+<WORKDIR>/parser_test.mbt:739:15-739:20:
     |     #|
     |   // TODO: fix
     |   debug_inspect(
-730 |     try @toml.parse(data) catch {
+739 |     try @toml.parse(data) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
@@ -1358,6 +1556,24 @@ Found 167 references for symbol 'parse':
   |             ^^^^^
   |     e => {
   |       let s = e.to_string()
+
+<WORKDIR>/toml_cli/main.mbt:76:25-76:30:
+   |       return 1
+   |     }
+   |   }
+76 |   let value = @toml_lib.parse(source) catch {
+   |                         ^^^^^
+   |     err => {
+   |       println("error: failed to parse \{path}: \{err}")
+
+<WORKDIR>/toml_cli/main.mbt:94:21-94:26:
+   |       return 1
+   |     }
+   |   }
+94 |   let _ = @toml_lib.parse(source) catch {
+   |                     ^^^^^
+   |     err => {
+   |       println("error: failed to parse \{path}: \{err}")
 
 <WORKDIR>/toml_to_string_test.mbt:38:19-38:24:
    |       #|

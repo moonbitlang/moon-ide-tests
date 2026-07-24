@@ -81,7 +81,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 @@
  #cfg(not(platform="windows"))
  priv struct KqueueWatchedFile {
-   file_id : FileIdentity
+   identity : FileIdentity
 -  io : @event_loop.IoHandle
 +  io : @event_loop.IoHandleRenamed
  }
@@ -170,10 +170,10 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  ///|
  /// A managed file descriptor/`HANDLE`,
  /// capable of performing async IO operations.
--struct IoHandle {
-+struct IoHandleRenamed {
-   mut fd : @fd_util.Fd
-   kind : @fd_util.FileKind
+-pub struct IoHandle {
++pub struct IoHandleRenamed {
+   priv mut fd : @fd_util.Fd
+   priv kind : @fd_util.FileKind
    /// - `is_async=true`: support native async operations through the event bus.
 @@
  }
@@ -296,18 +296,18 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  #cfg(not(platform="windows"))
 -pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
 +pub async fn IoHandleRenamed::wait_read(handle : IoHandleRenamed) -> Unit {
+   guard curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
  
  ///|
  #cfg(not(platform="windows"))
 -async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
 +async fn IoHandleRenamed::wait_write(handle : IoHandleRenamed) -> Unit {
+   guard curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
  
  ///|
@@ -487,8 +487,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
  
  ///|
--let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
-+let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = {}
+-let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
++let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = Map([])
  
  ///|
 -fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {

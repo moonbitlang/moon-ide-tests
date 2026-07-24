@@ -52,14 +52,14 @@ Found 8 references for symbol 'wait_read':
    | #cfg(not(platform="windows"))
 17 | pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
    |                        ^^^^^^^^^
+   |   guard curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
-   |     abort("file descriptor already closed")
 
-<WORKDIR>/src/internal/event_loop/io_unix.mbt:82:12-82:21:
+<WORKDIR>/src/internal/event_loop/io_unix.mbt:84:12-84:21:
    |     return ret
    |   }
    |   let ret = if @os_error.is_nonblocking_io_error() {
-82 |     handle.wait_read()
+84 |     handle.wait_read()
    |            ^^^^^^^^^
    |     read_unix_ffi(handle.fd, buf, offset~, len~)
    |   } else {
@@ -82,11 +82,11 @@ Found 8 references for symbol 'wait_read':
     |     accept_unix_ffi(handle.fd, addr)
     |   } else {
 
-<WORKDIR>/src/internal/event_loop/process_unix.mbt:58:8-58:17:
+<WORKDIR>/src/internal/event_loop/process_unix.mbt:70:8-70:17:
    |     if !@os_error.is_nonblocking_io_error() {
    |       @os_error.check_errno(context)
    |     }
-58 |     io.wait_read()
+70 |     io.wait_read()
    |        ^^^^^^^^^
    |   } else if platform is MacOS {
    |     // MacOS/BSD, use `kqueue` with `EVFILT_PROC`

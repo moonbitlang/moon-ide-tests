@@ -35,148 +35,148 @@ Found 59 references for symbol 'Parser':
   |   let next_view = for view = self.view() {
   |     match view {
 
-<WORKDIR>/parser.mbt:17:4-17:10:
-   | /// Try to consume a single bare key from the current position.
-   | /// Handles identifiers, strings, integers, booleans (true/false),
-   | /// and special float keywords (inf/nan) in key position.
-17 | fn Parser::try_parse_single_key(self : Parser) -> String? {
+<WORKDIR>/parser.mbt:23:4-23:10:
+   | /// "1_0"). A leading '+' in the raw text means the token can never be a
+   | /// bare key ('+' is not a bare-key character), so it is rejected here and
+   | /// surfaces as an "Expected key" error.
+23 | fn Parser::try_parse_single_key(self : Parser) -> String? {
    |    ^^^^^^
    |   match self.view() {
-   |     [Identifier(name, ..), .. rest] => {
+   |     [Identifier(name, ..), .. rest] =>
 
-<WORKDIR>/parser.mbt:17:40-17:46:
-   | /// Try to consume a single bare key from the current position.
-   | /// Handles identifiers, strings, integers, booleans (true/false),
-   | /// and special float keywords (inf/nan) in key position.
-17 | fn Parser::try_parse_single_key(self : Parser) -> String? {
+<WORKDIR>/parser.mbt:23:40-23:46:
+   | /// "1_0"). A leading '+' in the raw text means the token can never be a
+   | /// bare key ('+' is not a bare-key character), so it is rejected here and
+   | /// surfaces as an "Expected key" error.
+23 | fn Parser::try_parse_single_key(self : Parser) -> String? {
    |                                        ^^^^^^
    |   match self.view() {
-   |     [Identifier(name, ..), .. rest] => {
+   |     [Identifier(name, ..), .. rest] =>
 
-<WORKDIR>/parser.mbt:55:4-55:10:
+<WORKDIR>/parser.mbt:70:4-70:10:
    | 
    | ///|
    | /// Parse a primary value (string, number, boolean)
-55 | fn Parser::parse_value(
+70 | fn Parser::parse_value(
    |    ^^^^^^
    |   self : Self,
    |   skip_newlines? : Bool = false,
 
-<WORKDIR>/parser.mbt:115:4-115:10:
+<WORKDIR>/parser.mbt:140:4-140:10:
     | 
     | ///|
     | /// Parse an array [1, 2, 3]
-115 | fn Parser::parse_array(self : Self) -> TomlValue raise {
+140 | fn Parser::parse_array(self : Self) -> TomlValue raise {
     |    ^^^^^^
     |   let values = []
     |   while true {
 
-<WORKDIR>/parser.mbt:139:4-139:10:
+<WORKDIR>/parser.mbt:164:4-164:10:
     | ///|
     | /// Parse an inline table {key = value, key2 = value2}
     | /// No trailing comma allowed unlike Array
-139 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
+164 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
     |    ^^^^^^
-    |   let table = {}
+    |   let table = Map([])
     |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
 
-<WORKDIR>/parser.mbt:139:38-139:44:
+<WORKDIR>/parser.mbt:164:38-164:44:
     | ///|
     | /// Parse an inline table {key = value, key2 = value2}
     | /// No trailing comma allowed unlike Array
-139 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
+164 | fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
     |                                      ^^^^^^
-    |   let table = {}
+    |   let table = Map([])
     |   self.skip_newlines() // TOML 1.1: allow newlines in inline tables
 
-<WORKDIR>/parser.mbt:187:4-187:10:
+<WORKDIR>/parser.mbt:212:4-212:10:
     | 
     | ///|
     | /// Parse a table path: section.subsection.key
-187 | fn Parser::parse_table_path(self : Parser) -> Array[String] raise {
+212 | fn Parser::parse_table_path(self : Parser) -> Array[String] raise {
     |    ^^^^^^
     |   self.parse_dotted_key()
     | }
 
-<WORKDIR>/parser.mbt:187:36-187:42:
+<WORKDIR>/parser.mbt:212:36-212:42:
     | 
     | ///|
     | /// Parse a table path: section.subsection.key
-187 | fn Parser::parse_table_path(self : Parser) -> Array[String] raise {
+212 | fn Parser::parse_table_path(self : Parser) -> Array[String] raise {
     |                                    ^^^^^^
     |   self.parse_dotted_key()
     | }
 
-<WORKDIR>/parser.mbt:192:7-192:13:
+<WORKDIR>/parser.mbt:217:7-217:13:
     | }
     | 
     | ///|
-192 | fn[A] Parser::error(self : Parser, msg : String) -> A raise {
+217 | fn[A] Parser::error(self : Parser, msg : String) -> A raise {
     |       ^^^^^^
     |   match self.view() {
     |     [token, ..] => fail("\{msg} at \{@debug.to_string(token.loc())}")
 
-<WORKDIR>/parser.mbt:192:28-192:34:
+<WORKDIR>/parser.mbt:217:28-217:34:
     | }
     | 
     | ///|
-192 | fn[A] Parser::error(self : Parser, msg : String) -> A raise {
+217 | fn[A] Parser::error(self : Parser, msg : String) -> A raise {
     |                            ^^^^^^
     |   match self.view() {
     |     [token, ..] => fail("\{msg} at \{@debug.to_string(token.loc())}")
 
-<WORKDIR>/parser.mbt:201:4-201:10:
+<WORKDIR>/parser.mbt:226:4-226:10:
     | 
     | ///|
     | /// Parse a dotted key path: key.subkey.subsubkey
-201 | fn Parser::parse_dotted_key(self : Parser) -> Array[String] raise {
+226 | fn Parser::parse_dotted_key(self : Parser) -> Array[String] raise {
     |    ^^^^^^
     |   let path = Array::new()
     | 
 
-<WORKDIR>/parser.mbt:201:36-201:42:
+<WORKDIR>/parser.mbt:226:36-226:42:
     | 
     | ///|
     | /// Parse a dotted key path: key.subkey.subsubkey
-201 | fn Parser::parse_dotted_key(self : Parser) -> Array[String] raise {
+226 | fn Parser::parse_dotted_key(self : Parser) -> Array[String] raise {
     |                                    ^^^^^^
     |   let path = Array::new()
     | 
 
-<WORKDIR>/parser.mbt:260:4-260:10:
+<WORKDIR>/parser.mbt:293:4-293:10:
     | 
     | ///|
     | /// Parse a key-value pair with dotted key support: key.subkey = value
-260 | fn Parser::parse_key_value(self : Parser) -> (Array[String], TomlValue) raise {
+293 | fn Parser::parse_key_value(self : Parser) -> (Array[String], TomlValue) raise {
     |    ^^^^^^
     |   // Parse dotted key
     |   let key_path = self.parse_dotted_key()
 
-<WORKDIR>/parser.mbt:260:35-260:41:
+<WORKDIR>/parser.mbt:293:35-293:41:
     | 
     | ///|
     | /// Parse a key-value pair with dotted key support: key.subkey = value
-260 | fn Parser::parse_key_value(self : Parser) -> (Array[String], TomlValue) raise {
+293 | fn Parser::parse_key_value(self : Parser) -> (Array[String], TomlValue) raise {
     |                                   ^^^^^^
     |   // Parse dotted key
     |   let key_path = self.parse_dotted_key()
 
-<WORKDIR>/parser.mbt:302:16-302:22:
+<WORKDIR>/parser.mbt:335:16-335:22:
     | /// `Result[TomlValue, Error]` instead.
     | pub fn parse(input : String) -> TomlValue raise {
     |   let tokens = @tokenize.tokenize(input)
-302 |   let parser = Parser::Parser(tokens)
+335 |   let parser = Parser::Parser(tokens)
     |                ^^^^^^
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
 
-<WORKDIR>/parser.mbt:302:24-302:30:
+<WORKDIR>/parser.mbt:335:24-335:30:
     | /// `Result[TomlValue, Error]` instead.
     | pub fn parse(input : String) -> TomlValue raise {
     |   let tokens = @tokenize.tokenize(input)
-302 |   let parser = Parser::Parser(tokens)
+335 |   let parser = Parser::Parser(tokens)
     |                        ^^^^^^
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
 
 <WORKDIR>/parser_wbtest.mbt:8:16-8:22:
@@ -467,85 +467,85 @@ Found 59 references for symbol 'Parser':
     |   let result = parser.parse_dotted_key()
     |   debug_inspect(
 
-<WORKDIR>/toml.mbt:34:13-34:19:
+<WORKDIR>/toml.mbt:42:13-42:19:
    | 
    | ///|
    | /// Parser state (will implement methods later)
-34 | priv struct Parser {
+42 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
    |   mut position : Int
 
-<WORKDIR>/toml.mbt:47:4-47:10:
+<WORKDIR>/toml.mbt:55:4-55:10:
    | /// breaks are insignificant (e.g. between top-level statements). The
    | /// parser's position is not advanced — callers commit progress by passing
    | /// the consumed tail back through `update_view`.
-47 | fn Parser::view(
+55 | fn Parser::view(
    |    ^^^^^^
    |   self : Self,
    |   skip_newlines? : Bool = false,
 
-<WORKDIR>/toml.mbt:75:4-75:10:
+<WORKDIR>/toml.mbt:83:4-83:10:
    | /// from that point. The new position is read from the view's start offset
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
-75 | fn Parser::update_view(
+83 | fn Parser::update_view(
    |    ^^^^^^
    |   self : Parser,
    |   view : ArrayView[@tokenize.Token],
 
-<WORKDIR>/toml.mbt:76:10-76:16:
+<WORKDIR>/toml.mbt:84:10-84:16:
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
    | fn Parser::update_view(
-76 |   self : Parser,
+84 |   self : Parser,
    |          ^^^^^^
    |   view : ArrayView[@tokenize.Token],
    | ) -> Unit {
 
-<WORKDIR>/toml.mbt:85:4-85:10:
+<WORKDIR>/toml.mbt:93:4-93:10:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |    ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:85:12-85:18:
+<WORKDIR>/toml.mbt:93:12-93:18:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |            ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:85:55-85:61:
+<WORKDIR>/toml.mbt:93:55-93:61:
    | 
    | ///|
    | /// Create a new parser
-85 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |                                                       ^^^^^^
    |   { tokens, position: 0 }
    | }
 
-<WORKDIR>/toml.mbt:98:16-98:22:
-   |     Equals(loc~),
-   |     StringToken("value", loc~, multiline=false),
-   |   ]
-98 |   let parser = Parser::Parser(tokens)
-   |                ^^^^^^
-   |   debug_inspect(parser.position, content="0")
-   |   debug_inspect(parser.tokens.length(), content="3")
+<WORKDIR>/toml.mbt:106:16-106:22:
+    |     Equals(loc~),
+    |     StringToken("value", loc~, multiline=false),
+    |   ]
+106 |   let parser = Parser::Parser(tokens)
+    |                ^^^^^^
+    |   debug_inspect(parser.position, content="0")
+    |   debug_inspect(parser.tokens.length(), content="3")
 
-<WORKDIR>/toml.mbt:98:24-98:30:
-   |     Equals(loc~),
-   |     StringToken("value", loc~, multiline=false),
-   |   ]
-98 |   let parser = Parser::Parser(tokens)
-   |                        ^^^^^^
-   |   debug_inspect(parser.position, content="0")
-   |   debug_inspect(parser.tokens.length(), content="3")
+<WORKDIR>/toml.mbt:106:24-106:30:
+    |     Equals(loc~),
+    |     StringToken("value", loc~, multiline=false),
+    |   ]
+106 |   let parser = Parser::Parser(tokens)
+    |                        ^^^^^^
+    |   debug_inspect(parser.position, content="0")
+    |   debug_inspect(parser.tokens.length(), content="3")
 
 ```

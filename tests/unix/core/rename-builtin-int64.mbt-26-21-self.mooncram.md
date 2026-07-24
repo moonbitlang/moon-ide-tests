@@ -1,4 +1,4 @@
-# core rename i builtin/int64.mbt:31:24
+# core rename self builtin/int64.mbt:26:21
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,24 +17,24 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'i' 'i_renamed' --loc 'builtin/int64.mbt:31:24'
+$ run_moon_ide moon ide rename 'self' 'self_renamed' --loc 'builtin/int64.mbt:26:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin/int64.mbt
 @@
- ///   inspect(Int64::from_int(42), content="42")
+ ///   inspect(Int64(3), content="3")
  /// }
  /// ```
--pub fn Int64::from_int(i : Int) -> Int64 {
-+pub fn Int64::from_int(i_renamed : Int) -> Int64 {
-   i.to_int64()
- }
+-pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
++pub fn Int64::Int64(self_renamed : Int64) -> Int64 = "%identity"
  
+ ///|
+ /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
 @@
  
  ///|
  pub impl Hash for Int64 with fn hash_combine(self, hasher) {
 -  hasher.combine_int64(self)
-+  hasher.combine_int64(i_renamed)
++  self_renamed.combine_int64(self)
  }
  
  ///|

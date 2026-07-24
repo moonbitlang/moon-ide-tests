@@ -1,4 +1,4 @@
-# rabbita find-references new warren/templates/minimized/main.mbt:1:18
+# rabbita find-references SheetSide rui/sheet.mbt:3:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,20 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'new' --loc 'warren/templates/minimized/main.mbt:1:18'
-Found 2 references for symbol 'new':
-<WORKDIR>/warren/templates/minimized/main.mbt:1:18-1:21:
-1 | using @rabbita { new, simple_cell }
-  |                  ^^^
-  | using @html { button, div, h1 }
-  | 
-
-<WORKDIR>/warren/templates/minimized/main.mbt:24:3-24:6:
-   |       ],
-   |     ],
-   |   )
-24 |   new(app).mount("app")
-   |   ^^^
-   | }
-
+$ run_moon_ide moon ide find-references 'SheetSide' --loc 'rui/sheet.mbt:3:15'
+Error: could not get package of file <WORKDIR>/rui/sheet.mbt
+[1]
 ```

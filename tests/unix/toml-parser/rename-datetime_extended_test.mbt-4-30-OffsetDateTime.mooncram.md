@@ -274,8 +274,8 @@ $ run_moon_ide moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'd
    // Scheduled maintenance (local datetime - timezone agnostic)
 *** Update File: <WORKDIR>/internal/qc_model/gen_test.mbt
 @@
- fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-   @qc.liftA3(
+ fn offset_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+   @gen.liftA3(
      fn(date : String, time : String, offset : String) {
 -      OffsetDateTime("\{date}T\{time}\{offset}")
 +      OffsetDateTimeRenamed("\{date}T\{time}\{offset}")

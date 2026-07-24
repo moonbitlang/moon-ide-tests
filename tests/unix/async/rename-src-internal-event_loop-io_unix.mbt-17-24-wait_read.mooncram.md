@@ -48,9 +48,9 @@ $ run_moon_ide moon ide rename 'wait_read' 'wait_read_renamed' --loc 'src/intern
  #cfg(not(platform="windows"))
 -pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
 +pub async fn IoHandle::wait_read_renamed(handle : IoHandle) -> Unit {
+   guard curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
      return ret
    }

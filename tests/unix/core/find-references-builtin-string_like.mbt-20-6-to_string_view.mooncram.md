@@ -19,38 +19,38 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
 Found 13 references for symbol 'to_string_view':
-<WORKDIR>/builtin/arrayview.mbt:1498:19-1498:33:
+<WORKDIR>/builtin/arrayview.mbt:1492:19-1492:33:
      |   match self {
      |     [] => ""
      |     [hd, .. tl] => {
-1498 |       let hd = hd.to_string_view()
+1492 |       let hd = hd.to_string_view()
      |                   ^^^^^^^^^^^^^^
      |       let size_hint = for s in tl; size_hint = hd.length() {
      |         continue size_hint + s.to_string_view().length() + separator.length()
 
-<WORKDIR>/builtin/arrayview.mbt:1500:32-1500:46:
+<WORKDIR>/builtin/arrayview.mbt:1494:32-1494:46:
      |     [hd, .. tl] => {
      |       let hd = hd.to_string_view()
      |       let size_hint = for s in tl; size_hint = hd.length() {
-1500 |         continue size_hint + s.to_string_view().length() + separator.length()
+1494 |         continue size_hint + s.to_string_view().length() + separator.length()
      |                                ^^^^^^^^^^^^^^
      |       } nobreak {
      |         size_hint
 
-<WORKDIR>/builtin/arrayview.mbt:1511:21-1511:35:
+<WORKDIR>/builtin/arrayview.mbt:1505:21-1505:35:
      |       if separator is "" {
      |         for s in tl {
      |           // buf.write_string(s)
-1511 |           let s = s.to_string_view()
+1505 |           let s = s.to_string_view()
      |                     ^^^^^^^^^^^^^^
      |           buf.write_view(s)
      |         }
 
-<WORKDIR>/builtin/arrayview.mbt:1516:21-1516:35:
+<WORKDIR>/builtin/arrayview.mbt:1510:21-1510:35:
      |         }
      |       } else {
      |         for s in tl {
-1516 |           let s = s.to_string_view()
+1510 |           let s = s.to_string_view()
      |                     ^^^^^^^^^^^^^^
      |           buf.write_view(separator)
      |           // buf.write_string(s)

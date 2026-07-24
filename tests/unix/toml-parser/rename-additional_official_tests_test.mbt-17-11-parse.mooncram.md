@@ -233,25 +233,6 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
      content=(
        #|TomlTable(
        #|  {
-*** Update File: <WORKDIR>/cmd/toml/main.mbt
-@@
-       return 1
-     }
-   }
--  let value = @toml_lib.parse(source) catch {
-+  let value = @toml_lib.parse_renamed(source) catch {
-     err => {
-       println("error: failed to parse \{path}: \{err}")
-       return 1
-@@
-       return 1
-     }
-   }
--  let _ = @toml_lib.parse(source) catch {
-+  let _ = @toml_lib.parse_renamed(source) catch {
-     err => {
-       println("error: failed to parse \{path}: \{err}")
-       return 1
 *** Update File: <WORKDIR>/comprehensive_test.mbt
 @@
      #|ports = [8000, 8001, 8002]
@@ -820,6 +801,193 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
      error =>
        Err(
          "parser rejected generated TOML\nrendered:\n\{rendered}\nerror:\n\{error}",
+*** Update File: <WORKDIR>/key_value_disambiguation_test.mbt
+@@
+   // These used to fail with "Expected value": a number followed by `]` and
+   // newline/EOF was mistaken for a table-header key.
+   debug_inspect(
+-    @toml.parse("arr = [1_0]\n"),
++    @toml.parse_renamed("arr = [1_0]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlInteger(10)]) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("arr = [1_000.5]\n"),
++    @toml.parse_renamed("arr = [1_000.5]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlFloat(1000.5)]) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("arr = [1e3]\n"),
++    @toml.parse_renamed("arr = [1e3]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlFloat(1000)]) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("arr = [\n  1_000.5,\n  2.5_5,\n]\n"),
++    @toml.parse_renamed("arr = [\n  1_000.5,\n  2.5_5,\n]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlFloat(1000.5), TomlFloat(2.55)]) })
+     ),
+@@
+ test "'+' signed numbers as last array element" {
+   // The old key-position lookahead rejected any `+number]` at end of line.
+   debug_inspect(
+-    @toml.parse("arr = [+5]\n"),
++    @toml.parse_renamed("arr = [+5]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlInteger(5)]) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("arr = [+5.5]\n"),
++    @toml.parse_renamed("arr = [+5.5]\n"),
+     content=(
+       #|TomlTable({ "arr": TomlArray([TomlFloat(5.5)]) })
+     ),
+@@
+ ///|
+ test "number-like bare keys keep their raw text" {
+   debug_inspect(
+-    @toml.parse("[1_0]\nx = 1\n"),
++    @toml.parse_renamed("[1_0]\nx = 1\n"),
+     content=(
+       #|TomlTable({ "1_0": TomlTable({ "x": TomlInteger(1) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("[-1_0]\nx = 1\n"),
++    @toml.parse_renamed("[-1_0]\nx = 1\n"),
+     content=(
+       #|TomlTable({ "-1_0": TomlTable({ "x": TomlInteger(1) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("[0xAB]\nx = 1\n"),
++    @toml.parse_renamed("[0xAB]\nx = 1\n"),
+     content=(
+       #|TomlTable({ "0xAB": TomlTable({ "x": TomlInteger(1) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("0xAB.cd = 1\n"),
++    @toml.parse_renamed("0xAB.cd = 1\n"),
+     content=(
+       #|TomlTable({ "0xAB": TomlTable({ "cd": TomlInteger(1) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("1_000.5 = 3\n"),
++    @toml.parse_renamed("1_000.5 = 3\n"),
+     content=(
+       #|TomlTable({ "1_000": TomlTable({ "5": TomlInteger(3) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("-5y = 3\n"),
++    @toml.parse_renamed("-5y = 3\n"),
+     content=(
+       #|TomlTable({ "-5y": TomlInteger(3) })
+     ),
+@@
+   }
+   // ...but they are still valid bare keys.
+   debug_inspect(
+-    @toml.parse("[0XAB]\nx = 1\n"),
++    @toml.parse_renamed("[0XAB]\nx = 1\n"),
+     content=(
+       #|TomlTable({ "0XAB": TomlTable({ "x": TomlInteger(1) }) })
+     ),
+@@
+ ///|
+ test "signed number values still work" {
+   debug_inspect(
+-    @toml.parse("x = +5\ny = -5\n"),
++    @toml.parse_renamed("x = +5\ny = -5\n"),
+     content=(
+       #|TomlTable({ "x": TomlInteger(5), "y": TomlInteger(-5) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("x = +5.5\ny = -5.5\n"),
++    @toml.parse_renamed("x = +5.5\ny = -5.5\n"),
+     content=(
+       #|TomlTable({ "x": TomlFloat(5.5), "y": TomlFloat(-5.5) })
+     ),
+@@
+   )
+   // The boundaries of the Int64 range still parse.
+   debug_inspect(
+-    @toml.parse("x = 0x7FFFFFFFFFFFFFFF\n"),
++    @toml.parse_renamed("x = 0x7FFFFFFFFFFFFFFF\n"),
+     content=(
+       #|TomlTable({ "x": TomlInteger(9223372036854775807) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("x = -9223372036854775808\n"),
++    @toml.parse_renamed("x = -9223372036854775808\n"),
+     content=(
+       #|TomlTable({ "x": TomlInteger(-9223372036854775808) })
+     ),
+@@
+   // Tables created implicitly by [a.b] headers (not by dotted keys) may be
+   // defined by a later [a] header.
+   debug_inspect(
+-    @toml.parse("[a.b]\nx = 1\n[a]\ny = 2\n"),
++    @toml.parse_renamed("[a.b]\nx = 1\n[a]\ny = 2\n"),
+     content=(
+       #|TomlTable({ "a": TomlTable({ "b": TomlTable({ "x": TomlInteger(1) }), "y": TomlInteger(2) }) })
+     ),
+@@
+   )
+   // Defining a new sub-table under a dotted-key table is also fine.
+   debug_inspect(
+-    @toml.parse("a.b = 1\n[a.c]\nx = 2\n"),
++    @toml.parse_renamed("a.b = 1\n[a.c]\nx = 2\n"),
+     content=(
+       #|TomlTable({ "a": TomlTable({ "b": TomlInteger(1), "c": TomlTable({ "x": TomlInteger(2) }) }) })
+     ),
+@@
+   // (Regression: these used to fail numeric validation before the parser
+   // could use the raw text as a key.)
+   debug_inspect(
+-    @toml.parse("1__0 = 1\n"),
++    @toml.parse_renamed("1__0 = 1\n"),
+     content=(
+       #|TomlTable({ "1__0": TomlInteger(1) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("[1_]\nx = 2\n"),
++    @toml.parse_renamed("[1_]\nx = 2\n"),
+     content=(
+       #|TomlTable({ "1_": TomlTable({ "x": TomlInteger(2) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("1_.5 = 3\n"),
++    @toml.parse_renamed("1_.5 = 3\n"),
+     content=(
+       #|TomlTable({ "1_": TomlTable({ "5": TomlInteger(3) }) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("99999999999999999999 = 1\n"),
++    @toml.parse_renamed("99999999999999999999 = 1\n"),
+     content=(
+       #|TomlTable({ "99999999999999999999": TomlInteger(1) })
+     ),
+   )
+   debug_inspect(
+-    @toml.parse("-99999999999999999999 = 1\n"),
++    @toml.parse_renamed("-99999999999999999999 = 1\n"),
+     content=(
+       #|TomlTable({ "-99999999999999999999": TomlInteger(1) })
+     ),
 *** Update File: <WORKDIR>/official_toml_test_suite_test.mbt
 @@
      #|basic = "value"
@@ -1064,7 +1232,7 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
 +pub fn parse_renamed(input : String) -> TomlValue raise {
    let tokens = @tokenize.tokenize(input)
    let parser = Parser::Parser(tokens)
-   let main_table = {}
+   let main_table = Map([])
 *** Update File: <WORKDIR>/parser_test.mbt
 @@
  ///|
@@ -1202,8 +1370,8 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
      } noraise {
        value => Ok(value)
 @@
- test "special float keywords as keys" {
-   // inf, nan, +inf, -inf, etc. are valid bare keys in TOML
+   // inf, nan, -inf, etc. are valid bare keys in TOML, but +inf is not:
+   // '+' is not a bare-key character, so `+inf = 1` must be rejected.
    debug_inspect(
 -    try @toml.parse("+inf = 1\n") catch {
 +    try @toml.parse_renamed("+inf = 1\n") catch {
@@ -1331,11 +1499,11 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
      #|c = "table"
      #|
    debug_inspect(
--    @toml.parse(conflict_toml),
-+    @toml.parse_renamed(conflict_toml),
-     content=(
-       #|TomlTable({ "a": TomlTable({ "b": TomlString("dotted"), "c": TomlString("table") }) })
-     ),
+-    try @toml.parse(conflict_toml) catch {
++    try @toml.parse_renamed(conflict_toml) catch {
+       err => Err(err)
+     } noraise {
+       value => Ok(value)
 @@
  ///|
  /// Test dotted key notation - deep nesting
@@ -1363,6 +1531,25 @@ $ run_moon_ide moon ide rename 'parse' 'parse_renamed' --loc 'additional_officia
      e => {
        let s = e.to_string()
        // e.to_string() gives: Failure("...FAILED: actual_message")
+*** Update File: <WORKDIR>/toml_cli/main.mbt
+@@
+       return 1
+     }
+   }
+-  let value = @toml_lib.parse(source) catch {
++  let value = @toml_lib.parse_renamed(source) catch {
+     err => {
+       println("error: failed to parse \{path}: \{err}")
+       return 1
+@@
+       return 1
+     }
+   }
+-  let _ = @toml_lib.parse(source) catch {
++  let _ = @toml_lib.parse_renamed(source) catch {
+     err => {
+       println("error: failed to parse \{path}: \{err}")
+       return 1
 *** Update File: <WORKDIR>/toml_to_string_test.mbt
 @@
        #|
