@@ -1,4 +1,4 @@
-# rabbita rename new warren/templates/minimized/main.mbt:1:18
+# rabbita find-references render_incremental_date_picker rui/date_picker_test.mbt:13:4
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,22 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'new' 'new_renamed' --loc 'warren/templates/minimized/main.mbt:1:18'
-*** Begin Patch
-*** Update File: <WORKDIR>/warren/templates/minimized/main.mbt
-@@
--using @rabbita { new, simple_cell }
-+using @rabbita { new_renamed, simple_cell }
- using @html { button, div, h1 }
- 
- enum Msg {
-@@
-       ],
-     ],
-   )
--  new(app).mount("app")
-+  new_renamed(app).mount("app")
- }
-*** End Patch
-
+$ run_moon_ide moon ide find-references 'render_incremental_date_picker' --loc 'rui/date_picker_test.mbt:13:4'
+Error: could not get package of file <WORKDIR>/rui/date_picker_test.mbt
+[1]
 ```

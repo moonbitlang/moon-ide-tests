@@ -24,7 +24,6 @@ type CoreIntArray = Array[Int]
 type CoreScores = @hashmap.HashMap[String, Int]
                   ^^^^^^^^^^^^^^^^
                   ```moonbit
-                  #alias(T, deprecated="`T` is deprecated, use `HashMap` instead")
                   type @hashmap.HashMap[K, V]
                   ```
                   ---
@@ -54,7 +53,6 @@ type CoreScores = @hashmap.HashMap[String, Int]
 type CoreIntList = @list.List[Int]
                    ^^^^^^^^^^
                    ```moonbit
-                   #alias(T, deprecated="`T` is deprecated, use `List` instead")
                    enum @list.List[A] {
                      Empty
                      More(A, tail~ : @list.List[A])

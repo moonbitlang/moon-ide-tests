@@ -91,8 +91,8 @@ Found 1 symbols matching 'Array::filter':
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1313-1343
-1313 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1318-1348
+1318 | ///|
      | /// Fold out values from an array according to certain rules. (escaped)
      | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
      | /// bounds are fixed when folding starts. (escaped)
@@ -363,8 +363,8 @@ Found 1 symbols matching 'Result::map':
 $ run_moon_ide moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:370-399
-370 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:341-370
+341 | ///|
     | /// Transforms the elements of the iterator using a mapping function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -400,8 +400,8 @@ Found 1 symbols matching 'Iter::map':
 $ run_moon_ide moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:340-368
-340 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:311-339
+311 | ///|
     | /// Filters the elements of the iterator based on a predicate function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -436,8 +436,8 @@ Found 1 symbols matching 'Iter::filter':
 $ run_moon_ide moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:838-851
-838 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:809-822
+809 | ///|
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
@@ -457,10 +457,9 @@ Found 1 symbols matching 'Iter::to_array':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List'
 Found 1 symbols matching '@moonbitlang/core/list.List':
 
-`pub enum List` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/types.mbt:15-21
+`pub enum List` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/types.mbt:15-20
 15 | ///| (escaped)
    | /// Type `List` used by this package APIs. (escaped)
-   | #alias(T, deprecated) (escaped)
    | pub enum List[A] { (escaped)
    |   Empty (escaped)
    |   More(A, mut tail~ : List[A]) (escaped)

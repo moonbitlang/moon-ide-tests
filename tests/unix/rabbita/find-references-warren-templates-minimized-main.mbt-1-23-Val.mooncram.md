@@ -1,4 +1,4 @@
-# rabbita rename Cmd rabbita/clipboard/aliases.mbt:2:18
+# rabbita find-references Val warren/templates/minimized/main.mbt:1:23
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'Cmd' 'CmdRenamed' --loc 'rabbita/clipboard/aliases.mbt:2:18'
-Error: could not get package of file <WORKDIR>/rabbita/clipboard/aliases.mbt
+$ run_moon_ide moon ide find-references 'Val' --loc 'warren/templates/minimized/main.mbt:1:23'
+Error: <WORKDIR>/warren/templates/minimized/_build/packages.json: No such file or directory
 [1]
 ```

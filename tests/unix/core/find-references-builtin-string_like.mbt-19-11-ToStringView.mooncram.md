@@ -19,20 +19,20 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
 Found 9 references for symbol 'ToStringView':
-<WORKDIR>/builtin/array.mbt:2189:12-2189:24:
+<WORKDIR>/builtin/array.mbt:2205:12-2205:24:
      | ///   inspect(s.split(" ").to_array().join(":"), content="hello:world")
      | /// }
      | /// ```
-2189 | pub fn[A : ToStringView] Array::join(
+2205 | pub fn[A : ToStringView] Array::join(
      |            ^^^^^^^^^^^^
      |   self : Array[A],
      |   separator : StringView,
 
-<WORKDIR>/builtin/arrayview.mbt:1491:12-1491:24:
+<WORKDIR>/builtin/arrayview.mbt:1485:12-1485:24:
      | ///   inspect(array_view.join(","), content="1,2,3")
      | /// }
      | /// ```
-1491 | pub fn[A : ToStringView] ArrayView::join(
+1485 | pub fn[A : ToStringView] ArrayView::join(
      |            ^^^^^^^^^^^^
      |   self : ArrayView[A],
      |   separator : StringView,

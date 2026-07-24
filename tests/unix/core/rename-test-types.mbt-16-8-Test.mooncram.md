@@ -38,6 +38,13 @@ $ run_moon_ide moon ide rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
  
    // Generate some output
    t.writeln("Current timestamp: 2024-01-01")
+*** Update File: <WORKDIR>/test/extends.mbt
+@@
+ ///|
+ #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+ #doc(hidden)
+-pub extend Test with @debug.Debug::{to_repr}
++pub extend TestRenamed with @debug.Debug::{to_repr}
 *** Update File: <WORKDIR>/test/test.mbt
 @@
  /// Write data to snapshot buffer, use `snapshot` to output.

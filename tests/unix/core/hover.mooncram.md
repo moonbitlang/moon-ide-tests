@@ -17,7 +17,13 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'from_int' --loc 'builtin/int64.mbt:31:15'
+$ run_moon_ide moon ide hover 'self' --loc 'builtin/int64.mbt:26:21'
+No hover information found for symbol 'self' at builtin/int64.mbt:26:21
+[1]
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'from_int' --loc 'builtin/int64.mbt:44:15'
 ///   inspect(Int64::from_int(42), content="42")
 /// }
 /// ```
@@ -43,20 +49,6 @@ pub fn Int64::from_int(i : Int) -> Int64 {
                  inspect(Int64::from_int(42), content="42")
                }
                ```
-  i.to_int64()
-}
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'i' --loc 'builtin/int64.mbt:31:24'
-///   inspect(Int64::from_int(42), content="42")
-/// }
-/// ```
-pub fn Int64::from_int(i : Int) -> Int64 {
-                       ^
-                       ```moonbit
-                       Int
-                       ```
   i.to_int64()
 }
 ```
@@ -94,41 +86,6 @@ pub trait ToStringView {
      ```
 }
 
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'ReprDelta' --loc 'debug/delta.mbt:17:11'
-///|
-/// Tree-shaped diff between two `Repr` values.
-priv enum ReprDelta {
-          ^^^^^^^^^
-          ```moonbit
-          enum ReprDelta {
-            Same(Repr, Array[ReprDelta])
-            Different(Repr, Repr)
-            Extra1(Repr)
-            Extra2(Repr)
-          }
-          ```
-          ---
-          
-           Tree-shaped diff between two `Repr` values.
-  Same(Repr, Array[ReprDelta])
-  Different(Repr, Repr)
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'Same' --loc 'debug/delta.mbt:18:3'
-///|
-/// Tree-shaped diff between two `Repr` values.
-priv enum ReprDelta {
-  Same(Repr, Array[ReprDelta])
-  ^^^^
-  ```moonbit
-  (Repr, Array[ReprDelta]) -> ReprDelta
-  ```
-  Different(Repr, Repr)
-  Extra1(Repr)
 ```
 
 ```mooncram

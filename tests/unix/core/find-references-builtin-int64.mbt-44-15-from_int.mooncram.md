@@ -1,4 +1,4 @@
-# core find-references from_int builtin/int64.mbt:31:15
+# core find-references from_int builtin/int64.mbt:44:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,22 +17,22 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'from_int' --loc 'builtin/int64.mbt:31:15'
+$ run_moon_ide moon ide find-references 'from_int' --loc 'builtin/int64.mbt:44:15'
 Found 5 references for symbol 'from_int':
-<WORKDIR>/builtin/int64.mbt:28:22-28:30:
+<WORKDIR>/builtin/int64.mbt:41:22-41:30:
    | ///
    | /// ```mbt check
    | /// test {
-28 | ///   inspect(Int64::from_int(42), content="42")
+41 | ///   inspect(Int64::from_int(42), content="42")
    |                      ^^^^^^^^
    | /// }
    | /// ```
 
-<WORKDIR>/builtin/int64.mbt:31:15-31:23:
+<WORKDIR>/builtin/int64.mbt:44:15-44:23:
    | ///   inspect(Int64::from_int(42), content="42")
    | /// }
    | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
+44 | pub fn Int64::from_int(i : Int) -> Int64 {
    |               ^^^^^^^^
    |   i.to_int64()
    | }

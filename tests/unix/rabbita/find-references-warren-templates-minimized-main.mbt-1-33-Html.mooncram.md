@@ -1,4 +1,4 @@
-# rabbita find-references ImageData rabbita/dom/image_data.mbt:8:20
+# rabbita find-references Html warren/templates/minimized/main.mbt:1:33
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'ImageData' --loc 'rabbita/dom/image_data.mbt:8:20'
-Error: could not find references for symbol 'ImageData' at rabbita/dom/image_data.mbt:8:20
+$ run_moon_ide moon ide find-references 'Html' --loc 'warren/templates/minimized/main.mbt:1:33'
+Error: <WORKDIR>/warren/templates/minimized/_build/packages.json: No such file or directory
 [1]
 ```

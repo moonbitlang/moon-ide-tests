@@ -18,205 +18,207 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide outline 'builtin/int64.mbt'
-  31 |pub fn Int64::from_int(i : Int) -> Int64 {
+  26 |pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
      |...
-  53 |pub fn Int64::abs(self : Int64) -> Int64 {
+  44 |pub fn Int64::from_int(i : Int) -> Int64 {
      |...
-  63 |pub fn Int64::min(self : Int64, other : Int64) -> Int64 {
+  66 |pub fn Int64::abs(self : Int64) -> Int64 {
      |...
-  73 |pub fn Int64::max(self : Int64, other : Int64) -> Int64 {
+  76 |pub fn Int64::min(self : Int64, other : Int64) -> Int64 {
      |...
-  83 |pub fn Int64::clamp(self : Int64, min~ : Int64, max~ : Int64) -> Int64 {
+  86 |pub fn Int64::max(self : Int64, other : Int64) -> Int64 {
      |...
-  95 |pub impl Hash for Int64 with fn hash_combine(self, hasher) {
+  96 |pub fn Int64::clamp(self : Int64, min~ : Int64, max~ : Int64) -> Int64 {
      |...
- 103 |pub impl Hash for Int64 with fn hash(self : Int64) -> Int {
+ 108 |pub impl Hash for Int64 with fn hash_combine(self, hasher) {
      |...
- 129 |pub impl Neg for Int64 with fn neg(self : Int64) -> Int64 = "%i64_neg"
+ 116 |pub impl Hash for Int64 with fn hash(self : Int64) -> Int {
      |...
- 152 |pub impl Add for Int64 with fn add(self, other) = "%i64_add"
+ 142 |pub impl Neg for Int64 with fn neg(self : Int64) -> Int64 = "%i64_neg"
      |...
- 176 |pub impl Sub for Int64 with fn sub(self, other) = "%i64_sub"
+ 165 |pub impl Add for Int64 with fn add(self, other) = "%i64_add"
      |...
- 201 |pub impl Mul for Int64 with fn mul(self, other) = "%i64_mul"
+ 189 |pub impl Sub for Int64 with fn sub(self, other) = "%i64_sub"
      |...
- 228 |pub impl Div for Int64 with fn div(self, other) = "%i64_div"
+ 214 |pub impl Mul for Int64 with fn mul(self, other) = "%i64_mul"
      |...
- 253 |pub impl Mod for Int64 with fn mod(self, other) = "%i64_mod"
+ 241 |pub impl Div for Int64 with fn div(self, other) = "%i64_div"
      |...
- 276 |pub fn Int64::lnot(self : Int64) -> Int64 = "%i64_lnot"
+ 266 |pub impl Mod for Int64 with fn mod(self, other) = "%i64_mod"
      |...
- 298 |pub impl BitAnd for Int64 with fn land(self, other) = "%i64_land"
+ 289 |pub fn Int64::lnot(self : Int64) -> Int64 = "%i64_lnot"
      |...
- 320 |pub impl BitOr for Int64 with fn lor(self, other) = "%i64_lor"
+ 311 |pub impl BitAnd for Int64 with fn land(self, other) = "%i64_land"
      |...
- 345 |pub impl BitXOr for Int64 with fn lxor(self, other) = "%i64_lxor"
+ 333 |pub impl BitOr for Int64 with fn lor(self, other) = "%i64_lor"
      |...
- 370 |#deprecated("Use infix operator `<<` instead")
- 371 |#coverage.skip
- 372 |pub fn Int64::lsl(self : Int64, other : Int) -> Int64 = "%i64_shl"
+ 358 |pub impl BitXOr for Int64 with fn lxor(self, other) = "%i64_lxor"
      |...
- 395 |#deprecated("Use infix operator `<<` instead")
- 396 |#coverage.skip
- 397 |pub fn Int64::shl(self : Int64, other : Int) -> Int64 = "%i64_shl"
+ 383 |#deprecated("Use infix operator `<<` instead")
+ 384 |#coverage.skip
+ 385 |pub fn Int64::lsl(self : Int64, other : Int) -> Int64 = "%i64_shl"
      |...
- 422 |#deprecated("Use UInt64 type and infix operator `>>` instead")
- 423 |#coverage.skip
- 424 |pub fn Int64::lsr(self : Int64, other : Int) -> Int64 = "%u64.shr"
+ 408 |#deprecated("Use infix operator `<<` instead")
+ 409 |#coverage.skip
+ 410 |pub fn Int64::shl(self : Int64, other : Int) -> Int64 = "%i64_shl"
      |...
- 450 |#deprecated("Use infix operator `>>` instead")
- 451 |#coverage.skip
- 452 |pub fn Int64::asr(self : Int64, other : Int) -> Int64 = "%i64_shr"
+ 435 |#deprecated("Use UInt64 type and infix operator `>>` instead")
+ 436 |#coverage.skip
+ 437 |pub fn Int64::lsr(self : Int64, other : Int) -> Int64 = "%u64.shr"
      |...
- 476 |#deprecated("Use infix operator `>>` instead")
- 477 |#coverage.skip
- 478 |pub fn Int64::shr(self : Int64, other : Int) -> Int64 = "%i64_shr"
+ 463 |#deprecated("Use infix operator `>>` instead")
+ 464 |#coverage.skip
+ 465 |pub fn Int64::asr(self : Int64, other : Int) -> Int64 = "%i64_shr"
      |...
- 504 |pub impl Shl for Int64 with fn shl(self, other) = "%i64_shl"
+ 489 |#deprecated("Use infix operator `>>` instead")
+ 490 |#coverage.skip
+ 491 |pub fn Int64::shr(self : Int64, other : Int) -> Int64 = "%i64_shr"
      |...
- 531 |pub impl Shr for Int64 with fn shr(self, other) = "%i64_shr"
+ 517 |pub impl Shl for Int64 with fn shl(self, other) = "%i64_shl"
      |...
- 552 |pub fn Int64::ctz(self : Int64) -> Int = "%i64_ctz"
+ 544 |pub impl Shr for Int64 with fn shr(self, other) = "%i64_shr"
      |...
- 574 |pub fn Int64::clz(self : Int64) -> Int = "%i64_clz"
+ 565 |pub fn Int64::ctz(self : Int64) -> Int = "%i64_ctz"
      |...
- 602 |pub fn Int64::popcnt(self : Int64) -> Int = "%i64_popcnt"
+ 587 |pub fn Int64::clz(self : Int64) -> Int = "%i64_clz"
      |...
- 625 |pub impl Eq for Int64 with fn equal(self : Int64, other : Int64) -> Bool = "%i64_eq"
+ 615 |pub fn Int64::popcnt(self : Int64) -> Int = "%i64_popcnt"
      |...
- 648 |pub impl Eq for Int64 with fn not_equal(self : Int64, other : Int64) -> Bool = "%i64_ne"
+ 638 |pub impl Eq for Int64 with fn equal(self : Int64, other : Int64) -> Bool = "%i64_eq"
      |...
- 677 |pub impl Compare for Int64 with fn compare(self, other) = "%i64_compare"
+ 661 |pub impl Eq for Int64 with fn not_equal(self : Int64, other : Int64) -> Bool = "%i64_ne"
      |...
- 680 |pub impl Compare for Int64 with fn op_lt(x, y) = "%i64.lt"
+ 690 |pub impl Compare for Int64 with fn compare(self, other) = "%i64_compare"
      |...
- 683 |pub impl Compare for Int64 with fn op_le(x, y) = "%i64.le"
+ 693 |pub impl Compare for Int64 with fn op_lt(x, y) = "%i64.lt"
      |...
- 686 |pub impl Compare for Int64 with fn op_gt(x, y) = "%i64.gt"
+ 696 |pub impl Compare for Int64 with fn op_le(x, y) = "%i64.le"
      |...
- 689 |pub impl Compare for Int64 with fn op_ge(x, y) = "%i64.ge"
+ 699 |pub impl Compare for Int64 with fn op_gt(x, y) = "%i64.gt"
      |...
- 703 |pub impl Default for Int64 with fn default() = "%i64_default"
+ 702 |pub impl Compare for Int64 with fn op_ge(x, y) = "%i64.ge"
      |...
- 727 |pub fn Int64::to_int(self : Int64) -> Int = "%i64_to_i32"
+ 716 |pub impl Default for Int64 with fn default() = "%i64_default"
      |...
- 749 |pub fn Int64::to_double(self : Int64) -> Double = "%i64_to_f64"
+ 740 |pub fn Int64::to_int(self : Int64) -> Int = "%i64_to_i32"
      |...
- 772 |pub fn Int64::reinterpret_as_double(self : Int64) -> Double = "%i64_to_f64_reinterpret"
+ 762 |pub fn Int64::to_double(self : Int64) -> Double = "%i64_to_f64"
      |...
- 796 |pub fn UInt64::reinterpret_as_double(self : UInt64) -> Double = "%i64_to_f64_reinterpret"
+ 785 |pub fn Int64::reinterpret_as_double(self : Int64) -> Double = "%i64_to_f64_reinterpret"
      |...
- 819 |pub fn Int64::to_byte(self : Int64) -> Byte = "%i64_to_byte"
+ 809 |pub fn UInt64::reinterpret_as_double(self : UInt64) -> Double = "%i64_to_f64_reinterpret"
      |...
- 841 |pub fn Int64::to_uint16(self : Int64) -> UInt16 = "%i64_to_u16"
+ 832 |pub fn Int64::to_byte(self : Int64) -> Byte = "%i64_to_byte"
      |...
- 863 |pub fn UInt64::trunc_double(val : Double) -> UInt64 = "%f64.to_u64"
+ 854 |pub fn Int64::to_uint16(self : Int64) -> UInt16 = "%i64_to_u16"
      |...
- 867 |#deprecated("Use `Float::from_int64` instead")
- 868 |/// Convert to `float`.
- 869 |pub fn Int64::to_float(self : Int64) -> Float = "%i64.to_f32"
+ 876 |pub fn UInt64::trunc_double(val : Double) -> UInt64 = "%f64.to_u64"
      |...
- 893 |pub fn UInt64::extend_uint(val : UInt) -> UInt64 = "%u32.to_u64"
+ 880 |#deprecated("Use `Float::from_int64` instead")
+ 881 |/// Convert to `float`.
+ 882 |pub fn Int64::to_float(self : Int64) -> Float = "%i64.to_f32"
      |...
- 917 |pub fn Int::to_int64(self : Int) -> Int64 = "%i32_to_i64"
+ 906 |pub fn UInt64::extend_uint(val : UInt) -> UInt64 = "%u32.to_u64"
      |...
- 940 |pub fn UInt16::to_int64(self : UInt16) -> Int64 = "%u16_to_i64"
+ 930 |pub fn Int::to_int64(self : Int) -> Int64 = "%i32_to_i64"
      |...
- 965 |#deprecated("Use `reinterpret_as_int64` instead")
- 966 |#coverage.skip
- 967 |pub fn Double::reinterpret_as_i64(self : Double) -> Int64 = "%f64_to_i64_reinterpret"
+ 953 |pub fn UInt16::to_int64(self : UInt16) -> Int64 = "%u16_to_i64"
      |...
- 992 |pub fn Double::reinterpret_as_int64(self : Double) -> Int64 = "%f64_to_i64_reinterpret"
+ 978 |#deprecated("Use `reinterpret_as_int64` instead")
+ 979 |#coverage.skip
+ 980 |pub fn Double::reinterpret_as_i64(self : Double) -> Int64 = "%f64_to_i64_reinterpret"
      |...
-1017 |#deprecated("Use `reinterpret_as_uint64` instead")
-1018 |#coverage.skip
-1019 |pub fn Double::reinterpret_as_u64(self : Double) -> UInt64 = "%f64_to_i64_reinterpret"
+1005 |pub fn Double::reinterpret_as_int64(self : Double) -> Int64 = "%f64_to_i64_reinterpret"
      |...
-1042 |pub fn Double::reinterpret_as_uint64(self : Double) -> UInt64 = "%f64_to_i64_reinterpret"
+1030 |#deprecated("Use `reinterpret_as_uint64` instead")
+1031 |#coverage.skip
+1032 |pub fn Double::reinterpret_as_u64(self : Double) -> UInt64 = "%f64_to_i64_reinterpret"
      |...
-1063 |pub fn Double::convert_uint64(val : UInt64) -> Double = "%u64.to_f64"
+1055 |pub fn Double::reinterpret_as_uint64(self : Double) -> UInt64 = "%f64_to_i64_reinterpret"
      |...
-1089 |#deprecated("Use `reinterpret_as_uint64` instead")
-1090 |#coverage.skip
-1091 |pub fn Int64::to_uint64(self : Int64) -> UInt64 = "%i64.to_u64_reinterpret"
+1076 |pub fn Double::convert_uint64(val : UInt64) -> Double = "%u64.to_f64"
      |...
-1114 |pub fn Int64::reinterpret_as_uint64(self : Int64) -> UInt64 = "%i64.to_u64_reinterpret"
+1102 |#deprecated("Use `reinterpret_as_uint64` instead")
+1103 |#coverage.skip
+1104 |pub fn Int64::to_uint64(self : Int64) -> UInt64 = "%i64.to_u64_reinterpret"
      |...
-1137 |#deprecated("Use `reinterpret_as_int64` instead")
-1138 |#coverage.skip
-1139 |pub fn UInt64::to_int64(self : UInt64) -> Int64 = "%u64.to_i64_reinterpret"
+1127 |pub fn Int64::reinterpret_as_uint64(self : Int64) -> UInt64 = "%i64.to_u64_reinterpret"
      |...
-1162 |pub fn UInt64::reinterpret_as_int64(self : UInt64) -> Int64 = "%u64.to_i64_reinterpret"
+1150 |#deprecated("Use `reinterpret_as_int64` instead")
+1151 |#coverage.skip
+1152 |pub fn UInt64::to_int64(self : UInt64) -> Int64 = "%u64.to_i64_reinterpret"
      |...
-1184 |pub fn UInt64::to_uint16(self : UInt64) -> UInt16 {
+1175 |pub fn UInt64::reinterpret_as_int64(self : UInt64) -> Int64 = "%u64.to_i64_reinterpret"
      |...
-1209 |pub fn UInt64::to_uint(self : UInt64) -> UInt = "%u64.to_u32"
+1197 |pub fn UInt64::to_uint16(self : UInt64) -> UInt16 {
      |...
-1235 |pub fn UInt64::to_int(self : UInt64) -> Int = "%u64.to_i32"
+1222 |pub fn UInt64::to_uint(self : UInt64) -> UInt = "%u64.to_u32"
      |...
-1258 |pub fn UInt64::to_double(self : UInt64) -> Double = "%u64.to_f64"
+1248 |pub fn UInt64::to_int(self : UInt64) -> Int = "%u64.to_i32"
      |...
-1285 |pub impl Add for UInt64 with fn add(self, other) = "%u64.add"
+1271 |pub fn UInt64::to_double(self : UInt64) -> Double = "%u64.to_f64"
      |...
-1311 |pub impl Sub for UInt64 with fn sub(self, other) = "%u64.sub"
+1298 |pub impl Add for UInt64 with fn add(self, other) = "%u64.add"
      |...
-1337 |pub impl Mul for UInt64 with fn mul(self, other) = "%u64.mul"
+1324 |pub impl Sub for UInt64 with fn sub(self, other) = "%u64.sub"
      |...
-1360 |pub impl Div for UInt64 with fn div(self, other) = "%u64.div"
+1350 |pub impl Mul for UInt64 with fn mul(self, other) = "%u64.mul"
      |...
-1384 |pub impl Mod for UInt64 with fn mod(self, other) = "%u64.mod"
+1373 |pub impl Div for UInt64 with fn div(self, other) = "%u64.div"
      |...
-1411 |pub impl Compare for UInt64 with fn compare(self, other) = "%u64.compare"
+1397 |pub impl Mod for UInt64 with fn mod(self, other) = "%u64.mod"
      |...
-1414 |pub impl Compare for UInt64 with fn op_lt(x, y) = "%u64.lt"
+1424 |pub impl Compare for UInt64 with fn compare(self, other) = "%u64.compare"
      |...
-1417 |pub impl Compare for UInt64 with fn op_le(x, y) = "%u64.le"
+1427 |pub impl Compare for UInt64 with fn op_lt(x, y) = "%u64.lt"
      |...
-1420 |pub impl Compare for UInt64 with fn op_gt(x, y) = "%u64.gt"
+1430 |pub impl Compare for UInt64 with fn op_le(x, y) = "%u64.le"
      |...
-1423 |pub impl Compare for UInt64 with fn op_ge(x, y) = "%u64.ge"
+1433 |pub impl Compare for UInt64 with fn op_gt(x, y) = "%u64.gt"
      |...
-1446 |pub impl Eq for UInt64 with fn equal(self : UInt64, other : UInt64) -> Bool = "%u64.eq"
+1436 |pub impl Compare for UInt64 with fn op_ge(x, y) = "%u64.ge"
      |...
-1469 |pub impl Eq for UInt64 with fn not_equal(self : UInt64, other : UInt64) -> Bool = "%u64.ne"
+1459 |pub impl Eq for UInt64 with fn equal(self : UInt64, other : UInt64) -> Bool = "%u64.eq"
      |...
-1490 |pub impl BitAnd for UInt64 with fn land(self, other) = "%u64.bitand"
+1482 |pub impl Eq for UInt64 with fn not_equal(self : UInt64, other : UInt64) -> Bool = "%u64.ne"
      |...
-1512 |pub impl BitOr for UInt64 with fn lor(self, other) = "%u64.bitor"
+1503 |pub impl BitAnd for UInt64 with fn land(self, other) = "%u64.bitand"
      |...
-1536 |pub impl BitXOr for UInt64 with fn lxor(self, other) = "%u64.bitxor"
+1525 |pub impl BitOr for UInt64 with fn lor(self, other) = "%u64.bitor"
      |...
-1557 |pub fn UInt64::lnot(self : UInt64) -> UInt64 = "%u64.bitnot"
+1549 |pub impl BitXOr for UInt64 with fn lxor(self, other) = "%u64.bitxor"
      |...
-1582 |#deprecated("Use infix operator `<<` instead")
-1583 |#coverage.skip
-1584 |pub fn UInt64::lsl(self : UInt64, shift : Int) -> UInt64 = "%u64.shl"
+1570 |pub fn UInt64::lnot(self : UInt64) -> UInt64 = "%u64.bitnot"
      |...
-1608 |#deprecated("Use infix operator `<<` instead")
-1609 |#coverage.skip
-1610 |pub fn UInt64::shl(self : UInt64, shift : Int) -> UInt64 = "%u64.shl"
+1595 |#deprecated("Use infix operator `<<` instead")
+1596 |#coverage.skip
+1597 |pub fn UInt64::lsl(self : UInt64, shift : Int) -> UInt64 = "%u64.shl"
      |...
-1632 |#deprecated("Use infix operator `>>` instead")
-1633 |#coverage.skip
-1634 |pub fn UInt64::shr(self : UInt64, shift : Int) -> UInt64 = "%u64.shr"
+1621 |#deprecated("Use infix operator `<<` instead")
+1622 |#coverage.skip
+1623 |pub fn UInt64::shl(self : UInt64, shift : Int) -> UInt64 = "%u64.shl"
      |...
-1659 |#deprecated("Use infix operator `>>` instead")
-1660 |#coverage.skip
-1661 |pub fn UInt64::lsr(self : UInt64, shift : Int) -> UInt64 = "%u64.shr"
+1645 |#deprecated("Use infix operator `>>` instead")
+1646 |#coverage.skip
+1647 |pub fn UInt64::shr(self : UInt64, shift : Int) -> UInt64 = "%u64.shr"
      |...
-1686 |pub impl Shl for UInt64 with fn shl(self, shift) = "%u64.shl"
+1672 |#deprecated("Use infix operator `>>` instead")
+1673 |#coverage.skip
+1674 |pub fn UInt64::lsr(self : UInt64, shift : Int) -> UInt64 = "%u64.shr"
      |...
-1712 |pub impl Shr for UInt64 with fn shr(self, shift) = "%u64.shr"
+1699 |pub impl Shl for UInt64 with fn shl(self, shift) = "%u64.shl"
      |...
-1734 |pub fn UInt64::clz(self : UInt64) -> Int = "%u64.clz"
+1725 |pub impl Shr for UInt64 with fn shr(self, shift) = "%u64.shr"
      |...
-1758 |pub fn UInt64::ctz(self : UInt64) -> Int = "%u64.ctz"
+1747 |pub fn UInt64::clz(self : UInt64) -> Int = "%u64.clz"
      |...
-1779 |pub fn UInt64::popcnt(self : UInt64) -> Int = "%u64.popcnt"
+1771 |pub fn UInt64::ctz(self : UInt64) -> Int = "%u64.ctz"
      |...
-1783 |#deprecated("Use `Float::from_uint64` instead")
-1784 |/// Convert to `float`.
-1785 |pub fn UInt64::to_float(self : UInt64) -> Float = "%u64.to_f32"
+1792 |pub fn UInt64::popcnt(self : UInt64) -> Int = "%u64.popcnt"
+     |...
+1796 |#deprecated("Use `Float::from_uint64` instead")
+1797 |/// Convert to `float`.
+1798 |pub fn UInt64::to_float(self : UInt64) -> Float = "%u64.to_f32"
      |...
 
 ```
@@ -229,60 +231,6 @@ $ run_moon_ide moon ide outline 'builtin/string_like.mbt'
    |...
 29 |pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
    |...
-
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'debug/delta.mbt'
- 17 |priv enum ReprDelta {
-    |...
- 26 |const DEFAULT_MAX_RELATIVE_ERROR : Double = 0.000000000001
-    |...
- 30 |fn double_abs(x : Double) -> Double {
-    |...
- 40 |fn double_max(x : Double, y : Double) -> Double {
-    |...
- 50 |fn relative_error(x : Double, y : Double) -> Double {
-    |...
- 65 |fn info_approx_eq(max_relative_error : Double, x : Repr, y : Repr) -> Bool {
-    |...
- 92 |fn info_is_unimportant(info : Repr) -> Bool {
-    |...
- 98 |fn diff_info_with(
- 99 |  left : Repr,
-100 |  right : Repr,
-101 |  max_relative_error~ : Double,
-102 |) -> ReprDelta {
-    |...
-142 |fn diff_repr(
-143 |  x : Repr,
-144 |  y : Repr,
-145 |  max_relative_error? : Double = DEFAULT_MAX_RELATIVE_ERROR,
-146 |) -> ReprDelta {
-    |...
-160 |fn pretty_print_delta(
-161 |  d : ReprDelta,
-162 |  max_depth? : Int,
-163 |  compact_threshold? : Int = default_threshold,
-164 |  use_ansi? : Bool = true,
-165 |) -> String {
-    |...
-176 |fn prune_delta(max_depth : Int?, delta : ReprDelta) -> ReprDelta {
-    |...
-215 |fn delta_root_size(delta : ReprDelta) -> Int {
-    |...
-224 |const ANSI_RESET : String = "\u001b[0m"
-    |...
-228 |const ANSI_RED : String = "\u001b[31m"
-    |...
-232 |const ANSI_GREEN : String = "\u001b[32m"
-    |...
-236 |fn mark_removed(use_ansi : Bool, x : ContentParens) -> ContentParens {
-    |...
-246 |fn mark_added(use_ansi : Bool, x : ContentParens) -> ContentParens {
-    |...
-256 |fn render_delta(threshold : Int, use_ansi : Bool, delta : ReprDelta) -> Content {
-    |...
 
 ```
 
@@ -498,6 +446,15 @@ $ run_moon_ide moon ide outline 'string/regex_test.mbt'
     |...
 728 |test "capture/multiple_captures_same_pattern" {
     |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'test/extends.mbt'
+20 |#deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+21 |#doc(hidden)
+22 |pub extend Test with @debug.Debug::{to_repr}
+   |...
 
 ```
 

@@ -1149,14 +1149,14 @@ $ run_moon_ide moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal/tok
        #|key =
      ) +
 @@
- /// Test edge case for hex digit error handling  
  test "test hex overflow edge case" {
-   // Test a hex number that might cause overflow issues
--  let tokens = @tokenize.tokenize(
-+  let tokens = @tokenize.tokenize_renamed(
-     (
-       #|hex = 0xFFFFFFFFFFFFFFFF
-     ),
+   debug_inspect(
+     try
+-      @tokenize.tokenize(
++      @tokenize.tokenize_renamed(
+         (
+           #|hex = 0xFFFFFFFFFFFFFFFF
+         ),
 @@
    // Try to find a Unicode code that's valid as int but invalid as char
    // Code point 0x110000 is too large for valid Unicode
@@ -1293,7 +1293,7 @@ $ run_moon_ide moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal/tok
 -  let tokens = @tokenize.tokenize(input)
 +  let tokens = @tokenize.tokenize_renamed(input)
    let parser = Parser::Parser(tokens)
-   let main_table = {}
+   let main_table = Map([])
    for current_table = main_table {
 *** Update File: <WORKDIR>/parser_test.mbt
 @@
@@ -1304,7 +1304,7 @@ $ run_moon_ide moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal/tok
 +    @tokenize.tokenize_renamed("10e-1 = \"a\""),
      content=(
        #|[
-       #|  Identifier(
+       #|  FloatToken(
 @@
      ),
    )
@@ -1313,7 +1313,7 @@ $ run_moon_ide moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal/tok
 +    @tokenize.tokenize_renamed("10e1 = \"b\""),
      content=(
        #|[
-       #|  Identifier(
+       #|  FloatToken(
 @@
      ),
    )

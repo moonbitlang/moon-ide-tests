@@ -46,29 +46,29 @@ Found 74 references for symbol 'execute':
     |   debug_inspect(m.named_group("name"), content="Some(<StringView: \"age\">)")
     |   debug_inspect(m.named_group("val"), content="Some(<StringView: \"30\">)")
 
-<WORKDIR>/string/README.mbt.md:310:15-310:22:
+<WORKDIR>/string/README.mbt.md:320:15-320:22:
     | test "regex combinators" {
     |   // match "abc" literally
     |   let abc = @string.Regex::string("abc")
-310 |   inspect(abc.execute("xabcy") is Some(_), content="true")
+320 |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |               ^^^^^^^
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
 
-<WORKDIR>/string/README.mbt.md:313:16-313:23:
+<WORKDIR>/string/README.mbt.md:323:16-323:23:
     |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
-313 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
+323 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
     |                ^^^^^^^
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
 
-<WORKDIR>/string/README.mbt.md:317:18-317:25:
+<WORKDIR>/string/README.mbt.md:327:18-327:25:
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
     |   let either = @string.Regex::string("cat") | @string.Regex::string("dog")
-317 |   inspect(either.execute("I have a dog") is Some(_), content="true")
+327 |   inspect(either.execute("I have a dog") is Some(_), content="true")
     |                  ^^^^^^^
     | }
     | ```

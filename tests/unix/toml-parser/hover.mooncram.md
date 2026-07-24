@@ -57,31 +57,43 @@ $ run_moon_ide moon ide hover 'parse' --loc 'additional_official_tests_test.mbt:
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'version' --loc 'cmd/toml/main.mbt:2:5'
-///|
-let version : String = "0.2.3"
-    ^^^^^^^
-    ```moonbit
-    String
-    ```
-    ---
-    
-
-///|
+$ run_moon_ide moon ide hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
+/// Test EOF handling in parser - covered by creating empty token arrays
+test "parser_eof_handling" {
+  // Test empty parse input to exercise EOF conditions
+  let result = @toml.parse(
+      ^^^^^^
+      ```moonbit
+      @toml.TomlValue
+      ```
+    (
+      #|
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'toml_command' --loc 'cmd/toml/main.mbt:5:4'
-let version : String = "0.2.3"
-
-///|
-fn toml_command() -> @argparse.Command {
-   ^^^^^^^^^^^^
-   ```moonbit
-   fn toml_command() -> @argparse.Command
-   ```
-  Command(
-    "toml",
+$ run_moon_ide moon ide hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
+/// Test EOF handling in parser - covered by creating empty token arrays
+test "parser_eof_handling" {
+  // Test empty parse input to exercise EOF conditions
+  let result = @toml.parse(
+               ^^^^^^^^^^^
+               ```moonbit
+               fn @bobzhang/toml.parse(input : String) -> @toml.TomlValue raise
+               ```
+               ---
+               
+                Parse a TOML document and return its root table as a `TomlValue`.
+               
+                On success the result is always a `TomlTable` whose contents reflect the
+                document's top-level keys, `[section]` headers, and `[[array]]` of
+                tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
+                escapes, inline-table newlines) are accepted.
+               
+                On any lexical or syntactic error, `parse` raises with a message
+                containing the source location. Wrap the call in `try?` to receive a
+                `Result[TomlValue, Error]` instead.
+    (
+      #|
 ```
 
 ```mooncram

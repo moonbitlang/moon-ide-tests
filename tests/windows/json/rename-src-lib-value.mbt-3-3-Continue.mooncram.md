@@ -40,43 +40,6 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Continue' 'Contin
    Finish(FinishValue)
  }
  
-*** Update File: <WORKDIR>/src\tests\incr.mbt
-@@
- fn continue_chunks(chunks : ArrayView[String], value : Value) -> Value raise {
-   match (chunks, value) {
-     ([], value) => value
--    ([chunk, .. rest], Continue(state)) =>
-+    ([chunk, .. rest], ContinueRenamed(state)) =>
-       continue_chunks(rest, decode_continue(chunk, state))
-     ([_, ..], Finish(_)) =>
-       raise InspectError::InspectError("parser finished before all chunks")
-@@
-         ", got " +
-         String::from_array([..rest]),
-       )
--    Continue(_) => incr_fail("expected chunked JSON to finish: " + name)
-+    ContinueRenamed(_) => incr_fail("expected chunked JSON to finish: " + name)
-   }
- }
- 
-@@
-         "expected chunked parser rejection, got non-parser error: " + name,
-       )
-   } noraise {
--    Continue(_) =>
-+    ContinueRenamed(_) =>
-       incr_fail("expected chunked parser rejection, got continuation: " + name)
-     Finish(_) =>
-       incr_fail("expected chunked parser rejection, parser accepted: " + name)
-@@
-       @debug.assert_eq(value, Json::object({ "a": Json::number(1.0) }))
-       assert_eq(String::from_array([..rest]), " trailing")
-     }
--    Continue(_) =>
-+    ContinueRenamed(_) =>
-       incr_fail("expected chunked parser to finish with trailing rest")
-   }
- }
 *** End Patch
 
 ```

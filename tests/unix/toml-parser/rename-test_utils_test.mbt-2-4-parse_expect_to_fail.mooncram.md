@@ -480,6 +480,141 @@ $ run_moon_ide moon ide rename 'parse_expect_to_fail' 'parse_expect_to_fail_rena
        (
          #|key = @invalid
        ),
+*** Update File: <WORKDIR>/key_value_disambiguation_test.mbt
+@@
+   // TOML only allows lowercase 0x/0o/0b prefixes, so 0X/0O/0B in value
+   // position is an error...
+   for input in ["x = 0XDEAD\n", "x = 0O755\n", "x = 0B1010\n"] {
+-    assert_true(parse_expect_to_fail(input).has_prefix("Expected value"))
++    assert_true(parse_expect_to_fail_renamed(input).has_prefix("Expected value"))
+   }
+   // ...but they are still valid bare keys.
+   debug_inspect(
+@@
+   // '+' is not a bare-key character, so all of these must be rejected
+   // (several used to parse with the '+' silently dropped).
+   inspect(
+-    parse_expect_to_fail("+5 = 3\n"),
++    parse_expect_to_fail_renamed("+5 = 3\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("+5.5 = 3\n"),
++    parse_expect_to_fail_renamed("+5.5 = 3\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("+5e3 = 3\n"),
++    parse_expect_to_fail_renamed("+5e3 = 3\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("+5y = 3\n"),
++    parse_expect_to_fail_renamed("+5y = 3\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("[+5]\n"),
++    parse_expect_to_fail_renamed("[+5]\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 4 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("+inf = 1\n"),
++    parse_expect_to_fail_renamed("+inf = 1\n"),
+     content=(
+       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+     ),
+@@
+   // These used to silently wrap around (0xFFFFFFFFFFFFFFFF parsed as -1)
+   // while decimal overflow was already an error.
+   inspect(
+-    parse_expect_to_fail("x = 0xFFFFFFFFFFFFFFFF\n"),
++    parse_expect_to_fail_renamed("x = 0xFFFFFFFFFFFFFFFF\n"),
+     content=(
+       #|Invalid hex number: value out of Int64 range at line 1, column 5)
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail(
++    parse_expect_to_fail_renamed(
+       "x = 0b1111111111111111111111111111111111111111111111111111111111111111\n",
+     ),
+     content=(
+@@
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("x = 0o2000000000000000000000\n"),
++    parse_expect_to_fail_renamed("x = 0o2000000000000000000000\n"),
+     content=(
+       #|Invalid octal number: value out of Int64 range at line 1, column 5)
+     ),
+@@
+   // TOML 1.0: dotted keys define the tables for each key part, and such
+   // tables cannot be redefined with a [table] header.
+   inspect(
+-    parse_expect_to_fail("fruit.apple = 1\n\n[fruit]\n"),
++    parse_expect_to_fail_renamed("fruit.apple = 1\n\n[fruit]\n"),
+     content=(
+       #|Duplicate table definition: [fruit] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("a.b.c = 1\n[a]\n"),
++    parse_expect_to_fail_renamed("a.b.c = 1\n[a]\n"),
+     content=(
+       #|Duplicate table definition: [a] at { start: { line: 2, column: 4 }, end: { line: 3, column: 1 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("a.b.c = 1\n[a.b]\n"),
++    parse_expect_to_fail_renamed("a.b.c = 1\n[a.b]\n"),
+     content=(
+       #|Duplicate table definition: [a.b] at { start: { line: 2, column: 6 }, end: { line: 3, column: 1 } })
+     ),
+   )
+   inspect(
+-    parse_expect_to_fail("[[a]]\nb.c = 1\n[a.b]\n"),
++    parse_expect_to_fail_renamed("[[a]]\nb.c = 1\n[a.b]\n"),
+     content=(
+       #|Duplicate table definition: [a.b] at { start: { line: 3, column: 6 }, end: { line: 4, column: 1 } })
+     ),
+@@
+     input in [
+       "a = []\n[[a]]\n", "a = [{}]\n[[a]]\n", "a = [ {x = 1} ]\n[[a]]\ny = 2\n",
+     ] {
+-    assert_true(parse_expect_to_fail(input).has_prefix("ExpectedArray"))
++    assert_true(parse_expect_to_fail_renamed(input).has_prefix("ExpectedArray"))
+   }
+ }
+ 
+@@
+   // reason rather than degrading to a generic "Expected value".
+   debug_inspect(
+     [
+-      parse_expect_to_fail("x = 1__0\n"),
++      parse_expect_to_fail_renamed("x = 1__0\n"),
+-      parse_expect_to_fail("arr = [1__0]\n"),
++      parse_expect_to_fail_renamed("arr = [1__0]\n"),
+-      parse_expect_to_fail("x = 1_\n"),
++      parse_expect_to_fail_renamed("x = 1_\n"),
+-      parse_expect_to_fail("x = 1.5_\n"),
++      parse_expect_to_fail_renamed("x = 1.5_\n"),
+-      parse_expect_to_fail("x = 99999999999999999999\n"),
++      parse_expect_to_fail_renamed("x = 99999999999999999999\n"),
+     ],
+     content=(
+       #|[
 *** Update File: <WORKDIR>/official_toml_test_suite_test.mbt
 @@
      #|inf = -infx

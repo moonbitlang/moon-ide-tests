@@ -73,11 +73,11 @@ Found 2 references for symbol 'filter':
 ```mooncram
 $ run_moon_ide moon ide find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 2 references for symbol 'fold':
-<MOON_HOME>/lib/core/builtin/array.mbt:1333:21-1333:25:
+<MOON_HOME>/lib/core/builtin/array.mbt:1338:21-1338:25:
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1333 | pub fn[A, B] Array::fold(
+1338 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -324,11 +324,11 @@ Found 2 references for symbol 'map':
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 3 references for symbol 'map':
-<MOON_HOME>/lib/core/builtin/iterator.mbt:389:20-389:23:
+<MOON_HOME>/lib/core/builtin/iterator.mbt:360:20-360:23:
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-389 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+360 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
