@@ -1,0 +1,9 @@
+///|
+pub fn answer() -> Int {
+  42
+}
+
+///|
+pub fn double(n : Int) -> Int {
+  n * 2
+}
