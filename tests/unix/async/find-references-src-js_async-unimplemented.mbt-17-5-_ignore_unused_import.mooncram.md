@@ -25,7 +25,7 @@ Found 1 references for symbol '_ignore_unused_import':
    | #coverage.skip
 17 | let _ignore_unused_import : Unit = {
    |     ^^^^^^^^^^^^^^^^^^^^^
-   |   ignore(@coroutine.spawn)
+   |   ignore(@coroutine.Coroutine::wake)
    |   ignore(@event_loop.Timer::new)
 
 ```

@@ -99,7 +99,7 @@ $ run_moon_ide moon ide rename 'ThreadSet' 'ThreadSetRenamed' --loc 'internal/re
 -  desc : ThreadSet,
 +  desc : ThreadSetRenamed,
  ) -> State {
-   { slot, cat, desc, hash: (slot, cat, desc).hash() }
+   { slot, cat, desc, hash: Hash::hash((slot, cat, desc)) }
  }
 *** Update File: <WORKDIR>/internal/regex_engine/automata/thread.mbt
 @@

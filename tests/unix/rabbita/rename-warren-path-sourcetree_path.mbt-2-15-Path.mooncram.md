@@ -21,11 +21,11 @@ $ run_moon_ide moon ide rename 'Path' 'PathRenamed' --loc 'warren/path/sourcetre
 *** Begin Patch
 *** Update File: <WORKDIR>/warren/devhub/devhub.mbt
 @@
-     path =>
-       match self.vfs.read(path) {
-         Some(content) => {
--          let content_type = match @path.Path::extname(path) {
-+          let content_type = match @path.PathRenamed::extname(path) {
+       }
+       match resource {
+         Some((resource_path, content)) => {
+-          let content_type = match @path.Path::extname(resource_path) {
++          let content_type = match @path.PathRenamed::extname(resource_path) {
              ".png" => "image/png"
              ".jpg" | ".jpeg" => "image/jpeg"
              ".html" => "text/html"
@@ -36,7 +36,7 @@ $ run_moon_ide moon ide rename 'Path' 'PathRenamed' --loc 'warren/path/sourcetre
 +using @path {type SourcePath, type PathRenamed}
  
  ///|
- using @devhub {type BroadcastMsg, type Devhub}
+ using @devhub {type Devhub}
 *** Update File: <WORKDIR>/warren/path/artifact_path.mbt
 @@
  

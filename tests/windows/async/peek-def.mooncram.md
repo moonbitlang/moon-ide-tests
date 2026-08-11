@@ -229,7 +229,7 @@ Definition found at file <MOON_HOME>/lib\core\builtin\stringbuilder_buffer.mbt
    | }
    | 
    | ///|
-   | fn StringBuilder::grow_if_necessary(
+   | /// Compute the next capacity without allocating. Since appends never shrink the
 Definition found at file <MOON_HOME>/lib\core\builtin\stringbuilder_buffer.mbt
    | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
    | ///
@@ -250,8 +250,8 @@ Definition found at file <MOON_HOME>/lib\core\builtin\stringbuilder_buffer.mbt
    | }
    | 
    | ///|
-   | fn StringBuilder::grow_if_necessary(
-   |   self : StringBuilder,
+   | /// Compute the next capacity without allocating. Since appends never shrink the
+   | /// builder, `required < len` means the required-size calculation overflowed.
 ```
 
 ```mooncram

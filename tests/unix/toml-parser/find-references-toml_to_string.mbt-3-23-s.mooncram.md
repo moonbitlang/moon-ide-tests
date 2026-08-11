@@ -27,11 +27,11 @@ Found 2 references for symbol 's':
   |   let result = StringBuilder()
   |   for char in s {
 
-<WORKDIR>/toml_to_string.mbt:290:30-290:31:
+<WORKDIR>/toml_to_string.mbt:294:30-294:31:
     |         output <+ "\{format_toml_key(key)}]\n"
     |         let new_path = path.copy()
     |         new_path.push(key)
-290 |         write_table_contents(t, output, new_path)
+294 |         write_table_contents(t, output, new_path)
     |                              ^
     |       }
     |       _ => () // Should not happen

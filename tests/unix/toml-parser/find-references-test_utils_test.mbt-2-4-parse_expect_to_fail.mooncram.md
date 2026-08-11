@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
-Found 66 references for symbol 'parse_expect_to_fail':
+Found 86 references for symbol 'parse_expect_to_fail':
 <WORKDIR>/comprehensive_test.mbt:425:5-425:25:
     | 
     |   // Missing value
@@ -478,6 +478,186 @@ Found 66 references for symbol 'parse_expect_to_fail':
     |       (
     |         #|key = @invalid
 
+<WORKDIR>/key_value_disambiguation_test.mbt:100:17-100:37:
+    |   // TOML only allows lowercase 0x/0o/0b prefixes, so 0X/0O/0B in value
+    |   // position is an error...
+    |   for input in ["x = 0XDEAD\n", "x = 0O755\n", "x = 0B1010\n"] {
+100 |     assert_true(parse_expect_to_fail(input).has_prefix("Expected value"))
+    |                 ^^^^^^^^^^^^^^^^^^^^
+    |   }
+    |   // ...but they are still valid bare keys.
+
+<WORKDIR>/key_value_disambiguation_test.mbt:116:5-116:25:
+    |   // '+' is not a bare-key character, so all of these must be rejected
+    |   // (several used to parse with the '+' silently dropped).
+    |   inspect(
+116 |     parse_expect_to_fail("+5 = 3\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:122:5-122:25:
+    |     ),
+    |   )
+    |   inspect(
+122 |     parse_expect_to_fail("+5.5 = 3\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:128:5-128:25:
+    |     ),
+    |   )
+    |   inspect(
+128 |     parse_expect_to_fail("+5e3 = 3\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:134:5-134:25:
+    |     ),
+    |   )
+    |   inspect(
+134 |     parse_expect_to_fail("+5y = 3\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:140:5-140:25:
+    |     ),
+    |   )
+    |   inspect(
+140 |     parse_expect_to_fail("[+5]\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 4 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:146:5-146:25:
+    |     ),
+    |   )
+    |   inspect(
+146 |     parse_expect_to_fail("+inf = 1\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:174:5-174:25:
+    |   // These used to silently wrap around (0xFFFFFFFFFFFFFFFF parsed as -1)
+    |   // while decimal overflow was already an error.
+    |   inspect(
+174 |     parse_expect_to_fail("x = 0xFFFFFFFFFFFFFFFF\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Invalid hex number: value out of Int64 range at line 1, column 5)
+
+<WORKDIR>/key_value_disambiguation_test.mbt:180:5-180:25:
+    |     ),
+    |   )
+    |   inspect(
+180 |     parse_expect_to_fail(
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |       "x = 0b1111111111111111111111111111111111111111111111111111111111111111\n",
+    |     ),
+
+<WORKDIR>/key_value_disambiguation_test.mbt:188:5-188:25:
+    |     ),
+    |   )
+    |   inspect(
+188 |     parse_expect_to_fail("x = 0o2000000000000000000000\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Invalid octal number: value out of Int64 range at line 1, column 5)
+
+<WORKDIR>/key_value_disambiguation_test.mbt:213:5-213:25:
+    |   // TOML 1.0: dotted keys define the tables for each key part, and such
+    |   // tables cannot be redefined with a [table] header.
+    |   inspect(
+213 |     parse_expect_to_fail("fruit.apple = 1\n\n[fruit]\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Duplicate table definition: [fruit] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:219:5-219:25:
+    |     ),
+    |   )
+    |   inspect(
+219 |     parse_expect_to_fail("a.b.c = 1\n[a]\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Duplicate table definition: [a] at { start: { line: 2, column: 4 }, end: { line: 3, column: 1 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:225:5-225:25:
+    |     ),
+    |   )
+    |   inspect(
+225 |     parse_expect_to_fail("a.b.c = 1\n[a.b]\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Duplicate table definition: [a.b] at { start: { line: 2, column: 6 }, end: { line: 3, column: 1 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:231:5-231:25:
+    |     ),
+    |   )
+    |   inspect(
+231 |     parse_expect_to_fail("[[a]]\nb.c = 1\n[a.b]\n"),
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |     content=(
+    |       #|Duplicate table definition: [a.b] at { start: { line: 3, column: 6 }, end: { line: 4, column: 1 } })
+
+<WORKDIR>/key_value_disambiguation_test.mbt:265:17-265:37:
+    |     input in [
+    |       "a = []\n[[a]]\n", "a = [{}]\n[[a]]\n", "a = [ {x = 1} ]\n[[a]]\ny = 2\n",
+    |     ] {
+265 |     assert_true(parse_expect_to_fail(input).has_prefix("ExpectedArray"))
+    |                 ^^^^^^^^^^^^^^^^^^^^
+    |   }
+    | }
+
+<WORKDIR>/key_value_disambiguation_test.mbt:313:7-313:27:
+    |   // reason rather than degrading to a generic "Expected value".
+    |   debug_inspect(
+    |     [
+313 |       parse_expect_to_fail("x = 1__0\n"),
+    |       ^^^^^^^^^^^^^^^^^^^^
+    |       parse_expect_to_fail("arr = [1__0]\n"),
+    |       parse_expect_to_fail("x = 1_\n"),
+
+<WORKDIR>/key_value_disambiguation_test.mbt:314:7-314:27:
+    |   debug_inspect(
+    |     [
+    |       parse_expect_to_fail("x = 1__0\n"),
+314 |       parse_expect_to_fail("arr = [1__0]\n"),
+    |       ^^^^^^^^^^^^^^^^^^^^
+    |       parse_expect_to_fail("x = 1_\n"),
+    |       parse_expect_to_fail("x = 1.5_\n"),
+
+<WORKDIR>/key_value_disambiguation_test.mbt:315:7-315:27:
+    |     [
+    |       parse_expect_to_fail("x = 1__0\n"),
+    |       parse_expect_to_fail("arr = [1__0]\n"),
+315 |       parse_expect_to_fail("x = 1_\n"),
+    |       ^^^^^^^^^^^^^^^^^^^^
+    |       parse_expect_to_fail("x = 1.5_\n"),
+    |       parse_expect_to_fail("x = 99999999999999999999\n"),
+
+<WORKDIR>/key_value_disambiguation_test.mbt:316:7-316:27:
+    |       parse_expect_to_fail("x = 1__0\n"),
+    |       parse_expect_to_fail("arr = [1__0]\n"),
+    |       parse_expect_to_fail("x = 1_\n"),
+316 |       parse_expect_to_fail("x = 1.5_\n"),
+    |       ^^^^^^^^^^^^^^^^^^^^
+    |       parse_expect_to_fail("x = 99999999999999999999\n"),
+    |     ],
+
+<WORKDIR>/key_value_disambiguation_test.mbt:317:7-317:27:
+    |       parse_expect_to_fail("arr = [1__0]\n"),
+    |       parse_expect_to_fail("x = 1_\n"),
+    |       parse_expect_to_fail("x = 1.5_\n"),
+317 |       parse_expect_to_fail("x = 99999999999999999999\n"),
+    |       ^^^^^^^^^^^^^^^^^^^^
+    |     ],
+    |     content=(
+
 <WORKDIR>/official_toml_test_suite_test.mbt:548:5-548:25:
     |     #|inf = -infx
     |     #|
@@ -559,38 +739,38 @@ Found 66 references for symbol 'parse_expect_to_fail':
     |     content=(
     |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 24 }, end: { line: 1, column: 31 } })
 
-<WORKDIR>/parser_test.mbt:394:5-394:25:
+<WORKDIR>/parser_test.mbt:396:5-396:25:
     |   // 1e100000 overflows Double but should NOT silently become infinity.
     |   // TOML reserves inf/nan as the only valid non-finite spellings.
     |   inspect(
-394 |     parse_expect_to_fail("x = 1e100000\n"),
+396 |     parse_expect_to_fail("x = 1e100000\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Invalid float: 1e100000 at { start: { line: 1, column: 5 }, end: { line: 1, column: 13 } })
 
-<WORKDIR>/parser_test.mbt:400:5-400:25:
+<WORKDIR>/parser_test.mbt:402:5-402:25:
     |     ),
     |   )
     |   inspect(
-400 |     parse_expect_to_fail("x = -31e368\n"),
+402 |     parse_expect_to_fail("x = -31e368\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Invalid float: -31e368 at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } })
 
-<WORKDIR>/parser_test.mbt:492:5-492:25:
+<WORKDIR>/parser_test.mbt:495:5-495:25:
     |     #|key2 = "value2"
     |     #|
     |   inspect(
-492 |     parse_expect_to_fail(duplicate_table_toml),
+495 |     parse_expect_to_fail(duplicate_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Duplicate table definition: [table] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
 
-<WORKDIR>/parser_test.mbt:507:5-507:25:
+<WORKDIR>/parser_test.mbt:510:5-510:25:
     |     #|key = "value"
     |     #|
     |   inspect(
-507 |     parse_expect_to_fail(conflicting_table_toml),
+510 |     parse_expect_to_fail(conflicting_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|ExpectedTable("table", "string

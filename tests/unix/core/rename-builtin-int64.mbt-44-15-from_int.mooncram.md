@@ -1,4 +1,4 @@
-# core rename from_int builtin/int64.mbt:31:15
+# core rename from_int builtin/int64.mbt:44:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'from_int' 'from_int_renamed' --loc 'builtin/int64.mbt:31:15'
+$ run_moon_ide moon ide rename 'from_int' 'from_int_renamed' --loc 'builtin/int64.mbt:44:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin/int64.mbt
 @@

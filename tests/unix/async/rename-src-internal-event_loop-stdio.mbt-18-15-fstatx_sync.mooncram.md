@@ -1,4 +1,4 @@
-# async rename kind_of_fd_sync_ffi src/internal/event_loop/stdio.mbt:17:15
+# async rename fstatx_sync src/internal/event_loop/stdio.mbt:18:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,27 +17,27 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'kind_of_fd_sync_ffi' 'kind_of_fd_sync_ffi_renamed' --loc 'src/internal/event_loop/stdio.mbt:17:15'
+$ run_moon_ide moon ide rename 'fstatx_sync' 'fstatx_sync_renamed' --loc 'src/internal/event_loop/stdio.mbt:18:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/internal/event_loop/stdio.mbt
 @@
- 
  ///|
  #cfg(target="native")
--extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
-+extern "C" fn kind_of_fd_sync_ffi_renamed(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
- 
- ///|
- #cfg(target="wasm")
-@@
+ #borrow(buf)
+-extern "C" fn fstatx_sync(
++extern "C" fn fstatx_sync_renamed(
    fd : @fd_util.Fd,
+   request : UInt,
+   buf : FixedArray[Byte],
+@@
    context~ : String,
  ) -> @fd_util.FileKind raise {
--  let kind = kind_of_fd_sync_ffi(fd)
-+  let kind = kind_of_fd_sync_ffi_renamed(fd)
-   if kind < 0 {
+   let buf = FixedArray::make(16, b'\x00')
+-  if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
++  if fstatx_sync_renamed(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
      @os_error.check_errno(context)
    }
+   guard! buf is [u32le(_), u32le(mask), i64le(kind)]
 *** End Patch
 
 ```

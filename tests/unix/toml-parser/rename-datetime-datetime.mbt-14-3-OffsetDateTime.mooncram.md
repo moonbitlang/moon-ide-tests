@@ -274,8 +274,8 @@ $ run_moon_ide moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'd
    // Scheduled maintenance (local datetime - timezone agnostic)
 *** Update File: <WORKDIR>/internal/qc_model/gen_test.mbt
 @@
- fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-   @qc.liftA3(
+ fn offset_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+   @gen.liftA3(
      fn(date : String, time : String, offset : String) {
 -      OffsetDateTime("\{date}T\{time}\{offset}")
 +      OffsetDateTimeRenamed("\{date}T\{time}\{offset}")
@@ -436,14 +436,14 @@ $ run_moon_ide moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'd
    )
    let local_dt_token = @tokenize.DateTimeToken(
 @@
-   let local_time_token = @tokenize.DateTimeToken(LocalTime("07:32:00"), loc~)
  
    // Test that tokens can be created (basic instantiation test)
--  guard offset_dt_token is DateTimeToken(OffsetDateTime("1979-05-27T07:32:00Z"))
-+  guard offset_dt_token is DateTimeToken(OffsetDateTimeRenamed("1979-05-27T07:32:00Z"))
-   guard local_dt_token is DateTimeToken(LocalDateTime("1979-05-27T07:32:00"))
-   guard local_date_token is DateTimeToken(LocalDate("1979-05-27"))
-   guard local_time_token is DateTimeToken(LocalTime("07:32:00"))
+   assert_true(
+-    offset_dt_token is DateTimeToken(OffsetDateTime("1979-05-27T07:32:00Z")),
++    offset_dt_token is DateTimeToken(OffsetDateTimeRenamed("1979-05-27T07:32:00Z")),
+   )
+   assert_true(
+     local_dt_token is DateTimeToken(LocalDateTime("1979-05-27T07:32:00")),
 @@
      content="true",
    )

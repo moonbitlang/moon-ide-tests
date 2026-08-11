@@ -1,4 +1,4 @@
-# rabbita find-references new warren/templates/minimized/main.mbt:1:18
+# rabbita rename Val rabbita/deprecated.mbt:6:23
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,20 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'new' --loc 'warren/templates/minimized/main.mbt:1:18'
-Found 2 references for symbol 'new':
-<WORKDIR>/warren/templates/minimized/main.mbt:1:18-1:21:
-1 | using @rabbita { new, simple_cell }
-  |                  ^^^
-  | using @html { button, div, h1 }
-  | 
-
-<WORKDIR>/warren/templates/minimized/main.mbt:24:3-24:6:
-   |       ],
-   |     ],
-   |   )
-24 |   new(app).mount("app")
-   |   ^^^
-   | }
-
+$ run_moon_ide moon ide rename 'Val' 'ValRenamed' --loc 'rabbita/deprecated.mbt:6:23'
+Error: could not get package of file <WORKDIR>/rabbita/deprecated.mbt
+[1]
 ```

@@ -19,92 +19,92 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
 Found 13 references for symbol 'to_string_view':
-<WORKDIR>/builtin/arrayview.mbt:1498:19-1498:33:
+<WORKDIR>/builtin/arrayview.mbt:1492:19-1492:33:
      |   match self {
      |     [] => ""
      |     [hd, .. tl] => {
-1498 |       let hd = hd.to_string_view()
+1492 |       let hd = hd.to_string_view()
      |                   ^^^^^^^^^^^^^^
      |       let size_hint = for s in tl; size_hint = hd.length() {
      |         continue size_hint + s.to_string_view().length() + separator.length()
 
-<WORKDIR>/builtin/arrayview.mbt:1500:32-1500:46:
+<WORKDIR>/builtin/arrayview.mbt:1494:32-1494:46:
      |     [hd, .. tl] => {
      |       let hd = hd.to_string_view()
      |       let size_hint = for s in tl; size_hint = hd.length() {
-1500 |         continue size_hint + s.to_string_view().length() + separator.length()
+1494 |         continue size_hint + s.to_string_view().length() + separator.length()
      |                                ^^^^^^^^^^^^^^
      |       } nobreak {
      |         size_hint
 
-<WORKDIR>/builtin/arrayview.mbt:1511:21-1511:35:
+<WORKDIR>/builtin/arrayview.mbt:1505:21-1505:35:
      |       if separator is "" {
      |         for s in tl {
      |           // buf.write_string(s)
-1511 |           let s = s.to_string_view()
+1505 |           let s = s.to_string_view()
      |                     ^^^^^^^^^^^^^^
      |           buf.write_view(s)
      |         }
 
-<WORKDIR>/builtin/arrayview.mbt:1516:21-1516:35:
+<WORKDIR>/builtin/arrayview.mbt:1510:21-1510:35:
      |         }
      |       } else {
      |         for s in tl {
-1516 |           let s = s.to_string_view()
+1510 |           let s = s.to_string_view()
      |                     ^^^^^^^^^^^^^^
      |           buf.write_view(separator)
      |           // buf.write_string(s)
 
-<WORKDIR>/builtin/fixedarray.mbt:1482:23-1482:37:
+<WORKDIR>/builtin/fixedarray.mbt:1484:23-1484:37:
      |   if len == 0 {
      |     return ""
      |   }
-1482 |   let first = self[0].to_string_view()
+1484 |   let first = self[0].to_string_view()
      |                       ^^^^^^^^^^^^^^
      |   let size_hint = for i in 1..<len; size_hint = first.length() {
      |     continue size_hint + separator.length() + self[i].to_string_view().length()
 
-<WORKDIR>/builtin/fixedarray.mbt:1484:55-1484:69:
+<WORKDIR>/builtin/fixedarray.mbt:1486:55-1486:69:
      |   }
      |   let first = self[0].to_string_view()
      |   let size_hint = for i in 1..<len; size_hint = first.length() {
-1484 |     continue size_hint + separator.length() + self[i].to_string_view().length()
+1486 |     continue size_hint + separator.length() + self[i].to_string_view().length()
      |                                                       ^^^^^^^^^^^^^^
      |   } nobreak {
      |     size_hint
 
-<WORKDIR>/builtin/fixedarray.mbt:1492:33-1492:47:
+<WORKDIR>/builtin/fixedarray.mbt:1494:33-1494:47:
      |   if separator.is_empty() {
      |     string.write_view(first)
      |     for i in 1..<len {
-1492 |       string.write_view(self[i].to_string_view())
+1494 |       string.write_view(self[i].to_string_view())
      |                                 ^^^^^^^^^^^^^^
      |     }
      |   } else {
 
-<WORKDIR>/builtin/fixedarray.mbt:1502:33-1502:47:
+<WORKDIR>/builtin/fixedarray.mbt:1504:33-1504:47:
      |         separator.start_offset(),
      |         separator.length(),
      |       )
-1502 |       string.write_view(self[i].to_string_view())
+1504 |       string.write_view(self[i].to_string_view())
      |                                 ^^^^^^^^^^^^^^
      |     }
      |   }
 
-<WORKDIR>/builtin/iterator.mbt:477:25-477:39:
+<WORKDIR>/builtin/iterator.mbt:476:25-476:39:
     | pub fn[A : ToStringView] Iter::join(self : Iter[A], sep : StringView) -> String {
     |   let result = StringBuilder()
     |   if self.next() is Some(x) {
-477 |     result.write_view(x.to_string_view())
+476 |     result.write_view(x.to_string_view())
     |                         ^^^^^^^^^^^^^^
     |     while self.next() is Some(x) {
     |       result.write_view(sep)
 
-<WORKDIR>/builtin/iterator.mbt:480:27-480:41:
+<WORKDIR>/builtin/iterator.mbt:479:27-479:41:
     |     result.write_view(x.to_string_view())
     |     while self.next() is Some(x) {
     |       result.write_view(sep)
-480 |       result.write_view(x.to_string_view())
+479 |       result.write_view(x.to_string_view())
     |                           ^^^^^^^^^^^^^^
     |     }
     |   }

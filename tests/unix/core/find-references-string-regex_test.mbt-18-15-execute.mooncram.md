@@ -19,56 +19,56 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'execute' --loc 'string/regex_test.mbt:18:15'
 Found 74 references for symbol 'execute':
-<WORKDIR>/string/README.mbt.md:204:15-204:22:
+<WORKDIR>/string/README.mbt.md:223:15-223:22:
     | test "string regex basics" {
     |   let regex = re"[[:digit:]]+"
     | 
-204 |   guard regex.execute("id=42") is Some(m) else { fail("Expected match") }
+223 |   guard regex.execute("id=42") is Some(m) else { fail("Expected match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="42")
     | 
 
-<WORKDIR>/string/README.mbt.md:262:12-262:19:
+<WORKDIR>/string/README.mbt.md:281:12-281:19:
     | ///|
     | test "match result" {
     |   let re = re"([[:alpha:]]+)=([[:digit:]]+)"
-262 |   guard re.execute("key=42") is Some(m) else { fail("no match") }
+281 |   guard re.execute("key=42") is Some(m) else { fail("no match") }
     |            ^^^^^^^
     |   inspect(m.content(), content="key=42")
     |   inspect(m.before(), content="")
 
-<WORKDIR>/string/README.mbt.md:277:12-277:19:
+<WORKDIR>/string/README.mbt.md:296:12-296:19:
     | ///|
     | test "named groups" {
     |   let re = re"(?<name>[[:alpha:]]+):(?<val>[[:digit:]]+)"
-277 |   guard re.execute("age:30") is Some(m) else { fail("no match") }
+296 |   guard re.execute("age:30") is Some(m) else { fail("no match") }
     |            ^^^^^^^
     |   debug_inspect(m.named_group("name"), content="Some(<StringView: \"age\">)")
     |   debug_inspect(m.named_group("val"), content="Some(<StringView: \"30\">)")
 
-<WORKDIR>/string/README.mbt.md:310:15-310:22:
+<WORKDIR>/string/README.mbt.md:339:15-339:22:
     | test "regex combinators" {
     |   // match "abc" literally
     |   let abc = @string.Regex::string("abc")
-310 |   inspect(abc.execute("xabcy") is Some(_), content="true")
+339 |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |               ^^^^^^^
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
 
-<WORKDIR>/string/README.mbt.md:313:16-313:23:
+<WORKDIR>/string/README.mbt.md:342:16-342:23:
     |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
-313 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
+342 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
     |                ^^^^^^^
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
 
-<WORKDIR>/string/README.mbt.md:317:18-317:25:
+<WORKDIR>/string/README.mbt.md:346:18-346:25:
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
     |   let either = @string.Regex::string("cat") | @string.Regex::string("dog")
-317 |   inspect(either.execute("I have a dog") is Some(_), content="true")
+346 |   inspect(either.execute("I have a dog") is Some(_), content="true")
     |                  ^^^^^^^
     | }
     | ```

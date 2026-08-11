@@ -18,6 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'IsEvent' --loc 'rabbita/dom/clipboard_event.mbt:8:10'
-Error: could not find references for symbol 'IsEvent' at rabbita/dom/clipboard_event.mbt:8:10
+Error: could not get package of file <WORKDIR>/rabbita/dom/clipboard_event.mbt
 [1]
 ```

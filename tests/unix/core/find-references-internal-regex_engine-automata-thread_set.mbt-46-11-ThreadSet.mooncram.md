@@ -107,7 +107,7 @@ Found 80 references for symbol 'ThreadSet':
 88 |   desc : ThreadSet,
    |          ^^^^^^^^^
    | ) -> State {
-   |   { slot, cat, desc, hash: (slot, cat, desc).hash() }
+   |   { slot, cat, desc, hash: Hash::hash((slot, cat, desc)) }
 
 <WORKDIR>/internal/regex_engine/automata/thread.mbt:43:33-43:42:
    | priv enum Thread {

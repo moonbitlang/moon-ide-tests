@@ -114,15 +114,6 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
    checkpoint : Checkpoint
  }
  
-*** Update File: <WORKDIR>/src\top.mbt
-@@
- ///|
- pub using @lib {
--  trait Decode,
-+  trait DecodeRenamed,
-   decode,
-   decode_start,
-   decode_continue,
 *** End Patch
 
 ```

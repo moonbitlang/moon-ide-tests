@@ -45,13 +45,16 @@ Definition found at file <WORKDIR>/src/aqueue/blocking_test.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
 Definition found at file <WORKDIR>/src/task_group.mbt
-    | /// `with_task_group` exits after all the whole group terminates,
     | /// which means all child tasks in the group have terminated, including `f`.
     | ///
     | /// If all children task terminate successfully,
     | /// `with_task_group` will return the result of `f`.
-223 | pub async fn[X] with_task_group(f : async (TaskGroup[X]) -> X) -> X {
+    | #callsite(autofill(loc))
+230 | pub async fn[X] with_task_group(
     |                 ^^^^^^^^^^^^^^^
+    |   f : async (TaskGroup[X]) -> X,
+    |   loc~ : SourceLoc,
+    | ) -> X {
     |   let tg = {
     |     children: Set([]),
     |     parent: @coroutine.current_coroutine(),
@@ -60,12 +63,9 @@ Definition found at file <WORKDIR>/src/task_group.mbt
     |     result: None,
     |     group_defer: [],
     |   }
-    |   tg.spawn_bg() <| () => {
+    |   tg.spawn_bg(loc~) <| () => {
     |     let value = f(tg)
     |     if tg.result is None {
-    |       tg.result = Some(value)
-    |     }
-    |   }
 ```
 
 ```mooncram
@@ -128,15 +128,15 @@ Definition found at file <WORKDIR>/src/internal/event_loop/io.mbt
    | ///|
    | /// A managed file descriptor/`HANDLE`,
    | /// capable of performing async IO operations.
-27 | struct IoHandle {
-   |        ^^^^^^^^
-   |   mut fd : @fd_util.Fd
-   |   kind : @fd_util.FileKind
+27 | pub struct IoHandle {
+   |            ^^^^^^^^
+   |   priv mut fd : @fd_util.Fd
+   |   priv kind : @fd_util.FileKind
    |   /// - `is_async=true`: support native async operations through the event bus.
    |   ///   This usually means the fd is non blocking (Unix) or overlapped (Windows)
    |   /// - `is_async=false`: all operations are blocking and go through the thread pool
-   |   is_async : Bool
-   |   mut read : IoStatus
+   |   priv is_async : Bool
+   |   priv mut read : IoStatus
    |   /// The current offset for reading.
    |   /// A negative value indicates that the underlying object does not support random access.
    |   ///
@@ -156,71 +156,71 @@ Definition found at file <WORKDIR>/src/internal/event_loop/io_unix.mbt
    | #cfg(not(platform="windows"))
 17 | pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
    |                        ^^^^^^^^^
+   |   guard! curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else {
    |     abort("file descriptor already closed")
    |   }
-   |   guard handle.read is Idle
+   |   guard! handle.read is Idle
    |   handle.read = Waiting(@coroutine.current_coroutine())
    |   defer {
    |     handle.read = Idle
    |   }
-   |   @coroutine.suspend()
+   |   evloop.suspend()
    | }
    | 
    | ///|
    | #cfg(not(platform="windows"))
-   | async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'kind_of_fd_sync_ffi' --loc 'src/internal/event_loop/stdio.mbt:17:15'
+$ run_moon_ide moon ide peek-def 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
 Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
-   | // See the License for the specific language governing permissions and
    | // limitations under the License.
    | 
    | ///|
    | #cfg(target="native")
-17 | extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
-   |               ^^^^^^^^^^^^^^^^^^^
-   | 
-   | ///|
-   | #cfg(target="wasm")
-   | #unsafe_skip_stub_check
-   | fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
-   | 
-   | ///|
-   | fn kind_of_fd_sync(
+   | #borrow(buf)
+18 | extern "C" fn fstatx_sync(
+   |               ^^^^^^^^^^^
    |   fd : @fd_util.Fd,
-   |   context~ : String,
-   | ) -> @fd_util.FileKind raise {
-   |   let kind = kind_of_fd_sync_ffi(fd)
-   |   if kind < 0 {
-   |     @os_error.check_errno(context)
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'fd' --loc 'src/internal/event_loop/stdio.mbt:17:35'
-Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
+   |   request : UInt,
+   |   buf : FixedArray[Byte],
+   |   buf_len : Int,
+   | ) -> Int = "moonbitlang_async_fstatx_sync"
    | 
    | ///|
    | #cfg(target="native")
-17 | extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
-   |                                   ^^
-   | 
-   | ///|
-   | #cfg(target="wasm")
-   | #unsafe_skip_stub_check
-   | fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
-   | 
-   | ///|
    | fn kind_of_fd_sync(
    |   fd : @fd_util.Fd,
    |   context~ : String,
    | ) -> @fd_util.FileKind raise {
-   |   let kind = kind_of_fd_sync_ffi(fd)
-   |   if kind < 0 {
+   |   let buf = FixedArray::make(16, b'\x00')
+   |   if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
+Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
+   | 
+   | ///|
+   | #cfg(target="native")
+   | #borrow(buf)
+   | extern "C" fn fstatx_sync(
+19 |   fd : @fd_util.Fd,
+   |   ^^
+   |   request : UInt,
+   |   buf : FixedArray[Byte],
+   |   buf_len : Int,
+   | ) -> Int = "moonbitlang_async_fstatx_sync"
+   | 
+   | ///|
+   | #cfg(target="native")
+   | fn kind_of_fd_sync(
+   |   fd : @fd_util.Fd,
+   |   context~ : String,
+   | ) -> @fd_util.FileKind raise {
+   |   let buf = FixedArray::make(16, b'\x00')
+   |   if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
    |     @os_error.check_errno(context)
 ```
 
@@ -234,7 +234,7 @@ Definition found at file <WORKDIR>/src/js_async/unimplemented.mbt
    | #coverage.skip
 17 | let _ignore_unused_import : Unit = {
    |     ^^^^^^^^^^^^^^^^^^^^^
-   |   ignore(@coroutine.spawn)
+   |   ignore(@coroutine.Coroutine::wake)
    |   ignore(@event_loop.Timer::new)
    | }
    | 
@@ -251,29 +251,29 @@ Definition found at file <WORKDIR>/src/js_async/unimplemented.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'spawn' --loc 'src/js_async/unimplemented.mbt:18:21'
+$ run_moon_ide moon ide peek-def 'Coroutine' --loc 'src/js_async/unimplemented.mbt:18:21'
 Definition found at file <WORKDIR>/src/internal/coroutine/coroutine.mbt
-    |     coro.state = Suspend(ok_cont~, err_cont~)
-    |   }
-    | }
-    | 
-    | ///|
-106 | pub fn spawn(f : async () -> Unit) -> Coroutine {
-    |        ^^^^^
-    |   scheduler.coro_id += 1
-    |   let coro = {
-    |     state: Running,
-    |     ready: true,
-    |     shielded: true,
-    |     downstream: Set([]),
-    |     coro_id: scheduler.coro_id,
-    |     cancelled: false,
-    |   }
-    |   fn run(_) {
-    |     run_async() <| () => {
-    |       coro.shielded = false
-    |       try f() catch {
-    |         err => coro.state = Fail(err)
+   |   Running
+   |   Suspend(ok_cont~ : (Unit) -> Unit, err_cont~ : (Error) -> Unit)
+   | }
+   | 
+   | ///|
+24 | pub struct Coroutine {
+   |            ^^^^^^^^^
+   |   priv coro_id : Int
+   |   priv mut state : State
+   |   priv mut shielded : Bool
+   |   priv mut cancelled : Bool
+   |   priv mut ready : Bool
+   |   priv downstream : Set[Coroutine]
+   |   loc : SourceLoc
+   | }
+   | 
+   | ///|
+   | pub impl Eq for Coroutine with fn equal(c1, c2) {
+   |   c1.coro_id == c2.coro_id
+   | }
+   | 
 ```
 
 ```mooncram
@@ -325,7 +325,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | }
    | 
    | ///|
-   | fn StringBuilder::grow_if_necessary(
+   | /// Compute the next capacity without allocating. Since appends never shrink the
 Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
    | ///
@@ -346,8 +346,8 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | }
    | 
    | ///|
-   | fn StringBuilder::grow_if_necessary(
-   |   self : StringBuilder,
+   | /// Compute the next capacity without allocating. Since appends never shrink the
+   | /// builder, `required < len` means the required-size calculation overflowed.
 ```
 
 ```mooncram

@@ -18,39 +18,57 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
-Found 9 references for symbol 'ToStringView':
-<WORKDIR>/builtin/array.mbt:2189:12-2189:24:
+Found 11 references for symbol 'ToStringView':
+<WORKDIR>/builtin/array.mbt:2182:12-2182:24:
      | ///   inspect(s.split(" ").to_array().join(":"), content="hello:world")
      | /// }
      | /// ```
-2189 | pub fn[A : ToStringView] Array::join(
+2182 | pub fn[A : ToStringView] Array::join(
      |            ^^^^^^^^^^^^
      |   self : Array[A],
      |   separator : StringView,
 
-<WORKDIR>/builtin/arrayview.mbt:1491:12-1491:24:
+<WORKDIR>/builtin/arrayview.mbt:1485:12-1485:24:
      | ///   inspect(array_view.join(","), content="1,2,3")
      | /// }
      | /// ```
-1491 | pub fn[A : ToStringView] ArrayView::join(
+1485 | pub fn[A : ToStringView] ArrayView::join(
      |            ^^^^^^^^^^^^
      |   self : ArrayView[A],
      |   separator : StringView,
 
-<WORKDIR>/builtin/fixedarray.mbt:1474:12-1474:24:
+<WORKDIR>/builtin/extends.mbt:508:24-508:36:
+    | pub extend String with ToJson::{to_json}
+    | 
+    | ///|
+508 | pub extend String with ToStringView::{to_string_view}
+    |                        ^^^^^^^^^^^^
+    | 
+    | ///|
+
+<WORKDIR>/builtin/extends.mbt:534:28-534:40:
+    | pub extend StringView with ToJson::{to_json}
+    | 
+    | ///|
+534 | pub extend StringView with ToStringView::{to_string_view}
+    |                            ^^^^^^^^^^^^
+    | 
+    | ///|
+
+<WORKDIR>/builtin/fixedarray.mbt:1476:12-1476:24:
      | ///   inspect(fixed_array.join(","), content="1,2,3")
      | /// }
      | /// ```
-1474 | pub fn[A : ToStringView] FixedArray::join(
+1476 | pub fn[A : ToStringView] FixedArray::join(
      |            ^^^^^^^^^^^^
      |   self : FixedArray[A],
      |   separator : StringView,
 
-<WORKDIR>/builtin/iterator.mbt:474:12-474:24:
+<WORKDIR>/builtin/iterator.mbt:473:12-473:24:
     | /// Collects the string-renderable elements of the iterator into a single
     | /// string, separated by `sep`.
     | /// The old iterator `self` must not be used again after calling `join`.
-474 | pub fn[A : ToStringView] Iter::join(self : Iter[A], sep : StringView) -> String {
+473 | pub fn[A : ToStringView] Iter::join(self : Iter[A], sep : StringView) -> String {
     |            ^^^^^^^^^^^^
     |   let result = StringBuilder()
     |   if self.next() is Some(x) {
