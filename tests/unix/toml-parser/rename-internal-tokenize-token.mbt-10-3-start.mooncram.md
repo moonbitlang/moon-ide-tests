@@ -40,9 +40,9 @@ $ run_moon_ide moon ide rename 'start' 'start_renamed' --loc 'internal/tokenize/
  ///|
 *** Update File: <WORKDIR>/internal/tokenize/tokenize.mbt
 @@
- /// Default location for testing and compatibility
- pub fn default_loc() -> Loc {
-   let pos : @lexer.Position = { line: 1, column: 1 }
+   // spelling both the annotation and the `T::` prefix trips
+   // unnecessary_annotation.
+   let pos = @lexer.Position::{ line: 1, column: 1 }
 -  { start: pos, end: pos }
 +  { start_renamed: pos, end: pos }
  }

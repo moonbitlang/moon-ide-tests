@@ -18,6 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Queue' --loc 'rabbita/internal/runtime/sandbox.mbt:3:20'
-Error: could not find references for symbol 'Queue' at rabbita/internal/runtime/sandbox.mbt:3:20
+Error: could not get package of file <WORKDIR>/rabbita/internal/runtime/sandbox.mbt
 [1]
 ```

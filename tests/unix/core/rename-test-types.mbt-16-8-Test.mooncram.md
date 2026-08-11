@@ -19,6 +19,36 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
 *** Begin Patch
+*** Update File: <WORKDIR>/diff/diff_html_test.mbt
+@@
+ }
+ 
+ ///|
+-test "real-world HTML diff page" (t : @test.Test) {
++test "real-world HTML diff page" (t : @test.TestRenamed) {
+   // Example 0: verbatim git history — diff/extends.mbt across the API
+   // redesign (commit 25334bf6 -> current main), fetched with `git show`.
+   let extends_old =
+*** Update File: <WORKDIR>/diff/diff_test.mbt
+@@
+ }
+ 
+ ///|
+-test "third-party HTML renderer over the public Hunk API" (t : @test.Test) {
++test "third-party HTML renderer over the public Hunk API" (t : @test.TestRenamed) {
+   // File-based snapshot: the result is a real page at
+   // diff/__snapshot__/hunk.html - open it in a browser.
+   let old = ["let x = 1", "if a < b {", "  go()", "}"][:]
+*** Update File: <WORKDIR>/diff/diff_word_test.mbt
+@@
+ }
+ 
+ ///|
+-test "intraline word diff as a styled HTML page" (t : @test.Test) {
++test "intraline word diff as a styled HTML page" (t : @test.TestRenamed) {
+   // File-based snapshot: open diff/__snapshot__/word_diff.html in a browser.
+   let old = [
+       "fn total(items : Array[Item]) -> Int {", "  let mut sum = 0", "  for item in items {",
 *** Update File: <WORKDIR>/test/README.mbt.md
 @@
  ```mbt check
@@ -38,6 +68,13 @@ $ run_moon_ide moon ide rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
  
    // Generate some output
    t.writeln("Current timestamp: 2024-01-01")
+*** Update File: <WORKDIR>/test/extends.mbt
+@@
+ ///|
+ #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+ #doc(hidden)
+-pub extend Test with @debug.Debug::{to_repr}
++pub extend TestRenamed with @debug.Debug::{to_repr}
 *** Update File: <WORKDIR>/test/test.mbt
 @@
  /// Write data to snapshot buffer, use `snapshot` to output.

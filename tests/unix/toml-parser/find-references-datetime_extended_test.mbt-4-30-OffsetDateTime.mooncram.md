@@ -37,11 +37,11 @@ Found 62 references for symbol 'OffsetDateTime':
    |   LocalDateTime(String)
    |   LocalDate(String)
 
-<WORKDIR>/datetime/datetime.mbt:25:5-25:19:
+<WORKDIR>/datetime/datetime.mbt:40:5-40:19:
    | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
    | pub impl Show for TomlDateTime with fn output(self, logger) {
    |   match self {
-25 |     OffsetDateTime(s) =>
+40 |     OffsetDateTime(s) =>
    |     ^^^^^^^^^^^^^^
    |       logger <+
    |         $|OffsetDateTime("\{s}")
@@ -344,55 +344,55 @@ Found 62 references for symbol 'OffsetDateTime':
     | 
 
 <WORKDIR>/internal/qc_model/gen_test.mbt:292:7-292:21:
-    | fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-    |   @qc.liftA3(
+    | fn offset_datetime_gen() -> @gen.Gen[@datetime.TomlDateTime] {
+    |   @gen.liftA3(
     |     fn(date : String, time : String, offset : String) {
 292 |       OffsetDateTime("\{date}T\{time}\{offset}")
     |       ^^^^^^^^^^^^^^
     |     },
     |     date_string_gen(),
 
-<WORKDIR>/internal/qc_model/model.mbt:238:5-238:19:
+<WORKDIR>/internal/qc_model/model.mbt:244:5-244:19:
     | ///|
     | fn datetime_has_fractional_seconds(datetime : @datetime.TomlDateTime) -> Bool {
     |   match datetime {
-238 |     OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
+244 |     OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
     |     ^^^^^^^^^^^^^^
     |       text.contains(".")
     |     LocalDate(_) => false
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:250:22-250:36:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:255:22-255:36:
     | ///|
     | /// Test uncovered Token JSON serialization methods
     | test "test DateTimeToken JSON serialization" {
-250 |   let dt = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
+255 |   let dt = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
     |                      ^^^^^^^^^^^^^^
     |   let token = @tokenize.DateTimeToken(dt, loc=@tokenize.default_loc())
     |   debug_inspect(
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:716:13-716:27:
+<WORKDIR>/internal/tokenize/tokenize.mbt:764:13-764:27:
     |           self.update_view(rest3)
     |           let end_pos = self.get_loc()
     |           DateTimeToken(
-716 |             OffsetDateTime("\{datetime_str}Z"),
+764 |             OffsetDateTime("\{datetime_str}Z"),
     |             ^^^^^^^^^^^^^^
     |             loc=make_loc(start_pos, end_pos),
     |           )
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:727:13-727:27:
+<WORKDIR>/internal/tokenize/tokenize.mbt:775:13-775:27:
     |           validate_timezone_offset(offset)
     |           let end_pos = self.get_loc()
     |           DateTimeToken(
-727 |             OffsetDateTime("\{datetime_str}\{offset}"),
+775 |             OffsetDateTime("\{datetime_str}\{offset}"),
     |             ^^^^^^^^^^^^^^
     |             loc=make_loc(start_pos, end_pos),
     |           )
 
-<WORKDIR>/toml.mbt:24:18-24:32:
+<WORKDIR>/toml.mbt:32:18-32:32:
    | /// "OffsetDateTime", "LocalDateTime", "LocalDate", "LocalTime"
    | pub fn TomlValue::datetime_info(self : TomlValue) -> (String, String)? {
    |   match self {
-24 |     TomlDateTime(OffsetDateTime(s)) => Some(("OffsetDateTime", s))
+32 |     TomlDateTime(OffsetDateTime(s)) => Some(("OffsetDateTime", s))
    |                  ^^^^^^^^^^^^^^
    |     TomlDateTime(LocalDateTime(s)) => Some(("LocalDateTime", s))
    |     TomlDateTime(LocalDate(s)) => Some(("LocalDate", s))
@@ -514,38 +514,38 @@ Found 62 references for symbol 'OffsetDateTime':
     |     loc~,
     |   )
 
-<WORKDIR>/toml_test.mbt:346:42-346:56:
-    |   let local_time_token = @tokenize.DateTimeToken(LocalTime("07:32:00"), loc~)
+<WORKDIR>/toml_test.mbt:347:38-347:52:
     | 
     |   // Test that tokens can be created (basic instantiation test)
-346 |   guard offset_dt_token is DateTimeToken(OffsetDateTime("1979-05-27T07:32:00Z"))
-    |                                          ^^^^^^^^^^^^^^
-    |   guard local_dt_token is DateTimeToken(LocalDateTime("1979-05-27T07:32:00"))
-    |   guard local_date_token is DateTimeToken(LocalDate("1979-05-27"))
+    |   assert_true(
+347 |     offset_dt_token is DateTimeToken(OffsetDateTime("1979-05-27T07:32:00Z")),
+    |                                      ^^^^^^^^^^^^^^
+    |   )
+    |   assert_true(
 
-<WORKDIR>/toml_test.mbt:367:24-367:38:
+<WORKDIR>/toml_test.mbt:371:24-371:38:
     |     content="true",
     |   )
     |   let datetime_array = [
-367 |     @toml.TomlDateTime(OffsetDateTime("2023-01-01T00:00:00Z")),
+371 |     @toml.TomlDateTime(OffsetDateTime("2023-01-01T00:00:00Z")),
     |                        ^^^^^^^^^^^^^^
     |     TomlDateTime(LocalDateTime("2023-01-02T00:00:00")),
     |     TomlDateTime(LocalDate("2023-01-03")),
 
-<WORKDIR>/toml_test.mbt:461:24-461:38:
+<WORKDIR>/toml_test.mbt:465:24-465:38:
     |   debug_inspect(@toml.TomlFloat(3.14).validate(), content="true")
     |   debug_inspect(@toml.TomlBoolean(true).validate(), content="true")
     |   debug_inspect(
-461 |     @toml.TomlDateTime(OffsetDateTime("2023-01-01T00:00:00Z")).validate(),
+465 |     @toml.TomlDateTime(OffsetDateTime("2023-01-01T00:00:00Z")).validate(),
     |                        ^^^^^^^^^^^^^^
     |     content="true",
     |   )
 
-<WORKDIR>/toml_to_string.mbt:158:9-158:23:
+<WORKDIR>/toml_to_string.mbt:162:9-162:23:
     |     TomlBoolean(b) => if b { output <+ "true" } else { output <+ "false" }
     |     TomlDateTime(dt) =>
     |       match dt {
-158 |         OffsetDateTime(s) | LocalDateTime(s) | LocalDate(s) | LocalTime(s) =>
+162 |         OffsetDateTime(s) | LocalDateTime(s) | LocalDate(s) | LocalTime(s) =>
     |         ^^^^^^^^^^^^^^
     |           output <+ "\{s}"
     |       }
@@ -568,11 +568,11 @@ Found 62 references for symbol 'OffsetDateTime':
     |         ]),
     |       ),
 
-<WORKDIR>/toml_utils.mbt:639:18-639:32:
+<WORKDIR>/toml_utils.mbt:654:18-654:32:
     |   set_dotted_key_value(
     |     table,
     |     ["root", "nested", "datetime"],
-639 |     TomlDateTime(OffsetDateTime("2024-01-01T12:00:00Z")),
+654 |     TomlDateTime(OffsetDateTime("2024-01-01T12:00:00Z")),
     |                  ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(

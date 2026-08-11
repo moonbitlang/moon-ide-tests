@@ -1,4 +1,4 @@
-# async find-references kind_of_fd_sync_ffi src/internal/event_loop/stdio.mbt:17:15
+# async find-references fstatx_sync src/internal/event_loop/stdio.mbt:18:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,24 +17,24 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'kind_of_fd_sync_ffi' --loc 'src/internal/event_loop/stdio.mbt:17:15'
-Found 2 references for symbol 'kind_of_fd_sync_ffi':
-<WORKDIR>/src/internal/event_loop/stdio.mbt:17:15-17:34:
-   | 
+$ run_moon_ide moon ide find-references 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
+Found 2 references for symbol 'fstatx_sync':
+<WORKDIR>/src/internal/event_loop/stdio.mbt:18:15-18:26:
    | ///|
    | #cfg(target="native")
-17 | extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
-   |               ^^^^^^^^^^^^^^^^^^^
-   | 
-   | ///|
-
-<WORKDIR>/src/internal/event_loop/stdio.mbt:29:14-29:33:
+   | #borrow(buf)
+18 | extern "C" fn fstatx_sync(
+   |               ^^^^^^^^^^^
    |   fd : @fd_util.Fd,
+   |   request : UInt,
+
+<WORKDIR>/src/internal/event_loop/stdio.mbt:32:6-32:17:
    |   context~ : String,
    | ) -> @fd_util.FileKind raise {
-29 |   let kind = kind_of_fd_sync_ffi(fd)
-   |              ^^^^^^^^^^^^^^^^^^^
-   |   if kind < 0 {
+   |   let buf = FixedArray::make(16, b'\x00')
+32 |   if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
+   |      ^^^^^^^^^^^
    |     @os_error.check_errno(context)
+   |   }
 
 ```

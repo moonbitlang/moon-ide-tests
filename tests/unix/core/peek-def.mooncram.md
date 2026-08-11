@@ -17,41 +17,41 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:31:15'
+$ run_moon_ide moon ide peek-def 'self' --loc 'builtin/int64.mbt:26:21'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
-   | ///   inspect(Int64::from_int(42), content="42")
+   | ///   inspect(Int64(3), content="3")
    | /// }
    | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
-   |               ^^^^^^^^
-   |   i.to_int64()
-   | }
+26 | pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
+   |                     ^^^^
    | 
    | ///|
-   | /// Computes the absolute value of a 64-bit integer.
+   | /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
    | ///
    | /// Parameters:
    | ///
-   | /// * `self` : The 64-bit integer whose absolute value is to be computed.
+   | /// * `i` : The integer value to be converted.
    | ///
-   | /// Returns the absolute value of the input integer.
+   | /// Returns the converted 64-bit integer (`Int64`) value.
    | ///
    | /// Example:
    | ///
+   | /// ```mbt check
+   | /// test {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'i' --loc 'builtin/int64.mbt:31:24'
+$ run_moon_ide moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
    | ///   inspect(Int64::from_int(42), content="42")
    | /// }
    | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
-   |                        ^
+44 | pub fn Int64::from_int(i : Int) -> Int64 {
+   |               ^^^^^^^^
    |   i.to_int64()
    | }
    | 
@@ -113,58 +113,6 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
    | pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
    |   self
    | }
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'ReprDelta' --loc 'debug/delta.mbt:17:11'
-Definition found at file <WORKDIR>/debug/delta.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
-   | 
-   | ///|
-   | /// Tree-shaped diff between two `Repr` values.
-17 | priv enum ReprDelta {
-   |           ^^^^^^^^^
-   |   Same(Repr, Array[ReprDelta])
-   |   Different(Repr, Repr)
-   |   Extra1(Repr)
-   |   Extra2(Repr)
-   | }
-   | 
-   | ///|
-   | /// Default max relative error for `DoubleLit` comparisons.
-   | const DEFAULT_MAX_RELATIVE_ERROR : Double = 0.000000000001
-   | 
-   | ///|
-   | /// Absolute value for `Double`.
-   | fn double_abs(x : Double) -> Double {
-   |   if x < 0.0 {
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'Same' --loc 'debug/delta.mbt:18:3'
-Definition found at file <WORKDIR>/debug/delta.mbt
-   | // limitations under the License.
-   | 
-   | ///|
-   | /// Tree-shaped diff between two `Repr` values.
-   | priv enum ReprDelta {
-18 |   Same(Repr, Array[ReprDelta])
-   |   ^^^^
-   |   Different(Repr, Repr)
-   |   Extra1(Repr)
-   |   Extra2(Repr)
-   | }
-   | 
-   | ///|
-   | /// Default max relative error for `DoubleLit` comparisons.
-   | const DEFAULT_MAX_RELATIVE_ERROR : Double = 0.000000000001
-   | 
-   | ///|
-   | /// Absolute value for `Double`.
-   | fn double_abs(x : Double) -> Double {
-   |   if x < 0.0 {
-   |     -x
 ```
 
 ```mooncram

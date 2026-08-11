@@ -137,7 +137,10 @@ pub fn StringBuilder::StringBuilder(size_hint? : Int) -> Self
 $ run_moon_ide moon ide doc StringBuilder::write_string
 package "moonbitlang/core/builtin"
 pub fn StringBuilder::write_string(Self, String) -> Unit
-  Writes a string to the StringBuilder.
+// target is:
+
+package "moonbitlang/core/builtin"
+pub fn &Logger::write_string(Self, String) -> Unit
 ```
 
 ```mooncram
@@ -296,13 +299,11 @@ enum List[A] {
   pub fn[A] List::List(ArrayView[A]) -> Self[A]
   pub fn[A] List::all(Self[A], (A) -> Bool raise?) -> Bool raise?
   pub fn[A] List::any(Self[A], (A) -> Bool raise?) -> Bool raise?
-  pub fn[X : @quickcheck.Arbitrary] List::arbitrary(Int, @splitmix.RandomState) -> Self[X]
   pub fn[A : Compare] List::compare(Self[A], Self[A]) -> Int
   pub fn[A] List::concat(Self[A], Self[A]) -> Self[A]
   #as_free_fn
   pub fn[A] List::cons(A, Self[A]) -> Self[A]
   pub fn[A : Eq] List::contains(Self[A], A) -> Bool
-  pub fn[X] List::default() -> Self[X]
   pub fn[A] List::drop(Self[A], Int) -> Self[A]
   pub fn[A] List::drop_while(Self[A], (A) -> Bool raise?) -> Self[A] raise?
   pub fn[A] List::each(Self[A], (A) -> Unit raise?) -> Unit raise?
@@ -324,7 +325,6 @@ enum List[A] {
   #as_free_fn
   pub fn[A : @json.FromJson] List::from_json(Json) -> Self[A] raise @json.JsonDecodeError
   pub fn[A : Hash] List::hash(Self[A]) -> Int
-  pub fn[A : Hash] List::hash_combine(Self[A], Hasher) -> Unit
   pub fn[A] List::head(Self[A]) -> A?
   pub fn[A] List::intercalate(Self[Self[A]], Self[A]) -> Self[A]
   pub fn[A] List::intersperse(Self[A], A) -> Self[A]
@@ -344,12 +344,7 @@ enum List[A] {
   #as_free_fn(empty)
   #as_free_fn
   pub fn[A] List::new() -> Self[A]
-  pub fn[A : Eq] List::not_equal(Self[A], Self[A]) -> Bool
   pub fn[A] List::nth(Self[A], Int) -> A?
-  pub fn[A : Compare] List::op_ge(Self[A], Self[A]) -> Bool
-  pub fn[A : Compare] List::op_gt(Self[A], Self[A]) -> Bool
-  pub fn[A : Compare] List::op_le(Self[A], Self[A]) -> Bool
-  pub fn[A : Compare] List::op_lt(Self[A], Self[A]) -> Bool
   #alias(add)
   pub fn[A] List::prepend(Self[A], A) -> Self[A]
   pub fn[A : Eq] List::remove(Self[A], A) -> Self[A]
@@ -386,7 +381,7 @@ enum List[A] {
   pub impl[A : ToJson] ToJson for List[A]
   pub impl[A : @debug.Debug] @debug.Debug for List[A]
   pub impl[A : @json.FromJson] @json.FromJson for List[A]
-  pub impl[X : @quickcheck.Arbitrary] @quickcheck.Arbitrary for List[X]
+  pub impl[X : Arbitrary] Arbitrary for @list.List[X]
 ```
 
 ```mooncram

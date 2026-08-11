@@ -73,82 +73,82 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
  16 |#cfg(not(platform="windows"))
  17 |pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
     |...
- 30 |#cfg(not(platform="windows"))
- 31 |async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
+ 31 |#cfg(not(platform="windows"))
+ 32 |async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
     |...
- 45 |#cfg(all(target="native", not(platform="windows")))
- 46 |#borrow(buf)
- 47 |extern "C" fn read_unix_ffi(
- 48 |  fd : @fd_util.Fd,
- 49 |  buf : FixedArray[Byte],
- 50 |  offset~ : Int,
- 51 |  len~ : Int,
- 52 |) -> Int = "moonbitlang_async_read"
+ 47 |#cfg(all(target="native", not(platform="windows")))
+ 48 |#borrow(buf)
+ 49 |extern "C" fn read_unix_ffi(
+ 50 |  fd : @fd_util.Fd,
+ 51 |  buf : FixedArray[Byte],
+ 52 |  offset~ : Int,
+ 53 |  len~ : Int,
+ 54 |) -> Int = "moonbitlang_async_read"
     |...
- 55 |#cfg(target="wasm")
- 56 |#unsafe_skip_stub_check
- 57 |#borrow(buf)
- 58 |fn read_unix_ffi(
- 59 |  fd : @fd_util.Fd,
- 60 |  buf : FixedArray[Byte],
- 61 |  offset~ : Int,
- 62 |  len~ : Int,
- 63 |) -> Int = "moonbitlang/async" "io/read/unix"
+ 57 |#cfg(target="wasm")
+ 58 |#unsafe_skip_stub_check
+ 59 |#borrow(buf)
+ 60 |fn read_unix_ffi(
+ 61 |  fd : @fd_util.Fd,
+ 62 |  buf : FixedArray[Byte],
+ 63 |  offset~ : Int,
+ 64 |  len~ : Int,
+ 65 |) -> Int = "moonbitlang/async" "io/read/unix"
     |...
- 66 |#cfg(not(platform="windows"))
- 67 |async fn IoHandle::read_via_event_bus_unix(
- 68 |  handle : IoHandle,
- 69 |  buf : FixedArray[Byte],
- 70 |  offset~ : Int,
- 71 |  len~ : Int,
- 72 |  context~ : String,
- 73 |) -> Int {
+ 68 |#cfg(not(platform="windows"))
+ 69 |async fn IoHandle::read_via_event_bus_unix(
+ 70 |  handle : IoHandle,
+ 71 |  buf : FixedArray[Byte],
+ 72 |  offset~ : Int,
+ 73 |  len~ : Int,
+ 74 |  context~ : String,
+ 75 |) -> Int {
     |...
- 94 |#cfg(all(target="native", not(platform="windows")))
- 95 |async fn IoHandle::read_via_event_bus(
- 96 |  handle : IoHandle,
- 97 |  buf : FixedArray[Byte],
- 98 |  offset~ : Int,
- 99 |  len~ : Int,
-100 |  context~ : String,
-101 |) -> Int {
+ 96 |#cfg(all(target="native", not(platform="windows")))
+ 97 |async fn IoHandle::read_via_event_bus(
+ 98 |  handle : IoHandle,
+ 99 |  buf : FixedArray[Byte],
+100 |  offset~ : Int,
+101 |  len~ : Int,
+102 |  context~ : String,
+103 |) -> Int {
     |...
-106 |#cfg(all(target="native", not(platform="windows")))
-107 |#borrow(buf)
-108 |extern "C" fn write_unix_ffi(
-109 |  fd : @fd_util.Fd,
-110 |  buf : Bytes,
-111 |  offset~ : Int,
-112 |  len~ : Int,
-113 |) -> Int = "moonbitlang_async_write"
+108 |#cfg(all(target="native", not(platform="windows")))
+109 |#borrow(buf)
+110 |extern "C" fn write_unix_ffi(
+111 |  fd : @fd_util.Fd,
+112 |  buf : Bytes,
+113 |  offset~ : Int,
+114 |  len~ : Int,
+115 |) -> Int = "moonbitlang_async_write"
     |...
-116 |#cfg(target="wasm")
-117 |#unsafe_skip_stub_check
-118 |#borrow(buf)
-119 |fn write_unix_ffi(
-120 |  fd : @fd_util.Fd,
-121 |  buf : Bytes,
-122 |  offset~ : Int,
-123 |  len~ : Int,
-124 |) -> Int = "moonbitlang/async" "io/write/unix"
+118 |#cfg(target="wasm")
+119 |#unsafe_skip_stub_check
+120 |#borrow(buf)
+121 |fn write_unix_ffi(
+122 |  fd : @fd_util.Fd,
+123 |  buf : Bytes,
+124 |  offset~ : Int,
+125 |  len~ : Int,
+126 |) -> Int = "moonbitlang/async" "io/write/unix"
     |...
-127 |#cfg(not(platform="windows"))
-128 |async fn IoHandle::write_via_event_bus_unix(
-129 |  handle : IoHandle,
-130 |  buf : Bytes,
-131 |  offset~ : Int,
-132 |  len~ : Int,
-133 |  context~ : String,
-134 |) -> Int {
+129 |#cfg(not(platform="windows"))
+130 |async fn IoHandle::write_via_event_bus_unix(
+131 |  handle : IoHandle,
+132 |  buf : Bytes,
+133 |  offset~ : Int,
+134 |  len~ : Int,
+135 |  context~ : String,
+136 |) -> Int {
     |...
-155 |#cfg(all(target="native", not(platform="windows")))
-156 |async fn IoHandle::write_via_event_bus(
-157 |  handle : IoHandle,
-158 |  buf : Bytes,
-159 |  offset~ : Int,
-160 |  len~ : Int,
-161 |  context~ : String,
-162 |) -> Int {
+157 |#cfg(all(target="native", not(platform="windows")))
+158 |async fn IoHandle::write_via_event_bus(
+159 |  handle : IoHandle,
+160 |  buf : Bytes,
+161 |  offset~ : Int,
+162 |  len~ : Int,
+163 |  context~ : String,
+164 |) -> Int {
     |...
 
 ```
@@ -156,33 +156,46 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
 ```mooncram
 $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
  16 |#cfg(target="native")
- 17 |extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
+ 17 |#borrow(buf)
+ 18 |extern "C" fn fstatx_sync(
+ 19 |  fd : @fd_util.Fd,
+ 20 |  request : UInt,
+ 21 |  buf : FixedArray[Byte],
+ 22 |  buf_len : Int,
+ 23 |) -> Int = "moonbitlang_async_fstatx_sync"
     |...
- 20 |#cfg(target="wasm")
- 21 |#unsafe_skip_stub_check
- 22 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
+ 26 |#cfg(target="native")
+ 27 |fn kind_of_fd_sync(
+ 28 |  fd : @fd_util.Fd,
+ 29 |  context~ : String,
+ 30 |) -> @fd_util.FileKind raise {
     |...
- 25 |fn kind_of_fd_sync(
- 26 |  fd : @fd_util.Fd,
- 27 |  context~ : String,
- 28 |) -> @fd_util.FileKind raise {
+ 43 |#cfg(target="wasm")
+ 44 |#unsafe_skip_stub_check
+ 45 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
     |...
- 37 |#cfg(target="native")
- 38 |extern "C" fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
+ 48 |#cfg(target="wasm")
+ 49 |fn kind_of_fd_sync(
+ 50 |  fd : @fd_util.Fd,
+ 51 |  context~ : String,
+ 52 |) -> @fd_util.FileKind raise {
     |...
- 41 |#cfg(target="wasm")
- 42 |#unsafe_skip_stub_check
- 43 |fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+ 61 |#cfg(target="native")
+ 62 |extern "C" fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
     |...
- 46 |let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
+ 65 |#cfg(target="wasm")
+ 66 |#unsafe_skip_stub_check
+ 67 |fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
     |...
- 49 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
+ 70 |let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
     |...
- 97 |pub let stdin : Result[IoHandle, Error] = try
+ 73 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
     |...
-106 |pub let stdout : Result[IoHandle, Error] = try
+121 |pub let stdin : Result[IoHandle, Error] = try
     |...
-115 |pub let stderr : Result[IoHandle, Error] = try
+130 |pub let stdout : Result[IoHandle, Error] = try
+    |...
+139 |pub let stderr : Result[IoHandle, Error] = try
     |...
 
 ```

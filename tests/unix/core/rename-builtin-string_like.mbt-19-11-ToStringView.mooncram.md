@@ -39,6 +39,25 @@ $ run_moon_ide moon ide rename 'ToStringView' 'ToStringViewRenamed' --loc 'built
    self : ArrayView[A],
    separator : StringView,
  ) -> String {
+*** Update File: <WORKDIR>/builtin/extends.mbt
+@@
+ pub extend String with ToJson::{to_json}
+ 
+ ///|
+-pub extend String with ToStringView::{to_string_view}
++pub extend String with ToStringViewRenamed::{to_string_view}
+ 
+ ///|
+ pub extend StringBuilder with Logger::{
+@@
+ pub extend StringView with ToJson::{to_json}
+ 
+ ///|
+-pub extend StringView with ToStringView::{to_string_view}
++pub extend StringView with ToStringViewRenamed::{to_string_view}
+ 
+ ///|
+ #doc(hidden)
 *** Update File: <WORKDIR>/builtin/fixedarray.mbt
 @@
  ///   inspect(fixed_array.join(","), content="1,2,3")

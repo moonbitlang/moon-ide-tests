@@ -1,4 +1,4 @@
-# core find-references i builtin/int64.mbt:31:24
+# core find-references self builtin/int64.mbt:26:21
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,24 +17,24 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'i' --loc 'builtin/int64.mbt:31:24'
-Found 2 references for symbol 'i':
-<WORKDIR>/builtin/int64.mbt:31:24-31:25:
-   | ///   inspect(Int64::from_int(42), content="42")
+$ run_moon_ide moon ide find-references 'self' --loc 'builtin/int64.mbt:26:21'
+Found 2 references for symbol 'self':
+<WORKDIR>/builtin/int64.mbt:26:21-26:25:
+   | ///   inspect(Int64(3), content="3")
    | /// }
    | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
-   |                        ^
-   |   i.to_int64()
-   | }
-
-<WORKDIR>/builtin/int64.mbt:96:24-96:28:
+26 | pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
+   |                     ^^^^
    | 
    | ///|
-   | pub impl Hash for Int64 with fn hash_combine(self, hasher) {
-96 |   hasher.combine_int64(self)
-   |                        ^^^^
-   | }
-   | 
+
+<WORKDIR>/builtin/int64.mbt:109:3-109:9:
+    | 
+    | ///|
+    | pub impl Hash for Int64 with fn hash_combine(self, hasher) {
+109 |   hasher.combine_int64(self)
+    |   ^^^^^^
+    | }
+    | 
 
 ```

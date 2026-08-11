@@ -24,7 +24,6 @@ type CoreIntArray = Array[Int]
 type CoreScores = @hashmap.HashMap[String, Int]
                   ^^^^^^^^^^^^^^^^
                   ```moonbit
-                  #alias(T, deprecated="`T` is deprecated, use `HashMap` instead")
                   type @hashmap.HashMap[K, V]
                   ```
                   ---
@@ -54,7 +53,6 @@ type CoreScores = @hashmap.HashMap[String, Int]
 type CoreIntList = @list.List[Int]
                    ^^^^^^^^^^
                    ```moonbit
-                   #alias(T, deprecated="`T` is deprecated, use `List` instead")
                    enum @list.List[A] {
                      Empty
                      More(A, tail~ : @list.List[A])
@@ -194,11 +192,8 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   builder.write_string(text)
           ^^^^^^^^^^^^
           ```moonbit
-          fn Logger::write_string(self : StringBuilder, str : String) -> Unit
+          fn StringBuilder::write_string(self : StringBuilder, str : String) -> Unit
           ```
-          ---
-          
-           Writes a string to the StringBuilder.
   (text.length(), text.split(" ").to_array(), builder.to_string())
 }
 ```
