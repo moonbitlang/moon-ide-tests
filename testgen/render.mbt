@@ -149,7 +149,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
     }
   }
   if has_command {
-    Some(CramFile::{ name: "outline.mooncram.md", content: sb.to_string() })
+    Some(CramFile::{ name: "outline.mooncram.md", content: sb.to_string(), })
   } else {
     None
   }
@@ -168,7 +168,7 @@ fn render_symbol_file(
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
   let has_command = append_case_commands(sb, seen, loc_cases, to_command)
   if has_command {
-    Some(CramFile::{ name, content: sb.to_string() })
+    Some(CramFile::{ name, content: sb.to_string(), })
   } else {
     None
   }
@@ -360,7 +360,7 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
         i = i + 1
       }
       if output.length() > 0 {
-        blocks.push(ExpectedBlock::{ command, output })
+        blocks.push(ExpectedBlock::{ command, output, })
       }
     } else {
       i = i + 1

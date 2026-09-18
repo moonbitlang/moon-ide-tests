@@ -128,7 +128,7 @@ fn LocCollector::append_symbol(
     return
   }
   let normalized_col = if col <= 0 { 1 } else { col }
-  let test_case = TestCase::{ file: self.file, line, col: normalized_col, sym }
+  let test_case = TestCase::{ file: self.file, line, col: normalized_col, sym, }
   if self.seen.contains(test_case) {
     return
   }
@@ -351,7 +351,7 @@ fn collect_cases_for_text(
   let (impls, reports) = @parser.parse_string(text, name=file)
   emit_parser_reports(file, reports)
   let loc_cases = collect_loc_cases(file, impls, max_per_file)
-  CollectResult::{ source_files: [file], loc_cases }
+  CollectResult::{ source_files: [file], loc_cases, }
 }
 
 ///|
@@ -550,5 +550,5 @@ fn collect_cases(
       None => ()
     }
   }
-  CollectResult::{ source_files, loc_cases }
+  CollectResult::{ source_files, loc_cases, }
 }
