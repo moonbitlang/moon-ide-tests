@@ -18,7 +18,7 @@ fn fatal(message : String) -> Unit {
 
 ///|
 fn[T : @debug.Debug] debug_text(value : T) -> String {
-  @debug.render(@debug.to_repr(value))
+  @debug.render(Repr(value))
 }
 
 ///|

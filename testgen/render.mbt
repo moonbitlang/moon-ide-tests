@@ -134,7 +134,7 @@ fn run_moon_ide_command(invocation : String) -> String {
 
 ///|
 fn render_outline_file(source_files : Array[String]) -> CramFile? {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, "outline")
   append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -162,7 +162,7 @@ fn render_symbol_file(
   loc_cases : Array[TestCase],
   to_command : (TestCase) -> String,
 ) -> CramFile? {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, suite)
   append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -202,7 +202,7 @@ fn split_case_file_name(
   test_case : TestCase,
   used : @hashset.HashSet[String],
 ) -> String {
-  let sanitized = StringBuilder::new()
+  let sanitized = StringBuilder()
   for ch in location(test_case) {
     if ch == '/' || ch == '\\' || ch == ':' {
       sanitized.write_char('-')
@@ -227,7 +227,7 @@ fn render_split_symbol_files(
   loc_cases : Array[TestCase],
   to_command : (TestCase) -> String,
 ) -> Array[CramFile] {
-  let files = Array::new()
+  let files = Array(capacity=0)
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
   for test_case in loc_cases {
@@ -236,7 +236,7 @@ fn render_split_symbol_files(
       continue
     }
     seen.add(command)
-    let sb = StringBuilder::new()
+    let sb = StringBuilder()
     append_markdown_header(
       sb,
       current_repo_slug.val,
@@ -306,7 +306,7 @@ fn render_cram_files(
   current_repo_slug.val = repo_slug
   current_repo_path.val = repo_path
   current_platform.val = platform
-  let files = Array::new()
+  let files = Array(capacity=0)
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
   append_if_some(files, render_peek_file(result.loc_cases))
@@ -321,7 +321,7 @@ fn render_cram_files(
 
 ///|
 fn split_lines(text : String) -> Array[String] {
-  let lines = Array::new()
+  let lines = Array(capacity=0)
   for line in text.split("\n") {
     if line.length() > 0 && line[line.length() - 1] == '\r' {
       lines.push(line[:line.length() - 1].to_owned())
@@ -345,13 +345,13 @@ fn is_mooncram_fence_close(line : String) -> Bool {
 ///|
 fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
   let lines = split_lines(existing)
-  let blocks = Array::new()
+  let blocks = Array(capacity=0)
   let mut i = 0
   while i < lines.length() {
     let line = lines[i]
     if is_generated_command(line) {
       let command = line
-      let output = Array::new()
+      let output = Array(capacity=0)
       i = i + 1
       while i < lines.length() &&
             !lines[i].has_prefix("$ ") &&
@@ -388,7 +388,7 @@ fn append_preserved_output(
 ///|
 fn preserve_expected_output(generated : String, existing : String) -> String {
   let blocks = parse_expected_blocks(existing)
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   let lines = split_lines(generated)
   let mut i = 0
   while i < lines.length() {

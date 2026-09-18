@@ -201,9 +201,11 @@ impl @syntax.IterVisitor for LocCollector with fn visit_TypeDecl(env, type_decl)
     env.append_from_loc(type_decl.tycon, type_decl.tycon_loc)
   }
   ignore(type_decl.params)
-  env.visit_TypeDesc(type_decl.components)
-  type_decl.deriving.each(x => env.visit_DerivingDirective(x))
-  env.visit_Visibility(type_decl.type_vis)
+  @syntax.IterVisitor::visit_TypeDesc(env, type_decl.components)
+  type_decl.deriving.each(x =>
+    @syntax.IterVisitor::visit_DerivingDirective(env, x)
+  )
+  @syntax.IterVisitor::visit_Visibility(env, type_decl.type_vis)
 }
 
 ///|
@@ -230,8 +232,8 @@ impl @syntax.IterVisitor for LocCollector with fn visit_Impl_TopUsing(
   ignore(loc)
   ignore(doc)
   for pair in names {
-    env.visit_AliasTarget(pair.0)
-    env.visit_UsingKind(pair.1)
+    @syntax.IterVisitor::visit_AliasTarget(env, pair.0)
+    @syntax.IterVisitor::visit_UsingKind(env, pair.1)
   }
 }
 
@@ -257,7 +259,9 @@ impl @syntax.IterVisitor for LocCollector with fn visit_ConstrDecl(
 ) {
   env.append_from_loc(constr_decl.name.name, constr_decl.name.loc)
   match constr_decl.args {
-    Some(args) => args.each(arg => env.visit_ConstrParam(arg))
+    Some(args) => args.each(arg =>
+      @syntax.IterVisitor::visit_ConstrParam(env, arg)
+    )
     None => ()
   }
 }
@@ -268,7 +272,7 @@ impl @syntax.IterVisitor for LocCollector with fn visit_Constructor(
   constructor_,
 ) {
   env.append_from_loc(constructor_.name.name, constructor_.name.loc)
-  env.visit_ConstructorExtraInfo(constructor_.extra_info)
+  @syntax.IterVisitor::visit_ConstructorExtraInfo(env, constructor_.extra_info)
 }
 
 ///|
@@ -291,8 +295,8 @@ impl @syntax.IterVisitor for LocCollector with fn visit_Expr_DotApply(
   ignore(return_self)
   ignore(loc)
   env.append_from_loc(method_name.name, method_name.loc)
-  env.visit_Expr(self)
-  args.each(arg => env.visit_Argument(arg))
+  @syntax.IterVisitor::visit_Expr(env, self)
+  args.each(arg => @syntax.IterVisitor::visit_Argument(env, arg))
 }
 
 ///|
@@ -301,7 +305,7 @@ fn collect_loc_cases(
   impls : @syntax.Impls,
   max_per_file : Int,
 ) -> Array[TestCase] {
-  let cases = Array::new()
+  let cases = Array(capacity=0)
   let seen : @hashset.HashSet[TestCase] = @hashset.HashSet([])
   let collector = LocCollector::{
     file,
@@ -311,7 +315,7 @@ fn collect_loc_cases(
     count: Ref(0),
   }
   for impl_ in impls {
-    collector.visit_Impl(impl_)
+    @syntax.IterVisitor::visit_Impl(collector, impl_)
   }
   cases
 }
@@ -321,7 +325,7 @@ fn parser_report_lines(
   file : String,
   reports : Array[@basic.Report],
 ) -> Array[String] {
-  let lines = Array::new()
+  let lines = Array(capacity=0)
   if reports.length() == 0 {
     return lines
   }
@@ -410,7 +414,7 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
 /// separator character individually: Windows relative paths contain one
 /// backslash per directory level.
 fn normalize_separators(path : String) -> String {
-  let sb = StringBuilder::new()
+  let sb = StringBuilder()
   for ch in path {
     if ch == '\\' {
       sb.write_char('/')
@@ -466,7 +470,7 @@ fn select_files(
   files.sort_by_key(rel_path => {
     (selection_key(seed, rel_path), normalize_separators(rel_path))
   })
-  let selected = Array::new()
+  let selected = Array(capacity=0)
   for rel_path in files {
     if max_files > 0 && selected.length() >= max_files {
       break
@@ -499,7 +503,7 @@ fn collect_files(
   max_files : Int,
   max_file_size : Int,
 ) -> Array[String] {
-  let files = Array::new()
+  let files = Array(capacity=0)
   walk_dir(project_root, "", files)
   select_files(files, seed, max_files, skip=rel_path => {
     if max_file_size <= 0 {
@@ -532,7 +536,7 @@ fn collect_cases(
   max_file_size : Int,
 ) -> CollectResult {
   let source_files = collect_files(project_root, seed, max_files, max_file_size)
-  let loc_cases = Array::new()
+  let loc_cases = Array(capacity=0)
   for rel_path in source_files {
     let abs_path = @path.Path::join(project_root, rel_path).to_string()
     let maybe_text = try @fs.read_file_to_string(abs_path) catch {
