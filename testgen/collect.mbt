@@ -373,7 +373,7 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
   let entries = try @fs.read_dir(abs_dir) catch {
     _ => []
   } noraise {
-    values => values
+    values => values.to_owned()
   }
   entries.sort()
   for name in entries {

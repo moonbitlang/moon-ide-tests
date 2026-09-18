@@ -139,7 +139,7 @@ fn remove_stale_split_files(
   let entries = try @fs.read_dir(output_dir) catch {
     _ => return
   } noraise {
-    values => values
+    values => values.to_owned()
   }
   entries.sort()
   for name in entries {
