@@ -121,14 +121,20 @@ foreach ($repo in $repos) {
 
 if ($RefreshSnapshots) {
   $dailyDir = Join-Path $root ".daily-test"
+  $windowsTests = Join-Path $root "tests\windows"
   New-Item -ItemType Directory -Force -Path $dailyDir | Out-Null
   $updateLog = Join-Path $dailyDir "windows-cram-update.log"
+
+  # moon cram parses the existing snapshots before updating them. Normalize
+  # legacy ` ()` output annotations first so the update can start.
+  Normalize-MoonCramFiles $windowsTests
+  Escape-EmptyParenLines $windowsTests
 
   $previousErrorActionPreference = $ErrorActionPreference
   $ErrorActionPreference = "Continue"
   & moon cram update --replace --assume-yes --cram-compat --no-keep-output-crlf `
     --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") `
-    (Join-Path $root "tests\windows") *> $updateLog
+    $windowsTests *> $updateLog
   $updateStatus = $LASTEXITCODE
   $ErrorActionPreference = $previousErrorActionPreference
 
@@ -137,6 +143,6 @@ if ($RefreshSnapshots) {
     throw "moon cram update exited with status $updateStatus"
   }
 
-  Normalize-MoonCramFiles (Join-Path $root "tests\windows")
-  Escape-EmptyParenLines (Join-Path $root "tests\windows")
+  Normalize-MoonCramFiles $windowsTests
+  Escape-EmptyParenLines $windowsTests
 }
