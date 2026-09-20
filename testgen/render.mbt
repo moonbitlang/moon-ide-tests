@@ -57,6 +57,15 @@ fn windows_repo_path(repo_path : String) -> String {
 }
 
 ///|
+fn platform_file_path(path : String) -> String {
+  let normalized = normalize_separators(path)
+  match current_platform.val {
+    TestPlatform::Unix => normalized
+    TestPlatform::Windows => windows_repo_path(normalized)
+  }
+}
+
+///|
 fn append_windows_header(sb : StringBuilder) -> Unit {
   ignore(sb)
 }
@@ -71,7 +80,7 @@ fn append_fixed_header(sb : StringBuilder) -> Unit {
 
 ///|
 fn location(test_case : TestCase) -> String {
-  "\{test_case.file}:\{test_case.line}:\{test_case.col}"
+  "\{platform_file_path(test_case.file)}:\{test_case.line}:\{test_case.col}"
 }
 
 ///|
@@ -143,7 +152,9 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
     if append_unique_command(
         sb,
         seen,
-        run_moon_ide_command("moon ide outline \{shell_quote(file)}"),
+        run_moon_ide_command(
+          "moon ide outline \{shell_quote(platform_file_path(file))}",
+        ),
       ) {
       has_command = true
     }

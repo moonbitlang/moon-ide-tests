@@ -465,6 +465,33 @@ test "render_cram_files emits windows powershell bootstrap" {
 }
 
 ///|
+test "rendered source paths follow the selected test platform" {
+  let result = CollectResult::{
+    source_files: ["src\\pkg\\a.mbt"],
+    loc_cases: [
+      TestCase::{ file: "src\\pkg\\a.mbt", line: 2, col: 3, sym: "f", },
+    ],
+  }
+  let windows_files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Windows,
+  )
+  assert_true(windows_files[0].content.contains("outline 'src\\pkg\\a.mbt'"))
+  assert_true(windows_files[1].content.contains("--loc 'src\\pkg\\a.mbt:2:3'"))
+
+  let unix_files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Unix,
+  )
+  assert_true(unix_files[0].content.contains("outline 'src/pkg/a.mbt'"))
+  assert_true(unix_files[1].content.contains("--loc 'src/pkg/a.mbt:2:3'"))
+}
+
+///|
 test "preserve_expected_output keeps matching command output" {
   let generated =
     #|# example hover
