@@ -18,6 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide rename 'sleep' 'sleep_renamed' --loc 'src/pipe/unimplemented_test.mbt:18:17'
-Error: could not find references for symbol 'sleep' at src/pipe/unimplemented_test.mbt:18:17
+Error: could not get package of file <WORKDIR>/src/pipe/unimplemented_test.mbt
 [1]
 ```

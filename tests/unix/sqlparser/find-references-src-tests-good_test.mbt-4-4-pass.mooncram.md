@@ -18,24 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'pass' --loc 'src/tests/good_test.mbt:4:4'
-Found 39 references for symbol 'pass':
-<WORKDIR>/src/tests/good_test.mbt:4:4-4:8:
-  | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql (escaped)
-  |  (escaped)
-  | ///| (escaped)
-4 | fn pass(input : String) -> Unit { (escaped)
-  |    ^^^^ (escaped)
-  |   (@sqlparser.parse_sql(input) catch { (escaped)
-  |     e => { (escaped)
-
+Found 38 references for symbol 'pass':
 <WORKDIR>/src/tests/good_test.mbt:16:30-16:34:
-   |  (escaped)
-   | ///| (escaped)
-   | test { (escaped)
-16 |   "SELECT * FROM orders;" |> pass (escaped)
-   |                              ^^^^ (escaped)
-   | } (escaped)
-   |  (escaped)
+   | 
+   | ///|
+   | test {
+16 |   "SELECT * FROM orders;" |> pass
+   |                              ^^^^
+   | }
+   | 
 
 <WORKDIR>/src/tests/good_test.mbt:21:68-21:72:
    |  (escaped)

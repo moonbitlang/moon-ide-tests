@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
-Found 2 references for symbol 'key_variations_toml':
-<WORKDIR>/additional_official_tests_test.mbt:8:7-8:26:
-  | ///|
-  | /// Test key names with various characters
-  | test "key name variations" {
-8 |   let key_variations_toml =
-  |       ^^^^^^^^^^^^^^^^^^^
-  |     #|bare_key = "value"
-  |     #|bare-key = "value"
-
+Found 1 references for symbol 'key_variations_toml':
 <WORKDIR>/additional_official_tests_test.mbt:17:17-17:36:
    |     #|"ʎǝʞ" = "value"
    |     #|

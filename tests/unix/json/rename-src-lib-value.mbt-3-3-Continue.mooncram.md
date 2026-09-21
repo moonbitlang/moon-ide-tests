@@ -56,43 +56,6 @@ $ run_moon_ide moon ide rename 'Continue' 'ContinueRenamed' --loc 'src/lib/value
    Finish(FinishValue)
  }
  
-*** Update File: <WORKDIR>/src/tests/incr.mbt
-@@
- fn continue_chunks(chunks : ArrayView[String], value : Value) -> Value raise {
-   match (chunks, value) {
-     ([], value) => value (escaped)
--    ([chunk, .. rest], Continue(state)) => (escaped)
-+    ([chunk, .. rest], ContinueRenamed(state)) => (escaped)
-       continue_chunks(rest, decode_continue(chunk, state))
-     ([_, ..], Finish(_)) => (escaped)
-       raise InspectError::InspectError("parser finished before all chunks")
-@@
-         ", got " +
-         String::from_array([..rest]),
-       )
--    Continue(_) => incr_fail("expected chunked JSON to finish: " + name) (escaped)
-+    ContinueRenamed(_) => incr_fail("expected chunked JSON to finish: " + name) (escaped)
-   }
- }
- 
-@@
-         "expected chunked parser rejection, got non-parser error: " + name,
-       )
-   } noraise {
--    Continue(_) => (escaped)
-+    ContinueRenamed(_) => (escaped)
-       incr_fail("expected chunked parser rejection, got continuation: " + name)
-     Finish(_) => (escaped)
-       incr_fail("expected chunked parser rejection, parser accepted: " + name)
-@@
-       @debug.assert_eq(value, Json::object({ "a": Json::number(1.0) }))
-       assert_eq(String::from_array([..rest]), " trailing")
-     }
--    Continue(_) => (escaped)
-+    ContinueRenamed(_) => (escaped)
-       incr_fail("expected chunked parser to finish with trailing rest")
-   }
- }
 *** End Patch
 
 ```

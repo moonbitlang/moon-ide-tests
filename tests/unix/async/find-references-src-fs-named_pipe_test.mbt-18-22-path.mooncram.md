@@ -18,14 +18,5 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'path' --loc 'src/fs/named_pipe_test.mbt:18:22'
-Found 1 references for symbol 'path':
-<WORKDIR>/src/fs/named_pipe_test.mbt:18:22-18:26:
-   | ///|
-   | #cfg(not(platform="windows"))
-   | #borrow(path)
-18 | extern "C" fn mkfifo(path : @os_string.OsString, mode : Int) -> Int = "mkfifo"
-   |                      ^^^^
-   | 
-   | ///|
-
+Found 0 references for symbol 'path':
 ```

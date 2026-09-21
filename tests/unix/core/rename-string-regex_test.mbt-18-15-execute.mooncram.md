@@ -602,6 +602,127 @@ $ run_moon_ide moon ide rename 'execute' 'execute_renamed' --loc 'string/regex_t
    }
    inspect(m.content(), content="john@example.com")
 @@
+ ///|
+ test "execute/alternation with an overlapping branch" {
+   // The two branches are the same expression, so both accept 'a'.
+-  guard @string.Regex("(?:a|a)c").execute("ac") is Some(m) else {
++  guard @string.Regex("(?:a|a)c").execute_renamed("ac") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="ac")
+   // The continuation must be consumed once, not twice.
+-  guard @string.Regex("(?:a|a)c").execute("acc") is Some(m) else {
++  guard @string.Regex("(?:a|a)c").execute_renamed("acc") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="ac")
+   // ...however long it is.
+-  guard @string.Regex("(?:a|a)bc").execute("abcbc") is Some(m) else {
++  guard @string.Regex("(?:a|a)bc").execute_renamed("abcbc") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="abc")
+@@
+   let regex = @string.Regex("(?:[ab]|[bc])x")
+   // 'a' comes only from the left branch, 'c' only from the right, and 'b'
+   // from both — it is the shared one that used to fail.
+-  guard regex.execute("ax") is Some(m) else { fail("expected a match") }
++  guard regex.execute_renamed("ax") is Some(m) else { fail("expected a match") }
+   inspect(m.content(), content="ax")
+-  guard regex.execute("bx") is Some(m) else { fail("expected a match") }
++  guard regex.execute_renamed("bx") is Some(m) else { fail("expected a match") }
+   inspect(m.content(), content="bx")
+-  guard regex.execute("cx") is Some(m) else { fail("expected a match") }
++  guard regex.execute_renamed("cx") is Some(m) else { fail("expected a match") }
+   inspect(m.content(), content="cx")
+   // The same alternation reached through the combinator API.
+   let combined = (re"[ab]" | re"[bc]") + re"x"
+-  guard combined.execute("bx") is Some(m) else { fail("expected a match") }
++  guard combined.execute_renamed("bx") is Some(m) else { fail("expected a match") }
+   inspect(m.content(), content="bx")
+ }
+ 
+@@
+ ///|
+ test "execute/alternation branches of different lengths" {
+   // Both branches start with 'a', and they finish at different points.
+-  guard @string.Regex("(?:a|ab)c").execute("ac") is Some(m) else {
++  guard @string.Regex("(?:a|ab)c").execute_renamed("ac") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="ac")
+-  guard @string.Regex("(?:ab|a)c").execute("abc") is Some(m) else {
++  guard @string.Regex("(?:ab|a)c").execute_renamed("abc") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="abc")
+   // A span that is not in the language must not be reported: from 0 only
+   // `a` applies, so the match can end at 1 or 2 but never at 3.
+-  guard @string.Regex("(?:.a|a)(?:b|)").execute("abb") is Some(m) else {
++  guard @string.Regex("(?:.a|a)(?:b|)").execute_renamed("abb") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="ab")
+@@
+ test "execute/overlapping alternation under a counted repetition" {
+   // Each iteration can only take one character here, so the bounds are what
+   // decide the length.
+-  guard @string.Regex("(?:.|ab){2}").execute("aaaaa") is Some(m) else {
++  guard @string.Regex("(?:.|ab){2}").execute_renamed("aaaaa") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="aa")
+-  guard @string.Regex("(?:.|ab){2,4}").execute("aaaaa") is Some(m) else {
++  guard @string.Regex("(?:.|ab){2,4}").execute_renamed("aaaaa") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="aaaa")
+@@
+ ///|
+ test "execute/overlapping alternation keeps anchors and preference" {
+   // Anchored: the whole subject has to be consumed exactly once.
+-  guard @string.Regex("^(?:a|a)c$").execute("ac") is Some(m) else {
++  guard @string.Regex("^(?:a|a)c$").execute_renamed("ac") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="ac")
+-  inspect(@string.Regex("^(?:a|a)c$").execute("acc") is None, content="true")
++  inspect(@string.Regex("^(?:a|a)c$").execute_renamed("acc") is None, content="true")
+   // Preference survives the overlap: the greedy branch wins the character
+   // and the lazy one yields it, and the capture reports which.
+-  guard @string.Regex("(?:(a+)|a)(a*)").execute("aaa") is Some(m) else {
++  guard @string.Regex("(?:(a+)|a)(a*)").execute_renamed("aaa") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="aaa")
+@@
+       #|Some(<StringView: "aaa">)
+     ),
+   )
+-  guard @string.Regex("(?:(a+?)|a)(a*)").execute("aaa") is Some(m) else {
++  guard @string.Regex("(?:(a+?)|a)(a*)").execute_renamed("aaa") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.content(), content="aaa")
+@@
+     ),
+   )
+   // The left branch is preferred where both accept the character.
+-  guard @string.Regex("(?:(a)|(a))b").execute("ab") is Some(m) else {
++  guard @string.Regex("(?:(a)|(a))b").execute_renamed("ab") is Some(m) else {
+     fail("expected a match")
+   }
+   debug_inspect(
+@@
+       Regex("^(?:.a?){2,}$"),
+       Regex("^(?:.a?){2,}?$"),
+     ] {
+-    guard regex.execute(subject) is Some(m) else { fail("expected a match") }
++    guard regex.execute_renamed(subject) is Some(m) else { fail("expected a match") }
+     assert_eq(m.content().length(), subject.length())
+   }
+ }
+@@
    let first = word.capture("first")
    let second = word.capture("second")
    let regex = first + @string.Regex::string(" ") + second

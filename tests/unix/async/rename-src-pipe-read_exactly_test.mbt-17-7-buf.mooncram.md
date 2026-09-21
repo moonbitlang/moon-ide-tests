@@ -24,8 +24,8 @@ $ run_moon_ide moon ide rename 'buf' 'buf_renamed' --loc 'src/pipe/read_exactly_
  
  ///|
  async test "read_exactly" {
--  let buf = StringBuilder::new()
-+  let buf_renamed = StringBuilder::new()
+-  let buf = StringBuilder()
++  let buf_renamed = StringBuilder()
    fn log(msg) {
 -    buf..write_string(msg).write_char('\n')
 +    buf_renamed..write_string(msg).write_char('\n')

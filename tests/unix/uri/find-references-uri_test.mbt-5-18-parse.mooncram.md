@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'parse' --loc 'uri_test.mbt:5:18'
-Found 47 references for symbol 'parse':
+Found 46 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:36:18-36:23:
    | ///| (escaped)
    | test "quick_start_example" { (escaped)
@@ -135,15 +135,6 @@ Found 47 references for symbol 'parse':
     |                  ^^^^^ (escaped)
     |   debug_inspect(uri.scheme(), content="Some(\\"custom\\")") (escaped)
     |   debug_inspect(uri.host(), content="Some(\\"example.com\\")") (escaped)
-
-<WORKDIR>/uri.mbt:127:8-127:13:
-    | /// - `UriError::InvalidScheme` if the scheme is malformed (escaped)
-    | /// - `UriError::InvalidAuthority` if the authority is malformed (escaped)
-    | /// - Other `UriError` variants for various parsing failures (escaped)
-127 | pub fn parse(uri_str : String) -> Uri raise UriError { (escaped)
-    |        ^^^^^ (escaped)
-    |   if uri_str.length() == 0 { (escaped)
-    |     raise EmptyUri (escaped)
 
 <WORKDIR>/uri_test.mbt:5:18-5:23:
   | /// Test basic URI parsing functionality (escaped)

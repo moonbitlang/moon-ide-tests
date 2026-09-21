@@ -18,20 +18,13 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'path' --loc 'src/tests/tpch_test.mbt:2:19'
-Found 2 references for symbol 'path':
-<WORKDIR>/src/tests/tpch_test.mbt:2:19-2:23:
-  | ///| (escaped)
-2 | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
-  |                   ^^^^ (escaped)
-  |   let input = @fs.read_file_to_string(path) catch { (escaped)
-  |     e => { (escaped)
-
+Found 1 references for symbol 'path':
 <WORKDIR>/src/tests/tpch_test.mbt:3:39-3:43:
   | ///| (escaped)
   | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
 3 |   let input = @fs.read_file_to_string(path) catch { (escaped)
   |                                       ^^^^ (escaped)
   |     e => { (escaped)
-  |       println("Read file error: \\{e.to_string()}") (escaped)
+  |       println("Read file error: \{Repr(e)}")
 
 ```

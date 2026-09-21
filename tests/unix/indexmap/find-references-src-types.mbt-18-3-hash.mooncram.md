@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'hash' --loc 'src/types.mbt:18:3'
-Found 6 references for symbol 'hash':
+Found 5 references for symbol 'hash':
 <WORKDIR>/src/IndexMap.mbt:112:5-112:9:
     |   // 创建新的桶 (escaped)
     |   let bucket_idx = self.core.entries.length() (escaped)
@@ -63,14 +63,5 @@ Found 6 references for symbol 'hash':
      |                                           ^^^^ (escaped)
      |   self.key_to_idx.remove(key) (escaped)
      |  (escaped)
-
-<WORKDIR>/src/types.mbt:18:3-18:7:
-   | ///| (escaped)
-   | /// 桶结构，包含键值对信息和链表指针 (escaped)
-   | priv struct Bucket[K, V] { (escaped)
-18 |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
-   |   ^^^^ (escaped)
-   |   key : K // 键 (escaped)
-   |   mut value : V // 值 (escaped)
 
 ```

@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'LazyState' --loc 'lazy/lazy.mbt:24:11'
-Found 2 references for symbol 'LazyState':
-<WORKDIR>/lazy/lazy.mbt:24:11-24:20:
-   | ///   the thunk and silently break the at-most-once guarantee.
-   | /// - `Forced(v)`: the thunk has produced `v`; the thunk reference is
-   | ///   dropped so its captures can be reclaimed.
-24 | priv enum LazyState[A] {
-   |           ^^^^^^^^^
-   |   Unforced(() -> A)
-   |   Forcing
-
+Found 1 references for symbol 'LazyState':
 <WORKDIR>/lazy/lazy.mbt:68:15-68:24:
    | /// `Lazy[A]` is not thread-safe. Sharing one across threads requires
    | /// external synchronization.

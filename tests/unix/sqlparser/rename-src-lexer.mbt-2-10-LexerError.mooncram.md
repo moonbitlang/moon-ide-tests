@@ -38,7 +38,7 @@ $ run_moon_ide moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer
  } derive(Debug)
 @@
  pub fn tokenize(
-   dialect? : &Dialect = MySQL::{  },
+   dialect? : &Dialect = MySQL::{ },
    input : String,
 -) -> Array[Token] raise LexerError {
 +) -> Array[Token] raise LexerErrorRenamed {
@@ -60,7 +60,7 @@ $ run_moon_ide moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer
    input : StringView,
 -) -> (Token, StringView) raise LexerError {
 +) -> (Token, StringView) raise LexerErrorRenamed {
-   let result = StringBuilder::new()
+   let result = StringBuilder()
    let rest = for rest = input {
      match rest {
 @@
@@ -78,7 +78,7 @@ $ run_moon_ide moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer
    input : StringView,
 -) -> (Token, StringView) raise LexerError {
 +) -> (Token, StringView) raise LexerErrorRenamed {
-   let result = StringBuilder::new()
+   let result = StringBuilder()
    let rest = for rest = input {
      match rest {
 @@
@@ -96,7 +96,7 @@ $ run_moon_ide moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer
    input : StringView,
 -) -> (Token, StringView) raise LexerError {
 +) -> (Token, StringView) raise LexerErrorRenamed {
-   let result = StringBuilder::new()
+   let result = StringBuilder()
    let rest = for rest = input {
      match rest {
 @@
@@ -108,16 +108,34 @@ $ run_moon_ide moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer
      }
    }
    (Identifier(result.to_string()), rest)
+@@
+ }
+ 
+ ///|
+-pub extend LexerError with Debug::{to_repr}
++pub extend LexerErrorRenamed with Debug::{to_repr}
+ 
+ ///|
+ pub extend Token with Debug::{to_repr}
 *** Update File: <WORKDIR>/src/show.mbt
 @@
  }
  
  ///|
--pub impl Show for LexerError with output(self, logger) {
-+pub impl Show for LexerErrorRenamed with output(self, logger) {
+-pub impl Show for LexerError with fn output(self, logger) {
++pub impl Show for LexerErrorRenamed with fn output(self, logger) {
    show_compact_debug(self, logger)
  }
  
+@@
+ pub extend Keyword with Show::{to_string, output}
+ 
+ ///|
+-pub extend LexerError with Show::{to_string, output}
++pub extend LexerErrorRenamed with Show::{to_string, output}
+ 
+ ///|
+ pub extend Literal with Show::{to_string, output}
 *** End Patch
 
 ```
