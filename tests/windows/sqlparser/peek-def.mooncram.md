@@ -53,14 +53,14 @@ Definition found at file <WORKDIR>/src\bigquery.mbt
   |                 ^^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for BigQuery with supports_string_literal_backslash_escape(
+  | pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for BigQuery with supports_boolean_literals(_self) {
+  | pub impl Dialect for BigQuery with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -76,14 +76,14 @@ Definition found at file <WORKDIR>/src\bigquery.mbt
   |                 ^^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for BigQuery with supports_string_literal_backslash_escape(
+  | pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for BigQuery with supports_boolean_literals(_self) {
+  | pub impl Dialect for BigQuery with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -149,14 +149,14 @@ Definition found at file <WORKDIR>/src\generic.mbt
   |                 ^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for Generic with supports_string_literal_backslash_escape(
+  | pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for Generic with supports_boolean_literals(_self) {
+  | pub impl Dialect for Generic with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -174,14 +174,14 @@ Definition found at file <WORKDIR>/src\generic.mbt
   |                 ^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for Generic with supports_string_literal_backslash_escape(
+  | pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for Generic with supports_boolean_literals(_self) {
+  | pub impl Dialect for Generic with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -294,14 +294,14 @@ Definition found at file <WORKDIR>/src\redshift.mbt
   |                 ^^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for Redshift with supports_string_literal_backslash_escape(
+  | pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for Redshift with supports_boolean_literals(_self) {
+  | pub impl Dialect for Redshift with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -317,14 +317,14 @@ Definition found at file <WORKDIR>/src\redshift.mbt
   |                 ^^^^^^^^
   | 
   | ///|
-  | pub impl Dialect for Redshift with supports_string_literal_backslash_escape(
+  | pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
   |   _self,
   | ) {
   |   true
   | }
   | 
   | ///|
-  | pub impl Dialect for Redshift with supports_boolean_literals(_self) {
+  | pub impl Dialect for Redshift with fn supports_boolean_literals(_self) {
   |   true
   | }
   | 
@@ -338,7 +338,7 @@ Definition found at file <WORKDIR>/src\show.mbt
 2 | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
   |               ^^^^^^^^^^^^^^^^^^
   |   let input = @debug.to_string(obj)
-  |   let buffer = StringBuilder::new()
+  |   let buffer = StringBuilder()
   |   let mut in_string = false
   |   let mut escaped = false
   |   for rest = input[:] {
@@ -360,7 +360,7 @@ Definition found at file <WORKDIR>/src\show.mbt
 2 | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
   |                                  ^^^
   |   let input = @debug.to_string(obj)
-  |   let buffer = StringBuilder::new()
+  |   let buffer = StringBuilder()
   |   let mut in_string = false
   |   let mut escaped = false
   |   for rest = input[:] {
@@ -431,7 +431,7 @@ Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   |    ^^^^^^^^^^^^^^
   |   let input = @fs.read_file_to_string(path) catch {
   |     e => {
-  |       println("Read file error: \{e.to_string()}")
+  |       println("Read file error: \{Repr(e)}")
   |       panic()
   |     }
   |   }
@@ -453,7 +453,7 @@ Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   |                   ^^^^
   |   let input = @fs.read_file_to_string(path) catch {
   |     e => {
-  |       println("Read file error: \{e.to_string()}")
+  |       println("Read file error: \{Repr(e)}")
   |       panic()
   |     }
   |   }

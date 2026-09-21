@@ -34,11 +34,11 @@ Definition found at file <WORKDIR>/parser.mbt
     | /// On any lexical or syntactic error, `parse` raises with a message
     | /// containing the source location. Wrap the call in `try?` to receive a
     | /// `Result[TomlValue, Error]` instead.
-300 | pub fn parse(input : String) -> TomlValue raise {
+333 | pub fn parse(input : String) -> TomlValue raise {
     |        ^^^^^
     |   let tokens = @tokenize.tokenize(input)
     |   let parser = Parser::Parser(tokens)
-    |   let main_table = {}
+    |   let main_table = Map([])
     |   for current_table = main_table {
     |     parser.skip_newlines()
     |     match parser.view() {
@@ -53,50 +53,55 @@ Definition found at file <WORKDIR>/parser.mbt
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide peek-def 'version' --loc 'cmd\toml\main.mbt:2:5'
-Definition found at file <WORKDIR>/cmd\toml\main.mbt
-  | ///|
-2 | let version : String = "0.2.3"
-  |     ^^^^^^^
+$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide peek-def 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
+Definition found at file <WORKDIR>/coverage_improvement_comprehensive_test.mbt
   | 
   | ///|
-  | fn toml_command() -> @argparse.Command {
-  |   Command(
-  |     "toml",
-  |     about="Parse, validate, and format TOML files.",
-  |     version~,
-  |     arg_required_else_help=true,
-  |     positionals=[
-  |       PositionArg("file", about="Parse TOML and print normalized TOML."),
-  |     ],
-  |     subcommands=[
-  |       Command("format", about="Parse TOML and print normalized TOML.", positionals=[
-  |         PositionArg(
+  | /// Test EOF handling in parser - covered by creating empty token arrays
+  | test "parser_eof_handling" {
+  |   // Test empty parse input to exercise EOF conditions
+9 |   let result = @toml.parse(
+  |       ^^^^^^
+  |     (
+  |       #|
+  |     ),
+  |   )
+  |   debug_inspect(
+  |     result,
+  |     content=(
+  |       #|TomlTable({})
+  |     ),
+  |   )
+  | }
+  | 
+  | ///|
+  | /// Test integer keys in inline tables
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide peek-def 'toml_command' --loc 'cmd\toml\main.mbt:5:4'
-Definition found at file <WORKDIR>/cmd\toml\main.mbt
-  | ///|
-  | let version : String = "0.2.3"
-  | 
-  | ///|
-5 | fn toml_command() -> @argparse.Command {
-  |    ^^^^^^^^^^^^
-  |   Command(
-  |     "toml",
-  |     about="Parse, validate, and format TOML files.",
-  |     version~,
-  |     arg_required_else_help=true,
-  |     positionals=[
-  |       PositionArg("file", about="Parse TOML and print normalized TOML."),
-  |     ],
-  |     subcommands=[
-  |       Command("format", about="Parse TOML and print normalized TOML.", positionals=[
-  |         PositionArg(
-  |           "file",
-  |           about="TOML file to format.",
-  |           num_args=@argparse.ValueRange::single(),
+$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide peek-def 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
+Definition found at file <WORKDIR>/parser.mbt
+    | /// escapes, inline-table newlines) are accepted.
+    | ///
+    | /// On any lexical or syntactic error, `parse` raises with a message
+    | /// containing the source location. Wrap the call in `try?` to receive a
+    | /// `Result[TomlValue, Error]` instead.
+333 | pub fn parse(input : String) -> TomlValue raise {
+    |        ^^^^^
+    |   let tokens = @tokenize.tokenize(input)
+    |   let parser = Parser::Parser(tokens)
+    |   let main_table = Map([])
+    |   for current_table = main_table {
+    |     parser.skip_newlines()
+    |     match parser.view() {
+    |       [EOF, ..] => break
+    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
+    |         if !loc1.adjacent(loc2) {
+    |           parser.error("Invalid table header: space between '[' and '['")
+    |         }
+    |         parser.update_view(rest)
+    |         let table_path = parser.parse_table_path()
+    |         match parser.view() {
 ```
 
 ```mooncram
@@ -116,13 +121,13 @@ Definition found at file <WORKDIR>/datetime\datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
 ```
 
 ```mooncram
@@ -141,14 +146,14 @@ Definition found at file <WORKDIR>/datetime\datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
-   |     LocalDateTime(s) =>
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
+   | ///|
 ```
 
 ```mooncram
@@ -191,14 +196,14 @@ Definition found at file <WORKDIR>/datetime\datetime.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
-   | /// Render the variant for human-readable diagnostics:
-   | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
-   | pub impl Show for TomlDateTime with fn output(self, logger) {
-   |   match self {
-   |     OffsetDateTime(s) =>
-   |       logger <+
-   |         $|OffsetDateTime("\{s}")
-   |     LocalDateTime(s) =>
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend TomlDateTime with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend TomlDateTime with Debug::{to_repr}
+   | 
+   | ///|
 ```
 
 ```mooncram
@@ -233,10 +238,10 @@ Definition found at file <WORKDIR>/internal\tokenize\tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1350 | pub fn tokenize(input : String) -> Array[Token] raise {
+1401 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
-     |   let tokens = Array::new()
+     |   let tokens = []
      |   for current_token = lexer.next_token() {
      |     match current_token {
      |       EOF(_) as t => {
@@ -266,15 +271,15 @@ Definition found at file <WORKDIR>/internal\tokenize\token.mbt
   | } derive(Eq, Debug)
   | 
   | ///|
-  | /// Token types for the lexer
-  | pub(all) enum Token {
-  |   // Literals
-  |   StringToken(String, loc~ : Loc, multiline~ : Bool)
-  |   IntegerToken(Int64, loc~ : Loc)
-  |   FloatToken(Double, loc~ : Loc, raw~ : String)
-  |   BooleanToken(Bool, loc~ : Loc)
-  |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
+  | #deprecated("compare with `==`; the Eq impl is unaffected")
+  | pub extend Loc with Eq::{not_equal, equal}
   | 
+  | ///|
+  | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+  | pub extend Loc with Debug::{to_repr}
+  | 
+  | ///|
+  | /// Token types for the lexer
 ```
 
 ```mooncram
@@ -291,16 +296,16 @@ Definition found at file <WORKDIR>/internal\tokenize\token.mbt
    | } derive(Eq, Debug)
    | 
    | ///|
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend Loc with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend Loc with Debug::{to_repr}
+   | 
+   | ///|
    | /// Token types for the lexer
    | pub(all) enum Token {
-   |   // Literals
-   |   StringToken(String, loc~ : Loc, multiline~ : Bool)
-   |   IntegerToken(Int64, loc~ : Loc)
-   |   FloatToken(Double, loc~ : Loc, raw~ : String)
-   |   BooleanToken(Bool, loc~ : Loc)
-   |   DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)
-   | 
-   |   // Symbols
 ```
 
 ```mooncram
@@ -311,7 +316,7 @@ Definition found at file <WORKDIR>/toml.mbt
    | 
    | ///|
    | /// Parser state (will implement methods later)
-34 | priv struct Parser {
+42 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
    |   mut position : Int
@@ -349,7 +354,7 @@ Definition found at file <WORKDIR>/parser.mbt
   | /// Try to consume a single bare key from the current position.
   | /// Handles identifiers, strings, integers, booleans (true/false),
   | /// and special float keywords (inf/nan) in key position.
-  | fn Parser::try_parse_single_key(self : Parser) -> String? {
+  | ///
 ```
 
 ```mooncram
@@ -386,10 +391,10 @@ Definition found at file <WORKDIR>/internal\tokenize\tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1350 | pub fn tokenize(input : String) -> Array[Token] raise {
+1401 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
-     |   let tokens = Array::new()
+     |   let tokens = []
      |   for current_token = lexer.next_token() {
      |     match current_token {
      |       EOF(_) as t => {

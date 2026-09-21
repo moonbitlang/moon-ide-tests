@@ -2,777 +2,786 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide find-references 'Uri' --loc 'uri.mbt:54:12'
-Found 104 references for symbol 'Uri':
-<WORKDIR>/uri.mbt:54:12-54:15:
-   | /// - path: hierarchical path to resource
-   | /// - query: additional parameters
-   | /// - fragment: reference to a secondary resource
-54 | pub struct Uri {
+Found 105 references for symbol 'Uri':
+<WORKDIR>/uri.mbt:65:12-65:15:
+   | ///|
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+65 | pub extend Uri with ToJson::{to_json}
    |            ^^^
-   |   scheme : String?
-   |   authority : Authority?
+   | 
+   | ///|
 
-<WORKDIR>/uri.mbt:97:19-97:22:
-   | /// # Returns
-   | ///
-   | /// A new `Uri` with all components set to their default values.
-97 | pub fn empty() -> Uri {
-   |                   ^^^
-   |   { scheme: None, authority: None, path: "", query: None, fragment: None }
-   | }
+<WORKDIR>/uri.mbt:110:19-110:22:
+    | /// # Returns
+    | ///
+    | /// A new `Uri` with all components set to their default values.
+110 | pub fn empty() -> Uri {
+    |                   ^^^
+    |   { scheme: None, authority: None, path: "", query: None, fragment: None, }
+    | }
 
-<WORKDIR>/uri.mbt:127:35-127:38:
+<WORKDIR>/uri.mbt:140:35-140:38:
     | /// - `UriError::InvalidScheme` if the scheme is malformed
     | /// - `UriError::InvalidAuthority` if the authority is malformed
     | /// - Other `UriError` variants for various parsing failures
-127 | pub fn parse(uri_str : String) -> Uri raise UriError {
+140 | pub fn parse(uri_str : String) -> Uri raise UriError {
     |                                   ^^^
     |   if uri_str.length() == 0 {
     |     raise EmptyUri
 
-<WORKDIR>/uri.mbt:160:57-160:60:
+<WORKDIR>/uri.mbt:173:57-173:60:
     | 
     | ///|
     | /// Parse URI with known scheme
-160 | fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError {
+173 | fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError {
     |                                                         ^^^
     |   let mut uri = empty()
-    |   uri = { ..uri, scheme: Some(scheme) }
+    |   uri = { ..uri, scheme: Some(scheme), }
 
-<WORKDIR>/uri.mbt:231:8-231:11:
+<WORKDIR>/uri.mbt:244:8-244:11:
     | 
     | ///|
     | /// Convert a Uri structure back to a string representation
-231 | pub fn Uri::to_string(self : Uri) -> String {
+244 | pub fn Uri::to_string(self : Uri) -> String {
     |        ^^^
     |   let mut result = ""
     | 
 
-<WORKDIR>/uri.mbt:231:30-231:33:
+<WORKDIR>/uri.mbt:244:30-244:33:
     | 
     | ///|
     | /// Convert a Uri structure back to a string representation
-231 | pub fn Uri::to_string(self : Uri) -> String {
+244 | pub fn Uri::to_string(self : Uri) -> String {
     |                              ^^^
     |   let mut result = ""
     | 
 
-<WORKDIR>/uri.mbt:282:19-282:22:
+<WORKDIR>/uri.mbt:295:19-295:22:
     | 
     | ///|
     | /// Implement Show trait for Uri to provide standard string representation
-282 | pub impl Show for Uri with output(self, logger) {
+295 | pub impl Show for Uri with fn output(self, logger) {
     |                   ^^^
     |   // Use our existing to_string method for the Show implementation
     |   logger.write_string(self.to_string())
 
-<WORKDIR>/uri.mbt:312:8-312:11:
+<WORKDIR>/uri.mbt:302:12-302:15:
+    | 
+    | ///|
+    | /// Keep `uri.output(logger)` available in dot form for existing users.
+302 | pub extend Uri with Show::{output}
+    |            ^^^
+    | 
+    | ///|
+
+<WORKDIR>/uri.mbt:329:8-329:11:
     | /// # Returns
     | ///
     | /// The scheme as `Some(String)` if present, `None` for relative URIs.
-312 | pub fn Uri::scheme(self : Uri) -> String? {
+329 | pub fn Uri::scheme(self : Uri) -> String? {
     |        ^^^
     |   self.scheme
     | }
 
-<WORKDIR>/uri.mbt:312:27-312:30:
+<WORKDIR>/uri.mbt:329:27-329:30:
     | /// # Returns
     | ///
     | /// The scheme as `Some(String)` if present, `None` for relative URIs.
-312 | pub fn Uri::scheme(self : Uri) -> String? {
+329 | pub fn Uri::scheme(self : Uri) -> String? {
     |                           ^^^
     |   self.scheme
     | }
 
-<WORKDIR>/uri.mbt:345:8-345:11:
+<WORKDIR>/uri.mbt:362:8-362:11:
     | /// # Returns
     | ///
     | /// The host as `Some(String)` if present, `None` for relative URIs or URIs without authority.
-345 | pub fn Uri::host(self : Uri) -> String? {
+362 | pub fn Uri::host(self : Uri) -> String? {
     |        ^^^
     |   match self.authority {
     |     Some(auth) => Some(auth.host)
 
-<WORKDIR>/uri.mbt:345:25-345:28:
+<WORKDIR>/uri.mbt:362:25-362:28:
     | /// # Returns
     | ///
     | /// The host as `Some(String)` if present, `None` for relative URIs or URIs without authority.
-345 | pub fn Uri::host(self : Uri) -> String? {
+362 | pub fn Uri::host(self : Uri) -> String? {
     |                         ^^^
     |   match self.authority {
     |     Some(auth) => Some(auth.host)
 
-<WORKDIR>/uri.mbt:385:8-385:11:
+<WORKDIR>/uri.mbt:402:8-402:11:
     | /// # See Also
     | ///
     | /// - `effective_port()` - Get the effective port including scheme defaults
-385 | pub fn Uri::port(self : Uri) -> Int? {
+402 | pub fn Uri::port(self : Uri) -> Int? {
     |        ^^^
     |   match self.authority {
     |     Some(auth) => auth.port
 
-<WORKDIR>/uri.mbt:385:25-385:28:
+<WORKDIR>/uri.mbt:402:25-402:28:
     | /// # See Also
     | ///
     | /// - `effective_port()` - Get the effective port including scheme defaults
-385 | pub fn Uri::port(self : Uri) -> Int? {
+402 | pub fn Uri::port(self : Uri) -> Int? {
     |                         ^^^
     |   match self.authority {
     |     Some(auth) => auth.port
 
-<WORKDIR>/uri.mbt:430:8-430:11:
+<WORKDIR>/uri.mbt:447:8-447:11:
     | ///
     | /// - `path_segments()` - Get path as array of segments
     | /// - `with_path()` - Create new URI with different path
-430 | pub fn Uri::path(self : Uri) -> String {
+447 | pub fn Uri::path(self : Uri) -> String {
     |        ^^^
     |   self.path
     | }
 
-<WORKDIR>/uri.mbt:430:25-430:28:
+<WORKDIR>/uri.mbt:447:25-447:28:
     | ///
     | /// - `path_segments()` - Get path as array of segments
     | /// - `with_path()` - Create new URI with different path
-430 | pub fn Uri::path(self : Uri) -> String {
+447 | pub fn Uri::path(self : Uri) -> String {
     |                         ^^^
     |   self.path
     | }
 
-<WORKDIR>/uri.mbt:472:8-472:11:
+<WORKDIR>/uri.mbt:489:8-489:11:
     | ///
     | /// - `get_query_param()` - Get specific query parameter value
     | /// - `parse_query()` - Parse query string into key-value pairs
-472 | pub fn Uri::query(self : Uri) -> String? {
+489 | pub fn Uri::query(self : Uri) -> String? {
     |        ^^^
     |   self.query
     | }
 
-<WORKDIR>/uri.mbt:472:26-472:29:
+<WORKDIR>/uri.mbt:489:26-489:29:
     | ///
     | /// - `get_query_param()` - Get specific query parameter value
     | /// - `parse_query()` - Parse query string into key-value pairs
-472 | pub fn Uri::query(self : Uri) -> String? {
+489 | pub fn Uri::query(self : Uri) -> String? {
     |                          ^^^
     |   self.query
     | }
 
-<WORKDIR>/uri.mbt:509:8-509:11:
+<WORKDIR>/uri.mbt:526:8-526:11:
     | /// # See Also
     | ///
     | /// - `with_fragment()` - Create new URI with different fragment
-509 | pub fn Uri::fragment(self : Uri) -> String? {
+526 | pub fn Uri::fragment(self : Uri) -> String? {
     |        ^^^
     |   self.fragment
     | }
 
-<WORKDIR>/uri.mbt:509:29-509:32:
+<WORKDIR>/uri.mbt:526:29-526:32:
     | /// # See Also
     | ///
     | /// - `with_fragment()` - Create new URI with different fragment
-509 | pub fn Uri::fragment(self : Uri) -> String? {
+526 | pub fn Uri::fragment(self : Uri) -> String? {
     |                             ^^^
     |   self.fragment
     | }
 
-<WORKDIR>/uri.mbt:699:8-699:11:
+<WORKDIR>/uri.mbt:716:8-716:11:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified scheme
-699 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
+716 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
     |        ^^^
-    |   { ..self, scheme: new_scheme }
+    |   { ..self, scheme: new_scheme, }
     | }
 
-<WORKDIR>/uri.mbt:699:32-699:35:
+<WORKDIR>/uri.mbt:716:32-716:35:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified scheme
-699 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
+716 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
     |                                ^^^
-    |   { ..self, scheme: new_scheme }
+    |   { ..self, scheme: new_scheme, }
     | }
 
-<WORKDIR>/uri.mbt:699:62-699:65:
+<WORKDIR>/uri.mbt:716:62-716:65:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified scheme
-699 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
+716 | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
     |                                                              ^^^
-    |   { ..self, scheme: new_scheme }
+    |   { ..self, scheme: new_scheme, }
     | }
 
-<WORKDIR>/uri.mbt:736:8-736:11:
+<WORKDIR>/uri.mbt:753:8-753:11:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified host
-736 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
+753 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
     |        ^^^
     |   match new_host {
     |     Some(host) => {
 
-<WORKDIR>/uri.mbt:736:30-736:33:
+<WORKDIR>/uri.mbt:753:30-753:33:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified host
-736 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
+753 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
     |                              ^^^
     |   match new_host {
     |     Some(host) => {
 
-<WORKDIR>/uri.mbt:736:58-736:61:
+<WORKDIR>/uri.mbt:753:58-753:61:
     | /// # Returns
     | ///
     | /// A new `Uri` with the specified host
-736 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
+753 | pub fn Uri::with_host(self : Uri, new_host : String?) -> Uri {
     |                                                          ^^^
     |   match new_host {
     |     Some(host) => {
 
-<WORKDIR>/uri.mbt:751:8-751:11:
+<WORKDIR>/uri.mbt:768:8-768:11:
     | 
     | ///|
     | /// Create a new URI with the specified port
-751 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
+768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
     |        ^^^
     |   match self.authority {
     |     Some(auth) => {
 
-<WORKDIR>/uri.mbt:751:30-751:33:
+<WORKDIR>/uri.mbt:768:30-768:33:
     | 
     | ///|
     | /// Create a new URI with the specified port
-751 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
+768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
     |                              ^^^
     |   match self.authority {
     |     Some(auth) => {
 
-<WORKDIR>/uri.mbt:751:55-751:58:
+<WORKDIR>/uri.mbt:768:55-768:58:
     | 
     | ///|
     | /// Create a new URI with the specified port
-751 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
+768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
     |                                                       ^^^
     |   match self.authority {
     |     Some(auth) => {
 
-<WORKDIR>/uri.mbt:774:8-774:11:
+<WORKDIR>/uri.mbt:791:8-791:11:
     | 
     | ///|
     | /// Create a new URI with the specified path
-774 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
+791 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
     |        ^^^
-    |   { ..self, path: new_path }
+    |   { ..self, path: new_path, }
     | }
 
-<WORKDIR>/uri.mbt:774:30-774:33:
+<WORKDIR>/uri.mbt:791:30-791:33:
     | 
     | ///|
     | /// Create a new URI with the specified path
-774 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
+791 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
     |                              ^^^
-    |   { ..self, path: new_path }
+    |   { ..self, path: new_path, }
     | }
 
-<WORKDIR>/uri.mbt:774:57-774:60:
+<WORKDIR>/uri.mbt:791:57-791:60:
     | 
     | ///|
     | /// Create a new URI with the specified path
-774 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
+791 | pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
     |                                                         ^^^
-    |   { ..self, path: new_path }
+    |   { ..self, path: new_path, }
     | }
 
-<WORKDIR>/uri.mbt:780:8-780:11:
+<WORKDIR>/uri.mbt:797:8-797:11:
     | 
     | ///|
     | /// Create a new URI with the specified query
-780 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
+797 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
     |        ^^^
-    |   { ..self, query: new_query }
+    |   { ..self, query: new_query, }
     | }
 
-<WORKDIR>/uri.mbt:780:31-780:34:
+<WORKDIR>/uri.mbt:797:31-797:34:
     | 
     | ///|
     | /// Create a new URI with the specified query
-780 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
+797 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
     |                               ^^^
-    |   { ..self, query: new_query }
+    |   { ..self, query: new_query, }
     | }
 
-<WORKDIR>/uri.mbt:780:60-780:63:
+<WORKDIR>/uri.mbt:797:60-797:63:
     | 
     | ///|
     | /// Create a new URI with the specified query
-780 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
+797 | pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
     |                                                            ^^^
-    |   { ..self, query: new_query }
+    |   { ..self, query: new_query, }
     | }
 
-<WORKDIR>/uri.mbt:786:8-786:11:
+<WORKDIR>/uri.mbt:803:8-803:11:
     | 
     | ///|
     | /// Create a new URI with the specified fragment
-786 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
+803 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
     |        ^^^
-    |   { ..self, fragment: new_fragment }
+    |   { ..self, fragment: new_fragment, }
     | }
 
-<WORKDIR>/uri.mbt:786:34-786:37:
+<WORKDIR>/uri.mbt:803:34-803:37:
     | 
     | ///|
     | /// Create a new URI with the specified fragment
-786 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
+803 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
     |                                  ^^^
-    |   { ..self, fragment: new_fragment }
+    |   { ..self, fragment: new_fragment, }
     | }
 
-<WORKDIR>/uri.mbt:786:66-786:69:
+<WORKDIR>/uri.mbt:803:66-803:69:
     | 
     | ///|
     | /// Create a new URI with the specified fragment
-786 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
+803 | pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
     |                                                                  ^^^
-    |   { ..self, fragment: new_fragment }
+    |   { ..self, fragment: new_fragment, }
     | }
 
-<WORKDIR>/uri.mbt:792:8-792:11:
+<WORKDIR>/uri.mbt:809:8-809:11:
     | 
     | ///|
-    | /// Check if the URI is absolute (has a scheme) (escaped)
-792 | pub fn Uri::is_absolute(self : Uri) -> Bool {
+    | /// Check if the URI is absolute (has a scheme)
+809 | pub fn Uri::is_absolute(self : Uri) -> Bool {
     |        ^^^
     |   match self.scheme {
     |     Some(_) => true
 
-<WORKDIR>/uri.mbt:792:32-792:35:
+<WORKDIR>/uri.mbt:809:32-809:35:
     | 
     | ///|
-    | /// Check if the URI is absolute (has a scheme) (escaped)
-792 | pub fn Uri::is_absolute(self : Uri) -> Bool {
+    | /// Check if the URI is absolute (has a scheme)
+809 | pub fn Uri::is_absolute(self : Uri) -> Bool {
     |                                ^^^
     |   match self.scheme {
     |     Some(_) => true
 
-<WORKDIR>/uri.mbt:801:8-801:11:
+<WORKDIR>/uri.mbt:818:8-818:11:
     | 
     | ///|
-    | /// Check if the URI is relative (no scheme) (escaped)
-801 | pub fn Uri::is_relative(self : Uri) -> Bool {
+    | /// Check if the URI is relative (no scheme)
+818 | pub fn Uri::is_relative(self : Uri) -> Bool {
     |        ^^^
     |   !self.is_absolute()
     | }
 
-<WORKDIR>/uri.mbt:801:32-801:35:
+<WORKDIR>/uri.mbt:818:32-818:35:
     | 
     | ///|
-    | /// Check if the URI is relative (no scheme) (escaped)
-801 | pub fn Uri::is_relative(self : Uri) -> Bool {
+    | /// Check if the URI is relative (no scheme)
+818 | pub fn Uri::is_relative(self : Uri) -> Bool {
     |                                ^^^
     |   !self.is_absolute()
     | }
-
-<WORKDIR>/uri.mbt:827:8-827:11:
-    | 
-    | ///|
-    | /// Get the effective port (explicit port or default port for scheme) (escaped)
-827 | pub fn Uri::effective_port(self : Uri) -> Int? {
-    |        ^^^
-    |   match self.authority {
-    |     Some(auth) =>
-
-<WORKDIR>/uri.mbt:827:35-827:38:
-    | 
-    | ///|
-    | /// Get the effective port (explicit port or default port for scheme) (escaped)
-827 | pub fn Uri::effective_port(self : Uri) -> Int? {
-    |                                   ^^^
-    |   match self.authority {
-    |     Some(auth) =>
 
 <WORKDIR>/uri.mbt:844:8-844:11:
     | 
     | ///|
-    | /// Normalize a URI (remove default ports, normalize path, etc.) (escaped)
-844 | pub fn Uri::normalize(self : Uri) -> Uri {
+    | /// Get the effective port (explicit port or default port for scheme)
+844 | pub fn Uri::effective_port(self : Uri) -> Int? {
+    |        ^^^
+    |   match self.authority {
+    |     Some(auth) =>
+
+<WORKDIR>/uri.mbt:844:35-844:38:
+    | 
+    | ///|
+    | /// Get the effective port (explicit port or default port for scheme)
+844 | pub fn Uri::effective_port(self : Uri) -> Int? {
+    |                                   ^^^
+    |   match self.authority {
+    |     Some(auth) =>
+
+<WORKDIR>/uri.mbt:861:8-861:11:
+    | 
+    | ///|
+    | /// Normalize a URI (remove default ports, normalize path, etc.)
+861 | pub fn Uri::normalize(self : Uri) -> Uri {
     |        ^^^
     |   let mut normalized = self
     | 
 
-<WORKDIR>/uri.mbt:844:30-844:33:
+<WORKDIR>/uri.mbt:861:30-861:33:
     | 
     | ///|
-    | /// Normalize a URI (remove default ports, normalize path, etc.) (escaped)
-844 | pub fn Uri::normalize(self : Uri) -> Uri {
+    | /// Normalize a URI (remove default ports, normalize path, etc.)
+861 | pub fn Uri::normalize(self : Uri) -> Uri {
     |                              ^^^
     |   let mut normalized = self
     | 
 
-<WORKDIR>/uri.mbt:844:38-844:41:
+<WORKDIR>/uri.mbt:861:38-861:41:
     | 
     | ///|
-    | /// Normalize a URI (remove default ports, normalize path, etc.) (escaped)
-844 | pub fn Uri::normalize(self : Uri) -> Uri {
+    | /// Normalize a URI (remove default ports, normalize path, etc.)
+861 | pub fn Uri::normalize(self : Uri) -> Uri {
     |                                      ^^^
     |   let mut normalized = self
     | 
 
-<WORKDIR>/uri.mbt:955:23-955:26:
+<WORKDIR>/uri.mbt:972:23-972:26:
     | /// # See Also
     | ///
     | /// - RFC3986 Section 5.2 - Reference Resolution
-955 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
+972 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
     |                       ^^^
     |   // If relative URI is absolute, return it as-is
     |   if relative.is_absolute() {
 
-<WORKDIR>/uri.mbt:955:39-955:42:
+<WORKDIR>/uri.mbt:972:39-972:42:
     | /// # See Also
     | ///
     | /// - RFC3986 Section 5.2 - Reference Resolution
-955 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
+972 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
     |                                       ^^^
     |   // If relative URI is absolute, return it as-is
     |   if relative.is_absolute() {
 
-<WORKDIR>/uri.mbt:955:47-955:50:
+<WORKDIR>/uri.mbt:972:47-972:50:
     | /// # See Also
     | ///
     | /// - RFC3986 Section 5.2 - Reference Resolution
-955 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
+972 | pub fn resolve(base : Uri, relative : Uri) -> Uri raise UriError {
     |                                               ^^^
     |   // If relative URI is absolute, return it as-is
     |   if relative.is_absolute() {
 
-<WORKDIR>/uri.mbt:1087:8-1087:11:
+<WORKDIR>/uri.mbt:1104:8-1104:11:
      | 
      | ///|
      | /// Get a specific query parameter value
-1087 | pub fn Uri::get_query_param(self : Uri, param_name : String) -> String? {
+1104 | pub fn Uri::get_query_param(self : Uri, param_name : String) -> String? {
      |        ^^^
      |   match self.query {
      |     Some(query_str) => {
 
-<WORKDIR>/uri.mbt:1087:36-1087:39:
+<WORKDIR>/uri.mbt:1104:36-1104:39:
      | 
      | ///|
      | /// Get a specific query parameter value
-1087 | pub fn Uri::get_query_param(self : Uri, param_name : String) -> String? {
+1104 | pub fn Uri::get_query_param(self : Uri, param_name : String) -> String? {
      |                                    ^^^
      |   match self.query {
      |     Some(query_str) => {
 
-<WORKDIR>/uri.mbt:1105:8-1105:11:
+<WORKDIR>/uri.mbt:1122:8-1122:11:
      | 
      | ///|
      | /// Add or update a query parameter
-1105 | pub fn Uri::with_query_param(
+1122 | pub fn Uri::with_query_param(
      |        ^^^
      |   self : Uri,
      |   param_name : String,
 
-<WORKDIR>/uri.mbt:1106:10-1106:13:
+<WORKDIR>/uri.mbt:1123:10-1123:13:
      | ///|
      | /// Add or update a query parameter
      | pub fn Uri::with_query_param(
-1106 |   self : Uri,
+1123 |   self : Uri,
      |          ^^^
      |   param_name : String,
      |   param_value : String,
 
-<WORKDIR>/uri.mbt:1109:6-1109:9:
+<WORKDIR>/uri.mbt:1126:6-1126:9:
      |   self : Uri,
      |   param_name : String,
      |   param_value : String,
-1109 | ) -> Uri {
+1126 | ) -> Uri {
      |      ^^^
      |   let current_params = match self.query {
      |     Some(query_str) => parse_query(query_str)
 
-<WORKDIR>/uri.mbt:1145:8-1145:11:
+<WORKDIR>/uri.mbt:1162:8-1162:11:
      | 
      | ///|
      | /// Remove a query parameter
-1145 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
+1162 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
      |        ^^^
      |   match self.query {
      |     Some(query_str) => {
 
-<WORKDIR>/uri.mbt:1145:39-1145:42:
+<WORKDIR>/uri.mbt:1162:39-1162:42:
      | 
      | ///|
      | /// Remove a query parameter
-1145 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
+1162 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
      |                                       ^^^
      |   match self.query {
      |     Some(query_str) => {
 
-<WORKDIR>/uri.mbt:1145:68-1145:71:
+<WORKDIR>/uri.mbt:1162:68-1162:71:
      | 
      | ///|
      | /// Remove a query parameter
-1145 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
+1162 | pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
      |                                                                    ^^^
      |   match self.query {
      |     Some(query_str) => {
 
-<WORKDIR>/uri.mbt:1209:8-1209:11:
+<WORKDIR>/uri.mbt:1226:8-1226:11:
      | /// # See Also
      | ///
      | /// - `decode()` - Decode percent-encoded strings
-1209 | pub fn Uri::encode(input : String) -> String {
+1226 | pub fn Uri::encode(input : String) -> String {
      |        ^^^
      |   let mut result = ""
      | 
 
-<WORKDIR>/uri.mbt:1269:8-1269:11:
+<WORKDIR>/uri.mbt:1286:8-1286:11:
      | /// # See Also
      | ///
      | /// - `encode()` - Encode strings for safe URI usage
-1269 | pub fn Uri::decode(input : String) -> String {
+1286 | pub fn Uri::decode(input : String) -> String {
      |        ^^^
      |   let mut result = ""
      |   let mut i = 0
 
-<WORKDIR>/uri.mbt:1324:8-1324:11:
+<WORKDIR>/uri.mbt:1341:8-1341:11:
      | /// # Returns
      | ///
      | /// Array of key-value pairs
-1324 | pub fn Uri::parse_query(query_string : String) -> Array[(String, String)] {
+1341 | pub fn Uri::parse_query(query_string : String) -> Array[(String, String)] {
      |        ^^^
      |   if query_string.length() == 0 {
      |     return []
 
-<WORKDIR>/uri.mbt:1337:19-1337:22:
+<WORKDIR>/uri.mbt:1354:19-1354:22:
      |     if pair_str.contains("=") {
      |       let parts = pair_str.split("=").collect()
      |       if parts.length() >= 2 {
-1337 |         let key = Uri::decode(parts[0].to_owned())
+1354 |         let key = Uri::decode(parts[0].to_owned())
      |                   ^^^
      |         let value = Uri::decode(parts[1].to_owned())
      |         result.push((key, value))
 
-<WORKDIR>/uri.mbt:1338:21-1338:24:
+<WORKDIR>/uri.mbt:1355:21-1355:24:
      |       let parts = pair_str.split("=").collect()
      |       if parts.length() >= 2 {
      |         let key = Uri::decode(parts[0].to_owned())
-1338 |         let value = Uri::decode(parts[1].to_owned())
+1355 |         let value = Uri::decode(parts[1].to_owned())
      |                     ^^^
      |         result.push((key, value))
      |       } else {
 
-<WORKDIR>/uri.mbt:1342:22-1342:25:
+<WORKDIR>/uri.mbt:1359:22-1359:25:
      |         result.push((key, value))
      |       } else {
      |         // No equals sign, treat as key with empty value
-1342 |         result.push((Uri::decode(pair_str), ""))
+1359 |         result.push((Uri::decode(pair_str), ""))
      |                      ^^^
      |       }
      |     } else {
 
-<WORKDIR>/uri.mbt:1346:20-1346:23:
+<WORKDIR>/uri.mbt:1363:20-1363:23:
      |       }
      |     } else {
      |       // No equals sign, treat as key with empty value
-1346 |       result.push((Uri::decode(pair_str), ""))
+1363 |       result.push((Uri::decode(pair_str), ""))
      |                    ^^^
      |     }
      |   }
 
-<WORKDIR>/uri.mbt:1370:8-1370:11:
+<WORKDIR>/uri.mbt:1387:8-1387:11:
      | /// # Returns
      | ///
      | /// Encoded query string
-1370 | pub fn Uri::build_query(pairs : Array[(String, String)]) -> String {
+1387 | pub fn Uri::build_query(pairs : Array[(String, String)]) -> String {
      |        ^^^
      |   let parts : Array[String] = []
      | 
 
-<WORKDIR>/uri.mbt:1375:23-1375:26:
+<WORKDIR>/uri.mbt:1392:23-1392:26:
      | 
      |   for i = 0; i < pairs.length(); i = i + 1 {
      |     let (key, value) = pairs[i]
-1375 |     let encoded_key = Uri::encode(key)
+1392 |     let encoded_key = Uri::encode(key)
      |                       ^^^
      |     if value.length() == 0 {
      |       parts.push(encoded_key)
 
-<WORKDIR>/uri.mbt:1379:27-1379:30:
+<WORKDIR>/uri.mbt:1396:27-1396:30:
      |     if value.length() == 0 {
      |       parts.push(encoded_key)
      |     } else {
-1379 |       let encoded_value = Uri::encode(value)
+1396 |       let encoded_value = Uri::encode(value)
      |                           ^^^
      |       parts.push(encoded_key + "=" + encoded_value)
      |     }
 
-<WORKDIR>/uri.mbt:1402:8-1402:11:
+<WORKDIR>/uri.mbt:1419:8-1419:11:
      | /// # Returns
      | ///
-     | /// Array of path segments (excluding empty segments from leading/trailing slashes) (escaped)
-1402 | pub fn Uri::path_segments(self : Uri) -> Array[String] {
+     | /// Array of path segments (excluding empty segments from leading/trailing slashes)
+1419 | pub fn Uri::path_segments(self : Uri) -> Array[String] {
      |        ^^^
      |   if self.path.length() == 0 {
      |     return []
 
-<WORKDIR>/uri.mbt:1402:34-1402:37:
+<WORKDIR>/uri.mbt:1419:34-1419:37:
      | /// # Returns
      | ///
-     | /// Array of path segments (excluding empty segments from leading/trailing slashes) (escaped)
-1402 | pub fn Uri::path_segments(self : Uri) -> Array[String] {
+     | /// Array of path segments (excluding empty segments from leading/trailing slashes)
+1419 | pub fn Uri::path_segments(self : Uri) -> Array[String] {
      |                                  ^^^
      |   if self.path.length() == 0 {
      |     return []
 
-<WORKDIR>/uri.mbt:1413:19-1413:22:
+<WORKDIR>/uri.mbt:1430:19-1430:22:
      |   for segment in segments {
      |     let seg_str = segment.to_owned()
      |     if seg_str.length() > 0 {
-1413 |       result.push(Uri::decode(seg_str))
+1430 |       result.push(Uri::decode(seg_str))
      |                   ^^^
      |     }
      |   }
 
-<WORKDIR>/uri.mbt:1437:8-1437:11:
+<WORKDIR>/uri.mbt:1454:8-1454:11:
      | /// # Returns
      | ///
      | /// New URI with the specified path segments
-1437 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
+1454 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
      |        ^^^
      |   if segments.length() == 0 {
-     |     return { ..self, path: "" }
+     |     return { ..self, path: "", }
 
-<WORKDIR>/uri.mbt:1437:39-1437:42:
+<WORKDIR>/uri.mbt:1454:39-1454:42:
      | /// # Returns
      | ///
      | /// New URI with the specified path segments
-1437 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
+1454 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
      |                                       ^^^
      |   if segments.length() == 0 {
-     |     return { ..self, path: "" }
+     |     return { ..self, path: "", }
 
-<WORKDIR>/uri.mbt:1437:73-1437:76:
+<WORKDIR>/uri.mbt:1454:73-1454:76:
      | /// # Returns
      | ///
      | /// New URI with the specified path segments
-1437 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
+1454 | pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
      |                                                                         ^^^
      |   if segments.length() == 0 {
-     |     return { ..self, path: "" }
+     |     return { ..self, path: "", }
 
-<WORKDIR>/uri.mbt:1444:27-1444:30:
+<WORKDIR>/uri.mbt:1461:27-1461:30:
      | 
      |   let encoded_segments : Array[String] = []
      |   for segment in segments {
-1444 |     encoded_segments.push(Uri::encode(segment.to_string()))
+1461 |     encoded_segments.push(Uri::encode(segment.to_string()))
      |                           ^^^
      |   }
      | 
 
-<WORKDIR>/uri.mbt:1470:8-1470:11:
+<WORKDIR>/uri.mbt:1487:8-1487:11:
      | /// # Returns
      | ///
-     | /// Optional tuple of (username, optional password) (escaped)
-1470 | pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
+     | /// Optional tuple of (username, optional password)
+1487 | pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
      |        ^^^
      |   match self.authority {
      |     Some(auth) =>
 
-<WORKDIR>/uri.mbt:1470:40-1470:43:
+<WORKDIR>/uri.mbt:1487:40-1487:43:
      | /// # Returns
      | ///
-     | /// Optional tuple of (username, optional password) (escaped)
-1470 | pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
+     | /// Optional tuple of (username, optional password)
+1487 | pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
      |                                        ^^^
      |   match self.authority {
      |     Some(auth) =>
 
-<WORKDIR>/uri.mbt:1478:30-1478:33:
+<WORKDIR>/uri.mbt:1495:30-1495:33:
      |           if userinfo.contains(":") {
      |             let parts = userinfo.split(":").collect()
      |             if parts.length() >= 2 {
-1478 |               let username = Uri::decode(parts[0].to_owned())
+1495 |               let username = Uri::decode(parts[0].to_owned())
      |                              ^^^
      |               let password = Uri::decode(parts[1].to_owned())
      |               Some((username, Some(password)))
 
-<WORKDIR>/uri.mbt:1479:30-1479:33:
+<WORKDIR>/uri.mbt:1496:30-1496:33:
      |             let parts = userinfo.split(":").collect()
      |             if parts.length() >= 2 {
      |               let username = Uri::decode(parts[0].to_owned())
-1479 |               let password = Uri::decode(parts[1].to_owned())
+1496 |               let password = Uri::decode(parts[1].to_owned())
      |                              ^^^
      |               Some((username, Some(password)))
      |             } else {
 
-<WORKDIR>/uri.mbt:1482:30-1482:33:
+<WORKDIR>/uri.mbt:1499:30-1499:33:
      |               let password = Uri::decode(parts[1].to_owned())
      |               Some((username, Some(password)))
      |             } else {
-1482 |               let username = Uri::decode(userinfo)
+1499 |               let username = Uri::decode(userinfo)
      |                              ^^^
      |               Some((username, None))
      |             }
 
-<WORKDIR>/uri.mbt:1486:28-1486:31:
+<WORKDIR>/uri.mbt:1503:28-1503:31:
      |               Some((username, None))
      |             }
      |           } else {
-1486 |             let username = Uri::decode(userinfo)
+1503 |             let username = Uri::decode(userinfo)
      |                            ^^^
      |             Some((username, None))
      |           }
 
-<WORKDIR>/uri.mbt:1515:8-1515:11:
+<WORKDIR>/uri.mbt:1532:8-1532:11:
      | /// # Returns
      | ///
      | /// New URI with the specified userinfo
-1515 | pub fn Uri::with_userinfo(
+1532 | pub fn Uri::with_userinfo(
      |        ^^^
      |   self : Uri,
      |   username : String?,
 
-<WORKDIR>/uri.mbt:1516:10-1516:13:
+<WORKDIR>/uri.mbt:1533:10-1533:13:
      | ///
      | /// New URI with the specified userinfo
      | pub fn Uri::with_userinfo(
-1516 |   self : Uri,
+1533 |   self : Uri,
      |          ^^^
      |   username : String?,
      |   password : String?,
 
-<WORKDIR>/uri.mbt:1519:6-1519:9:
+<WORKDIR>/uri.mbt:1536:6-1536:9:
      |   self : Uri,
      |   username : String?,
      |   password : String?,
-1519 | ) -> Uri {
+1536 | ) -> Uri {
      |      ^^^
      |   match username {
      |     Some(user) => {
 
-<WORKDIR>/uri.mbt:1523:23-1523:26:
+<WORKDIR>/uri.mbt:1540:23-1540:26:
      |   match username {
      |     Some(user) => {
      |       let userinfo = match password {
-1523 |         Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass)
+1540 |         Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass)
      |                       ^^^
      |         None => Uri::encode(user)
      |       }
 
-<WORKDIR>/uri.mbt:1523:49-1523:52:
+<WORKDIR>/uri.mbt:1540:49-1540:52:
      |   match username {
      |     Some(user) => {
      |       let userinfo = match password {
-1523 |         Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass)
+1540 |         Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass)
      |                                                 ^^^
      |         None => Uri::encode(user)
      |       }
 
-<WORKDIR>/uri.mbt:1524:17-1524:20:
+<WORKDIR>/uri.mbt:1541:17-1541:20:
      |     Some(user) => {
      |       let userinfo = match password {
      |         Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass)
-1524 |         None => Uri::encode(user)
+1541 |         None => Uri::encode(user)
      |                 ^^^
      |       }
      | 

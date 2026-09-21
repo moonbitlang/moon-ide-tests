@@ -15,7 +15,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'skip_newli
 @@
  /// No trailing comma allowed unlike Array
  fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
-   let table = {}
+   let table = Map([])
 -  self.skip_newlines() // TOML 1.1: allow newlines in inline tables
 +  self.skip_newlines_renamed() // TOML 1.1: allow newlines in inline tables
    if self.view() is [RightBrace, .. rest] {
@@ -32,7 +32,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'skip_newli
  
 @@
      set_dotted_key_value(table, key_path, value) catch {
-       error => self.error(error.to_string())
+       error => self.error("\{error}")
      }
 -    self.skip_newlines()
 +    self.skip_newlines_renamed()
@@ -46,7 +46,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'skip_newli
            self.update_view(rest2)
 @@
    let parser = Parser::Parser(tokens)
-   let main_table = {}
+   let main_table = Map([])
    for current_table = main_table {
 -    parser.skip_newlines()
 +    parser.skip_newlines_renamed()

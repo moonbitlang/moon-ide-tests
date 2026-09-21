@@ -17,9 +17,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'io' 'io_renamed'
    let r = @event_loop.IoHandle::from_fd(r, kind=Pipe)
    let w = @event_loop.IoHandle::from_fd(w, kind=Pipe, is_async=false)
    (
--    { io: r, read_buf: @io.ReaderBuffer::new() },
-+    { io_renamed: r, read_buf: @io.ReaderBuffer::new() },
-     TempPipeWrite::{ pipe: w, closed: false },
+-    { io: r, read_buf: @io.ReaderBuffer::new(), },
++    { io_renamed: r, read_buf: @io.ReaderBuffer::new(), },
+     TempPipeWrite::{ pipe: w, shared, closed: false, },
    )
  }
 @@

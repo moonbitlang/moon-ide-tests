@@ -2,15 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'original' --loc 'src\lib\json.mbt:3:3'
-Found 18 references for symbol 'original':
-<WORKDIR>/src\lib\json.mbt:3:3-3:11:
-  | ///|
-  | priv struct Context {
-3 |   original : Array[Char]
-  |   ^^^^^^^^
-  |   rest : ArrayView[Char]
-  |   skip : Int
-
+Found 17 references for symbol 'original':
 <WORKDIR>/src\lib\json.mbt:27:5-27:13:
    |   }
    |   let ctx = Context::{

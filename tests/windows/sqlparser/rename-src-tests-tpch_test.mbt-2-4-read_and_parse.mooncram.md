@@ -10,7 +10,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'read_and_par
 +fn read_and_parse_renamed(path : String) -> @sqlparser.Statements {
    let input = @fs.read_file_to_string(path) catch {
      e => {
-       println("Read file error: \{e.to_string()}")
+       println("Read file error: \{Repr(e)}")
 @@
  
  ///|

@@ -10,7 +10,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename '_ignore_unused_i
  #coverage.skip
 -let _ignore_unused_import : Unit = {
 +let _ignore_unused_import_renamed : Unit = {
-   ignore(@coroutine.spawn)
+   ignore(@coroutine.Coroutine::wake)
    ignore(@event_loop.Timer::new)
  }
 *** End Patch
