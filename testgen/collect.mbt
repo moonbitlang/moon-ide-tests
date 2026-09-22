@@ -334,7 +334,7 @@ fn parser_report_lines(
     "testgen: parser emitted \{reports.length()} \{plural} for \{file}",
   )
   for report in reports {
-    lines.push("testgen:   \{report.to_string()}")
+    lines.push("testgen:   \{Show::to_string(report)}")
   }
   lines
 }
