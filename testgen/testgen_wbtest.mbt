@@ -313,7 +313,7 @@ test "parser_report_lines formats parser diagnostics" {
 test "render_cram_files emits mooncram markdown commands" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
-    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
+    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f", }],
   }
   let files = render_cram_files(
     result,
@@ -366,10 +366,10 @@ test "render_split_symbol_files emits one file per case" {
   current_repo_path.val = "fixtures/repos/example"
   current_platform.val = TestPlatform::Unix
   let cases = [
-    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f" },
-    TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g" },
+    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
+    TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g", },
     // Duplicate case collapses into the first file.
-    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f" },
+    TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
   ]
   let files = render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
@@ -398,18 +398,16 @@ test "render_split_symbol_files emits one file per case" {
 ///|
 test "split_case_file_name disambiguates sanitization collisions" {
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
-  let first = split_case_file_name("rename", TestCase::{
-    file: "a/b.mbt",
-    line: 1,
-    col: 2,
-    sym: "f",
-  }, used)
-  let second = split_case_file_name("rename", TestCase::{
-    file: "a-b.mbt",
-    line: 1,
-    col: 2,
-    sym: "f",
-  }, used)
+  let first = split_case_file_name(
+    "rename",
+    TestCase::{ file: "a/b.mbt", line: 1, col: 2, sym: "f", },
+    used,
+  )
+  let second = split_case_file_name(
+    "rename",
+    TestCase::{ file: "a-b.mbt", line: 1, col: 2, sym: "f", },
+    used,
+  )
   inspect(first, content="rename-a-b.mbt-1-2-f.mooncram.md")
   inspect(second, content="rename-a-b.mbt-1-2-f-2.mooncram.md")
 }
@@ -444,7 +442,7 @@ test "split suite output detection covers legacy and per-case names" {
 test "render_cram_files emits windows powershell bootstrap" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
-    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f" }],
+    loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f", }],
   }
   let files = render_cram_files(
     result,
@@ -464,6 +462,33 @@ test "render_cram_files emits windows powershell bootstrap" {
       "$ run_moon_ide '..\\..\\..\\fixtures\\repos\\example' moon ide hover 'f' --loc 'a.mbt:1:4'",
     ),
   )
+}
+
+///|
+test "rendered source paths follow the selected test platform" {
+  let result = CollectResult::{
+    source_files: ["src\\pkg\\a.mbt"],
+    loc_cases: [
+      TestCase::{ file: "src\\pkg\\a.mbt", line: 2, col: 3, sym: "f", },
+    ],
+  }
+  let windows_files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Windows,
+  )
+  assert_true(windows_files[0].content.contains("outline 'src\\pkg\\a.mbt'"))
+  assert_true(windows_files[1].content.contains("--loc 'src\\pkg\\a.mbt:2:3'"))
+
+  let unix_files = render_cram_files(
+    result,
+    "example",
+    "fixtures/repos/example",
+    TestPlatform::Unix,
+  )
+  assert_true(unix_files[0].content.contains("outline 'src/pkg/a.mbt'"))
+  assert_true(unix_files[1].content.contains("--loc 'src/pkg/a.mbt:2:3'"))
 }
 
 ///|

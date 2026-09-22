@@ -18,20 +18,13 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'obj' --loc 'src/show.mbt:2:34'
-Found 2 references for symbol 'obj':
-<WORKDIR>/src/show.mbt:2:34-2:37:
-  | ///|
-2 | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
-  |                                  ^^^
-  |   let input = @debug.to_string(obj)
-  |   let buffer = StringBuilder::new()
-
+Found 1 references for symbol 'obj':
 <WORKDIR>/src/show.mbt:3:32-3:35:
   | ///|
   | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
 3 |   let input = @debug.to_string(obj)
   |                                ^^^
-  |   let buffer = StringBuilder::new()
+  |   let buffer = StringBuilder()
   |   let mut in_string = false
 
 ```

@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'regex' --loc 'string/regex_test.mbt:17:7'
-Found 2 references for symbol 'regex':
-<WORKDIR>/string/regex_test.mbt:17:7-17:12:
-   | 
-   | ///|
-   | test "execute/non_capture_group" {
-17 |   let regex = re"(?:ab)(c)(?:d)"
-   |       ^^^^^
-   |   guard regex.execute("abcd") is Some(m) else { fail("Expected match") }
-   |   debug_inspect(
-
+Found 1 references for symbol 'regex':
 <WORKDIR>/string/regex_test.mbt:18:9-18:14:
    | ///|
    | test "execute/non_capture_group" {

@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'm' --loc 'src\IndexMap_test.mbt:17:7'
-Found 3 references for symbol 'm':
-<WORKDIR>/src\IndexMap_test.mbt:17:7-17:8:
-   | 
-   | ///|
-   | test "new" {
-17 |   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
-   |       ^
-   |   inspect(m.capacity(), content="8")
-   |   @debug.assert_eq(m.size(), 0)
-
+Found 2 references for symbol 'm':
 <WORKDIR>/src\IndexMap_test.mbt:18:11-18:12:
    | ///|
    | test "new" {

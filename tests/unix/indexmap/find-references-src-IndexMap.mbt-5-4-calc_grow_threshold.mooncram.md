@@ -18,24 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
-Found 3 references for symbol 'calc_grow_threshold':
-<WORKDIR>/src/IndexMap.mbt:5:4-5:23:
-  | const Default_init_capacity = 8 (escaped)
-  |  (escaped)
-  | ///| (escaped)
-5 | fn calc_grow_threshold(capacity : Int) -> Int { (escaped)
-  |    ^^^^^^^^^^^^^^^^^^^ (escaped)
-  |   capacity * 3 / 4 // 75% 负载因子 (escaped)
-  | } (escaped)
-
+Found 2 references for symbol 'calc_grow_threshold':
 <WORKDIR>/src/IndexMap.mbt:39:13-39:32:
-   |     }, (escaped)
-   |     size: 0, (escaped)
-   |     capacity, (escaped)
-39 |     growAt: calc_grow_threshold(capacity), (escaped)
-   |             ^^^^^^^^^^^^^^^^^^^ (escaped)
-   |     key_to_idx: @hashmap.HashMap::default(), (escaped)
-   |   } (escaped)
+   |     },
+   |     size: 0,
+   |     capacity,
+39 |     growAt: calc_grow_threshold(capacity),
+   |             ^^^^^^^^^^^^^^^^^^^
+   |     key_to_idx: @hashmap.HashMap::default(),
+   |   }
 
 <WORKDIR>/src/IndexMap.mbt:780:17-780:36:
     |   } else { (escaped)

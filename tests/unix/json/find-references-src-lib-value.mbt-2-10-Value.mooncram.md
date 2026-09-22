@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Value' --loc 'src/lib/value.mbt:2:10'
-Found 33 references for symbol 'Value':
+Found 31 references for symbol 'Value':
 <WORKDIR>/src/lib/json.mbt:48:59-48:64:
    | } (escaped)
    |  (escaped)
@@ -297,21 +297,5 @@ Found 33 references for symbol 'Value':
     |     ^^^^^ (escaped)
     |       rest, (escaped)
     |       arr_acc, (escaped)
-
-<WORKDIR>/src/lib/value.mbt:2:10-2:15:
-  | ///| (escaped)
-2 | pub enum Value { (escaped)
-  |          ^^^^^ (escaped)
-  |   Continue(ContinueValue) (escaped)
-  |   Finish(FinishValue) (escaped)
-
-<WORKDIR>/src/top.mbt:7:8-7:13:
-  |   decode, (escaped)
-  |   decode_start, (escaped)
-  |   decode_continue, (escaped)
-7 |   type Value, (escaped)
-  |        ^^^^^ (escaped)
-  |   type ContinueValue, (escaped)
-  |   type FinishValue, (escaped)
 
 ```

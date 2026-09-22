@@ -2,14 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Context' --loc 'src\lib\json.mbt:2:13'
-Found 34 references for symbol 'Context':
-<WORKDIR>/src\lib\json.mbt:2:13-2:20:
-  | ///|
-2 | priv struct Context {
-  |             ^^^^^^^
-  |   original : Array[Char]
-  |   rest : ArrayView[Char]
-
+Found 33 references for symbol 'Context':
 <WORKDIR>/src\lib\json.mbt:25:13-25:20:
    |     Some(decode) => decode
    |     None => () (escaped)

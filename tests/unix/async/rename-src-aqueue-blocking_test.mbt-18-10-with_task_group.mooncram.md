@@ -19,6 +19,16 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc 'src/aqueue/blocking_test.mbt:18:10'
 *** Begin Patch
+*** Update File: <WORKDIR>/examples/dead_lock/main.mbt
+@@
+ async fn main {
+   let mutex1 = @async.Mutex()
+   let mutex2 = @async.Mutex()
+-  @async.with_task_group <| group => {
++  @async.with_task_group_renamed <| group => {
+     group.spawn_bg() <| () => {
+       mutex1.acquire()
+       defer mutex1.release()
 *** Update File: <WORKDIR>/examples/http_file_server/main.mbt
 @@
    } else {
@@ -33,7 +43,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
    }
  
-   let client_log = StringBuilder::new()
+   let client_log = StringBuilder()
 -  @async.with_task_group <| root => {
 +  @async.with_task_group_renamed <| root => {
      let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
@@ -96,8 +106,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      for ;; {
 *** Update File: <WORKDIR>/examples/udp_ping_pong/main.mbt
 @@
- 
  ///|
+ #warnings("-fragile_catch_all")
  async fn server_main(server : @socket.UdpServer, println : Printer) -> Unit {
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
@@ -143,7 +153,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "allow_failure ignored" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg(allow_failure=true, () => raise Err)
@@ -151,7 +161,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      buf <+ "main task terminate\n"
 @@
  async test "allow_failure waited" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -161,7 +171,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "allow_failure no error" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg(allow_failure=true) <| () => {
@@ -174,7 +184,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
      group.spawn_bg() <| () => {
        for i in 0..<3 {
 @@
@@ -219,7 +229,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let received = []
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[String] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[String] = Queue(kind=Unbounded)
      // Producer A puts items at time 0, 100, 200 ms.
      group.spawn_bg() <| () => {
 @@
@@ -228,7 +238,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let work_by_worker : Array[Array[Int]] = [[], [], []]
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Blocking(1))
+     let q : @aqueue.Queue[Int] = Queue(kind=Blocking(1))
      for w in 0..<3 {
        group.spawn_bg(allow_failure=true) <| () => {
 @@
@@ -237,14 +247,14 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
-     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
      // Reader 1 starts waiting at ~0 ms.
      root.spawn_bg(() => log.push("r1 got \{q.get()}"))
 *** Update File: <WORKDIR>/src/aqueue/aqueue_test.mbt
 @@
  ///|
  async test "aqueue basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let queue = @aqueue.Queue(kind=Unbounded)
@@ -253,7 +263,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "aqueue multi-reader" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let queue = @aqueue.Queue(kind=Unbounded)
@@ -262,7 +272,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "aqueue cancellation no_swallow" {
    // `get` should not swallow the value
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let q = @aqueue.Queue(kind=Unbounded)
@@ -271,7 +281,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "aqueue fairness" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let queue = @aqueue.Queue(kind=Unbounded)
@@ -280,7 +290,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "aqueue fairness2" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let queue = @aqueue.Queue(kind=Unbounded)
@@ -402,7 +412,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    q.put(1)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
@@ -411,22 +421,22 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let q = @async.Queue(kind=Blocking(0))
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
  ///|
  async test "close with blocking get" {
-   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let start = @env.now()
+     let start = @async.now()
      group.spawn_bg() <| () => {
        @async.sleep(300)
 @@
  ///|
  async test "close with completed get" {
-   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      group.spawn_bg() <| () => {
@@ -473,15 +483,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "manual cancel" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let task = root.spawn(() => {
-       try {
-         @async.sleep(300)
+       match @async.handle_cancellation(() => @async.sleep(300)) {
+         None => buf.write_string("cancelled\n")
 @@
  async test "error propagation" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -491,7 +501,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "multiple scope" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -513,7 +523,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "recursive cancel" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -521,7 +531,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          @async.sleep(400)
 @@
  async test "spawn directly error" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -533,17 +543,17 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
            buf <+ "after spawn\n"
 @@
  async test "error in cancellation" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
        root.spawn_bg(no_wait=true) <| () => {
-         @async.sleep(1000) catch {
-           _ => {
+         match @async.handle_cancellation(() => @async.sleep(1000)) {
+           None => {
 @@
  ///|
  async test "immediately cancelled" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let task = root.spawn(() => {
@@ -601,7 +611,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "cond var cancellation no_swallow" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let cond = @cond_var.Cond()
@@ -610,7 +620,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "cond var fairness" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let cond = @cond_var.Cond()
@@ -619,7 +629,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "cond var broadcast" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let cond = @cond_var.Cond()
@@ -628,36 +638,53 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "cond var broadcast cancellation" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let cond = @cond_var.Cond()
      for i in 0..<3 {
        root.spawn_bg(allow_failure=true) <| () => {
-*** Update File: <WORKDIR>/src/fs/access_test.mbt
+*** Update File: <WORKDIR>/src/external_loop_integration/external_loop_test.mbt
 @@
-     return
-   }
-   let path = "_build/chmod_test"
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     @fs.write_file(path, "abcd", create_mode=CreateNew, permission=0o444)
-     group.add_defer(() => @fs.remove(path))
-     inspect(@fs.can_read(path), content="true")
-*** Update File: <WORKDIR>/src/fs/create_test.mbt
+   let main_loop = @external_loop_test.MainLoop()
+   @event_loop.with_event_loop <| () => {
+     @async.set_external_event_loop(main_loop)
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       let start = @async.now()
+       fn tick() {
+         (@async.now() - start + 50) / 150
 @@
- ///|
- async test "create_mode test" {
-   let path = "_build/create_exclusive_test"
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     for create_mode in [@fs.OpenExisting, @fs.TruncateExisting] {
-       @test_util.assert_raise_async <| () => {
-         @fs.open(path, mode=WriteOnly, create_mode~)
+   let main_loop = @external_loop_test.MainLoop()
+   @event_loop.with_event_loop <| () => {
+     @async.set_external_event_loop(main_loop)
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       let start = @async.now()
+       fn tick() {
+         (@async.now() - start + 50) / 150
+@@
+   let main_loop = @external_loop_test.MainLoop()
+   @event_loop.with_event_loop <| () => {
+     @async.set_external_event_loop(main_loop)
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       let (r, w) = @pipe.pipe()
+       defer r.close()
+       defer w.close()
+@@
+     @async.set_external_event_loop(main_loop)
+     let (r, w) = @pipe.pipe()
+     defer r.close()
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       // The following three tasks will start running at the same scheduler slice
+       group.spawn_bg() <| () => {
+         defer w.close()
 *** Update File: <WORKDIR>/src/fs/dir.mbt
 @@
    let context = "@fs.walk()"
-   guard max_concurrency > 0
+   guard! max_concurrency > 0
    let sem = @async.Semaphore(max_concurrency)
 -  @async.with_task_group() <| fn(group) {
 +  @async.with_task_group_renamed() <| fn(group) {
@@ -770,29 +797,10 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let file_name = "_build/flock_advisory"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     @fs.write_file(file_name, create_mode=CreateOrTruncate, "abcd")
+     @fs.write_file(file_name, "abcd")
      let file = @fs.open(file_name, mode=ReadWrite)
      defer file.close()
-*** Update File: <WORKDIR>/src/fs/mkdir_test.mbt
-@@
- 
- ///|
- async test "mkdir recursive" {
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     let base_path = "_build/recursive_mkdir"
-     let path = "\{base_path}/test//directory"
-     @fs.mkdir(path, recursive=true)
 *** Update File: <WORKDIR>/src/fs/named_pipe_test.mbt
-@@
- ///|
- #cfg(not(platform="windows"))
- async test "cancel named fifo open" {
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     let path = "_build/cancel_open_test"
-     if mkfifo(@os_string.encode(path), 0o644) < 0 {
-       @os_error.check_errno("mkfifo")
 @@
  ///|
  #cfg(not(platform="windows"))
@@ -802,147 +810,52 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let path = "_build/named_pipe_test"
      if mkfifo(@os_string.encode(path), 0o644) < 0 {
        @os_error.check_errno("mkfifo")
-*** Update File: <WORKDIR>/src/fs/realpath_test.mbt
-@@
- ///|
- #cfg(not(platform="windows"))
- async test "realpath link to absolute" {
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     guard @env.current_dir() is Some(cwd)
-     let path = match cwd {
-       [.., '/'] => cwd + "src/fs/realpath_test.mbt"
-@@
- ///|
- #cfg(not(platform="windows"))
- async test "realpath link to relative" {
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     guard @env.current_dir() is Some(cwd)
-     let rel_path = "../src/fs/realpath_test.mbt"
-     let link_path = "_build/realpath_test_link_to_relative.test"
-@@
- 
- ///|
- async test "realpath link to dir absolute" {
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     guard @env.current_dir() is Some(cwd)
-     let path = match cwd {
-       [.., '/'] => cwd + "src/fs"
-@@
- #cfg(not(platform="windows"))
- async test "realpath link to dir relative" {
-   guard @env.current_dir() is Some(cwd)
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     let rel_path = "../src/fs"
-     let link_path = "_build/realpath_test_link_to_dir_relative.test"
-     @fs.symlink(link_path, target=rel_path)
-*** Update File: <WORKDIR>/src/fs/stat_test.mbt
-@@
- async test "kind of symlink to regular" {
-   let link_path = "_build/stat_symlink_to_regular_test"
-   @fs.symlink(link_path, target="../LICENSE")
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     group.add_defer(() => @fs.remove(link_path))
-     debug_inspect(@fs.kind(link_path), content="Regular")
-     debug_inspect(@fs.kind(link_path, follow_symlink=false), content="SymLink")
-@@
-   guard @env.current_dir() is Some(cwd)
-   let link_path = "_build/stat_symlink_to_dir_test"
-   @fs.symlink(link_path, target="\{cwd}/_build")
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     group.add_defer(() => @fs.remove(link_path))
-     debug_inspect(@fs.kind(link_path), content="Directory")
-     debug_inspect(@fs.kind(link_path, follow_symlink=false), content="SymLink")
-*** Update File: <WORKDIR>/src/fs/text_file_test.mbt
-@@
- 
- ///|
- async test "text file" {
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     let path = "_build/basic_text_file_test"
-     root.add_defer(() => @fs.remove(path))
-     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate)
-*** Update File: <WORKDIR>/src/fs/timestamp_test.mbt
-@@
-     return
-   }
-   let path = "/tmp/timestamp_test"
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
-     group.add_defer(() => @fs.remove(path))
-     let mtime_1 = @fs.mtime(path)
-@@
-     return
-   }
-   let path = "/tmp/opened_file_timestamp_test"
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
-     group.add_defer(() => @fs.remove(path))
-     let file = @fs.open(path, mode=ReadWrite, sync=Full)
-*** Update File: <WORKDIR>/src/fs/tmpdir_test.mbt
-@@
- 
- ///|
- async test "tmpdir" {
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     let t1 = @fs.tmpdir(prefix="tmp")
-     group.add_defer() <| () => {
-       @async.protect_from_cancel(() => @fs.rmdir(t1, recursive=true))
 *** Update File: <WORKDIR>/src/fs/watch_test.mbt
 @@
- ///|
- async test "watch basic" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_basic_test"
      let test_dir = Dir({
        "root_file": File("abcd"),
+       "inner_dir": Dir({ "inner_file": File("efgh") }),
 @@
- ///|
- async test "watch rename within" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_rename_within_test"
      let test_dir = Dir({
        "root_file": File("abcd"),
+       "inner_dir": Dir({ "inner_file": File("efgh") }),
 @@
- ///|
- async test "watch rename inout test" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let base_path = "_build/watch_rename_inout_test"
      let test_dir = Dir({
        "watched": Dir({
+         "root_file": File("abcd"),
 @@
+ 
  ///|
  async test "watch horizontal swap" {
-   let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
      let path = "_build/watch_swap_test"
      let test_dir = Dir({ "file1": File("abcd"), "file2": File("efgh") })
      test_dir.instantiate(path)
 @@
- ///|
- async test "watch vertical swap" {
+   report_child_event~ : Bool,
+ ) -> Array[String] {
    let log = []
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_vertical_swap_test"
      let test_dir = Dir({
        "outer": Dir({
+         "file": File("abcd"),
 @@
  ///|
  async test "watch ignored path" {
@@ -952,11 +865,20 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let path = "_build/watch_ignored_path_test"
      let test_dir = Dir({
        "ignored": Dir({ "file": File("abcd") }),
+@@
+     "root_file": File("abcd"),
+     "inner_dir": Dir({ "inner_file": File("efgh") }),
+   })
+-  @async.with_task_group <| group => {
++  @async.with_task_group_renamed <| group => {
+     let path = "_build/watch_init_event_test"
+     test_dir.instantiate(path)
+     group.add_defer(() => {
 *** Update File: <WORKDIR>/src/group_defer_test.mbt
 @@
  ///|
  async test "group defer basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| fn(root) {
 +  @async.with_task_group_renamed() <| fn(root) {
      root.add_defer(() => log <+ "first group defer\n")
@@ -964,7 +886,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        defer log.write_string("defer for first task\n")
 @@
  async test "group defer error" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(fn(root) {
 +    @async.with_task_group_renamed(fn(root) {
@@ -974,7 +896,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "group defer cancelled" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -1066,17 +988,26 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "request streaming" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let port = test_server(group, log)
      async fn fetch_response(client : @http.Client) {
        while client.read_some() is Some(data) {
+@@
+ #cfg(any(target="native", target="wasm"))
+ async test "user agent" {
+   let log = StringBuilder()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
+     let port = server.addr.port()
+     group.spawn_bg(no_wait=true) <| () => {
 *** Update File: <WORKDIR>/src/http/parser_wbtest.mbt
 @@
  ///|
  async test "read_request basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1085,7 +1016,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_request fixed body" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1103,7 +1034,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_request chunked" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1112,7 +1043,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_request stream" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1121,7 +1052,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "multiple request" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1130,7 +1061,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1139,7 +1070,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response passthrough fallback (no length headers)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1148,7 +1079,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response 204 No Content (no body)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1157,7 +1088,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response 205 Reset Content (no body)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1166,7 +1097,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response 304 Not Modified (no body)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1175,7 +1106,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response 100 Continue (no body)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1184,7 +1115,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response CONNECT 200 (no body, tunnel mode)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1193,7 +1124,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response HEAD 200 (no body)" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1211,6 +1142,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
      r.read_all().binary()
    })
+   let (r, w) = @io.pipe()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     group.spawn_bg() <| () => {
+       defer w.close()
+       w
+@@
+      0x00, 0x00, 0x00,
+   ]
    let (r, w) = @io.pipe()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -1291,6 +1231,33 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        proxy_server.run_forever() <| ((_, _, conn) => {
          conn.send_response(407, "ProxyAuthenticationRequired")
 *** Update File: <WORKDIR>/src/http/request_test.mbt
+@@
+ 
+ ///|
+ async test "request cancel handshake" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let port = non_responding_tcp_server(group)
+     let result = @async.with_timeout_opt(250) <| () => {
+       let (response, _) = @http.get("http://127.0.0.1:\{port}/")
+@@
+ ///|
+ async test "request cancel wait response header" {
+   let log = StringBuilder()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let port = test_server(group, log)
+     let result = @async.with_timeout_opt(250) <| () => {
+       let (response, _) = @http.get("http://127.0.0.1:\{port}/no-response")
+@@
+ ///|
+ async test "request cancel wait response body" {
+   let log = StringBuilder()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let port = test_server(group, log)
+     let result = @async.with_timeout_opt(250) <| () => {
+       let (response, _) = @http.get("http://127.0.0.1:\{port}/no-response-body")
 @@
  async test "manual Accept-Encoding" {
    let log = []
@@ -1409,10 +1376,28 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let (r, w) = @io.pipe()
      root.spawn_bg() <| () => {
        defer w.close()
+@@
+ 
+ ///|
+ async test "HEAD response with Content-Length" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "HEAD response with non-empty body" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
 *** Update File: <WORKDIR>/src/internal/coroutine/pause_test.mbt
 @@
  test "coroutine ping-pong" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let coro = @coroutine.spawn(() => {
 -    @async.with_task_group(group => {
 +    @async.with_task_group_renamed(group => {
@@ -1421,7 +1406,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          @async.pause()
 *** Update File: <WORKDIR>/src/internal/event_loop/missing_close_test.mbt
 @@
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    @event_loop.check_fd_leak.val = false
    @event_loop.with_event_loop() <| () => {
 -    @async.with_task_group() <| root => {
@@ -1443,7 +1428,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "worker basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -1452,7 +1437,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "worker multiple" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -1461,7 +1446,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "worker cancel1" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -1470,12 +1455,30 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "worker cancel2" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
        for _ in 0..<3 {
          @async.sleep(400)
+@@
+ test "max worker limit" {
+   let log = []
+   with_event_loop(max_worker_count=2, () => {
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       let start = @async.now()
+       for i in 0..<4 {
+         group.spawn_bg() <| () => {
+@@
+ test "cancel queued job" {
+   let log = []
+   with_event_loop(max_worker_count=1, () => {
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       let start = @async.now()
+       fn tick() {
+         (@async.now() - start + 50).to_int() / 100
 *** Update File: <WORKDIR>/src/io/README.mbt.md
 @@
  ```moonbit check
@@ -1606,7 +1609,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "write_reader - copy from reader to writer" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let (r1, w1) = @io.pipe()
@@ -1624,7 +1627,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "BufferedWriter - basic buffering" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let (r, w) = @io.pipe()
@@ -1651,7 +1654,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "BufferedWriter::write_reader - buffered copy" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let (r1, w1) = @io.pipe()
@@ -1661,7 +1664,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "BufferedWriter" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| fn(root) {
 +  @async.with_task_group_renamed() <| fn(root) {
      let (r, w) = @io.pipe()
@@ -1670,7 +1673,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "BufferedWriter::write_reader" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| fn(root) {
 +  @async.with_task_group_renamed() <| fn(root) {
      let (r1, w1) = @io.pipe()
@@ -1717,7 +1720,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_all basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1736,7 +1739,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_some basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1745,7 +1748,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_some length limit 1" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1754,7 +1757,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_some length limit 2" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
@@ -1763,12 +1766,21 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_some length limit 3" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @io.pipe()
      defer r.close()
      root.spawn_bg() <| () => {
+@@
+ 
+ ///|
+ async test "read_some returned chunks remain stable" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let first_expected = Bytes::make(1024, b'a')
+     let second_expected = Bytes::make(1024, b'b')
+     let (r, w) = @io.pipe()
 *** Update File: <WORKDIR>/src/io/writer_test.mbt
 @@
  
@@ -1782,7 +1794,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "write reader" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r1, w1) = @io.pipe()
@@ -1799,8 +1811,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      root.spawn_bg() <| () => {
 *** Update File: <WORKDIR>/src/lazy_init_test.mbt
 @@
+       Some(_) => log.push("lazy init completed at tick \{current_tick()}")
      }
-     log.push("lazy init completed at tick \{current_tick()}")
    })
 -  let result = @async.with_task_group(group => {
 +  let result = @async.with_task_group_renamed(group => {
@@ -1808,8 +1820,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        x.wait()
        log.push("got lazy init value at tick \{current_tick()}")
 @@
+       Some(_) => log.push("lazy init completed at tick \{current_tick()}")
      }
-     log.push("lazy init completed at tick \{current_tick()}")
    })
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -1857,21 +1869,21 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "no_wait cancelled" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg(no_wait=true) <| () => {
-       try @async.sleep(1000) catch {
-         err => {
+       match @async.handle_cancellation(() => @async.sleep(1000)) {
+         None => buf.write_string("`no_wait` task cancelled\n")
 @@
  ///|
  async test "no_wait normal exit" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg(no_wait=true) <| () => {
-       try @async.sleep(100) catch {
-         err => {
+       match @async.handle_cancellation(() => @async.sleep(100)) {
+         None => buf.write_string("`no_wait` task cancelled\n")
 *** Update File: <WORKDIR>/src/pipe/read_exactly_test.mbt
 @@
      buf..write_string(msg).write_char('\n')
@@ -1926,7 +1938,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let input_file = "_build/process_test_input.txt"
-     @fs.write_file(input_file, "file content", create_mode=CreateOrTruncate)
+     @fs.write_file(input_file, "file content")
      root.add_defer(() => @fs.remove(input_file))
 @@
  ///|
@@ -1945,7 +1957,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 +  @async.with_task_group_renamed(root => {
      let input_file = "_build/process_redirect_in.txt"
      let output_file = "_build/process_redirect_out.txt"
-     @fs.write_file(input_file, "redirect test", create_mode=CreateOrTruncate)
+     @fs.write_file(input_file, "redirect test")
 @@
  ///|
  #cfg(all(target="native", not(platform="windows")))
@@ -1961,18 +1973,18 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
  async test "multiple processes to one pipe" {
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
-     let (reader, writer) = @pipe.pipe()
+     let (reader, writer) = @process.read_from_process(shared=true)
      root.spawn_bg(no_wait=true, () => {
        defer reader.close()
 @@
+       inspect(output.contains("first"), content="true")
        inspect(output.contains("second"), content="true")
      })
-     defer writer.close()
 -    @async.with_task_group(group => {
 +    @async.with_task_group_renamed(group => {
-       @process.spawn(group, "echo", ["first"], stdout=writer) |> ignore
-       @process.spawn(group, "echo", ["second"], stdout=writer) |> ignore
-     })
+       // The write must be manually closed after all children process are spawned
+       // in the shared case
+       defer writer.close()
 *** Update File: <WORKDIR>/src/process/basic_test.mbt
 @@
  
@@ -1982,7 +1994,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @process.read_from_process()
      defer r.close()
-     @process.spawn(group, shell, ["-c", "\{ls} test_directory"], stdout=w, extra_env={
+     @process.spawn(
 @@
  ///|
  async test "basic_cat" {
@@ -1996,7 +2008,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "cancel process" {
    let test_prog = sleep_prog.wait()
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @process.read_from_process()
@@ -2023,7 +2035,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "orphan process" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (r, w) = @process.read_from_process()
@@ -2037,7 +2049,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      // FIXME(upstram): missing codelens here
-     guard @env.current_dir() is Some(prev_cwd)
+     guard! @env.current_dir() is Some(prev_cwd)
      let (r, w) = @process.read_from_process()
 *** Update File: <WORKDIR>/src/process/env_test.mbt
 @@
@@ -2070,17 +2082,17 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        defer we_write.close()
 *** Update File: <WORKDIR>/src/process/process.mbt
 @@
-   process.wait_pid(context~) catch {
-     _ if @coroutine.is_being_cancelled() =>
-       @async.protect_from_cancel() <| () => {
+   match @async.handle_cancellation(() => process.wait_pid(context~)) {
+     None => {
+       let ret = @async.protect_from_cancel() <| () => {
 -        @async.with_task_group() <| group => {
 +        @async.with_task_group_renamed() <| group => {
            group.spawn_bg(no_wait=true, () => cancel_handler(pid))
            process.wait_pid(context~)
          }
 @@
-     process.wait_pid(context~) catch {
-       _ if @coroutine.is_being_cancelled() =>
+     match @async.handle_cancellation(() => process.wait_pid(context~)) {
+       None =>
          @async.protect_from_cancel() <| () => {
 -          @async.with_task_group() <| group => {
 +          @async.with_task_group_renamed() <| group => {
@@ -2130,18 +2142,16 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
  async test "merge multiple" {
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
-     let (r, w) = @pipe.pipe()
+     let (r, w) = @process.read_from_process(shared=true)
      root.spawn_bg(no_wait=true) <| () => {
        defer r.close()
-@@
        inspect(r.read_all().text(), content="abcdefgh")
      }
-     defer w.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
+       defer w.close()
        @process.spawn(group, shell, ["-c", "\{write_stdout} abcd"], stdout=w, extra_env={
          "LANG": "en_US.UTF-8",
-       })
 @@
  ///|
  async test "redirect to file" {
@@ -2154,22 +2164,54 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  
  ///|
+ async test "merge multiple to file" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let output_file = "_build/process_redirect_merge_multiple_test_out.txt"
+     root.add_defer(() => @fs.remove(output_file))
+     let w = @process.redirect_to_file(output_file, shared=true)
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       defer w.close()
+       let _ = @process.spawn(
+         group,
+@@
+ 
+ ///|
  async test "merge stdout and stderr" {
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @process.read_from_process()
      defer r.close()
      let _ = @process.spawn(
+@@
+ 
+ ///|
+ async test "merge stdout and stderr to file" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let output_file = "_build/process_redirect_merge_test_out.txt"
+     group.add_defer(() => @fs.remove(output_file))
+     let w = @process.redirect_to_file(output_file)
+@@
+ ///|
+ async test "pipe" {
+   let log = []
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let cat = cat.wait()
+     let (r1, w1) = @process.write_to_process()
+     defer w1.close()
 *** Update File: <WORKDIR>/src/process/spawn_in_group_test.mbt
 @@
    let log = []
    let sleep = sleep_prog.wait()
-   let t0 = @env.now()
+   let t0 = @async.now()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let _ = @process.spawn(group, sleep, ["500"])
      @async.sleep(250)
-     let t = (@env.now() - t0).to_int() / 250
+     let t = (@async.now() - t0).to_int() / 250
 @@
  ///|
  async test "spawn_in_group cancel" {
@@ -2189,11 +2231,11 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "Process::wait" {
    let sleep = sleep_prog.wait()
-   let mut t0 = 0UL
+   let mut t0 = 0L
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let child = @process.spawn(group, sleep, ["500", "-exit-code", "42"])
-     t0 = @env.now()
+     t0 = @async.now()
      let result = child.wait()
 @@
  ///|
@@ -2207,7 +2249,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  async test "Process:cancel" {
    let sleep = sleep_prog.wait()
-   let mut t0 = 0UL
+   let mut t0 = 0L
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @process.read_from_process()
@@ -2216,7 +2258,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 *** Update File: <WORKDIR>/src/process/wait_test.mbt
 @@
  async test "basic wait" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let test_prog = sleep_prog.wait()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
@@ -2225,27 +2267,36 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          @async.sleep(750)
 @@
  async test "wait_pid" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let test_prog = sleep_prog.wait()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      group.spawn_bg() <| () => {
        for _ in 0..<2 {
          @async.sleep(800)
+@@
+ async test "signal exit code" {
+   guard !(@event_loop.platform is Windows) else {  }
+   let sleep = sleep_prog.wait()
+-  let exit_code = @async.with_task_group <| group => {
++  let exit_code = @async.with_task_group_renamed <| group => {
+     let proc = @process.spawn(group, sleep, ["1000", "-use-default-handler"])
+     group.spawn_bg(no_wait=true) <| () => {
+       @async.sleep(100)
 *** Update File: <WORKDIR>/src/protect_from_cancel_test.mbt
 @@
  ///|
  async test "protect_from_cancel" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
-       @async.protect_from_cancel(() => {
-         @async.sleep(400) catch {
+       @async.protect_from_cancel <| () => {
+         match @async.handle_cancellation(() => @async.sleep(400)) {
 @@
  ///|
  async test "protect_from_cancel wait" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -2263,14 +2314,14 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "protect_from_cancel with_timeout" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
        @async.sleep(200)
        log <+ "200ms tick\n"
 @@
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let result : Error = @test_util.expect_error_async <| () => {
      (
 -      @async.with_task_group(root => {
@@ -2281,7 +2332,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "protect_from_cancel nested1" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -2290,7 +2341,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "protect_from_cancel nested2" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -2299,16 +2350,16 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "protect_from_cancel in cancellation handler" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg(no_wait=true) <| () => {
-       @async.sleep(400) catch {
-         err => {
+       match @async.handle_cancellation(() => @async.sleep(400)) {
+         None => {
 @@
  ///|
  async test "cancel while scheduled" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -2317,7 +2368,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "error in async cancel" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -2330,8 +2381,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -    @async.with_task_group(group => {
 +    @async.with_task_group_renamed(group => {
        group.spawn_bg(no_wait=true, allow_failure=true) <| () => {
-         @async.sleep(1000) catch {
-           _ => {
+         errdefer {
+           log <+ "performing async cleanup\n"
 *** Update File: <WORKDIR>/src/raw_fd/raw_fd_test.mbt
 @@
    )
@@ -2384,7 +2435,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          root.return_immediately(())
 @@
  async test "return_immediately error on cancel" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -2401,11 +2452,11 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        @async.sleep(100)
        log.push("100ms tick")
      }
--    @async.with_task_group(group => {
-+    @async.with_task_group_renamed(group => {
-       group.return_immediately(()) catch {
-         _ => @async.sleep(200)
-       }
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       defer @async.sleep(200)
+       group.return_immediately(())
+     }
 @@
  ///|
  async test "return_immediately called outside" {
@@ -2471,7 +2522,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "semaphore mutex" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let semaphore = @semaphore.Semaphore(1)
@@ -2480,7 +2531,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "semaphore multiple value" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let semaphore = @semaphore.Semaphore(2)
@@ -2498,7 +2549,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "semaphore cancellation no_swallow" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let semaphore = @semaphore.Semaphore(1)
@@ -2507,12 +2558,22 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "semaphore fairness" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let semaphore = @semaphore.Semaphore(1)
      root.spawn_bg() <| () => {
        for _ in 0..<3 {
+*** Update File: <WORKDIR>/src/shell/execute.mbt
+@@
+   // immediately before its producer is spawned, keeping any unconsumed input
+   // end local to that one junction if the producer itself fails to spawn.
+   let capture_stderr = sink is Buffer(_)
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let captured = Ref(0)
+     let limit = match sink {
+       Buffer(limit) => limit
 *** Update File: <WORKDIR>/src/signal/signal_test.mbt
 @@
  async test "cancel with default signal" {
@@ -2541,6 +2602,24 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let (r, w) = @process.read_from_process()
      let task = group.spawn(() => {
        defer log.push("process terminates")
+@@
+ async test "change cancellation signal set in the middle #1" {
+   let test_prog = sleep_prog.wait()
+   let log = []
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r1, w1) = @process.write_to_process()
+     defer w1.close()
+     let (r2, w2) = @process.read_from_process()
+@@
+ async test "change cancellation signal set in the middle #2" {
+   let test_prog = sleep_prog.wait()
+   let log = []
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r1, w1) = @process.write_to_process()
+     defer w1.close()
+     let (r2, w2) = @process.read_from_process()
 *** Update File: <WORKDIR>/src/socket/connect_burst_test.mbt
 @@
  ///|
@@ -2579,7 +2658,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "Only_V4 server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:0"))
@@ -2588,7 +2667,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "Only_V6 server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.TcpServer(
@@ -2597,7 +2676,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "dual stack server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.TcpServer(@socket.Addr::parse("[::]:0"))
@@ -2606,7 +2685,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "Only_V4 UDP server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
@@ -2615,7 +2694,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "Only_V6 UDP server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.UdpServer(
@@ -2624,7 +2703,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "dual stack UDP server" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.UdpServer(@socket.Addr::parse("[::]:0"))
@@ -2728,7 +2807,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "resolve cancel" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let lock = @async.Semaphore(1, initial_value=1)
@@ -2744,6 +2823,16 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
        for _ in 0..<2 {
          let server = @socket.TcpServer(
+*** Update File: <WORKDIR>/src/socket/reuse_port_test.mbt
+@@
+   let mut accepted1 = 0
+   let mut accepted2 = 0
+   let finished = @async.with_timeout_opt(10000, () => {
+-    @async.with_task_group() <| group => {
++    @async.with_task_group_renamed() <| group => {
+       let server1 = @socket.TcpServer(
+         @socket.Addr::parse("127.0.0.1:0"),
+         reuse_port_lb=true,
 *** Update File: <WORKDIR>/src/socket/tcp.mbt
 @@
      None => None
@@ -2758,7 +2847,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "spawn_loop basic" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let mut i = 0
@@ -2766,7 +2855,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        log.write_string("tick \{i}\n")
 @@
  async test "spawn_loop basic-error" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -2780,12 +2869,12 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let mut i = 0
-     let start = @env.now()
+     let start = @async.now()
      fn tick() {
 *** Update File: <WORKDIR>/src/spawn_test.mbt
 @@
  async test "spawn error1" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
    let result = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -2794,7 +2883,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          buf <+ "task 1 finished\n"
 @@
  async test "spawn error2" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
    let result = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -2828,7 +2917,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 +  @async.with_task_group_renamed() <| group => {
      let (cat_read, we_write) = @process.write_to_process()
      let (we_read, cat_write) = @process.read_from_process()
-     group.spawn_bg() <| () => {
+     let (we_read_err, cat_write_err) = @process.read_from_process()
 @@
  async test "stdout and stderr are the same" {
    let cat = cat.wait()
@@ -2840,19 +2929,19 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      }
 *** Update File: <WORKDIR>/src/task_group.mbt
 @@
- ///
  /// If all children task terminate successfully,
  /// `with_task_group` will return the result of `f`.
--pub async fn[X] with_task_group(f : async (TaskGroup[X]) -> X) -> X {
-+pub async fn[X] with_task_group_renamed(f : async (TaskGroup[X]) -> X) -> X {
-   let tg = {
-     children: Set([]),
-     parent: @coroutine.current_coroutine(),
+ #callsite(autofill(loc))
+-pub async fn[X] with_task_group(
++pub async fn[X] with_task_group_renamed(
+   f : async (TaskGroup[X]) -> X,
+   loc~ : SourceLoc,
+ ) -> X {
 *** Update File: <WORKDIR>/src/timer_test.mbt
 @@
  ///|
  async test "basic sleep" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      root.spawn_bg() <| () => {
@@ -2877,7 +2966,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          group.spawn_bg() <| () => {
            timer.wait()
 @@
-     (@env.now() - start + 50).to_int() / 150
+     (@async.now() - start + 50).to_int() / 150
    }
    let timer = @async.Timer(450)
 -  @async.with_task_group() <| group => {
@@ -2928,7 +3017,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "one way" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (client_read_from_server, server_write_to_client) = @pipe.pipe()
@@ -2937,7 +3026,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "echo" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let (client_read_from_server, server_write_to_client) = @pipe.pipe()
@@ -2983,7 +3072,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "wait basic" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -2992,7 +3081,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "wait cancelled" {
-   let buf = StringBuilder::new()
+   let buf = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      let task = root.spawn(() => {
@@ -3001,7 +3090,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "try_wait" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let task = root.spawn(no_wait=true, () => {
@@ -3010,7 +3099,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 *** Update File: <WORKDIR>/src/websocket/README.mbt.md
 @@
  ///|
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async test "WebSocket client example" {
 -  @async.with_task_group(group => {
 +  @async.with_task_group_renamed(group => {
@@ -3282,9 +3371,9 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        @async.sleep(300)
        log.push("300ms tick")
 @@
- ///|
+ #warnings("-fragile_catch_all")
  async test "with_timeout failure" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -3293,7 +3382,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "with_timeout timeout" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -3302,7 +3391,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "with_timeout nested1" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -3311,7 +3400,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "with_timeout nested2" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {
@@ -3319,7 +3408,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        log <+ "300ms tick\n"
 @@
  async test "with_timeout error_on_cancel" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -3328,7 +3417,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          log <+ "200ms tick\n"
 @@
  async test "with_timeout error-on-timeout" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
    let err = @test_util.expect_error_async <| () => {
 -    @async.with_task_group(root => {
 +    @async.with_task_group_renamed(root => {
@@ -3345,9 +3434,9 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        @async.sleep(200)
        log.push("200ms tick")
 @@
- ///|
+ #warnings("-fragile_catch_all")
  async test "with_timeout_opt failure" {
-   let log = StringBuilder::new()
+   let log = StringBuilder()
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
      root.spawn_bg() <| () => {

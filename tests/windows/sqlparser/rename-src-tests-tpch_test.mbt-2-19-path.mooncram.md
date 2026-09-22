@@ -11,7 +11,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'path' 'path_
 -  let input = @fs.read_file_to_string(path) catch {
 +  let input = @fs.read_file_to_string(path_renamed) catch {
      e => {
-       println("Read file error: \{e.to_string()}")
+       println("Read file error: \{Repr(e)}")
        panic()
 *** End Patch
 

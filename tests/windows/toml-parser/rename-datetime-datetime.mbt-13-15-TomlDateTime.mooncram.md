@@ -14,6 +14,26 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTi
    LocalDateTime(String)
    LocalDate(String)
 @@
+ 
+ ///|
+ #deprecated("compare with `==`; the Eq impl is unaffected")
+-pub extend TomlDateTime with Eq::{not_equal, equal}
++pub extend TomlDateTimeRenamed with Eq::{not_equal, equal}
+ 
+ ///|
+ #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+-pub extend TomlDateTime with Debug::{to_repr}
++pub extend TomlDateTimeRenamed with Debug::{to_repr}
+ 
+ ///|
+-pub extend TomlDateTime with Show::{to_string}
++pub extend TomlDateTimeRenamed with Show::{to_string}
+ 
+ ///|
+ #deprecated("render via the Show trait, e.g. `inspect` or `\\{value}`")
+-pub extend TomlDateTime with Show::{output}
++pub extend TomlDateTimeRenamed with Show::{output}
+ 
  ///|
  /// Render the variant for human-readable diagnostics:
  /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
@@ -22,43 +42,43 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTi
    match self {
      OffsetDateTime(s) =>
        logger <+
-*** Update File: <WORKDIR>/internal\qc_model\gen_test.mbt
+*** Update File: <WORKDIR>/internal\qc_model\generator.mbt
 @@
  }
  
  ///|
--fn local_date_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-+fn local_date_gen() -> @qc.Gen[@datetime.TomlDateTimeRenamed] {
-   date_string_gen().fmap(fn(value) { LocalDate(value) })
+-fn local_date_gen() -> @qc.Generator[@datetime.TomlDateTime] {
++fn local_date_gen() -> @qc.Generator[@datetime.TomlDateTimeRenamed] {
+   date_string_gen().map(value => LocalDate(value))
  }
  
  ///|
--fn local_time_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-+fn local_time_gen() -> @qc.Gen[@datetime.TomlDateTimeRenamed] {
-   time_string_gen().fmap(fn(value) { LocalTime(value) })
+-fn local_time_gen() -> @qc.Generator[@datetime.TomlDateTime] {
++fn local_time_gen() -> @qc.Generator[@datetime.TomlDateTimeRenamed] {
+   time_string_gen().map(value => LocalTime(value))
  }
  
  ///|
--fn local_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-+fn local_datetime_gen() -> @qc.Gen[@datetime.TomlDateTimeRenamed] {
-   @qc.liftA2(
-     fn(date : String, time : String) { LocalDateTime("\{date}T\{time}") },
-     date_string_gen(),
+-fn local_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
++fn local_datetime_gen() -> @qc.Generator[@datetime.TomlDateTimeRenamed] {
+   date_string_gen().zip_with(time_string_gen(), (date, time) => {
+     LocalDateTime("\{date}T\{time}")
+   })
 @@
  }
  
  ///|
--fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-+fn offset_datetime_gen() -> @qc.Gen[@datetime.TomlDateTimeRenamed] {
-   @qc.liftA3(
-     fn(date : String, time : String, offset : String) {
-       OffsetDateTime("\{date}T\{time}\{offset}")
+-fn offset_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
++fn offset_datetime_gen() -> @qc.Generator[@datetime.TomlDateTimeRenamed] {
+   date_string_gen().zip_with3(time_string_gen(), offset_suffix_gen(), (
+     date,
+     time,
 @@
  }
  
  ///|
--fn toml_datetime_gen() -> @qc.Gen[@datetime.TomlDateTime] {
-+fn toml_datetime_gen() -> @qc.Gen[@datetime.TomlDateTimeRenamed] {
+-fn toml_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
++fn toml_datetime_gen() -> @qc.Generator[@datetime.TomlDateTimeRenamed] {
    @qc.frequency([
      (2U, local_date_gen()),
      (2U, local_time_gen()),
@@ -92,7 +112,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTi
    match datetime {
      OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
        text.contains(".")
-*** Update File: <WORKDIR>/internal\qc_model\shrink_test.mbt
+*** Update File: <WORKDIR>/internal\qc_model\shrink.mbt
 @@
  
  ///|
@@ -101,12 +121,12 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTi
 +  values : Array[@datetime.TomlDateTimeRenamed],
 -) -> Iter[Array[@datetime.TomlDateTime]] {
 +) -> Iter[Array[@datetime.TomlDateTimeRenamed]] {
-   Array::makei(values.length(), fn(i) {
+   Array::makei(values.length(), i => {
      let next = values.copy()
      next.remove(i) |> ignore
 *** Update File: <WORKDIR>/internal\tokenize\token.mbt
 @@
-   IntegerToken(Int64, loc~ : Loc)
+   IntegerToken(Int64, loc~ : Loc, raw~ : String)
    FloatToken(Double, loc~ : Loc, raw~ : String)
    BooleanToken(Bool, loc~ : Loc)
 -  DateTimeToken(@datetime.TomlDateTime, loc~ : Loc)

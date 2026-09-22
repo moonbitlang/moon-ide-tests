@@ -48,9 +48,9 @@ $ run_moon_ide moon ide rename 'wait_read' 'wait_read_renamed' --loc 'src/intern
  #cfg(not(platform="windows"))
 -pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
 +pub async fn IoHandle::wait_read_renamed(handle : IoHandle) -> Unit {
+   guard! curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
      return ret
    }
@@ -71,7 +71,7 @@ $ run_moon_ide moon ide rename 'wait_read' 'wait_read_renamed' --loc 'src/intern
    } else {
      ret
 @@
-     @coroutine.protect_from_cancel(@coroutine.pause, resume_on_cancel=true)
+     @coroutine.pause_nocancel()
      conn
    } else if @os_error.is_nonblocking_io_error() {
 -    handle.wait_read()
@@ -89,6 +89,15 @@ $ run_moon_ide moon ide rename 'wait_read' 'wait_read_renamed' --loc 'src/intern
    } else if platform is MacOS {
      // MacOS/BSD, use `kqueue` with `EVFILT_PROC`
      if evloop.bus.register_pid(self.pid) {
+@@
+           // On Linux, if the child process is `ptrace`'ed,
+           // we may receive spurious wakeup message from the pidfd.
+           // Work around this by retrying wait.
+-          io.wait_read()
++          io.wait_read_renamed()
+         MacOS =>
+           // On MacOS, when `kevent` report `ESRCH`,
+           // there is a small window where `waitpid(.., WNOHANG)` may still return zero.
 *** End Patch
 
 ```

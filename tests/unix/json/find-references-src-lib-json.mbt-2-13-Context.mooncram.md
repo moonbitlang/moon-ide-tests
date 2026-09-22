@@ -18,22 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Context' --loc 'src/lib/json.mbt:2:13'
-Found 34 references for symbol 'Context':
-<WORKDIR>/src/lib/json.mbt:2:13-2:20:
-  | ///| (escaped)
-2 | priv struct Context { (escaped)
-  |             ^^^^^^^ (escaped)
-  |   original : Array[Char] (escaped)
-  |   rest : ArrayView[Char] (escaped)
-
+Found 33 references for symbol 'Context':
 <WORKDIR>/src/lib/json.mbt:25:13-25:20:
-   |     Some(decode) => decode (escaped)
+   |     Some(decode) => decode
    |     None => () (escaped)
-   |   } (escaped)
-25 |   let ctx = Context::{ (escaped)
-   |             ^^^^^^^ (escaped)
-   |     rest: input.to_array()[:], (escaped)
-   |     original: input.to_array(), (escaped)
+   |   }
+25 |   let ctx = Context::{
+   |             ^^^^^^^
+   |     rest: input.to_array()[:],
+   |     original: input.to_array(),
 
 <WORKDIR>/src/lib/json.mbt:53:13-53:20:
    |     Some(decode) => decode (escaped)

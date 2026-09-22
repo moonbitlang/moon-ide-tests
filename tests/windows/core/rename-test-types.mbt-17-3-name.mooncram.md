@@ -25,8 +25,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'name' 'name_renam
  #as_free_fn
  #as_free_fn(new, deprecated="Use `Test()` instead")
  pub fn Test::Test(name : String) -> Test {
--  { name, buffer: StringBuilder() }
-+  { name_renamed: name, buffer: StringBuilder() }
+-  { name, buffer: StringBuilder(), }
++  { name_renamed: name, buffer: StringBuilder(), }
  }
 *** End Patch
 

@@ -33,18 +33,18 @@ $ run_moon_ide moon ide rename 'start' 'start_renamed' --loc 'internal/tokenize/
  ///|
  /// Check if two locations are adjacent (end of first equals start of second).
  pub fn Loc::adjacent(self : Loc, other : Loc) -> Bool {
--  self.end.equal(other.start)
-+  self.end.equal(other.start_renamed)
+-  self.end == other.start
++  self.end == other.start_renamed
  }
  
  ///|
 *** Update File: <WORKDIR>/internal/tokenize/tokenize.mbt
 @@
- /// Default location for testing and compatibility
- pub fn default_loc() -> Loc {
-   let pos : @lexer.Position = { line: 1, column: 1 }
--  { start: pos, end: pos }
-+  { start_renamed: pos, end: pos }
+   // spelling both the annotation and the `T::` prefix trips
+   // unnecessary_annotation.
+   let pos = @lexer.Position::{ line: 1, column: 1, }
+-  { start: pos, end: pos, }
++  { start_renamed: pos, end: pos, }
  }
  
  ///|
@@ -52,8 +52,8 @@ $ run_moon_ide moon ide rename 'start' 'start_renamed' --loc 'internal/tokenize/
  ///|
  /// Create a location from lexer positions
  fn make_loc(start_pos : @lexer.Position, end_pos : @lexer.Position) -> Loc {
--  { start: start_pos, end: end_pos }
-+  { start_renamed: start_pos, end: end_pos }
+-  { start: start_pos, end: end_pos, }
++  { start_renamed: start_pos, end: end_pos, }
  }
  
  ///|

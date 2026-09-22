@@ -83,7 +83,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ThreadSet' 'Threa
 -  desc : ThreadSet,
 +  desc : ThreadSetRenamed,
  ) -> State {
-   { slot, cat, desc, hash: (slot, cat, desc).hash() }
+   { slot, cat, desc, hash: Hash::hash((slot, cat, desc)), }
  }
 *** Update File: <WORKDIR>/internal\regex_engine\automata\thread.mbt
 @@
@@ -220,8 +220,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ThreadSet' 'Threa
 -fn ThreadSet::find_first_match(self : ThreadSet) -> MarkSlotMap? {
 +fn ThreadSetRenamed::find_first_match(self : ThreadSetRenamed) -> MarkSlotMap? {
    match self {
-     Empty => None
-     Node(i={ no_match: true }, ..) => None
+     Empty | Node(i={ no_match: true, }, ..) => None
+     Node(l=Empty, t=End(marks), ..) => Some(marks)
 @@
  }
  
@@ -230,7 +230,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ThreadSet' 'Threa
 +fn ThreadSetRenamed::remove_matches(self : ThreadSetRenamed) -> ThreadSetRenamed {
    match self {
      Empty => Empty
-     Node(i={ no_match: true }, ..) => self
+     Node(i={ no_match: true, }, ..) => self
 @@
        match t {
          End(_) => l.remove_matches() + r.remove_matches()
@@ -246,7 +246,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ThreadSet' 'Threa
 +fn ThreadSetRenamed::split_at_first_match(self : ThreadSetRenamed) -> (ThreadSetRenamed, ThreadSetRenamed) {
    match self {
      Empty => (Empty, Empty)
-     Node(i={ no_match: true }, ..) => (self, Empty)
+     Node(i={ no_match: true, }, ..) => (self, Empty)
 @@
        ..
      ) => {
@@ -254,20 +254,35 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ThreadSet' 'Threa
 -      (ThreadSet::make_node(l, t, r1, p~), r2)
 +      (ThreadSetRenamed::make_node(l, t, r1, p~), r2)
      }
-     Node(l=Node(i={ no_match: false }, ..) as l, t~, r~, p~, ..) => {
+     Node(l=Node(i={ no_match: false, }, ..) as l, t~, r~, p~, ..) => {
        let (l1, l2) = l.split_at_first_match()
 -      (l1, ThreadSet::make_node(l2, t, r, p~))
 +      (l1, ThreadSetRenamed::make_node(l2, t, r, p~))
      }
    }
  }
- 
- ///|
+@@
+ /// consumes a variable number of characters; limiting deduplication to each
+ /// wrapper separately retains one thread per partition of the input and
+ /// makes the set grow exponentially.
 -fn ThreadSet::remove_duplicates(self : ThreadSet, next : Expr) -> ThreadSet {
 +fn ThreadSetRenamed::remove_duplicates(self : ThreadSetRenamed, next : Expr) -> ThreadSetRenamed {
    let seen = @hashset.HashSet([])
+   self.remove_duplicates_with_seen(next, seen)
+ }
+ 
+ ///|
+-fn ThreadSet::remove_duplicates_with_seen(
++fn ThreadSetRenamed::remove_duplicates_with_seen(
+-  self : ThreadSet,
++  self : ThreadSetRenamed,
+   next : Expr,
+   seen : @hashset.HashSet[ExprId],
+-) -> ThreadSet {
++) -> ThreadSetRenamed {
    for thread in self; result = ts_empty {
      match thread {
+       End(_) => break result + ts_one(thread)
 @@
  }
  

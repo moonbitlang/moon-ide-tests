@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'LexerError' --loc 'src/lexer.mbt:2:10'
-Found 11 references for symbol 'LexerError':
+Found 12 references for symbol 'LexerError':
 <WORKDIR>/src/export.mbt:3:14-3:24:
   | ///|
   | pub suberror SqlParserError {
@@ -27,16 +27,9 @@ Found 11 references for symbol 'LexerError':
   |   ParserError(ParserError)
   | } derive(Debug)
 
-<WORKDIR>/src/lexer.mbt:2:10-2:20:
-  | ///|
-2 | suberror LexerError {
-  |          ^^^^^^^^^^
-  |   UnterminatedString
-  |   UnknownCharacter(Char)
-
 <WORKDIR>/src/lexer.mbt:58:25-58:35:
    | pub fn tokenize(
-   |   dialect? : &Dialect = MySQL::{  },
+   |   dialect? : &Dialect = MySQL::{ },
    |   input : String,
 58 | ) -> Array[Token] raise LexerError {
    |                         ^^^^^^^^^^
@@ -58,7 +51,7 @@ Found 11 references for symbol 'LexerError':
     |   input : StringView,
 476 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
-    |   let result = StringBuilder::new()
+    |   let result = StringBuilder()
     |   let rest = for rest = input {
 
 <WORKDIR>/src/lexer.mbt:513:19-513:29:
@@ -76,7 +69,7 @@ Found 11 references for symbol 'LexerError':
     |   input : StringView,
 523 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
-    |   let result = StringBuilder::new()
+    |   let result = StringBuilder()
     |   let rest = for rest = input {
 
 <WORKDIR>/src/lexer.mbt:556:19-556:29:
@@ -94,7 +87,7 @@ Found 11 references for symbol 'LexerError':
     |   input : StringView,
 566 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
-    |   let result = StringBuilder::new()
+    |   let result = StringBuilder()
     |   let rest = for rest = input {
 
 <WORKDIR>/src/lexer.mbt:587:19-587:29:
@@ -106,13 +99,31 @@ Found 11 references for symbol 'LexerError':
     |     }
     |   }
 
+<WORKDIR>/src/lexer.mbt:853:12-853:22:
+    | }
+    | 
+    | ///|
+853 | pub extend LexerError with Debug::{to_repr}
+    |            ^^^^^^^^^^
+    | 
+    | ///|
+
 <WORKDIR>/src/show.mbt:584:19-584:29:
     | }
     | 
     | ///|
-584 | pub impl Show for LexerError with output(self, logger) {
+584 | pub impl Show for LexerError with fn output(self, logger) {
     |                   ^^^^^^^^^^
     |   show_compact_debug(self, logger)
     | }
+
+<WORKDIR>/src/show.mbt:761:12-761:22:
+    | pub extend Keyword with Show::{to_string, output}
+    | 
+    | ///|
+761 | pub extend LexerError with Show::{to_string, output}
+    |            ^^^^^^^^^^
+    | 
+    | ///|
 
 ```

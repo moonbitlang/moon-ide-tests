@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'T' --loc 'src\IndexMap_test.mbt:17:19'
-Found 116 references for symbol 'T':
+Found 115 references for symbol 'T':
 <WORKDIR>/src\IndexMap.mbt:27:62-27:63:
    | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)
    | /// inspect(map.capacity(), content="16")
@@ -1037,14 +1037,5 @@ Found 116 references for symbol 'T':
      |                       ^
      | 
      |   // 验证初始容量
-
-<WORKDIR>/src\types.mbt:54:8-54:9:
-   | /// map.set(3, "updated")
-   | /// assert_eq(map.get(3), Some("updated"))
-   | /// assert_eq(map.get_at(0), (3, "updated"))  // Access by insertion order
-54 | struct T[K, V] {
-   |        ^
-   |   core : IndexMapCore[K, V] // 包含核心数据结构
-   |   mut size : Int // 元素数量
 
 ```

@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'Bucket' --loc 'src\types.mbt:17:13'
-Found 2 references for symbol 'Bucket':
-<WORKDIR>/src\types.mbt:17:13-17:19:
-   | 
-   | ///|
-   | /// 桶结构，包含键值对信息和链表指针
-17 | priv struct Bucket[K, V] {
-   |             ^^^^^^
-   |   hash : Int // 键的哈希值（缓存以避免重复计算）
-   |   key : K // 键
-
+Found 1 references for symbol 'Bucket':
 <WORKDIR>/src\types.mbt:29:23-29:29:
    | /// IndexMap核心结构，包含所有数据组织功能
    | priv struct IndexMapCore[K, V] {

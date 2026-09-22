@@ -17,8 +17,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'scheme' 'scheme_re
  ///
  /// A new `Uri` with all components set to their default values.
  pub fn empty() -> Uri {
--  { scheme: None, authority: None, path: "", query: None, fragment: None }
-+  { scheme_renamed: None, authority: None, path: "", query: None, fragment: None }
+-  { scheme: None, authority: None, path: "", query: None, fragment: None, }
++  { scheme_renamed: None, authority: None, path: "", query: None, fragment: None, }
  }
  
  ///|
@@ -26,8 +26,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'scheme' 'scheme_re
  /// Parse URI with known scheme
  fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError {
    let mut uri = empty()
--  uri = { ..uri, scheme: Some(scheme) }
-+  uri = { ..uri, scheme_renamed: Some(scheme) }
+-  uri = { ..uri, scheme: Some(scheme), }
++  uri = { ..uri, scheme_renamed: Some(scheme), }
  
    // Split by fragment first
    let parts_fragment = rest.split("#").collect()
@@ -53,8 +53,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'scheme' 'scheme_re
  ///
  /// A new `Uri` with the specified scheme
  pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
--  { ..self, scheme: new_scheme }
-+  { ..self, scheme_renamed: new_scheme }
+-  { ..self, scheme: new_scheme, }
++  { ..self, scheme_renamed: new_scheme, }
  }
  
  ///|

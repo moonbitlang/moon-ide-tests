@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'sql' --loc 'src/prepare.mbt:6:7'
-Found 2 references for symbol 'sql':
-<WORKDIR>/src/prepare.mbt:6:7-6:10:
-  | 
-  | ///|
-  | test "PREPARE simple SELECT" {
-6 |   let sql = "PREPARE stmt AS SELECT * FROM users WHERE id = ?"
-  |       ^^^
-  |   let stmt = parse_sql(sql)[0] |> pretty_print
-  |   inspect(
-
+Found 1 references for symbol 'sql':
 <WORKDIR>/src/prepare.mbt:7:24-7:27:
   | ///|
   | test "PREPARE simple SELECT" {

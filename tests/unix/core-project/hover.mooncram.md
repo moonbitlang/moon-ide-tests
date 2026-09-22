@@ -24,7 +24,6 @@ type CoreIntArray = Array[Int]
 type CoreScores = @hashmap.HashMap[String, Int]
                   ^^^^^^^^^^^^^^^^
                   ```moonbit
-                  #alias(T, deprecated="`T` is deprecated, use `HashMap` instead")
                   type @hashmap.HashMap[K, V]
                   ```
                   ---
@@ -54,7 +53,7 @@ type CoreScores = @hashmap.HashMap[String, Int]
 type CoreIntList = @list.List[Int]
                    ^^^^^^^^^^
                    ```moonbit
-                   #alias(T, deprecated="`T` is deprecated, use `List` instead")
+                   #unsafe_cycle_free
                    enum @list.List[A] {
                      Empty
                      More(A, tail~ : @list.List[A])
@@ -194,11 +193,8 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   builder.write_string(text)
           ^^^^^^^^^^^^
           ```moonbit
-          fn Logger::write_string(self : StringBuilder, str : String) -> Unit
+          fn StringBuilder::write_string(self : StringBuilder, str : String) -> Unit
           ```
-          ---
-          
-           Writes a string to the StringBuilder.
   (text.length(), text.split(" ").to_array(), builder.to_string())
 }
 ```
@@ -297,7 +293,9 @@ pub fn exercise_int_core(n : Int) -> String {
     
      * `self` : The integer whose absolute value is to be computed.
     
-     Returns the absolute value of the integer.
+     Returns the absolute value of the integer. When the input is
+     `@int.min_value` (-2147483648), returns `@int.min_value` itself, since its
+     absolute value is not representable as an `Int`.
     
      Example:
     
@@ -607,7 +605,7 @@ $ run_moon_ide moon ide hover 'filter' --loc 'core_ide_cases.mbt:73:4'
    
     # Returns
    
-    A new iterator that only contains the elements for which the predicate function returns `IterContinue`.
+    A new iterator that only contains the elements for which the predicate function returns `true`.
    
     # Note
     The old iterator `self` must not be used again after calling `filter`.

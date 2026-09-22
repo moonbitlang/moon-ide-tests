@@ -26,7 +26,7 @@ $ run_moon_ide moon ide rename 'obj' 'obj_renamed' --loc 'src/show.mbt:2:34'
 +fn[T : Debug] show_compact_debug(obj_renamed : T, logger : &Logger) -> Unit {
 -  let input = @debug.to_string(obj)
 +  let input = @debug.to_string(obj_renamed)
-   let buffer = StringBuilder::new()
+   let buffer = StringBuilder()
    let mut in_string = false
    let mut escaped = false
 *** End Patch
