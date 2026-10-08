@@ -3,14 +3,14 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SourcePath' 'SourcePathRenamed' --loc 'warren\path\sourcetree_path.mbt:5:8'
 *** Begin Patch
-*** Update File: <WORKDIR>/warren\main.mbt
+*** Update File: <WORKDIR>/warren\build.mbt
 @@
  ///|
 -using @path {type SourcePath, type Path}
 +using @path {type SourcePathRenamed, type Path}
  
  ///|
- using @devhub {type BroadcastMsg, type Devhub}
+ let build_entry_script =
 *** Update File: <WORKDIR>/warren\path\artifact_path.mbt
 @@
  ///|
@@ -26,7 +26,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SourcePath' 'S
  ///|
 -pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
 +pub fn ArtifactPath::new(root : SourcePathRenamed) -> ArtifactPath {
-   { root, relative: "", mod_path: None }
+   { root, relative: "", mod_path: None, }
  }
  
 @@

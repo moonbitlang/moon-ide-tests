@@ -18,8 +18,8 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
-Found 12 references for symbol 'SourcePath':
-<WORKDIR>/warren/main.mbt:2:19-2:29:
+Found 11 references for symbol 'SourcePath':
+<WORKDIR>/warren/build.mbt:2:19-2:29:
   | ///|
 2 | using @path {type SourcePath, type Path}
   |                   ^^^^^^^^^^
@@ -40,7 +40,7 @@ Found 12 references for symbol 'SourcePath':
    | ///|
 42 | pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
    |                                 ^^^^^^^^^^
-   |   { root, relative: "", mod_path: None }
+   |   { root, relative: "", mod_path: None, }
    | }
 
 <WORKDIR>/warren/path/artifact_path.mbt:57:6-57:16:
@@ -51,15 +51,6 @@ Found 12 references for symbol 'SourcePath':
    |      ^^^^^^^^^^
    |   let mut acc = self.root
    |   acc = acc.join(
-
-<WORKDIR>/warren/path/sourcetree_path.mbt:5:8-5:18:
-  | pub type Path = @p.Path
-  | 
-  | ///|
-5 | struct SourcePath(String) derive(Eq, Compare, Hash)
-  |        ^^^^^^^^^^
-  | 
-  | ///|
 
 <WORKDIR>/warren/path/sourcetree_path.mbt:8:20-8:30:
   | struct SourcePath(String) derive(Eq, Compare, Hash)

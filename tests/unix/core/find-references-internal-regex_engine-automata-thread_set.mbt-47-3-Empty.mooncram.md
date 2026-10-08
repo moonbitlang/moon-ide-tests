@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Empty' --loc 'internal/regex_engine/automata/thread_set.mbt:47:3'
-Found 31 references for symbol 'Empty':
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:47:3-47:8:
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-   | priv enum ThreadSet {
-47 |   Empty
-   |   ^^^^^
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-
+Found 30 references for symbol 'Empty':
 <WORKDIR>/internal/regex_engine/automata/thread_set.mbt:66:11-66:16:
    | 
    | ///|
@@ -158,142 +149,142 @@ Found 31 references for symbol 'Empty':
     | ///|
     | fn ThreadSet::find_first_match(self : ThreadSet) -> MarkSlotMap? {
     |   match self {
-164 |     Empty => None
+164 |     Empty | Node(i={ no_match: true, }, ..) => None
     |     ^^^^^
-    |     Node(i={ no_match: true }, ..) => None
     |     Node(l=Empty, t=End(marks), ..) => Some(marks)
+    |     Node(l~, t~, r~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:166:12-166:17:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:165:12-165:17:
+    | fn ThreadSet::find_first_match(self : ThreadSet) -> MarkSlotMap? {
     |   match self {
-    |     Empty => None
-    |     Node(i={ no_match: true }, ..) => None
-166 |     Node(l=Empty, t=End(marks), ..) => Some(marks)
+    |     Empty | Node(i={ no_match: true, }, ..) => None
+165 |     Node(l=Empty, t=End(marks), ..) => Some(marks)
     |            ^^^^^
     |     Node(l~, t~, r~, ..) =>
     |       match l.find_first_match() {
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:182:5-182:10:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:181:5-181:10:
     | ///|
     | fn ThreadSet::remove_matches(self : ThreadSet) -> ThreadSet {
     |   match self {
-182 |     Empty => Empty
+181 |     Empty => Empty
     |     ^^^^^
-    |     Node(i={ no_match: true }, ..) => self
+    |     Node(i={ no_match: true, }, ..) => self
     |     Node(l~, t~, r~, p~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:182:14-182:19:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:181:14-181:19:
     | ///|
     | fn ThreadSet::remove_matches(self : ThreadSet) -> ThreadSet {
     |   match self {
-182 |     Empty => Empty
+181 |     Empty => Empty
     |              ^^^^^
-    |     Node(i={ no_match: true }, ..) => self
+    |     Node(i={ no_match: true, }, ..) => self
     |     Node(l~, t~, r~, p~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:196:5-196:10:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:195:5-195:10:
     | ///|
     | fn ThreadSet::split_at_first_match(self : ThreadSet) -> (ThreadSet, ThreadSet) {
     |   match self {
-196 |     Empty => (Empty, Empty)
+195 |     Empty => (Empty, Empty)
     |     ^^^^^
-    |     Node(i={ no_match: true }, ..) => (self, Empty)
-    |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+    |     Node(i={ no_match: true, }, ..) => (self, Empty)
+    |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:196:15-196:20:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:195:15-195:20:
     | ///|
     | fn ThreadSet::split_at_first_match(self : ThreadSet) -> (ThreadSet, ThreadSet) {
     |   match self {
-196 |     Empty => (Empty, Empty)
+195 |     Empty => (Empty, Empty)
     |               ^^^^^
-    |     Node(i={ no_match: true }, ..) => (self, Empty)
-    |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+    |     Node(i={ no_match: true, }, ..) => (self, Empty)
+    |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:196:22-196:27:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:195:22-195:27:
     | ///|
     | fn ThreadSet::split_at_first_match(self : ThreadSet) -> (ThreadSet, ThreadSet) {
     |   match self {
-196 |     Empty => (Empty, Empty)
+195 |     Empty => (Empty, Empty)
     |                      ^^^^^
-    |     Node(i={ no_match: true }, ..) => (self, Empty)
-    |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+    |     Node(i={ no_match: true, }, ..) => (self, Empty)
+    |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:197:46-197:51:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:196:47-196:52:
     | fn ThreadSet::split_at_first_match(self : ThreadSet) -> (ThreadSet, ThreadSet) {
     |   match self {
     |     Empty => (Empty, Empty)
-197 |     Node(i={ no_match: true }, ..) => (self, Empty)
-    |                                              ^^^^^
-    |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+196 |     Node(i={ no_match: true, }, ..) => (self, Empty)
+    |                                               ^^^^^
+    |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
     |       (l, r)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:198:12-198:17:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:197:12-197:17:
     |   match self {
     |     Empty => (Empty, Empty)
-    |     Node(i={ no_match: true }, ..) => (self, Empty)
-198 |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+    |     Node(i={ no_match: true, }, ..) => (self, Empty)
+197 |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
     |            ^^^^^
     |       (l, r)
     |     Node(
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:201:9-201:14:
-    |     Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:200:9-200:14:
+    |     Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
     |       (l, r)
     |     Node(
-201 |       l=Empty
+200 |       l=Empty
     |         ^^^^^
-    |       | Node(i={ no_match: true }, ..) as l,
+    |       | Node(i={ no_match: true, }, ..) as l,
     |       t=Exp(_)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:268:26-268:31:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:299:26-299:31:
     |   Iter::new(() => {
     |     for curr = node {
     |       match curr {
-268 |         Node(t=thread, l=Empty, r=right, ..) => {
+299 |         Node(t=thread, l=Empty, r=right, ..) => {
     |                          ^^^^^
     |           node = right
     |           break Some(thread)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:276:9-276:14:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:307:9-307:14:
     |           parents.push((thread, right))
     |           continue left
     |         }
-276 |         Empty if parents.pop() is Some((thread, right)) => {
+307 |         Empty if parents.pop() is Some((thread, right)) => {
     |         ^^^^^
     |           node = right
     |           break Some(thread)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:280:9-280:14:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:311:9-311:14:
     |           node = right
     |           break Some(thread)
     |         }
-280 |         Empty => break None
+311 |         Empty => break None
     |         ^^^^^
     |       }
     |     }
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:301:5-301:10:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:332:5-332:10:
     | ///|
     | fn ThreadSet::map(self : ThreadSet, f : (Thread) -> Thread) -> ThreadSet {
     |   match self {
-301 |     Empty => Empty
+332 |     Empty => Empty
     |     ^^^^^
     |     Node(l~, t~, r~, p~, ..) => {
     |       let l2 = l.map(f)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:301:14-301:19:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:332:14-332:19:
     | ///|
     | fn ThreadSet::map(self : ThreadSet, f : (Thread) -> Thread) -> ThreadSet {
     |   match self {
-301 |     Empty => Empty
+332 |     Empty => Empty
     |              ^^^^^
     |     Node(l~, t~, r~, p~, ..) => {
     |       let l2 = l.map(f)
 
-<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:312:28-312:33:
+<WORKDIR>/internal/regex_engine/automata/thread_set.mbt:343:28-343:33:
     | }
     | 
     | ///|
-312 | let ts_empty : ThreadSet = Empty
+343 | let ts_empty : ThreadSet = Empty
     |                            ^^^^^
     | 
     | ///|

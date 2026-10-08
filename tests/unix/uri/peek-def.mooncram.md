@@ -34,12 +34,12 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson) (escaped)
    |  (escaped)
    | ///| (escaped)
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI (escaped)
-   | /// Contains optional user info, required host, and optional port (escaped)
-   | pub struct Authority { (escaped)
-   |   userinfo : String? (escaped)
-   |   host : String (escaped)
-   |   port : Int? (escaped)
 ```
 
 ```mooncram
@@ -59,13 +59,13 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson) (escaped)
    |  (escaped)
    | ///| (escaped)
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI (escaped)
    | /// Contains optional user info, required host, and optional port (escaped)
-   | pub struct Authority { (escaped)
-   |   userinfo : String? (escaped)
-   |   host : String (escaped)
-   |   port : Int? (escaped)
-   | } derive(ToJson) (escaped)
 ```
 
 ```mooncram
@@ -101,7 +101,7 @@ Definition found at file <WORKDIR>/uri.mbt
     | /// - `UriError::InvalidScheme` if the scheme is malformed (escaped)
     | /// - `UriError::InvalidAuthority` if the authority is malformed (escaped)
     | /// - Other `UriError` variants for various parsing failures (escaped)
-127 | pub fn parse(uri_str : String) -> Uri raise UriError { (escaped)
+140 | pub fn parse(uri_str : String) -> Uri raise UriError {
     |        ^^^^^ (escaped)
     |   if uri_str.length() == 0 { (escaped)
     |     raise EmptyUri (escaped)
@@ -162,10 +162,10 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson) (escaped)
    |  (escaped)
    | ///| (escaped)
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI (escaped)
-   | /// Contains optional user info, required host, and optional port (escaped)
-   | pub struct Authority { (escaped)
-   |   userinfo : String? (escaped)
-   |   host : String (escaped)
-   |   port : Int? (escaped)
 ```

@@ -30,11 +30,11 @@ $ run_moon_ide moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 
    read_buf : @io.ReaderBuffer
  }
 @@
- ///
- /// `w` is temporary: it can only be passed to one `@process.run` call.
- /// However, it is safe to pass `w` to both `stdout` and `stderr` of the same process.
--pub fn read_from_process() -> (ReadFromProcess, &ProcessOutput) raise {
-+pub fn read_from_process() -> (ReadFromProcessRenamed, &ProcessOutput) raise {
+ /// the read end `r` will fail to observe EOF from children process.
+ pub fn read_from_process(
+   shared? : Bool = false,
+-) -> (ReadFromProcess, &ProcessOutput) raise {
++) -> (ReadFromProcessRenamed, &ProcessOutput) raise {
    let context = "@process.read_from_process()"
    let (r, w) = @fd_util.pipe(
      read_end_is_async=true,
@@ -59,6 +59,34 @@ $ run_moon_ide moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 
    self,
    buf,
    offset~,
+@@
+ }
+ 
+ ///|
+-pub extend ReadFromProcess with @io.Reader::{
++pub extend ReadFromProcessRenamed with @io.Reader::{
+   read,
+   drop,
+   read_exactly,
+*** Update File: <WORKDIR>/src/shell/execute.mbt
+@@
+ 
+ ///|
+ async fn read_bounded(
+-  reader : @process.ReadFromProcess,
++  reader : @process.ReadFromProcessRenamed,
+   captured : Ref[Int],
+   limit : Int,
+   stream : String,
+@@
+ /// bound. A CRLF terminator's CR is punctuation, not content, and so does not
+ /// consume the line's allowance.
+ async fn read_lines(
+-  reader : @process.ReadFromProcess,
++  reader : @process.ReadFromProcessRenamed,
+   on_line : async (String) -> Unit,
+   limit : Int,
+ ) -> Unit {
 *** End Patch
 
 ```

@@ -2,14 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'read_and_parse' --loc 'src\tests\tpch_test.mbt:2:4'
-Found 23 references for symbol 'read_and_parse':
-<WORKDIR>/src\tests\tpch_test.mbt:2:4-2:18:
-  | ///|
-2 | fn read_and_parse(path : String) -> @sqlparser.Statements {
-  |    ^^^^^^^^^^^^^^
-  |   let input = @fs.read_file_to_string(path) catch {
-  |     e => {
-
+Found 22 references for symbol 'read_and_parse':
 <WORKDIR>/src\tests\tpch_test.mbt:23:14-23:28:
    | 
    | ///|

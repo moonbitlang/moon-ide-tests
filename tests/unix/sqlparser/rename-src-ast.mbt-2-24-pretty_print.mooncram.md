@@ -32,8 +32,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  
  test "BigQuery named parameter" {
    let tokens = "SELECT * FROM users WHERE id = @user_id;"
--  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -41,8 +41,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "BigQuery positional parameter" {
    let tokens = "SELECT * FROM users WHERE id = ?;"
--  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -50,8 +50,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "BigQuery mixed parameters" {
    let tokens = "SELECT * FROM users WHERE id = @user_id AND age > ?;"
--  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -59,8 +59,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "BigQuery multiple named parameters" {
    let tokens = "SELECT @field FROM @table WHERE @condition = @value;"
--  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -68,8 +68,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  
  test "Named parameters treated as identifiers in MySQL" {
    let tokens = "SELECT @user_id FROM users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -818,8 +818,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "SubQuery" {
    let tokens = "SELECT sub FROM (SELECT name FROM users WHERE active = true) AS sub;"
--  let stmt = parse_sql(tokens, dialect=Postgres::{  })[0] |> pretty_print
-+  let stmt = parse_sql(tokens, dialect=Postgres::{  })[0] |> pretty_print_renamed
+-  let stmt = parse_sql(tokens, dialect=Postgres::{ })[0] |> pretty_print
++  let stmt = parse_sql(tokens, dialect=Postgres::{ })[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -953,8 +953,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Null, true and false" {
    let tokens = "SELECT NULL, true, false FROM t1;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens)[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens)[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens)[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens)[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1395,8 +1395,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW TABLES" {
    let tokens = "SHOW TABLES;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1404,8 +1404,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW COLUMNS FROM table" {
    let tokens = "SHOW COLUMNS FROM users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1413,8 +1413,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW TABLES LIKE pattern" {
    let tokens = "SHOW TABLES LIKE 'user%';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1422,8 +1422,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL with backticks in SHOW" {
    let tokens = "SHOW COLUMNS FROM `table name`;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1431,8 +1431,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL LOCK TABLES" {
    let tokens = "LOCK TABLES users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1440,8 +1440,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL UNLOCK TABLES" {
    let tokens = "UNLOCK TABLES;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1449,8 +1449,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL DIV operator" {
    let tokens = "SELECT 10 DIV 3 FROM test;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1458,8 +1458,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW VARIABLES" {
    let tokens = "SHOW VARIABLES;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1467,8 +1467,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW GLOBAL STATUS" {
    let tokens = "SHOW GLOBAL STATUS;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1476,8 +1476,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW FULL PROCESSLIST" {
    let tokens = "SHOW FULL PROCESSLIST;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1485,8 +1485,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW CREATE TABLE" {
    let tokens = "SHOW CREATE TABLE users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1494,8 +1494,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SHOW EXTENDED COLUMNS" {
    let tokens = "SHOW EXTENDED COLUMNS FROM users LIKE 'name%';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1503,8 +1503,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SET session variable" {
    let tokens = "SET SESSION sql_mode = 'STRICT_TRANS_TABLES';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1512,8 +1512,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SET global variable" {
    let tokens = "SET GLOBAL max_connections = 200;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1521,8 +1521,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SET user variable" {
    let tokens = "SET @counter = 1;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1530,8 +1530,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SET multiple variables" {
    let tokens = "SET @name = 'John', @age = 30, @salary = 50000.50;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1539,8 +1539,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL SET local variable" {
    let tokens = "SET autocommit = 0;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1548,8 +1548,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL REPLACE INTO statement" {
    let tokens = "REPLACE INTO users (id, name) VALUES (1, 'John');"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1557,8 +1557,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL REPLACE INTO with multiple values" {
    let tokens = "REPLACE INTO products (id, name, price) VALUES (1, 'Widget', 10.50), (2, 'Gadget', 15.00);"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1566,8 +1566,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL INSERT OR REPLACE statement" {
    let tokens = "INSERT OR REPLACE INTO settings (key, value) VALUES ('theme', 'dark');"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1575,8 +1575,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL INSERT with ON DUPLICATE KEY UPDATE" {
    let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON DUPLICATE KEY UPDATE name = 'John Updated', email = 'john.new@example.com';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1584,8 +1584,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL INSERT single assignment ON DUPLICATE KEY UPDATE" {
    let tokens = "INSERT INTO counters (id, count) VALUES (1, 1) ON DUPLICATE KEY UPDATE count = count + 1;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1593,8 +1593,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL REPLACE with ON DUPLICATE KEY UPDATE" {
    let tokens = "REPLACE INTO settings (setting_key, setting_value) VALUES ('theme', 'dark') ON DUPLICATE KEY UPDATE setting_value = 'light';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1602,8 +1602,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL basic LOAD DATA statement" {
    let tokens = "LOAD DATA INFILE '/tmp/data.csv' INTO TABLE users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1611,8 +1611,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL LOAD DATA with LOCAL and REPLACE" {
    let tokens = "LOAD DATA LOCAL INFILE '/tmp/users.txt' REPLACE INTO TABLE employees;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1620,8 +1620,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL LOAD DATA with FIELDS options" {
    let tokens = "LOAD DATA INFILE '/data/products.csv' INTO TABLE products CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"';"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1629,8 +1629,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL LOAD DATA with LINES options" {
    let tokens = "LOAD DATA INFILE '/tmp/logs.txt' INTO TABLE logs LINES STARTING BY '>>>' TERMINATED BY '\n' IGNORE 5 LINES;"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1638,8 +1638,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "MySQL LOAD DATA with column list and SET" {
    let tokens = "LOAD DATA INFILE '/data/sales.csv' IGNORE INTO TABLE sales FIELDS TERMINATED BY ',' (date, amount, customer) SET created_at = now();"
--  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1648,8 +1648,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Question mark placeholder in WHERE clause" {
    let sql = "SELECT * FROM users WHERE id = ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1657,8 +1657,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Multiple question mark placeholders" {
    let sql = "SELECT * FROM users WHERE age > ? AND name = ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1666,8 +1666,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Question mark placeholder in INSERT" {
    let sql = "INSERT INTO users (name, age) VALUES (?, ?);"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1675,8 +1675,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Question mark placeholder in UPDATE" {
    let sql = "UPDATE users SET name = ?, age = ? WHERE id = ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1684,8 +1684,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Question mark placeholder in LIMIT" {
    let sql = "SELECT * FROM users LIMIT ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1693,8 +1693,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Question mark placeholder in LIMIT and OFFSET" {
    let sql = "SELECT * FROM users LIMIT ? OFFSET ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1702,8 +1702,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL $1 numbered placeholder" {
    let sql = "SELECT * FROM users WHERE id = $1;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1711,8 +1711,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL multiple numbered placeholders" {
    let sql = "SELECT * FROM users WHERE age > $1 AND name = $2;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1720,8 +1720,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL numbered placeholders in INSERT" {
    let sql = "INSERT INTO users (name, age, email) VALUES ($1, $2, $3);"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content="INSERT INTO users (name, age, email) VALUES ($1, $2, $3);",
@@ -1729,8 +1729,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL numbered placeholders in LIMIT OFFSET" {
    let sql = "SELECT * FROM users LIMIT $1 OFFSET $2;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1738,8 +1738,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL numbered placeholders out of order" {
    let sql = "SELECT * FROM users WHERE id = $2 AND name = $1;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1747,8 +1747,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Colon named parameter" {
    let sql = "SELECT * FROM users WHERE name = :username;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1756,8 +1756,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Multiple colon named parameters" {
    let sql = "SELECT * FROM users WHERE age > :min_age AND city = :city_name;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1765,8 +1765,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Colon named parameters in INSERT" {
    let sql = "INSERT INTO users (name, age) VALUES (:name, :age);"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(stmt, content="INSERT INTO users (name, age) VALUES (:name, :age);")
  }
  
@@ -1774,8 +1774,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "At-sign named parameter" {
    let sql = "SELECT * FROM users WHERE name = @username;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1783,8 +1783,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Multiple at-sign named parameters" {
    let sql = "SELECT * FROM users WHERE age > @min_age AND city = @city_name;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1792,8 +1792,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Placeholder in function call" {
    let sql = "SELECT UPPER(?) FROM users;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1801,8 +1801,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Placeholder in expression" {
    let sql = "SELECT * FROM users WHERE age + ? > 100;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1810,8 +1810,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Placeholder in BETWEEN clause" {
    let sql = "SELECT * FROM users WHERE age BETWEEN ? AND ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1819,8 +1819,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Placeholder in IN list" {
    let sql = "SELECT * FROM users WHERE id IN (?, ?, ?);"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1828,8 +1828,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL numbered placeholder in CASE expression" {
    let sql = "SELECT CASE WHEN age > $1 THEN 'old' ELSE 'young' END FROM users;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1837,8 +1837,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Named parameter in JOIN condition" {
    let sql = "SELECT * FROM users u JOIN orders o ON u.id = o.user_id WHERE o.total > :min_total;"
--  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1846,12 +1846,12 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
    let sql1 = "SELECT * FROM users WHERE id = ?;"
    let sql2 = "SELECT * FROM users WHERE id = $1;"
    let sql3 = "SELECT * FROM users WHERE id = :user_id;"
--  let stmt1 = parse_sql(dialect=MySQL::{  }, sql1).stmts[0] |> pretty_print
-+  let stmt1 = parse_sql(dialect=MySQL::{  }, sql1).stmts[0] |> pretty_print_renamed
--  let stmt2 = parse_sql(dialect=Postgres::{  }, sql2).stmts[0] |> pretty_print
-+  let stmt2 = parse_sql(dialect=Postgres::{  }, sql2).stmts[0] |> pretty_print_renamed
--  let stmt3 = parse_sql(dialect=Postgres::{  }, sql3).stmts[0] |> pretty_print
-+  let stmt3 = parse_sql(dialect=Postgres::{  }, sql3).stmts[0] |> pretty_print_renamed
+-  let stmt1 = parse_sql(dialect=MySQL::{ }, sql1).stmts[0] |> pretty_print
++  let stmt1 = parse_sql(dialect=MySQL::{ }, sql1).stmts[0] |> pretty_print_renamed
+-  let stmt2 = parse_sql(dialect=Postgres::{ }, sql2).stmts[0] |> pretty_print
++  let stmt2 = parse_sql(dialect=Postgres::{ }, sql2).stmts[0] |> pretty_print_renamed
+-  let stmt3 = parse_sql(dialect=Postgres::{ }, sql3).stmts[0] |> pretty_print
++  let stmt3 = parse_sql(dialect=Postgres::{ }, sql3).stmts[0] |> pretty_print_renamed
    inspect(
      stmt1,
      content=(
@@ -1859,8 +1859,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "Placeholder in DELETE statement" {
    let sql = "DELETE FROM users WHERE id = ?;"
--  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1951,8 +1951,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL LISTEN" {
    let tokens = "LISTEN my_channel;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1960,8 +1960,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL NOTIFY without payload" {
    let tokens = "NOTIFY my_channel;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1969,8 +1969,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL NOTIFY with payload" {
    let tokens = "NOTIFY my_channel, 'hello world';"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1978,8 +1978,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  
  test "PostgreSQL ARRAY syntax with integers" {
    let tokens = "SELECT ARRAY[1, 2, 3, 4] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1987,8 +1987,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL bracket array syntax" {
    let tokens = "SELECT [1, 2, 3] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -1996,8 +1996,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL empty ARRAY" {
    let tokens = "SELECT ARRAY[] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2005,8 +2005,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL ARRAY with strings" {
    let tokens = "SELECT ARRAY['hello', 'world'] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2014,8 +2014,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL nested arrays" {
    let tokens = "SELECT ARRAY[ARRAY[1, 2], ARRAY[3, 4]] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2023,8 +2023,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL mixed bracket and ARRAY syntax" {
    let tokens = "SELECT ARRAY[[1, 2], [3, 4]] FROM test;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2032,8 +2032,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  
  test "PostgreSQL JSON extract operator" {
    let tokens = "SELECT data -> 'key' FROM json_table;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2041,8 +2041,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL JSON extract text operator" {
    let tokens = "SELECT data ->> 'key' FROM json_table;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2050,8 +2050,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL JSON path extract operator" {
    let tokens = "SELECT data #> ARRAY['key', 'subkey'] FROM json_table;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2059,8 +2059,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL JSON contains operator" {
    let tokens = "SELECT data @> '{\"key\":\"value\"}' FROM json_table;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2068,8 +2068,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL JSON contained in operator" {
    let tokens = "SELECT '{\"a\":1}' <@ data FROM json_table;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2077,8 +2077,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  
  test "PostgreSQL COUNT with FILTER" {
    let tokens = "SELECT count(*) FILTER (WHERE active) FROM users;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2086,8 +2086,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL COUNT without FILTER" {
    let tokens = "SELECT count(*) FROM users;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2095,8 +2095,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL SUM with FILTER" {
    let tokens = "SELECT sum(amount) FILTER (WHERE status = 'completed') FROM orders;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(
@@ -2104,8 +2104,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  ///|
  test "PostgreSQL multiple aggregations with FILTER" {
    let tokens = "SELECT count(*) FILTER (WHERE active), avg(age) FILTER (WHERE age > 18) FROM users;"
--  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-+  let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print_renamed
+-  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
++  let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print_renamed
    inspect(
      stmt,
      content=(

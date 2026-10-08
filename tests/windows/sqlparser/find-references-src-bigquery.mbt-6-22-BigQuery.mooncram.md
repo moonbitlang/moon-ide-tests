@@ -3,19 +3,11 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'BigQuery' --loc 'src\bigquery.mbt:6:22'
 Found 17 references for symbol 'BigQuery':
-<WORKDIR>/src\bigquery.mbt:3:17-3:25:
-  | ///|
-  | /// BigQuery dialect - supports Google BigQuery specific syntax
-3 | pub(all) struct BigQuery {}
-  |                 ^^^^^^^^
-  | 
-  | ///|
-
 <WORKDIR>/src\bigquery.mbt:6:22-6:30:
   | pub(all) struct BigQuery {}
   | 
   | ///|
-6 | pub impl Dialect for BigQuery with supports_string_literal_backslash_escape(
+6 | pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
   |                      ^^^^^^^^
   |   _self,
   | ) {
@@ -24,7 +16,7 @@ Found 17 references for symbol 'BigQuery':
    | }
    | 
    | ///|
-13 | pub impl Dialect for BigQuery with supports_boolean_literals(_self) {
+13 | pub impl Dialect for BigQuery with fn supports_boolean_literals(_self) {
    |                      ^^^^^^^^
    |   true
    | }
@@ -33,7 +25,7 @@ Found 17 references for symbol 'BigQuery':
    | }
    | 
    | ///|
-18 | pub impl Dialect for BigQuery with supports_filter_during_aggregation(_self) {
+18 | pub impl Dialect for BigQuery with fn supports_filter_during_aggregation(_self) {
    |                      ^^^^^^^^
    |   false
    | }
@@ -42,7 +34,7 @@ Found 17 references for symbol 'BigQuery':
    | }
    | 
    | ///|
-23 | pub impl Dialect for BigQuery with supports_within_after_array_aggregation(
+23 | pub impl Dialect for BigQuery with fn supports_within_after_array_aggregation(
    |                      ^^^^^^^^
    |   _self,
    | ) {
@@ -51,108 +43,117 @@ Found 17 references for symbol 'BigQuery':
    | }
    | 
    | ///|
-30 | pub impl Dialect for BigQuery with requires_column_types_in_create_table(_self) {
+30 | pub impl Dialect for BigQuery with fn requires_column_types_in_create_table(
+   |                      ^^^^^^^^
+   |   _self,
+   | ) {
+
+<WORKDIR>/src\bigquery.mbt:37:22-37:30:
+   | }
+   | 
+   | ///|
+37 | pub impl Dialect for BigQuery with fn supports_if_not_exists(_self) {
    |                      ^^^^^^^^
    |   true
    | }
 
-<WORKDIR>/src\bigquery.mbt:35:22-35:30:
+<WORKDIR>/src\bigquery.mbt:42:22-42:30:
    | }
    | 
    | ///|
-35 | pub impl Dialect for BigQuery with supports_if_not_exists(_self) {
-   |                      ^^^^^^^^
-   |   true
-   | }
-
-<WORKDIR>/src\bigquery.mbt:40:22-40:30:
-   | }
-   | 
-   | ///|
-40 | pub impl Dialect for BigQuery with supports_double_quoted_identifiers(_self) {
+42 | pub impl Dialect for BigQuery with fn supports_double_quoted_identifiers(_self) {
    |                      ^^^^^^^^
    |   false
    | }
 
-<WORKDIR>/src\bigquery.mbt:45:22-45:30:
+<WORKDIR>/src\bigquery.mbt:47:22-47:30:
    | }
    | 
    | ///|
-45 | pub impl Dialect for BigQuery with supports_named_parameters(_self) {
+47 | pub impl Dialect for BigQuery with fn supports_named_parameters(_self) {
    |                      ^^^^^^^^
    |   true
    | }
 
-<WORKDIR>/src\bigquery.mbt:50:22-50:30:
+<WORKDIR>/src\bigquery.mbt:52:22-52:30:
    | }
    | 
    | ///|
-50 | pub impl Dialect for BigQuery with parse_statement(
+52 | pub impl Dialect for BigQuery with fn parse_statement(
    |                      ^^^^^^^^
    |   _self : BigQuery,
    |   _parser : Parser,
 
-<WORKDIR>/src\bigquery.mbt:51:11-51:19:
+<WORKDIR>/src\bigquery.mbt:53:11-53:19:
    | 
    | ///|
-   | pub impl Dialect for BigQuery with parse_statement(
-51 |   _self : BigQuery,
+   | pub impl Dialect for BigQuery with fn parse_statement(
+53 |   _self : BigQuery,
    |           ^^^^^^^^
    |   _parser : Parser,
    |   _tokens : ArrayView[Token],
 
-<WORKDIR>/src\bigquery.mbt:59:22-59:30:
+<WORKDIR>/src\bigquery.mbt:61:22-61:30:
    | }
    | 
    | ///|
-59 | pub impl Dialect for BigQuery with parse_expr(
+61 | pub impl Dialect for BigQuery with fn parse_expr(
    |                      ^^^^^^^^
    |   _self : BigQuery,
    |   _tokens : ArrayView[Token],
 
-<WORKDIR>/src\bigquery.mbt:60:11-60:19:
+<WORKDIR>/src\bigquery.mbt:62:11-62:19:
    | 
    | ///|
-   | pub impl Dialect for BigQuery with parse_expr(
-60 |   _self : BigQuery,
+   | pub impl Dialect for BigQuery with fn parse_expr(
+62 |   _self : BigQuery,
    |           ^^^^^^^^
    |   _tokens : ArrayView[Token],
    | ) -> ParserResult[Expr]? raise ParserError {
 
-<WORKDIR>/src\bigquery.mbt:71:32-71:40:
+<WORKDIR>/src\bigquery.mbt:73:32-73:40:
    | 
    | test "BigQuery named parameter" {
    |   let tokens = "SELECT * FROM users WHERE id = @user_id;"
-71 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
+73 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
    |                                ^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:88:32-88:40:
+<WORKDIR>/src\bigquery.mbt:90:32-90:40:
    | ///|
    | test "BigQuery positional parameter" {
    |   let tokens = "SELECT * FROM users WHERE id = ?;"
-88 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
+90 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
    |                                ^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:105:32-105:40:
+<WORKDIR>/src\bigquery.mbt:107:32-107:40:
     | ///|
     | test "BigQuery mixed parameters" {
     |   let tokens = "SELECT * FROM users WHERE id = @user_id AND age > ?;"
-105 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
+107 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
     |                                ^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:123:32-123:40:
+<WORKDIR>/src\bigquery.mbt:125:32-125:40:
     | ///|
     | test "BigQuery multiple named parameters" {
     |   let tokens = "SELECT @field FROM @table WHERE @condition = @value;"
-123 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
+125 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
     |                                ^^^^^^^^
     |   inspect(
     |     stmt,
+
+<WORKDIR>/src\bigquery.mbt:157:12-157:20:
+    | }
+    | 
+    | ///|
+157 | pub extend BigQuery with Dialect::{
+    |            ^^^^^^^^
+    |   supports_filter_during_aggregation,
+    |   parse_statement,
 
 ```

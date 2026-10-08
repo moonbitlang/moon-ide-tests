@@ -1,7 +1,40 @@
 # core hover
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'from_int' --loc 'builtin\int64.mbt:31:15'
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'arr' --loc 'builtin\exact_view_test.mbt:17:7'
+///|
+test "exact_view uses the same bounds on all array types" {
+  let arr = [1, 2, 3, 4]
+      ^^^
+      ```moonbit
+      Array[Int]
+      ```
+  let fixed : FixedArray[Int] = [1, 2, 3, 4]
+  let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'fixed' --loc 'builtin\exact_view_test.mbt:18:7'
+///|
+test "exact_view uses the same bounds on all array types" {
+  let arr = [1, 2, 3, 4]
+  let fixed : FixedArray[Int] = [1, 2, 3, 4]
+      ^^^^^
+      ```moonbit
+      FixedArray[Int]
+      ```
+  let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+  let view = [0, 1, 2, 3, 4, 5][1:5]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'self' --loc 'builtin\int64.mbt:26:21'
+No hover information found for symbol 'self' at builtin\int64.mbt:26:21
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'from_int' --loc 'builtin\int64.mbt:44:15'
 ///   inspect(Int64::from_int(42), content="42")
 /// }
 /// ```
@@ -27,20 +60,6 @@ pub fn Int64::from_int(i : Int) -> Int64 {
                  inspect(Int64::from_int(42), content="42")
                }
                ```
-  i.to_int64()
-}
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'i' --loc 'builtin\int64.mbt:31:24'
-///   inspect(Int64::from_int(42), content="42")
-/// }
-/// ```
-pub fn Int64::from_int(i : Int) -> Int64 {
-                       ^
-                       ```moonbit
-                       Int
-                       ```
   i.to_int64()
 }
 ```
@@ -81,49 +100,14 @@ pub trait ToStringView {
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'ReprDelta' --loc 'debug\delta.mbt:17:11'
-///|
-/// Tree-shaped diff between two `Repr` values.
-priv enum ReprDelta {
-          ^^^^^^^^^
-          ```moonbit
-          enum ReprDelta {
-            Same(Repr, Array[ReprDelta])
-            Different(Repr, Repr)
-            Extra1(Repr)
-            Extra2(Repr)
-          }
-          ```
-          ---
-          
-           Tree-shaped diff between two `Repr` values.
-  Same(Repr, Array[ReprDelta])
-  Different(Repr, Repr)
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'Same' --loc 'debug\delta.mbt:18:3'
-///|
-/// Tree-shaped diff between two `Repr` values.
-priv enum ReprDelta {
-  Same(Repr, Array[ReprDelta])
-  ^^^^
-  ```moonbit
-  (Repr, Array[ReprDelta]) -> ReprDelta
-  ```
-  Different(Repr, Repr)
-  Extra1(Repr)
-```
-
-```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'decode_utf8_js' --loc 'encoding\utf8\decode_js.mbt:16:16'
-No hover information found for symbol 'decode_utf8_js' at encoding\utf8\decode_js.mbt:16:16
+Error: could not get package of loc encoding\utf8\decode_js.mbt:16:16
 [1]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'bytes' --loc 'encoding\utf8\decode_js.mbt:17:3'
-No hover information found for symbol 'bytes' at encoding\utf8\decode_js.mbt:17:3
+Error: could not get package of loc encoding\utf8\decode_js.mbt:17:3
 [1]
 ```
 
@@ -309,8 +293,9 @@ test "execute/non_capture_group" {
                unit of a surrogate pair).
               
                Passing a `last_index` in the middle of a surrogate pair may produce match
-               offsets that later cause `MatchResult::before`, `MatchResult::content`, or
-               `MatchResult::after` to panic when slicing.
+               offsets that split a character. `MatchResult::before`, `MatchResult::content`,
+               and `MatchResult::after` trim such boundaries inward when slicing, so their
+               views may omit that character.
               
                `last_index` only controls where searching starts. It does **not** change
                anchor semantics:

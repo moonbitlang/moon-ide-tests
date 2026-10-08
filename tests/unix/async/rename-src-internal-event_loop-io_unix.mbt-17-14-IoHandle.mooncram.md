@@ -50,7 +50,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  
 *** Update File: <WORKDIR>/src/fs/watch.mbt
 @@
- #cfg(not(platform="windows"))
+ #cfg(all(target="native", not(platform="windows")))
  fn Watcher::new_backend(
    self : Watcher,
 -  root : @event_loop.IoHandle,
@@ -61,7 +61,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 *** Update File: <WORKDIR>/src/fs/watch_inotify.mbt
 @@
  ///|
- #cfg(not(platform="windows"))
+ #cfg(any(target="wasm", not(platform="windows")))
  priv struct InotifyWatcher {
 -  inotify : @event_loop.IoHandle
 +  inotify : @event_loop.IoHandleRenamed
@@ -79,15 +79,15 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
        is_async=true,
 *** Update File: <WORKDIR>/src/fs/watch_kqueue.mbt
 @@
- #cfg(not(platform="windows"))
+ #cfg(any(target="wasm", not(platform="windows")))
  priv struct KqueueWatchedFile {
-   file_id : FileIdentity
+   identity : FileIdentity
 -  io : @event_loop.IoHandle
 +  io : @event_loop.IoHandleRenamed
  }
  
  ///|
- #cfg(not(platform="windows"))
+ #cfg(any(target="wasm", not(platform="windows")))
  priv struct KqueueWatcher {
 -  kqueue : @event_loop.IoHandle
 +  kqueue : @event_loop.IoHandleRenamed
@@ -121,12 +121,12 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -) -> (IoHandle, FileIdentity) {
 +) -> (IoHandleRenamed, FileIdentity) {
    let path_bytes = @os_string.encode(path)
-   let job = Job::open(path_bytes, access, create~, append~, sync~, mode~)
-   defer job.0.free()
+   let stat_buf = FixedArray::make(32, b'\x00')
+   let job = Job::open(
 @@
-     _ => {
-       let fd = job.fd()
-       let kind = job.kind()
+         )
+       }
+       let kind = @fd_util.FileKind::unsafe_from_int(kind.to_int())
 -      let io = IoHandle::from_fd(
 +      let io = IoHandleRenamed::from_fd(
          fd,
@@ -170,10 +170,10 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  ///|
  /// A managed file descriptor/`HANDLE`,
  /// capable of performing async IO operations.
--struct IoHandle {
-+struct IoHandleRenamed {
-   mut fd : @fd_util.Fd
-   kind : @fd_util.FileKind
+-pub struct IoHandle {
++pub struct IoHandleRenamed {
+   priv mut fd : @fd_util.Fd
+   priv kind : @fd_util.FileKind
    /// - `is_async=true`: support native async operations through the event bus.
 @@
  }
@@ -196,7 +196,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  /// The underlying file descriptor is returned.
 -pub fn IoHandle::detach_from_event_loop(handle : IoHandle) -> Unit {
 +pub fn IoHandleRenamed::detach_from_event_loop(handle : IoHandleRenamed) -> Unit {
-   guard curr_loop.val is Some(evloop)
+   guard! curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else { return }
    evloop.fds.remove(handle.fd)
 @@
@@ -221,8 +221,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -) -> IoHandle raise {
 +) -> IoHandleRenamed raise {
    let context = "@event_loop.IoHandle::from_fd()"
-   guard curr_loop.val is Some(evloop)
-   guard evloop.fds.get(fd) is None
+   errdefer @fd_util.close(fd, kind~, context~)
+   guard! curr_loop.val is Some(evloop)
 @@
  ///|
  /// Perform a read operation on the IO handle via the thread pool.
@@ -296,18 +296,18 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  #cfg(not(platform="windows"))
 -pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
 +pub async fn IoHandleRenamed::wait_read(handle : IoHandleRenamed) -> Unit {
+   guard! curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
  
  ///|
  #cfg(not(platform="windows"))
 -async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
 +async fn IoHandleRenamed::wait_write(handle : IoHandleRenamed) -> Unit {
+   guard! curr_loop.val is Some(evloop)
    guard @fd_util.fd_is_valid(handle.fd) else {
      abort("file descriptor already closed")
-   }
 @@
  
  ///|
@@ -480,15 +480,15 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -    Some(IoHandle::from_fd(pidfd, kind=Unknown, read_only=true))
 +    Some(IoHandleRenamed::from_fd(pidfd, kind=Unknown, read_only=true))
    }
-   { pid, handle }
+   { pid, handle, }
  }
 *** Update File: <WORKDIR>/src/internal/event_loop/stdio.mbt
 @@
  fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
  
  ///|
--let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
-+let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = {}
+-let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
++let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = Map([])
  
  ///|
 -fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
@@ -581,8 +581,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  let w = @event_loop.IoHandle::from_fd(w, kind=Pipe, is_async=false)
 +  let w = @event_loop.IoHandleRenamed::from_fd(w, kind=Pipe, is_async=false)
    (
-     { io: r, read_buf: @io.ReaderBuffer::new() },
-     TempPipeWrite::{ pipe: w, closed: false },
+     { io: r, read_buf: @io.ReaderBuffer::new(), },
+     TempPipeWrite::{ pipe: w, shared, closed: false, },
 @@
      write_end_is_async=true,
      context~,
@@ -591,9 +591,20 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 +  let r = @event_loop.IoHandleRenamed::from_fd(r, kind=Pipe, is_async=false)
 -  let w = @event_loop.IoHandle::from_fd(w, kind=Pipe)
 +  let w = @event_loop.IoHandleRenamed::from_fd(w, kind=Pipe)
-   (TempPipeRead::{ pipe: r, closed: false }, w)
+   (TempPipeRead::{ pipe: r, closed: false, }, w)
  }
  
+@@
+     write_end_is_async=false,
+     context~,
+   )
+-  let r = @event_loop.IoHandle::from_fd(r, kind=Pipe, is_async=false)
++  let r = @event_loop.IoHandleRenamed::from_fd(r, kind=Pipe, is_async=false)
+-  let w = @event_loop.IoHandle::from_fd(w, kind=Pipe, is_async=false)
++  let w = @event_loop.IoHandleRenamed::from_fd(w, kind=Pipe, is_async=false)
+   (
+     TempPipeRead::{ pipe: r, closed: false, },
+     TempPipeWrite::{ pipe: w, shared: false, closed: false, },
 @@
  
  ///|
@@ -607,18 +618,18 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  priv struct TempPipeWrite {
 -  pipe : @event_loop.IoHandle
 +  pipe : @event_loop.IoHandleRenamed
+   shared : Bool
    mut closed : Bool
  }
- 
 @@
+ 
+ ///|
+ priv struct RedirectToFile {
+-  io : @event_loop.IoHandle
++  io : @event_loop.IoHandleRenamed
+   shared : Bool
+   mut closed : Bool
  }
- 
- ///|
--priv struct RedirectToFile(@event_loop.IoHandle)
-+priv struct RedirectToFile(@event_loop.IoHandleRenamed)
- 
- ///|
- impl ProcessOutput for RedirectToFile with fn fd(self) {
 *** Update File: <WORKDIR>/src/raw_fd/raw_fd.mbt
 @@
  /// that are not natively supported by `moonbitlang/async`.
@@ -633,8 +644,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    let context = "@raw_fd.RawFd::new()"
    let kind = @event_loop.kind_of_fd(fd, context~)
    let is_async = @fd_util.fd_is_nonblocking(fd, context~)
--  { fd, io: @event_loop.IoHandle::from_fd(fd, kind~, is_async~) }
-+  { fd, io: @event_loop.IoHandleRenamed::from_fd(fd, kind~, is_async~) }
+-  { fd, io: @event_loop.IoHandle::from_fd(fd, kind~, is_async~), }
++  { fd, io: @event_loop.IoHandleRenamed::from_fd(fd, kind~, is_async~), }
  }
  
  ///|
@@ -651,8 +662,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    let kind = @event_loop.kind_of_fd(fd, context~)
    let is_async = @fd_util.fd_is_nonblocking(fd, context~)
    let read_buf = @io.ReaderBuffer::new()
--  { fd, io: @event_loop.IoHandle::from_fd(fd, kind~, is_async~), read_buf }
-+  { fd, io: @event_loop.IoHandleRenamed::from_fd(fd, kind~, is_async~), read_buf }
+-  { fd, io: @event_loop.IoHandle::from_fd(fd, kind~, is_async~), read_buf, }
++  { fd, io: @event_loop.IoHandleRenamed::from_fd(fd, kind~, is_async~), read_buf, }
  }
  
  ///|
@@ -681,18 +692,18 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    let sock = make_tcp_socket(family, context~)
 -  let io = @event_loop.IoHandle::from_fd(sock, kind=Socket, read_only=true)
 +  let io = @event_loop.IoHandleRenamed::from_fd(sock, kind=Socket, read_only=true)
-   try {
-     if addr.is_ipv6() && addr.is_ipv6_wildcard() {
-       if 0 != set_ipv6_only(sock, !dual_stack) {
+   errdefer io.close()
+   if addr.is_ipv6() && addr.is_ipv6_wildcard() {
+     if 0 != set_ipv6_only(sock, !dual_stack) {
 @@
    let context = "@socket.Tcp::connect()"
    let family = addr.family()
    let sock = make_tcp_socket(family, context~)
 -  let conn = @event_loop.IoHandle::from_fd(sock, kind=Socket)
 +  let conn = @event_loop.IoHandleRenamed::from_fd(sock, kind=Socket)
-   try {
-     if disable_nagle(sock) < 0 {
-       @os_error.check_errno("@socket.Tcp::connect(): set TCP_NODELAY")
+   errdefer conn.close()
+   if disable_nagle(sock) < 0 {
+     @os_error.check_errno("@socket.Tcp::connect(): set TCP_NODELAY")
 *** Update File: <WORKDIR>/src/socket/udp.mbt
 @@
  pub struct UdpClient {
@@ -709,9 +720,9 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    let sock = make_udp_socket(family, multicast=false, context~)
 -  let io = @event_loop.IoHandle::from_fd(sock, kind=Socket, read_only=true)
 +  let io = @event_loop.IoHandleRenamed::from_fd(sock, kind=Socket, read_only=true)
-   try {
-     let dst_addr = if addr.is_multicast() {
-       if @event_loop.platform is Windows {
+   errdefer io.close()
+   let dst_addr = if addr.is_multicast() {
+     if @event_loop.platform is Windows {
 @@
  /// The essence of `UdpServer` is a UDP socket with a fixed/well-known port.
  pub struct UdpServer {
@@ -727,18 +738,18 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    let sock = make_udp_socket(family, multicast=false, context~)
 -  let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
 +  let io = @event_loop.IoHandleRenamed::from_fd(sock, kind=Socket)
-   try {
-     if addr.is_ipv6() && addr.is_ipv6_wildcard() {
-       if 0 != set_ipv6_only(sock, !dual_stack) {
+   errdefer io.close()
+   if addr.is_ipv6() && addr.is_ipv6_wildcard() {
+     if 0 != set_ipv6_only(sock, !dual_stack) {
 @@
      abort("@socket.UdpServer::multicast() is IPv4 only")
    }
    let sock = make_udp_socket(family, multicast=true, context~)
 -  let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
 +  let io = @event_loop.IoHandleRenamed::from_fd(sock, kind=Socket)
-   try {
-     if @event_loop.platform is Windows {
-       let local_addr = Addr::new(0, multi_addr.port())
+   errdefer io.close()
+   if @event_loop.platform is Windows {
+     let local_addr = Addr::new(0, multi_addr.port())
 *** Update File: <WORKDIR>/src/stdio/stdio.mbt
 @@
  

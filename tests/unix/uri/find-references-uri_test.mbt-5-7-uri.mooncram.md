@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'uri' --loc 'uri_test.mbt:5:7'
-Found 2 references for symbol 'uri':
-<WORKDIR>/uri_test.mbt:5:7-5:10:
-  | /// Test basic URI parsing functionality (escaped)
-  | test "basic_uri_parsing" { (escaped)
-  |   // Test simple HTTP URI (escaped)
-5 |   let uri = @uri.parse("https://example.com/path") (escaped)
-  |       ^^^ (escaped)
-  |   json_inspect(uri, content={ (escaped)
-  |     "scheme": "https", (escaped)
-
+Found 1 references for symbol 'uri':
 <WORKDIR>/uri_test.mbt:6:16-6:19:
   | test "basic_uri_parsing" { (escaped)
   |   // Test simple HTTP URI (escaped)

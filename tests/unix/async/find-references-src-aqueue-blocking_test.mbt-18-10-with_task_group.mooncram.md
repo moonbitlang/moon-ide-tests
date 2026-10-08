@@ -18,7 +18,16 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
-Found 367 references for symbol 'with_task_group':
+Found 377 references for symbol 'with_task_group':
+<WORKDIR>/examples/dead_lock/main.mbt:19:10-19:25:
+   | async fn main {
+   |   let mutex1 = @async.Mutex()
+   |   let mutex2 = @async.Mutex()
+19 |   @async.with_task_group <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     group.spawn_bg() <| () => {
+   |       mutex1.acquire()
+
 <WORKDIR>/examples/http_file_server/main.mbt:87:10-87:25:
    |   } else {
    |     path
@@ -31,7 +40,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/examples/http_file_server/server_wbtest.mbt:47:10-47:25:
    |   }
    | 
-   |   let client_log = StringBuilder::new()
+   |   let client_log = StringBuilder()
 47 |   @async.with_task_group <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
@@ -46,20 +55,20 @@ Found 367 references for symbol 'with_task_group':
    |     let idle_timer = @async.Timer(5000)
    |     group.spawn_bg(no_wait=true) <| () => {
 
-<WORKDIR>/examples/tcp_ping_pong/main.mbt:74:10-74:25:
+<WORKDIR>/examples/tcp_ping_pong/main.mbt:75:10-75:25:
    | 
    | ///|
    | pub async fn main_prog(println : Printer) -> Unit {
-74 |   @async.with_task_group(root => {
+75 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @socket.TcpServer(@socket.Addr::parse("127.0.0.1:0"))
    |     let addr = server.addr
 
-<WORKDIR>/examples/tcp_ping_pong/main.mbt:79:14-79:29:
+<WORKDIR>/examples/tcp_ping_pong/main.mbt:80:14-80:29:
    |     let addr = server.addr
    |     root.spawn_bg(() => server_main(server, println))
    |     root.spawn_bg() <| () => {
-79 |       @async.with_task_group <| ctx => {
+80 |       @async.with_task_group <| ctx => {
    |              ^^^^^^^^^^^^^^^
    |         for i in 0..<6 {
    |           let msg = if i % 3 == 1 { "pong" } else { "ping" }
@@ -91,29 +100,29 @@ Found 367 references for symbol 'with_task_group':
    |     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:4200"))
    |     defer server.close()
 
-<WORKDIR>/examples/udp_ping_pong/main.mbt:23:10-23:25:
-   | 
+<WORKDIR>/examples/udp_ping_pong/main.mbt:24:10-24:25:
    | ///|
+   | #warnings("-fragile_catch_all")
    | async fn server_main(server : @socket.UdpServer, println : Printer) -> Unit {
-23 |   @async.with_task_group(group => {
+24 |   @async.with_task_group(group => {
    |          ^^^^^^^^^^^^^^^
    |     defer server.close()
    |     let buf = FixedArray::make(1024, b'0')
 
-<WORKDIR>/examples/udp_ping_pong/main.mbt:73:10-73:25:
+<WORKDIR>/examples/udp_ping_pong/main.mbt:74:10-74:25:
    | 
    | ///|
    | pub async fn main_prog(println : Printer) -> Unit {
-73 |   @async.with_task_group(root => {
+74 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @socket.UdpServer(@socket.Addr::parse("127.0.0.1:0"))
    |     let addr = server.addr
 
-<WORKDIR>/examples/udp_ping_pong/main.mbt:78:14-78:29:
+<WORKDIR>/examples/udp_ping_pong/main.mbt:79:14-79:29:
    |     let addr = server.addr
    |     root.spawn_bg(() => server_main(server, println))
    |     root.spawn_bg() <| () => {
-78 |       @async.with_task_group <| ctx => {
+79 |       @async.with_task_group <| ctx => {
    |              ^^^^^^^^^^^^^^^
    |         for i in 0..<6 {
    |           let msg = if i % 3 == 1 { "pong" } else { "ping" }
@@ -139,7 +148,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/allow_failure_test.mbt:18:10-18:25:
    | ///|
    | async test "allow_failure ignored" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg(allow_failure=true, () => raise Err)
@@ -147,7 +156,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/allow_failure_test.mbt:36:12-36:27:
    | async test "allow_failure waited" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
    |   let err = @test_util.expect_error_async <| () => {
 36 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
@@ -157,7 +166,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/allow_failure_test.mbt:55:10-55:25:
    | ///|
    | async test "allow_failure no error" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 55 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg(allow_failure=true) <| () => {
@@ -169,7 +178,7 @@ Found 367 references for symbol 'with_task_group':
    |   let log = []
 44 |   @async.with_task_group <| group => {
    |          ^^^^^^^^^^^^^^^
-   |     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+   |     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
    |     group.spawn_bg() <| () => {
 
 <WORKDIR>/src/aqueue/README.mbt.md:109:10-109:25:
@@ -214,7 +223,7 @@ Found 367 references for symbol 'with_task_group':
     |   let received = []
 391 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
-    |     let q : @aqueue.Queue[String] = @aqueue.Queue(kind=Unbounded)
+    |     let q : @aqueue.Queue[String] = Queue(kind=Unbounded)
     |     // Producer A puts items at time 0, 100, 200 ms.
 
 <WORKDIR>/src/aqueue/README.mbt.md:430:10-430:25:
@@ -223,7 +232,7 @@ Found 367 references for symbol 'with_task_group':
     |   let work_by_worker : Array[Array[Int]] = [[], [], []]
 430 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
-    |     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Blocking(1))
+    |     let q : @aqueue.Queue[Int] = Queue(kind=Blocking(1))
     |     for w in 0..<3 {
 
 <WORKDIR>/src/aqueue/README.mbt.md:470:10-470:25:
@@ -232,13 +241,13 @@ Found 367 references for symbol 'with_task_group':
     |   let log = []
 470 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
-    |     let q : @aqueue.Queue[Int] = @aqueue.Queue(kind=Unbounded)
+    |     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
     |     // Reader 1 starts waiting at ~0 ms.
 
 <WORKDIR>/src/aqueue/aqueue_test.mbt:18:10-18:25:
    | ///|
    | async test "aqueue basic" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let queue = @aqueue.Queue(kind=Unbounded)
@@ -247,35 +256,35 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/aqueue/aqueue_test.mbt:56:10-56:25:
    | ///|
    | async test "aqueue multi-reader" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 56 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let queue = @aqueue.Queue(kind=Unbounded)
    |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/aqueue/aqueue_test.mbt:110:10-110:25:
+<WORKDIR>/src/aqueue/aqueue_test.mbt:107:10-107:25:
     | async test "aqueue cancellation no_swallow" {
     |   // `get` should not swallow the value
-    |   let log = StringBuilder::new()
-110 |   @async.with_task_group() <| group => {
+    |   let log = StringBuilder()
+107 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @aqueue.Queue(kind=Unbounded)
     |     let get_task = group.spawn(() => log.write_string("get() => \{q.get()}\n"))
 
-<WORKDIR>/src/aqueue/aqueue_test.mbt:131:10-131:25:
+<WORKDIR>/src/aqueue/aqueue_test.mbt:128:10-128:25:
     | ///|
     | async test "aqueue fairness" {
-    |   let log = StringBuilder::new()
-131 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+128 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let queue = @aqueue.Queue(kind=Unbounded)
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/aqueue/aqueue_test.mbt:167:10-167:25:
+<WORKDIR>/src/aqueue/aqueue_test.mbt:164:10-164:25:
     | ///|
     | async test "aqueue fairness2" {
-    |   let log = StringBuilder::new()
-167 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+164 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let queue = @aqueue.Queue(kind=Unbounded)
     |     queue.put(1)
@@ -334,56 +343,56 @@ Found 367 references for symbol 'with_task_group':
     |     let q = @async.Queue(kind=Blocking(1))
     |     q.put(0)
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:184:10-184:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:181:10-181:25:
     | ///|
     | async test "blocking zero buffered" {
     |   let log = []
-184 |   @async.with_task_group() <| group => {
+181 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=Blocking(0))
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:238:10-238:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:235:10-235:25:
     | ///|
     | async test "blocked zero buffered try_get" {
     |   let log = []
-238 |   @async.with_task_group() <| group => {
+235 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=Blocking(0))
     |     @debug.assert_eq(None, q.try_get())
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:262:10-262:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:259:10-259:25:
     | ///|
     | async test "blocked zero buffered try_put" {
     |   let log = []
-262 |   @async.with_task_group() <| group => {
+259 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=Blocking(0))
     |     assert_eq(false, q.try_put(-1))
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:290:10-290:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:287:10-287:25:
     | ///|
     | async test "blocked zero buffered discard oldest try_get" {
     |   let log = []
-290 |   @async.with_task_group() <| group => {
+287 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=DiscardOldest(0))
     |     @debug.assert_eq(None, q.try_get())
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:312:10-312:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:309:10-309:25:
     | ///|
     | async test "blocked zero buffered discard oldest try_put" {
     |   let log = []
-312 |   @async.with_task_group() <| group => {
+309 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=DiscardOldest(0))
     |     @debug.assert_eq(false, q.try_put(-1))
 
-<WORKDIR>/src/aqueue/blocking_test.mbt:340:10-340:25:
+<WORKDIR>/src/aqueue/blocking_test.mbt:337:10-337:25:
     | ///|
     | async test "blocked zero buffered discard latest try_put" {
     |   let log = []
-340 |   @async.with_task_group() <| group => {
+337 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let q = @async.Queue(kind=DiscardLatest(0))
     |     @debug.assert_eq(false, q.try_put(-1))
@@ -394,7 +403,7 @@ Found 367 references for symbol 'with_task_group':
    |   q.put(1)
 79 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
-   |     let start = @env.now()
+   |     let start = @async.now()
    |     group.spawn_bg() <| () => {
 
 <WORKDIR>/src/aqueue/close_test.mbt:98:10-98:25:
@@ -403,59 +412,59 @@ Found 367 references for symbol 'with_task_group':
    |   let q = @async.Queue(kind=Blocking(0))
 98 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
-   |     let start = @env.now()
+   |     let start = @async.now()
    |     group.spawn_bg() <| () => {
 
 <WORKDIR>/src/aqueue/close_test.mbt:117:10-117:25:
     | ///|
     | async test "close with blocking get" {
-    |   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+    |   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 117 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
-    |     let start = @env.now()
+    |     let start = @async.now()
     |     group.spawn_bg() <| () => {
 
 <WORKDIR>/src/aqueue/close_test.mbt:136:10-136:25:
     | ///|
     | async test "close with completed get" {
-    |   let q : @aqueue.Queue[Int] = @async.Queue(kind=Unbounded)
+    |   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
 136 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       debug_inspect(
 
-<WORKDIR>/src/async.mbt:62:3-62:18:
-   |   f : async () -> X,
-   |   error? : Error = TimeoutError,
-   | ) -> X {
-62 |   with_task_group() <| group => {
-   |   ^^^^^^^^^^^^^^^
-   |     group.spawn_bg(no_wait=true) <| () => {
-   |       sleep(time)
+<WORKDIR>/src/async.mbt:101:3-101:18:
+    |   f : async () -> X,
+    |   error? : Error = TimeoutError,
+    | ) -> X {
+101 |   with_task_group() <| group => {
+    |   ^^^^^^^^^^^^^^^
+    |     group.spawn_bg(no_wait=true) <| () => {
+    |       sleep(time)
 
-<WORKDIR>/src/async.mbt:82:3-82:18:
-   | /// - If `f` is still running after `timeout` milliseconds,
-   | /// ` with_timeout_opt` will return `None` immediately, and `f` will be cancelled.
-   | pub async fn[X] with_timeout_opt(time : Int, f : async () -> X) -> X? {
-82 |   with_task_group() <| group => {
-   |   ^^^^^^^^^^^^^^^
-   |     group.spawn_bg(no_wait=true) <| () => {
-   |       sleep(time)
+<WORKDIR>/src/async.mbt:121:3-121:18:
+    | /// - If `f` is still running after `timeout` milliseconds,
+    | /// ` with_timeout_opt` will return `None` immediately, and `f` will be cancelled.
+    | pub async fn[X] with_timeout_opt(time : Int, f : async () -> X) -> X? {
+121 |   with_task_group() <| group => {
+    |   ^^^^^^^^^^^^^^^
+    |     group.spawn_bg(no_wait=true) <| () => {
+    |       sleep(time)
 
-<WORKDIR>/src/async.mbt:251:3-251:18:
+<WORKDIR>/src/async.mbt:287:3-287:18:
     |     None
     |   }
     |   let results = Array::make(tasks.length(), None)
-251 |   with_task_group() <| tg => {
+287 |   with_task_group() <| tg => {
     |   ^^^^^^^^^^^^^^^
     |     for i, task in tasks {
     |       if semaphore is Some(sem) {
 
-<WORKDIR>/src/async.mbt:299:3-299:18:
+<WORKDIR>/src/async.mbt:336:3-336:18:
     |   }
     |   let mut result = None
     |   let mut last_err = None
-299 |   with_task_group() <| tg => {
+336 |   with_task_group() <| tg => {
     |   ^^^^^^^^^^^^^^^
     |     for task in tasks {
     |       if semaphore is Some(sem) {
@@ -463,116 +472,116 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/cancellation_test.mbt:18:10-18:25:
    | ///|
    | async test "manual cancel" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 18 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let task = root.spawn(() => {
-   |       try {
+   |       match @async.handle_cancellation(() => @async.sleep(300)) {
 
-<WORKDIR>/src/cancellation_test.mbt:52:12-52:27:
+<WORKDIR>/src/cancellation_test.mbt:47:12-47:27:
    | async test "error propagation" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
    |   let err = @test_util.expect_error_async <| () => {
-52 |     @async.with_task_group(root => {
+47 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
    |       root.spawn_bg() <| () => {
    |         @async.sleep(300)
 
-<WORKDIR>/src/cancellation_test.mbt:88:10-88:25:
+<WORKDIR>/src/cancellation_test.mbt:80:10-80:25:
    | ///|
    | async test "multiple scope" {
-   |   let buf = StringBuilder::new()
-88 |   @async.with_task_group() <| root => {
+   |   let buf = StringBuilder()
+80 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       try
 
-<WORKDIR>/src/cancellation_test.mbt:91:16-91:31:
+<WORKDIR>/src/cancellation_test.mbt:83:16-83:31:
    |   @async.with_task_group() <| root => {
    |     root.spawn_bg() <| () => {
    |       try
-91 |         @async.with_task_group() <| fn(ctx) {
+83 |         @async.with_task_group() <| fn(ctx) {
    |                ^^^^^^^^^^^^^^^
    |           ctx.spawn_bg() <| () => {
    |             @async.sleep(200)
 
-<WORKDIR>/src/cancellation_test.mbt:119:16-119:31:
+<WORKDIR>/src/cancellation_test.mbt:107:16-107:31:
     |     }
     |     root.spawn_bg() <| () => {
     |       try
-119 |         @async.with_task_group() <| fn(ctx) {
+107 |         @async.with_task_group() <| fn(ctx) {
     |                ^^^^^^^^^^^^^^^
     |           ctx.spawn_bg() <| () => {
     |             @async.sleep(500)
 
-<WORKDIR>/src/cancellation_test.mbt:161:10-161:25:
+<WORKDIR>/src/cancellation_test.mbt:145:10-145:25:
     | ///|
     | async test "recursive cancel" {
-    |   let buf = StringBuilder::new()
-161 |   @async.with_task_group(root => {
+    |   let buf = StringBuilder()
+145 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       for _ in 0..<2 {
 
-<WORKDIR>/src/cancellation_test.mbt:199:12-199:27:
+<WORKDIR>/src/cancellation_test.mbt:183:12-183:27:
     | async test "spawn directly error" {
-    |   let buf = StringBuilder::new()
+    |   let buf = StringBuilder()
     |   let err = @test_util.expect_error_async <| () => {
-199 |     @async.with_task_group(root => {
+183 |     @async.with_task_group(root => {
     |            ^^^^^^^^^^^^^^^
     |       root.spawn_bg() <| () => {
     |         @async.with_task_group() <| group => {
 
-<WORKDIR>/src/cancellation_test.mbt:201:16-201:31:
+<WORKDIR>/src/cancellation_test.mbt:185:16-185:31:
     |   let err = @test_util.expect_error_async <| () => {
     |     @async.with_task_group(root => {
     |       root.spawn_bg() <| () => {
-201 |         @async.with_task_group() <| group => {
+185 |         @async.with_task_group() <| group => {
     |                ^^^^^^^^^^^^^^^
     |           @async.sleep(1)
     |           group.spawn_bg(() => raise Err)
 
-<WORKDIR>/src/cancellation_test.mbt:226:12-226:27:
+<WORKDIR>/src/cancellation_test.mbt:210:12-210:27:
     | async test "error in cancellation" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
     |   let err = @test_util.expect_error_async <| () => {
-226 |     @async.with_task_group(root => {
+210 |     @async.with_task_group(root => {
     |            ^^^^^^^^^^^^^^^
     |       root.spawn_bg(no_wait=true) <| () => {
-    |         @async.sleep(1000) catch {
+    |         match @async.handle_cancellation(() => @async.sleep(1000)) {
 
-<WORKDIR>/src/cancellation_test.mbt:251:10-251:25:
+<WORKDIR>/src/cancellation_test.mbt:236:10-236:25:
     | ///|
     | async test "immediately cancelled" {
-    |   let log = StringBuilder::new()
-251 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+236 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let task = root.spawn(() => {
     |       defer log.write_string("task terminated\n")
 
-<WORKDIR>/src/cancellation_test.mbt:275:12-275:27:
+<WORKDIR>/src/cancellation_test.mbt:260:12-260:27:
     | ///|
     | async test "immediate failure" {
     |   let result = @test_util.expect_error_async <| () => {
-275 |     @async.with_task_group(group => {
+260 |     @async.with_task_group(group => {
     |            ^^^^^^^^^^^^^^^
     |       group.spawn_bg(() => raise Failure::Failure("failure"))
     |       group.spawn_bg(() => group.spawn_bg(() => @async.sleep(100)))
 
-<WORKDIR>/src/cancellation_test.mbt:293:10-293:25:
+<WORKDIR>/src/cancellation_test.mbt:278:10-278:25:
     | ///|
     | async test "task group cancel & complete at the same time" {
     |   let log = []
-293 |   @async.with_task_group() <| outer => {
+278 |   @async.with_task_group() <| outer => {
     |          ^^^^^^^^^^^^^^^
     |     @async.with_task_group() <| inner => {
     |       outer.spawn_bg(no_wait=true) <| () => {
 
-<WORKDIR>/src/cancellation_test.mbt:294:12-294:27:
+<WORKDIR>/src/cancellation_test.mbt:279:12-279:27:
     | async test "task group cancel & complete at the same time" {
     |   let log = []
     |   @async.with_task_group() <| outer => {
-294 |     @async.with_task_group() <| inner => {
+279 |     @async.with_task_group() <| inner => {
     |            ^^^^^^^^^^^^^^^
     |       outer.spawn_bg(no_wait=true) <| () => {
     |         for i = 1; ; i = i + 1 {
@@ -607,7 +616,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/cond_var/cond_var_test.mbt:35:10-35:25:
    | ///|
    | async test "cond var cancellation no_swallow" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 35 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let cond = @cond_var.Cond()
@@ -616,7 +625,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/cond_var/cond_var_test.mbt:62:10-62:25:
    | ///|
    | async test "cond var fairness" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 62 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let cond = @cond_var.Cond()
@@ -625,7 +634,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/cond_var/cond_var_test.mbt:100:10-100:25:
     | ///|
     | async test "cond var broadcast" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 100 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let cond = @cond_var.Cond()
@@ -634,35 +643,53 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/cond_var/cond_var_test.mbt:125:10-125:25:
     | ///|
     | async test "cond var broadcast cancellation" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 125 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let cond = @cond_var.Cond()
     |     for i in 0..<3 {
 
-<WORKDIR>/src/fs/access_test.mbt:59:10-59:25:
-   |     return
-   |   }
-   |   let path = "_build/chmod_test"
-59 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     @fs.write_file(path, "abcd", create_mode=CreateNew, permission=0o444)
-   |     group.add_defer(() => @fs.remove(path))
+<WORKDIR>/src/external_loop_integration/external_loop_test.mbt:21:12-21:27:
+   |   let main_loop = @external_loop_test.MainLoop()
+   |   @event_loop.with_event_loop <| () => {
+   |     @async.set_external_event_loop(main_loop)
+21 |     @async.with_task_group <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       let start = @async.now()
+   |       fn tick() {
 
-<WORKDIR>/src/fs/create_test.mbt:76:10-76:25:
-   | ///|
-   | async test "create_mode test" {
-   |   let path = "_build/create_exclusive_test"
-76 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     for create_mode in [@fs.OpenExisting, @fs.TruncateExisting] {
-   |       @test_util.assert_raise_async <| () => {
+<WORKDIR>/src/external_loop_integration/external_loop_test.mbt:68:12-68:27:
+   |   let main_loop = @external_loop_test.MainLoop()
+   |   @event_loop.with_event_loop <| () => {
+   |     @async.set_external_event_loop(main_loop)
+68 |     @async.with_task_group <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       let start = @async.now()
+   |       fn tick() {
 
-<WORKDIR>/src/fs/dir.mbt:423:10-423:25:
+<WORKDIR>/src/external_loop_integration/external_loop_test.mbt:92:12-92:27:
+   |   let main_loop = @external_loop_test.MainLoop()
+   |   @event_loop.with_event_loop <| () => {
+   |     @async.set_external_event_loop(main_loop)
+92 |     @async.with_task_group <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       let (r, w) = @pipe.pipe()
+   |       defer r.close()
+
+<WORKDIR>/src/external_loop_integration/external_loop_test.mbt:124:12-124:27:
+    |     @async.set_external_event_loop(main_loop)
+    |     let (r, w) = @pipe.pipe()
+    |     defer r.close()
+124 |     @async.with_task_group <| group => {
+    |            ^^^^^^^^^^^^^^^
+    |       // The following three tasks will start running at the same scheduler slice
+    |       group.spawn_bg() <| () => {
+
+<WORKDIR>/src/fs/dir.mbt:430:10-430:25:
     |   let context = "@fs.walk()"
-    |   guard max_concurrency > 0
+    |   guard! max_concurrency > 0
     |   let sem = @async.Semaphore(max_concurrency)
-423 |   @async.with_task_group() <| fn(group) {
+430 |   @async.with_task_group() <| fn(group) {
     |          ^^^^^^^^^^^^^^^
     |     fn handle_path(path : String) {
     |       guard !exclude(path) else {  }
@@ -772,184 +799,85 @@ Found 367 references for symbol 'with_task_group':
     |   let file_name = "_build/flock_advisory"
 331 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
-    |     @fs.write_file(file_name, create_mode=CreateOrTruncate, "abcd")
+    |     @fs.write_file(file_name, "abcd")
     |     let file = @fs.open(file_name, mode=ReadWrite)
 
-<WORKDIR>/src/fs/mkdir_test.mbt:41:10-41:25:
-   | 
-   | ///|
-   | async test "mkdir recursive" {
-41 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     let base_path = "_build/recursive_mkdir"
-   |     let path = "\{base_path}/test//directory"
-
-<WORKDIR>/src/fs/named_pipe_test.mbt:23:10-23:25:
-   | ///|
-   | #cfg(not(platform="windows"))
-   | async test "cancel named fifo open" {
-23 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     let path = "_build/cancel_open_test"
-   |     if mkfifo(@os_string.encode(path), 0o644) < 0 {
-
-<WORKDIR>/src/fs/named_pipe_test.mbt:60:10-60:25:
+<WORKDIR>/src/fs/named_pipe_test.mbt:58:10-58:25:
    | ///|
    | #cfg(not(platform="windows"))
    | async test "named fifo" {
-60 |   @async.with_task_group() <| group => {
+58 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let path = "_build/named_pipe_test"
    |     if mkfifo(@os_string.encode(path), 0o644) < 0 {
 
-<WORKDIR>/src/fs/realpath_test.mbt:29:10-29:25:
-   | ///|
-   | #cfg(not(platform="windows"))
-   | async test "realpath link to absolute" {
-29 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     guard @env.current_dir() is Some(cwd)
-   |     let path = match cwd {
-
-<WORKDIR>/src/fs/realpath_test.mbt:47:10-47:25:
-   | ///|
-   | #cfg(not(platform="windows"))
-   | async test "realpath link to relative" {
-47 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     guard @env.current_dir() is Some(cwd)
-   |     let rel_path = "../src/fs/realpath_test.mbt"
-
-<WORKDIR>/src/fs/realpath_test.mbt:61:10-61:25:
-   | 
-   | ///|
-   | async test "realpath link to dir absolute" {
-61 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     guard @env.current_dir() is Some(cwd)
-   |     let path = match cwd {
-
-<WORKDIR>/src/fs/realpath_test.mbt:83:10-83:25:
-   | #cfg(not(platform="windows"))
-   | async test "realpath link to dir relative" {
-   |   guard @env.current_dir() is Some(cwd)
-83 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     let rel_path = "../src/fs"
-   |     let link_path = "_build/realpath_test_link_to_dir_relative.test"
-
-<WORKDIR>/src/fs/stat_test.mbt:20:10-20:25:
-   | async test "kind of symlink to regular" {
-   |   let link_path = "_build/stat_symlink_to_regular_test"
-   |   @fs.symlink(link_path, target="../LICENSE")
-20 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     group.add_defer(() => @fs.remove(link_path))
-   |     debug_inspect(@fs.kind(link_path), content="Regular")
-
-<WORKDIR>/src/fs/stat_test.mbt:32:10-32:25:
-   |   guard @env.current_dir() is Some(cwd)
-   |   let link_path = "_build/stat_symlink_to_dir_test"
-   |   @fs.symlink(link_path, target="\{cwd}/_build")
-32 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     group.add_defer(() => @fs.remove(link_path))
-   |     debug_inspect(@fs.kind(link_path), content="Directory")
-
-<WORKDIR>/src/fs/text_file_test.mbt:17:10-17:25:
-   | 
-   | ///|
-   | async test "text file" {
-17 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     let path = "_build/basic_text_file_test"
-   |     root.add_defer(() => @fs.remove(path))
-
-<WORKDIR>/src/fs/timestamp_test.mbt:31:10-31:25:
-   |     return
-   |   }
-   |   let path = "/tmp/timestamp_test"
-31 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
-   |     group.add_defer(() => @fs.remove(path))
-
-<WORKDIR>/src/fs/timestamp_test.mbt:88:10-88:25:
-   |     return
-   |   }
-   |   let path = "/tmp/opened_file_timestamp_test"
-88 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     @fs.write_file(path, "abcd", create_mode=CreateOrTruncate, sync=Full)
-   |     group.add_defer(() => @fs.remove(path))
-
-<WORKDIR>/src/fs/tmpdir_test.mbt:17:10-17:25:
-   | 
-   | ///|
-   | async test "tmpdir" {
-17 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     let t1 = @fs.tmpdir(prefix="tmp")
-   |     group.add_defer() <| () => {
-
-<WORKDIR>/src/fs/watch_test.mbt:37:10-37:25:
-   | ///|
-   | async test "watch basic" {
+<WORKDIR>/src/fs/watch_test.mbt:57:10-57:25:
+   |   report_child_event~ : Bool,
+   | ) -> Array[String] {
    |   let log = []
-37 |   @async.with_task_group(group => {
+57 |   @async.with_task_group(group => {
    |          ^^^^^^^^^^^^^^^
-   |     let path = "_build/watch_basic_test"
    |     let test_dir = Dir({
+   |       "root_file": File("abcd"),
 
-<WORKDIR>/src/fs/watch_test.mbt:163:10-163:25:
-    | ///|
-    | async test "watch rename within" {
+<WORKDIR>/src/fs/watch_test.mbt:231:10-231:25:
+    |   report_child_event~ : Bool,
+    | ) -> Array[String] {
     |   let log = []
-163 |   @async.with_task_group(group => {
+231 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
-    |     let path = "_build/watch_rename_within_test"
     |     let test_dir = Dir({
+    |       "root_file": File("abcd"),
 
-<WORKDIR>/src/fs/watch_test.mbt:249:10-249:25:
-    | ///|
-    | async test "watch rename inout test" {
+<WORKDIR>/src/fs/watch_test.mbt:355:10-355:25:
+    |   report_child_event~ : Bool,
+    | ) -> Array[String] {
     |   let log = []
-249 |   @async.with_task_group(group => {
+355 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
-    |     let base_path = "_build/watch_rename_inout_test"
     |     let test_dir = Dir({
+    |       "watched": Dir({
 
-<WORKDIR>/src/fs/watch_test.mbt:376:10-376:25:
+<WORKDIR>/src/fs/watch_test.mbt:520:10-520:25:
+    | 
     | ///|
     | async test "watch horizontal swap" {
-    |   let log = []
-376 |   @async.with_task_group(group => {
+520 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
     |     let path = "_build/watch_swap_test"
     |     let test_dir = Dir({ "file1": File("abcd"), "file2": File("efgh") })
 
-<WORKDIR>/src/fs/watch_test.mbt:403:10-403:25:
-    | ///|
-    | async test "watch vertical swap" {
+<WORKDIR>/src/fs/watch_test.mbt:557:10-557:25:
+    |   report_child_event~ : Bool,
+    | ) -> Array[String] {
     |   let log = []
-403 |   @async.with_task_group(group => {
+557 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
-    |     let path = "_build/watch_vertical_swap_test"
     |     let test_dir = Dir({
+    |       "outer": Dir({
 
-<WORKDIR>/src/fs/watch_test.mbt:449:10-449:25:
+<WORKDIR>/src/fs/watch_test.mbt:636:10-636:25:
     | ///|
     | async test "watch ignored path" {
     |   let log = []
-449 |   @async.with_task_group(group => {
+636 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
     |     let path = "_build/watch_ignored_path_test"
     |     let test_dir = Dir({
 
+<WORKDIR>/src/fs/watch_test.mbt:785:10-785:25:
+    |     "root_file": File("abcd"),
+    |     "inner_dir": Dir({ "inner_file": File("efgh") }),
+    |   })
+785 |   @async.with_task_group <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let path = "_build/watch_init_event_test"
+    |     test_dir.instantiate(path)
+
 <WORKDIR>/src/group_defer_test.mbt:18:10-18:25:
    | ///|
    | async test "group defer basic" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group() <| fn(root) {
    |          ^^^^^^^^^^^^^^^
    |     root.add_defer(() => log <+ "first group defer\n")
@@ -957,7 +885,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/group_defer_test.mbt:59:12-59:27:
    | async test "group defer error" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let err = @test_util.expect_error_async <| () => {
 59 |     @async.with_task_group(fn(root) {
    |            ^^^^^^^^^^^^^^^
@@ -967,7 +895,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/group_defer_test.mbt:101:10-101:25:
     | ///|
     | async test "group defer cancelled" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 101 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
@@ -1054,164 +982,182 @@ Found 367 references for symbol 'with_task_group':
     |     let (compressed_r, compressed_w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/client_test.mbt:95:10-95:25:
+<WORKDIR>/src/http/client_test.mbt:50:10-50:25:
    | ///|
    | async test "request streaming" {
-   |   let log = StringBuilder::new()
-95 |   @async.with_task_group() <| group => {
+   |   let log = StringBuilder()
+50 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let port = test_server(group, log)
    |     async fn fetch_response(client : @http.Client) {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:37:10-37:25:
+<WORKDIR>/src/http/client_test.mbt:188:10-188:25:
+    | #cfg(any(target="native", target="wasm"))
+    | async test "user agent" {
+    |   let log = StringBuilder()
+188 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
+    |     let port = server.addr.port()
+
+<WORKDIR>/src/http/parser_wbtest.mbt:40:10-40:25:
    | ///|
    | async test "read_request basic" {
-   |   let log = StringBuilder::new()
-37 |   @async.with_task_group() <| root => {
+   |   let log = StringBuilder()
+40 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:66:10-66:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:69:10-69:25:
    | ///|
    | async test "read_request fixed body" {
-   |   let log = StringBuilder::new()
-66 |   @async.with_task_group() <| root => {
+   |   let log = StringBuilder()
+69 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:97:10-97:25:
-   | 
-   | ///|
-   | async test "read_request fixed body early EOF" {
-97 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     let (r, w) = @io.pipe()
-   |     root.spawn_bg() <| () => {
+<WORKDIR>/src/http/parser_wbtest.mbt:100:10-100:25:
+    | 
+    | ///|
+    | async test "read_request fixed body early EOF" {
+100 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:123:10-123:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:126:10-126:25:
     | ///|
     | async test "read_request chunked" {
-    |   let log = StringBuilder::new()
-123 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+126 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:159:10-159:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:162:10-162:25:
     | ///|
     | async test "read_request stream" {
-    |   let log = StringBuilder::new()
-159 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+162 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:209:10-209:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:212:10-212:25:
     | ///|
     | async test "multiple request" {
-    |   let log = StringBuilder::new()
-209 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+212 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:271:10-271:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:274:10-274:25:
     | ///|
     | async test "read_response basic" {
-    |   let log = StringBuilder::new()
-271 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+274 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:302:10-302:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:305:10-305:25:
     | ///|
     | async test "read_response passthrough fallback (no length headers)" {
-    |   let log = StringBuilder::new()
-302 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+305 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:339:10-339:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:342:10-342:25:
     | ///|
     | async test "read_response 204 No Content (no body)" {
-    |   let log = StringBuilder::new()
-339 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+342 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:376:10-376:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:379:10-379:25:
     | ///|
     | async test "read_response 205 Reset Content (no body)" {
-    |   let log = StringBuilder::new()
-376 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+379 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:413:10-413:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:416:10-416:25:
     | ///|
     | async test "read_response 304 Not Modified (no body)" {
-    |   let log = StringBuilder::new()
-413 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+416 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:450:10-450:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:453:10-453:25:
     | ///|
     | async test "read_response 100 Continue (no body)" {
-    |   let log = StringBuilder::new()
-450 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+453 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:482:10-482:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:485:10-485:25:
     | ///|
     | async test "read_response CONNECT 200 (no body, tunnel mode)" {
-    |   let log = StringBuilder::new()
-482 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+485 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:516:10-516:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:519:10-519:25:
     | ///|
     | async test "read_response HEAD 200 (no body)" {
-    |   let log = StringBuilder::new()
-516 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+519 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:757:27-757:42:
+<WORKDIR>/src/http/parser_wbtest.mbt:758:27-758:42:
     | 
     | ///|
     | async test "gzip split between chunks" {
-757 |   let compressed = @async.with_task_group(group => {
+758 |   let compressed = @async.with_task_group(group => {
     |                           ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:767:10-767:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:768:10-768:25:
     |     r.read_all().binary()
     |   })
     |   let (r, w) = @io.pipe()
-767 |   @async.with_task_group() <| group => {
+768 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       defer w.close()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:797:10-797:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:812:10-812:25:
+    |      0x00, 0x00, 0x00,
+    |   ]
+    |   let (r, w) = @io.pipe()
+812 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     group.spawn_bg() <| () => {
+    |       defer w.close()
+
+<WORKDIR>/src/http/parser_wbtest.mbt:839:10-839:25:
     | 
     | ///|
     | async test "read_response parse cookie" {
-797 |   @async.with_task_group() <| group => {
+839 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
@@ -1234,56 +1180,83 @@ Found 367 references for symbol 'with_task_group':
    |     let server = @socket.TcpServer(@socket.Addr::parse("127.0.0.1:0"))
    |     let server_addr = server.addr
 
-<WORKDIR>/src/http/proxy_test.mbt:106:10-106:25:
+<WORKDIR>/src/http/proxy_test.mbt:107:10-107:25:
     |   log.push("proxy server: connected to \{request.path} successfully")
     |   conn..send_response(200, "OK").end_response()
     |   conn.enter_passthrough_mode()
-106 |   @async.with_task_group() <| group => {
+107 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg(() => conn.write_reader(client))
     |     group.spawn_bg(() => client.write_reader(conn))
 
-<WORKDIR>/src/http/proxy_test.mbt:115:10-115:25:
+<WORKDIR>/src/http/proxy_test.mbt:116:10-116:25:
     | ///|
     | async test "proxied https request" {
     |   let log = []
-115 |   @async.with_task_group() <| group => {
+116 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
     |     let port = server.addr.port()
 
-<WORKDIR>/src/http/proxy_test.mbt:137:10-137:25:
+<WORKDIR>/src/http/proxy_test.mbt:138:10-138:25:
     | ///|
     | async test "proxied http request" {
     |   let log = []
-137 |   @async.with_task_group() <| group => {
+138 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
     |     let port = server.addr.port()
 
-<WORKDIR>/src/http/proxy_test.mbt:163:10-163:25:
+<WORKDIR>/src/http/proxy_test.mbt:164:10-164:25:
     |   let proxy_server_addr = proxy_server.addr
     |   let server = @socket.TcpServer(@socket.Addr::parse("127.0.0.1:0"))
     |   let port = server.addr.port()
-163 |   @async.with_task_group() <| group => {
+164 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg(no_wait=true) <| () => {
     |       proxy_server.run_forever() <| ((req, body, conn) => {
 
-<WORKDIR>/src/http/proxy_test.mbt:204:10-204:25:
+<WORKDIR>/src/http/proxy_test.mbt:205:10-205:25:
     | async test "proxy error" {
     |   let proxy_server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
     |   let port = proxy_server.addr.port()
-204 |   @async.with_task_group() <| group => {
+205 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg(no_wait=true) <| () => {
     |       proxy_server.run_forever() <| ((_, _, conn) => {
 
-<WORKDIR>/src/http/request_test.mbt:50:10-50:25:
+<WORKDIR>/src/http/request_test.mbt:29:10-29:25:
+   | 
+   | ///|
+   | async test "request cancel handshake" {
+29 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let port = non_responding_tcp_server(group)
+   |     let result = @async.with_timeout_opt(250) <| () => {
+
+<WORKDIR>/src/http/request_test.mbt:42:10-42:25:
+   | ///|
+   | async test "request cancel wait response header" {
+   |   let log = StringBuilder()
+42 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let port = test_server(group, log)
+   |     let result = @async.with_timeout_opt(250) <| () => {
+
+<WORKDIR>/src/http/request_test.mbt:55:10-55:25:
+   | ///|
+   | async test "request cancel wait response body" {
+   |   let log = StringBuilder()
+55 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let port = test_server(group, log)
+   |     let result = @async.with_timeout_opt(250) <| () => {
+
+<WORKDIR>/src/http/request_test.mbt:70:10-70:25:
    | async test "manual Accept-Encoding" {
    |   let log = []
    |   let test_server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
-50 |   @async.with_task_group <| group => {
+70 |   @async.with_task_group <| group => {
    |          ^^^^^^^^^^^^^^^
    |     group.spawn_bg(no_wait=true) <| () => {
    |       test_server.run_forever() <| ((req, _body, conn) => {
@@ -1369,36 +1342,54 @@ Found 367 references for symbol 'with_task_group':
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:737:10-737:25:
+<WORKDIR>/src/http/send_wbtest.mbt:743:10-743:25:
     | 
     | ///|
     | async test "send_request empty body" {
-737 |   @async.with_task_group <| group => {
+743 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:771:10-771:25:
+<WORKDIR>/src/http/send_wbtest.mbt:777:10-777:25:
     | 
     | ///|
     | async test "send_response empty body" {
-771 |   @async.with_task_group <| group => {
+777 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:810:10-810:25:
+<WORKDIR>/src/http/send_wbtest.mbt:846:10-846:25:
     | 
     | ///|
     | async test "sender persistent header" {
-810 |   @async.with_task_group() <| root => {
+846 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/send_wbtest.mbt:874:10-874:25:
+    | 
+    | ///|
+    | async test "HEAD response with Content-Length" {
+874 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/send_wbtest.mbt:904:10-904:25:
+    | 
+    | ///|
+    | async test "HEAD response with non-empty body" {
+904 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
 <WORKDIR>/src/internal/coroutine/pause_test.mbt:19:12-19:27:
    | test "coroutine ping-pong" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let coro = @coroutine.spawn(() => {
 19 |     @async.with_task_group(group => {
    |            ^^^^^^^^^^^^^^^
@@ -1406,7 +1397,7 @@ Found 367 references for symbol 'with_task_group':
    |         log <+ "ping\n"
 
 <WORKDIR>/src/internal/event_loop/missing_close_test.mbt:20:12-20:27:
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   @event_loop.check_fd_leak.val = false
    |   @event_loop.with_event_loop() <| () => {
 20 |     @async.with_task_group() <| root => {
@@ -1423,218 +1414,236 @@ Found 367 references for symbol 'with_task_group':
    |     group.spawn_bg() <| () => {
    |       @async.sleep(50)
 
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:36:10-36:25:
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:47:10-47:25:
    | ///|
    | async test "worker basic" {
-   |   let log = StringBuilder::new()
-36 |   @async.with_task_group() <| root => {
+   |   let log = StringBuilder()
+47 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       for _ in 0..<3 {
 
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:61:10-61:25:
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:72:10-72:25:
    | ///|
    | async test "worker multiple" {
-   |   let log = StringBuilder::new()
-61 |   @async.with_task_group() <| root => {
+   |   let log = StringBuilder()
+72 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       for _ in 0..<3 {
 
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:92:10-92:25:
-   | ///|
-   | async test "worker cancel1" {
-   |   let log = StringBuilder::new()
-92 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<4 {
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:103:10-103:25:
+    | ///|
+    | async test "worker cancel1" {
+    |   let log = StringBuilder()
+103 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     root.spawn_bg() <| () => {
+    |       for _ in 0..<4 {
 
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:130:10-130:25:
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:137:10-137:25:
     | ///|
     | async test "worker cancel2" {
-    |   let log = StringBuilder::new()
-130 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+137 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       for _ in 0..<3 {
 
-<WORKDIR>/src/io/README.mbt.md:28:10-28:25:
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:170:12-170:27:
+    | test "max worker limit" {
+    |   let log = []
+    |   with_event_loop(max_worker_count=2, () => {
+170 |     @async.with_task_group <| group => {
+    |            ^^^^^^^^^^^^^^^
+    |       let start = @async.now()
+    |       for i in 0..<4 {
+
+<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:196:12-196:27:
+    | test "cancel queued job" {
+    |   let log = []
+    |   with_event_loop(max_worker_count=1, () => {
+196 |     @async.with_task_group <| group => {
+    |            ^^^^^^^^^^^^^^^
+    |       let start = @async.now()
+    |       fn tick() {
+
+<WORKDIR>/src/io/README.mbt.md:27:10-27:25:
    | ```moonbit check
    | ///|
    | async test "quick start pipeline" {
-28 |   @async.with_task_group(root => {
+27 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     // Create a pair of connected endpoints that speak the Reader/Writer protocols.
    |     // Data written to the write end (`writer`) can be read from the read end (`reader`)
 
-<WORKDIR>/src/io/README.mbt.md:67:10-67:25:
+<WORKDIR>/src/io/README.mbt.md:66:10-66:25:
    | ```moonbit check
    | ///|
    | async test "data as binary" {
-67 |   @async.with_task_group(root => {
+66 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:83:10-83:25:
+<WORKDIR>/src/io/README.mbt.md:82:10-82:25:
    | 
    | ///|
    | async test "data as text" {
-83 |   @async.with_task_group(root => {
+82 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:99:10-99:25:
+<WORKDIR>/src/io/README.mbt.md:98:10-98:25:
    | 
    | ///|
    | async test "data as json" {
-99 |   @async.with_task_group(root => {
+98 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:131:10-131:25:
+<WORKDIR>/src/io/README.mbt.md:130:10-130:25:
     | ```moonbit check
     | ///|
     | async test "read from reader" {
-131 |   @async.with_task_group(root => {
+130 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     // Create connected endpoints. `r` is a Reader, `w` is a Writer.
     |     let (r, w) = @io.pipe()
 
-<WORKDIR>/src/io/README.mbt.md:154:10-154:25:
+<WORKDIR>/src/io/README.mbt.md:153:10-153:25:
     | 
     | ///|
     | async test "read_exactly - read exact number of bytes" {
-154 |   @async.with_task_group(root => {
+153 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:172:10-172:25:
+<WORKDIR>/src/io/README.mbt.md:171:10-171:25:
     | 
     | ///|
     | async test "read_some - read next chunk of data" {
-172 |   @async.with_task_group(root => {
+171 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:217:10-217:25:
+<WORKDIR>/src/io/README.mbt.md:216:10-216:25:
     | 
     | ///|
     | async test "read_all - read entire content" {
-217 |   @async.with_task_group(root => {
+216 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:233:10-233:25:
+<WORKDIR>/src/io/README.mbt.md:232:10-232:25:
     | 
     | ///|
     | async test "read_all large data" {
-233 |   @async.with_task_group(root => {
+232 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:247:10-247:25:
+<WORKDIR>/src/io/README.mbt.md:246:10-246:25:
     | 
     | ///|
     | async test "drop - advance stream by discarding data" {
-247 |   @async.with_task_group(root => {
+246 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:264:10-264:25:
+<WORKDIR>/src/io/README.mbt.md:263:10-263:25:
     | 
     | ///|
     | async test "read_until - read text from stream until a separator is found" {
-264 |   @async.with_task_group(root => {
+263 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:368:10-368:25:
+<WORKDIR>/src/io/README.mbt.md:367:10-367:25:
     | ```moonbit check
     | ///|
     | async test "write to writer" {
-368 |   @async.with_task_group(root => {
+367 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:386:10-386:25:
+<WORKDIR>/src/io/README.mbt.md:385:10-385:25:
     | 
     | ///|
     | async test "write_once - single write operation" {
-386 |   @async.with_task_group(root => {
+385 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:403:10-403:25:
+<WORKDIR>/src/io/README.mbt.md:402:10-402:25:
     | 
     | ///|
     | async test "write large data" {
-403 |   @async.with_task_group(root => {
+402 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg(() => {
 
-<WORKDIR>/src/io/README.mbt.md:421:10-421:25:
+<WORKDIR>/src/io/README.mbt.md:420:10-420:25:
     | ///|
     | async test "write_reader - copy from reader to writer" {
-    |   let log = StringBuilder::new()
-421 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+420 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r1, w1) = @io.pipe()
     |     let (r2, w2) = @io.pipe()
 
-<WORKDIR>/src/io/README.mbt.md:466:10-466:25:
+<WORKDIR>/src/io/README.mbt.md:465:10-465:25:
     | 
     | ///|
     | async test "write string" {
-466 |   @async.with_task_group(root => {
+465 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:489:10-489:25:
+<WORKDIR>/src/io/README.mbt.md:488:10-488:25:
     | ///|
     | async test "BufferedWriter - basic buffering" {
-    |   let log = StringBuilder::new()
-489 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+488 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg(() => {
 
-<WORKDIR>/src/io/README.mbt.md:527:10-527:25:
+<WORKDIR>/src/io/README.mbt.md:526:10-526:25:
     | 
     | ///|
     | async test "BufferedWriter::new with custom size" {
-527 |   @async.with_task_group(root => {
+526 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:545:10-545:25:
+<WORKDIR>/src/io/README.mbt.md:544:10-544:25:
     | 
     | ///|
     | async test "BufferedWriter::flush - commit buffered data" {
-545 |   @async.with_task_group(root => {
+544 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/io/README.mbt.md:565:10-565:25:
+<WORKDIR>/src/io/README.mbt.md:564:10-564:25:
     | ///|
     | async test "BufferedWriter::write_reader - buffered copy" {
-    |   let log = StringBuilder::new()
-565 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+564 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r1, w1) = @io.pipe()
     |     let (r2, w2) = @io.pipe()
@@ -1642,7 +1651,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/buffered_writer_test.mbt:18:10-18:25:
    | ///|
    | async test "BufferedWriter" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group() <| fn(root) {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
@@ -1651,7 +1660,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/buffered_writer_test.mbt:56:10-56:25:
    | ///|
    | async test "BufferedWriter::write_reader" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 56 |   @async.with_task_group() <| fn(root) {
    |          ^^^^^^^^^^^^^^^
    |     let (r1, w1) = @io.pipe()
@@ -1696,7 +1705,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/read_all_test.mbt:32:10-32:25:
    | ///|
    | async test "read_all basic" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 32 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
@@ -1714,7 +1723,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/read_some_test.mbt:18:10-18:25:
    | ///|
    | async test "read_some basic" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
@@ -1723,7 +1732,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/read_some_test.mbt:43:10-43:25:
    | ///|
    | async test "read_some length limit 1" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 43 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
@@ -1732,7 +1741,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/read_some_test.mbt:71:10-71:25:
    | ///|
    | async test "read_some length limit 2" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 71 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
@@ -1741,11 +1750,20 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/read_some_test.mbt:98:10-98:25:
    | ///|
    | async test "read_some length limit 3" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 98 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @io.pipe()
    |     defer r.close()
+
+<WORKDIR>/src/io/read_some_test.mbt:123:10-123:25:
+    | 
+    | ///|
+    | async test "read_some returned chunks remain stable" {
+123 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let first_expected = Bytes::make(1024, b'a')
+    |     let second_expected = Bytes::make(1024, b'b')
 
 <WORKDIR>/src/io/writer_test.mbt:17:10-17:25:
    | 
@@ -1759,35 +1777,35 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/io/writer_test.mbt:34:10-34:25:
    | ///|
    | async test "write reader" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 34 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r1, w1) = @io.pipe()
    |     let (r2, w2) = @io.pipe()
 
-<WORKDIR>/src/io/writer_test.mbt:108:10-108:25:
+<WORKDIR>/src/io/writer_test.mbt:111:10-111:25:
     | 
     | ///|
     | async test "write_string" {
-108 |   @async.with_task_group() <| root => {
+111 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     defer r.close()
 
-<WORKDIR>/src/lazy_init_test.mbt:115:23-115:38:
+<WORKDIR>/src/lazy_init_test.mbt:112:23-112:38:
+    |       Some(_) => log.push("lazy init completed at tick \{current_tick()}")
     |     }
-    |     log.push("lazy init completed at tick \{current_tick()}")
     |   })
-115 |   let result = @async.with_task_group(group => {
+112 |   let result = @async.with_task_group(group => {
     |                       ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       x.wait()
 
-<WORKDIR>/src/lazy_init_test.mbt:146:10-146:25:
+<WORKDIR>/src/lazy_init_test.mbt:140:10-140:25:
+    |       Some(_) => log.push("lazy init completed at tick \{current_tick()}")
     |     }
-    |     log.push("lazy init completed at tick \{current_tick()}")
     |   })
-146 |   @async.with_task_group() <| group => {
+140 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       debug_inspect(
@@ -1831,20 +1849,20 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/no_wait_test.mbt:18:10-18:25:
    | ///|
    | async test "no_wait cancelled" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg(no_wait=true) <| () => {
-   |       try @async.sleep(1000) catch {
+   |       match @async.handle_cancellation(() => @async.sleep(1000)) {
 
-<WORKDIR>/src/no_wait_test.mbt:45:10-45:25:
+<WORKDIR>/src/no_wait_test.mbt:41:10-41:25:
    | ///|
    | async test "no_wait normal exit" {
-   |   let buf = StringBuilder::new()
-45 |   @async.with_task_group() <| root => {
+   |   let buf = StringBuilder()
+41 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg(no_wait=true) <| () => {
-   |       try @async.sleep(100) catch {
+   |       match @async.handle_cancellation(() => @async.sleep(100)) {
 
 <WORKDIR>/src/pipe/read_exactly_test.mbt:22:10-22:25:
    |     buf..write_string(msg).write_char('\n')
@@ -1898,7 +1916,7 @@ Found 367 references for symbol 'with_task_group':
 192 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let input_file = "_build/process_test_input.txt"
-    |     @fs.write_file(input_file, "file content", create_mode=CreateOrTruncate)
+    |     @fs.write_file(input_file, "file content")
 
 <WORKDIR>/src/process/README.mbt.md:215:10-215:25:
     | ///|
@@ -1909,41 +1927,41 @@ Found 367 references for symbol 'with_task_group':
     |     let output_file = "_build/process_test_output.txt"
     |     root.add_defer(() => @fs.remove(output_file))
 
-<WORKDIR>/src/process/README.mbt.md:241:10-241:25:
+<WORKDIR>/src/process/README.mbt.md:238:10-238:25:
     | ///|
     | #cfg(all(target="native", not(platform="windows")))
     | async test "file to file redirection" {
-241 |   @async.with_task_group(root => {
+238 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     let input_file = "_build/process_redirect_in.txt"
     |     let output_file = "_build/process_redirect_out.txt"
 
-<WORKDIR>/src/process/README.mbt.md:397:10-397:25:
+<WORKDIR>/src/process/README.mbt.md:391:10-391:25:
     | ///|
     | #cfg(all(target="native", not(platform="windows")))
     | async test "merge stdout and stderr" {
-397 |   @async.with_task_group(group => {
+391 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
     |     let (reader, writer) = @process.read_from_process()
     |     defer reader.close()
 
-<WORKDIR>/src/process/README.mbt.md:422:10-422:25:
+<WORKDIR>/src/process/README.mbt.md:416:10-416:25:
     | ///|
     | #cfg(all(target="native", not(platform="windows")))
     | async test "multiple processes to one pipe" {
-422 |   @async.with_task_group(root => {
+416 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
-    |     let (reader, writer) = @pipe.pipe()
+    |     let (reader, writer) = @process.read_from_process(shared=true)
     |     root.spawn_bg(no_wait=true, () => {
 
-<WORKDIR>/src/process/README.mbt.md:431:12-431:27:
+<WORKDIR>/src/process/README.mbt.md:424:12-424:27:
+    |       inspect(output.contains("first"), content="true")
     |       inspect(output.contains("second"), content="true")
     |     })
-    |     defer writer.close()
-431 |     @async.with_task_group(group => {
+424 |     @async.with_task_group(group => {
     |            ^^^^^^^^^^^^^^^
-    |       @process.spawn(group, "echo", ["first"], stdout=writer) |> ignore
-    |       @process.spawn(group, "echo", ["second"], stdout=writer) |> ignore
+    |       // The write must be manually closed after all children process are spawned
+    |       // in the shared case
 
 <WORKDIR>/src/process/basic_test.mbt:18:10-18:25:
    | 
@@ -1954,11 +1972,11 @@ Found 367 references for symbol 'with_task_group':
    |     let (r, w) = @process.read_from_process()
    |     defer r.close()
 
-<WORKDIR>/src/process/basic_test.mbt:40:10-40:25:
+<WORKDIR>/src/process/basic_test.mbt:44:10-44:25:
    | ///|
    | async test "basic_cat" {
    |   let cat = cat.wait()
-40 |   @async.with_task_group() <| group => {
+44 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (cat_read, we_write) = @process.write_to_process()
    |     let (we_read, cat_write) = @process.read_from_process()
@@ -1966,7 +1984,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/process/cancel_test.mbt:20:10-20:25:
    | async test "cancel process" {
    |   let test_prog = sleep_prog.wait()
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 20 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @process.read_from_process()
@@ -1993,7 +2011,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/process/cancel_test.mbt:116:10-116:25:
     | ///|
     | async test "orphan process" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 116 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @process.read_from_process()
@@ -2006,7 +2024,7 @@ Found 367 references for symbol 'with_task_group':
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     // FIXME(upstram): missing codelens here
-   |     guard @env.current_dir() is Some(prev_cwd)
+   |     guard! @env.current_dir() is Some(prev_cwd)
 
 <WORKDIR>/src/process/env_test.mbt:18:10-18:25:
    | 
@@ -2035,56 +2053,56 @@ Found 367 references for symbol 'with_task_group':
    |     let (cat_read, we_write) = @process.write_to_process()
    |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/process/process.mbt:152:16-152:31:
-    |   process.wait_pid(context~) catch {
-    |     _ if @coroutine.is_being_cancelled() =>
-    |       @async.protect_from_cancel() <| () => {
-152 |         @async.with_task_group() <| group => {
+<WORKDIR>/src/process/process.mbt:154:16-154:31:
+    |   match @async.handle_cancellation(() => process.wait_pid(context~)) {
+    |     None => {
+    |       let ret = @async.protect_from_cancel() <| () => {
+154 |         @async.with_task_group() <| group => {
     |                ^^^^^^^^^^^^^^^
     |           group.spawn_bg(no_wait=true, () => cancel_handler(pid))
     |           process.wait_pid(context~)
 
-<WORKDIR>/src/process/process.mbt:238:18-238:33:
-    |     process.wait_pid(context~) catch {
-    |       _ if @coroutine.is_being_cancelled() =>
+<WORKDIR>/src/process/process.mbt:245:18-245:33:
+    |     match @async.handle_cancellation(() => process.wait_pid(context~)) {
+    |       None =>
     |         @async.protect_from_cancel() <| () => {
-238 |           @async.with_task_group() <| group => {
+245 |           @async.with_task_group() <| group => {
     |                  ^^^^^^^^^^^^^^^
     |             group.spawn_bg(no_wait=true, () => cancel_handler(pid))
     |             process.wait_pid(context~)
 
-<WORKDIR>/src/process/process.mbt:265:10-265:25:
+<WORKDIR>/src/process/process.mbt:272:10-272:25:
     |   no_console_window? : Bool,
     | ) -> (Int, &@io.Data) {
     |   let (r, w) = read_from_process()
-265 |   @async.with_task_group() <| group => {
+272 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     defer r.close()
     |     let exit_code = group.spawn(() => {
 
-<WORKDIR>/src/process/process.mbt:301:10-301:25:
+<WORKDIR>/src/process/process.mbt:308:10-308:25:
     |   no_console_window? : Bool,
     | ) -> (Int, &@io.Data) {
     |   let (r, w) = read_from_process()
-301 |   @async.with_task_group() <| group => {
+308 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     defer r.close()
     |     let exit_code = group.spawn(() => {
 
-<WORKDIR>/src/process/process.mbt:338:10-338:25:
+<WORKDIR>/src/process/process.mbt:345:10-345:25:
     | ) -> (Int, &@io.Data, &@io.Data) {
     |   let (r_out, w_out) = read_from_process()
     |   let (r_err, w_err) = read_from_process()
-338 |   @async.with_task_group() <| group => {
+345 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let exit_code = group.spawn(() => {
     |       run(
 
-<WORKDIR>/src/process/process.mbt:380:10-380:25:
+<WORKDIR>/src/process/process.mbt:387:10-387:25:
     |   no_console_window? : Bool,
     | ) -> (Int, &@io.Data) {
     |   let (r, w) = read_from_process()
-380 |   @async.with_task_group() <| group => {
+387 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     defer r.close()
     |     let exit_code = group.spawn(() => {
@@ -2095,17 +2113,17 @@ Found 367 references for symbol 'with_task_group':
    | async test "merge multiple" {
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
-   |     let (r, w) = @pipe.pipe()
+   |     let (r, w) = @process.read_from_process(shared=true)
    |     root.spawn_bg(no_wait=true) <| () => {
 
-<WORKDIR>/src/process/redirect_test.mbt:25:12-25:27:
+<WORKDIR>/src/process/redirect_test.mbt:24:12-24:27:
+   |       defer r.close()
    |       inspect(r.read_all().text(), content="abcdefgh")
    |     }
-   |     defer w.close()
-25 |     @async.with_task_group() <| group => {
+24 |     @async.with_task_group() <| group => {
    |            ^^^^^^^^^^^^^^^
+   |       defer w.close()
    |       @process.spawn(group, shell, ["-c", "\{write_stdout} abcd"], stdout=w, extra_env={
-   |         "LANG": "en_US.UTF-8",
 
 <WORKDIR>/src/process/redirect_test.mbt:45:10-45:25:
    | ///|
@@ -2116,19 +2134,55 @@ Found 367 references for symbol 'with_task_group':
    |     let input_file = "_build/process_redirect_test_in.txt"
    |     let output_file = "_build/process_redirect_test_out.txt"
 
-<WORKDIR>/src/process/redirect_test.mbt:66:10-66:25:
+<WORKDIR>/src/process/redirect_test.mbt:63:10-63:25:
+   | 
+   | ///|
+   | async test "merge multiple to file" {
+63 |   @async.with_task_group() <| root => {
+   |          ^^^^^^^^^^^^^^^
+   |     let output_file = "_build/process_redirect_merge_multiple_test_out.txt"
+   |     root.add_defer(() => @fs.remove(output_file))
+
+<WORKDIR>/src/process/redirect_test.mbt:67:12-67:27:
+   |     let output_file = "_build/process_redirect_merge_multiple_test_out.txt"
+   |     root.add_defer(() => @fs.remove(output_file))
+   |     let w = @process.redirect_to_file(output_file, shared=true)
+67 |     @async.with_task_group <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       defer w.close()
+   |       let _ = @process.spawn(
+
+<WORKDIR>/src/process/redirect_test.mbt:95:10-95:25:
    | 
    | ///|
    | async test "merge stdout and stderr" {
-66 |   @async.with_task_group() <| group => {
+95 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @process.read_from_process()
    |     defer r.close()
 
+<WORKDIR>/src/process/redirect_test.mbt:111:10-111:25:
+    | 
+    | ///|
+    | async test "merge stdout and stderr to file" {
+111 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let output_file = "_build/process_redirect_merge_test_out.txt"
+    |     group.add_defer(() => @fs.remove(output_file))
+
+<WORKDIR>/src/process/redirect_test.mbt:133:10-133:25:
+    | ///|
+    | async test "pipe" {
+    |   let log = []
+133 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let cat = cat.wait()
+    |     let (r1, w1) = @process.write_to_process()
+
 <WORKDIR>/src/process/spawn_in_group_test.mbt:20:10-20:25:
    |   let log = []
    |   let sleep = sleep_prog.wait()
-   |   let t0 = @env.now()
+   |   let t0 = @async.now()
 20 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let _ = @process.spawn(group, sleep, ["500"])
@@ -2155,11 +2209,11 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/process/spawn_in_group_test.mbt:53:10-53:25:
    | async test "Process::wait" {
    |   let sleep = sleep_prog.wait()
-   |   let mut t0 = 0UL
+   |   let mut t0 = 0L
 53 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let child = @process.spawn(group, sleep, ["500", "-exit-code", "42"])
-   |     t0 = @env.now()
+   |     t0 = @async.now()
 
 <WORKDIR>/src/process/spawn_in_group_test.mbt:68:10-68:25:
    | ///|
@@ -2173,7 +2227,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/process/spawn_in_group_test.mbt:81:10-81:25:
    | async test "Process:cancel" {
    |   let sleep = sleep_prog.wait()
-   |   let mut t0 = 0UL
+   |   let mut t0 = 0L
 81 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @process.read_from_process()
@@ -2181,7 +2235,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/process/wait_test.mbt:20:10-20:25:
    | async test "basic wait" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let test_prog = sleep_prog.wait()
 20 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
@@ -2190,111 +2244,120 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/process/wait_test.mbt:51:10-51:25:
    | async test "wait_pid" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let test_prog = sleep_prog.wait()
 51 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     group.spawn_bg() <| () => {
    |       for _ in 0..<2 {
 
+<WORKDIR>/src/process/wait_test.mbt:102:26-102:41:
+    | async test "signal exit code" {
+    |   guard !(@event_loop.platform is Windows) else {  }
+    |   let sleep = sleep_prog.wait()
+102 |   let exit_code = @async.with_task_group <| group => {
+    |                          ^^^^^^^^^^^^^^^
+    |     let proc = @process.spawn(group, sleep, ["1000", "-use-default-handler"])
+    |     group.spawn_bg(no_wait=true) <| () => {
+
 <WORKDIR>/src/protect_from_cancel_test.mbt:18:10-18:25:
    | ///|
    | async test "protect_from_cancel" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
-   |       @async.protect_from_cancel(() => {
+   |       @async.protect_from_cancel <| () => {
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:65:10-65:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:56:10-56:25:
    | ///|
    | async test "protect_from_cancel wait" {
-   |   let log = StringBuilder::new()
-65 |   @async.with_task_group(root => {
+   |   let log = StringBuilder()
+56 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       @async.sleep(200)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:72:12-72:27:
+<WORKDIR>/src/protect_from_cancel_test.mbt:63:12-63:27:
    |       @async.sleep(200)
    |       log <+ "400ms tick\n"
    |     }
-72 |     @async.with_task_group(group => {
+63 |     @async.with_task_group(group => {
    |            ^^^^^^^^^^^^^^^
    |       group.spawn_bg() <| () => {
    |         @async.sleep(300)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:103:10-103:25:
-    | ///|
-    | async test "protect_from_cancel with_timeout" {
-    |   let log = StringBuilder::new()
-103 |   @async.with_task_group() <| root => {
-    |          ^^^^^^^^^^^^^^^
-    |     root.spawn_bg() <| () => {
-    |       @async.sleep(200)
+<WORKDIR>/src/protect_from_cancel_test.mbt:94:10-94:25:
+   | ///|
+   | async test "protect_from_cancel with_timeout" {
+   |   let log = StringBuilder()
+94 |   @async.with_task_group() <| root => {
+   |          ^^^^^^^^^^^^^^^
+   |     root.spawn_bg() <| () => {
+   |       @async.sleep(200)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:136:14-136:29:
-    |   let log = StringBuilder::new()
+<WORKDIR>/src/protect_from_cancel_test.mbt:127:14-127:29:
+    |   let log = StringBuilder()
     |   let result : Error = @test_util.expect_error_async <| () => {
     |     (
-136 |       @async.with_task_group(root => {
+127 |       @async.with_task_group(root => {
     |              ^^^^^^^^^^^^^^^
     |         root.spawn_bg() <| () => {
     |           @async.sleep(200)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:167:10-167:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:158:10-158:25:
     | ///|
     | async test "protect_from_cancel nested1" {
-    |   let log = StringBuilder::new()
-167 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+158 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:200:10-200:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:191:10-191:25:
     | ///|
     | async test "protect_from_cancel nested2" {
-    |   let log = StringBuilder::new()
-200 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+191 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:239:10-239:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:230:10-230:25:
     | ///|
     | async test "protect_from_cancel in cancellation handler" {
-    |   let log = StringBuilder::new()
-239 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+230 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg(no_wait=true) <| () => {
-    |       @async.sleep(400) catch {
+    |       match @async.handle_cancellation(() => @async.sleep(400)) {
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:269:10-269:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:260:10-260:25:
     | ///|
     | async test "cancel while scheduled" {
-    |   let log = StringBuilder::new()
-269 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+260 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       for _ in 0..<2 {
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:312:10-312:25:
+<WORKDIR>/src/protect_from_cancel_test.mbt:303:10-303:25:
     | ///|
     | async test "error in async cancel" {
-    |   let log = StringBuilder::new()
-312 |   @async.with_task_group() <| root => {
+    |   let log = StringBuilder()
+303 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       for _ in 0..<2 {
 
-<WORKDIR>/src/protect_from_cancel_test.mbt:319:12-319:27:
+<WORKDIR>/src/protect_from_cancel_test.mbt:310:12-310:27:
     |         log <+ "tick\n"
     |       }
     |     }
-319 |     @async.with_task_group(group => {
+310 |     @async.with_task_group(group => {
     |            ^^^^^^^^^^^^^^^
     |       group.spawn_bg(no_wait=true, allow_failure=true) <| () => {
-    |         @async.sleep(1000) catch {
+    |         errdefer {
 
 <WORKDIR>/src/raw_fd/raw_fd_test.mbt:25:10-25:25:
    |   )
@@ -2352,7 +2415,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/return_immediately_test.mbt:44:12-44:27:
    | async test "return_immediately error on cancel" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let err = @test_util.expect_error_async <| () => {
 44 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
@@ -2372,25 +2435,25 @@ Found 367 references for symbol 'with_task_group':
    |       @async.sleep(100)
    |       log.push("100ms tick")
    |     }
-78 |     @async.with_task_group(group => {
+78 |     @async.with_task_group <| group => {
    |            ^^^^^^^^^^^^^^^
-   |       group.return_immediately(()) catch {
-   |         _ => @async.sleep(200)
+   |       defer @async.sleep(200)
+   |       group.return_immediately(())
 
-<WORKDIR>/src/return_immediately_test.mbt:93:10-93:25:
+<WORKDIR>/src/return_immediately_test.mbt:90:10-90:25:
    | ///|
    | async test "return_immediately called outside" {
    |   let log = []
-93 |   @async.with_task_group() <| outer => {
+90 |   @async.with_task_group() <| outer => {
    |          ^^^^^^^^^^^^^^^
    |     outer.spawn_bg() <| () => {
    |       @async.sleep(100)
 
-<WORKDIR>/src/return_immediately_test.mbt:98:12-98:27:
+<WORKDIR>/src/return_immediately_test.mbt:95:12-95:27:
    |       @async.sleep(100)
    |       log.push("100ms tick")
    |     }
-98 |     @async.with_task_group(inner => {
+95 |     @async.with_task_group(inner => {
    |            ^^^^^^^^^^^^^^^
    |       outer.spawn_bg(() => inner.return_immediately(()))
    |     })
@@ -2443,7 +2506,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/semaphore/semaphore_test.mbt:18:10-18:25:
    | ///|
    | async test "semaphore mutex" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let semaphore = @semaphore.Semaphore(1)
@@ -2452,7 +2515,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/semaphore/semaphore_test.mbt:51:10-51:25:
    | ///|
    | async test "semaphore multiple value" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 51 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let semaphore = @semaphore.Semaphore(2)
@@ -2470,7 +2533,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/semaphore/semaphore_test.mbt:107:10-107:25:
     | ///|
     | async test "semaphore cancellation no_swallow" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 107 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let semaphore = @semaphore.Semaphore(1)
@@ -2479,11 +2542,20 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/semaphore/semaphore_test.mbt:132:10-132:25:
     | ///|
     | async test "semaphore fairness" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 132 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let semaphore = @semaphore.Semaphore(1)
     |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/shell/execute.mbt:532:10-532:25:
+    |   // immediately before its producer is spawned, keeping any unconsumed input
+    |   // end local to that one junction if the producer itself fails to spawn.
+    |   let capture_stderr = sink is Buffer(_)
+532 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let captured = Ref(0)
+    |     let limit = match sink {
 
 <WORKDIR>/src/signal/signal_test.mbt:39:10-39:25:
    | async test "cancel with default signal" {
@@ -2503,14 +2575,32 @@ Found 367 references for symbol 'with_task_group':
    |     let (r, w) = @process.read_from_process()
    |     let task = group.spawn(() => {
 
-<WORKDIR>/src/signal/signal_test.mbt:105:10-105:25:
+<WORKDIR>/src/signal/signal_test.mbt:102:10-102:25:
     | async test "cancel with SIGHUP" {
     |   let test_prog = sleep_prog.wait()
     |   let log = []
-105 |   @async.with_task_group() <| group => {
+102 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @process.read_from_process()
     |     let task = group.spawn(() => {
+
+<WORKDIR>/src/signal/signal_test.mbt:132:10-132:25:
+    | async test "change cancellation signal set in the middle #1" {
+    |   let test_prog = sleep_prog.wait()
+    |   let log = []
+132 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r1, w1) = @process.write_to_process()
+    |     defer w1.close()
+
+<WORKDIR>/src/signal/signal_test.mbt:160:10-160:25:
+    | async test "change cancellation signal set in the middle #2" {
+    |   let test_prog = sleep_prog.wait()
+    |   let log = []
+160 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r1, w1) = @process.write_to_process()
+    |     defer w1.close()
 
 <WORKDIR>/src/socket/connect_burst_test.mbt:46:10-46:25:
    | ///|
@@ -2551,7 +2641,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:26:10-26:25:
    | ///|
    | async test "Only_V4 server" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 26 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:0"))
@@ -2560,7 +2650,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:80:10-80:25:
    | ///|
    | async test "Only_V6 server" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 80 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @socket.TcpServer(
@@ -2569,7 +2659,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:137:10-137:25:
     | ///|
     | async test "dual stack server" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 137 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.TcpServer(@socket.Addr::parse("[::]:0"))
@@ -2578,7 +2668,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:188:10-188:25:
     | ///|
     | async test "Only_V4 UDP server" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 188 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
@@ -2587,7 +2677,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:241:10-241:25:
     | ///|
     | async test "Only_V6 UDP server" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 241 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(
@@ -2596,7 +2686,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/dual_stack_test.mbt:297:10-297:25:
     | ///|
     | async test "dual stack UDP server" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 297 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(@socket.Addr::parse("[::]:0"))
@@ -2620,56 +2710,56 @@ Found 367 references for symbol 'with_task_group':
    |     let server = @socket.UdpServer(@socket.Addr::parse("127.0.0.1:0"))
    |     let server_addr = server.addr
 
-<WORKDIR>/src/socket/happy_eyeball.mbt:43:12-43:27:
+<WORKDIR>/src/socket/happy_eyeball.mbt:44:12-44:27:
    |   let mut result = None
    |   let mut conn_err = None
    |   async fn connect_with_protocol(protocol : IpProtocolPreference) {
-43 |     @async.with_task_group() <| group => {
+44 |     @async.with_task_group() <| group => {
    |            ^^^^^^^^^^^^^^^
    |       for ai = ai; !ai.is_null(); ai = ai.next() {
    |         let addr = ai.to_addr(port)
 
-<WORKDIR>/src/socket/multicast_test.mbt:30:10-30:25:
+<WORKDIR>/src/socket/multicast_test.mbt:18:10-18:25:
    | ///|
    | async test "multicast basic" {
    |   let log = []
-30 |   @async.with_task_group <| group => {
+18 |   @async.with_task_group <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let addr = @socket.Addr::parse("239.0.0.1:4200")
    |     let interface_addr = @socket.Addr::parse("127.0.0.1:0")
 
-<WORKDIR>/src/socket/multicast_test.mbt:70:10-70:25:
+<WORKDIR>/src/socket/multicast_test.mbt:58:10-58:25:
    | ///|
    | async test "multicast discovery then unicast" {
    |   let log = []
-70 |   @async.with_task_group <| group => {
+58 |   @async.with_task_group <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let interface_addr = @socket.Addr::parse("127.0.0.1:0")
    |     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
 
-<WORKDIR>/src/socket/multicast_test.mbt:122:10-122:25:
+<WORKDIR>/src/socket/multicast_test.mbt:107:10-107:25:
     |     return
     |   }
     |   let log = []
-122 |   @async.with_task_group() <| group => {
+107 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer::multicast(
     |       @socket.Addr::parse("239.0.0.1:0"),
 
-<WORKDIR>/src/socket/multicast_test.mbt:170:10-170:25:
+<WORKDIR>/src/socket/multicast_test.mbt:150:10-150:25:
     |     return
     |   }
     |   let log = []
-170 |   @async.with_task_group <| group => {
+150 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(@socket.Addr::parse("[::]:0"))
     |     defer server.close()
 
-<WORKDIR>/src/socket/multicast_test.mbt:229:10-229:25:
+<WORKDIR>/src/socket/multicast_test.mbt:206:10-206:25:
     |     return
     |   }
     |   let log = []
-229 |   @async.with_task_group() <| group => {
+206 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(@socket.Addr::parse("[::]:0"))
     |     let port = server.addr.port()
@@ -2695,7 +2785,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/socket/resolve_host_test.mbt:26:10-26:25:
    | ///|
    | async test "resolve cancel" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 26 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let lock = @async.Semaphore(1, initial_value=1)
@@ -2710,11 +2800,20 @@ Found 367 references for symbol 'with_task_group':
    |     group.spawn_bg() <| () => {
    |       for _ in 0..<2 {
 
-<WORKDIR>/src/socket/tcp.mbt:141:10-141:25:
+<WORKDIR>/src/socket/reuse_port_test.mbt:27:12-27:27:
+   |   let mut accepted1 = 0
+   |   let mut accepted2 = 0
+   |   let finished = @async.with_timeout_opt(10000, () => {
+27 |     @async.with_task_group() <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       let server1 = @socket.TcpServer(
+   |         @socket.Addr::parse("127.0.0.1:0"),
+
+<WORKDIR>/src/socket/tcp.mbt:152:10-152:25:
     |     None => None
     |     Some(n) => Some(@async.Semaphore(n))
     |   }
-141 |   @async.with_task_group() <| group => {
+152 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     for ;; {
     |       // only accept the connection if we have enough
@@ -2722,7 +2821,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/spawn_loop_test.mbt:18:10-18:25:
    | ///|
    | async test "spawn_loop basic" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 18 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let mut i = 0
@@ -2730,7 +2829,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/spawn_loop_test.mbt:43:12-43:27:
    | async test "spawn_loop basic-error" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
    |   let err = @test_util.expect_error_async <| () => {
 43 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
@@ -2744,11 +2843,11 @@ Found 367 references for symbol 'with_task_group':
 69 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let mut i = 0
-   |     let start = @env.now()
+   |     let start = @async.now()
 
 <WORKDIR>/src/spawn_test.mbt:19:12-19:27:
    | async test "spawn error1" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
    |   let result = @test_util.expect_error_async <| () => {
 19 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
@@ -2757,7 +2856,7 @@ Found 367 references for symbol 'with_task_group':
 
 <WORKDIR>/src/spawn_test.mbt:43:12-43:27:
    | async test "spawn error2" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
    |   let result = @test_util.expect_error_async <| () => {
 43 |     @async.with_task_group(root => {
    |            ^^^^^^^^^^^^^^^
@@ -2791,28 +2890,19 @@ Found 367 references for symbol 'with_task_group':
    |     let (cat_read, we_write) = @process.write_to_process()
    |     let (we_read, cat_write) = @process.read_from_process()
 
-<WORKDIR>/src/stdio/stdio_test.mbt:112:10-112:25:
+<WORKDIR>/src/stdio/stdio_test.mbt:116:10-116:25:
     | async test "stdout and stderr are the same" {
     |   let cat = cat.wait()
     |   let (cat_read, we_write) = @process.write_to_process()
-112 |   @async.with_task_group <| group => {
+116 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let cat_task = group.spawn() <| () => {
     |       @process.collect_output_merged(cat, [], stdin=cat_read)
 
-<WORKDIR>/src/task_group.mbt:223:17-223:32:
-    | ///
-    | /// If all children task terminate successfully,
-    | /// `with_task_group` will return the result of `f`.
-223 | pub async fn[X] with_task_group(f : async (TaskGroup[X]) -> X) -> X {
-    |                 ^^^^^^^^^^^^^^^
-    |   let tg = {
-    |     children: Set([]),
-
 <WORKDIR>/src/timer_test.mbt:18:10-18:25:
    | ///|
    | async test "basic sleep" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 18 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
@@ -2837,7 +2927,7 @@ Found 367 references for symbol 'with_task_group':
    |         group.spawn_bg() <| () => {
 
 <WORKDIR>/src/timer_test.mbt:124:10-124:25:
-    |     (@env.now() - start + 50).to_int() / 150
+    |     (@async.now() - start + 50).to_int() / 150
     |   }
     |   let timer = @async.Timer(450)
 124 |   @async.with_task_group() <| group => {
@@ -2884,7 +2974,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/tls/tls_test.mbt:51:10-51:25:
    | ///|
    | async test "one way" {
-   |   let log = StringBuilder::new()
+   |   let log = StringBuilder()
 51 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let (client_read_from_server, server_write_to_client) = @pipe.pipe()
@@ -2893,7 +2983,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/tls/tls_test.mbt:104:10-104:25:
     | ///|
     | async test "echo" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
 104 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (client_read_from_server, server_write_to_client) = @pipe.pipe()
@@ -2938,7 +3028,7 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/wait_test.mbt:18:10-18:25:
    | ///|
    | async test "wait basic" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 18 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
@@ -2947,24 +3037,24 @@ Found 367 references for symbol 'with_task_group':
 <WORKDIR>/src/wait_test.mbt:47:10-47:25:
    | ///|
    | async test "wait cancelled" {
-   |   let buf = StringBuilder::new()
+   |   let buf = StringBuilder()
 47 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     let task = root.spawn(() => {
    |       @async.sleep(1000)
 
-<WORKDIR>/src/wait_test.mbt:77:10-77:25:
+<WORKDIR>/src/wait_test.mbt:75:10-75:25:
    | ///|
    | async test "try_wait" {
-   |   let log = StringBuilder::new()
-77 |   @async.with_task_group() <| root => {
+   |   let log = StringBuilder()
+75 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let task = root.spawn(no_wait=true, () => {
    |       @async.sleep(450)
 
 <WORKDIR>/src/websocket/README.mbt.md:55:10-55:25:
    | ///|
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async test "WebSocket client example" {
 55 |   @async.with_task_group(group => {
    |          ^^^^^^^^^^^^^^^
@@ -3169,20 +3259,20 @@ Found 367 references for symbol 'with_task_group':
    |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
    |     let addr = server.addr
 
-<WORKDIR>/src/websocket/utf8_validation_test.mbt:94:10-94:25:
+<WORKDIR>/src/websocket/utf8_validation_test.mbt:92:10-92:25:
    | 
    | ///|
    | async test "UTF8 validation large message" {
-94 |   @async.with_task_group() <| group => {
+92 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
    |     let port = server.addr.port()
 
-<WORKDIR>/src/websocket/utf8_validation_test.mbt:108:12-108:27:
+<WORKDIR>/src/websocket/utf8_validation_test.mbt:106:12-106:27:
     |     }
     |     let client = @websocket.connect("ws://localhost:\{port}")
     |     defer client.close()
-108 |     @async.with_task_group() <| group => {
+106 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
     |       let chunk_text = String::make(1024, '☺')
     |       let chunk_bin = @utf8.encode(chunk_text)
@@ -3241,83 +3331,83 @@ Found 367 references for symbol 'with_task_group':
    |     root.spawn_bg() <| () => {
    |       @async.sleep(300)
 
-<WORKDIR>/src/with_timeout_test.mbt:37:10-37:25:
-   | ///|
+<WORKDIR>/src/with_timeout_test.mbt:38:10-38:25:
+   | #warnings("-fragile_catch_all")
    | async test "with_timeout failure" {
-   |   let log = StringBuilder::new()
-37 |   @async.with_task_group(root => {
+   |   let log = StringBuilder()
+38 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:66:10-66:25:
+<WORKDIR>/src/with_timeout_test.mbt:67:10-67:25:
    | ///|
    | async test "with_timeout timeout" {
-   |   let log = StringBuilder::new()
-66 |   @async.with_task_group(root => {
+   |   let log = StringBuilder()
+67 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       @async.sleep(300)
 
-<WORKDIR>/src/with_timeout_test.mbt:99:10-99:25:
+<WORKDIR>/src/with_timeout_test.mbt:97:10-97:25:
    | ///|
    | async test "with_timeout nested1" {
-   |   let log = StringBuilder::new()
-99 |   @async.with_task_group(root => {
+   |   let log = StringBuilder()
+97 |   @async.with_task_group(root => {
    |          ^^^^^^^^^^^^^^^
    |     root.spawn_bg() <| () => {
    |       @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:140:10-140:25:
+<WORKDIR>/src/with_timeout_test.mbt:139:10-139:25:
     | ///|
     | async test "with_timeout nested2" {
-    |   let log = StringBuilder::new()
-140 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+139 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(300)
 
-<WORKDIR>/src/with_timeout_test.mbt:181:12-181:27:
+<WORKDIR>/src/with_timeout_test.mbt:177:12-177:27:
     | async test "with_timeout error_on_cancel" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
     |   let err = @test_util.expect_error_async <| () => {
-181 |     @async.with_task_group(root => {
+177 |     @async.with_task_group(root => {
     |            ^^^^^^^^^^^^^^^
     |       root.spawn_bg() <| () => {
     |         @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:212:12-212:27:
+<WORKDIR>/src/with_timeout_test.mbt:208:12-208:27:
     | async test "with_timeout error-on-timeout" {
-    |   let log = StringBuilder::new()
+    |   let log = StringBuilder()
     |   let err = @test_util.expect_error_async <| () => {
-212 |     @async.with_task_group(root => {
+208 |     @async.with_task_group(root => {
     |            ^^^^^^^^^^^^^^^
     |       root.spawn_bg() <| () => {
     |         @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:243:10-243:25:
+<WORKDIR>/src/with_timeout_test.mbt:236:10-236:25:
     | ///|
     | async test "with_timeout_opt normal exit" {
     |   let log = []
-243 |   @async.with_task_group(root => {
+236 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:263:10-263:25:
-    | ///|
+<WORKDIR>/src/with_timeout_test.mbt:257:10-257:25:
+    | #warnings("-fragile_catch_all")
     | async test "with_timeout_opt failure" {
-    |   let log = StringBuilder::new()
-263 |   @async.with_task_group(root => {
+    |   let log = StringBuilder()
+257 |   @async.with_task_group(root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
 
-<WORKDIR>/src/with_timeout_test.mbt:292:10-292:25:
+<WORKDIR>/src/with_timeout_test.mbt:286:10-286:25:
     | ///|
     | async test "with_timeout_opt timeout" {
     |   let log = []
-292 |   @async.with_task_group() <| root => {
+286 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)

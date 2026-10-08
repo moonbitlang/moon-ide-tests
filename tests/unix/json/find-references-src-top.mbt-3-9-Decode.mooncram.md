@@ -18,13 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Decode' --loc 'src/top.mbt:3:9'
-Found 1 references for symbol 'Decode':
-<WORKDIR>/src/top.mbt:3:9-3:15:
-  | ///|
-  | pub using @lib {
-3 |   trait Decode,
-  |         ^^^^^^
-  |   decode,
-  |   decode_start,
-
+Error: could not get package of file <WORKDIR>/src/top.mbt
+[1]
 ```

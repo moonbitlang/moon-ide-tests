@@ -3,19 +3,11 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'Redshift' --loc 'src\redshift.mbt:6:22'
 Found 12 references for symbol 'Redshift':
-<WORKDIR>/src\redshift.mbt:3:17-3:25:
-  | ///|
-  | /// Redshift dialect - supports Amazon Redshift specific syntax
-3 | pub(all) struct Redshift {}
-  |                 ^^^^^^^^
-  | 
-  | ///|
-
 <WORKDIR>/src\redshift.mbt:6:22-6:30:
   | pub(all) struct Redshift {}
   | 
   | ///|
-6 | pub impl Dialect for Redshift with supports_string_literal_backslash_escape(
+6 | pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
   |                      ^^^^^^^^
   |   _self,
   | ) {
@@ -24,7 +16,7 @@ Found 12 references for symbol 'Redshift':
    | }
    | 
    | ///|
-13 | pub impl Dialect for Redshift with supports_boolean_literals(_self) {
+13 | pub impl Dialect for Redshift with fn supports_boolean_literals(_self) {
    |                      ^^^^^^^^
    |   true
    | }
@@ -33,7 +25,7 @@ Found 12 references for symbol 'Redshift':
    | }
    | 
    | ///|
-18 | pub impl Dialect for Redshift with supports_filter_during_aggregation(_self) {
+18 | pub impl Dialect for Redshift with fn supports_filter_during_aggregation(_self) {
    |                      ^^^^^^^^
    |   false
    | }
@@ -42,7 +34,7 @@ Found 12 references for symbol 'Redshift':
    | }
    | 
    | ///|
-23 | pub impl Dialect for Redshift with supports_within_after_array_aggregation(
+23 | pub impl Dialect for Redshift with fn supports_within_after_array_aggregation(
    |                      ^^^^^^^^
    |   _self,
    | ) {
@@ -51,63 +43,72 @@ Found 12 references for symbol 'Redshift':
    | }
    | 
    | ///|
-30 | pub impl Dialect for Redshift with requires_column_types_in_create_table(_self) {
+30 | pub impl Dialect for Redshift with fn requires_column_types_in_create_table(
+   |                      ^^^^^^^^
+   |   _self,
+   | ) {
+
+<WORKDIR>/src\redshift.mbt:37:22-37:30:
+   | }
+   | 
+   | ///|
+37 | pub impl Dialect for Redshift with fn supports_if_not_exists(_self) {
    |                      ^^^^^^^^
    |   true
    | }
 
-<WORKDIR>/src\redshift.mbt:35:22-35:30:
+<WORKDIR>/src\redshift.mbt:42:22-42:30:
    | }
    | 
    | ///|
-35 | pub impl Dialect for Redshift with supports_if_not_exists(_self) {
+42 | pub impl Dialect for Redshift with fn supports_double_quoted_identifiers(_self) {
    |                      ^^^^^^^^
    |   true
    | }
 
-<WORKDIR>/src\redshift.mbt:40:22-40:30:
+<WORKDIR>/src\redshift.mbt:47:22-47:30:
    | }
    | 
    | ///|
-40 | pub impl Dialect for Redshift with supports_double_quoted_identifiers(_self) {
-   |                      ^^^^^^^^
-   |   true
-   | }
-
-<WORKDIR>/src\redshift.mbt:45:22-45:30:
-   | }
-   | 
-   | ///|
-45 | pub impl Dialect for Redshift with parse_statement(
+47 | pub impl Dialect for Redshift with fn parse_statement(
    |                      ^^^^^^^^
    |   _self : Redshift,
    |   _parser : Parser,
 
-<WORKDIR>/src\redshift.mbt:46:11-46:19:
+<WORKDIR>/src\redshift.mbt:48:11-48:19:
    | 
    | ///|
-   | pub impl Dialect for Redshift with parse_statement(
-46 |   _self : Redshift,
+   | pub impl Dialect for Redshift with fn parse_statement(
+48 |   _self : Redshift,
    |           ^^^^^^^^
    |   _parser : Parser,
    |   _tokens : ArrayView[Token],
 
-<WORKDIR>/src\redshift.mbt:54:22-54:30:
+<WORKDIR>/src\redshift.mbt:56:22-56:30:
    | }
    | 
    | ///|
-54 | pub impl Dialect for Redshift with parse_expr(
+56 | pub impl Dialect for Redshift with fn parse_expr(
    |                      ^^^^^^^^
    |   _self : Redshift,
    |   _tokens : ArrayView[Token],
 
-<WORKDIR>/src\redshift.mbt:55:11-55:19:
+<WORKDIR>/src\redshift.mbt:57:11-57:19:
    | 
    | ///|
-   | pub impl Dialect for Redshift with parse_expr(
-55 |   _self : Redshift,
+   | pub impl Dialect for Redshift with fn parse_expr(
+57 |   _self : Redshift,
    |           ^^^^^^^^
    |   _tokens : ArrayView[Token],
    | ) -> ParserResult[Expr]? raise ParserError {
+
+<WORKDIR>/src\redshift.mbt:64:12-64:20:
+   | }
+   | 
+   | ///|
+64 | pub extend Redshift with Dialect::{
+   |            ^^^^^^^^
+   |   supports_filter_during_aggregation,
+   |   parse_statement,
 
 ```

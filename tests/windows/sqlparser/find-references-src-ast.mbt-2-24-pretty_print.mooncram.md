@@ -2,56 +2,49 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'pretty_print' --loc 'src\ast.mbt:2:24'
-Found 298 references for symbol 'pretty_print':
-<WORKDIR>/src\ast.mbt:2:24-2:36:
-  | ///|
-2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
-  |                        ^^^^^^^^^^^^
-  |   @pp.pretty(obj).to_string()
-  | }
-
-<WORKDIR>/src\bigquery.mbt:71:68-71:80:
+Found 297 references for symbol 'pretty_print':
+<WORKDIR>/src\bigquery.mbt:73:67-73:79:
    | 
    | test "BigQuery named parameter" {
    |   let tokens = "SELECT * FROM users WHERE id = @user_id;"
-71 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-   |                                                                    ^^^^^^^^^^^^
+73 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
+   |                                                                   ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:88:68-88:80:
+<WORKDIR>/src\bigquery.mbt:90:67-90:79:
    | ///|
    | test "BigQuery positional parameter" {
    |   let tokens = "SELECT * FROM users WHERE id = ?;"
-88 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-   |                                                                    ^^^^^^^^^^^^
+90 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
+   |                                                                   ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:105:68-105:80:
+<WORKDIR>/src\bigquery.mbt:107:67-107:79:
     | ///|
     | test "BigQuery mixed parameters" {
     |   let tokens = "SELECT * FROM users WHERE id = @user_id AND age > ?;"
-105 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+107 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:123:68-123:80:
+<WORKDIR>/src\bigquery.mbt:125:67-125:79:
     | ///|
     | test "BigQuery multiple named parameters" {
     |   let tokens = "SELECT @field FROM @table WHERE @condition = @value;"
-123 |   let stmt = parse_sql(dialect=BigQuery::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+125 |   let stmt = parse_sql(dialect=BigQuery::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\bigquery.mbt:142:65-142:77:
+<WORKDIR>/src\bigquery.mbt:144:64-144:76:
     | 
     | test "Named parameters treated as identifiers in MySQL" {
     |   let tokens = "SELECT @user_id FROM users;"
-142 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+144 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
@@ -721,1137 +714,1137 @@ Found 298 references for symbol 'pretty_print':
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1144:38-1144:50:
+<WORKDIR>/src\dml.mbt:1147:38-1147:50:
      | ///|
      | test "Parse select with two columns" {
      |   let tokens = "SELECT col1, col2 FROM t;"
-1144 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1147 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1160:38-1160:50:
+<WORKDIR>/src\dml.mbt:1163:38-1163:50:
      | ///|
      | test "Parse select with function call" {
      |   let tokens = "SELECT MAX(arg1, arg2), MIN() as m FROM t;"
-1160 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1163 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1176:38-1176:50:
+<WORKDIR>/src\dml.mbt:1179:38-1179:50:
      | ///|
      | test "Nested expression" {
      |   let tokens = "SELECT sum(l_extendedprice * (1 - l_discount)) FROM lineitem;"
-1176 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1179 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1191:38-1191:50:
+<WORKDIR>/src\dml.mbt:1194:38-1194:50:
      | ///|
      | test "Binary expression" {
      |   let tokens = "SELECT 1 + 2 * 3 FROM t;"
-1191 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1194 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1206:38-1206:50:
+<WORKDIR>/src\dml.mbt:1209:38-1209:50:
      | ///|
      | test "Complecated binary expression" {
      |   let tokens = "SELECT sum(a * (1 - b) * (2 + b)) AS c FROM t;"
-1206 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1209 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1221:38-1221:50:
+<WORKDIR>/src\dml.mbt:1224:38-1224:50:
      | ///|
      | test "Selection clause" {
      |   let tokens = "SELECT * FROM t WHERE id = 1;"
-1221 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1224 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1247:38-1247:50:
+<WORKDIR>/src\dml.mbt:1250:38-1250:50:
      |     #|  AND name ILIKE 'TEST' 
      |     #|  AND name NOT LIKE 'test2' 
      |     #|  AND name NOT ILIKE 'TEST2';
-1247 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1250 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1267:38-1267:50:
+<WORKDIR>/src\dml.mbt:1270:38-1270:50:
      | ///|
      | test "From multiple table refs" {
      |   let tokens = "SELECT * FROM t1, t2;"
-1267 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1270 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1283:62-1283:74:
+<WORKDIR>/src\dml.mbt:1286:61-1286:73:
      | ///|
      | test "SubQuery" {
      |   let tokens = "SELECT sub FROM (SELECT name FROM users WHERE active = true) AS sub;"
-1283 |   let stmt = parse_sql(tokens, dialect=Postgres::{  })[0] |> pretty_print
-     |                                                              ^^^^^^^^^^^^
+1286 |   let stmt = parse_sql(tokens, dialect=Postgres::{ })[0] |> pretty_print
+     |                                                             ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1305:38-1305:50:
+<WORKDIR>/src\dml.mbt:1308:38-1308:50:
      | ///|
      | test "Exists, not exists" {
      |   let tokens = "SELECT * FROM t WHERE EXISTS (SELECT 1 FROM t2) AND NOT EXISTS (SELECT 1 FROM t3);"
-1305 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1308 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1333:38-1333:50:
+<WORKDIR>/src\dml.mbt:1336:38-1336:50:
      | ///|
      | test "Between and" {
      |   let tokens = "SELECT * FROM t WHERE id BETWEEN 1 AND 10;"
-1333 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1336 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1350:38-1350:50:
+<WORKDIR>/src\dml.mbt:1353:38-1353:50:
      | ///|
      | test "Compound identifiers" {
      |   let tokens = "SELECT t1.col1, t2.col2 FROM t1, t2;"
-1350 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1353 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1367:38-1367:50:
+<WORKDIR>/src\dml.mbt:1370:38-1370:50:
      | ///|
      | test "Extract function" {
      |   let tokens = "SELECT EXTRACT(YEAR FROM date_col) FROM t;"
-1367 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1370 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1382:38-1382:50:
+<WORKDIR>/src\dml.mbt:1385:38-1385:50:
      | ///|
      | test "Aliasing omits AS" {
      |   let tokens = "SELECT col1 c1, col2 FROM t;"
-1382 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1385 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1398:38-1398:50:
+<WORKDIR>/src\dml.mbt:1401:38-1401:50:
      | ///|
      | test "Case when" {
      |   let tokens = "SELECT CASE WHEN a > 0 THEN 'positive' WHEN a < 0 THEN 'negative' ELSE 'zero' END AS result FROM t;"
-1398 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1401 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1417:38-1417:50:
+<WORKDIR>/src\dml.mbt:1420:38-1420:50:
      | ///|
      | test "Having" {
      |   let tokens = "SELECT col1, COUNT(*) FROM t GROUP BY col1 HAVING COUNT(*) > 1;"
-1417 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1420 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1437:38-1437:50:
+<WORKDIR>/src\dml.mbt:1440:38-1440:50:
      | ///|
      | test "In list" {
      |   let tokens = "SELECT * FROM t WHERE col1 IN (1, 2, 3);"
-1437 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1440 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1454:38-1454:50:
+<WORKDIR>/src\dml.mbt:1457:38-1457:50:
      | ///|
      | test "In subquery" {
      |   let tokens = "SELECT * FROM t WHERE col1 IN (SELECT col2 FROM t2);"
-1454 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1457 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1476:38-1476:50:
+<WORKDIR>/src\dml.mbt:1479:38-1479:50:
      | ///|
      | test "Join with ON condition" {
      |   let tokens = "SELECT * FROM t1 JOIN t2 ON t1.id = t2.id;"
-1476 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1479 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1492:38-1492:50:
+<WORKDIR>/src\dml.mbt:1495:38-1495:50:
      | ///|
      | test "Cross join" {
      |   let tokens = "SELECT * FROM t1 CROSS JOIN t2;"
-1492 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1495 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1507:38-1507:50:
+<WORKDIR>/src\dml.mbt:1510:38-1510:50:
      | ///|
      | test "Left join" {
      |   let tokens = "SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id GROUP BY x;"
-1507 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1510 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1525:38-1525:50:
+<WORKDIR>/src\dml.mbt:1528:38-1528:50:
      | ///|
      | test "Right join" {
      |   let tokens = "SELECT * FROM t1 RIGHT JOIN t2 ON t1.id = t2.id;"
-1525 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1528 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1541:38-1541:50:
+<WORKDIR>/src\dml.mbt:1544:38-1544:50:
      | ///|
      | test "Full outer join" {
      |   let tokens = "SELECT * FROM t1 LEFT OUTER JOIN t2 ON t1.id = t2.id;"
-1541 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1544 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1557:62-1557:74:
+<WORKDIR>/src\dml.mbt:1560:61-1560:73:
      | ///|
      | test "Null, true and false" {
      |   let tokens = "SELECT NULL, true, false FROM t1;"
-1557 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens)[0] |> pretty_print
-     |                                                              ^^^^^^^^^^^^
+1560 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens)[0] |> pretty_print
+     |                                                             ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1574:38-1574:50:
+<WORKDIR>/src\dml.mbt:1577:38-1577:50:
      | ///|
      | test "Unary plus and minus" {
      |   let tokens = "SELECT +1, -2 FROM t;"
-1574 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1577 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1590:38-1590:50:
+<WORKDIR>/src\dml.mbt:1593:38-1593:50:
      | ///|
      | test "Unary not expression" {
      |   let tokens = "SELECT NOT a FROM t;"
-1590 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1593 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1605:38-1605:50:
+<WORKDIR>/src\dml.mbt:1608:38-1608:50:
      | ///|
      | test "Using clause in join" {
      |   let tokens = "SELECT * FROM t1 JOIN t2 USING (id);"
-1605 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1608 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1621:36-1621:48:
+<WORKDIR>/src\dml.mbt:1624:36-1624:48:
      | ///|
      | test "Multiple statements" {
      |   let tokens = "SELECT * FROM t1; SELECT * FROM t2;"
-1621 |   let stmts = parse_sql(tokens) |> pretty_print
+1624 |   let stmts = parse_sql(tokens) |> pretty_print
      |                                    ^^^^^^^^^^^^
      |   inspect(
      |     stmts,
 
-<WORKDIR>/src\dml.mbt:1641:38-1641:50:
+<WORKDIR>/src\dml.mbt:1644:38-1644:50:
      | ///|
      | test "String literal as column" {
      |   let tokens = "SELECT test FROM 't';"
-1641 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1644 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1656:38-1656:50:
+<WORKDIR>/src\dml.mbt:1659:38-1659:50:
      | ///|
      | test "Limit and offset" {
      |   let tokens = "SELECT * FROM t LIMIT 10 OFFSET 5;"
-1656 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1659 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1675:38-1675:50:
+<WORKDIR>/src\dml.mbt:1678:38-1678:50:
      | ///|
      | test "Limit without offset" {
      |   let tokens = "SELECT * FROM t LIMIT N;"
-1675 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1678 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1692:38-1692:50:
+<WORKDIR>/src\dml.mbt:1695:38-1695:50:
      | ///|
      | test "Offset without limit" {
      |   let tokens = "SELECT * FROM t OFFSET N;"
-1692 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1695 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1709:38-1709:50:
+<WORKDIR>/src\dml.mbt:1712:38-1712:50:
      | ///|
      | test "Duplicate treatment" {
      |   let tokens = "SELECT COUNT(DISTINCT *) FROM t;"
-1709 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1712 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1724:38-1724:50:
+<WORKDIR>/src\dml.mbt:1727:38-1727:50:
      | ///|
      | test "Substring" {
      |   let tokens = "SELECT SUBSTRING(col FROM 1 FOR 5) FROM t;"
-1724 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1727 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1739:38-1739:50:
+<WORKDIR>/src\dml.mbt:1742:38-1742:50:
      | ///|
      | test "Substring with start only" {
      |   let tokens = "SELECT SUBSTRING(col FROM 1) FROM t;"
-1739 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1742 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1754:38-1754:50:
+<WORKDIR>/src\dml.mbt:1757:38-1757:50:
      | ///|
      | test "Substring another way" {
      |   let tokens = "SELECT SUBSTRING(col, 1, 5) FROM t;"
-1754 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1757 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1797:38-1797:50:
+<WORKDIR>/src\dml.mbt:1800:38-1800:50:
      | ///|
      | test {
      |   let tokens = "SELECT * FROM t1 UNION (SELECT * FROM t2 UNION SELECT * FROM t3) ORDER BY col1;"
-1797 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1800 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1826:38-1826:50:
+<WORKDIR>/src\dml.mbt:1829:38-1829:50:
      | ///|
      | test "Non projections" {
      |   let tokens = "SELECT FROM t1;"
-1826 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1829 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:1862:38-1862:50:
+<WORKDIR>/src\dml.mbt:1865:38-1865:50:
      | ///|
      | test "Top 10" {
      |   let tokens = "SELECT TOP 10 * FROM t;"
-1862 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+1865 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2008:38-2008:50:
+<WORKDIR>/src\dml.mbt:2011:38-2011:50:
      | ///|
      | test "Insert with values - simple" {
      |   let tokens = "INSERT INTO test_table VALUES (1, 2, 'test');"
-2008 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2011 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2020:38-2020:50:
+<WORKDIR>/src\dml.mbt:2023:38-2023:50:
      | ///|
      | test "Insert with columns and values" {
      |   let tokens = "INSERT INTO test_table (id, value, name) VALUES (1, 2, 'test');"
-2020 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2023 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2032:38-2032:50:
+<WORKDIR>/src\dml.mbt:2035:38-2035:50:
      | ///|
      | test "Insert with SELECT" {
      |   let tokens = "INSERT INTO test_table SELECT * FROM students;"
-2032 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2035 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2047:38-2047:50:
+<WORKDIR>/src\dml.mbt:2050:38-2050:50:
      | ///|
      | test "Insert with schema" {
      |   let tokens = "INSERT INTO some_schema.test_table SELECT * FROM another_schema.students;"
-2047 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2050 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2063:38-2063:50:
+<WORKDIR>/src\dml.mbt:2066:38-2066:50:
      | /// PostgreSQL ON CONFLICT Tests
      | test "INSERT with ON CONFLICT DO NOTHING" {
      |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON CONFLICT DO NOTHING;"
-2063 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2066 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2075:38-2075:50:
+<WORKDIR>/src\dml.mbt:2078:38-2078:50:
      | ///|
      | test "INSERT with ON CONFLICT (column) DO NOTHING" {
      |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON CONFLICT (email) DO NOTHING;"
-2075 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2078 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2087:38-2087:50:
+<WORKDIR>/src\dml.mbt:2090:38-2090:50:
      | ///|
      | test "INSERT with ON CONFLICT (multiple columns) DO UPDATE" {
      |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON CONFLICT (id, email) DO UPDATE SET name = EXCLUDED.name;"
-2087 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2090 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2099:38-2099:50:
+<WORKDIR>/src\dml.mbt:2102:38-2102:50:
      | ///|
      | test "INSERT with ON CONFLICT ON CONSTRAINT" {
      |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON CONFLICT ON CONSTRAINT users_email_key DO UPDATE SET name = EXCLUDED.name;"
-2099 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2102 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2111:38-2111:50:
+<WORKDIR>/src\dml.mbt:2114:38-2114:50:
      | ///|
      | test "INSERT with ON CONFLICT DO UPDATE with WHERE" {
      |   let tokens = "INSERT INTO users (id, name, email, active) VALUES (1, 'John', 'john@example.com', true) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, active = EXCLUDED.active WHERE users.created_at < NOW();"
-2111 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2114 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2123:38-2123:50:
+<WORKDIR>/src\dml.mbt:2126:38-2126:50:
      | ///|
      | test "INSERT with ON CONFLICT (expression) WHERE condition" {
      |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON CONFLICT (LOWER(email)) WHERE active = true DO UPDATE SET name = EXCLUDED.name;"
-2123 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2126 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2155:38-2155:50:
+<WORKDIR>/src\dml.mbt:2158:38-2158:50:
      | ///|
      | test "Delete with WHERE" {
      |   let tokens = "DELETE FROM students WHERE grade > 3.0;"
-2155 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2158 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2168:38-2168:50:
+<WORKDIR>/src\dml.mbt:2171:38-2171:50:
      | ///|
      | test "Delete without WHERE" {
      |   let tokens = "DELETE FROM students;"
-2168 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2171 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2219:38-2219:50:
+<WORKDIR>/src\dml.mbt:2222:38-2222:50:
      | ///|
      | test "Update with single assignment and WHERE" {
      |   let tokens = "UPDATE students SET grade = 1.3 WHERE name = 'Max Mustermann';"
-2219 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2222 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2233:38-2233:50:
+<WORKDIR>/src\dml.mbt:2236:38-2236:50:
      | ///|
      | test "Update with multiple assignments and WHERE" {
      |   let tokens = "UPDATE students SET grade = 1.3, name='Felix Fürstenberg' WHERE name = 'Max Mustermann';"
-2233 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2236 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2247:38-2247:50:
+<WORKDIR>/src\dml.mbt:2250:38-2250:50:
      | ///|
      | test "Update without WHERE" {
      |   let tokens = "UPDATE students SET grade = 1.0;"
-2247 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2250 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2502:38-2502:50:
+<WORKDIR>/src\dml.mbt:2505:38-2505:50:
      | ///|
      | test "Truncate table" {
      |   let tokens = "TRUNCATE students;"
-2502 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2505 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2516:38-2516:50:
+<WORKDIR>/src\dml.mbt:2519:38-2519:50:
      | 
      | test "Simple CTE with WITH clause" {
      |   let tokens = "WITH sales AS (SELECT * FROM orders) SELECT * FROM sales;"
-2516 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2519 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2537:38-2537:50:
+<WORKDIR>/src\dml.mbt:2540:38-2540:50:
      | ///|
      | test "CTE with column specification" {
      |   let tokens = "WITH sales(id, total) AS (SELECT order_id, amount FROM orders) SELECT * FROM sales;"
-2537 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2540 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2559:38-2559:50:
+<WORKDIR>/src\dml.mbt:2562:38-2562:50:
      | ///|
      | test "Multiple CTEs" {
      |   let tokens = "WITH sales AS (SELECT * FROM orders), customers AS (SELECT * FROM users) SELECT * FROM sales JOIN customers ON sales.user_id = customers.id;"
-2559 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2562 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2587:38-2587:50:
+<WORKDIR>/src\dml.mbt:2590:38-2590:50:
      | ///|
      | test "CTE with ORDER BY and LIMIT" {
      |   let tokens = "WITH top_sales AS (SELECT * FROM orders ORDER BY amount DESC LIMIT 10) SELECT * FROM top_sales;"
-2587 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2590 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2612:38-2612:50:
+<WORKDIR>/src\dml.mbt:2615:38-2615:50:
      | ///|
      | test "Nested CTE (CTE referencing another CTE)" {
      |   let tokens = "WITH sales AS (SELECT * FROM orders), big_sales AS (SELECT * FROM sales WHERE amount > 1000) SELECT * FROM big_sales;"
-2612 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2615 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2641:38-2641:50:
+<WORKDIR>/src\dml.mbt:2644:38-2644:50:
      | ///|
      | test "CTE with aggregation" {
      |   let tokens = "WITH monthly_sales AS (SELECT date_month, SUM(amount) as total FROM orders GROUP BY date_month) SELECT * FROM monthly_sales;"
-2641 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2644 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2666:38-2666:50:
+<WORKDIR>/src\dml.mbt:2669:38-2669:50:
      | /// Window Functions Tests
      | test "Simple window function with empty OVER clause" {
      |   let tokens = "SELECT rank() OVER () FROM test;"
-2666 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2669 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2681:38-2681:50:
+<WORKDIR>/src\dml.mbt:2684:38-2684:50:
      | ///|
      | test "Window function with ORDER BY" {
      |   let tokens = "SELECT rank() OVER (ORDER BY salary DESC) FROM employees;"
-2681 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2684 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2696:38-2696:50:
+<WORKDIR>/src\dml.mbt:2699:38-2699:50:
      | ///|
      | test "Window function with PARTITION BY" {
      |   let tokens = "SELECT count(*) OVER (PARTITION BY department) FROM employees;"
-2696 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2699 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2711:38-2711:50:
+<WORKDIR>/src\dml.mbt:2714:38-2714:50:
      | ///|
      | test "Window function with PARTITION BY and ORDER BY" {
      |   let tokens = "SELECT row_number() OVER (PARTITION BY department ORDER BY salary DESC) FROM employees;"
-2711 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2714 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2726:38-2726:50:
+<WORKDIR>/src\dml.mbt:2729:38-2729:50:
      | ///|
      | test "Window function with ROWS frame - UNBOUNDED PRECEDING" {
      |   let tokens = "SELECT sum(salary) OVER (ORDER BY hire_date ROWS UNBOUNDED PRECEDING) FROM employees;"
-2726 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2729 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2741:38-2741:50:
+<WORKDIR>/src\dml.mbt:2744:38-2744:50:
      | ///|
      | test "Window function with ROWS frame - BETWEEN" {
      |   let tokens = "SELECT avg(salary) OVER (ORDER BY hire_date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) FROM employees;"
-2741 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2744 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2946:38-2946:50:
+<WORKDIR>/src\dml.mbt:2949:38-2949:50:
      | ///|
      | test "MERGE - Simple" {
      |   let tokens = "MERGE INTO target_table USING source_table ON target_table.id = source_table.id WHEN MATCHED THEN UPDATE SET name = source_table.name WHEN NOT MATCHED THEN INSERT VALUES (source_table.id, source_table.name);"
-2946 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2949 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2962:38-2962:50:
+<WORKDIR>/src\dml.mbt:2965:38-2965:50:
      | ///|
      | test "MERGE with table aliases" {
      |   let tokens = "MERGE INTO customers c USING customer_updates cu ON c.id = cu.id WHEN MATCHED THEN UPDATE SET name = cu.name;"
-2962 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2965 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2977:38-2977:50:
+<WORKDIR>/src\dml.mbt:2980:38-2980:50:
      | ///|
      | test "MERGE with subquery source" {
      |   let tokens = "MERGE INTO dest_table t USING (SELECT id, name FROM source) s ON t.id = s.id WHEN NOT MATCHED THEN INSERT (id, name) VALUES (s.id, s.name);"
-2977 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+2980 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:2998:38-2998:50:
+<WORKDIR>/src\dml.mbt:3001:38-3001:50:
      | ///|
      | test "MERGE with conditional WHEN" {
      |   let tokens = "MERGE INTO products p USING updates u ON p.id = u.id WHEN MATCHED AND u.price > p.price THEN UPDATE SET price = u.price WHEN NOT MATCHED THEN INSERT VALUES (u.id, u.name, u.price);"
-2998 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+3001 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\dml.mbt:3014:38-3014:50:
+<WORKDIR>/src\dml.mbt:3017:38-3017:50:
      | ///|
      | test "MERGE with DELETE action" {
      |   let tokens = "MERGE INTO inventory i USING changes c ON i.id = c.id WHEN MATCHED AND c.quantity = 0 THEN DELETE WHEN MATCHED THEN UPDATE SET quantity = c.quantity;"
-3014 |   let stmt = parse_sql(tokens)[0] |> pretty_print
+3017 |   let stmt = parse_sql(tokens)[0] |> pretty_print
      |                                      ^^^^^^^^^^^^
      |   inspect(
      |     stmt,
 
-<WORKDIR>/src\mysql.mbt:100:65-100:77:
+<WORKDIR>/src\mysql.mbt:104:64-104:76:
     | ///|
     | test "MySQL SHOW TABLES" {
     |   let tokens = "SHOW TABLES;"
-100 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+104 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:112:65-112:77:
+<WORKDIR>/src\mysql.mbt:116:64-116:76:
     | ///|
     | test "MySQL SHOW COLUMNS FROM table" {
     |   let tokens = "SHOW COLUMNS FROM users;"
-112 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+116 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:124:65-124:77:
+<WORKDIR>/src\mysql.mbt:128:64-128:76:
     | ///|
     | test "MySQL SHOW TABLES LIKE pattern" {
     |   let tokens = "SHOW TABLES LIKE 'user%';"
-124 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+128 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:136:65-136:77:
+<WORKDIR>/src\mysql.mbt:140:64-140:76:
     | ///|
     | test "MySQL with backticks in SHOW" {
     |   let tokens = "SHOW COLUMNS FROM `table name`;"
-136 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+140 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:148:65-148:77:
+<WORKDIR>/src\mysql.mbt:152:64-152:76:
     | ///|
     | test "MySQL LOCK TABLES" {
     |   let tokens = "LOCK TABLES users;"
-148 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+152 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:160:65-160:77:
+<WORKDIR>/src\mysql.mbt:164:64-164:76:
     | ///|
     | test "MySQL UNLOCK TABLES" {
     |   let tokens = "UNLOCK TABLES;"
-160 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+164 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:172:65-172:77:
+<WORKDIR>/src\mysql.mbt:176:64-176:76:
     | ///|
     | test "MySQL DIV operator" {
     |   let tokens = "SELECT 10 DIV 3 FROM test;"
-172 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+176 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:187:65-187:77:
+<WORKDIR>/src\mysql.mbt:191:64-191:76:
     | ///|
     | test "MySQL SHOW VARIABLES" {
     |   let tokens = "SHOW VARIABLES;"
-187 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+191 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:199:65-199:77:
+<WORKDIR>/src\mysql.mbt:203:64-203:76:
     | ///|
     | test "MySQL SHOW GLOBAL STATUS" {
     |   let tokens = "SHOW GLOBAL STATUS;"
-199 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+203 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:211:65-211:77:
+<WORKDIR>/src\mysql.mbt:215:64-215:76:
     | ///|
     | test "MySQL SHOW FULL PROCESSLIST" {
     |   let tokens = "SHOW FULL PROCESSLIST;"
-211 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+215 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:223:65-223:77:
+<WORKDIR>/src\mysql.mbt:227:64-227:76:
     | ///|
     | test "MySQL SHOW CREATE TABLE" {
     |   let tokens = "SHOW CREATE TABLE users;"
-223 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+227 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:235:65-235:77:
+<WORKDIR>/src\mysql.mbt:239:64-239:76:
     | ///|
     | test "MySQL SHOW EXTENDED COLUMNS" {
     |   let tokens = "SHOW EXTENDED COLUMNS FROM users LIKE 'name%';"
-235 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+239 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:247:65-247:77:
+<WORKDIR>/src\mysql.mbt:251:64-251:76:
     | ///|
     | test "MySQL SET session variable" {
     |   let tokens = "SET SESSION sql_mode = 'STRICT_TRANS_TABLES';"
-247 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+251 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:259:65-259:77:
+<WORKDIR>/src\mysql.mbt:263:64-263:76:
     | ///|
     | test "MySQL SET global variable" {
     |   let tokens = "SET GLOBAL max_connections = 200;"
-259 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+263 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:271:65-271:77:
+<WORKDIR>/src\mysql.mbt:275:64-275:76:
     | ///|
     | test "MySQL SET user variable" {
     |   let tokens = "SET @counter = 1;"
-271 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+275 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:283:65-283:77:
+<WORKDIR>/src\mysql.mbt:287:64-287:76:
     | ///|
     | test "MySQL SET multiple variables" {
     |   let tokens = "SET @name = 'John', @age = 30, @salary = 50000.50;"
-283 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+287 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:295:65-295:77:
+<WORKDIR>/src\mysql.mbt:299:64-299:76:
     | ///|
     | test "MySQL SET local variable" {
     |   let tokens = "SET autocommit = 0;"
-295 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+299 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:307:65-307:77:
+<WORKDIR>/src\mysql.mbt:311:64-311:76:
     | ///|
     | test "MySQL REPLACE INTO statement" {
     |   let tokens = "REPLACE INTO users (id, name) VALUES (1, 'John');"
-307 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+311 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:319:65-319:77:
+<WORKDIR>/src\mysql.mbt:323:64-323:76:
     | ///|
     | test "MySQL REPLACE INTO with multiple values" {
     |   let tokens = "REPLACE INTO products (id, name, price) VALUES (1, 'Widget', 10.50), (2, 'Gadget', 15.00);"
-319 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+323 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:331:65-331:77:
+<WORKDIR>/src\mysql.mbt:335:64-335:76:
     | ///|
     | test "MySQL INSERT OR REPLACE statement" {
     |   let tokens = "INSERT OR REPLACE INTO settings (key, value) VALUES ('theme', 'dark');"
-331 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+335 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:343:65-343:77:
+<WORKDIR>/src\mysql.mbt:347:64-347:76:
     | ///|
     | test "MySQL INSERT with ON DUPLICATE KEY UPDATE" {
     |   let tokens = "INSERT INTO users (id, name, email) VALUES (1, 'John', 'john@example.com') ON DUPLICATE KEY UPDATE name = 'John Updated', email = 'john.new@example.com';"
-343 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+347 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:355:65-355:77:
+<WORKDIR>/src\mysql.mbt:359:64-359:76:
     | ///|
     | test "MySQL INSERT single assignment ON DUPLICATE KEY UPDATE" {
     |   let tokens = "INSERT INTO counters (id, count) VALUES (1, 1) ON DUPLICATE KEY UPDATE count = count + 1;"
-355 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+359 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:367:65-367:77:
+<WORKDIR>/src\mysql.mbt:371:64-371:76:
     | ///|
     | test "MySQL REPLACE with ON DUPLICATE KEY UPDATE" {
     |   let tokens = "REPLACE INTO settings (setting_key, setting_value) VALUES ('theme', 'dark') ON DUPLICATE KEY UPDATE setting_value = 'light';"
-367 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+371 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:379:65-379:77:
+<WORKDIR>/src\mysql.mbt:383:64-383:76:
     | ///|
     | test "MySQL basic LOAD DATA statement" {
     |   let tokens = "LOAD DATA INFILE '/tmp/data.csv' INTO TABLE users;"
-379 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+383 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:392:65-392:77:
+<WORKDIR>/src\mysql.mbt:396:64-396:76:
     | ///|
     | test "MySQL LOAD DATA with LOCAL and REPLACE" {
     |   let tokens = "LOAD DATA LOCAL INFILE '/tmp/users.txt' REPLACE INTO TABLE employees;"
-392 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+396 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:405:65-405:77:
+<WORKDIR>/src\mysql.mbt:409:64-409:76:
     | ///|
     | test "MySQL LOAD DATA with FIELDS options" {
     |   let tokens = "LOAD DATA INFILE '/data/products.csv' INTO TABLE products CHARACTER SET utf8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"';"
-405 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+409 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:420:65-420:77:
+<WORKDIR>/src\mysql.mbt:424:64-424:76:
     | ///|
     | test "MySQL LOAD DATA with LINES options" {
     |   let tokens = "LOAD DATA INFILE '/tmp/logs.txt' INTO TABLE logs LINES STARTING BY '>>>' TERMINATED BY '\n' IGNORE 5 LINES;"
-420 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+424 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\mysql.mbt:436:65-436:77:
+<WORKDIR>/src\mysql.mbt:440:64-440:76:
     | ///|
     | test "MySQL LOAD DATA with column list and SET" {
     |   let tokens = "LOAD DATA INFILE '/data/sales.csv' IGNORE INTO TABLE sales FIELDS TERMINATED BY ',' (date, amount, customer) SET created_at = now();"
-436 |   let stmt = parse_sql(dialect=MySQL::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+440 |   let stmt = parse_sql(dialect=MySQL::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:20:62-20:74:
+<WORKDIR>/src\parameterized.mbt:20:61-20:73:
    | ///|
    | test "Question mark placeholder in WHERE clause" {
    |   let sql = "SELECT * FROM users WHERE id = ?;"
-20 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+20 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:37:62-37:74:
+<WORKDIR>/src\parameterized.mbt:37:61-37:73:
    | ///|
    | test "Multiple question mark placeholders" {
    |   let sql = "SELECT * FROM users WHERE age > ? AND name = ?;"
-37 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+37 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:55:62-55:74:
+<WORKDIR>/src\parameterized.mbt:55:61-55:73:
    | ///|
    | test "Question mark placeholder in INSERT" {
    |   let sql = "INSERT INTO users (name, age) VALUES (?, ?);"
-55 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+55 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:67:62-67:74:
+<WORKDIR>/src\parameterized.mbt:67:61-67:73:
    | ///|
    | test "Question mark placeholder in UPDATE" {
    |   let sql = "UPDATE users SET name = ?, age = ? WHERE id = ?;"
-67 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+67 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:81:62-81:74:
+<WORKDIR>/src\parameterized.mbt:81:61-81:73:
    | ///|
    | test "Question mark placeholder in LIMIT" {
    |   let sql = "SELECT * FROM users LIMIT ?;"
-81 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+81 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:98:62-98:74:
+<WORKDIR>/src\parameterized.mbt:98:61-98:73:
    | ///|
    | test "Question mark placeholder in LIMIT and OFFSET" {
    |   let sql = "SELECT * FROM users LIMIT ? OFFSET ?;"
-98 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-   |                                                              ^^^^^^^^^^^^
+98 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+   |                                                             ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:117:65-117:77:
+<WORKDIR>/src\parameterized.mbt:117:64-117:76:
     | ///|
     | test "PostgreSQL $1 numbered placeholder" {
     |   let sql = "SELECT * FROM users WHERE id = $1;"
-117 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+117 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:134:65-134:77:
+<WORKDIR>/src\parameterized.mbt:134:64-134:76:
     | ///|
     | test "PostgreSQL multiple numbered placeholders" {
     |   let sql = "SELECT * FROM users WHERE age > $1 AND name = $2;"
-134 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+134 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:152:65-152:77:
+<WORKDIR>/src\parameterized.mbt:152:64-152:76:
     | ///|
     | test "PostgreSQL numbered placeholders in INSERT" {
     |   let sql = "INSERT INTO users (name, age, email) VALUES ($1, $2, $3);"
-152 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+152 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:162:65-162:77:
+<WORKDIR>/src\parameterized.mbt:162:64-162:76:
     | ///|
     | test "PostgreSQL numbered placeholders in LIMIT OFFSET" {
     |   let sql = "SELECT * FROM users LIMIT $1 OFFSET $2;"
-162 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+162 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:181:65-181:77:
+<WORKDIR>/src\parameterized.mbt:181:64-181:76:
     | ///|
     | test "PostgreSQL numbered placeholders out of order" {
     |   let sql = "SELECT * FROM users WHERE id = $2 AND name = $1;"
-181 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+181 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:199:65-199:77:
+<WORKDIR>/src\parameterized.mbt:199:64-199:76:
     | ///|
     | test "Colon named parameter" {
     |   let sql = "SELECT * FROM users WHERE name = :username;"
-199 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+199 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:216:65-216:77:
+<WORKDIR>/src\parameterized.mbt:216:64-216:76:
     | ///|
     | test "Multiple colon named parameters" {
     |   let sql = "SELECT * FROM users WHERE age > :min_age AND city = :city_name;"
-216 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+216 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:234:65-234:77:
+<WORKDIR>/src\parameterized.mbt:234:64-234:76:
     | ///|
     | test "Colon named parameters in INSERT" {
     |   let sql = "INSERT INTO users (name, age) VALUES (:name, :age);"
-234 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+234 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(stmt, content="INSERT INTO users (name, age) VALUES (:name, :age);")
     | }
 
-<WORKDIR>/src\parameterized.mbt:241:62-241:74:
+<WORKDIR>/src\parameterized.mbt:241:61-241:73:
     | ///|
     | test "At-sign named parameter" {
     |   let sql = "SELECT * FROM users WHERE name = @username;"
-241 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+241 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:258:62-258:74:
+<WORKDIR>/src\parameterized.mbt:258:61-258:73:
     | ///|
     | test "Multiple at-sign named parameters" {
     |   let sql = "SELECT * FROM users WHERE age > @min_age AND city = @city_name;"
-258 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+258 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:276:62-276:74:
+<WORKDIR>/src\parameterized.mbt:276:61-276:73:
     | ///|
     | test "Placeholder in function call" {
     |   let sql = "SELECT UPPER(?) FROM users;"
-276 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+276 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:291:62-291:74:
+<WORKDIR>/src\parameterized.mbt:291:61-291:73:
     | ///|
     | test "Placeholder in expression" {
     |   let sql = "SELECT * FROM users WHERE age + ? > 100;"
-291 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+291 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:308:62-308:74:
+<WORKDIR>/src\parameterized.mbt:308:61-308:73:
     | ///|
     | test "Placeholder in BETWEEN clause" {
     |   let sql = "SELECT * FROM users WHERE age BETWEEN ? AND ?;"
-308 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+308 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:325:62-325:74:
+<WORKDIR>/src\parameterized.mbt:325:61-325:73:
     | ///|
     | test "Placeholder in IN list" {
     |   let sql = "SELECT * FROM users WHERE id IN (?, ?, ?);"
-325 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+325 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:342:65-342:77:
+<WORKDIR>/src\parameterized.mbt:342:64-342:76:
     | ///|
     | test "PostgreSQL numbered placeholder in CASE expression" {
     |   let sql = "SELECT CASE WHEN age > $1 THEN 'old' ELSE 'young' END FROM users;"
-342 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+342 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:360:65-360:77:
+<WORKDIR>/src\parameterized.mbt:360:64-360:76:
     | ///|
     | test "Named parameter in JOIN condition" {
     |   let sql = "SELECT * FROM users u JOIN orders o ON u.id = o.user_id WHERE o.total > :min_total;"
-360 |   let stmt = parse_sql(dialect=Postgres::{  }, sql).stmts[0] |> pretty_print
-    |                                                                 ^^^^^^^^^^^^
+360 |   let stmt = parse_sql(dialect=Postgres::{ }, sql).stmts[0] |> pretty_print
+    |                                                                ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\parameterized.mbt:382:64-382:76:
+<WORKDIR>/src\parameterized.mbt:382:63-382:75:
     |   let sql1 = "SELECT * FROM users WHERE id = ?;"
     |   let sql2 = "SELECT * FROM users WHERE id = $1;"
     |   let sql3 = "SELECT * FROM users WHERE id = :user_id;"
-382 |   let stmt1 = parse_sql(dialect=MySQL::{  }, sql1).stmts[0] |> pretty_print
-    |                                                                ^^^^^^^^^^^^
-    |   let stmt2 = parse_sql(dialect=Postgres::{  }, sql2).stmts[0] |> pretty_print
-    |   let stmt3 = parse_sql(dialect=Postgres::{  }, sql3).stmts[0] |> pretty_print
+382 |   let stmt1 = parse_sql(dialect=MySQL::{ }, sql1).stmts[0] |> pretty_print
+    |                                                               ^^^^^^^^^^^^
+    |   let stmt2 = parse_sql(dialect=Postgres::{ }, sql2).stmts[0] |> pretty_print
+    |   let stmt3 = parse_sql(dialect=Postgres::{ }, sql3).stmts[0] |> pretty_print
 
-<WORKDIR>/src\parameterized.mbt:383:67-383:79:
+<WORKDIR>/src\parameterized.mbt:383:66-383:78:
     |   let sql2 = "SELECT * FROM users WHERE id = $1;"
     |   let sql3 = "SELECT * FROM users WHERE id = :user_id;"
-    |   let stmt1 = parse_sql(dialect=MySQL::{  }, sql1).stmts[0] |> pretty_print
-383 |   let stmt2 = parse_sql(dialect=Postgres::{  }, sql2).stmts[0] |> pretty_print
-    |                                                                   ^^^^^^^^^^^^
-    |   let stmt3 = parse_sql(dialect=Postgres::{  }, sql3).stmts[0] |> pretty_print
+    |   let stmt1 = parse_sql(dialect=MySQL::{ }, sql1).stmts[0] |> pretty_print
+383 |   let stmt2 = parse_sql(dialect=Postgres::{ }, sql2).stmts[0] |> pretty_print
+    |                                                                  ^^^^^^^^^^^^
+    |   let stmt3 = parse_sql(dialect=Postgres::{ }, sql3).stmts[0] |> pretty_print
     |   inspect(
 
-<WORKDIR>/src\parameterized.mbt:384:67-384:79:
+<WORKDIR>/src\parameterized.mbt:384:66-384:78:
     |   let sql3 = "SELECT * FROM users WHERE id = :user_id;"
-    |   let stmt1 = parse_sql(dialect=MySQL::{  }, sql1).stmts[0] |> pretty_print
-    |   let stmt2 = parse_sql(dialect=Postgres::{  }, sql2).stmts[0] |> pretty_print
-384 |   let stmt3 = parse_sql(dialect=Postgres::{  }, sql3).stmts[0] |> pretty_print
-    |                                                                   ^^^^^^^^^^^^
+    |   let stmt1 = parse_sql(dialect=MySQL::{ }, sql1).stmts[0] |> pretty_print
+    |   let stmt2 = parse_sql(dialect=Postgres::{ }, sql2).stmts[0] |> pretty_print
+384 |   let stmt3 = parse_sql(dialect=Postgres::{ }, sql3).stmts[0] |> pretty_print
+    |                                                                  ^^^^^^^^^^^^
     |   inspect(
     |     stmt1,
 
-<WORKDIR>/src\parameterized.mbt:423:62-423:74:
+<WORKDIR>/src\parameterized.mbt:423:61-423:73:
     | ///|
     | test "Placeholder in DELETE statement" {
     |   let sql = "DELETE FROM users WHERE id = ?;"
-423 |   let stmt = parse_sql(dialect=MySQL::{  }, sql).stmts[0] |> pretty_print
-    |                                                              ^^^^^^^^^^^^
+423 |   let stmt = parse_sql(dialect=MySQL::{ }, sql).stmts[0] |> pretty_print
+    |                                                             ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
@@ -1936,165 +1929,165 @@ Found 298 references for symbol 'pretty_print':
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:94:68-94:80:
+<WORKDIR>/src\postgres.mbt:96:67-96:79:
    | ///|
    | test "PostgreSQL LISTEN" {
    |   let tokens = "LISTEN my_channel;"
-94 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-   |                                                                    ^^^^^^^^^^^^
+96 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+   |                                                                   ^^^^^^^^^^^^
    |   inspect(
    |     stmt,
 
-<WORKDIR>/src\postgres.mbt:106:68-106:80:
+<WORKDIR>/src\postgres.mbt:108:67-108:79:
     | ///|
     | test "PostgreSQL NOTIFY without payload" {
     |   let tokens = "NOTIFY my_channel;"
-106 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+108 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:118:68-118:80:
+<WORKDIR>/src\postgres.mbt:120:67-120:79:
     | ///|
     | test "PostgreSQL NOTIFY with payload" {
     |   let tokens = "NOTIFY my_channel, 'hello world';"
-118 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+120 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:132:68-132:80:
+<WORKDIR>/src\postgres.mbt:134:67-134:79:
     | 
     | test "PostgreSQL ARRAY syntax with integers" {
     |   let tokens = "SELECT ARRAY[1, 2, 3, 4] FROM test;"
-132 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+134 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:147:68-147:80:
+<WORKDIR>/src\postgres.mbt:149:67-149:79:
     | ///|
     | test "PostgreSQL bracket array syntax" {
     |   let tokens = "SELECT [1, 2, 3] FROM test;"
-147 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+149 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:162:68-162:80:
+<WORKDIR>/src\postgres.mbt:164:67-164:79:
     | ///|
     | test "PostgreSQL empty ARRAY" {
     |   let tokens = "SELECT ARRAY[] FROM test;"
-162 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+164 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:177:68-177:80:
+<WORKDIR>/src\postgres.mbt:179:67-179:79:
     | ///|
     | test "PostgreSQL ARRAY with strings" {
     |   let tokens = "SELECT ARRAY['hello', 'world'] FROM test;"
-177 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+179 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:192:68-192:80:
+<WORKDIR>/src\postgres.mbt:194:67-194:79:
     | ///|
     | test "PostgreSQL nested arrays" {
     |   let tokens = "SELECT ARRAY[ARRAY[1, 2], ARRAY[3, 4]] FROM test;"
-192 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+194 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:207:68-207:80:
+<WORKDIR>/src\postgres.mbt:209:67-209:79:
     | ///|
     | test "PostgreSQL mixed bracket and ARRAY syntax" {
     |   let tokens = "SELECT ARRAY[[1, 2], [3, 4]] FROM test;"
-207 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+209 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:303:68-303:80:
+<WORKDIR>/src\postgres.mbt:305:67-305:79:
     | 
     | test "PostgreSQL JSON extract operator" {
     |   let tokens = "SELECT data -> 'key' FROM json_table;"
-303 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+305 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:318:68-318:80:
+<WORKDIR>/src\postgres.mbt:320:67-320:79:
     | ///|
     | test "PostgreSQL JSON extract text operator" {
     |   let tokens = "SELECT data ->> 'key' FROM json_table;"
-318 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+320 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:333:68-333:80:
+<WORKDIR>/src\postgres.mbt:335:67-335:79:
     | ///|
     | test "PostgreSQL JSON path extract operator" {
     |   let tokens = "SELECT data #> ARRAY['key', 'subkey'] FROM json_table;"
-333 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+335 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:348:68-348:80:
+<WORKDIR>/src\postgres.mbt:350:67-350:79:
     | ///|
     | test "PostgreSQL JSON contains operator" {
     |   let tokens = "SELECT data @> '{\"key\":\"value\"}' FROM json_table;"
-348 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+350 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:363:68-363:80:
+<WORKDIR>/src\postgres.mbt:365:67-365:79:
     | ///|
     | test "PostgreSQL JSON contained in operator" {
     |   let tokens = "SELECT '{\"a\":1}' <@ data FROM json_table;"
-363 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+365 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:380:68-380:80:
+<WORKDIR>/src\postgres.mbt:382:67-382:79:
     | 
     | test "PostgreSQL COUNT with FILTER" {
     |   let tokens = "SELECT count(*) FILTER (WHERE active) FROM users;"
-380 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+382 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:395:68-395:80:
+<WORKDIR>/src\postgres.mbt:397:67-397:79:
     | ///|
     | test "PostgreSQL COUNT without FILTER" {
     |   let tokens = "SELECT count(*) FROM users;"
-395 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+397 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:410:68-410:80:
+<WORKDIR>/src\postgres.mbt:412:67-412:79:
     | ///|
     | test "PostgreSQL SUM with FILTER" {
     |   let tokens = "SELECT sum(amount) FILTER (WHERE status = 'completed') FROM orders;"
-410 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+412 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src\postgres.mbt:425:68-425:80:
+<WORKDIR>/src\postgres.mbt:427:67-427:79:
     | ///|
     | test "PostgreSQL multiple aggregations with FILTER" {
     |   let tokens = "SELECT count(*) FILTER (WHERE active), avg(age) FILTER (WHERE age > 18) FROM users;"
-425 |   let stmt = parse_sql(dialect=Postgres::{  }, tokens).stmts[0] |> pretty_print
-    |                                                                    ^^^^^^^^^^^^
+427 |   let stmt = parse_sql(dialect=Postgres::{ }, tokens).stmts[0] |> pretty_print
+    |                                                                   ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 

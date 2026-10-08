@@ -18,32 +18,23 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'm' --loc 'src/IndexMap_test.mbt:17:7'
-Found 3 references for symbol 'm':
-<WORKDIR>/src/IndexMap_test.mbt:17:7-17:8:
-   |  (escaped)
-   | ///| (escaped)
-   | test "new" { (escaped)
-17 |   let m : @IndexMap.T[Int, Int] = @IndexMap.new() (escaped)
-   |       ^ (escaped)
-   |   inspect(m.capacity(), content="8") (escaped)
-   |   @debug.assert_eq(m.size(), 0) (escaped)
-
+Found 2 references for symbol 'm':
 <WORKDIR>/src/IndexMap_test.mbt:18:11-18:12:
-   | ///| (escaped)
-   | test "new" { (escaped)
-   |   let m : @IndexMap.T[Int, Int] = @IndexMap.new() (escaped)
-18 |   inspect(m.capacity(), content="8") (escaped)
-   |           ^ (escaped)
-   |   @debug.assert_eq(m.size(), 0) (escaped)
-   | } (escaped)
+   | ///|
+   | test "new" {
+   |   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
+18 |   inspect(m.capacity(), content="8")
+   |           ^
+   |   @debug.assert_eq(m.size(), 0)
+   | }
 
 <WORKDIR>/src/IndexMap_test.mbt:19:20-19:21:
-   | test "new" { (escaped)
-   |   let m : @IndexMap.T[Int, Int] = @IndexMap.new() (escaped)
-   |   inspect(m.capacity(), content="8") (escaped)
-19 |   @debug.assert_eq(m.size(), 0) (escaped)
-   |                    ^ (escaped)
-   | } (escaped)
+   | test "new" {
+   |   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
+   |   inspect(m.capacity(), content="8")
+19 |   @debug.assert_eq(m.size(), 0)
+   |                    ^
+   | }
    |  (escaped)
 
 ```

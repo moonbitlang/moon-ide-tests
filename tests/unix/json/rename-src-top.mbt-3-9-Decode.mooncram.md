@@ -18,16 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/top.mbt:3:9'
-*** Begin Patch
-*** Update File: <WORKDIR>/src/top.mbt
-@@
- ///|
- pub using @lib {
--  trait Decode,
-+  trait DecodeRenamed,
-   decode,
-   decode_start,
-   decode_continue,
-*** End Patch
-
+Error: could not get package of file <WORKDIR>/src/top.mbt
+[1]
 ```

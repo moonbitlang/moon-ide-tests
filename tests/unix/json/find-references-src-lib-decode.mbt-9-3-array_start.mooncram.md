@@ -18,24 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'array_start' --loc 'src/lib/decode.mbt:9:3'
-Found 4 references for symbol 'array_start':
-<WORKDIR>/src/lib/decode.mbt:9:3-9:14:
-  |  (escaped)
-  | ///| (escaped)
-  | pub trait Decode { (escaped)
-9 |   array_start(Self, JsonArray) -> JsonArray (escaped)
-  |   ^^^^^^^^^^^ (escaped)
-  |   array_push(Self, Json, JsonArray) -> JsonArray (escaped)
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
-
+Found 3 references for symbol 'array_start':
 <WORKDIR>/src/lib/decode.mbt:21:27-21:38:
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-21 | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray { (escaped)
-   |                           ^^^^^^^^^^^ (escaped)
-   |   [] (escaped)
-   | } (escaped)
+   | }
+   | 
+   | ///|
+21 | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+   |                           ^^^^^^^^^^^
+   |   []
+   | }
 
 <WORKDIR>/src/lib/json.mbt:457:20-457:31:
     |       array_start({ ..ctx, rest, }, len + 1) (escaped)

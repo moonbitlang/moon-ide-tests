@@ -18,14 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'input' --loc 'test_utils_test.mbt:2:25'
-Found 2 references for symbol 'input':
-<WORKDIR>/test_utils_test.mbt:2:25-2:30:
-  | ///|
-2 | fn parse_expect_to_fail(input : String) -> String {
-  |                         ^^^^^
-  |   try @toml.parse(input) catch {
-  |     e => {
-
+Found 1 references for symbol 'input':
 <WORKDIR>/test_utils_test.mbt:3:19-3:24:
   | ///|
   | fn parse_expect_to_fail(input : String) -> String {

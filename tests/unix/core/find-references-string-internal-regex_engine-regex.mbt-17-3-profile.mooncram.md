@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'profile' --loc 'string/internal/regex_engine/regex.mbt:17:3'
-Found 5 references for symbol 'profile':
+Found 4 references for symbol 'profile':
 <WORKDIR>/string/internal/regex_engine/execute.mbt:57:18-57:25:
    |   guard last_index >= 0 && last_index <= input.length() else { panic() }
    |   let symbol_table = self.symbol_table
@@ -36,15 +36,6 @@ Found 5 references for symbol 'profile':
     |                      ^^^^^^^
     |         symbol_repr=self.symbol_repr,
     |         if pos >= end {
-
-<WORKDIR>/string/internal/regex_engine/regex.mbt:17:3-17:10:
-   | 
-   | ///|
-   | struct Regex {
-17 |   profile : Profile
-   |   ^^^^^^^
-   |   ctx : @automata.Context
-   |   expr : @automata.Expr
 
 <WORKDIR>/string/internal/regex_engine/regex.mbt:49:5-49:12:
    |   symbol_repr : ReadOnlyArray[Rechar],

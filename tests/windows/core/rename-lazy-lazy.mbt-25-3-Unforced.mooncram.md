@@ -6,7 +6,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Unforced' 'Unforc
 *** Update File: <WORKDIR>/lazy\debug.mbt
 @@
    match self.state {
-     Forced(v) => @debug.Repr::opaque_("Lazy", @debug.to_repr(v))
+     Forced(v) => @debug.Repr::opaque_("Lazy", Repr(v))
      Forcing => @debug.Repr::opaque_("Lazy", @debug.Repr::literal("forcing"))
 -    Unforced(_) => @debug.Repr::opaque_("Lazy", @debug.Repr::omitted())
 +    UnforcedRenamed(_) => @debug.Repr::opaque_("Lazy", @debug.Repr::omitted())
@@ -23,11 +23,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Unforced' 'Unforc
    Forced(A)
  }
 @@
- /// }
  /// ```
+ #owned(thunk)
  pub fn[A] Lazy::Lazy(thunk : () -> A) -> Lazy[A] {
--  { state: Unforced(thunk) }
-+  { state: UnforcedRenamed(thunk) }
+-  { state: Unforced(thunk), }
++  { state: UnforcedRenamed(thunk), }
  }
  
  ///|

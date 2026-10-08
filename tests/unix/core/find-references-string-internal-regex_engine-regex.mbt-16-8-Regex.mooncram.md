@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Regex' --loc 'string/internal/regex_engine/regex.mbt:16:8'
-Found 23 references for symbol 'Regex':
+Found 22 references for symbol 'Regex':
 <WORKDIR>/string/internal/regex_engine/compile.mbt:17:54-17:59:
    | 
    | ///|
@@ -54,15 +54,6 @@ Found 23 references for symbol 'Regex':
    |          ^^^^^
    |   input : StringView,
    |   last_index : Int,
-
-<WORKDIR>/string/internal/regex_engine/regex.mbt:16:8-16:13:
-   | // limitations under the License.
-   | 
-   | ///|
-16 | struct Regex {
-   |        ^^^^^
-   |   profile : Profile
-   |   ctx : @automata.Context
 
 <WORKDIR>/string/internal/regex_engine/regex.mbt:35:8-35:13:
    | 

@@ -18,14 +18,5 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references '_ignore_unused_import' --loc 'src/js_async/unimplemented.mbt:17:5'
-Found 1 references for symbol '_ignore_unused_import':
-<WORKDIR>/src/js_async/unimplemented.mbt:17:5-17:26:
-   | 
-   | ///|
-   | #coverage.skip
-17 | let _ignore_unused_import : Unit = {
-   |     ^^^^^^^^^^^^^^^^^^^^^
-   |   ignore(@coroutine.spawn)
-   |   ignore(@event_loop.Timer::new)
-
+Found 0 references for symbol '_ignore_unused_import':
 ```

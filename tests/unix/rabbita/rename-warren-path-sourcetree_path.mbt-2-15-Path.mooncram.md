@@ -19,31 +19,31 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide rename 'Path' 'PathRenamed' --loc 'warren/path/sourcetree_path.mbt:2:15'
 *** Begin Patch
-*** Update File: <WORKDIR>/warren/devhub/devhub.mbt
-@@
-     path =>
-       match self.vfs.read(path) {
-         Some(content) => {
--          let content_type = match @path.Path::extname(path) {
-+          let content_type = match @path.PathRenamed::extname(path) {
-             ".png" => "image/png"
-             ".jpg" | ".jpeg" => "image/jpeg"
-             ".html" => "text/html"
-*** Update File: <WORKDIR>/warren/main.mbt
+*** Update File: <WORKDIR>/warren/build.mbt
 @@
  ///|
 -using @path {type SourcePath, type Path}
 +using @path {type SourcePath, type PathRenamed}
  
  ///|
- using @devhub {type BroadcastMsg, type Devhub}
+ let build_entry_script =
+*** Update File: <WORKDIR>/warren/devhub/devhub.mbt
+@@
+       }
+       match resource {
+         Some((resource_path, content)) => {
+-          let content_type = match @path.Path::extname(resource_path) {
++          let content_type = match @path.PathRenamed::extname(resource_path) {
+             ".png" => "image/png"
+             ".jpg" | ".jpeg" => "image/jpeg"
+             ".html" => "text/html"
 *** Update File: <WORKDIR>/warren/path/artifact_path.mbt
 @@
  
  ///|
  pub fn ArtifactPath::join_relative(s1 : Self, s2 : String) -> ArtifactPath {
--  { ..s1, relative: Path::join(s1.relative, s2).0 }
-+  { ..s1, relative: PathRenamed::join(s1.relative, s2).0 }
+-  { ..s1, relative: Path::join(s1.relative, s2).0, }
++  { ..s1, relative: PathRenamed::join(s1.relative, s2).0, }
  }
  
  ///|

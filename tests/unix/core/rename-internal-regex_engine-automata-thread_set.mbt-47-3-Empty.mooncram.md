@@ -102,9 +102,8 @@ $ run_moon_ide moon ide rename 'Empty' 'EmptyRenamed' --loc 'internal/regex_engi
  ///|
  fn ThreadSet::find_first_match(self : ThreadSet) -> MarkSlotMap? {
    match self {
--    Empty => None
-+    EmptyRenamed => None
-     Node(i={ no_match: true }, ..) => None
+-    Empty | Node(i={ no_match: true, }, ..) => None
++    EmptyRenamed | Node(i={ no_match: true, }, ..) => None
 -    Node(l=Empty, t=End(marks), ..) => Some(marks)
 +    Node(l=EmptyRenamed, t=End(marks), ..) => Some(marks)
      Node(l~, t~, r~, ..) =>
@@ -116,7 +115,7 @@ $ run_moon_ide moon ide rename 'Empty' 'EmptyRenamed' --loc 'internal/regex_engi
    match self {
 -    Empty => Empty
 +    EmptyRenamed => EmptyRenamed
-     Node(i={ no_match: true }, ..) => self
+     Node(i={ no_match: true, }, ..) => self
      Node(l~, t~, r~, p~, ..) =>
        match t {
 @@
@@ -125,15 +124,15 @@ $ run_moon_ide moon ide rename 'Empty' 'EmptyRenamed' --loc 'internal/regex_engi
    match self {
 -    Empty => (Empty, Empty)
 +    EmptyRenamed => (EmptyRenamed, EmptyRenamed)
--    Node(i={ no_match: true }, ..) => (self, Empty)
-+    Node(i={ no_match: true }, ..) => (self, EmptyRenamed)
--    Node(l=Empty | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
-+    Node(l=EmptyRenamed | Node(i={ no_match: true }, ..) as l, t=End(_), r~, ..) =>
+-    Node(i={ no_match: true, }, ..) => (self, Empty)
++    Node(i={ no_match: true, }, ..) => (self, EmptyRenamed)
+-    Node(l=Empty | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
++    Node(l=EmptyRenamed | Node(i={ no_match: true, }, ..) as l, t=End(_), r~, ..) =>
        (l, r)
      Node(
 -      l=Empty
 +      l=EmptyRenamed
-       | Node(i={ no_match: true }, ..) as l,
+       | Node(i={ no_match: true, }, ..) as l,
        t=Exp(_)
        | Seq(_) as t,
 @@

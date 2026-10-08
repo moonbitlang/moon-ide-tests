@@ -3,6 +3,4 @@ import {
   "username/testgen",
 }
 
-options(
-  "is-main": true,
-)
+pkgtype(kind: "executable")

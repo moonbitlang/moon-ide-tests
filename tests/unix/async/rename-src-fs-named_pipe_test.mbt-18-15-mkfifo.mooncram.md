@@ -29,15 +29,13 @@ $ run_moon_ide moon ide rename 'mkfifo' 'mkfifo_renamed' --loc 'src/fs/named_pip
  
  ///|
  #cfg(not(platform="windows"))
-@@
  async test "cancel named fifo open" {
-   @async.with_task_group() <| group => {
-     let path = "_build/cancel_open_test"
--    if mkfifo(@os_string.encode(path), 0o644) < 0 {
-+    if mkfifo_renamed(@os_string.encode(path), 0o644) < 0 {
-       @os_error.check_errno("mkfifo")
-     }
-     group.add_defer(() => @fs.remove(path))
+   let path = "_build/cancel_open_test"
+-  if mkfifo(@os_string.encode(path), 0o644) < 0 {
++  if mkfifo_renamed(@os_string.encode(path), 0o644) < 0 {
+     @os_error.check_errno("mkfifo")
+   }
+   defer @fs.remove(path)
 @@
  async test "named fifo" {
    @async.with_task_group() <| group => {

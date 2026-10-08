@@ -14,21 +14,21 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\aqueue\bloc
     |...
 158 |async test "blocking immediate cancellation" {
     |...
-182 |async test "blocking zero buffered" {
+179 |async test "blocking zero buffered" {
     |...
-207 |async test "zero buffered try_put" {
+204 |async test "zero buffered try_put" {
     |...
-214 |test "blocking try_put" {
+211 |test "blocking try_put" {
     |...
-236 |async test "blocked zero buffered try_get" {
+233 |async test "blocked zero buffered try_get" {
     |...
-260 |async test "blocked zero buffered try_put" {
+257 |async test "blocked zero buffered try_put" {
     |...
-288 |async test "blocked zero buffered discard oldest try_get" {
+285 |async test "blocked zero buffered discard oldest try_get" {
     |...
-310 |async test "blocked zero buffered discard oldest try_put" {
+307 |async test "blocked zero buffered discard oldest try_put" {
     |...
-338 |async test "blocked zero buffered discard latest try_put" {
+335 |async test "blocked zero buffered discard latest try_put" {
     |...
 
 ```
@@ -41,13 +41,13 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\fs\named_pi
     |...
  21 |#cfg(not(platform="windows"))
     |...
- 37 |#cfg(platform="windows")
+ 35 |#cfg(platform="windows")
     |...
- 58 |#cfg(not(platform="windows"))
+ 56 |#cfg(not(platform="windows"))
     |...
- 87 |#cfg(platform="windows")
+ 85 |#cfg(platform="windows")
     |...
-122 |#cfg(platform="windows")
+120 |#cfg(platform="windows")
     |...
 
 ```
@@ -57,82 +57,82 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\internal\ev
  16 |#cfg(not(platform="windows"))
  17 |pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
     |...
- 30 |#cfg(not(platform="windows"))
- 31 |async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
+ 31 |#cfg(not(platform="windows"))
+ 32 |async fn IoHandle::wait_write(handle : IoHandle) -> Unit {
     |...
- 45 |#cfg(all(target="native", not(platform="windows")))
- 46 |#borrow(buf)
- 47 |extern "C" fn read_unix_ffi(
- 48 |  fd : @fd_util.Fd,
- 49 |  buf : FixedArray[Byte],
- 50 |  offset~ : Int,
- 51 |  len~ : Int,
- 52 |) -> Int = "moonbitlang_async_read"
+ 47 |#cfg(all(target="native", not(platform="windows")))
+ 48 |#borrow(buf)
+ 49 |extern "C" fn read_unix_ffi(
+ 50 |  fd : @fd_util.Fd,
+ 51 |  buf : FixedArray[Byte],
+ 52 |  offset~ : Int,
+ 53 |  len~ : Int,
+ 54 |) -> Int = "moonbitlang_async_read"
     |...
- 55 |#cfg(target="wasm")
- 56 |#unsafe_skip_stub_check
- 57 |#borrow(buf)
- 58 |fn read_unix_ffi(
- 59 |  fd : @fd_util.Fd,
- 60 |  buf : FixedArray[Byte],
- 61 |  offset~ : Int,
- 62 |  len~ : Int,
- 63 |) -> Int = "moonbitlang/async" "io/read/unix"
+ 57 |#cfg(target="wasm")
+ 58 |#unsafe_skip_stub_check
+ 59 |#borrow(buf)
+ 60 |fn read_unix_ffi(
+ 61 |  fd : @fd_util.Fd,
+ 62 |  buf : FixedArray[Byte],
+ 63 |  offset~ : Int,
+ 64 |  len~ : Int,
+ 65 |) -> Int = "moonbitlang/async" "io/read/unix"
     |...
- 66 |#cfg(not(platform="windows"))
- 67 |async fn IoHandle::read_via_event_bus_unix(
- 68 |  handle : IoHandle,
- 69 |  buf : FixedArray[Byte],
- 70 |  offset~ : Int,
- 71 |  len~ : Int,
- 72 |  context~ : String,
- 73 |) -> Int {
+ 68 |#cfg(not(platform="windows"))
+ 69 |async fn IoHandle::read_via_event_bus_unix(
+ 70 |  handle : IoHandle,
+ 71 |  buf : FixedArray[Byte],
+ 72 |  offset~ : Int,
+ 73 |  len~ : Int,
+ 74 |  context~ : String,
+ 75 |) -> Int {
     |...
- 94 |#cfg(all(target="native", not(platform="windows")))
- 95 |async fn IoHandle::read_via_event_bus(
- 96 |  handle : IoHandle,
- 97 |  buf : FixedArray[Byte],
- 98 |  offset~ : Int,
- 99 |  len~ : Int,
-100 |  context~ : String,
-101 |) -> Int {
+ 96 |#cfg(all(target="native", not(platform="windows")))
+ 97 |async fn IoHandle::read_via_event_bus(
+ 98 |  handle : IoHandle,
+ 99 |  buf : FixedArray[Byte],
+100 |  offset~ : Int,
+101 |  len~ : Int,
+102 |  context~ : String,
+103 |) -> Int {
     |...
-106 |#cfg(all(target="native", not(platform="windows")))
-107 |#borrow(buf)
-108 |extern "C" fn write_unix_ffi(
-109 |  fd : @fd_util.Fd,
-110 |  buf : Bytes,
-111 |  offset~ : Int,
-112 |  len~ : Int,
-113 |) -> Int = "moonbitlang_async_write"
+108 |#cfg(all(target="native", not(platform="windows")))
+109 |#borrow(buf)
+110 |extern "C" fn write_unix_ffi(
+111 |  fd : @fd_util.Fd,
+112 |  buf : Bytes,
+113 |  offset~ : Int,
+114 |  len~ : Int,
+115 |) -> Int = "moonbitlang_async_write"
     |...
-116 |#cfg(target="wasm")
-117 |#unsafe_skip_stub_check
-118 |#borrow(buf)
-119 |fn write_unix_ffi(
-120 |  fd : @fd_util.Fd,
-121 |  buf : Bytes,
-122 |  offset~ : Int,
-123 |  len~ : Int,
-124 |) -> Int = "moonbitlang/async" "io/write/unix"
+118 |#cfg(target="wasm")
+119 |#unsafe_skip_stub_check
+120 |#borrow(buf)
+121 |fn write_unix_ffi(
+122 |  fd : @fd_util.Fd,
+123 |  buf : Bytes,
+124 |  offset~ : Int,
+125 |  len~ : Int,
+126 |) -> Int = "moonbitlang/async" "io/write/unix"
     |...
-127 |#cfg(not(platform="windows"))
-128 |async fn IoHandle::write_via_event_bus_unix(
-129 |  handle : IoHandle,
-130 |  buf : Bytes,
-131 |  offset~ : Int,
-132 |  len~ : Int,
-133 |  context~ : String,
-134 |) -> Int {
+129 |#cfg(not(platform="windows"))
+130 |async fn IoHandle::write_via_event_bus_unix(
+131 |  handle : IoHandle,
+132 |  buf : Bytes,
+133 |  offset~ : Int,
+134 |  len~ : Int,
+135 |  context~ : String,
+136 |) -> Int {
     |...
-155 |#cfg(all(target="native", not(platform="windows")))
-156 |async fn IoHandle::write_via_event_bus(
-157 |  handle : IoHandle,
-158 |  buf : Bytes,
-159 |  offset~ : Int,
-160 |  len~ : Int,
-161 |  context~ : String,
-162 |) -> Int {
+157 |#cfg(all(target="native", not(platform="windows")))
+158 |async fn IoHandle::write_via_event_bus(
+159 |  handle : IoHandle,
+160 |  buf : Bytes,
+161 |  offset~ : Int,
+162 |  len~ : Int,
+163 |  context~ : String,
+164 |) -> Int {
     |...
 
 ```
@@ -140,33 +140,46 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\internal\ev
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\internal\event_loop\stdio.mbt'
  16 |#cfg(target="native")
- 17 |extern "C" fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang_async_kind_of_fd"
+ 17 |#borrow(buf)
+ 18 |extern "C" fn fstatx_sync(
+ 19 |  fd : @fd_util.Fd,
+ 20 |  request : UInt,
+ 21 |  buf : FixedArray[Byte],
+ 22 |  buf_len : Int,
+ 23 |) -> Int = "moonbitlang_async_fstatx_sync"
     |...
- 20 |#cfg(target="wasm")
- 21 |#unsafe_skip_stub_check
- 22 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
+ 26 |#cfg(target="native")
+ 27 |fn kind_of_fd_sync(
+ 28 |  fd : @fd_util.Fd,
+ 29 |  context~ : String,
+ 30 |) -> @fd_util.FileKind raise {
     |...
- 25 |fn kind_of_fd_sync(
- 26 |  fd : @fd_util.Fd,
- 27 |  context~ : String,
- 28 |) -> @fd_util.FileKind raise {
+ 43 |#cfg(target="wasm")
+ 44 |#unsafe_skip_stub_check
+ 45 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
     |...
- 37 |#cfg(target="native")
- 38 |extern "C" fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
+ 48 |#cfg(target="wasm")
+ 49 |fn kind_of_fd_sync(
+ 50 |  fd : @fd_util.Fd,
+ 51 |  context~ : String,
+ 52 |) -> @fd_util.FileKind raise {
     |...
- 41 |#cfg(target="wasm")
- 42 |#unsafe_skip_stub_check
- 43 |fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+ 61 |#cfg(target="native")
+ 62 |extern "C" fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
     |...
- 46 |let stdio_handles : Map[@fd_util.Fd, IoHandle] = {}
+ 65 |#cfg(target="wasm")
+ 66 |#unsafe_skip_stub_check
+ 67 |fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
     |...
- 49 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
+ 70 |let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
     |...
- 97 |pub let stdin : Result[IoHandle, Error] = try
+ 73 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
     |...
-106 |pub let stdout : Result[IoHandle, Error] = try
+119 |pub let stdin : Result[IoHandle, Error] = try
     |...
-115 |pub let stderr : Result[IoHandle, Error] = try
+128 |pub let stdout : Result[IoHandle, Error] = try
+    |...
+137 |pub let stderr : Result[IoHandle, Error] = try
     |...
 
 ```
@@ -285,100 +298,130 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\process\red
     |...
  24 |struct WriteToProcess(@event_loop.IoHandle)
     |...
- 34 |pub fn read_from_process() -> (ReadFromProcess, &ProcessOutput) raise {
+ 48 |pub fn read_from_process(
+ 49 |  shared? : Bool = false,
+ 50 |) -> (ReadFromProcess, &ProcessOutput) raise {
     |...
- 54 |pub fn write_to_process() -> (&ProcessInput, WriteToProcess) raise {
+ 70 |pub fn write_to_process() -> (&ProcessInput, WriteToProcess) raise {
     |...
- 67 |pub fn ReadFromProcess::close(self : ReadFromProcess) -> Unit {
+ 85 |pub fn pipe() -> (&ProcessInput, &ProcessOutput) raise {
     |...
- 72 |pub impl @io.Reader for ReadFromProcess with fn _get_internal_buffer(self) {
+101 |pub fn ReadFromProcess::close(self : ReadFromProcess) -> Unit {
     |...
- 77 |pub impl @io.Reader for ReadFromProcess with fn _direct_read(
- 78 |  self,
- 79 |  buf,
- 80 |  offset~,
- 81 |  max_len~,
- 82 |) {
+106 |pub impl @io.Reader for ReadFromProcess with fn _get_internal_buffer(self) {
     |...
- 92 |pub fn WriteToProcess::close(self : WriteToProcess) -> Unit {
+111 |pub impl @io.Reader for ReadFromProcess with fn _direct_read(
+112 |  self,
+113 |  buf,
+114 |  offset~,
+115 |  max_len~,
+116 |) {
     |...
- 98 |pub impl @io.Writer for WriteToProcess with fn write_once(
- 99 |  self,
-100 |  buf,
-101 |  offset~,
-102 |  len~,
-103 |) {
+126 |pub extend ReadFromProcess with @io.Reader::{
+127 |  read,
+128 |  drop,
+129 |  read_exactly,
+130 |  read_some,
+131 |  read_all,
+132 |  read_until,
+133 |}
     |...
-109 |fn @fs.CreateMode::to_int(self : @fs.CreateMode) -> Int = "%identity"
+136 |pub fn WriteToProcess::close(self : WriteToProcess) -> Unit {
     |...
-115 |#label_migration(create, fill=false, msg="the option `create` is deprecated, use `create_mode` and `permission` instead")
-116 |#label_migration(truncate, fill=false, msg="the option `truncate` is deprecated, use `create_mode` instead")
-117 |pub async fn redirect_to_file(
-118 |  path : String,
-119 |  append? : Bool = false,
-120 |  create_mode? : @fs.CreateMode,
-121 |  permission? : Int,
-122 |  create? : Int,
-123 |  truncate? : Bool = false,
-124 |) -> &ProcessOutput {
+142 |pub impl @io.Writer for WriteToProcess with fn write_once(
+143 |  self,
+144 |  buf,
+145 |  offset~,
+146 |  len~,
+147 |) {
     |...
-154 |pub async fn redirect_from_file(path : String) -> &ProcessInput {
+153 |pub extend WriteToProcess with @io.Writer::{write_once, write, write_reader}
     |...
-169 |trait ProcessInput {
+156 |fn @fs.CreateMode::to_int(self : @fs.CreateMode) -> Int = "%identity"
     |...
-175 |impl ProcessInput with fn after_spawn(_) {
+176 |pub async fn redirect_to_file(
+177 |  path : String,
+178 |  append? : Bool = false,
+179 |  create_mode? : @fs.CreateMode = CreateOrTruncate,
+180 |  permission? : Int = 0o644,
+181 |  shared? : Bool = false,
+182 |) -> &ProcessOutput {
     |...
-180 |pub impl ProcessInput for @pipe.PipeRead with fn fd(self) {
+197 |pub async fn redirect_from_file(path : String) -> &ProcessInput {
     |...
-185 |pub impl ProcessInput for @stdio.Input with fn fd(self) {
+212 |trait ProcessInput {
     |...
-191 |trait ProcessOutput {
+227 |#doc(hidden)
+228 |#deprecated
+229 |pub fn &ProcessInput::close(self : &ProcessInput) -> Unit {
     |...
-197 |impl ProcessOutput with fn after_spawn(_) {
+234 |impl ProcessInput with fn do_close(_) {
     |...
-202 |pub impl ProcessOutput for @pipe.PipeWrite with fn fd(self) {
+239 |impl ProcessInput with fn after_spawn(_) {
     |...
-207 |pub impl ProcessOutput for @stdio.Output with fn fd(self) {
+244 |#deprecated("use `@process.write_to_process()` or `@process.pipe()` instead")
     |...
-212 |priv struct TempPipeRead {
+248 |pub impl ProcessInput for @pipe.PipeRead with fn fd(self) {
     |...
-218 |priv struct TempPipeWrite {
+253 |pub impl ProcessInput for @stdio.Input with fn fd(self) {
     |...
-224 |impl ProcessOutput for TempPipeWrite with fn fd(self) {
+259 |trait ProcessOutput {
     |...
-229 |impl ProcessOutput for TempPipeWrite with fn after_spawn(self) {
+273 |pub fn &ProcessOutput::close(self : &ProcessOutput) -> Unit {
     |...
-237 |impl ProcessInput for TempPipeRead with fn fd(self) {
+278 |impl ProcessOutput with fn do_close(_) {
     |...
-242 |impl ProcessInput for TempPipeRead with fn after_spawn(self) {
+283 |impl ProcessOutput with fn after_spawn(_) {
     |...
-250 |priv struct RedirectToFile(@event_loop.IoHandle)
+288 |#deprecated("use `@process.read_from_process(shared~)` or `@process.pipe()` instead")
     |...
-253 |impl ProcessOutput for RedirectToFile with fn fd(self) {
+292 |pub impl ProcessOutput for @pipe.PipeWrite with fn fd(self) {
     |...
-258 |impl ProcessOutput for RedirectToFile with fn after_spawn(self) {
+297 |pub impl ProcessOutput for @stdio.Output with fn fd(self) {
     |...
-263 |impl ProcessInput for RedirectToFile with fn fd(self) {
+302 |priv struct TempPipeRead {
     |...
-268 |impl ProcessInput for RedirectToFile with fn after_spawn(self) {
+308 |priv struct TempPipeWrite {
     |...
+315 |impl ProcessOutput for TempPipeWrite with fn fd(self) {
+    |...
+320 |impl ProcessOutput for TempPipeWrite with fn do_close(self) {
+    |...
+328 |impl ProcessOutput for TempPipeWrite with fn after_spawn(self) {
+    |...
+335 |impl ProcessInput for TempPipeRead with fn fd(self) {
+    |...
+340 |impl ProcessInput for TempPipeRead with fn do_close(self) {
+    |...
+348 |impl ProcessInput for TempPipeRead with fn after_spawn(self) {
+    |...
+353 |priv struct RedirectToFile {
+    |...
+360 |impl ProcessOutput for RedirectToFile with fn fd(self) {
+    |...
+365 |impl ProcessOutput for RedirectToFile with fn do_close(self) {
+    |...
+373 |impl ProcessOutput for RedirectToFile with fn after_spawn(self) {
+    |...
+380 |impl ProcessInput for RedirectToFile with fn fd(self) {
+    |...
+385 |impl ProcessInput for RedirectToFile with fn do_close(self) {
+    |...
+393 |impl ProcessInput for RedirectToFile with fn after_spawn(self) {
+    |...
+
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\socket\reuse_port_test.mbt'
+16 |async test "reuse port lb" {
+   |...
 
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\socket\unimplemented.mbt'
 17 |#cfg(not(target="native"))
-   |...
-
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide outline 'src\tls\unimplemented_test.mbt'
-16 |#cfg(not(target="native"))
-   |...
-24 |#cfg(target="wasm")
-   |...
-28 |#cfg(not(any(target="native", target="wasm")))
    |...
 
 ```

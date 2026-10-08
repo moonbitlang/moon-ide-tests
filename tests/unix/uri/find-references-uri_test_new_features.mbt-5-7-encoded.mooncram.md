@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'encoded' --loc 'uri_test_new_features.mbt:5:7'
-Found 2 references for symbol 'encoded':
-<WORKDIR>/uri_test_new_features.mbt:5:7-5:14:
-  | /// Test URL encoding functionality (escaped)
-  | test "url_encoding" { (escaped)
-  |   // Test basic encoding (escaped)
-5 |   let encoded = Uri::encode("hello world!") (escaped)
-  |       ^^^^^^^ (escaped)
-  |   json_inspect(encoded, content="hello%20world%21") (escaped)
-  |  (escaped)
-
+Found 1 references for symbol 'encoded':
 <WORKDIR>/uri_test_new_features.mbt:6:16-6:23:
   | test "url_encoding" { (escaped)
   |   // Test basic encoding (escaped)

@@ -18,14 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'obj' --loc 'src/ast.mbt:2:37'
-Found 2 references for symbol 'obj':
-<WORKDIR>/src/ast.mbt:2:37-2:40:
-  | ///| (escaped)
-2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String { (escaped)
-  |                                     ^^^ (escaped)
-  |   @pp.pretty(obj).to_string() (escaped)
-  | } (escaped)
-
+Found 1 references for symbol 'obj':
 <WORKDIR>/src/ast.mbt:3:14-3:17:
   | ///| (escaped)
   | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String { (escaped)

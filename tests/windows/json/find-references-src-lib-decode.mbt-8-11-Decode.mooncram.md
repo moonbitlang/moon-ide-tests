@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Decode' --loc 'src\lib\decode.mbt:8:11'
-Found 17 references for symbol 'Decode':
-<WORKDIR>/src\lib\decode.mbt:8:11-8:17:
-  | pub type JsonObject = Map[String, Json]
-  | 
-  | ///|
-8 | pub trait Decode {
-  |           ^^^^^^
-  |   array_start(Self, JsonArray) -> JsonArray
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-
+Found 15 references for symbol 'Decode':
 <WORKDIR>/src\lib\decode.mbt:21:6-21:12:
    | }
    | 
@@ -63,7 +54,7 @@ Found 17 references for symbol 'Decode':
    | ///|
 49 | impl Decode for Unit with object_finish(_self, acc, old_acc) {
    |      ^^^^^^
-   |   (acc, old_acc) (escaped)
+   |   (acc, old_acc)
    | }
 
 <WORKDIR>/src\lib\decode.mbt:54:6-54:12:
@@ -146,13 +137,5 @@ Found 17 references for symbol 'Decode':
    |             ^^^^^^
    |   checkpoint : Checkpoint
    | }
-
-<WORKDIR>/src\top.mbt:3:9-3:15:
-  | ///|
-  | pub using @lib {
-3 |   trait Decode,
-  |         ^^^^^^
-  |   decode,
-  |   decode_start,
 
 ```

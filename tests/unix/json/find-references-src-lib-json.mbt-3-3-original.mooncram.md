@@ -18,23 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'original' --loc 'src/lib/json.mbt:3:3'
-Found 18 references for symbol 'original':
-<WORKDIR>/src/lib/json.mbt:3:3-3:11:
-  | ///| (escaped)
-  | priv struct Context { (escaped)
-3 |   original : Array[Char] (escaped)
-  |   ^^^^^^^^ (escaped)
-  |   rest : ArrayView[Char] (escaped)
-  |   skip : Int (escaped)
-
+Found 17 references for symbol 'original':
 <WORKDIR>/src/lib/json.mbt:27:5-27:13:
-   |   } (escaped)
-   |   let ctx = Context::{ (escaped)
-   |     rest: input.to_array()[:], (escaped)
-27 |     original: input.to_array(), (escaped)
-   |     ^^^^^^^^ (escaped)
-   |     skip: 0, (escaped)
-   |     arr_acc: [], (escaped)
+   |   }
+   |   let ctx = Context::{
+   |     rest: input.to_array()[:],
+27 |     original: input.to_array(),
+   |     ^^^^^^^^
+   |     skip: 0,
+   |     arr_acc: [],
 
 <WORKDIR>/src/lib/json.mbt:55:5-55:13:
    |   } (escaped)

@@ -18,15 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
-Found 4 references for symbol 'UnterminatedString':
-<WORKDIR>/src/lexer.mbt:3:3-3:21:
-  | ///|
-  | suberror LexerError {
-3 |   UnterminatedString
-  |   ^^^^^^^^^^^^^^^^^^
-  |   UnknownCharacter(Char)
-  | } derive(Debug)
-
+Found 3 references for symbol 'UnterminatedString':
 <WORKDIR>/src/lexer.mbt:513:31-513:49:
     |         result.write_char(c)
     |         continue rest

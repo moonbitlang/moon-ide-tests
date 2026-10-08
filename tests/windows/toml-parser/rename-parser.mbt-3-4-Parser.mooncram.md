@@ -13,14 +13,14 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'Parser' 'P
      match view {
        [Newline(..), .. rest] => continue rest
 @@
- /// Try to consume a single bare key from the current position.
- /// Handles identifiers, strings, integers, booleans (true/false),
- /// and special float keywords (inf/nan) in key position.
+ /// "1_0"). A leading '+' in the raw text means the token can never be a
+ /// bare key ('+' is not a bare-key character), so it is rejected here and
+ /// surfaces as an "Expected key" error.
 -fn Parser::try_parse_single_key(self : Parser) -> String? {
 +fn ParserRenamed::try_parse_single_key(self : ParserRenamed) -> String? {
    match self.view() {
-     [Identifier(name, ..), .. rest] => {
-       self.update_view(rest)
+     [Identifier(name, ..), .. rest] =>
+       if name.has_prefix("+") {
 @@
  
  ///|
@@ -45,7 +45,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'Parser' 'P
  /// No trailing comma allowed unlike Array
 -fn Parser::parse_inline_table(self : Parser) -> TomlValue raise {
 +fn ParserRenamed::parse_inline_table(self : ParserRenamed) -> TomlValue raise {
-   let table = {}
+   let table = Map([])
    self.skip_newlines() // TOML 1.1: allow newlines in inline tables
    if self.view() is [RightBrace, .. rest] {
 @@
@@ -69,7 +69,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'Parser' 'P
  /// Parse a dotted key path: key.subkey.subsubkey
 -fn Parser::parse_dotted_key(self : Parser) -> Array[String] raise {
 +fn ParserRenamed::parse_dotted_key(self : ParserRenamed) -> Array[String] raise {
-   let path = Array::new()
+   let path = []
  
    // Parse first key - handle the case where the tokenizer saw a float like "1.2"
 @@
@@ -87,7 +87,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'Parser' 'P
    let tokens = @tokenize.tokenize(input)
 -  let parser = Parser::Parser(tokens)
 +  let parser = ParserRenamed::ParserRenamed(tokens)
-   let main_table = {}
+   let main_table = Map([])
    for current_table = main_table {
      parser.skip_newlines()
 *** Update File: <WORKDIR>/parser_wbtest.mbt
@@ -271,7 +271,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'Parser' 'P
  /// Create a new parser
 -fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
 +fn ParserRenamed::ParserRenamed(tokens : Array[@tokenize.Token]) -> ParserRenamed {
-   { tokens, position: 0 }
+   { tokens, position: 0, }
  }
  
 @@

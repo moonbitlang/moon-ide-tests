@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'array_start' --loc 'src\lib\decode.mbt:9:3'
-Found 4 references for symbol 'array_start':
-<WORKDIR>/src\lib\decode.mbt:9:3-9:14:
-  | 
-  | ///|
-  | pub trait Decode {
-9 |   array_start(Self, JsonArray) -> JsonArray
-  |   ^^^^^^^^^^^
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
-
+Found 3 references for symbol 'array_start':
 <WORKDIR>/src\lib\decode.mbt:21:27-21:38:
    | }
    | 

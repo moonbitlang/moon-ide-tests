@@ -18,16 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'tokens' --loc 'parser_wbtest.mbt:7:7'
-Found 2 references for symbol 'tokens':
-<WORKDIR>/parser_wbtest.mbt:7:7-7:13:
-  | ///|
-  | test "parse_dotted_key - simple identifier" {
-  |   // Test parsing a simple identifier key
-7 |   let tokens = @tokenize.tokenize("simple")
-  |       ^^^^^^
-  |   let parser = Parser::Parser(tokens)
-  |   let result = parser.parse_dotted_key()
-
+Found 1 references for symbol 'tokens':
 <WORKDIR>/parser_wbtest.mbt:8:31-8:37:
   | test "parse_dotted_key - simple identifier" {
   |   // Test parsing a simple identifier key

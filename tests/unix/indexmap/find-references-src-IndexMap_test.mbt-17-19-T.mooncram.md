@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'T' --loc 'src/IndexMap_test.mbt:17:19'
-Found 116 references for symbol 'T':
+Found 115 references for symbol 'T':
 <WORKDIR>/src/IndexMap.mbt:27:62-27:63:
    | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16) (escaped)
    | /// inspect(map.capacity(), content="16") (escaped)
@@ -1053,14 +1053,5 @@ Found 116 references for symbol 'T':
      |                       ^ (escaped)
      |  (escaped)
      |   // 验证初始容量 (escaped)
-
-<WORKDIR>/src/types.mbt:54:8-54:9:
-   | /// map.set(3, "updated") (escaped)
-   | /// assert_eq(map.get(3), Some("updated")) (escaped)
-   | /// assert_eq(map.get_at(0), (3, "updated"))  // Access by insertion order (escaped)
-54 | struct T[K, V] { (escaped)
-   |        ^ (escaped)
-   |   core : IndexMapCore[K, V] // 包含核心数据结构 (escaped)
-   |   mut size : Int // 元素数量 (escaped)
 
 ```

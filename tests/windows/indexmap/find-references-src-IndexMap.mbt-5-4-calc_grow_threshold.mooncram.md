@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
-Found 3 references for symbol 'calc_grow_threshold':
-<WORKDIR>/src\IndexMap.mbt:5:4-5:23:
-  | const Default_init_capacity = 8
-  | 
-  | ///|
-5 | fn calc_grow_threshold(capacity : Int) -> Int {
-  |    ^^^^^^^^^^^^^^^^^^^
-  |   capacity * 3 / 4 // 75% 负载因子
-  | }
-
+Found 2 references for symbol 'calc_grow_threshold':
 <WORKDIR>/src\IndexMap.mbt:39:13-39:32:
    |     },
    |     size: 0,

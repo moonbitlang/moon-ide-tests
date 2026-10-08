@@ -65,6 +65,7 @@ jobs:
       - name: Refresh Unix snapshots
         run: |
           mkdir -p .daily-test
+          scripts/escape-cram-empty-parens.sh tests/unix
           moon cram update --replace --assume-yes --cram-compat tests/unix \
             > .daily-test/unix-cram-update.log 2>&1
           scripts/escape-cram-empty-parens.sh tests/unix

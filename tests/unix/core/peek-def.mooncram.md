@@ -17,14 +17,92 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:31:15'
+$ run_moon_ide moon ide peek-def 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
+Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | test "exact_view uses the same bounds on all array types" {
+17 |   let arr = [1, 2, 3, 4]
+   |       ^^^
+   |   let fixed : FixedArray[Int] = [1, 2, 3, 4]
+   |   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+   |   let view = [0, 1, 2, 3, 4, 5][1:5]
+   |   let mutable = arr.mut_view()
+   |   let raw = @builtin.UninitializedArray::make(4)
+   |   for i in 0..<4 {
+   |     raw[i] = i + 1
+   |   }
+   |   for
+   |     result in [
+   |       arr.exact_view(start=1, end=3),
+   |       fixed.exact_view(start=1, end=3),
+   |       ro.exact_view(start=1, end=3),
+   |       view.exact_view(start=1, end=3),
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
+Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
+   | // limitations under the License.
+   | 
+   | ///|
+   | test "exact_view uses the same bounds on all array types" {
+   |   let arr = [1, 2, 3, 4]
+18 |   let fixed : FixedArray[Int] = [1, 2, 3, 4]
+   |       ^^^^^
+   |   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+   |   let view = [0, 1, 2, 3, 4, 5][1:5]
+   |   let mutable = arr.mut_view()
+   |   let raw = @builtin.UninitializedArray::make(4)
+   |   for i in 0..<4 {
+   |     raw[i] = i + 1
+   |   }
+   |   for
+   |     result in [
+   |       arr.exact_view(start=1, end=3),
+   |       fixed.exact_view(start=1, end=3),
+   |       ro.exact_view(start=1, end=3),
+   |       view.exact_view(start=1, end=3),
+   |       mutable.exact_view(start=1, end=3),
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'self' --loc 'builtin/int64.mbt:26:21'
+Definition found at file <WORKDIR>/builtin/int64.mbt
+   | /// ```mbt check
+   | /// test {
+   | ///   inspect(Int64(3), content="3")
+   | /// }
+   | /// ```
+26 | pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
+   |                     ^^^^
+   | 
+   | ///|
+   | /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
+   | ///
+   | /// Parameters:
+   | ///
+   | /// * `i` : The integer value to be converted.
+   | ///
+   | /// Returns the converted 64-bit integer (`Int64`) value.
+   | ///
+   | /// Example:
+   | ///
+   | /// ```mbt check
+   | /// test {
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
    | ///   inspect(Int64::from_int(42), content="42")
    | /// }
    | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
+44 | pub fn Int64::from_int(i : Int) -> Int64 {
    |               ^^^^^^^^
    |   i.to_int64()
    | }
@@ -36,35 +114,9 @@ Definition found at file <WORKDIR>/builtin/int64.mbt
    | ///
    | /// * `self` : The 64-bit integer whose absolute value is to be computed.
    | ///
-   | /// Returns the absolute value of the input integer.
-   | ///
-   | /// Example:
-   | ///
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'i' --loc 'builtin/int64.mbt:31:24'
-Definition found at file <WORKDIR>/builtin/int64.mbt
-   | /// ```mbt check
-   | /// test {
-   | ///   inspect(Int64::from_int(42), content="42")
-   | /// }
-   | /// ```
-31 | pub fn Int64::from_int(i : Int) -> Int64 {
-   |                        ^
-   |   i.to_int64()
-   | }
-   | 
-   | ///|
-   | /// Computes the absolute value of a 64-bit integer.
-   | ///
-   | /// Parameters:
-   | ///
-   | /// * `self` : The 64-bit integer whose absolute value is to be computed.
-   | ///
-   | /// Returns the absolute value of the input integer.
-   | ///
-   | /// Example:
+   | /// Returns the absolute value of the input integer. When the input is
+   | /// `@int64.MIN_VALUE` (-9223372036854775808), returns `@int64.MIN_VALUE`
+   | /// itself, since its absolute value is not representable as an `Int64`.
    | ///
 ```
 
@@ -116,66 +168,14 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'ReprDelta' --loc 'debug/delta.mbt:17:11'
-Definition found at file <WORKDIR>/debug/delta.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
-   | 
-   | ///|
-   | /// Tree-shaped diff between two `Repr` values.
-17 | priv enum ReprDelta {
-   |           ^^^^^^^^^
-   |   Same(Repr, Array[ReprDelta])
-   |   Different(Repr, Repr)
-   |   Extra1(Repr)
-   |   Extra2(Repr)
-   | }
-   | 
-   | ///|
-   | /// Default max relative error for `DoubleLit` comparisons.
-   | const DEFAULT_MAX_RELATIVE_ERROR : Double = 0.000000000001
-   | 
-   | ///|
-   | /// Absolute value for `Double`.
-   | fn double_abs(x : Double) -> Double {
-   |   if x < 0.0 {
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'Same' --loc 'debug/delta.mbt:18:3'
-Definition found at file <WORKDIR>/debug/delta.mbt
-   | // limitations under the License.
-   | 
-   | ///|
-   | /// Tree-shaped diff between two `Repr` values.
-   | priv enum ReprDelta {
-18 |   Same(Repr, Array[ReprDelta])
-   |   ^^^^
-   |   Different(Repr, Repr)
-   |   Extra1(Repr)
-   |   Extra2(Repr)
-   | }
-   | 
-   | ///|
-   | /// Default max relative error for `DoubleLit` comparisons.
-   | const DEFAULT_MAX_RELATIVE_ERROR : Double = 0.000000000001
-   | 
-   | ///|
-   | /// Absolute value for `Double`.
-   | fn double_abs(x : Double) -> Double {
-   |   if x < 0.0 {
-   |     -x
-```
-
-```mooncram
 $ run_moon_ide moon ide peek-def 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16'
-Error: could not find definition for symbol 'decode_utf8_js' at encoding/utf8/decode_js.mbt:16:16
+Error: could not get package of loc encoding/utf8/decode_js.mbt:16:16
 [1]
 ```
 
 ```mooncram
 $ run_moon_ide moon ide peek-def 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3'
-Error: could not find definition for symbol 'bytes' at encoding/utf8/decode_js.mbt:17:3
+Error: could not get package of loc encoding/utf8/decode_js.mbt:17:3
 [1]
 ```
 
@@ -369,7 +369,7 @@ Definition found at file <WORKDIR>/string/regex.mbt
     | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     | /// }
     | /// ```
-348 | pub fn Regex::execute(
+350 | pub fn Regex::execute(
     |               ^^^^^^^
     |   self : Regex,
     |   input : StringView,
@@ -378,7 +378,7 @@ Definition found at file <WORKDIR>/string/regex.mbt
     |   match self.re().execute(input, last_index) {
     |     None => None
     |     Some(result) =>
-    |       Some({ input, group_names: self.re().group_names(), result })
+    |       Some({ input, group_names: self.re().group_names(), result, })
     |   }
     | }
     | 
@@ -407,7 +407,7 @@ Definition found at file <WORKDIR>/test/types.mbt
    | #as_free_fn
    | #as_free_fn(new, deprecated="Use `Test()` instead")
    | pub fn Test::Test(name : String) -> Test {
-   |   { name, buffer: StringBuilder() }
+   |   { name, buffer: StringBuilder(), }
    | }
 ```
 
@@ -430,6 +430,6 @@ Definition found at file <WORKDIR>/test/types.mbt
    | #as_free_fn
    | #as_free_fn(new, deprecated="Use `Test()` instead")
    | pub fn Test::Test(name : String) -> Test {
-   |   { name, buffer: StringBuilder() }
+   |   { name, buffer: StringBuilder(), }
    | }
 ```

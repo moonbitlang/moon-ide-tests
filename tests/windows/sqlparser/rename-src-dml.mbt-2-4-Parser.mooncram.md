@@ -6,7 +6,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\ansi.mbt
 @@
  ///|
- pub impl Dialect for ANSI with parse_statement(
+ pub impl Dialect for ANSI with fn parse_statement(
    _self : ANSI,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -16,7 +16,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\bigquery.mbt
 @@
  ///|
- pub impl Dialect for BigQuery with parse_statement(
+ pub impl Dialect for BigQuery with fn parse_statement(
    _self : BigQuery,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -26,7 +26,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\clickhouse.mbt
 @@
  ///|
- pub impl Dialect for ClickHouse with parse_statement(
+ pub impl Dialect for ClickHouse with fn parse_statement(
    _self : ClickHouse,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -332,17 +332,17 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
    let tokens = self.expect_token(tokens, Keyword(Create))
 *** Update File: <WORKDIR>/src\dialect.mbt
 @@
-   parse_expr(Self, tokens : ArrayView[Token]) -> ParserResult[Expr]? raise ParserError = _
+   fn parse_expr(Self, tokens : ArrayView[Token]) -> ParserResult[Expr]? raise ParserError = _
  
    /// Custom statement parsing for dialect-specific syntax
--  parse_statement(Self, parser : Parser, tokens : ArrayView[Token]) -> ParserResult[
-+  parse_statement(Self, parser : ParserRenamed, tokens : ArrayView[Token]) -> ParserResult[
+-  fn parse_statement(Self, parser : Parser, tokens : ArrayView[Token]) -> ParserResult[
++  fn parse_statement(Self, parser : ParserRenamed, tokens : ArrayView[Token]) -> ParserResult[
      Statement,
    ]? raise ParserError = _
  
 @@
  ///|
- impl Dialect with parse_statement(
+ impl Dialect with fn parse_statement(
    _self : Self,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -813,7 +813,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\duckdb.mbt
 @@
  ///|
- pub impl Dialect for DuckDB with parse_statement(
+ pub impl Dialect for DuckDB with fn parse_statement(
    _self : DuckDB,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -823,7 +823,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\generic.mbt
 @@
  ///|
- pub impl Dialect for Generic with parse_statement(
+ pub impl Dialect for Generic with fn parse_statement(
    _self : Generic,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -833,7 +833,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\mysql.mbt
 @@
  ///|
- pub impl Dialect for MySQL with parse_statement(
+ pub impl Dialect for MySQL with fn parse_statement(
    _self : MySQL,
 -  parser : Parser,
 +  parser : ParserRenamed,
@@ -863,7 +863,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
  ) -> ArrayView[Token] raise ParserError {
 @@
    tokens : ArrayView[Token],
-   dialect? : &Dialect = MySQL::{  },
+   dialect? : &Dialect = MySQL::{ },
  ) -> Array[Statement] raise ParserError {
 -  let parser = Parser::{ dialect, }
 +  let parser = ParserRenamed::{ dialect, }
@@ -1060,7 +1060,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\postgres.mbt
 @@
  ///|
- pub impl Dialect for Postgres with parse_statement(
+ pub impl Dialect for Postgres with fn parse_statement(
    _self : Postgres,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -1070,7 +1070,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\redshift.mbt
 @@
  ///|
- pub impl Dialect for Redshift with parse_statement(
+ pub impl Dialect for Redshift with fn parse_statement(
    _self : Redshift,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -1080,7 +1080,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\snowflake.mbt
 @@
  ///|
- pub impl Dialect for Snowflake with parse_statement(
+ pub impl Dialect for Snowflake with fn parse_statement(
    _self : Snowflake,
 -  _parser : Parser,
 +  _parser : ParserRenamed,
@@ -1090,7 +1090,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 *** Update File: <WORKDIR>/src\sqlite.mbt
 @@
  ///|
- pub impl Dialect for SQLite with parse_statement(
+ pub impl Dialect for SQLite with fn parse_statement(
    _self : SQLite,
 -  _parser : Parser,
 +  _parser : ParserRenamed,

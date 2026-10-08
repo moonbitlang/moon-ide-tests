@@ -62,7 +62,7 @@ $ run_moon_ide moon ide hover 'BigQuery' --loc 'src/bigquery.mbt:6:22'
 pub(all) struct BigQuery {}
 
 ///|
-pub impl Dialect for BigQuery with supports_string_literal_backslash_escape(
+pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
                      ^^^^^^^^
                      ```moonbit
                      struct BigQuery {
@@ -126,7 +126,7 @@ $ run_moon_ide moon ide hover 'Generic' --loc 'src/generic.mbt:8:22'
 pub(all) struct Generic {}
 
 ///|
-pub impl Dialect for Generic with supports_string_literal_backslash_escape(
+pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
                      ^^^^^^^
                      ```moonbit
                      struct Generic {
@@ -218,7 +218,7 @@ $ run_moon_ide moon ide hover 'Redshift' --loc 'src/redshift.mbt:6:22'
 pub(all) struct Redshift {}
 
 ///|
-pub impl Dialect for Redshift with supports_string_literal_backslash_escape(
+pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
                      ^^^^^^^^
                      ```moonbit
                      struct Redshift {
@@ -240,7 +240,7 @@ fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
               fn[T : @debug.Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit
               ```
   let input = @debug.to_string(obj)
-  let buffer = StringBuilder::new()
+  let buffer = StringBuilder()
 ```
 
 ```mooncram
@@ -252,7 +252,7 @@ fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
                                  T
                                  ```
   let input = @debug.to_string(obj)
-  let buffer = StringBuilder::new()
+  let buffer = StringBuilder()
 ```
 
 ```mooncram

@@ -18,12 +18,12 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson)
    | 
    | ///|
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI
-   | /// Contains optional user info, required host, and optional port
-   | pub struct Authority {
-   |   userinfo : String?
-   |   host : String
-   |   port : Int?
 ```
 
 ```mooncram
@@ -43,13 +43,13 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson)
    | 
    | ///|
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI
    | /// Contains optional user info, required host, and optional port
-   | pub struct Authority {
-   |   userinfo : String?
-   |   host : String
-   |   port : Int?
-   | } derive(ToJson)
 ```
 
 ```mooncram
@@ -85,7 +85,7 @@ Definition found at file <WORKDIR>/uri.mbt
     | /// - `UriError::InvalidScheme` if the scheme is malformed
     | /// - `UriError::InvalidAuthority` if the authority is malformed
     | /// - Other `UriError` variants for various parsing failures
-127 | pub fn parse(uri_str : String) -> Uri raise UriError {
+140 | pub fn parse(uri_str : String) -> Uri raise UriError {
     |        ^^^^^
     |   if uri_str.length() == 0 {
     |     raise EmptyUri
@@ -146,10 +146,10 @@ Definition found at file <WORKDIR>/uri.mbt
    | } derive(ToJson)
    | 
    | ///|
+   | /// Keep `uri.to_json()` available in dot form for existing users of this
+   | /// published package (the implicit promotion of `impl ToJson` is deprecated).
+   | pub extend Uri with ToJson::{to_json}
+   | 
+   | ///|
    | /// Authority component of a URI
-   | /// Contains optional user info, required host, and optional port
-   | pub struct Authority {
-   |   userinfo : String?
-   |   host : String
-   |   port : Int?
 ```

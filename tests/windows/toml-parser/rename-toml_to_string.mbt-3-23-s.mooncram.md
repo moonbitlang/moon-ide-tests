@@ -10,17 +10,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 's' 's_rena
 -fn escape_toml_string(s : String) -> String {
 +fn escape_toml_string(s_renamed : String) -> String {
    let result = StringBuilder()
-   for char in s {
+-  for char in s {
++  for char in s_renamed {
      match char {
-@@
-         output <+ "\{format_toml_key(key)}]\n"
-         let new_path = path.copy()
-         new_path.push(key)
--        write_table_contents(t, output, new_path)
-+        write_table_contents(s_renamed, output, new_path)
-       }
-       _ => () // Should not happen
-     }
+       '\b' => result <+ "\\b"
+       '\t' => result <+ "\\t"
 *** End Patch
 
 ```

@@ -14,12 +14,21 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
    authority : Authority?
    path : String
 @@
+ ///|
+ /// Keep `uri.to_json()` available in dot form for existing users of this
+ /// published package (the implicit promotion of `impl ToJson` is deprecated).
+-pub extend Uri with ToJson::{to_json}
++pub extend UriRenamed with ToJson::{to_json}
+ 
+ ///|
+ /// Authority component of a URI
+@@
  /// # Returns
  ///
  /// A new `Uri` with all components set to their default values.
 -pub fn empty() -> Uri {
 +pub fn empty() -> UriRenamed {
-   { scheme: None, authority: None, path: "", query: None, fragment: None }
+   { scheme: None, authority: None, path: "", query: None, fragment: None, }
  }
  
 @@
@@ -38,7 +47,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 -fn parse_with_scheme(scheme : String, rest : String) -> Uri raise UriError {
 +fn parse_with_scheme(scheme : String, rest : String) -> UriRenamed raise UriError {
    let mut uri = empty()
-   uri = { ..uri, scheme: Some(scheme) }
+   uri = { ..uri, scheme: Some(scheme), }
  
 @@
  
@@ -53,11 +62,20 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  
  ///|
  /// Implement Show trait for Uri to provide standard string representation
--pub impl Show for Uri with output(self, logger) {
-+pub impl Show for UriRenamed with output(self, logger) {
+-pub impl Show for Uri with fn output(self, logger) {
++pub impl Show for UriRenamed with fn output(self, logger) {
    // Use our existing to_string method for the Show implementation
    logger.write_string(self.to_string())
  }
+@@
+ 
+ ///|
+ /// Keep `uri.output(logger)` available in dot form for existing users.
+-pub extend Uri with Show::{output}
++pub extend UriRenamed with Show::{output}
+ 
+ ///|
+ /// Get the scheme component of the URI.
 @@
  /// # Returns
  ///
@@ -118,7 +136,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  /// A new `Uri` with the specified scheme
 -pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
 +pub fn UriRenamed::with_scheme(self : UriRenamed, new_scheme : String?) -> UriRenamed {
-   { ..self, scheme: new_scheme }
+   { ..self, scheme: new_scheme, }
  }
  
 @@
@@ -138,28 +156,28 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 +pub fn UriRenamed::with_port(self : UriRenamed, new_port : Int?) -> UriRenamed {
    match self.authority {
      Some(auth) => {
-       let new_authority = Some({ ..auth, port: new_port })
+       let new_authority = Some({ ..auth, port: new_port, })
 @@
  
  ///|
  /// Create a new URI with the specified path
 -pub fn Uri::with_path(self : Uri, new_path : String) -> Uri {
 +pub fn UriRenamed::with_path(self : UriRenamed, new_path : String) -> UriRenamed {
-   { ..self, path: new_path }
+   { ..self, path: new_path, }
  }
  
  ///|
  /// Create a new URI with the specified query
 -pub fn Uri::with_query(self : Uri, new_query : String?) -> Uri {
 +pub fn UriRenamed::with_query(self : UriRenamed, new_query : String?) -> UriRenamed {
-   { ..self, query: new_query }
+   { ..self, query: new_query, }
  }
  
  ///|
  /// Create a new URI with the specified fragment
 -pub fn Uri::with_fragment(self : Uri, new_fragment : String?) -> Uri {
 +pub fn UriRenamed::with_fragment(self : UriRenamed, new_fragment : String?) -> UriRenamed {
-   { ..self, fragment: new_fragment }
+   { ..self, fragment: new_fragment, }
  }
  
  ///|
@@ -331,7 +349,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 -pub fn Uri::with_path_segments(self : Uri, segments : Array[String]) -> Uri {
 +pub fn UriRenamed::with_path_segments(self : UriRenamed, segments : Array[String]) -> UriRenamed {
    if segments.length() == 0 {
-     return { ..self, path: "" }
+     return { ..self, path: "", }
    }
 @@
  

@@ -18,28 +18,28 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
-Found 9 references for symbol 'Path':
-<WORKDIR>/warren/devhub/devhub.mbt:217:42-217:46:
-    |     path =>
-    |       match self.vfs.read(path) {
-    |         Some(content) => {
-217 |           let content_type = match @path.Path::extname(path) {
-    |                                          ^^^^
-    |             ".png" => "image/png"
-    |             ".jpg" | ".jpeg" => "image/jpeg"
-
-<WORKDIR>/warren/main.mbt:2:36-2:40:
+Found 8 references for symbol 'Path':
+<WORKDIR>/warren/build.mbt:2:36-2:40:
   | ///|
 2 | using @path {type SourcePath, type Path}
   |                                    ^^^^
   | 
   | ///|
 
+<WORKDIR>/warren/devhub/devhub.mbt:236:42-236:46:
+    |       }
+    |       match resource {
+    |         Some((resource_path, content)) => {
+236 |           let content_type = match @path.Path::extname(resource_path) {
+    |                                          ^^^^
+    |             ".png" => "image/png"
+    |             ".jpg" | ".jpeg" => "image/jpeg"
+
 <WORKDIR>/warren/path/artifact_path.mbt:48:21-48:25:
    | 
    | ///|
    | pub fn ArtifactPath::join_relative(s1 : Self, s2 : String) -> ArtifactPath {
-48 |   { ..s1, relative: Path::join(s1.relative, s2).0 }
+48 |   { ..s1, relative: Path::join(s1.relative, s2).0, }
    |                     ^^^^
    | }
    | 
@@ -52,13 +52,6 @@ Found 9 references for symbol 'Path':
    |   ^^^^
    | }
    | 
-
-<WORKDIR>/warren/path/sourcetree_path.mbt:2:10-2:14:
-  | ///|
-2 | pub type Path = @p.Path
-  |          ^^^^
-  | 
-  | ///|
 
 <WORKDIR>/warren/path/sourcetree_path.mbt:14:3-14:7:
    | 

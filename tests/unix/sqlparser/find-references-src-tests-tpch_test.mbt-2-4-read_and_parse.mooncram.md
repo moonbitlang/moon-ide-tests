@@ -18,22 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
-Found 23 references for symbol 'read_and_parse':
-<WORKDIR>/src/tests/tpch_test.mbt:2:4-2:18:
-  | ///| (escaped)
-2 | fn read_and_parse(path : String) -> @sqlparser.Statements { (escaped)
-  |    ^^^^^^^^^^^^^^ (escaped)
-  |   let input = @fs.read_file_to_string(path) catch { (escaped)
-  |     e => { (escaped)
-
+Found 22 references for symbol 'read_and_parse':
 <WORKDIR>/src/tests/tpch_test.mbt:23:14-23:28:
-   |  (escaped)
-   | ///| (escaped)
-   | test "TPCH 1" { (escaped)
-23 |   let stmt = read_and_parse("src/tests/tpch/1.sql") |> @sqlparser.pretty_print (escaped)
-   |              ^^^^^^^^^^^^^^ (escaped)
-   |   inspect( (escaped)
-   |     stmt, (escaped)
+   | 
+   | ///|
+   | test "TPCH 1" {
+23 |   let stmt = read_and_parse("src/tests/tpch/1.sql") |> @sqlparser.pretty_print
+   |              ^^^^^^^^^^^^^^
+   |   inspect(
+   |     stmt,
 
 <WORKDIR>/src/tests/tpch_test.mbt:54:14-54:28:
    |  (escaped)

@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'log' --loc 'src\aqueue\blocking_test.mbt:17:7'
-Found 4 references for symbol 'log':
-<WORKDIR>/src\aqueue\blocking_test.mbt:17:7-17:10:
-   | 
-   | ///|
-   | async test "blocking unbuffered" {
-17 |   let log = []
-   |       ^^^
-   |   @async.with_task_group() <| group => {
-   |     let q = @async.Queue(kind=Blocking(1))
-
+Found 3 references for symbol 'log':
 <WORKDIR>/src\aqueue\blocking_test.mbt:23:9-23:12:
    |     group.spawn_bg() <| () => {
    |       for i in 0..<3 {

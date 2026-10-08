@@ -27,7 +27,7 @@ $ run_moon_ide moon ide rename 'path' 'path_renamed' --loc 'src/tests/tpch_test.
 -  let input = @fs.read_file_to_string(path) catch {
 +  let input = @fs.read_file_to_string(path_renamed) catch {
      e => { (escaped)
-       println("Read file error: \{e.to_string()}")
+       println("Read file error: \{Repr(e)}")
        panic()
 *** End Patch
 

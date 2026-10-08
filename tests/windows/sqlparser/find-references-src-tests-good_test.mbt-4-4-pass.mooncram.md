@@ -2,16 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'pass' --loc 'src\tests\good_test.mbt:4:4'
-Found 39 references for symbol 'pass':
-<WORKDIR>/src\tests\good_test.mbt:4:4-4:8:
-  | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
-  | 
-  | ///|
-4 | fn pass(input : String) -> Unit {
-  |    ^^^^
-  |   (@sqlparser.parse_sql(input) catch {
-  |     e => {
-
+Found 38 references for symbol 'pass':
 <WORKDIR>/src\tests\good_test.mbt:16:30-16:34:
    | 
    | ///|

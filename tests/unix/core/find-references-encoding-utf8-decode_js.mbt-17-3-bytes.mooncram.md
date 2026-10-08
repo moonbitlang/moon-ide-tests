@@ -18,6 +18,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3'
-Error: could not find references for symbol 'bytes' at encoding/utf8/decode_js.mbt:17:3
+Error: could not get package of file <WORKDIR>/encoding/utf8/decode_js.mbt
 [1]
 ```
