@@ -324,7 +324,7 @@ jobs:
           fi
 
           moonx moonbitlang/openseek@0.6.1 \
-            --model deepseek-v4-pro \
+            --model deepseek-flash \
             --thinking high \
             --max-steps 120 \
             run \
