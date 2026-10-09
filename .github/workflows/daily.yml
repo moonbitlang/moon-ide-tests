@@ -165,22 +165,45 @@ jobs:
           "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
-      - name: Collect Windows review inputs
-        if: always()
-        shell: powershell
-        run: git status --short > .daily-test\windows-status.txt
-
       - name: Commit Windows daily changes
         shell: powershell
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git diff --quiet -- tests/windows
+
+          # Stage first: the Windows checkout can report CRLF-only worktree
+          # changes that disappear once Git normalizes them into the index.
+          git -c core.safecrlf=false add --renormalize -- tests/windows
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+          git diff --cached --quiet -- tests/windows
           $diffStatus = $LASTEXITCODE
+
+          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+          $windowsStatusText = $windowsStatus -join [Environment]::NewLine
+          if ($windowsStatusText.Length -gt 0) {
+            $windowsStatusText += [Environment]::NewLine
+          }
+          [System.IO.File]::WriteAllText(
+            ".daily-test\windows-status.txt",
+            $windowsStatusText,
+            [System.Text.UTF8Encoding]::new($false)
+          )
+
           if ($diffStatus -eq 1) {
-            git add tests/windows
             git commit -m "chore: update daily Windows IDE baselines"
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
             git push --force-with-lease origin $env:DAILY_BRANCH
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
           } elseif ($diffStatus -ne 0) {
             exit $diffStatus
           }
