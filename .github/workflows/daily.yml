@@ -206,6 +206,23 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Update MoonBit registry
+        run: |
+          for attempt in 1 2 3; do
+            if moon update; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+          done
+
       - name: Checkout daily branch
         run: |
           git fetch --no-tags origin main
@@ -272,57 +289,73 @@ jobs:
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
 
-      - name: Install Codex CLI
-        if: steps.diff.outputs.has_changes == 'true'
-        run: npm install -g @openai/codex
-
-      - name: Restore Codex ChatGPT auth
+      - name: Review daily output with OpenSeek
+        id: openseek
         if: steps.diff.outputs.has_changes == 'true'
         env:
-          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+          DEEPSEEK: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
-          if [ -z "$CODEX_AUTH_JSON" ]; then
-            echo "::error::Set the CODEX_AUTH_JSON repository secret to a file-backed ChatGPT auth.json from codex login."
+          if [ -z "$DEEPSEEK" ]; then
+            echo "::error::Set the DEEPSEEK_API_KEY repository secret to a DeepSeek API key."
             exit 1
           fi
 
-          mkdir -p "$HOME/.codex"
-          chmod 700 "$HOME/.codex"
-          cat > "$HOME/.codex/config.toml" <<'TOML'
-          cli_auth_credentials_store = "file"
-          web_search = "disabled"
-          TOML
-
-          printf '%s' "$CODEX_AUTH_JSON" > "$HOME/.codex/auth.json"
-          chmod 600 "$HOME/.codex/auth.json"
-
-          jq -e '
-            .auth_mode == "chatgpt" and
-            ((.tokens.refresh_token // "") != "")
-          ' "$HOME/.codex/auth.json" >/dev/null
-
-      - name: Review daily output with Codex
-        id: codex
-        if: steps.diff.outputs.has_changes == 'true'
-        run: |
-          codex --ask-for-approval never exec \
-            --sandbox read-only \
-            --ephemeral \
-            --output-schema .github/codex/schemas/daily-test-review.schema.json \
-            -o .daily-test/codex-review.json \
+          moonx moonbitlang/openseek@0.6.1 \
+            --model deepseek-v4-pro \
+            --thinking high \
+            --max-steps 120 \
+            run \
+            --approval never \
+            --no-session \
+            --dir "$GITHUB_WORKSPACE" \
+            --result-file .daily-test/openseek-review.json \
             "$(cat .github/codex/prompts/daily-test-review.md)"
 
-      - name: Parse Codex review
-        id: codex-result
+      - name: Parse OpenSeek review
+        id: openseek-result
         if: steps.diff.outputs.has_changes == 'true'
         run: |
           node <<'NODE'
           const fs = require("fs");
-          const raw = fs.readFileSync(".daily-test/codex-review.json", "utf8").trim();
-          const parsed = JSON.parse(raw);
-          const hasProblem = parsed.has_problem === true;
-          const commentBody = typeof parsed.comment_body === "string" ? parsed.comment_body.trim() : "";
-          const delimiter = `CODEX_COMMENT_${Date.now()}`;
+          const raw = fs.readFileSync(".daily-test/openseek-review.json", "utf8").trim();
+          const result = JSON.parse(raw);
+
+          if (result.status !== "completed") {
+            throw new Error(`OpenSeek review did not complete: ${result.reason || result.status || "unknown status"}`);
+          }
+
+          const answer = result.output?.answer;
+          if (typeof answer !== "string") {
+            throw new Error("OpenSeek returned a completed run without a text answer");
+          }
+
+          const parsed = JSON.parse(answer);
+          const schema = JSON.parse(
+            fs.readFileSync(".github/codex/schemas/daily-test-review.schema.json", "utf8"),
+          );
+          const properties = schema.properties || {};
+          const allowedKeys = new Set(Object.keys(properties));
+
+          if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+            throw new Error("OpenSeek answer is not a JSON object");
+          }
+          if (schema.additionalProperties === false && Object.keys(parsed).some((key) => !allowedKeys.has(key))) {
+            throw new Error("OpenSeek answer has properties outside the daily review schema");
+          }
+          for (const key of schema.required || []) {
+            if (!(key in parsed)) {
+              throw new Error(`OpenSeek answer is missing required property: ${key}`);
+            }
+          }
+          for (const [key, definition] of Object.entries(properties)) {
+            if (key in parsed && typeof parsed[key] !== definition.type) {
+              throw new Error(`OpenSeek answer has invalid type for ${key}`);
+            }
+          }
+
+          const hasProblem = parsed.has_problem;
+          const commentBody = parsed.comment_body.trim();
+          const delimiter = `OPENSEEK_COMMENT_${Date.now()}`;
 
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_problem=${hasProblem}\n`);
           fs.appendFileSync(
@@ -332,11 +365,11 @@ jobs:
           NODE
 
       - name: Comment on pull request
-        if: steps.diff.outputs.has_changes == 'true' && steps.codex-result.outputs.has_problem == 'true'
+        if: steps.diff.outputs.has_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
         uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
-          COMMENT_BODY: ${{ steps.codex-result.outputs.comment_body }}
+          COMMENT_BODY: ${{ steps.openseek-result.outputs.comment_body }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -347,7 +380,7 @@ jobs:
               throw new Error("Missing pull request number");
             }
             if (!body) {
-              throw new Error("Codex reported a problem but returned an empty comment body");
+              throw new Error("OpenSeek reported a problem but returned an empty comment body");
             }
 
             await github.rest.issues.createComment({
