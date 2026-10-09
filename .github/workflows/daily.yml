@@ -329,7 +329,21 @@ jobs:
             throw new Error("OpenSeek returned a completed run without a text answer");
           }
 
-          const parsed = JSON.parse(answer);
+          const parseAnswer = (text) => {
+            const candidates = [text.trim()];
+            for (const match of text.matchAll(/```(?:json)?\s*\n([\s\S]*?)```/gi)) {
+              candidates.push(match[1].trim());
+            }
+            for (const candidate of candidates.reverse()) {
+              try {
+                return JSON.parse(candidate);
+              } catch {
+                // Continue to the next candidate, then reject the response.
+              }
+            }
+            throw new Error("OpenSeek answer does not contain valid JSON");
+          };
+          const parsed = parseAnswer(answer);
           const schema = JSON.parse(
             fs.readFileSync(".github/codex/schemas/daily-test-review.schema.json", "utf8"),
           );

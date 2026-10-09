@@ -34,3 +34,23 @@ Return JSON only:
 ```
 
 Set `has_problem` to `true` only when a PR comment should be posted. In that case, make `comment_body` a concise Markdown comment with the affected test paths, the observed failure or wrong output, and the evidence from the log or diff.
+
+## Mandatory output contract
+
+Your final answer is passed directly to a strict JSON parser. Return exactly one
+JSON object and nothing else: no explanation, no Markdown, no code fence, and
+no text before or after the object.
+
+The object must conform exactly to this schema:
+
+```json
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "has_problem": { "type": "boolean" },
+    "comment_body": { "type": "string" }
+  },
+  "required": ["has_problem", "comment_body"]
+}
+```
