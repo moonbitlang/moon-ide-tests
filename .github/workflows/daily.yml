@@ -248,6 +248,8 @@ jobs:
 
       - name: Checkout daily branch
         run: |
+          cp .github/scripts/parse-openseek-result.mbtx "$RUNNER_TEMP/parse-openseek-result.mbtx"
+          cp .github/codex/prompts/daily-test-review.md "$RUNNER_TEMP/daily-test-review.md"
           git fetch --no-tags origin main
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
           git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
@@ -332,13 +334,13 @@ jobs:
             --no-session \
             --dir "$GITHUB_WORKSPACE" \
             --result-file .daily-test/openseek-review.json \
-            "$(cat .github/codex/prompts/daily-test-review.md)"
+            "$(cat "$RUNNER_TEMP/daily-test-review.md")"
 
       - name: Parse OpenSeek review
         id: openseek-result
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          moon run --target native .github/scripts/parse-openseek-result.mbtx
+          moon run --target native "$RUNNER_TEMP/parse-openseek-result.mbtx"
 
       - name: Comment on pull request
         if: steps.diff.outputs.has_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
