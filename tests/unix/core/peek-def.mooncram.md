@@ -180,55 +180,45 @@ Error: could not get package of loc encoding/utf8/decode_js.mbt:17:3
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:46:11'
+$ run_moon_ide moon ide peek-def 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:30:13'
 Definition found at file <WORKDIR>/internal/regex_engine/automata/thread_set.mbt
-   | /// # Usage in Automaton
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-46 | priv enum ThreadSet {
-   |           ^^^^^^^^^
-   |   Empty
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
+   | /// Ownership: every array reachable from a set under construction was
+   | /// allocated by the current `delta` call (producers build new arrays for
+   | /// nested `Seq` threads and `remove_duplicates` rebuilds every level), so
+   | /// `assign_slot_in_place` may mutate them. Once a set is stored in a
+   | /// `State` it is never mutated again.
+30 | priv struct ThreadSet(Array[Thread])
+   |             ^^^^^^^^^
+   | 
+   | ///|
+   | impl Eq for ThreadSet with fn equal(self, other) {
+   |   self.0 == other.0
    | }
    | 
    | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
+   | impl Hash for ThreadSet with fn hash_combine(self, hasher) {
+   |   for thread in self.0 {
+   |     hasher.combine(thread)
+   |   }
+   | }
+   | 
+   | ///|
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Empty' --loc 'internal/regex_engine/automata/thread_set.mbt:47:3'
-Definition found at file <WORKDIR>/internal/regex_engine/automata/thread_set.mbt
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-   | priv enum ThreadSet {
-47 |   Empty
-   |   ^^^^^
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
-   | }
-   | 
-   | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
-   |   no_match : Bool
+$ run_moon_ide moon ide peek-def 'Thread' --loc 'internal/regex_engine/automata/thread_set.mbt:30:29'
+Definition found at file <WORKDIR>/internal/regex_engine/automata/thread.mbt
+   | /// 2. During derivative computation, threads transform based on input:
+   | ///    - May split into multiple threads (alternation)
+   | ///    - May transition to `Seq` for sequences
+   | ///    - May reach `End` when matching succeeds
+   | /// 3. Threads are eliminated if they can't match the current input
+40 | priv enum Thread {
+   |           ^^^^^^
+   |   End(MarkSlotMap)
+   |   Exp(MarkSlotMap, Expr)
+   |   Seq(@shared_types.Preference, ThreadSet, Expr)
+   | } derive(Eq, Hash)
 ```
 
 ```mooncram
@@ -301,12 +291,12 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    |   symbol_repr : ReadOnlyArray[Rechar]
    |   start_states : Array[(Category, StateId)]
    |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
+   |   /// Indexed by `transition_base + symbol`; holds the encoded next state.
+   |   mut transition_table : FixedArray[Int]
+   |   /// Parallel to `transition_table`; holds the slot of the next state so the
+   |   /// scan loop needs no per-state lookup.
+   |   mut slot_table : FixedArray[Int]
+   |   /// Largest slot index of any stabilized state (bounds the scratch buffer).
 ```
 
 ```mooncram
@@ -326,13 +316,13 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    |   symbol_repr : ReadOnlyArray[Rechar]
    |   start_states : Array[(Category, StateId)]
    |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
-   | }
+   |   /// Indexed by `transition_base + symbol`; holds the encoded next state.
+   |   mut transition_table : FixedArray[Int]
+   |   /// Parallel to `transition_table`; holds the slot of the next state so the
+   |   /// scan loop needs no per-state lookup.
+   |   mut slot_table : FixedArray[Int]
+   |   /// Largest slot index of any stabilized state (bounds the scratch buffer).
+   |   mut max_slot : Int
 ```
 
 ```mooncram
@@ -369,7 +359,7 @@ Definition found at file <WORKDIR>/string/regex.mbt
     | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     | /// }
     | /// ```
-350 | pub fn Regex::execute(
+351 | pub fn Regex::execute(
     |               ^^^^^^^
     |   self : Regex,
     |   input : StringView,

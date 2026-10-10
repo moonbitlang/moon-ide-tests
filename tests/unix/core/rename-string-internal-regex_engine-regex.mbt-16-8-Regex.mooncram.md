@@ -99,7 +99,13 @@ $ run_moon_ide moon ide rename 'Regex' 'RegexRenamed' --loc 'string/internal/reg
  ///|
 -fn Regex::get_state(self : Regex, state_id : StateId) -> @automata.State {
 +fn RegexRenamed::get_state(self : RegexRenamed, state_id : StateId) -> @automata.State {
-   self.states.unsafe_get(state_id.index())
+   self.states.unsafe_get(self.state_index(state_id))
+ }
+ 
+ ///|
+-fn Regex::state_index(self : Regex, state_id : StateId) -> Int {
++fn RegexRenamed::state_index(self : RegexRenamed, state_id : StateId) -> Int {
+   state_id.transition_base() / self.num_symbols()
  }
  
  ///|

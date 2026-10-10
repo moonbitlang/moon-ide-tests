@@ -127,11 +127,11 @@ Found 21 references for symbol 'Scheduler':
     |   parent : @dom.Element,
     | ) -> IProps {
 
-<WORKDIR>/rabbita/internal/vdom/diff.mbt:681:16-681:25:
+<WORKDIR>/rabbita/internal/vdom/diff.mbt:685:16-685:25:
     | fn diff_children(
     |   old : Children[INode],
     |   new : Children[VNode],
-681 |   scheduler : &Scheduler,
+685 |   scheduler : &Scheduler,
     |                ^^^^^^^^^
     |   captured_link_listener : @dom.Listener,
     |   parent : @dom.Node,
@@ -190,20 +190,20 @@ Found 21 references for symbol 'Scheduler':
     |   captured_link_listener : @dom.Listener,
     | ) -> INode {
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:120:35-120:44:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:123:35-123:44:
     | 
     | ///|
     | pub struct Props {
-120 |   handlers : Map[String, (Event, &Scheduler) -> Unit]
+123 |   handlers : Map[String, (Event, &Scheduler) -> Unit]
     |                                   ^^^^^^^^^
     |   attrs : Map[String, String]
     |   props : Map[String, @variant.Variant]
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:131:35-131:44:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:134:35-134:44:
     |   attrs : Map[String, String],
     |   props : Map[String, @variant.Variant],
     |   styles : Map[String, String],
-131 |   handlers : Map[String, (Event, &Scheduler) -> Unit],
+134 |   handlers : Map[String, (Event, &Scheduler) -> Unit],
     |                                   ^^^^^^^^^
     | ) -> Props {
     |   { handlers, attrs, styles, props, }

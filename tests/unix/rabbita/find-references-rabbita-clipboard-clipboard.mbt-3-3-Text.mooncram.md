@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
-Found 9 references for symbol 'Text':
+Found 10 references for symbol 'Text':
 <WORKDIR>/rabbita/clipboard/op.mbt:12:21-12:25:
    |   ..on_invoke(op_invoke)
    |   ..on_debug(extension => {
@@ -54,6 +54,15 @@ Found 9 references for symbol 'Text':
   |                     ^^^^
   |     content="ClipboardCopy(Text(\"hello\"))",
   |   )
+
+<WORKDIR>/rui/markdown/block.mbt:91:32-91:36:
+   |       type_="button",
+   |       title="Copy code",
+   |       attrs=@html.Attrs::build().aria_label("Copy code"),
+91 |       on_click=@clipboard.copy(Text(source)),
+   |                                ^^^^
+   |       @html.span(
+   |         style=["display:flex"],
 
 <WORKDIR>/website/homepage/components/forms_input_group_variants.mbt:909:46-909:50:
     |                     title="Copy script",

@@ -303,82 +303,40 @@ $ run_moon_ide moon ide outline 'encoding/utf8/decode_js.mbt'
 
 ```mooncram
 $ run_moon_ide moon ide outline 'internal/regex_engine/automata/thread_set.mbt'
- 46 |priv enum ThreadSet {
+ 30 |priv struct ThreadSet(Array[Thread])
     |...
- 58 |#valtype
- 59 |priv struct ThreadSetNodeInfo {
+ 33 |impl Eq for ThreadSet with fn equal(self, other) {
     |...
- 65 |fn ThreadSet::is_empty(self : ThreadSet) -> Bool {
+ 38 |impl Hash for ThreadSet with fn hash_combine(self, hasher) {
     |...
- 70 |fn ThreadSet::is_singleton(self : ThreadSet) -> Bool {
+ 45 |let ts_empty : ThreadSet = ThreadSet([])
     |...
- 75 |fn ThreadSet::first(self : ThreadSet) -> Thread? {
+ 48 |fn ThreadSet::first(self : ThreadSet) -> Thread? {
     |...
- 84 |fn ThreadSet::choose(self : ThreadSet) -> Thread {
+ 55 |fn first_match(threads : Array[Thread]) -> MarkSlotMap? {
     |...
- 92 |fn ThreadSet::no_match(self : ThreadSet) -> Bool {
+ 66 |fn remove_matches(threads : Array[Thread]) -> Unit {
     |...
-100 |fn ThreadSet::make_node(
-101 |  l : ThreadSet,
-102 |  t : Thread,
-103 |  r : ThreadSet,
-104 |  p~ : Int,
-105 |) -> ThreadSet {
+ 72 |fn truncate(threads : Array[Thread], len : Int) -> Unit {
     |...
-113 |let rand_state : @ref.Ref[Int] = Ref(0)
+ 82 |fn split_at_first_match(threads : Array[Thread]) -> Array[Thread] {
     |...
-116 |fn rand_int() -> Int {
+ 98 |fn ts_seq(
+ 99 |  pref : @shared_types.Preference,
+100 |  first : Array[Thread],
+101 |  next : Expr,
+102 |  rem : Array[Thread],
+103 |) -> Unit {
     |...
-122 |fn ThreadSet::singleton(t : Thread) -> ThreadSet {
+137 |fn remove_duplicates(
+138 |  threads : Array[Thread],
+139 |  next : Expr,
+140 |  seen : @hashset.HashSet[ExprId],
+141 |) -> Unit {
     |...
-127 |fn ThreadSet::merge(l : ThreadSet, r : ThreadSet) -> ThreadSet {
+183 |fn ThreadSet::assign_slot_in_place(self : ThreadSet, slot : Slot) -> Unit {
     |...
-141 |impl Add for ThreadSet with fn add(self, other) {
-    |...
-146 |fn ThreadSet::flat_map(
-147 |  self : ThreadSet,
-148 |  f : (Thread) -> ThreadSet,
-149 |) -> ThreadSet {
-    |...
-162 |fn ThreadSet::find_first_match(self : ThreadSet) -> MarkSlotMap? {
-    |...
-179 |fn ThreadSet::remove_matches(self : ThreadSet) -> ThreadSet {
-    |...
-193 |fn ThreadSet::split_at_first_match(self : ThreadSet) -> (ThreadSet, ThreadSet) {
-    |...
-242 |fn ThreadSet::remove_duplicates(self : ThreadSet, next : Expr) -> ThreadSet {
-    |...
-248 |fn ThreadSet::remove_duplicates_with_seen(
-249 |  self : ThreadSet,
-250 |  next : Expr,
-251 |  seen : @hashset.HashSet[ExprId],
-252 |) -> ThreadSet {
-    |...
-281 |fn ThreadSet::assign_slot(desc : ThreadSet, slot : Slot) -> ThreadSet {
-    |...
-293 |fn ThreadSet::iter(self : ThreadSet) -> Iter[Thread] {
-    |...
-318 |fn ThreadSet::iter_marks(self : ThreadSet) -> Iter[MarkSlotMap] {
-    |...
-330 |fn ThreadSet::map(self : ThreadSet, f : (Thread) -> Thread) -> ThreadSet {
-    |...
-343 |let ts_empty : ThreadSet = Empty
-    |...
-346 |fn ts_one(t : Thread) -> ThreadSet {
-    |...
-351 |fn ts_end(marks : MarkSlotMap) -> ThreadSet {
-    |...
-356 |fn ts_exp(marks : MarkSlotMap, expr : Expr) -> ThreadSet {
-    |...
-361 |fn ts_seq(
-362 |  pref : @shared_types.Preference,
-363 |  first : ThreadSet,
-364 |  next : Expr,
-365 |) -> ThreadSet {
-    |...
-377 |impl Eq for ThreadSet with fn equal(self, other) {
-    |...
-395 |impl Hash for ThreadSet with fn hash_combine(self, hasher) {
+196 |fn ThreadSet::each_marks(self : ThreadSet, f : (MarkSlotMap) -> Unit) -> Unit {
     |...
 
 ```
@@ -411,18 +369,18 @@ No symbols found.
 $ run_moon_ide moon ide outline 'string/internal/regex_engine/regex.mbt'
 16 |struct Regex {
    |...
-35 |pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
+42 |pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
    |...
-40 |fn Regex::new(
-41 |  profile : Profile,
-42 |  ctx : @automata.Context,
-43 |  expr : @automata.Expr,
-44 |  groups : ReadOnlyArray[String?],
-45 |  symbol_table : @symbol_map.Table,
-46 |  symbol_repr : ReadOnlyArray[Rechar],
-47 |) -> Regex {
+47 |fn Regex::new(
+48 |  profile : Profile,
+49 |  ctx : @automata.Context,
+50 |  expr : @automata.Expr,
+51 |  groups : ReadOnlyArray[String?],
+52 |  symbol_table : @symbol_map.Table,
+53 |  symbol_repr : ReadOnlyArray[Rechar],
+54 |) -> Regex {
    |...
-65 |fn Regex::num_symbols(self : Regex) -> Int {
+75 |fn Regex::num_symbols(self : Regex) -> Int {
    |...
 
 ```
@@ -437,71 +395,79 @@ $ run_moon_ide moon ide outline 'string/regex_test.mbt'
     |...
  66 |test "execute/range_crossing_surrogate_gap_has_no_half_match" {
     |...
- 74 |test "compile/error_unclosed_group" {
+ 74 |test "execute/colon_range" {
     |...
- 83 |test "compile/error_unclosed_char_class" {
+114 |test "compile/error_unclosed_group" {
     |...
- 92 |test "compile/unicode_escape_supplementary_plane" {
+123 |test "compile/error_unclosed_char_class" {
     |...
-110 |test "string/literal_metacharacters" {
+132 |test "compile/unicode_escape_supplementary_plane" {
     |...
-134 |test "repeat/greedy_and_nongreedy" {
+150 |test "string/literal_metacharacters" {
     |...
-167 |test "panic repeat/invalid_min_negative" {
+174 |test "repeat/greedy_and_nongreedy" {
     |...
-173 |test "panic repeat/invalid_max_less_than_min" {
+207 |test "panic repeat/invalid_min_negative" {
     |...
-179 |test "panic repeat/invalid_min_too_large" {
+213 |test "panic repeat/invalid_max_less_than_min" {
     |...
-185 |test "panic repeat/invalid_max_too_large" {
+219 |test "panic repeat/invalid_min_too_large" {
     |...
-191 |test "add/sequence" {
+225 |test "panic repeat/invalid_max_too_large" {
     |...
-209 |test "bitor/alternation" {
+231 |test "add/sequence" {
     |...
-232 |test "complex/email_pattern" {
+249 |test "bitor/alternation" {
     |...
-273 |test "complex/url_protocol" {
+272 |test "complex/email_pattern" {
     |...
-315 |test "complex/date_formats" {
+313 |test "complex/url_protocol" {
     |...
-367 |test "complex/programming_identifier" {
+355 |test "complex/date_formats" {
     |...
-417 |test "complex/log_level" {
+407 |test "complex/programming_identifier" {
     |...
-461 |test "complex/phone_number" {
+457 |test "complex/log_level" {
     |...
-495 |test "complex/semantic_version" {
+501 |test "complex/phone_number" {
     |...
-539 |test "complex/hex_color" {
+535 |test "complex/semantic_version" {
     |...
-590 |test "complex/json_number" {
+579 |test "complex/hex_color" {
     |...
-648 |test "add/with_any_quantifier" {
+630 |test "complex/json_number" {
     |...
-656 |test "add/with_any_quantifier_and_empty_wrappers" {
+688 |test "add/with_any_quantifier" {
     |...
-664 |test "should_raise" {
+696 |test "add/with_any_quantifier_and_empty_wrappers" {
     |...
-675 |test "escaped_dash_in_char_class" {
+704 |test "should_raise" {
     |...
-685 |test "capture/simple_named_group" {
+715 |test "escaped_dash_in_char_class" {
     |...
-699 |test "capture/email_with_named_groups" {
+725 |test "capture/simple_named_group" {
     |...
-739 |test "execute/alternation with an overlapping branch" {
+739 |test "capture/email_with_named_groups" {
     |...
-758 |test "execute/alternation of overlapping character classes" {
+779 |test "execute/alternation with an overlapping branch" {
     |...
-775 |test "execute/alternation branches of different lengths" {
+798 |test "execute/alternation of overlapping character classes" {
     |...
-794 |test "execute/overlapping alternation under a counted repetition" {
+815 |test "execute/alternation branches of different lengths" {
     |...
-808 |test "execute/overlapping alternation keeps anchors and preference" {
+834 |test "execute/overlapping alternation under a counted repetition" {
     |...
-856 |test "execute/variable-length repetition keeps a bounded thread set" {
+848 |test "execute/overlapping alternation keeps anchors and preference" {
     |...
-873 |test "capture/multiple_captures_same_pattern" {
+896 |test "execute/variable-length repetition keeps a bounded thread set" {
+    |...
+913 |test "capture/multiple_captures_same_pattern" {
+    |...
+934 |test "very long literal patterns compile without deep recursion" {
+    |...
+959 |test "matches that need more than 2047 live capture slots are found" {
+    |...
+977 |test "character classes are stored with merged intervals" {
     |...
 
 ```

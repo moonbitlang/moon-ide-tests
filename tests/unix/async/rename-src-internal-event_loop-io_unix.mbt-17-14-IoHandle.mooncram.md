@@ -235,6 +235,17 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    offset~ : Int,
    len~ : Int,
 @@
+ const IS_NATIVE_WINDOWS : Bool = false
+ 
+ ///|
+-async fn IoHandle::read_console(
++async fn IoHandleRenamed::read_console(
+-  handle : IoHandle,
++  handle : IoHandleRenamed,
+   buf : FixedArray[Byte],
+   offset~ : Int,
+   len~ : Int,
+@@
  }
  
  ///|
@@ -251,6 +262,17 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  /// Used for handling objects that do not support native async writing.
 -async fn IoHandle::write_via_worker(
 +async fn IoHandleRenamed::write_via_worker(
+-  handle : IoHandle,
++  handle : IoHandleRenamed,
+   buf : Bytes,
+   offset~ : Int,
+   len~ : Int,
+@@
+ }
+ 
+ ///|
+-async fn IoHandle::write_console(
++async fn IoHandleRenamed::write_console(
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,

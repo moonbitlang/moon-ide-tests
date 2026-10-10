@@ -244,6 +244,16 @@ $ run_moon_ide moon ide rename 'execute' 'execute_renamed' --loc 'string/regex_t
          None => {
            done = true
            return Some(str[copy_index:])
+*** Update File: <WORKDIR>/string/regex_methods_test.mbt
+@@
+ ///|
+ test "capture group indices cannot wrap around" {
+   let regex = re"(a)"
+-  guard regex.execute("a") is Some(matched) else { fail("expected match") }
++  guard regex.execute_renamed("a") is Some(matched) else { fail("expected match") }
+   for index in [-2147483648, -1073741824, -1, 2, 1073741824, 2147483647] {
+     assert_eq(matched.group(index) is None, true)
+   }
 *** Update File: <WORKDIR>/string/regex_test.mbt
 @@
  ///|
@@ -279,6 +289,53 @@ $ run_moon_ide moon ide rename 'execute' 'execute_renamed' --loc 'string/regex_t
 -  guard regex.execute("😀") is None else {
 +  guard regex.execute_renamed("😀") is None else {
      fail("Expected no surrogate-half match")
+   }
+ }
+@@
+ test "execute/colon_range" {
+   let regex = @string.Regex("^[:-@]$")
+   for ch in [":", ";", "<", "=", ">", "?", "@"] {
+-    guard regex.execute(ch) is Some(_) else {
++    guard regex.execute_renamed(ch) is Some(_) else {
+       fail("Expected colon range endpoint to match")
+     }
+   }
+   for ch in ["!", "A", "["] {
+-    guard regex.execute(ch) is None else {
++    guard regex.execute_renamed(ch) is None else {
+       fail("Expected character outside colon range not to match")
+     }
+   }
+   let inverse = @string.Regex("^[^:-@]$")
+-  guard inverse.execute("A") is Some(_) else {
++  guard inverse.execute_renamed("A") is Some(_) else {
+     fail("Expected inverse colon range to match")
+   }
+-  guard inverse.execute(":") is None else {
++  guard inverse.execute_renamed(":") is None else {
+     fail("Expected inverse colon range to exclude colon")
+   }
+   for pattern in ["^[:]$", "^[::]$", "^[:-:]$", "^[:-@:]$", "^[:a-z:]$"] {
+     let regex = @string.Regex(pattern)
+-    guard regex.execute(":") is Some(_) else {
++    guard regex.execute_renamed(":") is Some(_) else {
+       fail("Expected literal colon to match")
+     }
+-    guard regex.execute("-") is None else {
++    guard regex.execute_renamed("-") is None else {
+       fail("Expected range syntax to exclude literal hyphen")
+     }
+   }
+   let literals = @string.Regex("^[:\\-@]$")
+   for ch in [":", "-", "@"] {
+-    guard literals.execute(ch) is Some(_) else {
++    guard literals.execute_renamed(ch) is Some(_) else {
+       fail("Expected escaped hyphen class to match its literal atoms")
+     }
+   }
+-  guard literals.execute(";") is None else {
++  guard literals.execute_renamed(";") is None else {
+     fail("Expected escaped hyphen not to introduce a range")
    }
  }
 @@
@@ -731,6 +788,30 @@ $ run_moon_ide moon ide rename 'execute' 'execute_renamed' --loc 'string/regex_t
    debug_inspect(
      m.named_group("first"),
      content=(
+@@
+   }
+   let literal = sb.to_string()
+   let re = @string.Regex::string(literal)
+-  guard re.execute("x" + literal + "x") is Some(m) else {
++  guard re.execute_renamed("x" + literal + "x") is Some(m) else {
+     fail("Expected match")
+   }
+   inspect(m.content().length(), content="100000")
+   let twice = re.repeat(min=2, max=2)
+-  guard twice.execute(literal + literal) is Some(m2) else {
++  guard twice.execute_renamed(literal + literal) is Some(m2) else {
+     fail("Expected match")
+   }
+   inspect(m2.content().length(), content="200000")
+@@
+   // group-0 start mark, so this pattern needed slot 2048 and the match was
+   // silently lost (release) or `debug_assert` fired (debug).
+   let re = @string.Regex::unsafe_from_string("(a)(?:a{256}){9}")
+-  guard re.execute("a".repeat(2400)) is Some(m) else { fail("Expected match") }
++  guard re.execute_renamed("a".repeat(2400)) is Some(m) else { fail("Expected match") }
+   inspect(m.before().length(), content="0")
+   inspect(m.content().length(), content="2305")
+   debug_inspect(
 *** End Patch
 
 ```

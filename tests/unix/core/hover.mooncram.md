@@ -128,66 +128,77 @@ Error: could not get package of loc encoding/utf8/decode_js.mbt:17:3
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:46:11'
-/// During execution, each `State` contains a `ThreadSet` collection representing all
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-          ^^^^^^^^^
-          ```moonbit
-          enum ThreadSet {
-            Empty
-            Node(i~ : ThreadSetNodeInfo, l~ : ThreadSet, t~ : Thread, r~ : ThreadSet, p~ : Int)
-          }
-          ```
-          ---
-          
-           A collection of execution threads stored in a Treap-based rope structure.
-          
-           `ThreadSet` maintains an ordered set of `Thread` instances representing all active
-           execution paths in the automaton. The order matters because it encodes matching
-           priorities - the first thread to reach an `End` state produces the match result.
-          
-           # Data Structure
-          
-           Uses a Treap (randomized binary search tree) to efficiently:
-           - Maintain thread ordering while allowing efficient insertion/merging
-           - Track metadata (`ThreadSetNodeInfo`) to optimize operations
-           - Support efficient operations like `flat_map`, `merge`, and iteration
-          
-           Each node tracks `no_match`: true if no thread in the subtree has reached `End` state.
-           This allows quick pruning of subtrees that cannot contribute to matches.
-          
-           # Key Operations
-          
-           - `merge`/`+`: Combines two thread sets while preserving order
-           - `flat_map`: Applies a function that may expand each thread to multiple threads
-           - `find_first_match`: Finds the first successful match (if any)
-           - `remove_matches`: Removes all threads in `End` state from the collection
-           - `remove_duplicates`: Eliminates redundant threads with same state
-           - `split_at_first_match`: Separates threads before/after first match
-          
-           # Usage in Automaton
-          
-           During execution, each `State` contains a `ThreadSet` collection representing all
-           possible execution paths from that state. When computing the derivative with
-           respect to input, threads are transformed and may split into multiple threads.
-  Empty
-  Node(
+$ run_moon_ide moon ide hover 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:30:13'
+/// nested `Seq` threads and `remove_duplicates` rebuilds every level), so
+/// `assign_slot_in_place` may mutate them. Once a set is stored in a
+/// `State` it is never mutated again.
+priv struct ThreadSet(Array[Thread])
+            ^^^^^^^^^
+            ```moonbit
+            struct ThreadSet(Array[Thread])
+            ```
+            ---
+            
+             The ordered collection of execution threads of a state.
+            
+             Threads are kept in an array in priority order: the first thread to reach
+             `End` wins, so producers append in the order the semantics dictate and
+             nothing ever inserts in the middle. Sets are built append-only through an
+             accumulator (`rem` in `delta_*`, the same shape as ocaml-re's list
+             accumulator), scanned a few times while the new state is finalized, and
+             then frozen inside a `State`.
+            
+             Ownership: every array reachable from a set under construction was
+             allocated by the current `delta` call (producers build new arrays for
+             nested `Seq` threads and `remove_duplicates` rebuilds every level), so
+             `assign_slot_in_place` may mutate them. Once a set is stored in a
+             `State` it is never mutated again.
+
+///|
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'Empty' --loc 'internal/regex_engine/automata/thread_set.mbt:47:3'
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-  Empty
-  ^^^^^
-  ```moonbit
-  ThreadSet
-  ```
-  Node(
-    i~ : ThreadSetNodeInfo,
+$ run_moon_ide moon ide hover 'Thread' --loc 'internal/regex_engine/automata/thread_set.mbt:30:29'
+/// nested `Seq` threads and `remove_duplicates` rebuilds every level), so
+/// `assign_slot_in_place` may mutate them. Once a set is stored in a
+/// `State` it is never mutated again.
+priv struct ThreadSet(Array[Thread])
+                            ^^^^^^
+                            ```moonbit
+                            enum Thread {
+                              End(MarkSlotMap)
+                              Exp(MarkSlotMap, Expr)
+                              Seq(@shared_types.Preference, ThreadSet, Expr)
+                            } derive(Eq, Hash)
+                            ```
+                            ---
+                            
+                             An execution thread in the automaton representing a possible matching path.
+                            
+                             `Thread` represents a single execution path during pattern matching. The automaton
+                             maintains multiple threads simultaneously to handle nondeterministic choices
+                             (alternations, quantifiers, etc.). Each thread tracks its current state using
+                             a `MarkSlotMap` to record positions encountered so far.
+                            
+                             # Variants
+                            
+                             - `End(MarkSlotMap)`: Thread has reached a successful match state with the given marks
+                             - `Exp(MarkSlotMap, Expr)`: Thread is executing the given expression with current marks
+                             - `Seq(Preference, ThreadSet, Expr)`: Thread is executing a sequence where:
+                               - The first part has produced multiple threads (stored in `ThreadSet`)
+                               - The next expression hasn't been executed yet
+                               - Preference determines how to prioritize results (First/Longest)
+                            
+                             # Thread Lifecycle
+                            
+                             1. Thread starts with `Exp(MarkSlotMap::empty(), initial_expr)`
+                             2. During derivative computation, threads transform based on input:
+                                - May split into multiple threads (alternation)
+                                - May transition to `Seq` for sequences
+                                - May reach `End` when matching succeeds
+                             3. Threads are eliminated if they can't match the current input
+
+///|
 ```
 
 ```mooncram
@@ -249,7 +260,10 @@ struct Regex {
          symbol_repr: ReadOnlyArray[Int]
          start_states: Array[(@shared_types.Category, StateId)]
          state_table: @hashmap.HashMap[@automata.State, StateId]
-         mut transition_table: FixedArray[StateId]
+         mut transition_table: FixedArray[Int]
+         mut slot_table: FixedArray[Int]
+         mut max_slot: Int
+         positions: Positions
          mut final_table: FixedArray[@list.List[(@shared_types.Category, @automata.Slot, @automata.Status)]]
          mut states: FixedArray[@automata.State]
          mut num_states: Int
