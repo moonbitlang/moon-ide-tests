@@ -338,68 +338,7 @@ jobs:
         id: openseek-result
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          node <<'NODE'
-          const fs = require("fs");
-          const raw = fs.readFileSync(".daily-test/openseek-review.json", "utf8").trim();
-          const result = JSON.parse(raw);
-
-          if (result.status !== "completed") {
-            throw new Error(`OpenSeek review did not complete: ${result.reason || result.status || "unknown status"}`);
-          }
-
-          const answer = result.output?.answer;
-          if (typeof answer !== "string") {
-            throw new Error("OpenSeek returned a completed run without a text answer");
-          }
-
-          const parseAnswer = (text) => {
-            const candidates = [text.trim()];
-            for (const match of text.matchAll(/```(?:json)?\s*\n([\s\S]*?)```/gi)) {
-              candidates.push(match[1].trim());
-            }
-            for (const candidate of candidates.reverse()) {
-              try {
-                return JSON.parse(candidate);
-              } catch {
-                // Continue to the next candidate, then reject the response.
-              }
-            }
-            throw new Error("OpenSeek answer does not contain valid JSON");
-          };
-          const parsed = parseAnswer(answer);
-          const schema = JSON.parse(
-            fs.readFileSync(".github/codex/schemas/daily-test-review.schema.json", "utf8"),
-          );
-          const properties = schema.properties || {};
-          const allowedKeys = new Set(Object.keys(properties));
-
-          if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-            throw new Error("OpenSeek answer is not a JSON object");
-          }
-          if (schema.additionalProperties === false && Object.keys(parsed).some((key) => !allowedKeys.has(key))) {
-            throw new Error("OpenSeek answer has properties outside the daily review schema");
-          }
-          for (const key of schema.required || []) {
-            if (!(key in parsed)) {
-              throw new Error(`OpenSeek answer is missing required property: ${key}`);
-            }
-          }
-          for (const [key, definition] of Object.entries(properties)) {
-            if (key in parsed && typeof parsed[key] !== definition.type) {
-              throw new Error(`OpenSeek answer has invalid type for ${key}`);
-            }
-          }
-
-          const hasProblem = parsed.has_problem;
-          const commentBody = parsed.comment_body.trim();
-          const delimiter = `OPENSEEK_COMMENT_${Date.now()}`;
-
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_problem=${hasProblem}\n`);
-          fs.appendFileSync(
-            process.env.GITHUB_OUTPUT,
-            `comment_body<<${delimiter}\n${commentBody}\n${delimiter}\n`,
-          );
-          NODE
+          moon run --target native .github/scripts/parse-openseek-result.mbtx
 
       - name: Comment on pull request
         if: steps.diff.outputs.has_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
