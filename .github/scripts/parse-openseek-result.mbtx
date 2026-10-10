@@ -22,45 +22,44 @@ fn workspace_path(path : String) -> String {
 }
 
 ///|
+fn parse_json_code_blocks(text : String) -> Json? {
+  let mut offset = 0
+  let mut last_json : Json? = None
+  while offset < text.length() {
+    let opening = match text[offset:].find("```") {
+      Some(pos) => offset + pos
+      None => break
+    }
+    let header_start = opening + 3
+    let header_end = match text[header_start:].find("\n") {
+      Some(pos) => header_start + pos
+      None => break
+    }
+    let content_start = header_end + 1
+    let closing = match text[content_start:].find("```") {
+      Some(pos) => content_start + pos
+      None => break
+    }
+
+    let language = text[header_start:header_end].trim().to_lower()
+    if language == "" || language == "json" {
+      match try_parse_json(text[content_start:closing].trim()) {
+        Some(parsed) => last_json = Some(parsed)
+        None => ()
+      }
+    }
+    offset = closing + 3
+  }
+  last_json
+}
+
+///|
 fn parse_answer(text : String) -> Json {
   match try_parse_json(text.trim()) {
     Some(parsed) => return parsed
     None => ()
   }
-
-  let offset = Ref(0)
-  let last_json = Ref(None)
-  while offset.val < text.length() {
-    let remaining = text[offset.val:]
-    match remaining.find("```") {
-      None => break
-      Some(fence_offset) => {
-        let header_start = offset.val + fence_offset + 3
-        match text[header_start:].find("\n") {
-          None => break
-          Some(header_length) => {
-            let content_start = header_start + header_length + 1
-            match text[content_start:].find("```") {
-              None => break
-              Some(content_length) => {
-                let content_end = content_start + content_length
-                let header = text[header_start:content_start - 1].trim()
-                if header == "" || header == "json" || header == "JSON" {
-                  match try_parse_json(text[content_start:content_end].trim()) {
-                    Some(parsed) => last_json.val = Some(parsed)
-                    None => ()
-                  }
-                }
-                offset.val = content_end + 3
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  match last_json.val {
+  match parse_json_code_blocks(text) {
     Some(parsed) => parsed
     None => abort("OpenSeek answer does not contain valid JSON")
   }
