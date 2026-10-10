@@ -422,7 +422,7 @@ Definition found at file <WORKDIR>/src/internal/env_util/env_util.mbt
    | 
    | ///|
    | #cfg(any(target="native", target="wasm"))
-53 | pub let platform : Platform = get_platform()
+42 | pub let platform : Platform = get_platform()
    |         ^^^^^^^^
 ```
 

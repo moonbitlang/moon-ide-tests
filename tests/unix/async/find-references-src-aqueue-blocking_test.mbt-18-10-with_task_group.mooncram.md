@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
-Found 377 references for symbol 'with_task_group':
+Found 382 references for symbol 'with_task_group':
 <WORKDIR>/examples/dead_lock/main.mbt:19:10-19:25:
    | async fn main {
    |   let mutex1 = @async.Mutex()
@@ -685,11 +685,11 @@ Found 377 references for symbol 'with_task_group':
     |       // The following three tasks will start running at the same scheduler slice
     |       group.spawn_bg() <| () => {
 
-<WORKDIR>/src/fs/dir.mbt:430:10-430:25:
+<WORKDIR>/src/fs/dir.mbt:441:10-441:25:
     |   let context = "@fs.walk()"
     |   guard! max_concurrency > 0
     |   let sem = @async.Semaphore(max_concurrency)
-430 |   @async.with_task_group() <| fn(group) {
+441 |   @async.with_task_group() <| fn(group) {
     |          ^^^^^^^^^^^^^^^
     |     fn handle_path(path : String) {
     |       guard !exclude(path) else {  }
@@ -802,6 +802,33 @@ Found 377 references for symbol 'with_task_group':
     |     @fs.write_file(file_name, "abcd")
     |     let file = @fs.open(file_name, mode=ReadWrite)
 
+<WORKDIR>/src/fs/mkdir_test.mbt:68:10-68:25:
+   | 
+   | ///|
+   | async test "mkdir allow_exist" {
+68 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let base_path = "_build/mkdir_allow_exist"
+   |     let path = "\{base_path}/directory"
+
+<WORKDIR>/src/fs/mkdir_test.mbt:94:10-94:25:
+   | 
+   | ///|
+   | async test "mkdir recursive concurrent with shared parents" {
+94 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let base_path = "_build/recursive_mkdir_concurrent"
+   |     group.add_defer(() => @fs.rmdir(base_path, recursive=true))
+
+<WORKDIR>/src/fs/mkdir_test.mbt:97:12-97:27:
+   |   @async.with_task_group() <| group => {
+   |     let base_path = "_build/recursive_mkdir_concurrent"
+   |     group.add_defer(() => @fs.rmdir(base_path, recursive=true))
+97 |     @async.with_task_group() <| workers => {
+   |            ^^^^^^^^^^^^^^^
+   |       for i in 0..<8 {
+   |         workers.spawn_bg(() => {
+
 <WORKDIR>/src/fs/named_pipe_test.mbt:58:10-58:25:
    | ///|
    | #cfg(not(platform="windows"))
@@ -811,68 +838,32 @@ Found 377 references for symbol 'with_task_group':
    |     let path = "_build/named_pipe_test"
    |     if mkfifo(@os_string.encode(path), 0o644) < 0 {
 
-<WORKDIR>/src/fs/watch_test.mbt:57:10-57:25:
-   |   report_child_event~ : Bool,
-   | ) -> Array[String] {
-   |   let log = []
-57 |   @async.with_task_group(group => {
-   |          ^^^^^^^^^^^^^^^
-   |     let test_dir = Dir({
-   |       "root_file": File("abcd"),
-
-<WORKDIR>/src/fs/watch_test.mbt:231:10-231:25:
-    |   report_child_event~ : Bool,
-    | ) -> Array[String] {
-    |   let log = []
-231 |   @async.with_task_group(group => {
-    |          ^^^^^^^^^^^^^^^
-    |     let test_dir = Dir({
-    |       "root_file": File("abcd"),
-
-<WORKDIR>/src/fs/watch_test.mbt:355:10-355:25:
-    |   report_child_event~ : Bool,
-    | ) -> Array[String] {
-    |   let log = []
-355 |   @async.with_task_group(group => {
-    |          ^^^^^^^^^^^^^^^
-    |     let test_dir = Dir({
-    |       "watched": Dir({
-
-<WORKDIR>/src/fs/watch_test.mbt:520:10-520:25:
+<WORKDIR>/src/fs/watch_test.mbt:496:10-496:25:
     | 
     | ///|
     | async test "watch horizontal swap" {
-520 |   @async.with_task_group(group => {
+496 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
     |     let path = "_build/watch_swap_test"
     |     let test_dir = Dir({ "file1": File("abcd"), "file2": File("efgh") })
 
-<WORKDIR>/src/fs/watch_test.mbt:557:10-557:25:
+<WORKDIR>/src/fs/watch_test.mbt:533:10-533:25:
     |   report_child_event~ : Bool,
     | ) -> Array[String] {
     |   let log = []
-557 |   @async.with_task_group(group => {
+533 |   @async.with_task_group(group => {
     |          ^^^^^^^^^^^^^^^
     |     let test_dir = Dir({
     |       "outer": Dir({
 
-<WORKDIR>/src/fs/watch_test.mbt:636:10-636:25:
-    | ///|
-    | async test "watch ignored path" {
-    |   let log = []
-636 |   @async.with_task_group(group => {
+<WORKDIR>/src/fs/watch_test.mbt:803:10-803:25:
+    |   defer @fs.rmdir(path, recursive=true)
+    | 
+    |   let log = StringBuilder()
+803 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
-    |     let path = "_build/watch_ignored_path_test"
-    |     let test_dir = Dir({
-
-<WORKDIR>/src/fs/watch_test.mbt:785:10-785:25:
-    |     "root_file": File("abcd"),
-    |     "inner_dir": Dir({ "inner_file": File("efgh") }),
-    |   })
-785 |   @async.with_task_group <| group => {
-    |          ^^^^^^^^^^^^^^^
-    |     let path = "_build/watch_init_event_test"
-    |     test_dir.instantiate(path)
+    |     let watcher = @fs.Watcher(
+    |       watched_path,
 
 <WORKDIR>/src/group_defer_test.mbt:18:10-18:25:
    | ///|
@@ -912,7 +903,7 @@ Found 377 references for symbol 'with_task_group':
 
 <WORKDIR>/src/gzip/gzip_test.mbt:18:10-18:25:
    | ///|
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async fn node_gzip(mode : String, input : Bytes) -> Bytes {
 18 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
@@ -920,7 +911,7 @@ Found 377 references for symbol 'with_task_group':
    |     let runner = group.spawn(() => {
 
 <WORKDIR>/src/gzip/gzip_test.mbt:38:10-38:25:
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async fn encode_with_moonbit(input : Bytes) -> Bytes {
    |   let (r, w) = @io.pipe()
 38 |   @async.with_task_group() <| group => {
@@ -929,7 +920,7 @@ Found 377 references for symbol 'with_task_group':
    |       defer w.close()
 
 <WORKDIR>/src/gzip/gzip_test.mbt:52:10-52:25:
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async fn decode_with_moonbit(input : Bytes) -> Bytes {
    |   let (r, w) = @io.pipe()
 52 |   @async.with_task_group() <| group => {
@@ -1000,6 +991,42 @@ Found 377 references for symbol 'with_task_group':
     |     let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
     |     let port = server.addr.port()
 
+<WORKDIR>/src/http/client_test.mbt:227:10-227:25:
+    | #cfg(any(target="native", target="wasm"))
+    | async test "1XX response" {
+    |   let log = StringBuilder()
+227 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let port = test_server(group, log)
+    |     let client = @http.Client("http://localhost:\{port}")
+
+<WORKDIR>/src/http/parser_trailer_wbtest.mbt:17:10-17:25:
+   | 
+   | ///|
+   | async test "trailer chunked" {
+17 |   @async.with_task_group() <| root => {
+   |          ^^^^^^^^^^^^^^^
+   |     let (r, w) = @io.pipe()
+   |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/parser_trailer_wbtest.mbt:78:10-78:25:
+   | 
+   | ///|
+   | async test "trailer fixed length" {
+78 |   @async.with_task_group() <| root => {
+   |          ^^^^^^^^^^^^^^^
+   |     let (r, w) = @io.pipe()
+   |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/parser_trailer_wbtest.mbt:112:10-112:25:
+    | 
+    | ///|
+    | async test "trailer close delimited" {
+112 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
+
 <WORKDIR>/src/http/parser_wbtest.mbt:40:10-40:25:
    | ///|
    | async test "read_request basic" {
@@ -1054,113 +1081,122 @@ Found 377 references for symbol 'with_task_group':
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:274:10-274:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:273:10-273:25:
+    | 
+    | ///|
+    | async test "empty header value" {
+273 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/parser_wbtest.mbt:297:10-297:25:
     | ///|
     | async test "read_response basic" {
     |   let log = StringBuilder()
-274 |   @async.with_task_group() <| root => {
+297 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:305:10-305:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:328:10-328:25:
     | ///|
     | async test "read_response passthrough fallback (no length headers)" {
     |   let log = StringBuilder()
-305 |   @async.with_task_group() <| root => {
+328 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:342:10-342:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:365:10-365:25:
     | ///|
     | async test "read_response 204 No Content (no body)" {
     |   let log = StringBuilder()
-342 |   @async.with_task_group() <| root => {
+365 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:379:10-379:25:
-    | ///|
-    | async test "read_response 205 Reset Content (no body)" {
-    |   let log = StringBuilder()
-379 |   @async.with_task_group() <| root => {
-    |          ^^^^^^^^^^^^^^^
-    |     let (r, w) = @io.pipe()
-    |     root.spawn_bg() <| () => {
-
-<WORKDIR>/src/http/parser_wbtest.mbt:416:10-416:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:402:10-402:25:
     | ///|
     | async test "read_response 304 Not Modified (no body)" {
     |   let log = StringBuilder()
-416 |   @async.with_task_group() <| root => {
+402 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:453:10-453:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:439:10-439:25:
     | ///|
     | async test "read_response 100 Continue (no body)" {
     |   let log = StringBuilder()
-453 |   @async.with_task_group() <| root => {
+439 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:485:10-485:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:471:10-471:25:
     | ///|
     | async test "read_response CONNECT 200 (no body, tunnel mode)" {
     |   let log = StringBuilder()
-485 |   @async.with_task_group() <| root => {
+471 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:519:10-519:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:505:10-505:25:
     | ///|
     | async test "read_response HEAD 200 (no body)" {
     |   let log = StringBuilder()
-519 |   @async.with_task_group() <| root => {
+505 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:758:27-758:42:
+<WORKDIR>/src/http/parser_wbtest.mbt:558:27-558:42:
     | 
     | ///|
     | async test "gzip split between chunks" {
-758 |   let compressed = @async.with_task_group(group => {
+558 |   let compressed = @async.with_task_group(group => {
     |                           ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/parser_wbtest.mbt:768:10-768:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:568:10-568:25:
     |     r.read_all().binary()
     |   })
     |   let (r, w) = @io.pipe()
-768 |   @async.with_task_group() <| group => {
+568 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       defer w.close()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:812:10-812:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:612:10-612:25:
     |      0x00, 0x00, 0x00,
     |   ]
     |   let (r, w) = @io.pipe()
-812 |   @async.with_task_group() <| group => {
+612 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     group.spawn_bg() <| () => {
     |       defer w.close()
 
-<WORKDIR>/src/http/parser_wbtest.mbt:839:10-839:25:
+<WORKDIR>/src/http/parser_wbtest.mbt:639:10-639:25:
     | 
     | ///|
     | async test "read_response parse cookie" {
-839 |   @async.with_task_group() <| group => {
+639 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/parser_wbtest.mbt:717:10-717:25:
+    | 
+    | ///|
+    | async test "chunk extension" {
+717 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
 
 <WORKDIR>/src/http/proxy_test.mbt:18:10-18:25:
    | ///|
@@ -1351,38 +1387,47 @@ Found 377 references for symbol 'with_task_group':
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:777:10-777:25:
+<WORKDIR>/src/http/send_wbtest.mbt:776:10-776:25:
     | 
     | ///|
     | async test "send_response empty body" {
-777 |   @async.with_task_group <| group => {
+776 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:846:10-846:25:
+<WORKDIR>/src/http/send_wbtest.mbt:845:10-845:25:
     | 
     | ///|
     | async test "sender persistent header" {
-846 |   @async.with_task_group() <| root => {
+845 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:874:10-874:25:
+<WORKDIR>/src/http/send_wbtest.mbt:873:10-873:25:
     | 
     | ///|
     | async test "HEAD response with Content-Length" {
-874 |   @async.with_task_group() <| root => {
+873 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src/http/send_wbtest.mbt:904:10-904:25:
+<WORKDIR>/src/http/send_wbtest.mbt:903:10-903:25:
     | 
     | ///|
     | async test "HEAD response with non-empty body" {
-904 |   @async.with_task_group() <| root => {
+903 |   @async.with_task_group() <| root => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     root.spawn_bg() <| () => {
+
+<WORKDIR>/src/http/send_wbtest.mbt:928:10-928:25:
+    | 
+    | ///|
+    | async test "reject header injection" {
+928 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
@@ -2874,7 +2919,7 @@ Found 377 references for symbol 'with_task_group':
 
 <WORKDIR>/src/stdio/stdio_test.mbt:48:10-48:25:
    | ///|
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async test "redirect pipe" {
 48 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
@@ -2882,7 +2927,7 @@ Found 377 references for symbol 'with_task_group':
    |     let (cat_read, we_write) = @process.write_to_process()
 
 <WORKDIR>/src/stdio/stdio_test.mbt:78:10-78:25:
-   | #cfg(target="native")
+   | #cfg(any(target="native", target="wasm"))
    | async test "stdio cancel" {
    |   let cat = cat.wait()
 78 |   @async.with_task_group() <| group => {

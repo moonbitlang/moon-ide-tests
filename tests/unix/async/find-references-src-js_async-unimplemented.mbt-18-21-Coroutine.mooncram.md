@@ -18,33 +18,24 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Coroutine' --loc 'src/js_async/unimplemented.mbt:18:21'
-Found 43 references for symbol 'Coroutine':
-<WORKDIR>/src/aqueue/aqueue.mbt:21:25-21:34:
-   |   /// `value` must be `Some(_)` when the reader is woken
+Found 44 references for symbol 'Coroutine':
+<WORKDIR>/src/aqueue/aqueue.mbt:29:21-29:30:
+   |   /// - `Some(_)` otherwise
    |   mut value : X?
    |   /// `None` indicates that the reader is cancelled
-21 |   mut coro : @coroutine.Coroutine?
-   |                         ^^^^^^^^^
-   | }
-   | 
+29 |   coro : @coroutine.Coroutine
+   |                     ^^^^^^^^^
+   |   /// For intrusive cancellable queue
+   |   mut index : Int
 
-<WORKDIR>/src/aqueue/aqueue.mbt:27:25-27:34:
+<WORKDIR>/src/cond_var/cond_var.mbt:17:21-17:30:
+   | 
    | ///|
-   | priv struct Writer[X] {
-   |   value : X
-27 |   mut coro : @coroutine.Coroutine?
-   |                         ^^^^^^^^^
-   | }
-   | 
-
-<WORKDIR>/src/cond_var/cond_var.mbt:28:25-28:34:
-   |   // So we set `woken = true` after waking up a waiter,
-   |   // and use this flag to protect against dangerous cancellation.
-   |   mut woken : Bool
-28 |   mut coro : @coroutine.Coroutine?
-   |                         ^^^^^^^^^
-   | }
-   | 
+   | priv struct Waiter {
+17 |   coro : @coroutine.Coroutine
+   |                     ^^^^^^^^^
+   |   /// For intrusive cancellable queue
+   |   mut index : Int
 
 <WORKDIR>/src/fs/watch.mbt:150:37-150:46:
     |   pending_remove : Set[FileIdentity]
@@ -106,8 +97,8 @@ Found 43 references for symbol 'Coroutine':
    | ///|
 52 | pub fn Coroutine::wake(self : Coroutine) -> Unit {
    |        ^^^^^^^^^
-   |   if !self.ready {
-   |     self.ready = true
+   |   // Only a suspended coroutine can be resumed: a running one observes
+   |   // `cancelled` at its next suspension point, and a finished one never runs
 
 <WORKDIR>/src/internal/coroutine/coroutine.mbt:52:31-52:40:
    | }
@@ -115,89 +106,105 @@ Found 43 references for symbol 'Coroutine':
    | ///|
 52 | pub fn Coroutine::wake(self : Coroutine) -> Unit {
    |                               ^^^^^^^^^
-   |   if !self.ready {
-   |     self.ready = true
+   |   // Only a suspended coroutine can be resumed: a running one observes
+   |   // `cancelled` at its next suspension point, and a finished one never runs
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:73:8-73:17:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:76:8-76:17:
    | }
    | 
    | ///|
-73 | pub fn Coroutine::cancel(self : Coroutine) -> Unit {
+76 | pub fn Coroutine::cancel(self : Coroutine) -> Unit {
    |        ^^^^^^^^^
    |   self.cancelled = true
    |   if !self.shielded {
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:73:33-73:42:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:76:33-76:42:
    | }
    | 
    | ///|
-73 | pub fn Coroutine::cancel(self : Coroutine) -> Unit {
+76 | pub fn Coroutine::cancel(self : Coroutine) -> Unit {
    |                                 ^^^^^^^^^
    |   self.cancelled = true
    |   if !self.shielded {
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:138:57-138:66:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:141:57-141:66:
     | 
     | ///|
     | #callsite(autofill(loc))
-138 | pub fn spawn(f : async () -> Unit, loc~ : SourceLoc) -> Coroutine {
+141 | pub fn spawn(f : async () -> Unit, loc~ : SourceLoc) -> Coroutine {
     |                                                         ^^^^^^^^^
     |   scheduler.coro_id += 1
     |   let coro = {
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:176:8-176:17:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:179:8-179:17:
     | }
     | 
     | ///|
-176 | pub fn Coroutine::unwrap(self : Coroutine) -> SuspendResult raise {
+179 | pub fn Coroutine::unwrap(self : Coroutine) -> SuspendResult raise {
     |        ^^^^^^^^^
     |   match self.state {
     |     Done => Continue
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:176:33-176:42:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:179:33-179:42:
     | }
     | 
     | ///|
-176 | pub fn Coroutine::unwrap(self : Coroutine) -> SuspendResult raise {
+179 | pub fn Coroutine::unwrap(self : Coroutine) -> SuspendResult raise {
     |                                 ^^^^^^^^^
     |   match self.state {
     |     Done => Continue
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:186:14-186:23:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:189:14-189:23:
     | }
     | 
     | ///|
-186 | pub async fn Coroutine::wait(target : Coroutine) -> SuspendResult {
+189 | pub async fn Coroutine::wait(target : Coroutine) -> SuspendResult {
     |              ^^^^^^^^^
     |   guard! scheduler.curr_coro is Some(coro)
     |   guard! !physical_equal(coro, target)
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:186:39-186:48:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:189:39-189:48:
     | }
     | 
     | ///|
-186 | pub async fn Coroutine::wait(target : Coroutine) -> SuspendResult {
+189 | pub async fn Coroutine::wait(target : Coroutine) -> SuspendResult {
     |                                       ^^^^^^^^^
     |   guard! scheduler.curr_coro is Some(coro)
     |   guard! !physical_equal(coro, target)
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:202:8-202:17:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:205:8-205:17:
     | }
     | 
     | ///|
-202 | pub fn Coroutine::check_error(coro : Coroutine) -> Unit raise {
+205 | pub fn Coroutine::check_error(coro : Coroutine) -> Unit raise {
     |        ^^^^^^^^^
     |   match coro.state {
     |     Fail(err) => raise err
 
-<WORKDIR>/src/internal/coroutine/coroutine.mbt:202:38-202:47:
+<WORKDIR>/src/internal/coroutine/coroutine.mbt:205:38-205:47:
     | }
     | 
     | ///|
-202 | pub fn Coroutine::check_error(coro : Coroutine) -> Unit raise {
+205 | pub fn Coroutine::check_error(coro : Coroutine) -> Unit raise {
     |                                      ^^^^^^^^^
     |   match coro.state {
     |     Fail(err) => raise err
+
+<WORKDIR>/src/internal/coroutine/deprecated.mbt:18:12-18:21:
+   | ///|
+   | #deprecated
+   | #doc(hidden)
+18 | pub extend Coroutine with Eq::{not_equal, equal}
+   |            ^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/src/internal/coroutine/deprecated.mbt:23:12-23:21:
+   | ///|
+   | #deprecated
+   | #doc(hidden)
+23 | pub extend Coroutine with Hash::{hash, hash_combine}
+   |            ^^^^^^^^^
 
 <WORKDIR>/src/internal/coroutine/scheduler.mbt:18:19-18:28:
    | ///|
@@ -343,14 +350,14 @@ Found 43 references for symbol 'Coroutine':
    |   mut state : LazyValueState[X]
    |   loc : SourceLoc
 
-<WORKDIR>/src/semaphore/semaphore.mbt:29:25-29:34:
-   |   // and use this flag to protect against dangerous cancellation.
-   |   mut acquired : Bool
+<WORKDIR>/src/semaphore/semaphore.mbt:18:21-18:30:
+   | ///|
+   | priv struct Waiter {
    |   // `None` indicates that the waiter is cancelled
-29 |   mut coro : @coroutine.Coroutine?
-   |                         ^^^^^^^^^
-   | }
-   | 
+18 |   coro : @coroutine.Coroutine
+   |                     ^^^^^^^^^
+   |   mut index : Int
+   |   mut prev : Int
 
 <WORKDIR>/src/task.mbt:20:21-20:30:
    | /// it can be used to wait and retrieve the result value of the task.

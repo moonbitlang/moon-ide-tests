@@ -21,31 +21,24 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
 *** Begin Patch
 *** Update File: <WORKDIR>/src/aqueue/aqueue.mbt
 @@
-   /// `value` must be `Some(_)` when the reader is woken
+   /// - `Some(_)` otherwise
    mut value : X?
    /// `None` indicates that the reader is cancelled
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
- ///|
- priv struct Writer[X] {
-   value : X
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
- ///|
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   /// For intrusive cancellable queue
+   mut index : Int
+   mut next : Int
 *** Update File: <WORKDIR>/src/cond_var/cond_var.mbt
 @@
-   // So we set `woken = true` after waking up a waiter,
-   // and use this flag to protect against dangerous cancellation.
-   mut woken : Bool
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
  
  ///|
+ priv struct Waiter {
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   /// For intrusive cancellable queue
+   mut index : Int
+   mut next : Int
 *** Update File: <WORKDIR>/src/fs/watch.mbt
 @@
    pending_remove : Set[FileIdentity]
@@ -101,9 +94,9 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
  ///|
 -pub fn Coroutine::wake(self : Coroutine) -> Unit {
 +pub fn CoroutineRenamed::wake(self : CoroutineRenamed) -> Unit {
-   if !self.ready {
-     self.ready = true
-     scheduler.run_later.push_back(self)
+   // Only a suspended coroutine can be resumed: a running one observes
+   // `cancelled` at its next suspension point, and a finished one never runs
+   // again. Enqueueing either would leave a stale entry in `run_later`.
 @@
  }
  
@@ -149,6 +142,19 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
    match coro.state {
      Fail(err) => raise err
      Done | Cancelled | Running | Suspend(_) => () (escaped)
+*** Update File: <WORKDIR>/src/internal/coroutine/deprecated.mbt
+@@
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend Coroutine with Eq::{not_equal, equal}
++pub extend CoroutineRenamed with Eq::{not_equal, equal}
+ 
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend Coroutine with Hash::{hash, hash_combine}
++pub extend CoroutineRenamed with Hash::{hash, hash_combine}
 *** Update File: <WORKDIR>/src/internal/coroutine/scheduler.mbt
 @@
  ///|
@@ -282,14 +288,14 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
  }
 *** Update File: <WORKDIR>/src/semaphore/semaphore.mbt
 @@
-   // and use this flag to protect against dangerous cancellation.
-   mut acquired : Bool
-   // `None` indicates that the waiter is cancelled
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
  ///|
+ priv struct Waiter {
+   // `None` indicates that the waiter is cancelled
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   mut index : Int
+   mut prev : Int
+   mut next : Int
 *** Update File: <WORKDIR>/src/task.mbt
 @@
  /// it can be used to wait and retrieve the result value of the task.

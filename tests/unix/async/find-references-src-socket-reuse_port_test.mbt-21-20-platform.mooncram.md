@@ -37,38 +37,38 @@ Found 45 references for symbol 'platform':
    |     return
    |   }
 
-<WORKDIR>/src/fs/dir.mbt:34:29-34:37:
+<WORKDIR>/src/fs/dir.mbt:45:29-45:37:
    |     @os_error.OSError(_) as err if recursive && err.is_ENOENT() => {
    |       let last_path_sep_index = match path.rev_find("/") {
    |         Some(index) => index
-34 |         None if @event_loop.platform is Windows &&
+45 |         None if @event_loop.platform is Windows &&
    |                             ^^^^^^^^
    |           path.rev_find("\\") is Some(index) => index
    |         None => raise err
 
-<WORKDIR>/src/fs/dir.mbt:39:35-39:43:
+<WORKDIR>/src/fs/dir.mbt:50:35-50:43:
    |         None => raise err
    |       }
    |       let parent = path[:last_path_sep_index].trim_end(chars="/")
-39 |       let parent = if @event_loop.platform is Windows {
+50 |       let parent = if @event_loop.platform is Windows {
    |                                   ^^^^^^^^
    |         parent.trim_end(chars="\\")
    |       } else {
 
-<WORKDIR>/src/fs/dir.mbt:65:31-65:39:
+<WORKDIR>/src/fs/dir.mbt:76:31-76:39:
    | ) -> Unit nocancel {
    |   let context = "@fs.rmdir()"
    |   if recursive {
-65 |     let base = if @event_loop.platform is Windows {
+76 |     let base = if @event_loop.platform is Windows {
    |                               ^^^^^^^^
    |       path.trim_end(chars="/\\")
    |     } else {
 
-<WORKDIR>/src/fs/dir.mbt:303:43-303:51:
+<WORKDIR>/src/fs/dir.mbt:314:43-314:51:
     |   let offset = dir.offset
     |   dir.offset += entry_len
     |   dir.count += 1
-303 |   let need_more_entry = match @event_loop.platform {
+314 |   let need_more_entry = match @event_loop.platform {
     |                                           ^^^^^^^^
     |     Linux => dir.offset >= dir.job_ret
     |     MacOS => dir.count >= dir.job_ret
@@ -181,38 +181,38 @@ Found 45 references for symbol 'platform':
    |         read_only=access is 0,
    |       )
 
-<WORKDIR>/src/internal/event_loop/io.mbt:146:17-146:25:
+<WORKDIR>/src/internal/event_loop/io.mbt:148:17-148:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-146 |     cancellable=platform is Windows || handle.kind.can_poll(),
+148 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:198:17-198:25:
+<WORKDIR>/src/internal/event_loop/io.mbt:308:17-308:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-198 |     cancellable=platform is Windows || handle.kind.can_poll(),
+308 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:240:52-240:60:
+<WORKDIR>/src/internal/event_loop/io.mbt:490:52-490:60:
     |   guard! !handle.is_async
     |   let job = Job::read(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-240 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
+490 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
     |                                                    ^^^^^^^^
     | }
     | 
 
-<WORKDIR>/src/internal/event_loop/io.mbt:264:59-264:67:
+<WORKDIR>/src/internal/event_loop/io.mbt:514:59-514:67:
     |   }
     |   let job = Job::write(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-264 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
+514 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
     |                                                           ^^^^^^^^
     | }
 

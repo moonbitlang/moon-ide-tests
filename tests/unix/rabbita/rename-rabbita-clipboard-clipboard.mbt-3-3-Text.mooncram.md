@@ -66,6 +66,16 @@ $ run_moon_ide moon ide rename 'Text' 'TextRenamed' --loc 'rabbita/clipboard/cli
      content="ClipboardCopy(Text(\"hello\"))",
    )
    debug_inspect(
+*** Update File: <WORKDIR>/rui/markdown/block.mbt
+@@
+       type_="button",
+       title="Copy code",
+       attrs=@html.Attrs::build().aria_label("Copy code"),
+-      on_click=@clipboard.copy(Text(source)),
++      on_click=@clipboard.copy(TextRenamed(source)),
+       @html.span(
+         style=["display:flex"],
+         attrs=@html.Attrs::build().aria_hidden("true"),
 *** Update File: <WORKDIR>/website/homepage/components/forms_input_group_variants.mbt
 @@
                      title="Copy script",

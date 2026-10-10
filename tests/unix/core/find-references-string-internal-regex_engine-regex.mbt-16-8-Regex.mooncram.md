@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Regex' --loc 'string/internal/regex_engine/regex.mbt:16:8'
-Found 22 references for symbol 'Regex':
+Found 24 references for symbol 'Regex':
 <WORKDIR>/string/internal/regex_engine/compile.mbt:17:54-17:59:
    | 
    | ///|
@@ -37,74 +37,74 @@ Found 22 references for symbol 'Regex':
    |     profile,
    |     ctx,
 
-<WORKDIR>/string/internal/regex_engine/execute.mbt:49:8-49:13:
+<WORKDIR>/string/internal/regex_engine/execute.mbt:51:8-51:13:
    | 
    | ///|
    | /// Execute using this compiled object.
-49 | pub fn Regex::execute(
+51 | pub fn Regex::execute(
    |        ^^^^^
    |   self : Regex,
    |   input : StringView,
 
-<WORKDIR>/string/internal/regex_engine/execute.mbt:50:10-50:15:
+<WORKDIR>/string/internal/regex_engine/execute.mbt:52:10-52:15:
    | ///|
    | /// Execute using this compiled object.
    | pub fn Regex::execute(
-50 |   self : Regex,
+52 |   self : Regex,
    |          ^^^^^
    |   input : StringView,
    |   last_index : Int,
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:35:8-35:13:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:42:8-42:13:
    | 
    | ///|
    | /// Function `group_names`.
-35 | pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
+42 | pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
    |        ^^^^^
    |   self.groups
    | }
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:35:34-35:39:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:42:34-42:39:
    | 
    | ///|
    | /// Function `group_names`.
-35 | pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
+42 | pub fn Regex::group_names(self : Regex) -> ReadOnlyArray[String?] {
    |                                  ^^^^^
    |   self.groups
    | }
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:40:4-40:9:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:47:4-47:9:
    | }
    | 
    | ///|
-40 | fn Regex::new(
+47 | fn Regex::new(
    |    ^^^^^
    |   profile : Profile,
    |   ctx : @automata.Context,
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:47:6-47:11:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:54:6-54:11:
    |   groups : ReadOnlyArray[String?],
    |   symbol_table : @symbol_map.Table,
    |   symbol_repr : ReadOnlyArray[Rechar],
-47 | ) -> Regex {
+54 | ) -> Regex {
    |      ^^^^^
    |   {
    |     profile,
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:65:4-65:9:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:75:4-75:9:
    | }
    | 
    | ///|
-65 | fn Regex::num_symbols(self : Regex) -> Int {
+75 | fn Regex::num_symbols(self : Regex) -> Int {
    |    ^^^^^
    |   self.symbol_repr.length()
    | }
 
-<WORKDIR>/string/internal/regex_engine/regex.mbt:65:30-65:35:
+<WORKDIR>/string/internal/regex_engine/regex.mbt:75:30-75:35:
    | }
    | 
    | ///|
-65 | fn Regex::num_symbols(self : Regex) -> Int {
+75 | fn Regex::num_symbols(self : Regex) -> Int {
    |                              ^^^^^
    |   self.symbol_repr.length()
    | }
@@ -115,7 +115,7 @@ Found 22 references for symbol 'Regex':
    | ///|
 16 | fn Regex::get_state(self : Regex, state_id : StateId) -> @automata.State {
    |    ^^^^^
-   |   self.states.unsafe_get(state_id.index())
+   |   self.states.unsafe_get(self.state_index(state_id))
    | }
 
 <WORKDIR>/string/internal/regex_engine/states.mbt:16:28-16:33:
@@ -124,77 +124,95 @@ Found 22 references for symbol 'Regex':
    | ///|
 16 | fn Regex::get_state(self : Regex, state_id : StateId) -> @automata.State {
    |                            ^^^^^
-   |   self.states.unsafe_get(state_id.index())
+   |   self.states.unsafe_get(self.state_index(state_id))
    | }
 
 <WORKDIR>/string/internal/regex_engine/states.mbt:21:4-21:9:
    | }
    | 
    | ///|
-21 | fn Regex::stablize_start_state(self : Regex, prev_cat : Category) -> StateId {
+21 | fn Regex::state_index(self : Regex, state_id : StateId) -> Int {
+   |    ^^^^^
+   |   state_id.transition_base() / self.num_symbols()
+   | }
+
+<WORKDIR>/string/internal/regex_engine/states.mbt:21:30-21:35:
+   | }
+   | 
+   | ///|
+21 | fn Regex::state_index(self : Regex, state_id : StateId) -> Int {
+   |                              ^^^^^
+   |   state_id.transition_base() / self.num_symbols()
+   | }
+
+<WORKDIR>/string/internal/regex_engine/states.mbt:26:4-26:9:
+   | }
+   | 
+   | ///|
+26 | fn Regex::stablize_start_state(self : Regex, prev_cat : Category) -> StateId {
    |    ^^^^^
    |   for start_state in self.start_states {
    |     let (cat, state_id) = start_state
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:21:39-21:44:
+<WORKDIR>/string/internal/regex_engine/states.mbt:26:39-26:44:
    | }
    | 
    | ///|
-21 | fn Regex::stablize_start_state(self : Regex, prev_cat : Category) -> StateId {
+26 | fn Regex::stablize_start_state(self : Regex, prev_cat : Category) -> StateId {
    |                                       ^^^^^
    |   for start_state in self.start_states {
    |     let (cat, state_id) = start_state
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:36:4-36:9:
+<WORKDIR>/string/internal/regex_engine/states.mbt:41:4-41:9:
    | }
    | 
    | ///|
-36 | fn Regex::stablize_state(self : Regex, state : @automata.State) -> StateId {
+41 | fn Regex::stablize_state(self : Regex, state : @automata.State) -> StateId {
    |    ^^^^^
    |   self.state_table.get_or_init(state, () => {
    |     let index = self.num_states
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:36:33-36:38:
+<WORKDIR>/string/internal/regex_engine/states.mbt:41:33-41:38:
    | }
    | 
    | ///|
-36 | fn Regex::stablize_state(self : Regex, state : @automata.State) -> StateId {
+41 | fn Regex::stablize_state(self : Regex, state : @automata.State) -> StateId {
    |                                 ^^^^^
    |   self.state_table.get_or_init(state, () => {
    |     let index = self.num_states
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:75:4-75:9:
+<WORKDIR>/string/internal/regex_engine/states.mbt:81:4-81:9:
    | }
    | 
    | ///|
-75 | fn Regex::stablize_next_state(
+81 | fn Regex::stablize_next_state(
    |    ^^^^^
    |   self : Regex,
    |   prev_state_id : StateId,
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:76:10-76:15:
+<WORKDIR>/string/internal/regex_engine/states.mbt:82:10-82:15:
    | 
    | ///|
    | fn Regex::stablize_next_state(
-76 |   self : Regex,
+82 |   self : Regex,
    |          ^^^^^
    |   prev_state_id : StateId,
    |   symbol : Rechar,
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:91:4-91:9:
+<WORKDIR>/string/internal/regex_engine/states.mbt:97:4-97:9:
    | }
    | 
    | ///|
-91 | fn Regex::stablize_final(
+97 | fn Regex::stablize_final(
    |    ^^^^^
    |   self : Regex,
    |   state_id : StateId,
 
-<WORKDIR>/string/internal/regex_engine/states.mbt:92:10-92:15:
+<WORKDIR>/string/internal/regex_engine/states.mbt:98:10-98:15:
    | 
    | ///|
    | fn Regex::stablize_final(
-92 |   self : Regex,
+98 |   self : Regex,
    |          ^^^^^
    |   state_id : StateId,
    |   state : @automata.State,
@@ -208,11 +226,11 @@ Found 22 references for symbol 'Regex':
    | }
    | 
 
-<WORKDIR>/string/regex.mbt:153:35-153:40:
+<WORKDIR>/string/regex.mbt:154:35-154:40:
     | }
     | 
     | ///|
-153 | fn Regex::re(self : Regex) -> @re.Regex {
+154 | fn Regex::re(self : Regex) -> @re.Regex {
     |                                   ^^^^^
     |   match self.re {
     |     Some(re) => re

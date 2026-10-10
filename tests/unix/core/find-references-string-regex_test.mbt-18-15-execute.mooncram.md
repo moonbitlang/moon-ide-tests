@@ -18,57 +18,57 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'execute' --loc 'string/regex_test.mbt:18:15'
-Found 91 references for symbol 'execute':
-<WORKDIR>/string/README.mbt.md:248:15-248:22:
+Found 103 references for symbol 'execute':
+<WORKDIR>/string/README.mbt.md:253:15-253:22:
     | test "string regex basics" {
     |   let regex = re"[[:digit:]]+"
     | 
-248 |   guard regex.execute("id=42") is Some(m) else { fail("Expected match") }
+253 |   guard regex.execute("id=42") is Some(m) else { fail("Expected match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="42")
     | 
 
-<WORKDIR>/string/README.mbt.md:306:12-306:19:
+<WORKDIR>/string/README.mbt.md:311:12-311:19:
     | ///|
     | test "match result" {
     |   let re = re"([[:alpha:]]+)=([[:digit:]]+)"
-306 |   guard re.execute("key=42") is Some(m) else { fail("no match") }
+311 |   guard re.execute("key=42") is Some(m) else { fail("no match") }
     |            ^^^^^^^
     |   inspect(m.content(), content="key=42")
     |   inspect(m.before(), content="")
 
-<WORKDIR>/string/README.mbt.md:321:12-321:19:
+<WORKDIR>/string/README.mbt.md:326:12-326:19:
     | ///|
     | test "named groups" {
     |   let re = re"(?<name>[[:alpha:]]+):(?<val>[[:digit:]]+)"
-321 |   guard re.execute("age:30") is Some(m) else { fail("no match") }
+326 |   guard re.execute("age:30") is Some(m) else { fail("no match") }
     |            ^^^^^^^
     |   debug_inspect(m.named_group("name"), content="Some(<StringView: \"age\">)")
     |   debug_inspect(m.named_group("val"), content="Some(<StringView: \"30\">)")
 
-<WORKDIR>/string/README.mbt.md:364:15-364:22:
+<WORKDIR>/string/README.mbt.md:369:15-369:22:
     | test "regex combinators" {
     |   // match "abc" literally
     |   let abc = @string.Regex::string("abc")
-364 |   inspect(abc.execute("xabcy") is Some(_), content="true")
+369 |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |               ^^^^^^^
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
 
-<WORKDIR>/string/README.mbt.md:367:16-367:23:
+<WORKDIR>/string/README.mbt.md:372:16-372:23:
     |   inspect(abc.execute("xabcy") is Some(_), content="true")
     |   // repeat: match 2 to 4 digits
     |   let digits = re"[[:digit:]]".repeat(min=2, max=4)
-367 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
+372 |   guard digits.execute("a12345") is Some(m) else { fail("no match") }
     |                ^^^^^^^
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
 
-<WORKDIR>/string/README.mbt.md:371:18-371:25:
+<WORKDIR>/string/README.mbt.md:376:18-376:25:
     |   inspect(m.content(), content="1234") // greedy: takes max
     |   // alternation with |
     |   let either = @string.Regex::string("cat") | @string.Regex::string("dog")
-371 |   inspect(either.execute("I have a dog") is Some(_), content="true")
+376 |   inspect(either.execute("I have a dog") is Some(_), content="true")
     |                  ^^^^^^^
     | }
     | ```
@@ -82,128 +82,128 @@ Found 91 references for symbol 'execute':
    | ///   inspect(m.content(), content="12")
    | /// }
 
-<WORKDIR>/string/regex.mbt:180:19-180:26:
+<WORKDIR>/string/regex.mbt:181:19-181:26:
     | /// ```mbt check
     | /// test {
     | ///   let regex = @string.Regex::unsafe_from_string("[[:digit:]]+")
-180 | ///   guard regex.execute("a12b") is Some(m) else { fail("Expected match") }
+181 | ///   guard regex.execute("a12b") is Some(m) else { fail("Expected match") }
     |                   ^^^^^^^
     | ///   inspect(m.content(), content="12")
     | /// }
 
-<WORKDIR>/string/regex.mbt:199:21-199:28:
+<WORKDIR>/string/regex.mbt:200:21-200:28:
     | /// ```mbt check
     | /// test {
     | ///   let regex = @string.Regex::string("a+b(c)")
-199 | ///   inspect(regex.execute("a+b(c)") is Some(_), content="true")
+200 | ///   inspect(regex.execute("a+b(c)") is Some(_), content="true")
     |                     ^^^^^^^
     | ///   inspect(regex.execute("abcc") is Some(_), content="false")
     | /// }
 
-<WORKDIR>/string/regex.mbt:200:21-200:28:
+<WORKDIR>/string/regex.mbt:201:21-201:28:
     | /// test {
     | ///   let regex = @string.Regex::string("a+b(c)")
     | ///   inspect(regex.execute("a+b(c)") is Some(_), content="true")
-200 | ///   inspect(regex.execute("abcc") is Some(_), content="false")
+201 | ///   inspect(regex.execute("abcc") is Some(_), content="false")
     |                     ^^^^^^^
     | /// }
     | /// ```
 
-<WORKDIR>/string/regex.mbt:225:20-225:27:
+<WORKDIR>/string/regex.mbt:226:20-226:27:
     | /// ```mbt check
     | /// test {
     | ///   let greedy = re"[[:digit:]]".repeat(min=2, max=4)
-225 | ///   guard greedy.execute("a12345") is Some(m1) else { fail("Expected match") }
+226 | ///   guard greedy.execute("a12345") is Some(m1) else { fail("Expected match") }
     |                    ^^^^^^^
     | ///   inspect(m1.content(), content="1234")
     | ///
 
-<WORKDIR>/string/regex.mbt:229:23-229:30:
+<WORKDIR>/string/regex.mbt:230:23-230:30:
     | ///   inspect(m1.content(), content="1234")
     | ///
     | ///   let nongreedy = re"[[:digit:]]".repeat(min=2, max=4, greedy=false)
-229 | ///   guard nongreedy.execute("a12345") is Some(m2) else { fail("Expected match") }
+230 | ///   guard nongreedy.execute("a12345") is Some(m2) else { fail("Expected match") }
     |                       ^^^^^^^
     | ///   inspect(m2.content(), content="12")
     | /// }
 
-<WORKDIR>/string/regex.mbt:266:19-266:26:
+<WORKDIR>/string/regex.mbt:267:19-267:26:
     | /// ```mbt check
     | /// test {
     | ///   let regex = @string.Regex::string("ab") + @string.Regex::string("cd")
-266 | ///   guard regex.execute("xabcd") is Some(m) else { fail("Expected match") }
+267 | ///   guard regex.execute("xabcd") is Some(m) else { fail("Expected match") }
     |                   ^^^^^^^
     | ///   inspect(m.content(), content="abcd")
     | /// }
 
-<WORKDIR>/string/regex.mbt:283:21-283:28:
+<WORKDIR>/string/regex.mbt:284:21-284:28:
     | /// ```mbt check
     | /// test {
     | ///   let regex = @string.Regex::string("cat") | @string.Regex::string("dog")
-283 | ///   inspect(regex.execute("dog") is Some(_), content="true")
+284 | ///   inspect(regex.execute("dog") is Some(_), content="true")
     |                     ^^^^^^^
     | ///   inspect(regex.execute("cow") is Some(_), content="false")
     | /// }
 
-<WORKDIR>/string/regex.mbt:284:21-284:28:
+<WORKDIR>/string/regex.mbt:285:21-285:28:
     | /// test {
     | ///   let regex = @string.Regex::string("cat") | @string.Regex::string("dog")
     | ///   inspect(regex.execute("dog") is Some(_), content="true")
-284 | ///   inspect(regex.execute("cow") is Some(_), content="false")
+285 | ///   inspect(regex.execute("cow") is Some(_), content="false")
     |                     ^^^^^^^
     | /// }
     | /// ```
 
-<WORKDIR>/string/regex.mbt:330:19-330:26:
+<WORKDIR>/string/regex.mbt:331:19-331:26:
     | ///   let regex = re"[[:digit:]]+"
     | ///   let input = "a12b34"
     | ///
-330 | ///   guard regex.execute(input) is Some(first) else {
+331 | ///   guard regex.execute(input) is Some(first) else {
     |                   ^^^^^^^
     | ///     fail("Expected first match")
     | ///   }
 
-<WORKDIR>/string/regex.mbt:336:19-336:26:
+<WORKDIR>/string/regex.mbt:337:19-337:26:
     | ///   inspect(first.content(), content="12")
     | ///
     | ///   let next = first.before().length() + first.content().length()
-336 | ///   guard regex.execute(input, last_index=next) is Some(second) else {
+337 | ///   guard regex.execute(input, last_index=next) is Some(second) else {
     |                   ^^^^^^^
     | ///     fail("Expected second match")
     | ///   }
 
-<WORKDIR>/string/regex.mbt:346:24-346:31:
+<WORKDIR>/string/regex.mbt:347:24-347:31:
     | /// ```mbt check
     | /// test {
     | ///   let anchored = re"^ab$"
-346 | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
+347 | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
     |                        ^^^^^^^
     | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     | /// }
 
-<WORKDIR>/string/regex.mbt:347:24-347:31:
+<WORKDIR>/string/regex.mbt:348:24-348:31:
     | /// test {
     | ///   let anchored = re"^ab$"
     | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
-347 | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
+348 | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     |                        ^^^^^^^
     | /// }
     | /// ```
 
-<WORKDIR>/string/regex.mbt:374:19-374:26:
+<WORKDIR>/string/regex.mbt:375:19-375:26:
     | /// test {
     | ///   let digit = re"[[:digit:]]+".capture("number")
     | ///   let regex = @string.Regex::string("ID: ") + digit
-374 | ///   guard regex.execute("ID: 12345") is Some(m) else { fail("Expected match") }
+375 | ///   guard regex.execute("ID: 12345") is Some(m) else { fail("Expected match") }
     |                   ^^^^^^^
     | ///   debug_inspect(
     | ///     m.named_group("number"),
 
-<WORKDIR>/string/regex.mbt:394:19-394:26:
+<WORKDIR>/string/regex.mbt:395:19-395:26:
     | ///     domain +
     | ///     @string.Regex::string(".") +
     | ///     tld
-394 | ///   guard email.execute("john@example.com") is Some(m) else {
+395 | ///   guard email.execute("john@example.com") is Some(m) else {
     |                   ^^^^^^^
     | ///     fail("Expected match")
     | ///   }
@@ -271,6 +271,15 @@ Found 91 references for symbol 'execute':
     |         None => {
     |           done = true
 
+<WORKDIR>/string/regex_methods_test.mbt:393:15-393:22:
+    | ///|
+    | test "capture group indices cannot wrap around" {
+    |   let regex = re"(a)"
+393 |   guard regex.execute("a") is Some(matched) else { fail("expected match") }
+    |               ^^^^^^^
+    |   for index in [-2147483648, -1073741824, -1, 2, 1073741824, 2147483647] {
+    |     assert_eq(matched.group(index) is None, true)
+
 <WORKDIR>/string/regex_test.mbt:18:15-18:22:
    | ///|
    | test "execute/non_capture_group" {
@@ -307,535 +316,634 @@ Found 91 references for symbol 'execute':
    |     fail("Expected no surrogate-half match")
    |   }
 
-<WORKDIR>/string/regex_test.mbt:94:15-94:22:
-   | ///|
-   | test "compile/unicode_escape_supplementary_plane" {
-   |   let regex = re"\u{1F600}"
-94 |   guard regex.execute("a😀b") is Some(m) else {
-   |               ^^^^^^^
-   |     fail("Expected match for supplementary-plane Unicode escape")
+<WORKDIR>/string/regex_test.mbt:77:17-77:24:
+   | test "execute/colon_range" {
+   |   let regex = @string.Regex("^[:-@]$")
+   |   for ch in [":", ";", "<", "=", ">", "?", "@"] {
+77 |     guard regex.execute(ch) is Some(_) else {
+   |                 ^^^^^^^
+   |       fail("Expected colon range endpoint to match")
+   |     }
+
+<WORKDIR>/string/regex_test.mbt:82:17-82:24:
+   |     }
+   |   }
+   |   for ch in ["!", "A", "["] {
+82 |     guard regex.execute(ch) is None else {
+   |                 ^^^^^^^
+   |       fail("Expected character outside colon range not to match")
+   |     }
+
+<WORKDIR>/string/regex_test.mbt:87:17-87:24:
+   |     }
+   |   }
+   |   let inverse = @string.Regex("^[^:-@]$")
+87 |   guard inverse.execute("A") is Some(_) else {
+   |                 ^^^^^^^
+   |     fail("Expected inverse colon range to match")
    |   }
 
-<WORKDIR>/string/regex_test.mbt:112:15-112:22:
+<WORKDIR>/string/regex_test.mbt:90:17-90:24:
+   |   guard inverse.execute("A") is Some(_) else {
+   |     fail("Expected inverse colon range to match")
+   |   }
+90 |   guard inverse.execute(":") is None else {
+   |                 ^^^^^^^
+   |     fail("Expected inverse colon range to exclude colon")
+   |   }
+
+<WORKDIR>/string/regex_test.mbt:95:17-95:24:
+   |   }
+   |   for pattern in ["^[:]$", "^[::]$", "^[:-:]$", "^[:-@:]$", "^[:a-z:]$"] {
+   |     let regex = @string.Regex(pattern)
+95 |     guard regex.execute(":") is Some(_) else {
+   |                 ^^^^^^^
+   |       fail("Expected literal colon to match")
+   |     }
+
+<WORKDIR>/string/regex_test.mbt:98:17-98:24:
+   |     guard regex.execute(":") is Some(_) else {
+   |       fail("Expected literal colon to match")
+   |     }
+98 |     guard regex.execute("-") is None else {
+   |                 ^^^^^^^
+   |       fail("Expected range syntax to exclude literal hyphen")
+   |     }
+
+<WORKDIR>/string/regex_test.mbt:104:20-104:27:
+    |   }
+    |   let literals = @string.Regex("^[:\\-@]$")
+    |   for ch in [":", "-", "@"] {
+104 |     guard literals.execute(ch) is Some(_) else {
+    |                    ^^^^^^^
+    |       fail("Expected escaped hyphen class to match its literal atoms")
+    |     }
+
+<WORKDIR>/string/regex_test.mbt:108:18-108:25:
+    |       fail("Expected escaped hyphen class to match its literal atoms")
+    |     }
+    |   }
+108 |   guard literals.execute(";") is None else {
+    |                  ^^^^^^^
+    |     fail("Expected escaped hyphen not to introduce a range")
+    |   }
+
+<WORKDIR>/string/regex_test.mbt:134:15-134:22:
+    | ///|
+    | test "compile/unicode_escape_supplementary_plane" {
+    |   let regex = re"\u{1F600}"
+134 |   guard regex.execute("a😀b") is Some(m) else {
+    |               ^^^^^^^
+    |     fail("Expected match for supplementary-plane Unicode escape")
+    |   }
+
+<WORKDIR>/string/regex_test.mbt:152:15-152:22:
     | ///|
     | test "string/literal_metacharacters" {
     |   let regex = @string.Regex::string("a+b(c)")
-112 |   guard regex.execute("xa+b(c)y") is Some(m) else {
+152 |   guard regex.execute("xa+b(c)y") is Some(m) else {
     |               ^^^^^^^
     |     fail("Expected literal match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:126:11-126:18:
+<WORKDIR>/string/regex_test.mbt:166:11-166:18:
     |     ),
     |   )
     |   debug_inspect(
-126 |     regex.execute("xabccy"),
+166 |     regex.execute("xabccy"),
     |           ^^^^^^^
     |     content=(
     |       #|None
 
-<WORKDIR>/string/regex_test.mbt:138:16-138:23:
+<WORKDIR>/string/regex_test.mbt:178:16-178:23:
     |   let base = re"[[:digit:]]"
     |   let greedy = base.repeat(min=2, max=4)
     |   let nongreedy = base.repeat(min=2, max=4, greedy=false)
-138 |   guard greedy.execute("a12345") is Some(m1) else {
+178 |   guard greedy.execute("a12345") is Some(m1) else {
     |                ^^^^^^^
     |     fail("Expected greedy match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:141:19-141:26:
+<WORKDIR>/string/regex_test.mbt:181:19-181:26:
     |   guard greedy.execute("a12345") is Some(m1) else {
     |     fail("Expected greedy match")
     |   }
-141 |   guard nongreedy.execute("a12345") is Some(m2) else {
+181 |   guard nongreedy.execute("a12345") is Some(m2) else {
     |                   ^^^^^^^
     |     fail("Expected non-greedy match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:193:15-193:22:
+<WORKDIR>/string/regex_test.mbt:233:15-233:22:
     | ///|
     | test "add/sequence" {
     |   let regex = @string.Regex::string("ab") + @string.Regex::string("cd")
-193 |   guard regex.execute("xxabcdyy") is Some(m) else {
+233 |   guard regex.execute("xxabcdyy") is Some(m) else {
     |               ^^^^^^^
     |     fail("Expected concatenated match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:212:11-212:18:
+<WORKDIR>/string/regex_test.mbt:252:11-252:18:
     | test "bitor/alternation" {
     |   let regex = @string.Regex::string("cat") | @string.Regex::string("dog")
     |   debug_inspect(
-212 |     regex.execute("dog"),
+252 |     regex.execute("dog"),
     |           ^^^^^^^
     |     content=(
     |       #|Some(
 
-<WORKDIR>/string/regex_test.mbt:224:11-224:18:
+<WORKDIR>/string/regex_test.mbt:264:11-264:18:
     |     ),
     |   )
     |   debug_inspect(
-224 |     regex.execute("cow"),
+264 |     regex.execute("cow"),
     |           ^^^^^^^
     |     content=(
     |       #|None
 
-<WORKDIR>/string/regex_test.mbt:244:15-244:22:
+<WORKDIR>/string/regex_test.mbt:284:15-284:22:
     |     domain_part +
     |     @string.Regex::string(".") +
     |     tld
-244 |   guard email.execute("user@example.com") is Some(m) else {
+284 |   guard email.execute("user@example.com") is Some(m) else {
     |               ^^^^^^^
     |     fail("Expected email match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:257:15-257:22:
+<WORKDIR>/string/regex_test.mbt:297:15-297:22:
     |       #|}
     |     ),
     |   )
-257 |   guard email.execute("test.user+tag@my-domain.org") is Some(x) else {
+297 |   guard email.execute("test.user+tag@my-domain.org") is Some(x) else {
     |               ^^^^^^^
     |     fail("Expected complex email match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:280:13-280:20:
+<WORKDIR>/string/regex_test.mbt:320:13-320:20:
     |   let ftp = @string.Regex::string("ftp")
     |   let protocol = http | https | ftp
     |   let url = protocol + @string.Regex::string("://") + re"[^/]+"
-280 |   guard url.execute("https://example.com") is Some(m) else {
+320 |   guard url.execute("https://example.com") is Some(m) else {
     |             ^^^^^^^
     |     fail("Expected URL match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:293:13-293:20:
+<WORKDIR>/string/regex_test.mbt:333:13-333:20:
     |       #|}
     |     ),
     |   )
-293 |   guard url.execute("ftp://files.server.org") is Some(m2) else {
+333 |   guard url.execute("ftp://files.server.org") is Some(m2) else {
     |             ^^^^^^^
     |     fail("Expected FTP URL match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:307:9-307:16:
+<WORKDIR>/string/regex_test.mbt:347:9-347:16:
     |     ),
     |   )
     |   debug_inspect(
-307 |     url.execute("gopher://old.site"),
+347 |     url.execute("gopher://old.site"),
     |         ^^^^^^^
     |     content=(
     |       #|None
 
-<WORKDIR>/string/regex_test.mbt:325:14-325:21:
+<WORKDIR>/string/regex_test.mbt:365:14-365:21:
     |   let dot_sep = @string.Regex::string(".")
     |   let sep = dash_sep | slash_sep | dot_sep
     |   let date = year + sep + month + sep + day
-325 |   guard date.execute("2026-02-26") is Some(m1) else {
+365 |   guard date.execute("2026-02-26") is Some(m1) else {
     |              ^^^^^^^
     |     fail("Expected dash date match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:338:14-338:21:
+<WORKDIR>/string/regex_test.mbt:378:14-378:21:
     |       #|}
     |     ),
     |   )
-338 |   guard date.execute("2026/02/26") is Some(m2) else {
+378 |   guard date.execute("2026/02/26") is Some(m2) else {
     |              ^^^^^^^
     |     fail("Expected slash date match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:351:14-351:21:
+<WORKDIR>/string/regex_test.mbt:391:14-391:21:
     |       #|}
     |     ),
     |   )
-351 |   guard date.execute("2026.02.26") is Some(m3) else {
+391 |   guard date.execute("2026.02.26") is Some(m3) else {
     |              ^^^^^^^
     |     fail("Expected dot date match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:374:23-374:30:
+<WORKDIR>/string/regex_test.mbt:414:23-414:30:
     |   let identifier = start_char + id_char.repeat(min=0)
     |   let namespace_sep = @string.Regex::string("::")
     |   let namespaced_id = (identifier + namespace_sep).repeat(min=0) + identifier
-374 |   guard namespaced_id.execute("std::string::length") is Some(m) else {
+414 |   guard namespaced_id.execute("std::string::length") is Some(m) else {
     |                       ^^^^^^^
     |     fail("Expected namespaced identifier match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:387:23-387:30:
+<WORKDIR>/string/regex_test.mbt:427:23-427:30:
     |       #|}
     |     ),
     |   )
-387 |   guard namespaced_id.execute("_internal_var") is Some(m2) else {
+427 |   guard namespaced_id.execute("_internal_var") is Some(m2) else {
     |                       ^^^^^^^
     |     fail("Expected simple identifier match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:401:23-401:30:
+<WORKDIR>/string/regex_test.mbt:441:23-441:30:
     |     ),
     |   )
     |   // Test should fail to match if starting with digit - the match skips leading digits
-401 |   guard namespaced_id.execute("123invalid") is Some(m3) else {
+441 |   guard namespaced_id.execute("123invalid") is Some(m3) else {
     |                       ^^^^^^^
     |     fail("Expected match somewhere in string")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:432:18-432:25:
+<WORKDIR>/string/regex_test.mbt:472:18-472:25:
     |     re"[^\]]+" +
     |     @string.Regex::string("]")
     |   let log_line = timestamp + @string.Regex::string(" ") + level
-432 |   guard log_line.execute("[2026-02-26 10:30:45] ERROR") is Some(m) else {
+472 |   guard log_line.execute("[2026-02-26 10:30:45] ERROR") is Some(m) else {
     |                  ^^^^^^^
     |     fail("Expected log line match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:445:18-445:25:
+<WORKDIR>/string/regex_test.mbt:485:18-485:25:
     |       #|}
     |     ),
     |   )
-445 |   guard log_line.execute("[10:30] WARNING") is Some(m2) else {
+485 |   guard log_line.execute("[10:30] WARNING") is Some(m2) else {
     |                  ^^^^^^^
     |     fail("Expected warning match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:479:15-479:22:
+<WORKDIR>/string/regex_test.mbt:519:15-519:22:
     |     prefix +
     |     (space | dash).repeat(min=0, max=1) +
     |     line
-479 |   guard phone.execute("+1 (555)123-4567") is Some(m) else {
+519 |   guard phone.execute("+1 (555)123-4567") is Some(m) else {
     |               ^^^^^^^
     |     fail("Expected phone match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:510:16-510:23:
+<WORKDIR>/string/regex_test.mbt:550:16-550:23:
     |   let semver = major_minor_patch +
     |     pre_release.repeat(min=0, max=1) +
     |     build_meta.repeat(min=0, max=1)
-510 |   guard semver.execute("1.2.3") is Some(m1) else {
+550 |   guard semver.execute("1.2.3") is Some(m1) else {
     |                ^^^^^^^
     |     fail("Expected simple version match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:523:16-523:23:
+<WORKDIR>/string/regex_test.mbt:563:16-563:23:
     |       #|}
     |     ),
     |   )
-523 |   guard semver.execute("2.0.0-beta.1+20260226") is Some(m2) else {
+563 |   guard semver.execute("2.0.0-beta.1+20260226") is Some(m2) else {
     |                ^^^^^^^
     |     fail("Expected full version match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:548:15-548:22:
+<WORKDIR>/string/regex_test.mbt:588:15-588:22:
     |   let long_color = hash + hex + hex + hex + hex + hex + hex
     |   let short_color = hash + hex + hex + hex
     |   let color = alpha_color | long_color | short_color
-548 |   guard color.execute("#FFF") is Some(m1) else {
+588 |   guard color.execute("#FFF") is Some(m1) else {
     |               ^^^^^^^
     |     fail("Expected short hex match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:561:15-561:22:
+<WORKDIR>/string/regex_test.mbt:601:15-601:22:
     |       #|}
     |     ),
     |   )
-561 |   guard color.execute("#FF5733") is Some(m2) else {
+601 |   guard color.execute("#FF5733") is Some(m2) else {
     |               ^^^^^^^
     |     fail("Expected long hex match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:574:15-574:22:
+<WORKDIR>/string/regex_test.mbt:614:15-614:22:
     |       #|}
     |     ),
     |   )
-574 |   guard color.execute("#FF5733AA") is Some(m3) else {
+614 |   guard color.execute("#FF5733AA") is Some(m3) else {
     |               ^^^^^^^
     |     fail("Expected alpha hex match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:606:16-606:23:
+<WORKDIR>/string/regex_test.mbt:646:16-646:23:
     |     int +
     |     frac.repeat(min=0, max=1) +
     |     exp.repeat(min=0, max=1)
-606 |   guard number.execute("-42") is Some(m1) else {
+646 |   guard number.execute("-42") is Some(m1) else {
     |                ^^^^^^^
     |     fail("Expected integer match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:619:16-619:23:
+<WORKDIR>/string/regex_test.mbt:659:16-659:23:
     |       #|}
     |     ),
     |   )
-619 |   guard number.execute("3.14159") is Some(m2) else {
+659 |   guard number.execute("3.14159") is Some(m2) else {
     |                ^^^^^^^
     |     fail("Expected float match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:632:16-632:23:
+<WORKDIR>/string/regex_test.mbt:672:16-672:23:
     |       #|}
     |     ),
     |   )
-632 |   guard number.execute("6.022e23") is Some(m3) else {
+672 |   guard number.execute("6.022e23") is Some(m3) else {
     |                ^^^^^^^
     |     fail("Expected scientific match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:651:13-651:20:
+<WORKDIR>/string/regex_test.mbt:691:13-691:20:
     | test "add/with_any_quantifier" {
     |   let re1 = re".*?\."
     |   let re2 = re1 + @string.Regex::string(" ")
-651 |   guard re1.execute("abc.") is Some(_) else { fail("Expected match") }
+691 |   guard re1.execute("abc.") is Some(_) else { fail("Expected match") }
     |             ^^^^^^^
     |   guard re2.execute("abc. ") is Some(_) else { fail("Expected match") }
     | }
 
-<WORKDIR>/string/regex_test.mbt:652:13-652:20:
+<WORKDIR>/string/regex_test.mbt:692:13-692:20:
     |   let re1 = re".*?\."
     |   let re2 = re1 + @string.Regex::string(" ")
     |   guard re1.execute("abc.") is Some(_) else { fail("Expected match") }
-652 |   guard re2.execute("abc. ") is Some(_) else { fail("Expected match") }
+692 |   guard re2.execute("abc. ") is Some(_) else { fail("Expected match") }
     |             ^^^^^^^
     | }
     | 
 
-<WORKDIR>/string/regex_test.mbt:659:12-659:19:
+<WORKDIR>/string/regex_test.mbt:699:12-699:19:
     | test "add/with_any_quantifier_and_empty_wrappers" {
     |   let empty = @string.Regex::string("")
     |   let re = empty + re".*?\." + empty + @string.Regex::string(" ")
-659 |   guard re.execute("abc. ") is Some(m) else { fail("Expected match") }
+699 |   guard re.execute("abc. ") is Some(m) else { fail("Expected match") }
     |            ^^^^^^^
     |   inspect(m.content(), content="abc. ")
     | }
 
-<WORKDIR>/string/regex_test.mbt:677:17-677:24:
+<WORKDIR>/string/regex_test.mbt:717:17-717:24:
     | ///|
     | test "escaped_dash_in_char_class" {
     |   let regex = re"[a\-z]"
-677 |   inspect(regex.execute("a-z") is Some(_), content="true")
+717 |   inspect(regex.execute("a-z") is Some(_), content="true")
     |                 ^^^^^^^
     |   inspect(regex.execute("b") is Some(_), content="false")
     |   inspect(regex.execute("-") is Some(_), content="true")
 
-<WORKDIR>/string/regex_test.mbt:678:17-678:24:
+<WORKDIR>/string/regex_test.mbt:718:17-718:24:
     | test "escaped_dash_in_char_class" {
     |   let regex = re"[a\-z]"
     |   inspect(regex.execute("a-z") is Some(_), content="true")
-678 |   inspect(regex.execute("b") is Some(_), content="false")
+718 |   inspect(regex.execute("b") is Some(_), content="false")
     |                 ^^^^^^^
     |   inspect(regex.execute("-") is Some(_), content="true")
     |   inspect(regex.execute("a") is Some(_), content="true")
 
-<WORKDIR>/string/regex_test.mbt:679:17-679:24:
+<WORKDIR>/string/regex_test.mbt:719:17-719:24:
     |   let regex = re"[a\-z]"
     |   inspect(regex.execute("a-z") is Some(_), content="true")
     |   inspect(regex.execute("b") is Some(_), content="false")
-679 |   inspect(regex.execute("-") is Some(_), content="true")
+719 |   inspect(regex.execute("-") is Some(_), content="true")
     |                 ^^^^^^^
     |   inspect(regex.execute("a") is Some(_), content="true")
     |   inspect(regex.execute("z") is Some(_), content="true")
 
-<WORKDIR>/string/regex_test.mbt:680:17-680:24:
+<WORKDIR>/string/regex_test.mbt:720:17-720:24:
     |   inspect(regex.execute("a-z") is Some(_), content="true")
     |   inspect(regex.execute("b") is Some(_), content="false")
     |   inspect(regex.execute("-") is Some(_), content="true")
-680 |   inspect(regex.execute("a") is Some(_), content="true")
+720 |   inspect(regex.execute("a") is Some(_), content="true")
     |                 ^^^^^^^
     |   inspect(regex.execute("z") is Some(_), content="true")
     | }
 
-<WORKDIR>/string/regex_test.mbt:681:17-681:24:
+<WORKDIR>/string/regex_test.mbt:721:17-721:24:
     |   inspect(regex.execute("b") is Some(_), content="false")
     |   inspect(regex.execute("-") is Some(_), content="true")
     |   inspect(regex.execute("a") is Some(_), content="true")
-681 |   inspect(regex.execute("z") is Some(_), content="true")
+721 |   inspect(regex.execute("z") is Some(_), content="true")
     |                 ^^^^^^^
     | }
     | 
 
-<WORKDIR>/string/regex_test.mbt:688:15-688:22:
+<WORKDIR>/string/regex_test.mbt:728:15-728:22:
     | test "capture/simple_named_group" {
     |   let digit = re"[[:digit:]]+".capture("number")
     |   let regex = @string.Regex::string("ID: ") + digit
-688 |   guard regex.execute("ID: 12345") is Some(m) else { fail("Expected match") }
+728 |   guard regex.execute("ID: 12345") is Some(m) else { fail("Expected match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="ID: 12345")
     |   debug_inspect(
 
-<WORKDIR>/string/regex_test.mbt:708:15-708:22:
+<WORKDIR>/string/regex_test.mbt:748:15-748:22:
     |     domain +
     |     @string.Regex::string(".") +
     |     tld
-708 |   guard email.execute("john@example.com") is Some(m) else {
+748 |   guard email.execute("john@example.com") is Some(m) else {
     |               ^^^^^^^
     |     fail("Expected match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:741:35-741:42:
+<WORKDIR>/string/regex_test.mbt:781:35-781:42:
     | ///|
     | test "execute/alternation with an overlapping branch" {
     |   // The two branches are the same expression, so both accept 'a'.
-741 |   guard @string.Regex("(?:a|a)c").execute("ac") is Some(m) else {
+781 |   guard @string.Regex("(?:a|a)c").execute("ac") is Some(m) else {
     |                                   ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:746:35-746:42:
+<WORKDIR>/string/regex_test.mbt:786:35-786:42:
     |   }
     |   inspect(m.content(), content="ac")
     |   // The continuation must be consumed once, not twice.
-746 |   guard @string.Regex("(?:a|a)c").execute("acc") is Some(m) else {
+786 |   guard @string.Regex("(?:a|a)c").execute("acc") is Some(m) else {
     |                                   ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:751:36-751:43:
+<WORKDIR>/string/regex_test.mbt:791:36-791:43:
     |   }
     |   inspect(m.content(), content="ac")
     |   // ...however long it is.
-751 |   guard @string.Regex("(?:a|a)bc").execute("abcbc") is Some(m) else {
+791 |   guard @string.Regex("(?:a|a)bc").execute("abcbc") is Some(m) else {
     |                                    ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:762:15-762:22:
+<WORKDIR>/string/regex_test.mbt:802:15-802:22:
     |   let regex = @string.Regex("(?:[ab]|[bc])x")
     |   // 'a' comes only from the left branch, 'c' only from the right, and 'b'
     |   // from both — it is the shared one that used to fail.
-762 |   guard regex.execute("ax") is Some(m) else { fail("expected a match") }
+802 |   guard regex.execute("ax") is Some(m) else { fail("expected a match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="ax")
     |   guard regex.execute("bx") is Some(m) else { fail("expected a match") }
 
-<WORKDIR>/string/regex_test.mbt:764:15-764:22:
+<WORKDIR>/string/regex_test.mbt:804:15-804:22:
     |   // from both — it is the shared one that used to fail.
     |   guard regex.execute("ax") is Some(m) else { fail("expected a match") }
     |   inspect(m.content(), content="ax")
-764 |   guard regex.execute("bx") is Some(m) else { fail("expected a match") }
+804 |   guard regex.execute("bx") is Some(m) else { fail("expected a match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="bx")
     |   guard regex.execute("cx") is Some(m) else { fail("expected a match") }
 
-<WORKDIR>/string/regex_test.mbt:766:15-766:22:
+<WORKDIR>/string/regex_test.mbt:806:15-806:22:
     |   inspect(m.content(), content="ax")
     |   guard regex.execute("bx") is Some(m) else { fail("expected a match") }
     |   inspect(m.content(), content="bx")
-766 |   guard regex.execute("cx") is Some(m) else { fail("expected a match") }
+806 |   guard regex.execute("cx") is Some(m) else { fail("expected a match") }
     |               ^^^^^^^
     |   inspect(m.content(), content="cx")
     |   // The same alternation reached through the combinator API.
 
-<WORKDIR>/string/regex_test.mbt:770:18-770:25:
+<WORKDIR>/string/regex_test.mbt:810:18-810:25:
     |   inspect(m.content(), content="cx")
     |   // The same alternation reached through the combinator API.
     |   let combined = (re"[ab]" | re"[bc]") + re"x"
-770 |   guard combined.execute("bx") is Some(m) else { fail("expected a match") }
+810 |   guard combined.execute("bx") is Some(m) else { fail("expected a match") }
     |                  ^^^^^^^
     |   inspect(m.content(), content="bx")
     | }
 
-<WORKDIR>/string/regex_test.mbt:777:36-777:43:
+<WORKDIR>/string/regex_test.mbt:817:36-817:43:
     | ///|
     | test "execute/alternation branches of different lengths" {
     |   // Both branches start with 'a', and they finish at different points.
-777 |   guard @string.Regex("(?:a|ab)c").execute("ac") is Some(m) else {
+817 |   guard @string.Regex("(?:a|ab)c").execute("ac") is Some(m) else {
     |                                    ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:781:36-781:43:
+<WORKDIR>/string/regex_test.mbt:821:36-821:43:
     |     fail("expected a match")
     |   }
     |   inspect(m.content(), content="ac")
-781 |   guard @string.Regex("(?:ab|a)c").execute("abc") is Some(m) else {
+821 |   guard @string.Regex("(?:ab|a)c").execute("abc") is Some(m) else {
     |                                    ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:787:41-787:48:
+<WORKDIR>/string/regex_test.mbt:827:41-827:48:
     |   inspect(m.content(), content="abc")
     |   // A span that is not in the language must not be reported: from 0 only
     |   // `a` applies, so the match can end at 1 or 2 but never at 3.
-787 |   guard @string.Regex("(?:.a|a)(?:b|)").execute("abb") is Some(m) else {
+827 |   guard @string.Regex("(?:.a|a)(?:b|)").execute("abb") is Some(m) else {
     |                                         ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:797:38-797:45:
+<WORKDIR>/string/regex_test.mbt:837:38-837:45:
     | test "execute/overlapping alternation under a counted repetition" {
     |   // Each iteration can only take one character here, so the bounds are what
     |   // decide the length.
-797 |   guard @string.Regex("(?:.|ab){2}").execute("aaaaa") is Some(m) else {
+837 |   guard @string.Regex("(?:.|ab){2}").execute("aaaaa") is Some(m) else {
     |                                      ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:801:40-801:47:
+<WORKDIR>/string/regex_test.mbt:841:40-841:47:
     |     fail("expected a match")
     |   }
     |   inspect(m.content(), content="aa")
-801 |   guard @string.Regex("(?:.|ab){2,4}").execute("aaaaa") is Some(m) else {
+841 |   guard @string.Regex("(?:.|ab){2,4}").execute("aaaaa") is Some(m) else {
     |                                        ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:810:37-810:44:
+<WORKDIR>/string/regex_test.mbt:850:37-850:44:
     | ///|
     | test "execute/overlapping alternation keeps anchors and preference" {
     |   // Anchored: the whole subject has to be consumed exactly once.
-810 |   guard @string.Regex("^(?:a|a)c$").execute("ac") is Some(m) else {
+850 |   guard @string.Regex("^(?:a|a)c$").execute("ac") is Some(m) else {
     |                                     ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:814:39-814:46:
+<WORKDIR>/string/regex_test.mbt:854:39-854:46:
     |     fail("expected a match")
     |   }
     |   inspect(m.content(), content="ac")
-814 |   inspect(@string.Regex("^(?:a|a)c$").execute("acc") is None, content="true")
+854 |   inspect(@string.Regex("^(?:a|a)c$").execute("acc") is None, content="true")
     |                                       ^^^^^^^
     |   // Preference survives the overlap: the greedy branch wins the character
     |   // and the lazy one yields it, and the capture reports which.
 
-<WORKDIR>/string/regex_test.mbt:817:41-817:48:
+<WORKDIR>/string/regex_test.mbt:857:41-857:48:
     |   inspect(@string.Regex("^(?:a|a)c$").execute("acc") is None, content="true")
     |   // Preference survives the overlap: the greedy branch wins the character
     |   // and the lazy one yields it, and the capture reports which.
-817 |   guard @string.Regex("(?:(a+)|a)(a*)").execute("aaa") is Some(m) else {
+857 |   guard @string.Regex("(?:(a+)|a)(a*)").execute("aaa") is Some(m) else {
     |                                         ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:827:42-827:49:
+<WORKDIR>/string/regex_test.mbt:867:42-867:49:
     |       #|Some(<StringView: "aaa">)
     |     ),
     |   )
-827 |   guard @string.Regex("(?:(a+?)|a)(a*)").execute("aaa") is Some(m) else {
+867 |   guard @string.Regex("(?:(a+?)|a)(a*)").execute("aaa") is Some(m) else {
     |                                          ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:838:39-838:46:
+<WORKDIR>/string/regex_test.mbt:878:39-878:46:
     |     ),
     |   )
     |   // The left branch is preferred where both accept the character.
-838 |   guard @string.Regex("(?:(a)|(a))b").execute("ab") is Some(m) else {
+878 |   guard @string.Regex("(?:(a)|(a))b").execute("ab") is Some(m) else {
     |                                       ^^^^^^^
     |     fail("expected a match")
     |   }
 
-<WORKDIR>/string/regex_test.mbt:867:17-867:24:
+<WORKDIR>/string/regex_test.mbt:907:17-907:24:
     |       Regex("^(?:.a?){2,}$"),
     |       Regex("^(?:.a?){2,}?$"),
     |     ] {
-867 |     guard regex.execute(subject) is Some(m) else { fail("expected a match") }
+907 |     guard regex.execute(subject) is Some(m) else { fail("expected a match") }
     |                 ^^^^^^^
     |     assert_eq(m.content().length(), subject.length())
     |   }
 
-<WORKDIR>/string/regex_test.mbt:878:15-878:22:
+<WORKDIR>/string/regex_test.mbt:918:15-918:22:
     |   let first = word.capture("first")
     |   let second = word.capture("second")
     |   let regex = first + @string.Regex::string(" ") + second
-878 |   guard regex.execute("hello world") is Some(m) else { fail("Expected match") }
+918 |   guard regex.execute("hello world") is Some(m) else { fail("Expected match") }
     |               ^^^^^^^
     |   debug_inspect(
     |     m.named_group("first"),
+
+<WORKDIR>/string/regex_test.mbt:947:12-947:19:
+    |   }
+    |   let literal = sb.to_string()
+    |   let re = @string.Regex::string(literal)
+947 |   guard re.execute("x" + literal + "x") is Some(m) else {
+    |            ^^^^^^^
+    |     fail("Expected match")
+    |   }
+
+<WORKDIR>/string/regex_test.mbt:952:15-952:22:
+    |   }
+    |   inspect(m.content().length(), content="100000")
+    |   let twice = re.repeat(min=2, max=2)
+952 |   guard twice.execute(literal + literal) is Some(m2) else {
+    |               ^^^^^^^
+    |     fail("Expected match")
+    |   }
+
+<WORKDIR>/string/regex_test.mbt:965:12-965:19:
+    |   // group-0 start mark, so this pattern needed slot 2048 and the match was
+    |   // silently lost (release) or `debug_assert` fired (debug).
+    |   let re = @string.Regex::unsafe_from_string("(a)(?:a{256}){9}")
+965 |   guard re.execute("a".repeat(2400)) is Some(m) else { fail("Expected match") }
+    |            ^^^^^^^
+    |   inspect(m.before().length(), content="0")
+    |   inspect(m.content().length(), content="2305")
 
 ```

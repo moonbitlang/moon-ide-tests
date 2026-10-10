@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'VNode' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
-Found 68 references for symbol 'VNode':
+Found 70 references for symbol 'VNode':
 <WORKDIR>/rabbita/html/html.mbt:2:34-2:39:
   | ///|
 2 | using @vdom {type Children, type VNode}
@@ -35,38 +35,38 @@ Found 68 references for symbol 'VNode':
    | 
    | ///|
 
-<WORKDIR>/rabbita/html/html.mbt:13:51-13:56:
-   | pub(all) struct Html(@vdom.VNode) derive(Eq)
+<WORKDIR>/rabbita/html/html.mbt:16:51-16:56:
+   | pub extend Html with Eq::{equal, not_equal}
    | 
    | ///|
-13 | pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
+16 | pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
    |                                                   ^^^^^
    |   self.0
    | }
 
-<WORKDIR>/rabbita/html/html.mbt:18:38-18:43:
+<WORKDIR>/rabbita/html/html.mbt:21:38-21:43:
    | }
    | 
    | ///|
-18 | pub fn Html::from_vnode(vdom : @vdom.VNode) -> Html {
+21 | pub fn Html::from_vnode(vdom : @vdom.VNode) -> Html {
    |                                      ^^^^^
    |   Html(vdom)
    | }
 
-<WORKDIR>/rabbita/html/html.mbt:58:9-58:14:
+<WORKDIR>/rabbita/html/html.mbt:61:9-61:14:
    | 
    | ///|
    | pub fn fragment(children : Array[Html]) -> Html {
-58 |   @vdom.VNode::fragment(children.map(x => x.0))
+61 |   @vdom.VNode::fragment(children.map(x => x.0))
    |         ^^^^^
    | }
    | 
 
-<WORKDIR>/rabbita/html/html.mbt:878:9-878:14:
+<WORKDIR>/rabbita/html/html.mbt:881:9-881:14:
     |   push_style(style, attrs)
     |   push_class(class, attrs)
     |   push_id(id, attrs)
-878 |   @vdom.VNode::link(attrs.to_props(), children, escape~)
+881 |   @vdom.VNode::link(attrs.to_props(), children, escape~)
     |         ^^^^^
     | }
     | 
@@ -168,11 +168,11 @@ Found 68 references for symbol 'VNode':
     |   scheduler : &Scheduler,
     |   captured_link_listener : @dom.Listener,
 
-<WORKDIR>/rabbita/internal/vdom/diff.mbt:680:18-680:23:
+<WORKDIR>/rabbita/internal/vdom/diff.mbt:684:18-684:23:
     | #cfg(target="js")
     | fn diff_children(
     |   old : Children[INode],
-680 |   new : Children[VNode],
+684 |   new : Children[VNode],
     |                  ^^^^^
     |   scheduler : &Scheduler,
     |   captured_link_listener : @dom.Listener,
@@ -249,29 +249,29 @@ Found 68 references for symbol 'VNode':
     |   scheduler : &Scheduler,
     |   captured_link_listener : @dom.Listener,
 
-<WORKDIR>/rabbita/internal/vdom/ssr.mbt:131:11-131:16:
+<WORKDIR>/rabbita/internal/vdom/ssr.mbt:136:11-136:16:
     | ///|
     | fn vnode_to_string(
     |   buf : StringBuilder,
-131 |   vnode : VNode,
+136 |   vnode : VNode,
     |           ^^^^^
     |   in_raw_text_element : Bool,
     | ) -> Unit {
 
-<WORKDIR>/rabbita/internal/vdom/ssr.mbt:204:23-204:28:
+<WORKDIR>/rabbita/internal/vdom/ssr.mbt:209:23-209:28:
     | ///|
     | fn children_to_string(
     |   buf : StringBuilder,
-204 |   children : Children[VNode],
+209 |   children : Children[VNode],
     |                       ^^^^^
     |   in_raw_text_element : Bool,
     | ) -> Unit {
 
-<WORKDIR>/rabbita/internal/vdom/ssr.mbt:221:42-221:47:
+<WORKDIR>/rabbita/internal/vdom/ssr.mbt:226:42-226:47:
     | }
     | 
     | ///|
-221 | pub fn server_side_render(render : () -> VNode) -> String {
+226 | pub fn server_side_render(render : () -> VNode) -> String {
     |                                          ^^^^^
     |   let vnode = render()
     |   let buf = StringBuilder()
@@ -339,6 +339,15 @@ Found 68 references for symbol 'VNode':
    |   )
    |   inspect(
 
+<WORKDIR>/rabbita/internal/vdom/ssr_wbtest.mbt:53:15-53:20:
+   |     "readOnly": Boolean(true),
+   |     "noValidate": Boolean(false),
+   |   }
+53 |   let input = VNode::elem("input", Props::new({}, props, {}, {}), Array([]))
+   |               ^^^^^
+   |   inspect(
+   |     server_side_render(() => input),
+
 <WORKDIR>/rabbita/internal/vdom/vdom.mbt:7:32-7:37:
   | ///|
   | #warnings("-unused_constructor")
@@ -375,185 +384,194 @@ Found 68 references for symbol 'VNode':
    |   physical_equal(a, b)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:64:8-64:13:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:19:12-19:17:
    | }
    | 
    | ///|
-64 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
+19 | pub extend VNode with Eq::{equal, not_equal}
+   |            ^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:67:8-67:13:
+   | }
+   | 
+   | ///|
+67 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
    |        ^^^^^
    |   VNode::Thunk(hash, f)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:64:43-64:48:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:67:43-67:48:
    | }
    | 
    | ///|
-64 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
+67 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
    |                                           ^^^^^
    |   VNode::Thunk(hash, f)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:64:53-64:58:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:67:53-67:58:
    | }
    | 
    | ///|
-64 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
+67 | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
    |                                                     ^^^^^
    |   VNode::Thunk(hash, f)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:65:3-65:8:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:68:3-68:8:
    | 
    | ///|
    | pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
-65 |   VNode::Thunk(hash, f)
+68 |   VNode::Thunk(hash, f)
    |   ^^^^^
    | }
    | 
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:69:8-69:13:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:72:8-72:13:
    | }
    | 
    | ///|
-69 | pub fn VNode::elem(
+72 | pub fn VNode::elem(
    |        ^^^^^
    |   tag : String,
    |   props : Props,
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:72:23-72:28:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:75:23-75:28:
    | pub fn VNode::elem(
    |   tag : String,
    |   props : Props,
-72 |   children : Children[VNode],
+75 |   children : Children[VNode],
    |                       ^^^^^
    |   namespace_uri? : String,
    | ) -> VNode {
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:74:6-74:11:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:77:6-77:11:
    |   props : Props,
    |   children : Children[VNode],
    |   namespace_uri? : String,
-74 | ) -> VNode {
+77 | ) -> VNode {
    |      ^^^^^
    |   Elem(tag, props, children, namespace_uri~)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:79:8-79:13:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:82:8-82:13:
    | }
    | 
    | ///|
-79 | pub fn VNode::text(s : String) -> VNode {
+82 | pub fn VNode::text(s : String) -> VNode {
    |        ^^^^^
    |   Text(s)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:79:35-79:40:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:82:35-82:40:
    | }
    | 
    | ///|
-79 | pub fn VNode::text(s : String) -> VNode {
+82 | pub fn VNode::text(s : String) -> VNode {
    |                                   ^^^^^
    |   Text(s)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:84:8-84:13:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:87:8-87:13:
    | }
    | 
    | ///|
-84 | pub fn VNode::link(
+87 | pub fn VNode::link(
    |        ^^^^^
    |   props : Props,
    |   children : Children[VNode],
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:86:23-86:28:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:89:23-89:28:
    | ///|
    | pub fn VNode::link(
    |   props : Props,
-86 |   children : Children[VNode],
+89 |   children : Children[VNode],
    |                       ^^^^^
    |   escape? : Bool = false,
    | ) -> VNode {
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:88:6-88:11:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:91:6-91:11:
    |   props : Props,
    |   children : Children[VNode],
    |   escape? : Bool = false,
-88 | ) -> VNode {
+91 | ) -> VNode {
    |      ^^^^^
    |   let tag = if escape { "a" } else { CAPTURED_LINK_TAG }
    |   VNode::elem(tag, props, children)
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:90:3-90:8:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:93:3-93:8:
    |   escape? : Bool = false,
    | ) -> VNode {
    |   let tag = if escape { "a" } else { CAPTURED_LINK_TAG }
-90 |   VNode::elem(tag, props, children)
+93 |   VNode::elem(tag, props, children)
    |   ^^^^^
    | }
    | 
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:94:8-94:13:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:97:8-97:13:
    | }
    | 
    | ///|
-94 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
+97 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
    |        ^^^^^
    |   Frag(childs)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:94:39-94:44:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:97:39-97:44:
    | }
    | 
    | ///|
-94 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
+97 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
    |                                       ^^^^^
    |   Frag(childs)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:94:50-94:55:
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:97:50-97:55:
    | }
    | 
    | ///|
-94 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
+97 | pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
    |                                                  ^^^^^
    |   Frag(childs)
    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:99:8-99:13:
-   | }
-   | 
-   | ///|
-99 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
-   |        ^^^^^
-   |   Elem("html", props, Array([head, body]), namespace_uri=None)
-   | }
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:102:8-102:13:
+    | }
+    | 
+    | ///|
+102 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
+    |        ^^^^^
+    |   Elem("html", props, Array([head, body]), namespace_uri=None)
+    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:99:46-99:51:
-   | }
-   | 
-   | ///|
-99 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
-   |                                              ^^^^^
-   |   Elem("html", props, Array([head, body]), namespace_uri=None)
-   | }
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:102:46-102:51:
+    | }
+    | 
+    | ///|
+102 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
+    |                                              ^^^^^
+    |   Elem("html", props, Array([head, body]), namespace_uri=None)
+    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:99:60-99:65:
-   | }
-   | 
-   | ///|
-99 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
-   |                                                            ^^^^^
-   |   Elem("html", props, Array([head, body]), namespace_uri=None)
-   | }
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:102:60-102:65:
+    | }
+    | 
+    | ///|
+102 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
+    |                                                            ^^^^^
+    |   Elem("html", props, Array([head, body]), namespace_uri=None)
+    | }
 
-<WORKDIR>/rabbita/internal/vdom/vdom.mbt:99:70-99:75:
-   | }
-   | 
-   | ///|
-99 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
-   |                                                                      ^^^^^
-   |   Elem("html", props, Array([head, body]), namespace_uri=None)
-   | }
+<WORKDIR>/rabbita/internal/vdom/vdom.mbt:102:70-102:75:
+    | }
+    | 
+    | ///|
+102 | pub fn VNode::document(props : Props, head : VNode, body : VNode) -> VNode {
+    |                                                                      ^^^^^
+    |   Elem("html", props, Array([head, body]), namespace_uri=None)
+    | }
 
 <WORKDIR>/rabbita/internal/vdom/vdom_relocation_wbtest.mbt:96:22-96:27:
    |       ("second", INode::Text("second", second)),

@@ -26,56 +26,56 @@ Found 8 references for symbol 'Path':
   | 
   | ///|
 
-<WORKDIR>/warren/devhub/devhub.mbt:236:42-236:46:
+<WORKDIR>/warren/devhub/devhub.mbt:242:42-242:46:
     |       }
     |       match resource {
     |         Some((resource_path, content)) => {
-236 |           let content_type = match @path.Path::extname(resource_path) {
+242 |           let content_type = match @path.Path::extname(resource_path) {
     |                                          ^^^^
     |             ".png" => "image/png"
     |             ".jpg" | ".jpeg" => "image/jpeg"
 
-<WORKDIR>/warren/path/artifact_path.mbt:48:21-48:25:
+<WORKDIR>/warren/path/artifact_path.mbt:78:21-78:25:
    | 
    | ///|
    | pub fn ArtifactPath::join_relative(s1 : Self, s2 : String) -> ArtifactPath {
-48 |   { ..s1, relative: Path::join(s1.relative, s2).0, }
+78 |   { ..s1, relative: Path::join(s1.relative, s2).0, }
    |                     ^^^^
    | }
    | 
 
-<WORKDIR>/warren/path/mooncakeio_path.mbt:16:3-16:7:
+<WORKDIR>/warren/path/mooncakeio_path.mbt:22:3-22:7:
    | 
    | ///|
    | pub fn MooncakesPath::join(a : Self, b : String) -> Self {
-16 |   Path::join(a.0, b).0
+22 |   Path::join(a.0, b).0
    |   ^^^^
    | }
    | 
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:14:3-14:7:
+<WORKDIR>/warren/path/sourcetree_path.mbt:26:3-26:7:
    | 
    | ///|
    | pub fn SourcePath::new(s : String) -> Self {
-14 |   Path::resolve(s).0
+26 |   Path::resolve(s).0
    |   ^^^^
    | }
    | 
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:24:3-24:7:
+<WORKDIR>/warren/path/sourcetree_path.mbt:39:3-39:7:
    | 
    | ///|
    | pub fn SourcePath::join(a : Self, b : String) -> Self {
-24 |   Path::join(a.0, b).normalize().0
+39 |   Path::join(a.0, b).normalize().0
    |   ^^^^
    | }
    | 
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:29:3-29:7:
+<WORKDIR>/warren/path/sourcetree_path.mbt:44:3-44:7:
    | 
    | ///|
    | pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
-29 |   Path::relative(a.0, base=base.0).0
+44 |   Path::relative(a.0, base=base.0).0
    |   ^^^^
    | }
 
