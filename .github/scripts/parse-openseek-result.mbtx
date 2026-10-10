@@ -1,0 +1,147 @@
+///|
+import {
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+}
+
+///|
+fn try_parse_json(text : StringView) -> Json? {
+  Some(@json.parse(text)) catch {
+    _ => None
+  }
+}
+
+///|
+fn workspace_path(path : String) -> String {
+  match @env.get_env_var("GITHUB_WORKSPACE") {
+    Some(workspace) => workspace + "/" + path
+    None => path
+  }
+}
+
+///|
+fn parse_json_code_blocks(text : String) -> Json? {
+  let mut offset = 0
+  let mut last_json : Json? = None
+  while offset < text.length() {
+    let opening = match text[offset:].find("```") {
+      Some(pos) => offset + pos
+      None => break
+    }
+    let header_start = opening + 3
+    let header_end = match text[header_start:].find("\n") {
+      Some(pos) => header_start + pos
+      None => break
+    }
+    let content_start = header_end + 1
+    let closing = match text[content_start:].find("```") {
+      Some(pos) => content_start + pos
+      None => break
+    }
+
+    let language = text[header_start:header_end].trim().to_lower()
+    if language == "" || language == "json" {
+      match try_parse_json(text[content_start:closing].trim()) {
+        Some(parsed) => last_json = Some(parsed)
+        None => ()
+      }
+    }
+    offset = closing + 3
+  }
+  last_json
+}
+
+///|
+fn parse_answer(text : String) -> Json {
+  match try_parse_json(text.trim()) {
+    Some(parsed) => return parsed
+    None => ()
+  }
+  match parse_json_code_blocks(text) {
+    Some(parsed) => parsed
+    None => abort("OpenSeek answer does not contain valid JSON")
+  }
+}
+
+///|
+fn completed_answer(result : Json) -> String {
+  guard result is Object(fields) else {
+    abort("OpenSeek result is not a JSON object")
+  }
+  let status = match fields.get("status") {
+    Some(String(status)) => status
+    _ => abort("OpenSeek result is missing a text status")
+  }
+  if status != "completed" {
+    let reason = match fields.get("reason") {
+      Some(String(reason)) => reason
+      _ => status
+    }
+    abort("OpenSeek review did not complete: " + reason)
+  }
+  match fields.get("output") {
+    Some(Object(output)) =>
+      match output.get("answer") {
+        Some(String(answer)) => answer
+        _ => abort("OpenSeek returned a completed run without a text answer")
+      }
+    _ => abort("OpenSeek returned a completed run without a text answer")
+  }
+}
+
+///|
+fn validate_review(value : Json) -> (Bool, String) {
+  guard value is Object(fields) else {
+    abort("OpenSeek answer is not a JSON object")
+  }
+  for key in fields.keys() {
+    if key != "has_problem" && key != "comment_body" {
+      abort("OpenSeek answer has properties outside the daily review schema")
+    }
+  }
+  let has_problem = match fields.get("has_problem") {
+    Some(True) => true
+    Some(False) => false
+    Some(_) => abort("OpenSeek answer has invalid type for has_problem")
+    None => abort("OpenSeek answer is missing required property: has_problem")
+  }
+  let comment_body = match fields.get("comment_body") {
+    Some(String(body)) => body.trim().to_owned()
+    Some(_) => abort("OpenSeek answer has invalid type for comment_body")
+    None => abort("OpenSeek answer is missing required property: comment_body")
+  }
+  (has_problem, comment_body)
+}
+
+///|
+async fn write_github_output(has_problem : Bool, comment_body : String) -> Unit {
+  let output_path = match @env.get_env_var("GITHUB_OUTPUT") {
+    Some(path) => path
+    None => abort("GITHUB_OUTPUT is not set")
+  }
+  let delimiter = "OPENSEEK_COMMENT_" + @env.now().to_string()
+  let problem_value = if has_problem { "true" } else { "false" }
+  let output = "has_problem=" +
+    problem_value +
+    "\n" +
+    "comment_body<<" +
+    delimiter +
+    "\n" +
+    comment_body +
+    "\n" +
+    delimiter +
+    "\n"
+  @fs.write_file(output_path, output, append=true, create_mode=OpenOrCreate)
+}
+
+///|
+async fn main {
+  let raw = @fs.read_file(workspace_path(".daily-test/openseek-review.json"))
+    .text()
+    .trim()
+  let answer = completed_answer(@json.parse(raw))
+  let (has_problem, comment_body) = validate_review(parse_answer(answer))
+  write_github_output(has_problem, comment_body)
+}

@@ -165,22 +165,45 @@ jobs:
           "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
-      - name: Collect Windows review inputs
-        if: always()
-        shell: powershell
-        run: git status --short > .daily-test\windows-status.txt
-
       - name: Commit Windows daily changes
         shell: powershell
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git diff --quiet -- tests/windows
+
+          # Stage first: the Windows checkout can report CRLF-only worktree
+          # changes that disappear once Git normalizes them into the index.
+          git -c core.safecrlf=false add --renormalize -- tests/windows
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+          git diff --cached --quiet -- tests/windows
           $diffStatus = $LASTEXITCODE
+
+          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+          $windowsStatusText = $windowsStatus -join [Environment]::NewLine
+          if ($windowsStatusText.Length -gt 0) {
+            $windowsStatusText += [Environment]::NewLine
+          }
+          [System.IO.File]::WriteAllText(
+            ".daily-test\windows-status.txt",
+            $windowsStatusText,
+            [System.Text.UTF8Encoding]::new($false)
+          )
+
           if ($diffStatus -eq 1) {
-            git add tests/windows
             git commit -m "chore: update daily Windows IDE baselines"
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
             git push --force-with-lease origin $env:DAILY_BRANCH
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
           } elseif ($diffStatus -ne 0) {
             exit $diffStatus
           }
@@ -206,8 +229,27 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Update MoonBit registry
+        run: |
+          for attempt in 1 2 3; do
+            if moon update; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 10))
+          done
+
       - name: Checkout daily branch
         run: |
+          cp .github/scripts/parse-openseek-result.mbtx "$RUNNER_TEMP/parse-openseek-result.mbtx"
+          cp .github/codex/prompts/daily-test-review.md "$RUNNER_TEMP/daily-test-review.md"
           git fetch --no-tags origin main
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
           git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
@@ -272,71 +314,40 @@ jobs:
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
 
-      - name: Install Codex CLI
-        if: steps.diff.outputs.has_changes == 'true'
-        run: npm install -g @openai/codex
-
-      - name: Restore Codex ChatGPT auth
+      - name: Review daily output with OpenSeek
+        id: openseek
         if: steps.diff.outputs.has_changes == 'true'
         env:
-          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+          DEEPSEEK: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
-          if [ -z "$CODEX_AUTH_JSON" ]; then
-            echo "::error::Set the CODEX_AUTH_JSON repository secret to a file-backed ChatGPT auth.json from codex login."
+          if [ -z "$DEEPSEEK" ]; then
+            echo "::error::Set the DEEPSEEK_API_KEY repository secret to a DeepSeek API key."
             exit 1
           fi
 
-          mkdir -p "$HOME/.codex"
-          chmod 700 "$HOME/.codex"
-          cat > "$HOME/.codex/config.toml" <<'TOML'
-          cli_auth_credentials_store = "file"
-          web_search = "disabled"
-          TOML
+          moonx moonbitlang/openseek@latest \
+            --model deepseek-flash \
+            --thinking high \
+            --max-steps 120 \
+            run \
+            --approval never \
+            --no-session \
+            --dir "$GITHUB_WORKSPACE" \
+            --result-file .daily-test/openseek-review.json \
+            "$(cat "$RUNNER_TEMP/daily-test-review.md")"
 
-          printf '%s' "$CODEX_AUTH_JSON" > "$HOME/.codex/auth.json"
-          chmod 600 "$HOME/.codex/auth.json"
-
-          jq -e '
-            .auth_mode == "chatgpt" and
-            ((.tokens.refresh_token // "") != "")
-          ' "$HOME/.codex/auth.json" >/dev/null
-
-      - name: Review daily output with Codex
-        id: codex
+      - name: Parse OpenSeek review
+        id: openseek-result
         if: steps.diff.outputs.has_changes == 'true'
         run: |
-          codex --ask-for-approval never exec \
-            --sandbox read-only \
-            --ephemeral \
-            --output-schema .github/codex/schemas/daily-test-review.schema.json \
-            -o .daily-test/codex-review.json \
-            "$(cat .github/codex/prompts/daily-test-review.md)"
-
-      - name: Parse Codex review
-        id: codex-result
-        if: steps.diff.outputs.has_changes == 'true'
-        run: |
-          node <<'NODE'
-          const fs = require("fs");
-          const raw = fs.readFileSync(".daily-test/codex-review.json", "utf8").trim();
-          const parsed = JSON.parse(raw);
-          const hasProblem = parsed.has_problem === true;
-          const commentBody = typeof parsed.comment_body === "string" ? parsed.comment_body.trim() : "";
-          const delimiter = `CODEX_COMMENT_${Date.now()}`;
-
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_problem=${hasProblem}\n`);
-          fs.appendFileSync(
-            process.env.GITHUB_OUTPUT,
-            `comment_body<<${delimiter}\n${commentBody}\n${delimiter}\n`,
-          );
-          NODE
+          moon run --target native "$RUNNER_TEMP/parse-openseek-result.mbtx"
 
       - name: Comment on pull request
-        if: steps.diff.outputs.has_changes == 'true' && steps.codex-result.outputs.has_problem == 'true'
+        if: steps.diff.outputs.has_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
         uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
-          COMMENT_BODY: ${{ steps.codex-result.outputs.comment_body }}
+          COMMENT_BODY: ${{ steps.openseek-result.outputs.comment_body }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -347,7 +358,7 @@ jobs:
               throw new Error("Missing pull request number");
             }
             if (!body) {
-              throw new Error("Codex reported a problem but returned an empty comment body");
+              throw new Error("OpenSeek reported a problem but returned an empty comment body");
             }
 
             await github.rest.issues.createComment({
