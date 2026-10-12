@@ -1,0 +1,166 @@
+# core find-references Test test\extends.mbt:22:12
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'Test' --loc 'test\extends.mbt:22:12'
+Found 18 references for symbol 'Test':
+<WORKDIR>/diff\diff_html_test.mbt:161:45-161:49:
+    | }
+    | 
+    | ///|
+161 | test "real-world HTML diff page" (t : @test.Test) {
+    |                                             ^^^^
+    |   // Example 0: verbatim git history — diff/extends.mbt across the API
+    |   // redesign (commit 25334bf6 -> current main), fetched with `git show`.
+
+<WORKDIR>/diff\diff_test.mbt:611:70-611:74:
+    | }
+    | 
+    | ///|
+611 | test "third-party HTML renderer over the public Hunk API" (t : @test.Test) {
+    |                                                                      ^^^^
+    |   // File-based snapshot: the result is a real page at
+    |   // diff/__snapshot__/hunk.html - open it in a browser.
+
+<WORKDIR>/diff\diff_word_test.mbt:221:61-221:65:
+    | }
+    | 
+    | ///|
+221 | test "intraline word diff as a styled HTML page" (t : @test.Test) {
+    |                                                             ^^^^
+    |   // File-based snapshot: open diff/__snapshot__/word_diff.html in a browser.
+    |   let old = [
+
+<WORKDIR>/test\README.mbt.md:93:17-93:21:
+   | ```mbt check
+   | ///|
+   | test "test output" {
+93 |   let t = @test.Test("Example Test")
+   |                 ^^^^
+   | 
+   |   // Write output to test buffer
+
+<WORKDIR>/test\README.mbt.md:115:17-115:21:
+    | ```mbt check
+    | ///|
+    | test "snapshot testing" {
+115 |   let t = @test.Test("Snapshot Test")
+    |                 ^^^^
+    | 
+    |   // Generate some output
+
+<WORKDIR>/test\extends.mbt:22:12-22:16:
+   | ///|
+   | #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+   | #doc(hidden)
+22 | pub extend Test with @debug.Debug::{to_repr}
+   |            ^^^^
+
+<WORKDIR>/test\test.mbt:192:8-192:12:
+    | /// Write data to snapshot buffer, use `snapshot` to output.
+    | /// 
+    | /// See also `@test.Test::writeln`
+192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+    |        ^^^^
+    |   self.buffer.write_string(obj.to_string())
+    | }
+
+<WORKDIR>/test\test.mbt:192:27-192:31:
+    | /// Write data to snapshot buffer, use `snapshot` to output.
+    | /// 
+    | /// See also `@test.Test::writeln`
+192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+    |                           ^^^^
+    |   self.buffer.write_string(obj.to_string())
+    | }
+
+<WORKDIR>/test\test.mbt:200:8-200:12:
+    | /// Write data to snapshot buffer and newline, use `snapshot` to output.
+    | /// 
+    | /// See also `@test.Test::write`
+200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+    |        ^^^^
+    |   self.write(obj)
+    |   self.buffer.write_char('\n')
+
+<WORKDIR>/test\test.mbt:200:29-200:33:
+    | /// Write data to snapshot buffer and newline, use `snapshot` to output.
+    | /// 
+    | /// See also `@test.Test::write`
+200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+    |                             ^^^^
+    |   self.write(obj)
+    |   self.buffer.write_char('\n')
+
+<WORKDIR>/test\test.mbt:210:21-210:25:
+    | /// 
+    | /// ```mbt check
+    | /// test {
+210 | ///   let t = @test.Test("test.txt")
+    |                     ^^^^
+    | ///   t.writeln("hello")
+    | ///   t.snapshot(filename="test.txt") // actual test block end
+
+<WORKDIR>/test\test.mbt:218:8-218:12:
+    | ///
+    | /// Currently it can only be used once and should be used as the last step.
+    | #callsite(autofill(args_loc, loc))
+218 | pub fn Test::snapshot(
+    |        ^^^^
+    |   self : Test,
+    |   filename~ : String,
+
+<WORKDIR>/test\test.mbt:219:10-219:14:
+    | /// Currently it can only be used once and should be used as the last step.
+    | #callsite(autofill(args_loc, loc))
+    | pub fn Test::snapshot(
+219 |   self : Test,
+    |          ^^^^
+    |   filename~ : String,
+    |   loc~ : SourceLoc,
+
+<WORKDIR>/test\test.mbt:238:8-238:12:
+    | 
+    | ///|
+    | /// Return the name of the test.
+238 | pub fn Test::name(self : Self) -> String {
+    |        ^^^^
+    |   self.name
+    | }
+
+<WORKDIR>/test\test_test.mbt:47:17-47:21:
+   | 
+   | ///|
+   | test "Test name" {
+47 |   let t = @test.Test("sample")
+   |                 ^^^^
+   |   inspect(t.name(), content="sample")
+   | }
+
+<WORKDIR>/test\types.mbt:26:8-26:12:
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+26 | pub fn Test::Test(name : String) -> Test {
+   |        ^^^^
+   |   { name, buffer: StringBuilder(), }
+   | }
+
+<WORKDIR>/test\types.mbt:26:14-26:18:
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+26 | pub fn Test::Test(name : String) -> Test {
+   |              ^^^^
+   |   { name, buffer: StringBuilder(), }
+   | }
+
+<WORKDIR>/test\types.mbt:26:37-26:41:
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+26 | pub fn Test::Test(name : String) -> Test {
+   |                                     ^^^^
+   |   { name, buffer: StringBuilder(), }
+   | }
+
+```
