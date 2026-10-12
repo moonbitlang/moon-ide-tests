@@ -92,8 +92,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- fixtures/repos tests/unix; then
-            git add fixtures/repos tests/unix
+          git add -A -- fixtures/repos tests/unix
+          if git diff --cached --quiet -- fixtures/repos tests/unix; then
+            exit 0
+          else
+            status=$?
+            if [ "$status" -ne 1 ]; then
+              exit "$status"
+            fi
             git commit -m "chore: update daily Unix IDE baselines"
           fi
 
@@ -133,6 +139,10 @@ jobs:
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
           git checkout -B $env:DAILY_BRANCH "origin/$($env:DAILY_BRANCH)"
+          git submodule update --init --recursive
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
           ".daily-test/" | Out-File -FilePath .git\info\exclude -Encoding utf8 -Append
 
@@ -171,9 +181,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Stage first: the Windows checkout can report CRLF-only worktree
-          # changes that disappear once Git normalizes them into the index.
-          git -c core.safecrlf=false add --renormalize -- tests/windows
+          # Stage additions and deletions as well as modified snapshots. Git
+          # normalizes CRLF-only worktree changes before the staged diff check.
+          git -c core.safecrlf=false add -A -- tests/windows
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
