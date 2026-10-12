@@ -19,6 +19,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
 +pub(all) struct Html(@vdom.VNodeRenamed) derive(Eq)
  
  ///|
+ pub extend Html with Eq::{equal, not_equal}
+ 
+ ///|
 -pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
 +pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNodeRenamed {
    self.0
@@ -300,6 +303,15 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    )
    inspect(
      server_side_render(() => div),
+@@
+     "readOnly": Boolean(true),
+     "noValidate": Boolean(false),
+   }
+-  let input = VNode::elem("input", Props::new({}, props, {}, {}), Array([]))
++  let input = VNodeRenamed::elem("input", Props::new({}, props, {}, {}), Array([]))
+   inspect(
+     server_side_render(() => input),
+     content=(
 *** Update File: <WORKDIR>/rabbita\internal\vdom\vdom.mbt
 @@
  
@@ -322,6 +334,12 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    physical_equal(a, b)
  }
  
+ ///|
+-pub extend VNode with Eq::{equal, not_equal}
++pub extend VNodeRenamed with Eq::{equal, not_equal}
+ 
+ ///|
+ const CAPTURED_LINK_TAG : String = "RABBITA_CAPTURED_LINK"
 @@
  }
  

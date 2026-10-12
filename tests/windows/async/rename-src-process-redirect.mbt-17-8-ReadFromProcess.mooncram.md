@@ -3,6 +3,13 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 'src\process\redirect.mbt:17:8'
 *** Begin Patch
+*** Update File: <WORKDIR>/src\process\deprecated.mbt
+@@
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend ReadFromProcess with @io.Reader::{_direct_read, _get_internal_buffer}
++pub extend ReadFromProcessRenamed with @io.Reader::{_direct_read, _get_internal_buffer}
 *** Update File: <WORKDIR>/src\process\redirect.mbt
 @@
  

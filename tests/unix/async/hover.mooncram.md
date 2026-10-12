@@ -79,6 +79,7 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
                mut read_offset: Int64
                mut write: IoStatus
                mut write_offset: Int64
+               console_state: WindowsConsoleBuffer
                // private fields
              }
              ```

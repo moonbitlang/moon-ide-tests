@@ -180,58 +180,6 @@ Error: could not get package of loc encoding/utf8/decode_js.mbt:17:3
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:46:11'
-Definition found at file <WORKDIR>/internal/regex_engine/automata/thread_set.mbt
-   | /// # Usage in Automaton
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-46 | priv enum ThreadSet {
-   |           ^^^^^^^^^
-   |   Empty
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
-   | }
-   | 
-   | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'Empty' --loc 'internal/regex_engine/automata/thread_set.mbt:47:3'
-Definition found at file <WORKDIR>/internal/regex_engine/automata/thread_set.mbt
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-   | priv enum ThreadSet {
-47 |   Empty
-   |   ^^^^^
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
-   | }
-   | 
-   | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
-   |   no_match : Bool
-```
-
-```mooncram
 $ run_moon_ide moon ide peek-def 'LazyState' --loc 'lazy/lazy.mbt:24:11'
 Definition found at file <WORKDIR>/lazy/lazy.mbt
    | /// - `Forcing`: the thunk is currently running. Used to detect reentrant
@@ -284,55 +232,55 @@ Definition found at file <WORKDIR>/lazy/lazy.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Regex' --loc 'string/internal/regex_engine/regex.mbt:16:8'
+$ run_moon_ide moon ide peek-def 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
-   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
    | 
    | ///|
-16 | struct Regex {
-   |        ^^^^^
-   |   profile : Profile
-   |   ctx : @automata.Context
-   |   expr : @automata.Expr
-   |   groups : ReadOnlyArray[String?]
-   |   symbol_table : @symbol_map.Table
-   |   symbol_repr : ReadOnlyArray[Rechar]
-   |   start_states : Array[(Category, StateId)]
-   |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
+   | /// Transition table entry: the transition has not been built yet.
+17 | const UNKNOWN : Int = -1
+   |       ^^^^^^^
+   | 
+   | ///|
+   | /// Transition table entry: no thread survives and nothing was accepted.
+   | /// Entries below `DEAD` denote a terminal state or a transition that moves
+   | /// registers, see `terminal` and `moving`.
+   | const DEAD : Int = -2
+   | 
+   | ///|
+   | /// Register of a tag while a transition is being built: the tag is set by
+   | /// this very transition and still needs a register.
+   | const CURRENT : Int = -1
+   | 
+   | ///|
+   | /// Default budget for the lazy DFA cache, in machine words (table entries
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'profile' --loc 'string/internal/regex_engine/regex.mbt:17:3'
+$ run_moon_ide moon ide peek-def 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
    | 
    | ///|
-   | struct Regex {
-17 |   profile : Profile
-   |   ^^^^^^^
-   |   ctx : @automata.Context
-   |   expr : @automata.Expr
-   |   groups : ReadOnlyArray[String?]
-   |   symbol_table : @symbol_map.Table
-   |   symbol_repr : ReadOnlyArray[Rechar]
-   |   start_states : Array[(Category, StateId)]
-   |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
-   | }
+   | /// Transition table entry: no thread survives and nothing was accepted.
+   | /// Entries below `DEAD` denote a terminal state or a transition that moves
+   | /// registers, see `terminal` and `moving`.
+23 | const DEAD : Int = -2
+   |       ^^^^
+   | 
+   | ///|
+   | /// Register of a tag while a transition is being built: the tag is set by
+   | /// this very transition and still needs a register.
+   | const CURRENT : Int = -1
+   | 
+   | ///|
+   | /// Default budget for the lazy DFA cache, in machine words (table entries
+   | /// plus state descriptions); a word is an `Int`, so this is 64 MB of table
+   | /// and state data. A state that does not fit is not added when a cached
+   | /// state can stand in for it, see `reuse`; otherwise the cache is dropped and
+   | /// rebuilt on demand. Memory therefore does not grow without bound on
+   | /// patterns whose DFA is huge, at the price of rebuilding states, which is
+   | /// several times slower than a cached step. The budget is large enough for a
 ```
 
 ```mooncram
@@ -369,7 +317,7 @@ Definition found at file <WORKDIR>/string/regex.mbt
     | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     | /// }
     | /// ```
-350 | pub fn Regex::execute(
+351 | pub fn Regex::execute(
     |               ^^^^^^^
     |   self : Regex,
     |   input : StringView,
@@ -385,6 +333,59 @@ Definition found at file <WORKDIR>/string/regex.mbt
     | ///|
     | /// Wraps this regex in a named capture group.
     | ///
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Test' --loc 'test/extends.mbt:22:12'
+Definition found at file <WORKDIR>/test/types.mbt
+   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+16 | struct Test {
+   |        ^^^^
+   |   name : String
+   |   buffer : StringBuilder
+   | } derive(@debug.Debug)
+   | 
+   | ///|
+   | /// Create a new instance.
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+   | pub fn Test::Test(name : String) -> Test {
+   |   { name, buffer: StringBuilder(), }
+   | }
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'to_repr' --loc 'test/extends.mbt:22:37'
+Definition found at file <WORKDIR>/test/extends.mbt
+   | // --- deprecated: hidden from the generated interface ---
+   | 
+   | ///|
+   | #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+   | #doc(hidden)
+22 | pub extend Test with @debug.Debug::{to_repr}
+   |                                     ^^^^^^^
+Definition found at file <WORKDIR>/test/types.mbt
+   | 
+   | ///|
+   | struct Test {
+   |   name : String
+   |   buffer : StringBuilder
+19 | } derive(@debug.Debug)
+   |          ^^^^^^^^^^^^
+   | 
+   | ///|
+   | /// Create a new instance.
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+   | pub fn Test::Test(name : String) -> Test {
+   |   { name, buffer: StringBuilder(), }
+   | }
 ```
 
 ```mooncram

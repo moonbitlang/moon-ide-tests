@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
-Found 11 references for symbol 'SourcePath':
+Found 16 references for symbol 'SourcePath':
 <WORKDIR>/warren/build.mbt:2:19-2:29:
   | ///|
 2 | using @path {type SourcePath, type Path}
@@ -34,74 +34,119 @@ Found 11 references for symbol 'SourcePath':
   |   mod_path : String?
   |   relative : String
 
-<WORKDIR>/warren/path/artifact_path.mbt:42:33-42:43:
+<WORKDIR>/warren/path/artifact_path.mbt:72:33-72:43:
    | }
    | 
    | ///|
-42 | pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
+72 | pub fn ArtifactPath::new(root : SourcePath) -> ArtifactPath {
    |                                 ^^^^^^^^^^
    |   { root, relative: "", mod_path: None, }
    | }
 
-<WORKDIR>/warren/path/artifact_path.mbt:57:6-57:16:
+<WORKDIR>/warren/path/artifact_path.mbt:87:6-87:16:
    |   target : Target,
    |   build : Build,
    |   mode : Mode,
-57 | ) -> SourcePath {
+87 | ) -> SourcePath {
    |      ^^^^^^^^^^
    |   let mut acc = self.root
    |   acc = acc.join(
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:8:20-8:30:
+<WORKDIR>/warren/path/sourcetree_path.mbt:8:12-8:22:
   | struct SourcePath(String) derive(Eq, Compare, Hash)
   | 
   | ///|
-8 | pub impl Debug for SourcePath with fn to_repr(self) {
-  |                    ^^^^^^^^^^
-  |   @debug.Repr::string(self.0)
-  | }
+8 | pub extend SourcePath with Eq::{equal, not_equal}
+  |            ^^^^^^^^^^
+  | 
+  | ///|
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:13:8-13:18:
+<WORKDIR>/warren/path/sourcetree_path.mbt:11:12-11:22:
+   | pub extend SourcePath with Eq::{equal, not_equal}
+   | 
+   | ///|
+11 | pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
+   |            ^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/warren/path/sourcetree_path.mbt:14:12-14:22:
+   | pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
+   | 
+   | ///|
+14 | pub extend SourcePath with Hash::{hash, hash_combine}
+   |            ^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/warren/path/sourcetree_path.mbt:17:20-17:30:
+   | pub extend SourcePath with Hash::{hash, hash_combine}
+   | 
+   | ///|
+17 | pub impl Debug for SourcePath with fn to_repr(self) {
+   |                    ^^^^^^^^^^
+   |   @debug.Repr::string(self.0)
+   | }
+
+<WORKDIR>/warren/path/sourcetree_path.mbt:22:12-22:22:
    | }
    | 
    | ///|
-13 | pub fn SourcePath::new(s : String) -> Self {
+22 | pub extend SourcePath with Debug::{to_repr}
+   |            ^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/warren/path/sourcetree_path.mbt:25:8-25:18:
+   | pub extend SourcePath with Debug::{to_repr}
+   | 
+   | ///|
+25 | pub fn SourcePath::new(s : String) -> Self {
    |        ^^^^^^^^^^
    |   Path::resolve(s).0
    | }
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:18:19-18:29:
+<WORKDIR>/warren/path/sourcetree_path.mbt:30:19-30:29:
    | }
    | 
    | ///|
-18 | pub impl Show for SourcePath with fn output(self, buf) {
+30 | pub impl Show for SourcePath with fn output(self, buf) {
    |                   ^^^^^^^^^^
    |   buf.write_string(self.0)
    | }
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:23:8-23:18:
+<WORKDIR>/warren/path/sourcetree_path.mbt:35:12-35:22:
    | }
    | 
    | ///|
-23 | pub fn SourcePath::join(a : Self, b : String) -> Self {
+35 | pub extend SourcePath with Show::{output, to_string}
+   |            ^^^^^^^^^^
+   | 
+   | ///|
+
+<WORKDIR>/warren/path/sourcetree_path.mbt:38:8-38:18:
+   | pub extend SourcePath with Show::{output, to_string}
+   | 
+   | ///|
+38 | pub fn SourcePath::join(a : Self, b : String) -> Self {
    |        ^^^^^^^^^^
    |   Path::join(a.0, b).normalize().0
    | }
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:28:8-28:18:
+<WORKDIR>/warren/path/sourcetree_path.mbt:43:8-43:18:
    | }
    | 
    | ///|
-28 | pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
+43 | pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
    |        ^^^^^^^^^^
    |   Path::relative(a.0, base=base.0).0
    | }
 
-<WORKDIR>/warren/path/sourcetree_path.mbt:28:46-28:56:
+<WORKDIR>/warren/path/sourcetree_path.mbt:43:46-43:56:
    | }
    | 
    | ///|
-28 | pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
+43 | pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
    |                                              ^^^^^^^^^^
    |   Path::relative(a.0, base=base.0).0
    | }
