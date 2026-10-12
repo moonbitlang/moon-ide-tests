@@ -191,11 +191,11 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
     |...
  73 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
     |...
-119 |pub let stdin : Result[IoHandle, Error] = try
+120 |pub let stdin : Result[IoHandle, Error] = try
     |...
-128 |pub let stdout : Result[IoHandle, Error] = try
+129 |pub let stdout : Result[IoHandle, Error] = try
     |...
-137 |pub let stderr : Result[IoHandle, Error] = try
+138 |pub let stderr : Result[IoHandle, Error] = try
     |...
 
 ```
@@ -217,77 +217,88 @@ $ run_moon_ide moon ide outline 'src/js_async/unimplemented.mbt'
  39 |#coverage.skip
  40 |pub impl Show for JsError with fn output(self, _logger) {
     |...
- 48 |#external
- 49 |#internal(unimplemented, "unimplemented in native backend")
- 50 |#coverage.skip
- 51 |pub type AbortController
+ 47 |pub extend JsError with Show::{to_string}
     |...
- 55 |#external
- 56 |#internal(unimplemented, "unimplemented in native backend")
- 57 |#coverage.skip
- 58 |pub type AbortSignal
+ 51 |#external
+ 52 |#internal(unimplemented, "unimplemented in native backend")
+ 53 |#coverage.skip
+ 54 |pub type AbortController
     |...
- 62 |#internal(unimplemented, "unimplemented in native backend")
- 63 |#coverage.skip
- 64 |pub fn AbortController::new() -> AbortController {
+ 58 |#external
+ 59 |#internal(unimplemented, "unimplemented in native backend")
+ 60 |#coverage.skip
+ 61 |pub type AbortSignal
     |...
- 71 |#internal(unimplemented, "unimplemented in native backend")
- 72 |#coverage.skip
- 73 |pub fn AbortController::signal(self : Self) -> AbortSignal {
+ 65 |#internal(unimplemented, "unimplemented in native backend")
+ 66 |#coverage.skip
+ 67 |pub fn AbortController::new() -> AbortController {
     |...
- 81 |#internal(unimplemented, "unimplemented in native backend")
- 82 |#coverage.skip
- 83 |pub fn AbortController::abort(self : Self) -> Unit {
+ 74 |#internal(unimplemented, "unimplemented in native backend")
+ 75 |#coverage.skip
+ 76 |pub fn AbortController::signal(self : Self) -> AbortSignal {
     |...
- 98 |#internal(unimplemented, "unimplemented in native backend")
- 99 |#warnings("-unused_async")
-100 |#coverage.skip
-101 |pub async fn[X] Promise::wait(
-102 |  promise : Promise[X],
-103 |  abort_controller? : AbortController,
-104 |) -> X {
+ 84 |#internal(unimplemented, "unimplemented in native backend")
+ 85 |#coverage.skip
+ 86 |pub fn AbortController::abort(self : Self) -> Unit {
     |...
-122 |#internal(unimplemented, "unimplemented in native backend")
-123 |#warnings("-unused_async")
-124 |#coverage.skip
-125 |pub async fn[X] run_promise(f : (AbortSignal) -> Promise[X]) -> X {
+101 |#internal(unimplemented, "unimplemented in native backend")
+102 |#warnings("-unused_async")
+103 |#coverage.skip
+104 |pub async fn[X] Promise::wait(
+105 |  promise : Promise[X],
+106 |  abort_controller? : AbortController,
+107 |) -> X {
     |...
-147 |#internal(unimplemented, "unimplemented in native backend")
-148 |#warnings("-unused_async")
-149 |#coverage.skip
-150 |pub fn[X] Promise::from_async(
-151 |  f : async () -> X,
-152 |  abort_signal? : AbortSignal,
-153 |) -> Promise[X] {
+125 |#internal(unimplemented, "unimplemented in native backend")
+126 |#warnings("-unused_async")
+127 |#coverage.skip
+128 |pub async fn[X] run_promise(f : (AbortSignal) -> Promise[X]) -> X {
     |...
-166 |#internal(unimplemented, "unimplemented in native backend")
-167 |type JsReadableStream
+150 |#internal(unimplemented, "unimplemented in native backend")
+151 |#warnings("-unused_async")
+152 |#coverage.skip
+153 |pub fn[X] Promise::from_async(
+154 |  f : async () -> X,
+155 |  abort_signal? : AbortSignal,
+156 |) -> Promise[X] {
     |...
-176 |#internal(unimplemented, "unimplemented in native backend")
-177 |type ReadableStream
+169 |#internal(unimplemented, "unimplemented in native backend")
+170 |type JsReadableStream
     |...
-184 |#internal(unimplemented, "unimplemented in native backend")
-185 |#coverage.skip
-186 |pub fn ReadableStream::from_js(stream : JsReadableStream) -> ReadableStream {
+179 |#internal(unimplemented, "unimplemented in native backend")
+180 |type ReadableStream
     |...
-193 |#internal(unimplemented, "unimplemented in native backend")
-194 |#coverage.skip
-195 |pub fn ReadableStream::close(self : ReadableStream) -> Unit {
+187 |#internal(unimplemented, "unimplemented in native backend")
+188 |#coverage.skip
+189 |pub fn ReadableStream::from_js(stream : JsReadableStream) -> ReadableStream {
     |...
-201 |#coverage.skip
-202 |pub impl @io.Reader for ReadableStream with fn _get_internal_buffer(_) {
+196 |#internal(unimplemented, "unimplemented in native backend")
+197 |#coverage.skip
+198 |pub fn ReadableStream::close(self : ReadableStream) -> Unit {
     |...
-207 |#coverage.skip
-208 |pub impl @io.Reader for ReadableStream with fn _direct_read(
-209 |  _,
-210 |  _,
-211 |  offset~,
-212 |  max_len~,
-213 |) {
+204 |#coverage.skip
+205 |pub impl @io.Reader for ReadableStream with fn _get_internal_buffer(_) {
     |...
-229 |#internal(unimplemented, "unimplemented in native backend")
-230 |#coverage.skip
-231 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
+210 |#coverage.skip
+211 |pub impl @io.Reader for ReadableStream with fn _direct_read(
+212 |  _,
+213 |  _,
+214 |  offset~,
+215 |  max_len~,
+216 |) {
+    |...
+223 |pub extend ReadableStream with @io.Reader::{
+224 |  read,
+225 |  read_some,
+226 |  drop,
+227 |  read_all,
+228 |  read_until,
+229 |  read_exactly,
+230 |}
+    |...
+242 |#internal(unimplemented, "unimplemented in native backend")
+243 |#coverage.skip
+244 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
     |...
 
 ```
@@ -437,7 +448,7 @@ $ run_moon_ide moon ide outline 'src/socket/reuse_port_test.mbt'
 
 ```mooncram
 $ run_moon_ide moon ide outline 'src/socket/unimplemented.mbt'
-17 |#cfg(not(target="native"))
+17 |#cfg(not(any(target="native", target="wasm")))
    |...
 
 ```

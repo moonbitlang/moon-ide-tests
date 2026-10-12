@@ -128,69 +128,6 @@ Error: could not get package of loc encoding/utf8/decode_js.mbt:17:3
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'ThreadSet' --loc 'internal/regex_engine/automata/thread_set.mbt:46:11'
-/// During execution, each `State` contains a `ThreadSet` collection representing all
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-          ^^^^^^^^^
-          ```moonbit
-          enum ThreadSet {
-            Empty
-            Node(i~ : ThreadSetNodeInfo, l~ : ThreadSet, t~ : Thread, r~ : ThreadSet, p~ : Int)
-          }
-          ```
-          ---
-          
-           A collection of execution threads stored in a Treap-based rope structure.
-          
-           `ThreadSet` maintains an ordered set of `Thread` instances representing all active
-           execution paths in the automaton. The order matters because it encodes matching
-           priorities - the first thread to reach an `End` state produces the match result.
-          
-           # Data Structure
-          
-           Uses a Treap (randomized binary search tree) to efficiently:
-           - Maintain thread ordering while allowing efficient insertion/merging
-           - Track metadata (`ThreadSetNodeInfo`) to optimize operations
-           - Support efficient operations like `flat_map`, `merge`, and iteration
-          
-           Each node tracks `no_match`: true if no thread in the subtree has reached `End` state.
-           This allows quick pruning of subtrees that cannot contribute to matches.
-          
-           # Key Operations
-          
-           - `merge`/`+`: Combines two thread sets while preserving order
-           - `flat_map`: Applies a function that may expand each thread to multiple threads
-           - `find_first_match`: Finds the first successful match (if any)
-           - `remove_matches`: Removes all threads in `End` state from the collection
-           - `remove_duplicates`: Eliminates redundant threads with same state
-           - `split_at_first_match`: Separates threads before/after first match
-          
-           # Usage in Automaton
-          
-           During execution, each `State` contains a `ThreadSet` collection representing all
-           possible execution paths from that state. When computing the derivative with
-           respect to input, threads are transformed and may split into multiple threads.
-  Empty
-  Node(
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'Empty' --loc 'internal/regex_engine/automata/thread_set.mbt:47:3'
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-  Empty
-  ^^^^^
-  ```moonbit
-  ThreadSet
-  ```
-  Node(
-    i~ : ThreadSetNodeInfo,
-```
-
-```mooncram
 $ run_moon_ide moon ide hover 'LazyState' --loc 'lazy/lazy.mbt:24:11'
 ///   the thunk and silently break the at-most-once guarantee.
 /// - `Forced(v)`: the thunk has produced `v`; the thunk reference is
@@ -233,43 +170,38 @@ priv enum LazyState[A] {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'Regex' --loc 'string/internal/regex_engine/regex.mbt:16:8'
-// limitations under the License.
+$ run_moon_ide moon ide hover 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
+///|
+/// Transition table entry: the transition has not been built yet.
+const UNKNOWN : Int = -1
+      ^^^^^^^
+      ```moonbit
+      Int
+      ```
+      ---
+      
+       Transition table entry: the transition has not been built yet.
 
 ///|
-struct Regex {
-       ^^^^^
-       ```moonbit
-       struct Regex {
-         profile: @shared_types.Profile
-         ctx: @automata.Context
-         expr: @automata.Expr
-         groups: ReadOnlyArray[String?]
-         symbol_table: @symbol_map.Table
-         symbol_repr: ReadOnlyArray[Int]
-         start_states: Array[(@shared_types.Category, StateId)]
-         state_table: @hashmap.HashMap[@automata.State, StateId]
-         mut transition_table: FixedArray[StateId]
-         mut final_table: FixedArray[@list.List[(@shared_types.Category, @automata.Slot, @automata.Status)]]
-         mut states: FixedArray[@automata.State]
-         mut num_states: Int
-       }
-       ```
-  profile : Profile
-  ctx : @automata.Context
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'profile' --loc 'string/internal/regex_engine/regex.mbt:17:3'
+$ run_moon_ide moon ide hover 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
+/// Transition table entry: no thread survives and nothing was accepted.
+/// Entries below `DEAD` denote a terminal state or a transition that moves
+/// registers, see `terminal` and `moving`.
+const DEAD : Int = -2
+      ^^^^
+      ```moonbit
+      Int
+      ```
+      ---
+      
+       Transition table entry: no thread survives and nothing was accepted.
+       Entries below `DEAD` denote a terminal state or a transition that moves
+       registers, see `terminal` and `moving`.
+
 ///|
-struct Regex {
-  profile : Profile
-  ^^^^^^^
-  ```moonbit
-  @shared_types.Profile
-  ```
-  ctx : @automata.Context
-  expr : @automata.Expr
 ```
 
 ```mooncram
@@ -356,6 +288,27 @@ test "execute/non_capture_group" {
                ```
   debug_inspect(
     m,
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'Test' --loc 'test/extends.mbt:22:12'
+///|
+#deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+#doc(hidden)
+pub extend Test with @debug.Debug::{to_repr}
+           ^^^^
+           ```moonbit
+           struct Test {
+             name: String
+             buffer: StringBuilder
+           } derive(@debug.Debug)
+           ```
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'to_repr' --loc 'test/extends.mbt:22:37'
+No hover information found for symbol 'to_repr' at test/extends.mbt:22:37
+[1]
 ```
 
 ```mooncram

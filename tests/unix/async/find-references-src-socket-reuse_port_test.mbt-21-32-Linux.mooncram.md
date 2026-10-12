@@ -19,11 +19,11 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:32'
 Found 19 references for symbol 'Linux':
-<WORKDIR>/src/fs/dir.mbt:304:5-304:10:
+<WORKDIR>/src/fs/dir.mbt:315:5-315:10:
     |   dir.offset += entry_len
     |   dir.count += 1
     |   let need_more_entry = match @event_loop.platform {
-304 |     Linux => dir.offset >= dir.job_ret
+315 |     Linux => dir.offset >= dir.job_ret
     |     ^^^^^
     |     MacOS => dir.count >= dir.job_ret
     |     Windows => entry_len is 0
@@ -91,65 +91,65 @@ Found 19 references for symbol 'Linux':
     |     MacOS => errno == macos_EINTR
     |     Windows => false
 
-<WORKDIR>/src/os_error/error.mbt:114:5-114:10:
+<WORKDIR>/src/os_error/error.mbt:117:5-117:10:
     | pub fn OSError::is_ENOENT(err : OSError) -> Bool {
     |   let OSError(errno, ..) = err
     |   match @env_util.platform {
-114 |     Linux => errno == linux_ENOENT
+117 |     Linux => errno == linux_ENOENT
     |     ^^^^^
     |     MacOS => errno == macos_ENOENT
     |     Windows =>
 
-<WORKDIR>/src/os_error/error.mbt:127:5-127:10:
+<WORKDIR>/src/os_error/error.mbt:130:5-130:10:
     | pub fn OSError::is_EEXIST(err : OSError) -> Bool {
     |   let OSError(errno, ..) = err
     |   match @env_util.platform {
-127 |     Linux => errno == linux_EEXIST
+130 |     Linux => errno == linux_EEXIST
     |     ^^^^^
     |     MacOS => errno == macos_EEXIST
     |     Windows =>
 
-<WORKDIR>/src/os_error/error.mbt:140:5-140:10:
+<WORKDIR>/src/os_error/error.mbt:143:5-143:10:
     | pub fn OSError::is_EACCES(err : OSError) -> Bool {
     |   let OSError(errno, ..) = err
     |   match @env_util.platform {
-140 |     Linux => errno == linux_EACCES
+143 |     Linux => errno == linux_EACCES
     |     ^^^^^
     |     MacOS => errno == macos_EACCES
     |     Windows => errno == windows_ERROR_ACCESS_DENIED
 
-<WORKDIR>/src/os_error/error.mbt:151:5-151:10:
+<WORKDIR>/src/os_error/error.mbt:154:5-154:10:
     | pub fn OSError::is_ECONNREFUSED(err : OSError) -> Bool {
     |   let OSError(errno, ..) = err
     |   match @env_util.platform {
-151 |     Linux => errno == linux_ECONNREFUSED
+154 |     Linux => errno == linux_ECONNREFUSED
     |     ^^^^^
     |     MacOS => errno == macos_ECONNREFUSED
     |     Windows => errno == windows_ERROR_CONNECTION_REFUSED
 
-<WORKDIR>/src/os_error/error.mbt:162:5-162:10:
+<WORKDIR>/src/os_error/error.mbt:165:5-165:10:
     | pub fn OSError::is_ERROR_NOTIFY_ENUM_DIR(err : OSError) -> Bool {
     |   let OSError(errno, ..) = err
     |   match @env_util.platform {
-162 |     Linux | MacOS => false
+165 |     Linux | MacOS => false
     |     ^^^^^
     |     Windows => errno == windows_ERROR_NOTIFY_ENUM_DIR
     |   }
 
-<WORKDIR>/src/os_error/error.mbt:177:3-177:8:
+<WORKDIR>/src/os_error/error.mbt:180:3-180:8:
     | 
     | ///|
     | pub let errno_ENOTDIR : Int = match @env_util.platform {
-177 |   Linux => linux_ENOTDIR
+180 |   Linux => linux_ENOTDIR
     |   ^^^^^
     |   MacOS => macos_ENOTDIR
     |   Windows => windows_ERROR_DIRECTORY
 
-<WORKDIR>/src/os_error/error.mbt:190:3-190:8:
+<WORKDIR>/src/os_error/error.mbt:193:3-193:8:
     | 
     | ///|
     | pub let errno_ENOTSUP : Int = match @env_util.platform {
-190 |   Linux => linux_ENOTSUP
+193 |   Linux => linux_ENOTSUP
     |   ^^^^^
     |   MacOS => macos_ENOTSUP
     |   Windows => windows_ERROR_NOT_SUPPORTED
