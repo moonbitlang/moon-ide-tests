@@ -18,7 +18,14 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'ReadFromProcess' --loc 'src/process/redirect.mbt:17:8'
-Found 8 references for symbol 'ReadFromProcess':
+Found 9 references for symbol 'ReadFromProcess':
+<WORKDIR>/src/process/deprecated.mbt:18:12-18:27:
+   | ///|
+   | #deprecated
+   | #doc(hidden)
+18 | pub extend ReadFromProcess with @io.Reader::{_direct_read, _get_internal_buffer}
+   |            ^^^^^^^^^^^^^^^
+
 <WORKDIR>/src/process/redirect.mbt:50:7-50:22:
    | /// the read end `r` will fail to observe EOF from children process.
    | pub fn read_from_process(
