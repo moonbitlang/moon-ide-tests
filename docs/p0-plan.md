@@ -1,0 +1,49 @@
+# P0 implementation plan
+
+The accepted chat plan is the specification. P0 provides frozen baseline replay,
+explicit case outcomes, isolated A/B/C execution, coverage/delta reports, and
+independent generation/execution stability checks. Existing sampling and IDE
+command semantics remain unchanged. New feature scenarios are P1/P2.
+
+## Tasks
+
+1. Manifest: parse checked-in Cram commands, stable semantic identities with
+   ambiguous matches requiring review, full input provenance and replay checks.
+2. Outcomes and coverage: explicit policy for positive/negative/unsupported
+   cases; legacy errors require review; required/deferred coverage cells and
+   added/retained/relocated/retired reports.
+3. Execution: instrument Cram without replacing its matcher; capture output and
+   exit status per command, preserve A and B findings through candidate C.
+4. Stability: independently regenerate twice, capture candidate snapshots in
+   isolation, compare cold/warm execution, fail closed on missing artifacts.
+5. Integration: daily A before fixture updates, B after updates with old commands,
+   C in isolated candidate trees, replay CLI, CI tests and user documentation.
+6. Validation and one fresh whole-branch review; fix important findings with
+   regression tests and create a draft PR.
+
+## Acceptance
+
+- No candidate update mutates the accepted snapshots before explicit promotion.
+- No baseline nonzero output becomes an approved negative test implicitly.
+- No failed/changed A execution is hidden by a passing C execution.
+- Required supported cells need effective cases; skipped/invalid/unknown cases
+  never contribute to effective coverage.
+- Matching input manifests regenerate identical files/commands; cold/warm
+  candidate execution must have identical normalized output and exit status.
+- Replays reject incompatible fixture/config/toolchain/generator inputs.
+
+## Progress and decisions
+
+- Setup: new worktree codex/testgen-p0, based on pending bugfix PR #27.
+- Ruling: stack the draft on codex/testgen-bugfixes to avoid duplicating bugfixes;
+  retarget after #27 merges. Cost if wrong: one rebase/PR-base update.
+- Ruling: referenced superpowers helper skills/scripts are absent locally;
+  keep this manual task ledger and use unittest RED/GREEN plus one fresh final
+  review. Cost if wrong: bookkeeping differs, no runtime behavior change.
+- Pre-flight: manifest IDs feed outcome policy, delta comparison and capture
+  files; semantic identity and unique execution identity must be distinct.
+- Pre-flight: Cram remains the expectation matcher; instrumentation captures
+  command outcomes without interpreting its annotation syntax.
+
+- Task 1: manifest tests RED (missing module) -> GREEN 7/7; stable identities,
+  ambiguous anchors, legacy errors, Windows parsing and replay identity checks.
