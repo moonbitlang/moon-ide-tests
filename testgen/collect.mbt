@@ -202,9 +202,9 @@ impl @syntax.IterVisitor for LocCollector with fn visit_TypeDecl(env, type_decl)
   }
   ignore(type_decl.params)
   @syntax.IterVisitor::visit_TypeDesc(env, type_decl.components)
-  type_decl.deriving.each(x =>
+  type_decl.deriving.each(x => {
     @syntax.IterVisitor::visit_DerivingDirective(env, x)
-  )
+  })
   @syntax.IterVisitor::visit_Visibility(env, type_decl.type_vis)
 }
 
@@ -259,9 +259,8 @@ impl @syntax.IterVisitor for LocCollector with fn visit_ConstrDecl(
 ) {
   env.append_from_loc(constr_decl.name.name, constr_decl.name.loc)
   match constr_decl.args {
-    Some(args) => args.each(arg =>
-      @syntax.IterVisitor::visit_ConstrParam(env, arg)
-    )
+    Some(args) =>
+      args.each(arg => @syntax.IterVisitor::visit_ConstrParam(env, arg))
     None => ()
   }
 }
@@ -375,7 +374,10 @@ fn should_skip_dir(name : String) -> Bool {
 ///|
 fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
   let entries = try @fs.read_dir(abs_dir) catch {
-    _ => []
+    err => {
+      fatal("failed to read directory \{abs_dir}: \{debug_text(err)}")
+      []
+    }
   } noraise {
     values => values.to_owned()
   }
@@ -388,7 +390,10 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
       @path.Path::join(rel_dir, name).to_string()
     }
     let is_dir = try @fs.is_dir(abs_path) catch {
-      _ => false
+      err => {
+        fatal("failed to inspect \{abs_path}: \{debug_text(err)}")
+        false
+      }
     } noraise {
       value => value
     }
@@ -399,7 +404,10 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
       continue
     }
     let is_file = try @fs.is_file(abs_path) catch {
-      _ => false
+      err => {
+        fatal("failed to inspect \{abs_path}: \{debug_text(err)}")
+        false
+      }
     } noraise {
       value => value
     }
@@ -510,11 +518,7 @@ fn collect_files(
       return false
     }
     let abs_path = @path.Path::join(project_root, rel_path).to_string()
-    let text = try @fs.read_file_to_string(abs_path) catch {
-      _ => return false
-    } noraise {
-      text => text
-    }
+    let text = read_file_or_exit(abs_path)
     let size = normalized_char_count(text)
     if size > max_file_size {
       println(
@@ -539,19 +543,10 @@ fn collect_cases(
   let loc_cases = Array(capacity=0)
   for rel_path in source_files {
     let abs_path = @path.Path::join(project_root, rel_path).to_string()
-    let maybe_text = try @fs.read_file_to_string(abs_path) catch {
-      _ => None
-    } noraise {
-      text => Some(text)
-    }
-    match maybe_text {
-      Some(text) => {
-        let result = collect_cases_for_text(rel_path, text, max_per_file)
-        for test_case in result.loc_cases {
-          loc_cases.push(test_case)
-        }
-      }
-      None => ()
+    let text = read_file_or_exit(abs_path)
+    let result = collect_cases_for_text(rel_path, text, max_per_file)
+    for test_case in result.loc_cases {
+      loc_cases.push(test_case)
     }
   }
   CollectResult::{ source_files, loc_cases, }

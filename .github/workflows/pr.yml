@@ -34,10 +34,13 @@ jobs:
       - name: Test generator
         run: moon -C testgen test --target wasm
 
+      - name: Test generator integration
+        run: python testgen/integration_test.py
+
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
-          git diff --exit-code -- tests/unix
+          python scripts/check-generated-tests.py tests/unix
 
       - name: Run Unix baselines
         run: moon cram test --cram-compat tests/unix
@@ -70,11 +73,16 @@ jobs:
             Start-Sleep -Seconds ($attempt * 10)
           }
 
+      - name: Test generator integration
+        shell: powershell
+        run: python testgen/integration_test.py
+
       - name: Verify generated Windows baselines
         shell: powershell
         run: |
+          $ErrorActionPreference = "Stop"
           .\scripts\update-windows-tests.ps1
-          git diff --exit-code -- tests\windows
+          python scripts/check-generated-tests.py tests/windows
 
       - name: Run Windows baselines
         shell: powershell

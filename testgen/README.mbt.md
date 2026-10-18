@@ -18,7 +18,9 @@ emitted as one `.mooncram.md` per test case; path separators and `:` in the
 case location are replaced with `-` in the file name. On regeneration, stale
 per-case files (and the pre-split monolithic `find-references.mooncram.md` /
 `rename.mooncram.md`, after migrating their snapshots) are removed from the
-output directory.
+output directory. Empty `outline`, `hover`, and `peek-def` suites are also
+removed on regeneration. Handwritten suites such as `doc.mooncram.md` are
+preserved.
 
 ## Usage
 
@@ -61,9 +63,23 @@ moon -C testgen run --target wasm cmd/main -- \
 - `_build`, `target`, and `node_modules` are skipped.
 - Symbol collection is AST-based (`moonbitlang/parser/syntax` visitor), not string scanning.
 - Parser diagnostics are printed to the generation log and do not change generated files.
+- Filesystem inspection and read failures stop generation with the affected
+  path instead of silently reducing the generated test set.
 - `hover`, `peek-def`, `find-references`, and `rename` share one location-based case collection (`--loc`).
 - `main` function symbols are excluded from collection.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
 - Generated Unix tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/unix`.
 - Generated Windows tests use PowerShell syntax and should be run with `moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows`.
+
+## Generator regression tests
+
+```sh
+moon -C testgen test --target wasm
+python testgen/integration_test.py
+```
+
+The integration tests use temporary fixtures and Git repositories to check
+stale-output removal, snapshot migration, read failures, shell quoting, and
+CI detection of new or changed baselines. They require Python 3 and Git,
+without additional Python packages or fixture submodule initialization.
