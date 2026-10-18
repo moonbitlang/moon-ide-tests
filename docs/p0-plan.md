@@ -95,6 +95,11 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 - CI-only test portability: compare resolved Windows paths (short and long
   temp paths identify the same directory); use an actually excessive matcher
   record count on both platforms. No runtime semantics changed.
+- CI integration follow-up: full fixture regeneration exposed an ignored,
+  dangling rabbita node_modules symlink. Skip known dependency/cache names
+  before filesystem inspection; keep strict errors for actual scan inputs.
+  Linux corpus regeneration was RED; a symlink regression test was added
+  (skipped locally because Windows symlink privilege is unavailable).
 - Final minor (deferred): replay filters required cells by platform but displays
   deferred cells for both platforms. This affects report presentation only.
 - Final Ruling: full legacy-corpus results remain unverified; Unix execution is
