@@ -6,7 +6,8 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from ide_regression.manifest import collect_cases, compare_cases, verify_inputs, fixture_commit
+from ide_regression.manifest import collect_cases, compare_cases, verify_inputs, fixture_commit, capture_manifest
+import subprocess
 from unittest.mock import patch
 
 
@@ -102,6 +103,21 @@ class ManifestTests(unittest.TestCase):
             self.assertIsNone(fixture_commit(self.repo))
         with patch('ide_regression.manifest._git', side_effect=[str(self.repo), 'abc']):
             self.assertEqual(fixture_commit(self.repo), 'abc')
+
+    def test_generator_dependency_code_is_part_of_frozen_inputs(self):
+        (self.root / 'fixtures/repos.yaml').write_text('repos:\n  - slug: demo\n    path: fixtures/repos/demo\n')
+        (self.root / 'scripts').mkdir()
+        dep = self.root / 'testgen/.mooncakes/owner/parser/parser.mbt'
+        dep.parent.mkdir(parents=True)
+        dep.write_text('// before\n')
+        with patch('ide_regression.manifest._git', return_value=None), \
+             patch('ide_regression.manifest.runtime_versions', return_value={}), \
+             patch('ide_regression.manifest.subprocess.run', return_value=subprocess.CompletedProcess([], 0, 'moon fixed', '')), \
+             patch.dict('os.environ', {'MOON_HOME': str(self.root / 'moon-home')}):
+            before = capture_manifest(self.root, 'unix', {})
+            dep.write_text('// after\n')
+            after = capture_manifest(self.root, 'unix', {})
+        self.assertIn('generator_dependencies', verify_inputs(before, after))
 
     def test_replay_checks_every_frozen_identity_and_allows_only_explicit_tool_upgrade(self):
         accepted = {"schema_version": 1, "inputs": {"fixtures": {"demo": "abc"}, "generator": "g", "config": "c", "dependencies": "d", "registry": "r", "toolchain": "t", "platform": "unix"}}

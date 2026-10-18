@@ -73,6 +73,12 @@ differences are normalized. Resolved package content is recorded separately so
 cache creation is not confused with a source change. Replay rejects a different
 resolved dependency graph after execution too.
 
+`begin` prepares a cold generator dependency cache before freezing inputs. The
+populated generator cache contains executable generator dependencies, so its
+content is frozen alongside generator source. Missing or changed generator
+dependency content requires preparing a matching cache before strict replay.
+Both A and replay also verify that execution did not mutate frozen inputs.
+
 ```sh
 python scripts/ide-regression.py inventory --platform unix --output artifacts/inventory.json
 python scripts/ide-regression.py replay --manifest baselines/unix.json --output artifacts/replay

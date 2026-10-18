@@ -329,6 +329,8 @@ def capture_manifest(root, platform, policy, *, moon="moon", provenance=None):
     inputs = {
         "platform": platform, "toolchain": version,
         "generator": tree_fingerprint(root / "testgen"),
+        'generator_dependencies': tree_fingerprint(root / 'testgen/.mooncakes')
+                                  if (root / 'testgen/.mooncakes').exists() else None,
         "config": digest([load_repos(root), policy]),
         "fixtures": fixtures, "dependencies": dependencies,
         "registry": {'commit': registry_commit} if registry_commit and not registry_dirty else tree_fingerprint(registry) if registry.exists() else None,

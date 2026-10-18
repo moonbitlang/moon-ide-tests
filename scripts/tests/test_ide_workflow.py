@@ -3,11 +3,13 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ide_regression.manifest import collect_cases, digest, tree_fingerprint
 from ide_regression.policy import classify
 from ide_regression.workflow import RegressionRun
+from ide_regression.replay import replay
 
 
 class FakeRunner:
@@ -99,6 +101,32 @@ class WorkflowTests(unittest.TestCase):
         report = pipeline.finish()
         self.assertEqual(report["stages"]["C"][0]["status"], "pass")
         self.assertEqual(report["gate"]["verdict"], "failed")
+
+    def test_A_source_mutation_is_preserved_even_if_C_passes(self):
+        class MutatingRunner(FakeRunner):
+            def run(inner, workspace, cases, output, **kwargs):
+                result = super().run(workspace, cases, output, **kwargs)
+                if inner.calls == 1:
+                    (Path(workspace) / 'fixtures/repos/demo/a.mbt').write_text('fn changed() { () }\n')
+                return result
+        pipeline = self.pipeline(runner=MutatingRunner())
+        pipeline.begin()
+        report = pipeline.finish()
+        self.assertEqual(report['gate']['verdict'], 'failed')
+        self.assertTrue(any(r['status'] == 'infrastructure_error' for r in report['stages']['A']))
+
+    def test_replay_source_mutation_cannot_report_clean(self):
+        saved = self.capture(self.root, 'unix', self.policy)
+        def mutate(workspace, cases, output):
+            (Path(workspace) / 'fixtures/repos/demo/a.mbt').write_text('fn changed() { () }\n')
+            return {'results': [classify(c, {'exit_code': 0, 'stdout': 'old-value',
+                                            'stdout_hash': digest('old-value'), 'baseline_match': True}) for c in cases]}
+        with patch('ide_regression.replay.capture_manifest', side_effect=self.capture), \
+             patch('ide_regression.replay.CramRunner') as runner:
+            runner.return_value.run.side_effect = mutate
+            report = replay(self.root, saved, self.output)
+        self.assertEqual(report['gate']['verdict'], 'failed')
+        self.assertTrue(any('fixtures' in s for s in report['stability_errors']))
 
     def test_generation_drift_and_execution_drift_fail_independently(self):
         def drifting_generator(workspace, platform, log):

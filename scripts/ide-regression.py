@@ -65,6 +65,9 @@ def main(argv=None):
     else:
         pipeline = RegressionRun(root, args.platform, output, policy, generate=generate_cases)
         if args.command == 'begin':
+            # Resolve/migrate a cold generator cache before freezing A inputs.
+            # Populated generator dependency code is immutable for the run.
+            run_generator(root, ['check', '--target', 'wasm'])
             pipeline.begin()
         elif args.command == 'finish':
             pipeline.finish()

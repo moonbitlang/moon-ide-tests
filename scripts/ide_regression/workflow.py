@@ -58,7 +58,12 @@ class RegressionRun:
         with tempfile.TemporaryDirectory(prefix='moon-ide-A-') as temp:
             workspace = copy_workspace(self.root, temp, self.platform)
             a = self.runner.run(workspace, accepted['cases'], self.output / 'A')
-            accepted['resolved_dependencies'] = self._capture(workspace, accepted).get('resolved_dependencies')
+            after = self._capture(workspace, accepted)
+            differences = verify_inputs(accepted, after)
+            if differences:
+                a['results'].append({'id': 'frozen-inputs', 'status': 'infrastructure_error',
+                                     'reason': 'Frozen inputs changed during A: ' + ', '.join(differences)})
+            accepted['resolved_dependencies'] = after.get('resolved_dependencies')
         # Legacy baselines have no recorded creator; expose that fact rather
         # than assigning today's toolchain to a historical snapshot.
         catalog_path = self.root / 'baselines' / (self.platform + '.json')

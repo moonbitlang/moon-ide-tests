@@ -72,3 +72,30 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 - Task 5 validation complete: Python harness 38/38 (including real end-to-end
   replay), Moon generator 21/21, generator integration 9/9. Both workflow YAML
   files parse; Bash audit helper and PowerShell audit helper pass syntax checks.
+
+- Final review: one fresh whole-branch reviewer, five Important findings, no
+  Critical findings. All Important findings reproduced before the fix pass:
+  Windows actual workflow staging (missing additions/deletion stat error),
+  incomplete/malformed matcher evidence, A/replay source mutation, omitted
+  generator dependency content, and Unix setup fixture formatting (CI RED).
+- Final fixed: workflow stages additions/deletions before normalization;
+  test_windows_index_includes_added_and_retired_candidates RED -> GREEN.
+- Final fixed: per-document matcher evidence count/shape validation;
+  test_captures_cannot_replace_missing_or_malformed_matcher_evidence RED -> GREEN.
+- Final fixed: preserve A/replay input mutation as independent failure;
+  test_A_source_mutation_is_preserved_even_if_C_passes and
+  test_replay_source_mutation_cannot_report_clean RED -> GREEN.
+- Final fixed: freeze generator dependency code, preparing cold caches before A;
+  test_generator_dependency_code_is_part_of_frozen_inputs RED -> GREEN.
+- Final fixed: Unix test fixture now has one setup command per Cram fence;
+  existing real runner test was RED on Unix CI; rerun pending.
+- Final minor (deferred): replay filters required cells by platform but displays
+  deferred cells for both platforms. This affects report presentation only.
+- Final Ruling: full legacy-corpus results remain unverified; Unix execution is
+  checked by PR CI rather than emulated locally. Partial corpus captures are
+  never reported as passing. Cost if wrong: separate full-corpus validation.
+- Final Ruling: new scenarios/sampling/semantic assertions stay outside P0,
+  matching the accepted scope. Cost if wrong: those coverage gaps remain for P1.
+- Final Ruling: retain Cram annotation semantics and require complete matcher
+  evidence rather than replacing its matcher. Cost if wrong: an upstream matcher
+  defect still needs an upstream regression test/fix.

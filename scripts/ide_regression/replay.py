@@ -52,6 +52,9 @@ def replay(root, saved, output, *, allow_toolchain_change=False):
         results = CramRunner(platform).run(workspace, cases, output / 'replay')['results']
         after = capture_manifest(workspace, platform, policy, provenance=current)
     errors = []
+    differences = verify_inputs(current, after)
+    if differences:
+        errors.append('frozen inputs changed during replay: ' + ', '.join(differences))
     if saved.get('resolved_dependencies') != after.get('resolved_dependencies'):
         errors.append('resolved dependency identity differs from recorded execution')
     filtered = {**policy, 'required_cells': [c for c in policy.get('required_cells', [])

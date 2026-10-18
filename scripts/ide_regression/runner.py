@@ -1,6 +1,6 @@
 """Capture IDE results while delegating expectation matching to Moon Cram."""
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 import hashlib
 import json
 import os
@@ -111,15 +111,34 @@ class CramRunner:
                     records = json.loads(result.stdout)
                     if not isinstance(records, list):
                         raise ValueError("expected an array")
+                    expected_counts = Counter()
+                    for file in (workspace / 'tests' / self.platform).rglob('*.mooncram.md'):
+                        count = len(list(command_blocks(file.read_text(encoding='utf-8'))))
+                        if count:
+                            expected_counts[str(file.resolve())] = count
+                    observed_counts = Counter()
                     for record in records:
+                        if (not isinstance(record, dict) or not isinstance(record.get('location'), str)
+                                or not isinstance(record.get('result'), dict)
+                                or not isinstance(record['result'].get('kind'), str)):
+                            raise ValueError('malformed Cram matcher record')
+                        location = str(Path(record['location']).resolve())
+                        if location not in expected_counts:
+                            raise ValueError('foreign Cram document: ' + location)
+                        observed_counts[location] += 1
                         if record.get("result", {}).get("kind") == "success":
                             continue
-                        expression = record.get("testcase", {}).get("shell_expression", "")
+                        testcase = record.get('testcase', {})
+                        if not isinstance(testcase, dict):
+                            raise ValueError('malformed Cram testcase')
+                        expression = testcase.get("shell_expression", "")
                         match = re.match(r"p0_capture ([a-f0-9]{24}) ", expression)
                         if match:
                             failed_ids.add(match[1])
                         else:
                             engine_error = "Cram reported an unassociated document/setup failure"
+                    if observed_counts != expected_counts:
+                        raise ValueError('missing or extra Cram matcher records')
                     if result.returncode not in {0, 50}:
                         engine_error = f"Cram test failed with exit {result.returncode}"
                     if result.returncode and not failed_ids and not engine_error:

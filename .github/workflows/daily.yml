@@ -178,15 +178,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Stage first: the Windows checkout can report CRLF-only worktree
-          # changes that disappear once Git normalizes them into the index.
+          # Include additions/deletions before renormalizing tracked content.
+          git -c core.safecrlf=false add -- tests/windows baselines/windows.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git -c core.safecrlf=false add --renormalize -- tests/windows
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
 
-          git add baselines/windows.json
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git diff --cached --quiet -- tests/windows baselines/windows.json
           $diffStatus = $LASTEXITCODE
 

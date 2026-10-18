@@ -27,7 +27,7 @@ class RunnerTests(unittest.TestCase):
             prefix = ""
             command = "run_moon_ide '..\\..\\..\\fixtures\\repos\\demo' moon ide hover 'foo' --loc 'a.mbt:1:4'"
         else:
-            prefix = '```mooncram\n$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/demo" && pwd)"\n$ run_moon_ide() { (cd "$TEST_REPO_ROOT" && "$@"); }\n```\n\n'
+            prefix = '```mooncram\n$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/demo" && pwd)"\n```\n\n```mooncram\n$ run_moon_ide() { (cd "$TEST_REPO_ROOT" && "$@"); }\n```\n\n'
             command = "run_moon_ide moon ide hover 'foo' --loc 'a.mbt:1:4'"
         self.command = command
         self.file.write_text(prefix + f"```mooncram\n$ {command}\ncaptured-value\n```\n")
@@ -61,6 +61,21 @@ class RunnerTests(unittest.TestCase):
             report = CramRunner(self.platform).run(self.root, self.cases, self.root / "artifacts")
         self.assertEqual(report["results"][0]["status"], "infrastructure_error")
         self.assertNotIn("p0_capture", self.file.read_text())
+
+    def test_captures_cannot_replace_missing_or_malformed_matcher_evidence(self):
+        for index, records in enumerate([[], [1], [{'location': 'foreign.md', 'result': {'kind': 'success'}}],
+                                         [{'location': str(self.file), 'result': {}}],
+                                         [{'location': str(self.file), 'result': {'kind': 'success'}}] * 3]):
+            def fake_execute(command, **kwargs):
+                captures = Path(kwargs['env']['P0_CAPTURE_DIR'])
+                identity = self.cases[0]['execution_id']
+                (captures / (identity + '.out')).write_text('wrong-output\n')
+                (captures / (identity + '.status')).write_text('0')
+                return __import__('subprocess').CompletedProcess(command, 0, json.dumps(records), '')
+            with self.subTest(records=records), patch('ide_regression.runner.execute', side_effect=fake_execute):
+                report = CramRunner(self.platform).run(self.root, self.cases, self.root / f'incomplete-{index}')
+                self.assertIsNotNone(report['engine_error'])
+                self.assertNotEqual(report['results'][0]['status'], 'pass')
 
     @unittest.skipUnless(shutil.which("moon-cram"), "Moon Cram is not installed")
     def test_real_cram_preserves_matching_and_captures_success_and_errors(self):
