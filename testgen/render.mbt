@@ -38,8 +38,22 @@ fn append_unix_header(sb : StringBuilder) -> Unit {
 
 ///|
 fn powershell_single_quote(arg : String) -> String {
-  let escaped = arg.replace(old="'", new="''")
-  "'\{escaped}'"
+  quote_with_apostrophe_escape(arg, "''")
+}
+
+///|
+fn quote_with_apostrophe_escape(arg : String, escape : String) -> String {
+  let sb = StringBuilder()
+  sb.write_char('\'')
+  for ch in arg {
+    if ch == '\'' {
+      sb.write_string(escape)
+    } else {
+      sb.write_char(ch)
+    }
+  }
+  sb.write_char('\'')
+  sb.to_string()
 }
 
 ///|
@@ -121,8 +135,10 @@ fn append_case_commands(
 
 ///|
 fn shell_quote(arg : String) -> String {
-  let escaped = arg.replace(old="'", new="'\\''")
-  "'\{escaped}'"
+  match current_platform.val {
+    TestPlatform::Unix => quote_with_apostrophe_escape(arg, "'\\''")
+    TestPlatform::Windows => powershell_single_quote(arg)
+  }
 }
 
 ///|

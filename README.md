@@ -38,6 +38,7 @@ Run the generator tests and all checked-in baselines:
 
 ```sh
 moon -C testgen test --target wasm
+python testgen/integration_test.py
 moon cram test --cram-compat tests/unix
 ```
 
@@ -114,11 +115,14 @@ The PR workflow:
 
 ```sh
 moon -C testgen test --target wasm
+python testgen/integration_test.py
 scripts/update-tests.sh
-git diff --exit-code -- tests/unix tests/windows
+python scripts/check-generated-tests.py tests/unix
 moon cram test --cram-compat tests/unix
 moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows
 ```
 
 This verifies that generated baselines are up to date and that all checked-in
-Moon Cram tests pass.
+Moon Cram tests pass. The Windows job regenerates and checks `tests/windows`
+separately. The generated-baseline check includes untracked additions as well
+as modifications and deletions.

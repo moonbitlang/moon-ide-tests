@@ -82,10 +82,19 @@ fn ensure_repo_dir(path : String) -> Unit {
 
 ///|
 fn read_existing_file(path : String) -> String? {
-  try @fs.read_file_to_string(path) catch {
-    _ => None
-  } noraise {
-    text => Some(text)
+  if !@fs.path_exists(path) {
+    return None
+  }
+  Some(read_file_or_exit(path))
+}
+
+///|
+fn read_file_or_exit(path : String) -> String {
+  @fs.read_file_to_string(path) catch {
+    err => {
+      fatal("failed to read \{path}: \{debug_text(err)}")
+      ""
+    }
   }
 }
 
@@ -125,10 +134,17 @@ fn is_split_suite_output(name : String) -> Bool {
 }
 
 ///|
-/// Split-suite cases that disappear leave their per-case files behind, and
-/// the pre-split monolithic suite files would keep running stale commands,
-/// so drop every split-suite output we did not just generate.
-fn remove_stale_split_files(
+fn is_generated_output(name : String) -> Bool {
+  name == "outline.mooncram.md" ||
+  name == "hover.mooncram.md" ||
+  name == "peek-def.mooncram.md" ||
+  is_split_suite_output(name)
+}
+
+///|
+/// Remove only generator-owned outputs, including suites that became empty.
+/// Handwritten suites such as doc.mooncram.md must remain untouched.
+fn remove_stale_generated_files(
   output_dir : String,
   files : Array[CramFile],
 ) -> Unit {
@@ -137,13 +153,16 @@ fn remove_stale_split_files(
     generated.add(file.name)
   }
   let entries = try @fs.read_dir(output_dir) catch {
-    _ => return
+    err => {
+      fatal("failed to read directory \{output_dir}: \{debug_text(err)}")
+      []
+    }
   } noraise {
     values => values.to_owned()
   }
   entries.sort()
   for name in entries {
-    if generated.contains(name) || !is_split_suite_output(name) {
+    if generated.contains(name) || !is_generated_output(name) {
       continue
     }
     let path = @path.Path::join(output_dir, name).to_string()
@@ -183,7 +202,7 @@ fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
     }
     write_generated_file_or_exit(path, content)
   }
-  remove_stale_split_files(output_dir, files)
+  remove_stale_generated_files(output_dir, files)
 }
 
 ///|
