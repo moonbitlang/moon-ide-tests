@@ -7,6 +7,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ide_regression.manifest import collect_cases, compare_cases, verify_inputs, fixture_commit, capture_manifest
+from ide_regression.manifest import tree_fingerprint
 import subprocess
 from unittest.mock import patch
 
@@ -118,6 +119,11 @@ class ManifestTests(unittest.TestCase):
             dep.write_text('// after\n')
             after = capture_manifest(self.root, 'unix', {})
         self.assertIn('generator_dependencies', verify_inputs(before, after))
+
+    def test_ignored_entry_is_not_source_when_git_checks_out_link_as_file(self):
+        before = tree_fingerprint(self.repo)
+        (self.repo / 'node_modules').write_text('../missing-dependencies')
+        self.assertEqual(tree_fingerprint(self.repo), before)
 
     def test_replay_checks_every_frozen_identity_and_allows_only_explicit_tool_upgrade(self):
         accepted = {"schema_version": 1, "inputs": {"fixtures": {"demo": "abc"}, "generator": "g", "config": "c", "dependencies": "d", "registry": "r", "toolchain": "t", "platform": "unix"}}

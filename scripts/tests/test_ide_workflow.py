@@ -8,7 +8,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ide_regression.manifest import collect_cases, digest, tree_fingerprint
 from ide_regression.policy import classify
-from ide_regression.workflow import RegressionRun
+from ide_regression.workflow import RegressionRun, copy_workspace
 from ide_regression.replay import replay
 
 
@@ -114,6 +114,17 @@ class WorkflowTests(unittest.TestCase):
         report = pipeline.finish()
         self.assertEqual(report['gate']['verdict'], 'failed')
         self.assertTrue(any(r['status'] == 'infrastructure_error' for r in report['stages']['A']))
+
+    def test_workspace_preserves_fixture_symlinks(self):
+        link = self.repo / 'README.md'
+        try:
+            link.symlink_to('a.mbt')
+        except OSError as error:
+            self.skipTest(f'Symlink creation unavailable: {error}')
+        workspace = copy_workspace(self.root, Path(self.temp.name) / 'copy', 'unix')
+        copied = workspace / 'fixtures/repos/demo/README.md'
+        self.assertTrue(copied.is_symlink())
+        self.assertEqual(tree_fingerprint(self.repo), tree_fingerprint(copied.parent))
 
     def test_replay_source_mutation_cannot_report_clean(self):
         saved = self.capture(self.root, 'unix', self.policy)

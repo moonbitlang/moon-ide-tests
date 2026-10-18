@@ -100,6 +100,10 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
   before filesystem inspection; keep strict errors for actual scan inputs.
   Linux corpus regeneration was RED; a symlink regression test was added
   (skipped locally because Windows symlink privilege is unavailable).
+- Follow-up provenance validation: preserve real symlinks in isolated workspaces
+  and ignore dependency/cache entries consistently when Windows Git materializes
+  links as plain files. Ignored-entry fingerprint test RED -> GREEN; real-link
+  preservation is covered on Unix (Windows lacks symlink creation privilege).
 - Final minor (deferred): replay filters required cells by platform but displays
   deferred cells for both platforms. This affects report presentation only.
 - Final Ruling: full legacy-corpus results remain unverified; Unix execution is

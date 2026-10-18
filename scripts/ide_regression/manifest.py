@@ -35,9 +35,13 @@ def tree_fingerprint(path, *, include_dependencies=False):
     rows = []
     for directory, dirs, files in os.walk(path, followlinks=False):
         dirs[:] = sorted(d for d in dirs if d not in IGNORED or (include_dependencies and d == ".mooncakes"))
+        for name in dirs:
+            link = Path(directory) / name
+            if link.is_symlink():
+                rows.append((link.relative_to(path).as_posix(), hashlib.sha256(os.readlink(link).encode()).hexdigest()))
         for name in sorted(files):
             file = Path(directory) / name
-            if name in {".git", ".DS_Store", ".moon-lock"}:
+            if name in IGNORED or name in {".DS_Store", ".moon-lock"}:
                 continue
             relative = file.relative_to(path).as_posix()
             if file.is_symlink():

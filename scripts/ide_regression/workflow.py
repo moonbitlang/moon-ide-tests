@@ -17,8 +17,8 @@ def copy_workspace(source, destination, platform):
                                     '__pycache__', '.moonagent', '.repo')
     for name in ('fixtures', 'core_test', 'testgen', 'scripts'):
         if (Path(source) / name).exists():
-            shutil.copytree(Path(source) / name, destination / name, ignore=ignore)
-    shutil.copytree(Path(source) / 'tests' / platform, destination / 'tests' / platform)
+            shutil.copytree(Path(source) / name, destination / name, ignore=ignore, symlinks=True)
+    shutil.copytree(Path(source) / 'tests' / platform, destination / 'tests' / platform, symlinks=True)
     return destination
 
 
