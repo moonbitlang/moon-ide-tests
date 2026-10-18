@@ -69,3 +69,6 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
   passed; source drift rejected. Full Windows inventory: 578 cases, 8 invalid
   positions, 108 unreviewed legacy nonzero snapshots. Full corpus A interrupted
   after slow old dependency resolution; partial captures remain diagnostic only.
+- Task 5 validation complete: Python harness 38/38 (including real end-to-end
+  replay), Moon generator 21/21, generator integration 9/9. Both workflow YAML
+  files parse; Bash audit helper and PowerShell audit helper pass syntax checks.
