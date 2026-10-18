@@ -22,7 +22,7 @@ class GeneratorTests(unittest.TestCase):
                     subprocess.CompletedProcess([], 0, 'success', '')]) as run:
                 result = run_generator(root, ['test', '--target', 'wasm'])
             self.assertEqual(result.stdout, 'success')
-            self.assertEqual(run.call_args_list[1].args[0], ['moon', '-C', str(dep), 'fmt'])
+            self.assertEqual(run.call_args_list[1].args[0], ['moon', '-C', str(dep.resolve()), 'fmt'])
 
     def test_does_not_modify_external_paths_or_retry_arbitrary_errors(self):
         with tempfile.TemporaryDirectory() as temp:

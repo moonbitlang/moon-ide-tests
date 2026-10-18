@@ -65,7 +65,7 @@ class RunnerTests(unittest.TestCase):
     def test_captures_cannot_replace_missing_or_malformed_matcher_evidence(self):
         for index, records in enumerate([[], [1], [{'location': 'foreign.md', 'result': {'kind': 'success'}}],
                                          [{'location': str(self.file), 'result': {}}],
-                                         [{'location': str(self.file), 'result': {'kind': 'success'}}] * 3]):
+                                         [{'location': str(self.file), 'result': {'kind': 'success'}}] * 4]):
             def fake_execute(command, **kwargs):
                 captures = Path(kwargs['env']['P0_CAPTURE_DIR'])
                 identity = self.cases[0]['execution_id']

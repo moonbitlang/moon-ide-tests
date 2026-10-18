@@ -88,7 +88,13 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 - Final fixed: freeze generator dependency code, preparing cold caches before A;
   test_generator_dependency_code_is_part_of_frozen_inputs RED -> GREEN.
 - Final fixed: Unix test fixture now has one setup command per Cram fence;
-  existing real runner test was RED on Unix CI; rerun pending.
+  existing real runner test was RED on Unix CI, then GREEN with real Cram.
+- Final fix-pass validation: Python suite 43/43 on Windows. Unix CI verified
+  the real A/B/C/replay smoke and runner after fixture correction; the remaining
+  platform-specific test fixture expectations were normalized for a final rerun.
+- CI-only test portability: compare resolved Windows paths (short and long
+  temp paths identify the same directory); use an actually excessive matcher
+  record count on both platforms. No runtime semantics changed.
 - Final minor (deferred): replay filters required cells by platform but displays
   deferred cells for both platforms. This affects report presentation only.
 - Final Ruling: full legacy-corpus results remain unverified; Unix execution is
