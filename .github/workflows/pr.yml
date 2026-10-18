@@ -32,7 +32,10 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test --target wasm
+        run: python scripts/ide-regression.py generator-test
+
+      - name: Test regression harness
+        run: python -m unittest discover -s scripts/tests -v
 
       - name: Test generator integration
         run: python testgen/integration_test.py
@@ -72,6 +75,14 @@ jobs:
             }
             Start-Sleep -Seconds ($attempt * 10)
           }
+
+      - name: Test generator
+        shell: powershell
+        run: python scripts/ide-regression.py generator-test
+
+      - name: Test regression harness
+        shell: powershell
+        run: python -m unittest discover -s scripts/tests -v
 
       - name: Test generator integration
         shell: powershell

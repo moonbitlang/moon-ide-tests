@@ -63,3 +63,9 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 - Integration prerequisite: current Moon rejects cached legacy dependency
   manifests; migrate only pinned generator cache manifests and retry. Generator
   unit tests pass 21/21 with the current toolchain; no dependency versions changed.
+- Task 5: replay CLI, both CI platforms, daily A-before-update/B/C isolation,
+  mandatory final gate and candidate draft PR integration implemented.
+- Real smoke: generator + current IDE + Cram + A/B/C + stage + frozen replay
+  passed; source drift rejected. Full Windows inventory: 578 cases, 8 invalid
+  positions, 108 unreviewed legacy nonzero snapshots. Full corpus A interrupted
+  after slow old dependency resolution; partial captures remain diagnostic only.

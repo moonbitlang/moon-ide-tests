@@ -103,7 +103,7 @@ def evaluate(stages, delta, coverage_report, stability_errors):
                 review.append({"stage": stage, "id": result.get("id"), "status": state})
     failures.extend({"stage": "stability", "reason": reason} for reason in stability_errors)
     failures.extend({"stage": "coverage", "missing": cell} for cell in coverage_report["missing_required"])
-    for kind in ("retired", "changed", "ambiguous"):
+    for kind in ("added", "retired", "changed", "ambiguous"):
         review.extend({"stage": "delta", "kind": kind, "id": identity} for identity in delta.get(kind, []))
     return {"verdict": "failed" if failures else "needs_review" if review else "clean",
             "failures": failures, "review_required": review}

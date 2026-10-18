@@ -14,6 +14,10 @@ def case(kind="success", **extra):
 
 
 class PolicyTests(unittest.TestCase):
+    def test_new_cases_also_need_human_review(self):
+        result = evaluate({}, {'added': ['new']}, {'missing_required': []}, [])
+        self.assertEqual(result['verdict'], 'needs_review')
+
     def test_matching_legacy_error_is_still_an_unexpected_error(self):
         c = case()
         c["legacy_error_requires_review"] = True

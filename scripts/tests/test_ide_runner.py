@@ -54,7 +54,7 @@ class RunnerTests(unittest.TestCase):
             self.assertTrue(stability_diff(first, second))
 
     def test_missing_capture_cannot_be_hidden_by_a_successful_cram_exit(self):
-        with patch("ide_regression.runner.subprocess.run") as process:
+        with patch("ide_regression.runner.execute") as process:
             process.return_value.returncode = 0
             process.return_value.stdout = "[]"
             process.return_value.stderr = ""

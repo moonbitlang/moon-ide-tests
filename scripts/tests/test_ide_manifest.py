@@ -6,7 +6,8 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from ide_regression.manifest import collect_cases, compare_cases, verify_inputs
+from ide_regression.manifest import collect_cases, compare_cases, verify_inputs, fixture_commit
+from unittest.mock import patch
 
 
 def snapshot(command, output="value", status=0, platform="unix"):
@@ -95,6 +96,12 @@ class ManifestTests(unittest.TestCase):
         self.source.write_text('let x = "😀"; foo()\n', encoding='utf-8')
         self.path.write_text(snapshot("run_moon_ide moon ide hover 'foo' --loc 'a.mbt:1:15'"))
         self.assertTrue(self.cases()[0]['input_valid'])
+
+    def test_builtin_fixture_does_not_inherit_outer_checkout_revision(self):
+        with patch('ide_regression.manifest._git', side_effect=[str(self.root)]):
+            self.assertIsNone(fixture_commit(self.repo))
+        with patch('ide_regression.manifest._git', side_effect=[str(self.repo), 'abc']):
+            self.assertEqual(fixture_commit(self.repo), 'abc')
 
     def test_replay_checks_every_frozen_identity_and_allows_only_explicit_tool_upgrade(self):
         accepted = {"schema_version": 1, "inputs": {"fixtures": {"demo": "abc"}, "generator": "g", "config": "c", "dependencies": "d", "registry": "r", "toolchain": "t", "platform": "unix"}}

@@ -283,6 +283,13 @@ def _git(root, *args):
     return result.stdout.strip() if result.returncode == 0 else None
 
 
+def fixture_commit(path):
+    top = _git(path, 'rev-parse', '--show-toplevel')
+    # Handwritten fixtures belong to this repository, whose HEAD necessarily
+    # changes when a candidate is merged. Their own content hash is sufficient.
+    return _git(path, 'rev-parse', 'HEAD') if top and Path(top).resolve() == Path(path).resolve() else None
+
+
 @lru_cache(maxsize=4)
 def runtime_versions(platform):
     commands = {'cram': ['moon-cram', '--version'], 'shell':
@@ -310,7 +317,7 @@ def capture_manifest(root, platform, policy, *, moon="moon", provenance=None):
                 raise ValueError('Uninitialized fixture submodule: ' + repo['path'])
     for relative in sorted({c["repo_path"] for c in cases}):
         path = root / relative
-        fixtures[relative] = {"tree": tree_fingerprint(path), "commit": _git(path, "rev-parse", "HEAD")}
+        fixtures[relative] = {"tree": tree_fingerprint(path), "commit": fixture_commit(path)}
         dependencies[relative] = digest([(p.relative_to(path).as_posix(), p.read_text(encoding='utf-8'))
                                         for p in sorted(path.rglob('moon.mod*'))
                                         if not any(part in IGNORED for part in p.relative_to(path).parts)])

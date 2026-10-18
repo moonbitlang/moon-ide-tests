@@ -58,9 +58,21 @@ class RegressionRun:
         with tempfile.TemporaryDirectory(prefix='moon-ide-A-') as temp:
             workspace = copy_workspace(self.root, temp, self.platform)
             a = self.runner.run(workspace, accepted['cases'], self.output / 'A')
+            accepted['resolved_dependencies'] = self._capture(workspace, accepted).get('resolved_dependencies')
+        # Legacy baselines have no recorded creator; expose that fact rather
+        # than assigning today's toolchain to a historical snapshot.
+        catalog_path = self.root / 'baselines' / (self.platform + '.json')
+        provenance = 'legacy creator unknown'
+        if catalog_path.exists():
+            catalog = read_json(catalog_path)
+            for key in ('fixtures', 'baselines'):
+                if catalog['inputs'][key] != accepted['inputs'][key]:
+                    raise ValueError('Accepted baseline catalog differs: ' + key)
+            provenance = catalog['inputs']['toolchain']
+        write_json(self.output / 'accepted-manifest.json', accepted)
         write_json(self.output / 'state.json', {
             'schema_version': 1, 'platform': self.platform, 'root': str(self.root),
-            'accepted': accepted, 'A': a['results']})
+            'accepted': accepted, 'A': a['results'], 'baseline_creator': provenance})
 
     def _state(self):
         state = read_json(self.output / 'state.json')
@@ -94,6 +106,9 @@ class RegressionRun:
             candidate = self._capture(first, current)
             warm = self.runner.run(first, candidate['cases'], self.output / 'C-warm')
             after_warm = self._capture(first, current)
+            unexpected_inputs = set(verify_inputs(current, after_warm)) - {'baselines'}
+            if unexpected_inputs:
+                stability.append('frozen inputs changed during C: ' + ', '.join(sorted(unexpected_inputs)))
             stability.extend(stability_diff(cold['results'], warm['results']))
             if candidate.get('resolved_dependencies') != after_warm.get('resolved_dependencies'):
                 stability.append('resolved dependencies changed between cold and warm execution')
@@ -106,7 +121,8 @@ class RegressionRun:
         cells = coverage(candidate['cases'], warm['results'], platform_policy)
         stages = {'A': state['A'], 'B': b['results'], 'C-cold': cold['results'], 'C': warm['results']}
         report = {'schema_version': 1, 'platform': self.platform, 'stages': stages,
-                  'delta': delta, 'coverage': cells, 'stability_errors': stability}
+                  'delta': delta, 'coverage': cells, 'stability_errors': stability,
+                  'baseline_creator': state.get('baseline_creator')}
         report['gate'] = evaluate(stages, delta, cells, stability)
         write_json(self.output / 'candidate-manifest.json', candidate)
         write_json(candidate_dir / 'baselines' / (self.platform + '.json'), compact_manifest(candidate))

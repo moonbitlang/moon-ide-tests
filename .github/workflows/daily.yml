@@ -41,9 +41,6 @@ jobs:
           mkdir -p .daily-test
           printf ".daily-test/\n" >> .git/info/exclude
 
-      - name: Update fixture repos
-        run: scripts/update-submodules.sh
-
       - name: Update MoonBit registry
         run: |
           for attempt in 1 2 3; do
@@ -57,29 +54,21 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test --target wasm
+        run: python scripts/ide-regression.py generator-test
 
-      - name: Update generated Unix tests
-        run: scripts/update-tests.sh
+      - name: A - run frozen Unix baselines before fixture updates
+        run: python scripts/ide-regression.py begin --platform unix --output .daily-test/p0-unix
 
-      - name: Refresh Unix snapshots
+      - name: Update fixture repos
+        run: scripts/update-submodules.sh
+
+      - name: B/C - diagnose fixture drift and validate isolated candidates
         run: |
-          mkdir -p .daily-test
-          scripts/escape-cram-empty-parens.sh tests/unix
-          moon cram update --replace --assume-yes --cram-compat tests/unix \
-            > .daily-test/unix-cram-update.log 2>&1
-          scripts/escape-cram-empty-parens.sh tests/unix
+          python scripts/ide-regression.py finish --platform unix --output .daily-test/p0-unix
+          cat .daily-test/p0-unix/report.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Run Unix cram tests
-        id: unix-cram
-        run: |
-          set +e
-          moon cram test --cram-compat tests/unix \
-            > .daily-test/unix-cram-test.log 2>&1
-          status=$?
-          set -e
-          echo "$status" > .daily-test/unix-cram-test-status.txt
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Stage Unix candidates for human review
+        run: python scripts/ide-regression.py stage --platform unix --output .daily-test/p0-unix
 
       - name: Collect Unix review inputs
         if: always()
@@ -92,8 +81,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- fixtures/repos tests/unix; then
-            git add fixtures/repos tests/unix
+          git add fixtures/repos tests/unix baselines/unix.json
+          if ! git diff --cached --quiet; then
             git commit -m "chore: update daily Unix IDE baselines"
           fi
 
@@ -133,6 +122,8 @@ jobs:
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
           git checkout -B $env:DAILY_BRANCH "origin/$($env:DAILY_BRANCH)"
+          git submodule update --init --recursive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
           ".daily-test/" | Out-File -FilePath .git\info\exclude -Encoding utf8 -Append
 
@@ -150,20 +141,36 @@ jobs:
             Start-Sleep -Seconds ($attempt * 10)
           }
 
-      - name: Update Windows snapshots
-        shell: powershell
-        run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
+      - name: Download frozen Unix inputs
+        uses: actions/download-artifact@v8
+        with:
+          name: daily-unix-review-inputs
+          path: .daily-test
 
-      - name: Run Windows cram tests
-        id: windows-cram
+      - name: Prepare Windows generator
+        shell: powershell
+        run: python scripts/ide-regression.py generator-test
+
+      - name: A - replay original fixtures with old Windows snapshots
         shell: powershell
         run: |
-          New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
-          $status = $LASTEXITCODE
-          [System.IO.File]::WriteAllText(".daily-test\windows-cram-test-status.txt", [string]$status, [System.Text.Encoding]::ASCII)
-          "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          exit 0
+          python scripts/ide-regression.py pin-fixtures --manifest .daily-test/p0-unix/accepted-manifest.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/ide-regression.py check-toolchain --platform windows --manifest .daily-test/p0-unix/accepted-manifest.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/ide-regression.py begin --platform windows --output .daily-test/p0-windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git submodule update --init --recursive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: B/C - diagnose and validate Windows candidates
+        shell: powershell
+        run: |
+          python scripts/ide-regression.py finish --platform windows --output .daily-test/p0-windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-Content .daily-test/p0-windows/report.md | Out-File $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          python scripts/ide-regression.py stage --platform windows --output .daily-test/p0-windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Commit Windows daily changes
         shell: powershell
@@ -178,10 +185,12 @@ jobs:
             exit $LASTEXITCODE
           }
 
-          git diff --cached --quiet -- tests/windows
+          git add baselines/windows.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git diff --cached --quiet -- tests/windows baselines/windows.json
           $diffStatus = $LASTEXITCODE
 
-          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
+          $windowsStatus = @(git diff --cached --name-status -- tests/windows baselines/windows.json)
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
@@ -223,6 +232,7 @@ jobs:
     needs:
       - daily-test
       - windows-baseline
+    if: always()
     steps:
       - uses: actions/checkout@v7
         with:
@@ -275,7 +285,7 @@ jobs:
       - name: Detect daily diff
         id: diff
         run: |
-          if git diff --quiet origin/main...HEAD -- fixtures/repos tests/unix tests/windows; then
+          if git diff --quiet origin/main...HEAD -- fixtures/repos tests/unix tests/windows baselines; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
@@ -294,22 +304,23 @@ jobs:
             --json number \
             --jq '.[0].number // empty')"
 
-          body="$(printf '%s\n\n%s\n%s\n' \
-            "This PR was generated by the Daily Test workflow." \
-            "It refreshes fixture submodules, regenerates IDE baseline tests with testgen," \
-            "promotes Unix Moon Cram snapshots, and promotes Windows Moon Cram snapshots.")"
+          {
+            printf '%s\n\n' "Candidate IDE baselines; human review is required before acceptance."
+            cat .daily-test/p0-unix/report.md .daily-test/p0-windows/report.md
+          } > .daily-test/pr-body.md
 
           if [ -z "$pr_number" ]; then
             pr_url="$(gh pr create \
               --base main \
               --head "$DAILY_BRANCH" \
+              --draft \
               --title "chore: update daily IDE baselines" \
-              --body "$body")"
+              --body-file .daily-test/pr-body.md)"
             pr_number="${pr_url##*/}"
           else
             gh pr edit "$pr_number" \
               --title "chore: update daily IDE baselines" \
-              --body "$body"
+              --body-file .daily-test/pr-body.md
           fi
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
@@ -368,14 +379,11 @@ jobs:
               body,
             });
 
-      - name: Fail if cram tests failed without a diff
-        if: steps.diff.outputs.has_changes == 'false'
+      - name: Enforce both platform reports regardless of candidate diff
+        if: always()
         run: |
-          unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
-          windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
-
-          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
-            cat .daily-test/unix-cram-test.log 2>/dev/null || true
-            cat .daily-test/windows-cram-test.log 2>/dev/null || true
-            exit 1
-          fi
+          unix_status=0
+          windows_status=0
+          python scripts/ide-regression.py check --output .daily-test/p0-unix || unix_status=$?
+          python scripts/ide-regression.py check --output .daily-test/p0-windows || windows_status=$?
+          test "$unix_status" -eq 0 && test "$windows_status" -eq 0

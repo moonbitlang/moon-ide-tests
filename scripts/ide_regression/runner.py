@@ -11,6 +11,7 @@ import subprocess
 
 from .manifest import command_blocks, write_json
 from .policy import classify
+from .process import execute
 
 SCRIPTS = Path(__file__).resolve().parents[1]
 
@@ -97,7 +98,9 @@ class CramRunner:
                 originals[relative] = file.read_bytes()
                 text = escape_empty_parens(file.read_text(encoding="utf-8"))
                 file.write_bytes(instrument(text, members).encode("utf-8"))
-            result = subprocess.run(command, cwd=workspace, env={**os.environ, **(env or {}), "P0_CAPTURE_DIR": str(captures)}, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=self.timeout + 30)
+            result = execute(command, cwd=workspace, env={**os.environ, **(env or {}),
+                             'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'GMT',
+                             "P0_CAPTURE_DIR": str(captures)}, timeout=self.timeout + 30)
             (output_dir / "cram.stdout").write_text(result.stdout, encoding="utf-8")
             (output_dir / "cram.stderr").write_text(result.stderr, encoding="utf-8")
             if update:
@@ -125,6 +128,9 @@ class CramRunner:
                     engine_error = f"Invalid Cram JSON result: {error}"
         except (OSError, subprocess.TimeoutExpired, ValueError) as error:
             engine_error = str(error)
+            if isinstance(error, subprocess.TimeoutExpired):
+                (output_dir / 'cram.stdout').write_text(error.stdout or '', encoding='utf-8')
+                (output_dir / 'cram.stderr').write_text(error.stderr or '', encoding='utf-8')
         finally:
             for relative, original in originals.items():
                 file = workspace / relative
