@@ -110,6 +110,13 @@ class GeneratorTests(unittest.TestCase):
                     self.assertIn("a.mbt", result.stdout)
                     self.assertEqual(sentinel.read_text(), "previous baseline\n")
 
+    def test_ignored_dangling_dependency_link_does_not_block_generation(self):
+        try:
+            (self.repo / 'node_modules').symlink_to(self.repo / 'missing-dependencies', target_is_directory=True)
+        except OSError as error:
+            self.skipTest(f'Symlink creation unavailable: {error}')
+        self.generate_ok(self.base / 'output')
+
     def test_preserves_snapshots_and_migrates_legacy_split_files(self):
         output = self.base / "output"
         self.generate_ok(output)

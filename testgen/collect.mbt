@@ -383,6 +383,11 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
   }
   entries.sort()
   for name in entries {
+    // Ignore dependency/cache entries before stat: a fixture may contain a
+    // dangling node_modules symlink that is intentionally outside the scan.
+    if should_skip_dir(name) {
+      continue
+    }
     let abs_path = @path.Path::join(abs_dir, name).to_string()
     let rel_path = if rel_dir is "" {
       name
@@ -398,9 +403,7 @@ fn walk_dir(abs_dir : String, rel_dir : String, out : Array[String]) -> Unit {
       value => value
     }
     if is_dir {
-      if !should_skip_dir(name) {
-        walk_dir(abs_path, rel_path, out)
-      }
+      walk_dir(abs_path, rel_path, out)
       continue
     }
     let is_file = try @fs.is_file(abs_path) catch {

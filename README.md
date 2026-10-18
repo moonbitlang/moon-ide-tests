@@ -25,6 +25,10 @@ fixture set for local development.
 See `testgen/README.mbt.md` for the generator CLI options and implementation
 notes.
 
+The daily workflow uses isolated A/B/C execution, explicit coverage/outcome
+policy and draft candidate PRs. See [IDE regression P0](docs/ide-regression-p0.md)
+for the required final gate, manifests, replay and candidate review procedure.
+
 ## Setup
 
 Install the MoonBit toolchain, then initialize the fixture submodules:
@@ -37,7 +41,8 @@ moon update
 Run the generator tests and all checked-in baselines:
 
 ```sh
-moon -C testgen test --target wasm
+python scripts/ide-regression.py generator-test
+python -m unittest discover -s scripts/tests -v
 python testgen/integration_test.py
 moon cram test --cram-compat tests/unix
 ```
@@ -106,15 +111,17 @@ scripts/escape-cram-empty-parens.sh tests/unix
 moon cram test --cram-compat tests/unix
 ```
 
-Canary CI runs this flow on a schedule and uploads the resulting fixture and
-baseline diff as an artifact.
+These commands manually refresh snapshots. Scheduled daily CI runs A before
+updating fixtures and B/C afterward; it preserves all failures, validates
+candidate stability and opens a draft PR for review.
 
 ## CI
 
 The PR workflow:
 
 ```sh
-moon -C testgen test --target wasm
+python scripts/ide-regression.py generator-test
+python -m unittest discover -s scripts/tests -v
 python testgen/integration_test.py
 scripts/update-tests.sh
 python scripts/check-generated-tests.py tests/unix

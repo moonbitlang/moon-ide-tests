@@ -6,23 +6,29 @@ Use the repository checkout and local command-line tools to inspect the result. 
 
 ```sh
 git status --short
-git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows
-git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows
+git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows baselines
+git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows baselines
 cat .daily-test/status.txt
 cat .daily-test/unix-status.txt
 cat .daily-test/windows-status.txt
 cat .daily-test/submodules.txt
-cat .daily-test/unix-cram-test-status.txt
-cat .daily-test/windows-cram-test-status.txt
-cat .daily-test/unix-cram-test.log
-cat .daily-test/windows-cram-test.log
-cat .daily-test/unix-cram-update.log
-cat .daily-test/windows-cram-update.log
+cat .daily-test/p0-unix/report.md
+cat .daily-test/p0-windows/report.md
+cat .daily-test/p0-unix/report.json
+cat .daily-test/p0-windows/report.json
 ```
 
 Decide whether the daily refresh contains a failed test, wrong expected output, suspicious baseline promotion, or another issue that needs human attention.
 
-Treat ordinary fixture submodule fast-forwards, generated baseline drift, and passing cram output as normal unless the diff or logs show a concrete test problem. If cram failed, inspect the log and explain the specific failing or suspicious tests.
+Preserve A findings (old fixtures/commands/snapshots with the current toolchain),
+B findings (new fixtures with old commands/snapshots), and C findings (independently
+generated candidate commands, then cold/warm execution) separately. A passing C
+never clears an A failure. Matching nonzero legacy output is not an approved
+negative test. Missing reports, missing required effective coverage, unstable
+generation/execution, retired cases and ambiguous identities need attention.
+Read the corresponding A/B/C-cold/C-warm captures when investigating a case.
+Candidates and coverage changes require human review; do not approve output
+merely because C matches newly recorded snapshots.
 
 Return JSON only:
 
