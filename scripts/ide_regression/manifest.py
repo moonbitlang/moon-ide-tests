@@ -2,6 +2,7 @@
 
 from collections import Counter, defaultdict
 import hashlib
+from functools import lru_cache
 import json
 import os
 from pathlib import Path
@@ -142,14 +143,21 @@ def _anchor(root, repo, argv):
         if not path.is_file():
             return None, False, f"missing source file: {source}", loc
         lines = path.read_text(encoding="utf-8").splitlines()
-        if line < 1 or line > len(lines) or column < 1 or column > len(lines[line - 1]) + 1:
+        if line < 1 or line > len(lines) or column < 1:
             return None, False, "source location out of range", loc
         text = lines[line - 1]
-        token = re.match(r"[A-Za-z_][A-Za-z0-9_]*", text[column - 1:])
+        try:
+            prefix = text.encode('utf-16-le')[:(column - 1) * 2].decode('utf-16-le')
+        except UnicodeDecodeError:
+            return None, False, 'source column splits a UTF-16 character', loc
+        offset = len(prefix)
+        if len(text.encode('utf-16-le')) < (column - 1) * 2:
+            return None, False, 'source location out of range', loc
+        token = re.match(r"[A-Za-z_][A-Za-z0-9_]*", text[offset:])
         query = argv[3] if len(argv) > 3 and not argv[3].startswith("--") else None
         if token is None or (query is not None and token[0] != query):
             return None, False, "location no longer points to the queried token", loc
-        marked = text[:column - 1] + "<TOKEN>" + text[column - 1 + len(token[0]):]
+        marked = text[:offset] + "<TOKEN>" + text[offset + len(token[0]):]
         return " ".join(marked.split()), True, "", loc
     if argv[2] == "outline":
         source = argv[3].replace("\\", "/")
@@ -275,26 +283,53 @@ def _git(root, *args):
     return result.stdout.strip() if result.returncode == 0 else None
 
 
+@lru_cache(maxsize=4)
+def runtime_versions(platform):
+    commands = {'cram': ['moon-cram', '--version'], 'shell':
+                ['powershell.exe', '-NoProfile', '-Command', '$PSVersionTable.PSVersion.ToString()']
+                if platform == 'windows' else ['bash', '--version']}
+    result = {}
+    for key, command in commands.items():
+        version = subprocess.run(command, capture_output=True, text=True, check=True)
+        result[key] = version.stdout.splitlines()[0]
+    return result
+
+
 def capture_manifest(root, platform, policy, *, moon="moon", provenance=None):
     root = Path(root).resolve()
     cases = collect_cases(root, platform, policy)
     tool = subprocess.run([moon, "version", "--all"], capture_output=True, text=True, check=True)
     version = [re.sub(r"\)\s+.*$", ")", line) for line in tool.stdout.splitlines() if line.startswith(("moon ", "moonc ", "moonrun ", "Feature flags"))]
-    fixtures, dependencies = {}, {}
+    fixtures, dependencies, resolved = {}, {}, {}
+    if not cases:
+        raise ValueError('No IDE cases found; refusing an empty baseline')
+    if provenance is None:
+        for repo in load_repos(root):
+            entry = _git(root, 'ls-files', '--stage', '--', repo['path']) or ''
+            if entry.startswith('160000 ') and not (root / repo['path'] / '.git').exists():
+                raise ValueError('Uninitialized fixture submodule: ' + repo['path'])
     for relative in sorted({c["repo_path"] for c in cases}):
         path = root / relative
         fixtures[relative] = {"tree": tree_fingerprint(path), "commit": _git(path, "rev-parse", "HEAD")}
-        dependencies[relative] = tree_fingerprint(path / ".mooncakes") if (path / ".mooncakes").exists() else None
+        dependencies[relative] = digest([(p.relative_to(path).as_posix(), p.read_text(encoding='utf-8'))
+                                        for p in sorted(path.rglob('moon.mod*'))
+                                        if not any(part in IGNORED for part in p.relative_to(path).parts)])
+        resolved[relative] = tree_fingerprint(path / ".mooncakes") if (path / ".mooncakes").exists() else None
     moon_home = Path(os.environ.get("MOON_HOME", str(Path.home() / ".moon")))
     registry = moon_home / "registry/index"
+    registry_commit = _git(registry, 'rev-parse', 'HEAD') if registry.exists() else None
+    registry_dirty = _git(registry, 'status', '--porcelain') if registry_commit else None
     inputs = {
         "platform": platform, "toolchain": version,
         "generator": tree_fingerprint(root / "testgen"),
         "config": digest([load_repos(root), policy]),
         "fixtures": fixtures, "dependencies": dependencies,
-        "registry": tree_fingerprint(registry) if registry.exists() else None,
+        "registry": {'commit': registry_commit} if registry_commit and not registry_dirty else tree_fingerprint(registry) if registry.exists() else None,
         "baselines": tree_fingerprint(root / "tests" / platform),
-        "environment": {k: os.environ.get(k) for k in ("LANG", "LC_ALL", "TZ", "MOON_UNSTABLE")},
+        'harness': tree_fingerprint(root / 'scripts'),
+        'runtime': runtime_versions(platform),
+        "environment": {'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'GMT',
+                        'MOON_UNSTABLE': os.environ.get('MOON_UNSTABLE')},
     }
     if provenance:
         # Sandboxes deliberately omit Git administration; carry the source
@@ -306,4 +341,4 @@ def capture_manifest(root, platform, policy, *, moon="moon", provenance=None):
     return {"schema_version": SCHEMA_VERSION, "inputs": inputs, "cases": cases,
             "source_revision": _git(root, "rev-parse", "HEAD"),
             "toolchain_raw": tool.stdout, "moon_home": str(moon_home),
-            "policy": policy}
+            "policy": policy, 'resolved_dependencies': resolved}

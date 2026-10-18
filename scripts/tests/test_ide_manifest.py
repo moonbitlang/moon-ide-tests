@@ -91,6 +91,11 @@ class ManifestTests(unittest.TestCase):
         self.assertFalse(case["input_valid"])
         self.assertIn("missing", case["input_reason"])
 
+    def test_source_columns_use_utf16_offsets(self):
+        self.source.write_text('let x = "😀"; foo()\n', encoding='utf-8')
+        self.path.write_text(snapshot("run_moon_ide moon ide hover 'foo' --loc 'a.mbt:1:15'"))
+        self.assertTrue(self.cases()[0]['input_valid'])
+
     def test_replay_checks_every_frozen_identity_and_allows_only_explicit_tool_upgrade(self):
         accepted = {"schema_version": 1, "inputs": {"fixtures": {"demo": "abc"}, "generator": "g", "config": "c", "dependencies": "d", "registry": "r", "toolchain": "t", "platform": "unix"}}
         self.assertEqual(verify_inputs(accepted, copy.deepcopy(accepted)), [])

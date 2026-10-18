@@ -57,3 +57,9 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
   per-run manifests/captures are artifacts. Legacy snapshots have unknown creator
   toolchain until the first reviewed candidate. Cost: initial review flags remain
   visible rather than inventing an approval history.
+
+- Task 4: workflow tests RED -> GREEN; 32/32 total tests. Independent generation,
+  cold/warm execution, A failure retention and explicit candidate staging tested.
+- Integration prerequisite: current Moon rejects cached legacy dependency
+  manifests; migrate only pinned generator cache manifests and retry. Generator
+  unit tests pass 21/21 with the current toolchain; no dependency versions changed.
