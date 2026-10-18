@@ -166,10 +166,12 @@ def collect_cases(root, platform, policy=None):
     overrides = (policy or {}).get("cases", {})
     for file in sorted((root / "tests" / platform).rglob("*.mooncram.md")):
         text = file.read_text(encoding="utf-8")
+        occurrences = Counter()
         for number, expression, expected in command_blocks(text):
             if not expression.startswith("run_moon_ide "):
                 continue
             words = shell_words(expression, platform)
+            occurrences[expression] += 1
             repo = _repo_path(root, file, text, words, platform)
             if words[1:3] != ["moon", "ide"] or len(words) < 4:
                 raise ValueError(f"Unsupported IDE invocation: {expression}")
@@ -188,7 +190,7 @@ def collect_cases(root, platform, policy=None):
                 expected = expected[:-1]
             case = {
                 "id": semantic, "semantic_key": semantic,
-                "execution_id": digest([file.relative_to(root).as_posix(), number, expression])[:24],
+                "execution_id": digest([file.relative_to(root).as_posix(), expression, occurrences[expression]])[:24],
                 "command": argv[2], "argv": argv, "shell_expression": expression,
                 "cram_file": file.relative_to(root).as_posix(), "command_line": number,
                 "repo_path": repo, "platform": platform, "location": location,

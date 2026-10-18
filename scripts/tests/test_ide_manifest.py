@@ -71,6 +71,11 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(case["expectation"]["kind"], "success")
         self.assertTrue(case["legacy_error_requires_review"])
 
+    def test_snapshot_length_does_not_change_execution_identity(self):
+        old = self.cases()
+        self.path.write_text("# Extra heading\n\n" + self.path.read_text())
+        self.assertEqual(old[0]["execution_id"], self.cases()[0]["execution_id"])
+
     def test_windows_quotes_and_embedded_markdown_do_not_truncate(self):
         windows = self.root / "tests/windows/demo"
         windows.mkdir(parents=True)

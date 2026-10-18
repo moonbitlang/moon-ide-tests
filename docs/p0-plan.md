@@ -50,3 +50,10 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 
 - Task 2: policy tests RED -> GREEN; 18/18 total tests. Explicit negatives,
   legacy failures, missing captures, independent stage/coverage/stability gates.
+
+- Task 3: capture/runner tests RED -> GREEN 24/24, including real Cram matching,
+  candidate update, cold/warm output checks and restoration of source snapshots.
+- Ruling: keep accepted provenance in compact baselines/<platform>.json; full
+  per-run manifests/captures are artifacts. Legacy snapshots have unknown creator
+  toolchain until the first reviewed candidate. Cost: initial review flags remain
+  visible rather than inventing an approval history.
