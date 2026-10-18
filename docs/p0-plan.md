@@ -47,3 +47,6 @@ command semantics remain unchanged. New feature scenarios are P1/P2.
 
 - Task 1: manifest tests RED (missing module) -> GREEN 7/7; stable identities,
   ambiguous anchors, legacy errors, Windows parsing and replay identity checks.
+
+- Task 2: policy tests RED -> GREEN; 18/18 total tests. Explicit negatives,
+  legacy failures, missing captures, independent stage/coverage/stability gates.

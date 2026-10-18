@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "cases": {},
+  "required_cells": [
+    {
+      "command": "outline",
+      "mode": "path",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    },
+    {
+      "command": "hover",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    },
+    {
+      "command": "peek-def",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    },
+    {
+      "command": "find-references",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    },
+    {
+      "command": "rename",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    },
+    {
+      "command": "outline",
+      "mode": "path",
+      "format": "text",
+      "target": "module-default",
+      "platform": "windows",
+      "expectation": "success"
+    },
+    {
+      "command": "hover",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "windows",
+      "expectation": "success"
+    },
+    {
+      "command": "peek-def",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "windows",
+      "expectation": "success"
+    },
+    {
+      "command": "find-references",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "windows",
+      "expectation": "success"
+    },
+    {
+      "command": "rename",
+      "mode": "symbol+loc",
+      "format": "text",
+      "target": "module-default",
+      "platform": "windows",
+      "expectation": "success"
+    },
+    {
+      "command": "doc",
+      "mode": "query",
+      "format": "text",
+      "target": "module-default",
+      "platform": "unix",
+      "expectation": "success"
+    }
+  ],
+  "deferred_cells": [
+    {
+      "command": "analyze",
+      "platform": "unix",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "analyze",
+      "platform": "windows",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "workspace-symbols",
+      "platform": "unix",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "workspace-symbols",
+      "platform": "windows",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "codelens",
+      "platform": "unix",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "codelens",
+      "platform": "windows",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "gen-symbols",
+      "platform": "unix",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "gen-symbols",
+      "platform": "windows",
+      "reason": "P1/P2 command expansion; not counted as covered in P0"
+    },
+    {
+      "command": "doc",
+      "platform": "windows",
+      "reason": "P1 port of the existing Unix core doc scenarios"
+    }
+  ]
+}
