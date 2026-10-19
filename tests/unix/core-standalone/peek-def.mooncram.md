@@ -91,8 +91,8 @@ Found 1 symbols matching 'Array::filter':
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1319-1349
-1319 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1324-1354
+1324 | ///|
      | /// Fold out values from an array according to certain rules. (escaped)
      | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
      | /// bounds are fixed when folding starts. (escaped)
@@ -158,8 +158,8 @@ Found 1 symbols matching 'String::length':
 $ run_moon_ide moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1714-1725
-1714 | ///|
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1721-1732
+1721 | ///|
      | /// Splits the string into all substrings separated by the given separator. (escaped)
      | ///  (escaped)
      | /// If the string does not contain the separator and the separator is not empty, (escaped)
@@ -340,7 +340,7 @@ Found 1 symbols matching 'Option::map':
 $ run_moon_ide moon ide peek-def 'Result::map'
 Found 1 symbols matching 'Result::map':
 
-`pub fn Result::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/result.mbt:15-32
+`pub fn Result::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/result.mbt:15-35
 15 | ///| (escaped)
    | /// Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged. (escaped)
    | /// (escaped)
@@ -353,7 +353,10 @@ Found 1 symbols matching 'Result::map':
    | ///   @test.assert_eq(y, Ok(42))
    | /// } (escaped)
    | /// ``` (escaped)
-   | pub fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E] { (escaped)
+   | pub fn[T, E, U] Result::map(
+   |   self : Result[T, E],
+   |   f : (T) -> U raise?,
+   | ) -> Result[U, E] raise? {
    |   match self { (escaped)
    |     Ok(value) => Ok(f(value)) (escaped)
    |     Err(err) => Err(err) (escaped)
@@ -473,8 +476,8 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
-`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:258-291
-258 | ///|
+`pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:222-255
+222 | ///|
     | /// Maps the list. (escaped)
     | /// (escaped)
     | /// # Example (escaped)
@@ -566,14 +569,16 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 $ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
-`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:810-832
-810 | ///|
-    | /// Applies a function to each key-value pair in the map and  (escaped)
+`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:849-873
+849 | ///|
+    | /// Applies a function to each key-value pair in the map and
     | /// returns a new map with the results, using the original keys. (escaped)
+    | ///
+    | /// `f` may raise; the error propagates and `self` is left unchanged.
     | pub fn[K, V, V2] HashMap::map( (escaped)
     |   self : HashMap[K, V], (escaped)
-    |   f : (K, V) -> V2, (escaped)
-    | ) -> HashMap[K, V2] { (escaped)
+    |   f : (K, V) -> V2 raise?,
+    | ) -> HashMap[K, V2] raise? {
     |   let other = { (escaped)
     |     capacity: self.capacity, (escaped)
     |     entries: FixedArray::make(self.capacity, None), (escaped)

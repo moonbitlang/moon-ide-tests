@@ -117,7 +117,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1339 | pub fn[A, B] Array::fold(
+1344 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -143,7 +143,7 @@ Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
    |   type InspectError, (escaped)
    |   type SnapshotError, (escaped)
    |   type SourceLoc, (escaped)
-71 |   type StringBuilder,
+70 |   type StringBuilder,
    |        ^^^^^^^^^^^^^ (escaped)
    | } (escaped)
    |  (escaped)
@@ -191,7 +191,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | ///|
     | pub extend StringBuilder with Logger::{
     |   write_char,
-513 |   write_string,
+459 |   write_string,
     |   ^^^^^^^^^^^^
     |   write_substring,
     |   write_view,
@@ -265,7 +265,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1723 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1730 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -306,7 +306,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///| (escaped)
     | /// Return this iterator itself. (escaped)
     | /// Return an iterator via `iter`. (escaped)
-    | #alias(iterator) (escaped)
+    | #alias(iterator, deprecated)
 ```
 
 ```mooncram
@@ -387,8 +387,11 @@ Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
    | ///   @test.assert_eq(y, Ok(42))
    | /// } (escaped)
    | /// ``` (escaped)
-27 | pub fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E] { (escaped)
+27 | pub fn[T, E, U] Result::map(
    |                         ^^^ (escaped)
+   |   self : Result[T, E],
+   |   f : (T) -> U raise?,
+   | ) -> Result[U, E] raise? {
    |   match self { (escaped)
    |     Ok(value) => Ok(f(value)) (escaped)
    |     Err(err) => Err(err) (escaped)
@@ -400,9 +403,6 @@ Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
    |   let x : Result[Int, Unit] = Ok(6) (escaped)
    |   let y = x.map((v : Int) => v * 7) (escaped)
    |   let z : Result[Int, Int] = Err(3) (escaped)
-   |   let w = z.map((v : Int) => v * 7) (escaped)
-   |   assert_true(y == Ok(42)) (escaped)
-   |   assert_true(w == Err(3)) (escaped)
 ```
 
 ```mooncram
@@ -454,7 +454,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///| (escaped)
     | /// Return this iterator itself. (escaped)
     | /// Return an iterator via `iter`. (escaped)
-    | #alias(iterator) (escaped)
+    | #alias(iterator, deprecated)
 ```
 
 ```mooncram
@@ -465,7 +465,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | /// } (escaped)
     | /// ``` (escaped)
     | #locals(f) (escaped)
-272 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+236 | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
     |                    ^^^ (escaped)
     |   match self { (escaped)
     |     Empty => Empty (escaped)
@@ -538,16 +538,16 @@ Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
 ```mooncram
 $ run_moon_ide moon ide peek-def 'map' --loc 'core_ide_cases.mbt:60:10'
 Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
-    | } (escaped)
-    |  (escaped)
     | ///| (escaped)
-    | /// Applies a function to each key-value pair in the map and  (escaped)
+    | /// Applies a function to each key-value pair in the map and
     | /// returns a new map with the results, using the original keys. (escaped)
-813 | pub fn[K, V, V2] HashMap::map(
+    | ///
+    | /// `f` may raise; the error propagates and `self` is left unchanged.
+854 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^ (escaped)
     |   self : HashMap[K, V], (escaped)
-    |   f : (K, V) -> V2, (escaped)
-    | ) -> HashMap[K, V2] { (escaped)
+    |   f : (K, V) -> V2 raise?,
+    | ) -> HashMap[K, V2] raise? {
     |   let other = { (escaped)
     |     capacity: self.capacity, (escaped)
     |     entries: FixedArray::make(self.capacity, None), (escaped)
@@ -595,7 +595,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | ///  (escaped)
      | /// If the separator is empty, the returned iterator will contain all the (escaped)
      | /// characters in the string as single elements. (escaped)
-1723 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1730 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^ (escaped)
      |   self[:].split(sep) (escaped)
      | } (escaped)
@@ -647,7 +647,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | #alias(of, deprecated="Use @list.List([...]) instead")
     | #as_free_fn(of, deprecated="Use @list.List([...]) instead")
     | #deprecated("Use @list.List([...]) instead")
-170 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+134 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   List(arr)
     | } (escaped)
@@ -669,7 +669,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | #alias(of, deprecated="Use @list.List([...]) instead")
     | #as_free_fn(of, deprecated="Use @list.List([...]) instead")
     | #deprecated("Use @list.List([...]) instead")
-170 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
+134 | pub fn[A] List::from_array(arr : ArrayView[A]) -> List[A] {
     |                 ^^^^^^^^^^ (escaped)
     |   List(arr)
     | } (escaped)

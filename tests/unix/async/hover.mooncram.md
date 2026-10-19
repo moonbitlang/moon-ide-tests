@@ -52,12 +52,18 @@ async test "blocking unbuffered" {
     group.spawn_bg() <| () => {
 ```
 
+Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
 $ run_moon_ide moon ide hover 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
 No hover information found for symbol 'mkfifo' at src/fs/named_pipe_test.mbt:18:15
 [1]
 ```
 
+Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
 $ run_moon_ide moon ide hover 'path' --loc 'src/fs/named_pipe_test.mbt:18:22'
 No hover information found for symbol 'path' at src/fs/named_pipe_test.mbt:18:22
@@ -79,6 +85,7 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
                mut read_offset: Int64
                mut write: IoStatus
                mut write_offset: Int64
+               console_state: WindowsConsoleBuffer
                // private fields
              }
              ```
@@ -103,12 +110,18 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
   guard @fd_util.fd_is_valid(handle.fd) else {
 ```
 
+Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
 $ run_moon_ide moon ide hover 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
 No hover information found for symbol 'fstatx_sync' at src/internal/event_loop/stdio.mbt:18:15
 [1]
 ```
 
+Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
 $ run_moon_ide moon ide hover 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
 No hover information found for symbol 'fd' at src/internal/event_loop/stdio.mbt:19:3
@@ -175,15 +188,32 @@ async test "read_exactly" {
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5'
-Error: could not get package of loc src/pipe/unimplemented_test.mbt:17:5
-[1]
+$ run_moon_ide moon ide hover '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
+///|
+#cfg(not(target="native"))
+let _ignore_unused_import : Unit = {
+    ^^^^^^^^^^^^^^^^^^^^^
+    ```moonbit
+    Unit
+    ```
+    ---
+    
+  ignore(@async.sleep)
+  ignore(@utf8.encode(""))
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17'
-Error: could not get package of loc src/pipe/unimplemented_test.mbt:18:17
-[1]
+$ run_moon_ide moon ide hover 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17' --target js
+///|
+#cfg(not(target="native"))
+let _ignore_unused_import : Unit = {
+  ignore(@async.sleep)
+         ^^^^^^^^^^^^
+         ```moonbit
+         async fn @moonbitlang/async.sleep(duration : Int) -> Unit noraise
+         ```
+  ignore(@utf8.encode(""))
+  ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
 ```
 
 ```mooncram
@@ -248,13 +278,36 @@ $ run_moon_ide moon ide hover 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:3
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9'
-No hover information found for symbol 'unimplemented' at src/socket/unimplemented.mbt:19:9
-[1]
+$ run_moon_ide moon ide hover 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9' --target js
+/// This package currently does not support JavaScript backend
+#cfg(not(any(target="native", target="wasm")))
+#coverage.skip
+pub let unimplemented : Unit = {
+        ^^^^^^^^^^^^^
+        ```moonbit
+        Unit
+        ```
+        ---
+        
+         This package currently does not support JavaScript backend
+  ignore(() => @string.parse_int("0"))
+  ignore(@io.pipe)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24'
-No hover information found for symbol 'parse_int' at src/socket/unimplemented.mbt:20:24
-[1]
+$ run_moon_ide moon ide hover 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
+#cfg(not(any(target="native", target="wasm")))
+#coverage.skip
+pub let unimplemented : Unit = {
+  ignore(() => @string.parse_int("0"))
+               ^^^^^^^^^^^^^^^^^
+               ```moonbit
+               fn @moonbitlang/core/string.parse_int(str : StringView, base? : Int) -> Int raise
+               ```
+               ---
+               
+                Parse a string in the given base (0, 2 to 36), return a Int number or an error.
+                If the `base` argument is 0, the base will be inferred by the prefix.
+  ignore(@io.pipe)
+  ignore(@event_loop.Timer::new)
 ```

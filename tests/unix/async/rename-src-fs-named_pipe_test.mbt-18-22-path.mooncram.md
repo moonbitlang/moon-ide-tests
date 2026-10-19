@@ -24,8 +24,8 @@ $ run_moon_ide moon ide rename 'path' 'path_renamed' --loc 'src/fs/named_pipe_te
  ///|
  #cfg(not(platform="windows"))
  #borrow(path)
--extern "C" fn mkfifo(path : @os_string.OsString, mode : Int) -> Int = "mkfifo"
-+extern "C" fn mkfifo(path_renamed : @os_string.OsString, mode : Int) -> Int = "mkfifo"
+-extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
++extern "C" fn mkfifo(path_renamed : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
  
  ///|
  #cfg(not(platform="windows"))

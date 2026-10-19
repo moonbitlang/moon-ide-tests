@@ -26,14 +26,14 @@ $ run_moon_ide moon ide rename 'parse_set_expr' 'parse_set_expr_renamed' --loc '
 +fn Parser::parse_set_expr_renamed(
    self : Parser,
    tokens : ArrayView[Token],
-   min_bp : Int,
+   min_bp : Int32,
 @@
      if next_bp <= min_bp {
        return (left, tokens)
      }
 -    let (right, tokens) = self.parse_set_expr(tokens, min_bp)
 +    let (right, tokens) = self.parse_set_expr_renamed(tokens, min_bp)
-     left_tokens = (SetExpr::SetOperation(op, left, right), tokens)
+     left_tokens = (SetOperation(op, left, right), tokens)
    }
  }
 @@

@@ -53,7 +53,7 @@ $ run_moon_ide moon ide outline 'src/aqueue/blocking_test.mbt'
 $ run_moon_ide moon ide outline 'src/fs/named_pipe_test.mbt'
  16 |#cfg(not(platform="windows"))
  17 |#borrow(path)
- 18 |extern "C" fn mkfifo(path : @os_string.OsString, mode : Int) -> Int = "mkfifo"
+ 18 |extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
     |...
  21 |#cfg(not(platform="windows"))
     |...
@@ -81,9 +81,9 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
  49 |extern "C" fn read_unix_ffi(
  50 |  fd : @fd_util.Fd,
  51 |  buf : FixedArray[Byte],
- 52 |  offset~ : Int,
- 53 |  len~ : Int,
- 54 |) -> Int = "moonbitlang_async_read"
+ 52 |  offset~ : Int32,
+ 53 |  len~ : Int32,
+ 54 |) -> Int32 = "moonbitlang_async_read"
     |...
  57 |#cfg(target="wasm")
  58 |#unsafe_skip_stub_check
@@ -91,36 +91,36 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
  60 |fn read_unix_ffi(
  61 |  fd : @fd_util.Fd,
  62 |  buf : FixedArray[Byte],
- 63 |  offset~ : Int,
- 64 |  len~ : Int,
- 65 |) -> Int = "moonbitlang/async" "io/read/unix"
+ 63 |  offset~ : Int32,
+ 64 |  len~ : Int32,
+ 65 |) -> Int32 = "moonbitlang/async" "io/read/unix"
     |...
  68 |#cfg(not(platform="windows"))
  69 |async fn IoHandle::read_via_event_bus_unix(
  70 |  handle : IoHandle,
  71 |  buf : FixedArray[Byte],
- 72 |  offset~ : Int,
- 73 |  len~ : Int,
+ 72 |  offset~ : Int32,
+ 73 |  len~ : Int32,
  74 |  context~ : String,
- 75 |) -> Int {
+ 75 |) -> Int32 {
     |...
  96 |#cfg(all(target="native", not(platform="windows")))
  97 |async fn IoHandle::read_via_event_bus(
  98 |  handle : IoHandle,
  99 |  buf : FixedArray[Byte],
-100 |  offset~ : Int,
-101 |  len~ : Int,
+100 |  offset~ : Int32,
+101 |  len~ : Int32,
 102 |  context~ : String,
-103 |) -> Int {
+103 |) -> Int32 {
     |...
 108 |#cfg(all(target="native", not(platform="windows")))
 109 |#borrow(buf)
 110 |extern "C" fn write_unix_ffi(
 111 |  fd : @fd_util.Fd,
 112 |  buf : Bytes,
-113 |  offset~ : Int,
-114 |  len~ : Int,
-115 |) -> Int = "moonbitlang_async_write"
+113 |  offset~ : Int32,
+114 |  len~ : Int32,
+115 |) -> Int32 = "moonbitlang_async_write"
     |...
 118 |#cfg(target="wasm")
 119 |#unsafe_skip_stub_check
@@ -128,27 +128,27 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
 121 |fn write_unix_ffi(
 122 |  fd : @fd_util.Fd,
 123 |  buf : Bytes,
-124 |  offset~ : Int,
-125 |  len~ : Int,
-126 |) -> Int = "moonbitlang/async" "io/write/unix"
+124 |  offset~ : Int32,
+125 |  len~ : Int32,
+126 |) -> Int32 = "moonbitlang/async" "io/write/unix"
     |...
 129 |#cfg(not(platform="windows"))
 130 |async fn IoHandle::write_via_event_bus_unix(
 131 |  handle : IoHandle,
 132 |  buf : Bytes,
-133 |  offset~ : Int,
-134 |  len~ : Int,
+133 |  offset~ : Int32,
+134 |  len~ : Int32,
 135 |  context~ : String,
-136 |) -> Int {
+136 |) -> Int32 {
     |...
 157 |#cfg(all(target="native", not(platform="windows")))
 158 |async fn IoHandle::write_via_event_bus(
 159 |  handle : IoHandle,
 160 |  buf : Bytes,
-161 |  offset~ : Int,
-162 |  len~ : Int,
+161 |  offset~ : Int32,
+162 |  len~ : Int32,
 163 |  context~ : String,
-164 |) -> Int {
+164 |) -> Int32 {
     |...
 
 ```
@@ -159,10 +159,10 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
  17 |#borrow(buf)
  18 |extern "C" fn fstatx_sync(
  19 |  fd : @fd_util.Fd,
- 20 |  request : UInt,
+ 20 |  request : UInt32,
  21 |  buf : FixedArray[Byte],
- 22 |  buf_len : Int,
- 23 |) -> Int = "moonbitlang_async_fstatx_sync"
+ 22 |  buf_len : Int32,
+ 23 |) -> Int32 = "moonbitlang_async_fstatx_sync"
     |...
  26 |#cfg(target="native")
  27 |fn kind_of_fd_sync(
@@ -172,7 +172,7 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
     |...
  43 |#cfg(target="wasm")
  44 |#unsafe_skip_stub_check
- 45 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int = "moonbitlang/async" "fd_util/kind_of_fd"
+ 45 |fn kind_of_fd_sync_ffi(fd : @fd_util.Fd) -> Int32 = "moonbitlang/async" "fd_util/kind_of_fd"
     |...
  48 |#cfg(target="wasm")
  49 |fn kind_of_fd_sync(
@@ -181,21 +181,21 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
  52 |) -> @fd_util.FileKind raise {
     |...
  61 |#cfg(target="native")
- 62 |extern "C" fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
+ 62 |extern "C" fn get_stdio_handle(id : Int32) -> @fd_util.Fd = "moonbitlang_async_get_stdio_handle"
     |...
  65 |#cfg(target="wasm")
  66 |#unsafe_skip_stub_check
- 67 |fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+ 67 |fn get_stdio_handle(id : Int32) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
     |...
  70 |let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
     |...
- 73 |fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
+ 73 |fn setup_stdio(id : Int32, context~ : String) -> IoHandle raise {
     |...
-119 |pub let stdin : Result[IoHandle, Error] = try
+120 |pub let stdin : Result[IoHandle, Error] = try
     |...
-128 |pub let stdout : Result[IoHandle, Error] = try
+129 |pub let stdout : Result[IoHandle, Error] = try
     |...
-137 |pub let stderr : Result[IoHandle, Error] = try
+138 |pub let stderr : Result[IoHandle, Error] = try
     |...
 
 ```
@@ -217,77 +217,88 @@ $ run_moon_ide moon ide outline 'src/js_async/unimplemented.mbt'
  39 |#coverage.skip
  40 |pub impl Show for JsError with fn output(self, _logger) {
     |...
- 48 |#external
- 49 |#internal(unimplemented, "unimplemented in native backend")
- 50 |#coverage.skip
- 51 |pub type AbortController
+ 47 |pub extend JsError with Show::{to_string}
     |...
- 55 |#external
- 56 |#internal(unimplemented, "unimplemented in native backend")
- 57 |#coverage.skip
- 58 |pub type AbortSignal
+ 51 |#external
+ 52 |#internal(unimplemented, "unimplemented in native backend")
+ 53 |#coverage.skip
+ 54 |pub type AbortController
     |...
- 62 |#internal(unimplemented, "unimplemented in native backend")
- 63 |#coverage.skip
- 64 |pub fn AbortController::new() -> AbortController {
+ 58 |#external
+ 59 |#internal(unimplemented, "unimplemented in native backend")
+ 60 |#coverage.skip
+ 61 |pub type AbortSignal
     |...
- 71 |#internal(unimplemented, "unimplemented in native backend")
- 72 |#coverage.skip
- 73 |pub fn AbortController::signal(self : Self) -> AbortSignal {
+ 65 |#internal(unimplemented, "unimplemented in native backend")
+ 66 |#coverage.skip
+ 67 |pub fn AbortController::new() -> AbortController {
     |...
- 81 |#internal(unimplemented, "unimplemented in native backend")
- 82 |#coverage.skip
- 83 |pub fn AbortController::abort(self : Self) -> Unit {
+ 74 |#internal(unimplemented, "unimplemented in native backend")
+ 75 |#coverage.skip
+ 76 |pub fn AbortController::signal(self : Self) -> AbortSignal {
     |...
- 98 |#internal(unimplemented, "unimplemented in native backend")
- 99 |#warnings("-unused_async")
-100 |#coverage.skip
-101 |pub async fn[X] Promise::wait(
-102 |  promise : Promise[X],
-103 |  abort_controller? : AbortController,
-104 |) -> X {
+ 84 |#internal(unimplemented, "unimplemented in native backend")
+ 85 |#coverage.skip
+ 86 |pub fn AbortController::abort(self : Self) -> Unit {
     |...
-122 |#internal(unimplemented, "unimplemented in native backend")
-123 |#warnings("-unused_async")
-124 |#coverage.skip
-125 |pub async fn[X] run_promise(f : (AbortSignal) -> Promise[X]) -> X {
+101 |#internal(unimplemented, "unimplemented in native backend")
+102 |#warnings("-unused_async")
+103 |#coverage.skip
+104 |pub async fn[X] Promise::wait(
+105 |  promise : Promise[X],
+106 |  abort_controller? : AbortController,
+107 |) -> X {
     |...
-147 |#internal(unimplemented, "unimplemented in native backend")
-148 |#warnings("-unused_async")
-149 |#coverage.skip
-150 |pub fn[X] Promise::from_async(
-151 |  f : async () -> X,
-152 |  abort_signal? : AbortSignal,
-153 |) -> Promise[X] {
+125 |#internal(unimplemented, "unimplemented in native backend")
+126 |#warnings("-unused_async")
+127 |#coverage.skip
+128 |pub async fn[X] run_promise(f : (AbortSignal) -> Promise[X]) -> X {
     |...
-166 |#internal(unimplemented, "unimplemented in native backend")
-167 |type JsReadableStream
+150 |#internal(unimplemented, "unimplemented in native backend")
+151 |#warnings("-unused_async")
+152 |#coverage.skip
+153 |pub fn[X] Promise::from_async(
+154 |  f : async () -> X,
+155 |  abort_signal? : AbortSignal,
+156 |) -> Promise[X] {
     |...
-176 |#internal(unimplemented, "unimplemented in native backend")
-177 |type ReadableStream
+169 |#internal(unimplemented, "unimplemented in native backend")
+170 |type JsReadableStream
     |...
-184 |#internal(unimplemented, "unimplemented in native backend")
-185 |#coverage.skip
-186 |pub fn ReadableStream::from_js(stream : JsReadableStream) -> ReadableStream {
+179 |#internal(unimplemented, "unimplemented in native backend")
+180 |type ReadableStream
     |...
-193 |#internal(unimplemented, "unimplemented in native backend")
-194 |#coverage.skip
-195 |pub fn ReadableStream::close(self : ReadableStream) -> Unit {
+187 |#internal(unimplemented, "unimplemented in native backend")
+188 |#coverage.skip
+189 |pub fn ReadableStream::from_js(stream : JsReadableStream) -> ReadableStream {
     |...
-201 |#coverage.skip
-202 |pub impl @io.Reader for ReadableStream with fn _get_internal_buffer(_) {
+196 |#internal(unimplemented, "unimplemented in native backend")
+197 |#coverage.skip
+198 |pub fn ReadableStream::close(self : ReadableStream) -> Unit {
     |...
-207 |#coverage.skip
-208 |pub impl @io.Reader for ReadableStream with fn _direct_read(
-209 |  _,
-210 |  _,
-211 |  offset~,
-212 |  max_len~,
-213 |) {
+204 |#coverage.skip
+205 |pub impl @io.Reader for ReadableStream with fn _get_internal_buffer(_) {
     |...
-229 |#internal(unimplemented, "unimplemented in native backend")
-230 |#coverage.skip
-231 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
+210 |#coverage.skip
+211 |pub impl @io.Reader for ReadableStream with fn _direct_read(
+212 |  _,
+213 |  _,
+214 |  offset~,
+215 |  max_len~,
+216 |) {
+    |...
+223 |pub extend ReadableStream with @io.Reader::{
+224 |  read,
+225 |  read_some,
+226 |  drop,
+227 |  read_all,
+228 |  read_until,
+229 |  read_exactly,
+230 |}
+    |...
+242 |#internal(unimplemented, "unimplemented in native backend")
+243 |#coverage.skip
+244 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
     |...
 
 ```
@@ -315,7 +326,7 @@ $ run_moon_ide moon ide outline 'src/process/redirect.mbt'
  24 |struct WriteToProcess(@event_loop.IoHandle)
     |...
  48 |pub fn read_from_process(
- 49 |  shared? : Bool = false,
+ 49 |  shared~ : Bool = false,
  50 |) -> (ReadFromProcess, &ProcessOutput) raise {
     |...
  70 |pub fn write_to_process() -> (&ProcessInput, WriteToProcess) raise {
@@ -353,14 +364,14 @@ $ run_moon_ide moon ide outline 'src/process/redirect.mbt'
     |...
 153 |pub extend WriteToProcess with @io.Writer::{write_once, write, write_reader}
     |...
-156 |fn @fs.CreateMode::to_int(self : @fs.CreateMode) -> Int = "%identity"
+156 |fn @fs.CreateMode::to_int(self : @fs.CreateMode) -> Int32 = "%identity"
     |...
 176 |pub async fn redirect_to_file(
 177 |  path : String,
-178 |  append? : Bool = false,
-179 |  create_mode? : @fs.CreateMode = CreateOrTruncate,
-180 |  permission? : Int = 0o644,
-181 |  shared? : Bool = false,
+178 |  append~ : Bool = false,
+179 |  create_mode~ : @fs.CreateMode = CreateOrTruncate,
+180 |  permission~ : Int32 = 0o644,
+181 |  shared~ : Bool = false,
 182 |) -> &ProcessOutput {
     |...
 197 |pub async fn redirect_from_file(path : String) -> &ProcessInput {
@@ -437,7 +448,7 @@ $ run_moon_ide moon ide outline 'src/socket/reuse_port_test.mbt'
 
 ```mooncram
 $ run_moon_ide moon ide outline 'src/socket/unimplemented.mbt'
-17 |#cfg(not(target="native"))
+17 |#cfg(not(any(target="native", target="wasm")))
    |...
 
 ```

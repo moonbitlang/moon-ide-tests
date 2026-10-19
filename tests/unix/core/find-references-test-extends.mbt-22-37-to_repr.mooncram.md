@@ -1,11 +1,11 @@
-# async rename parse_int src/socket/unimplemented.mbt:20:24
+# core find-references to_repr test/extends.mbt:22:37
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
 ```
 
 ```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
+$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
 ```
 
 ```mooncram
@@ -17,7 +17,6 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'parse_int' 'parse_int_renamed' --loc 'src/socket/unimplemented.mbt:20:24'
-Error: could not find references for symbol 'parse_int' at src/socket/unimplemented.mbt:20:24
-[1]
+$ run_moon_ide moon ide find-references 'to_repr' --loc 'test/extends.mbt:22:37'
+Found 0 references for symbol 'to_repr':
 ```

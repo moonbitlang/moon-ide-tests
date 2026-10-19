@@ -17,7 +17,18 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'bytes' 'bytes_renamed' --loc 'encoding/utf8/decode_js.mbt:17:3'
-Error: could not get package of file <WORKDIR>/encoding/utf8/decode_js.mbt
-[1]
+$ run_moon_ide moon ide rename 'bytes' 'bytes_renamed' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
+*** Begin Patch
+*** Update File: <WORKDIR>/encoding/utf8/decode_js.mbt
+@@
+ 
+ ///|
+ extern "js" fn decode_utf8_js(
+-  bytes : Bytes,
++  bytes_renamed : Bytes,
+   start : Int32,
+   len : Int32,
+   preserve_bom : Bool,
+*** End Patch
+
 ```

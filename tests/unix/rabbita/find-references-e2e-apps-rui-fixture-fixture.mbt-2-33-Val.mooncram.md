@@ -1,4 +1,4 @@
-# rabbita find-references Html warren/templates/minimized/main.mbt:1:33
+# rabbita find-references Val e2e/apps/rui/fixture/fixture.mbt:2:33
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,7 +17,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'Html' --loc 'warren/templates/minimized/main.mbt:1:33'
-Error: no metadata is available for any backend
-[1]
+$ run_moon_ide moon ide find-references 'Val' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
+Found 1 references for symbol 'Val':
+<WORKDIR>/e2e/apps/rui/fixture/fixture.mbt:24:41-24:44:
+   | }
+   | 
+   | ///|
+24 | pub fn mount(name : String, app : () -> Val[Html]) -> Unit {
+   |                                         ^^^
+   |   @rabbita.new(() => {
+   |     app().map(body => {
+
 ```

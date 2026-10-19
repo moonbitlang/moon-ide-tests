@@ -32,8 +32,8 @@ $ run_moon_ide moon ide rename 'UnterminatedString' 'UnterminatedStringRenamed' 
          result.write_char(c)
          continue rest
        }
--      [] => raise LexerError::UnterminatedString
-+      [] => raise LexerError::UnterminatedStringRenamed
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
      }
    }
    (StringLiteral(result.to_string()), rest)
@@ -41,8 +41,8 @@ $ run_moon_ide moon ide rename 'UnterminatedString' 'UnterminatedStringRenamed' 
          result.write_char(c)
          continue rest
        }
--      [] => raise LexerError::UnterminatedString
-+      [] => raise LexerError::UnterminatedStringRenamed
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
      }
    }
    (StringLiteral(result.to_string()), rest)
@@ -50,8 +50,8 @@ $ run_moon_ide moon ide rename 'UnterminatedString' 'UnterminatedStringRenamed' 
          result.write_char(c)
          continue rest
        }
--      [] => raise LexerError::UnterminatedString
-+      [] => raise LexerError::UnterminatedStringRenamed
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
      }
    }
    (Identifier(result.to_string()), rest)
