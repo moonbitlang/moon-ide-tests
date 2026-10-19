@@ -4,6 +4,8 @@
 Only configuration copies enter `moon fmt`. Publish the converted legacy files
 after every module succeeds, retaining the original configurations on failure.
 Local .mooncakes copies are included; links to caches outside the fixture are not.
+One explicit JSON source compatibility overlay replaces obsolete space escapes
+with valid, equally wide literals so IDE query lines and columns remain stable.
 """
 
 import argparse
@@ -103,20 +105,44 @@ def converted_manifests(root):
     return replacements
 
 
+def source_compatibility_replacements(root):
+    source = root / "fixtures/repos/json/src/lib/json.mbt"
+    if not source.is_file():
+        return {}
+    candidate = source
+    while candidate != root:
+        if is_link(candidate):
+            raise ValueError(f"refusing to patch linked fixture source: {source}")
+        candidate = candidate.parent
+    content = source.read_bytes()
+    # This upstream parser uses the obsolete '\ ' literal eight times. A
+    # trailing space keeps every subsequent byte/column at its original offset.
+    updated = content.replace(b"'\\ '", b"' ' ")
+    return {source: updated} if updated != content else {}
+
+
 def prepare(root):
     replacements = converted_manifests(root)
+    source_replacements = source_compatibility_replacements(root)
     originals = {source: source.read_bytes() for source in replacements}
+    original_sources = {source: source.read_bytes() for source in source_replacements}
     try:
         for source, content in replacements.items():
             source.with_suffix("").write_bytes(content)
             source.unlink()
+        for source, content in source_replacements.items():
+            source.write_bytes(content)
     except BaseException:
         for source, content in originals.items():
             source.write_bytes(content)
             source.with_suffix("").unlink(missing_ok=True)
+        for source, content in original_sources.items():
+            source.write_bytes(content)
         raise
     for source in replacements:
         print(f"Prepared {source.relative_to(root)}")
+    for source in source_replacements:
+        print(f"Prepared JSON source compatibility overlay: {source.relative_to(root)}")
 
 
 def main():

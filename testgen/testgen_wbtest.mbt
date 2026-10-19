@@ -830,6 +830,7 @@ test "intrinsic parameter and imported trait hover limitations are narrowly mark
       (
         "rabbita", "rabbita/internal/vdom/vdom.mbt", 19, "Scheduler", "using-trait-hover",
       ),
+      ("json", "src/top.mbt", 9, "Decode", "using-trait-hover"),
     ] {
     let files = render_cram_files(
       CollectResult::{

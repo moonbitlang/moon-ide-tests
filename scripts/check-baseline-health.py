@@ -10,7 +10,10 @@ from pathlib import Path
 LIMITATIONS = {
     "extension-declaration-hover": [("core", "test/extends.mbt", "to_repr", 37, None)],
     "intrinsic-parameter-hover": [("core", "builtin/int64.mbt", "self", 21, None)],
-    "using-trait-hover": [("rabbita", "rabbita/internal/vdom/vdom.mbt", "Scheduler", 19, None)],
+    "using-trait-hover": [
+        ("rabbita", "rabbita/internal/vdom/vdom.mbt", "Scheduler", 19, None),
+        ("json", "src/top.mbt", "Decode", 9, None),
+    ],
     "extern-function-hover": [
         ("core", "encoding/utf8/decode_js.mbt", "decode_utf8_js", 16, "js"),
         ("async", "src/fs/named_pipe_test.mbt", "mkfifo", 15, None),

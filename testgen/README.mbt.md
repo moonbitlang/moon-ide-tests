@@ -85,7 +85,8 @@ moon -C testgen run --target wasm cmd/main -- \
 - Precise hover cases remain as IDE reproductions: core's extension
   declaration `test/extends.mbt` (`to_repr`), its intrinsic parameter
   `builtin/int64.mbt` (`self`), and Rabbita's imported trait in
-  `rabbita/internal/vdom/vdom.mbt` (`Scheduler`). Each gets a descriptive note and
+  `rabbita/internal/vdom/vdom.mbt` (`Scheduler`) plus JSON's public imported trait
+  in `src/top.mbt` (`Decode`). Each gets a descriptive note and
   `<!-- known-ide-limitation: ... -->` immediately before its command fence.
   Other locations and other IDE operations are unmarked. Their failed output is
   still captured so a future IDE fix is visible in the snapshots.

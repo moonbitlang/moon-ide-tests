@@ -58,6 +58,7 @@ class BaselineHealthTests(unittest.TestCase):
         for limitation, repo, symbol, location in [
             ("intrinsic-parameter-hover", "core", "self", "builtin/int64.mbt:26:21"),
             ("using-trait-hover", "rabbita", "Scheduler", "rabbita/internal/vdom/vdom.mbt:2:19"),
+            ("using-trait-hover", "json", "Decode", "src/top.mbt:3:9"),
         ]:
             text = block(f"moon ide hover '{symbol}' --loc '{location}'", f"No hover information found for symbol '{symbol}' at {location}\n[1]", f"<!-- known-ide-limitation: {limitation} -->")
             self.assertEqual(health.validate_text(text, f"tests/unix/{repo}/hover.mooncram.md"), [])

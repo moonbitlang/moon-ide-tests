@@ -4,7 +4,7 @@
 
 **Goal:** Repair repository-side causes of invalid IDE baselines, retain the IDE hover limitation, and refresh PR #30 from PR #29.
 
-**Architecture:** Prepare legacy fixture manifests without changing source locations. Apply explicit fixture selection policies before sampling, attach the appropriate backend to queries, and reject unmarked failed-command snapshots. Keep review inputs pinned to the launch commit and limited to tests and execution evidence.
+**Architecture:** Prepare legacy fixture manifests without changing source locations. Apply a narrow JSON syntax overlay that preserves line lengths and following symbol columns. Apply explicit fixture selection policies before sampling, attach the appropriate backend to queries, and reject unmarked failed-command snapshots. Keep review inputs pinned to the launch commit and limited to tests and execution evidence.
 
 **Tech Stack:** MoonBit, Python standard library, Bash, Windows PowerShell 5.1, GitHub Actions.
 
@@ -13,7 +13,7 @@
 ## Global constraints
 
 - Work on `codex/update-testgen-dependencies` in the existing dependency worktree.
-- Do not change third-party fixture source or commit fixture revisions into #29.
+- Do not commit fixture revisions or push changes to third-party repositories. The documented local JSON syntax overlay must preserve source locations.
 - Do not merge either PR.
 - Preserve default backends for unaffected files.
 - Scope automated review to `BASE_SHA...HEAD -- tests/unix tests/windows`.
@@ -30,7 +30,7 @@
 
 **Files:** `scripts/prepare-fixtures.py`, script regression tests, `scripts/update-tests.sh`, `scripts/update-windows-tests.ps1`, own legacy project manifests.
 
-**Interfaces:** A checked `python scripts/prepare-fixtures.py` invocation prepares fixture configurations before generation and execution. It leaves `.mbt`/`.mbt.md` bytes unchanged. Refresh logs are raw UTF-8.
+**Interfaces:** A checked `python scripts/prepare-fixtures.py` invocation prepares fixture configurations before generation and execution. Manifest formatting leaves `.mbt`/`.mbt.md` bytes unchanged. The explicit JSON overlay replaces obsolete escaped-space literals with equally wide valid syntax. Refresh logs are raw UTF-8.
 
 - [x] Add failing regression tests for legacy migration, unchanged sources, repeated preparation, non-ASCII logs and exit status.
 - [x] Implement preparation and integrate into both generation scripts; migrate the owned core project configuration.

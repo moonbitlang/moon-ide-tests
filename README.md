@@ -27,18 +27,27 @@ notes.
 
 ## Setup
 
-Install the MoonBit toolchain, then initialize the fixture submodules:
+Install the MoonBit toolchain and Python 3, then initialize and prepare the fixtures:
 
 ```sh
 git submodule update --init --recursive
 moon update
+python scripts/prepare-fixtures.py
 ```
+
+Preparation migrates legacy fixture manifests using configuration-only copies;
+it never sends fixture sources to the formatter. It also converts JSON's obsolete
+escaped-space character literals to ordinary spaces, preserving line lengths and
+all following symbol columns. These are local compatibility changes; fixture
+gitlinks and upstream repositories are unchanged. Both generation scripts run
+preparation automatically. Run it again after updating or restoring submodules.
 
 Run the generator tests and all checked-in baselines:
 
 ```sh
 moon -C testgen test --target wasm
 moon cram test --cram-compat tests/unix
+python scripts/check-baseline-health.py tests/unix
 ```
 
 To run one baseline while iterating:
@@ -105,8 +114,15 @@ scripts/escape-cram-empty-parens.sh tests/unix
 moon cram test --cram-compat tests/unix
 ```
 
-Canary CI runs this flow on a schedule and uploads the resulting fixture and
-baseline diff as an artifact.
+The Daily Test workflow runs this flow on a schedule. To refresh a PR branch,
+choose that branch when manually running Daily Test. Its update PR targets the
+selected branch; Agent review sees only tests changed since the exact launch
+commit and execution logs. Existing changes on the selected branch are excluded.
+
+Daily checks both cram results and baseline health before succeeding: refreshing
+snapshots cannot turn an unexpected command failure into an accepted baseline.
+The narrowly marked [known IDE limitations](docs/known-ide-limitations.md) retain
+their reproduction queries and exact failure output.
 
 ## CI
 
@@ -115,7 +131,8 @@ The PR workflow:
 ```sh
 moon -C testgen test --target wasm
 scripts/update-tests.sh
-git diff --exit-code -- tests/unix tests/windows
+python scripts/check-generated-tests.py tests/unix tests/windows
+python scripts/check-baseline-health.py tests/unix tests/windows
 moon cram test --cram-compat tests/unix
 moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows
 ```

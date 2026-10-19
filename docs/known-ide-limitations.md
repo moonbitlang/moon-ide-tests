@@ -53,6 +53,11 @@ moon ide hover Scheduler --loc rabbita/cmd/scheduler.mbt:14:17
 Hover fails in the using declaration. Definition lookup succeeds there, and
 hover succeeds at the trait declaration. The annotation is `using-trait-hover`.
 
+JSON's public imported trait has the same limitation after fixture preparation:
+from `fixtures/repos/json`, hover at `src/top.mbt:3:9` on `Decode` fails, while
+`moon ide peek-def Decode --loc src/top.mbt:3:9` succeeds and
+`moon ide hover Decode --loc src/lib/decode.mbt:8:11` displays the trait.
+
 ## External declarations
 
 External functions and their parameters can be recognized by definition lookup,

@@ -157,6 +157,37 @@ class PrepareFixturesTests(unittest.TestCase):
         self.assertTrue((project / "moon.mod").exists())
         self.assertTrue((project / "src/moon.pkg").exists())
 
+    def test_json_space_escape_overlay_preserves_lines_columns_and_other_sources(self):
+        (self.fixture / "moon.mod").write_text('name = "example/sample"', encoding="utf-8")
+        source = self.root / "fixtures/repos/json/src/lib/json.mbt"
+        source.parent.mkdir(parents=True)
+        original = b"['\\ ' | '\\n', .. rest] => rest\r\n['\\ ', x] => x\n"
+        source.write_bytes(original)
+        unrelated = self.fixture / "main.mbt"
+        unrelated.write_bytes(original)
+        result = self.prepare()
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+        expected = b"[' '  | '\\n', .. rest] => rest\r\n[' ' , x] => x\n"
+        self.assertEqual(source.read_bytes(), expected)
+        self.assertEqual(unrelated.read_bytes(), original)
+        self.assertEqual([len(line) for line in original.splitlines(keepends=True)],
+                         [len(line) for line in expected.splitlines(keepends=True)])
+        self.assertEqual(original.index(b"rest"), expected.index(b"rest"))
+        self.assertEqual(original.index(b"=> x"), expected.index(b"=> x"))
+        result = self.prepare()
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+        self.assertEqual(source.read_bytes(), expected)
+
+    def test_failed_manifest_migration_does_not_apply_json_source_overlay(self):
+        (self.fixture / "moon.mod.json").write_bytes(b"invalid JSON")
+        source = self.root / "fixtures/repos/json/src/lib/json.mbt"
+        source.parent.mkdir(parents=True)
+        original = b"['\\ ', .. rest] => rest\r\n"
+        source.write_bytes(original)
+        result = self.prepare()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(source.read_bytes(), original)
+
 
 if __name__ == "__main__":
     unittest.main()

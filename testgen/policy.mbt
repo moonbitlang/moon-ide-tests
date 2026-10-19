@@ -91,7 +91,8 @@ fn fixture_hover_annotation(
           "intrinsic-parameter-hover", "Known IDE limitation: hover on the intrinsic declaration parameter reports no information; ordinary function parameters have hover information.",
         ),
       )
-    ("rabbita", "rabbita/internal/vdom/vdom.mbt", "Scheduler", 19) =>
+    ("rabbita", "rabbita/internal/vdom/vdom.mbt", "Scheduler", 19)
+    | ("json", "src/top.mbt", "Decode", 9) =>
       Some(
         (
           "using-trait-hover", "Known IDE limitation: hover on the trait imported by using reports no information; its declaration hover and imported-name peek-def work.",
