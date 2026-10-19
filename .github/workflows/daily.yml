@@ -181,6 +181,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Add removals and new files before renormalizing the remaining index;
+          # --renormalize alone tries to stat deleted tracked files and fails.
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
           # Stage first: the Windows checkout can report CRLF-only worktree
           # changes that disappear once Git normalizes them into the index.
           git -c core.safecrlf=false add --renormalize -- tests/windows
