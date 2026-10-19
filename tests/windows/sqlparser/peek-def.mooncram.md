@@ -124,7 +124,7 @@ Definition found at file <WORKDIR>/src\dml.mbt
   |            ^^^^^^^^^^^^^^
   |   self : Parser,
   |   tokens : ArrayView[Token],
-  |   min_bp : Int,
+  |   min_bp : Int32,
   | ) -> ParserResult[SetExpr] raise ParserError {
   |   let mut left_tokens = match tokens {
   |     [LParen, .. tokens] => {
@@ -134,7 +134,7 @@ Definition found at file <WORKDIR>/src\dml.mbt
   |     }
   |     [Keyword(Select), ..] as tokens => {
   |       let (select_stmt, tokens) = self.parse_select(tokens)
-  |       (SetExpr::Select(select_stmt), tokens)
+  |       (Select(select_stmt), tokens)
   |     }
 ```
 

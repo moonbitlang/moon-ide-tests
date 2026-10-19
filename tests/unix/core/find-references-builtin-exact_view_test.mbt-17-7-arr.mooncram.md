@@ -20,8 +20,8 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 $ run_moon_ide moon ide find-references 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
 Found 2 references for symbol 'arr':
 <WORKDIR>/builtin/exact_view_test.mbt:21:17-21:20:
-   |   let fixed : FixedArray[Int] = [1, 2, 3, 4]
-   |   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+   |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
+   |   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
    |   let view = [0, 1, 2, 3, 4, 5][1:5]
 21 |   let mutable = arr.mut_view()
    |                 ^^^

@@ -76,7 +76,7 @@ Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
    | ///|
    | #cfg(not(platform="windows"))
    | #borrow(path)
-18 | extern "C" fn mkfifo(path : @os_string.OsString, mode : Int) -> Int = "mkfifo"
+18 | extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
    |               ^^^^^^
    | 
    | ///|
@@ -102,7 +102,7 @@ Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
    | ///|
    | #cfg(not(platform="windows"))
    | #borrow(path)
-18 | extern "C" fn mkfifo(path : @os_string.OsString, mode : Int) -> Int = "mkfifo"
+18 | extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
    |                      ^^^^
    | 
    | ///|
@@ -183,10 +183,10 @@ Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
 18 | extern "C" fn fstatx_sync(
    |               ^^^^^^^^^^^
    |   fd : @fd_util.Fd,
-   |   request : UInt,
+   |   request : UInt32,
    |   buf : FixedArray[Byte],
-   |   buf_len : Int,
-   | ) -> Int = "moonbitlang_async_fstatx_sync"
+   |   buf_len : Int32,
+   | ) -> Int32 = "moonbitlang_async_fstatx_sync"
    | 
    | ///|
    | #cfg(target="native")
@@ -208,10 +208,10 @@ Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
    | extern "C" fn fstatx_sync(
 19 |   fd : @fd_util.Fd,
    |   ^^
-   |   request : UInt,
+   |   request : UInt32,
    |   buf : FixedArray[Byte],
-   |   buf_len : Int,
-   | ) -> Int = "moonbitlang_async_fstatx_sync"
+   |   buf_len : Int32,
+   | ) -> Int32 = "moonbitlang_async_fstatx_sync"
    | 
    | ///|
    | #cfg(target="native")
@@ -260,7 +260,7 @@ Definition found at file <WORKDIR>/src/internal/coroutine/coroutine.mbt
    | ///|
 31 | pub struct Coroutine {
    |            ^^^^^^^^^
-   |   priv coro_id : Int
+   |   priv coro_id : Int32
    |   priv mut state : State
    |   priv mut shielded : Bool
    |   priv mut cancelled : Bool
@@ -329,15 +329,58 @@ Definition found at file <WORKDIR>/src/pipe/read_exactly_test.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5'
-Error: could not get package of loc src/pipe/unimplemented_test.mbt:17:5
-[1]
+$ run_moon_ide moon ide peek-def '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
+Definition found at file <WORKDIR>/src/pipe/unimplemented_test.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | #cfg(not(target="native"))
+17 | let _ignore_unused_import : Unit = {
+   |     ^^^^^^^^^^^^^^^^^^^^^
+   |   ignore(@async.sleep)
+   |   ignore(@utf8.encode(""))
+   |   ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
+   | }
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17'
-Error: could not get package of loc src/pipe/unimplemented_test.mbt:18:17
-[1]
+$ run_moon_ide moon ide peek-def 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17' --target js
+Definition found at file <WORKDIR>/src/timer.mbt
+   | 
+   | ///|
+   | /// `sleep` will wait for the given time (in milliseconds) before returning.
+   | /// Other task can still run while current task is sleeping.
+   | /// If current task is cancelled, `sleep` will return early with an error.
+19 | pub using @event_loop {sleep}
+   |                        ^^^^^
+   | 
+   | ///|
+   | priv enum TimerState {
+   |   // The timer is active, and there is some one waiting for it
+   |   Running(@event_loop.Timer)
+   |   // The timer is active, but no one is waiting for it.
+   |   // So we do not keep track of the timer in the event loop to save resource
+   |   Detached
+   |   // The timer has terminated normally
+   |   Terminated
+   |   // The timer is manually cancelled
+   |   Cancelled(Error)
+   | }
+   | 
+Definition found at file <WORKDIR>/src/internal/event_loop/timer.js.mbt
+   | ///|
+   | pub extern "js" fn Timer::cancel(self : Timer) =
+   |   #| (timer) => clearTimeout(timer)
+   | 
+   | ///|
+36 | pub async fn sleep(duration : Int32) -> Unit noraise {
+   |              ^^^^^
+   |   let coro = @coroutine.current_coroutine()
+   |   let timer = Timer::new(duration, () => coro.wake())
+   |   defer timer.cancel()
+   |   @coroutine.suspend()
+   | }
 ```
 
 ```mooncram
@@ -410,19 +453,19 @@ Definition found at file <WORKDIR>/src/internal/event_loop/event_loop.mbt
    |   extra : PlatformEventLoopExtra
    |   /// a special file descriptor used to indicate job completion message from thread pool
    |   notify_recv : @fd_util.Fd
-   |   max_worker_count : Int
-   |   mut job_id : Int
+   |   max_worker_count : Int32
+   |   mut job_id : Int32
    |   job_queue : Set[QueuedJob]
    |   idle_workers : @deque.Deque[Worker]
-   |   running_workers : Map[Int, Worker]
-   |   jobs : Map[Int, @coroutine.Coroutine]
+   |   running_workers : Map[Int32, Worker]
+   |   jobs : Map[Int32, @coroutine.Coroutine]
 Definition found at file <WORKDIR>/src/internal/env_util/env_util.mbt
    | #unsafe_skip_stub_check
    | fn get_platform() -> Platform = "moonbitlang/async" "runtime/get_platform"
    | 
    | ///|
    | #cfg(any(target="native", target="wasm"))
-53 | pub let platform : Platform = get_platform()
+42 | pub let platform : Platform = get_platform()
    |         ^^^^^^^^
 ```
 
@@ -442,13 +485,61 @@ Definition found at file <WORKDIR>/src/types/types.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9'
-Error: could not find definition for symbol 'unimplemented' at src/socket/unimplemented.mbt:19:9
-[1]
+$ run_moon_ide moon ide peek-def 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9' --target js
+Definition found at file <WORKDIR>/src/socket/unimplemented.mbt
+   | 
+   | ///|
+   | /// This package currently does not support JavaScript backend
+   | #cfg(not(any(target="native", target="wasm")))
+   | #coverage.skip
+19 | pub let unimplemented : Unit = {
+   |         ^^^^^^^^^^^^^
+   |   ignore(() => @string.parse_int("0"))
+   |   ignore(@io.pipe)
+   |   ignore(@event_loop.Timer::new)
+   |   ignore(@async.sleep)
+   |   ignore(@os_error.unimplemented)
+   |   ignore(@fd_util.unimplemented)
+   |   ignore(@c_buffer.unimplemented)
+   |   ignore(@os_string.unimplemented)
+   | }
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24'
-Error: could not find definition for symbol 'parse_int' at src/socket/unimplemented.mbt:20:24
-[1]
+$ run_moon_ide moon ide peek-def 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
+Definition found at file <MOON_HOME>/lib/core/string/strconv.mbt
+   | // limitations under the License.
+   | 
+   | ///|
+   | pub using @internal/strconv {
+   |   parse_int64,
+18 |   parse_int,
+   |   ^^^^^^^^^
+   |   parse_uint64,
+   |   parse_uint,
+   |   parse_bool,
+   |   parse_double,
+   | }
+Definition found at file <MOON_HOME>/lib/core/internal/strconv/strconv_int.mbt
+    | }
+    | 
+    | ///|
+    | /// Parse a string in the given base (0, 2 to 36), return a Int number or an error.
+    | /// If the `base` argument is 0, the base will be inferred by the prefix.
+148 | pub fn parse_int(str : StringView, base? : Int = 0) -> Int raise {
+    |        ^^^^^^^^^
+    |   let n = parse_int64(str, base~)
+    |   if n < INT_MIN.to_int64() || n > INT_MAX.to_int64() {
+    |     range_err()
+    |   }
+    |   n.to_int()
+    | }
+    | 
+    | // Check whether the underscores are correct.
+    | // Underscores must appear only between digits or between a base prefix and a digit.
+    | 
+    | ///|
+    | fn check_underscore(str : StringView) -> Bool {
+    |   // Fast path: underscores are rare in practice. Without any underscore the
+    |   // per-character scan below can never reach a `break false` arm (those all
 ```

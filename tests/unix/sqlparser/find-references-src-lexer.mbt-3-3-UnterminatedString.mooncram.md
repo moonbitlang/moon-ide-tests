@@ -19,30 +19,30 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
 Found 3 references for symbol 'UnterminatedString':
-<WORKDIR>/src/lexer.mbt:513:31-513:49:
+<WORKDIR>/src/lexer.mbt:511:19-511:37:
     |         result.write_char(c)
     |         continue rest
     |       }
-513 |       [] => raise LexerError::UnterminatedString
-    |                               ^^^^^^^^^^^^^^^^^^
+511 |       [] => raise UnterminatedString
+    |                   ^^^^^^^^^^^^^^^^^^
     |     }
     |   }
 
-<WORKDIR>/src/lexer.mbt:556:31-556:49:
+<WORKDIR>/src/lexer.mbt:554:19-554:37:
     |         result.write_char(c)
     |         continue rest
     |       }
-556 |       [] => raise LexerError::UnterminatedString
-    |                               ^^^^^^^^^^^^^^^^^^
+554 |       [] => raise UnterminatedString
+    |                   ^^^^^^^^^^^^^^^^^^
     |     }
     |   }
 
-<WORKDIR>/src/lexer.mbt:587:31-587:49:
+<WORKDIR>/src/lexer.mbt:585:19-585:37:
     |         result.write_char(c)
     |         continue rest
     |       }
-587 |       [] => raise LexerError::UnterminatedString
-    |                               ^^^^^^^^^^^^^^^^^^
+585 |       [] => raise UnterminatedString
+    |                   ^^^^^^^^^^^^^^^^^^
     |     }
     |   }
 

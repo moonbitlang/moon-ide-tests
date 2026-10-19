@@ -25,7 +25,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ToStringView' 'To
  ) -> String {
 *** Update File: <WORKDIR>/builtin\extends.mbt
 @@
- pub extend String with ToJson::{to_json}
+ pub extend String with Show::{to_string}
  
  ///|
 -pub extend String with ToStringView::{to_string_view}
@@ -34,7 +34,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'ToStringView' 'To
  ///|
  pub extend StringBuilder with Logger::{
 @@
- pub extend StringView with ToJson::{to_json}
+ pub extend StringView with Hash::{hash}
  
  ///|
 -pub extend StringView with ToStringView::{to_string_view}

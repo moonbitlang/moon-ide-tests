@@ -262,7 +262,7 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
        evloop.extra.wait_pid(evloop, self.pid)
 *** Update File: <WORKDIR>/src/process/cancellation.mbt
 @@
- pub(all) struct CancellationHandler(async (Int) -> Unit)
+ pub(all) struct CancellationHandler(async (Int32) -> Unit)
  
  ///|
 -let default_signal : @signal.Signal = if @event_loop.platform is Windows {

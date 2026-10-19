@@ -27,7 +27,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  io : @event_loop.IoHandle
 +  io : @event_loop.IoHandleRenamed
    buf : DirectoryBuffer
-   buf_len : Int
+   buf_len : Int32
    // The offset of the next entry in the buffer
 @@
  }
@@ -56,8 +56,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  root : @event_loop.IoHandle,
 +  root : @event_loop.IoHandleRenamed,
    root_id~ : FileIdentity,
-   debounce_timeout~ : Int,
-   max_debounce_delay~ : Int,
+   debounce_timeout~ : Int32,
+   max_debounce_delay~ : Int32,
 *** Update File: <WORKDIR>/src/fs/watch_inotify.mbt
 @@
  ///|
@@ -116,7 +116,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 *** Update File: <WORKDIR>/src/internal/event_loop/fs.mbt
 @@
    // permission for file when new file is created
-   mode~ : Int,
+   mode~ : Int32,
    context~ : String,
 -) -> (IoHandle, FileIdentity) {
 +) -> (IoHandleRenamed, FileIdentity) {
@@ -163,7 +163,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  dir : IoHandle,
 +  dir : IoHandleRenamed,
    buf : @c_buffer.Buffer,
-   len : Int,
+   len : Int32,
    restart~ : Bool,
 *** Update File: <WORKDIR>/src/internal/event_loop/io.mbt
 @@
@@ -216,8 +216,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 +pub fn IoHandleRenamed::from_fd(
    fd : @fd_util.Fd,
    kind~ : @fd_util.FileKind,
-   is_async? : Bool = true,
-   read_only? : Bool = false,
+   is_async~ : Bool = true,
+   read_only~ : Bool = false,
 -) -> IoHandle raise {
 +) -> IoHandleRenamed raise {
    let context = "@event_loop.IoHandle::from_fd()"
@@ -232,8 +232,19 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
+@@
+ const IS_NATIVE_WINDOWS : Bool = false
+ 
+ ///|
+-async fn IoHandle::read_console(
++async fn IoHandleRenamed::read_console(
+-  handle : IoHandle,
++  handle : IoHandleRenamed,
+   buf : FixedArray[Byte],
+   offset~ : Int32,
+   len~ : Int32,
 @@
  }
  
@@ -243,8 +254,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  ///|
  /// Perform a write operation on the IO handle via the thread pool.
@@ -254,8 +265,19 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
+@@
+ }
+ 
+ ///|
+-async fn IoHandle::write_console(
++async fn IoHandleRenamed::write_console(
+-  handle : IoHandle,
++  handle : IoHandleRenamed,
+   buf : Bytes,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  }
  
@@ -265,8 +287,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  /// Perform a random access read on the IO handle.
  /// Since only regular files support random access IO,
@@ -276,8 +298,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  /// Perform a random access write on the IO handle.
  /// Since only regular files support random access IO,
@@ -287,8 +309,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 *** Update File: <WORKDIR>/src/internal/event_loop/io_unix.mbt
 @@
  
@@ -317,8 +339,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -328,8 +350,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -339,8 +361,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -350,8 +372,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 *** Update File: <WORKDIR>/src/internal/event_loop/network.mbt
 @@
  }
@@ -374,8 +396,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -385,8 +407,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : FixedArray[Byte],
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -396,8 +418,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -407,8 +429,8 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 -  handle : IoHandle,
 +  handle : IoHandleRenamed,
    buf : Bytes,
-   offset~ : Int,
-   len~ : Int,
+   offset~ : Int32,
+   len~ : Int32,
 @@
  
  ///|
@@ -457,7 +479,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 @@
  #valtype
  pub struct Process {
-   pid : Int
+   pid : Int32
 -  priv handle : IoHandle?
 +  priv handle : IoHandleRenamed?
  }
@@ -484,15 +506,15 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  }
 *** Update File: <WORKDIR>/src/internal/event_loop/stdio.mbt
 @@
- fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+ fn get_stdio_handle(id : Int32) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
  
  ///|
 -let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
 +let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = Map([])
  
  ///|
--fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
-+fn setup_stdio(id : Int, context~ : String) -> IoHandleRenamed raise {
+-fn setup_stdio(id : Int32, context~ : String) -> IoHandle raise {
++fn setup_stdio(id : Int32, context~ : String) -> IoHandleRenamed raise {
    let fd = get_stdio_handle(id)
    if !@fd_util.fd_is_valid(fd) {
      @os_error.check_errno(context)

@@ -18,6 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'actual' --loc 'src/tests/json_value_semantics_test.mbt:3:7'
-Error: could not get package of file <WORKDIR>/src/tests/json_value_semantics_test.mbt
-[1]
+Found 1 references for symbol 'actual':
+<WORKDIR>/src/tests/json_value_semantics_test.mbt:11:20-11:26:
+   |     Json::null(),
+   |     Json::object({ "a": Json::boolean(true) }),
+   |   ])
+11 |   @debug.assert_eq(actual, expected)
+   |                    ^^^^^^
+   | }
+   | 
+
+[0]
 ```

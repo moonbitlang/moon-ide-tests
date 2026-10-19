@@ -373,7 +373,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
 -  self : Parser,
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
-   min_bp : Int,
+   min_bp : Int32,
  ) -> ParserResult[SetExpr] raise ParserError {
 @@
  }
@@ -439,7 +439,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
 -  self : Parser,
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
-   min_bp : Int,
+   min_bp : Int32,
  ) -> ParserResult[Expr] raise ParserError {
 @@
  }
@@ -451,7 +451,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
    left : Expr,
-   min_bp : Int,
+   min_bp : Int32,
 @@
  }
  
@@ -879,7 +879,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
  ) -> ArrayView[Token] raise ParserError {
 @@
    tokens : ArrayView[Token],
-   dialect? : &Dialect = MySQL::{ },
+   dialect~ : &Dialect = MySQL::{ },
  ) -> Array[Statement] raise ParserError {
 -  let parser = Parser::{ dialect, }
 +  let parser = ParserRenamed::{ dialect, }

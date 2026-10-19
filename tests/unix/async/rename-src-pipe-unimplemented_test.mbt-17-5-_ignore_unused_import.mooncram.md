@@ -17,7 +17,18 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src/pipe/unimplemented_test.mbt:17:5'
-Error: could not get package of file <WORKDIR>/src/pipe/unimplemented_test.mbt
-[1]
+$ run_moon_ide moon ide rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
+*** Begin Patch
+*** Update File: <WORKDIR>/src/pipe/unimplemented_test.mbt
+@@
+ 
+ ///|
+ #cfg(not(target="native"))
+-let _ignore_unused_import : Unit = {
++let _ignore_unused_import_renamed : Unit = {
+   ignore(@async.sleep)
+   ignore(@utf8.encode(""))
+   ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
+*** End Patch
+
 ```

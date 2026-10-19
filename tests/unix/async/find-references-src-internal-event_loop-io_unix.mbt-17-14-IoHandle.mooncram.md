@@ -18,21 +18,21 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'IoHandle' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
-Found 108 references for symbol 'IoHandle':
-<WORKDIR>/src/fs/dir.mbt:100:20-100:28:
+Found 112 references for symbol 'IoHandle':
+<WORKDIR>/src/fs/dir.mbt:111:20-111:28:
     | ///|
     | /// A directory in file system
     | struct Directory {
-100 |   io : @event_loop.IoHandle
+111 |   io : @event_loop.IoHandle
     |                    ^^^^^^^^
     |   buf : DirectoryBuffer
-    |   buf_len : Int
+    |   buf_len : Int32
 
-<WORKDIR>/src/fs/dir.mbt:159:47-159:55:
+<WORKDIR>/src/fs/dir.mbt:170:47-170:55:
     | }
     | 
     | ///|
-159 | fn Directory::from_io_handle(io : @event_loop.IoHandle) -> Directory {
+170 | fn Directory::from_io_handle(io : @event_loop.IoHandle) -> Directory {
     |                                               ^^^^^^^^
     |   let buf_len = @cmp.maximum(1024, Directory::min_buffer_size())
     |   {
@@ -53,7 +53,7 @@ Found 108 references for symbol 'IoHandle':
 182 |   root : @event_loop.IoHandle,
     |                      ^^^^^^^^
     |   root_id~ : FileIdentity,
-    |   debounce_timeout~ : Int,
+    |   debounce_timeout~ : Int32,
 
 <WORKDIR>/src/fs/watch_inotify.mbt:18:25-18:33:
    | ///|
@@ -111,7 +111,7 @@ Found 108 references for symbol 'IoHandle':
 
 <WORKDIR>/src/internal/event_loop/fs.mbt:35:7-35:15:
    |   // permission for file when new file is created
-   |   mode~ : Int,
+   |   mode~ : Int32,
    |   context~ : String,
 35 | ) -> (IoHandle, FileIdentity) {
    |       ^^^^^^^^
@@ -127,257 +127,293 @@ Found 108 references for symbol 'IoHandle':
    |         fd,
    |         kind~,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:313:14-313:22:
+<WORKDIR>/src/internal/event_loop/fs.mbt:317:14-317:22:
     | }
     | 
     | ///|
-313 | pub async fn IoHandle::fsync(
+317 | pub async fn IoHandle::fsync(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   only_data~ : Bool,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:314:12-314:20:
+<WORKDIR>/src/internal/event_loop/fs.mbt:318:12-318:20:
     | 
     | ///|
     | pub async fn IoHandle::fsync(
-314 |   handle : IoHandle,
+318 |   handle : IoHandle,
     |            ^^^^^^^^
     |   only_data~ : Bool,
     |   context~ : String,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:324:14-324:22:
+<WORKDIR>/src/internal/event_loop/fs.mbt:328:14-328:22:
     | }
     | 
     | ///|
-324 | pub async fn IoHandle::lock(
+328 | pub async fn IoHandle::lock(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   exclusive~ : Bool,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:325:12-325:20:
+<WORKDIR>/src/internal/event_loop/fs.mbt:329:12-329:20:
     | 
     | ///|
     | pub async fn IoHandle::lock(
-325 |   handle : IoHandle,
+329 |   handle : IoHandle,
     |            ^^^^^^^^
     |   exclusive~ : Bool,
     |   context~ : String,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:427:14-427:22:
+<WORKDIR>/src/internal/event_loop/fs.mbt:431:14-431:22:
     | }
     | 
     | ///|
-427 | pub async fn IoHandle::readdir(
+431 | pub async fn IoHandle::readdir(
     |              ^^^^^^^^
     |   dir : IoHandle,
     |   buf : @c_buffer.Buffer,
 
-<WORKDIR>/src/internal/event_loop/fs.mbt:428:9-428:17:
+<WORKDIR>/src/internal/event_loop/fs.mbt:432:9-432:17:
     | 
     | ///|
     | pub async fn IoHandle::readdir(
-428 |   dir : IoHandle,
+432 |   dir : IoHandle,
     |         ^^^^^^^^
     |   buf : @c_buffer.Buffer,
-    |   len : Int,
+    |   len : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:50:8-50:16:
+<WORKDIR>/src/internal/event_loop/io.mbt:51:8-51:16:
    | }
    | 
    | ///|
-50 | pub fn IoHandle::fd(handle : IoHandle) -> @fd_util.Fd {
+51 | pub fn IoHandle::fd(handle : IoHandle) -> @fd_util.Fd {
    |        ^^^^^^^^
    |   handle.fd
    | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:50:30-50:38:
+<WORKDIR>/src/internal/event_loop/io.mbt:51:30-51:38:
    | }
    | 
    | ///|
-50 | pub fn IoHandle::fd(handle : IoHandle) -> @fd_util.Fd {
+51 | pub fn IoHandle::fd(handle : IoHandle) -> @fd_util.Fd {
    |                              ^^^^^^^^
    |   handle.fd
    | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:55:8-55:16:
+<WORKDIR>/src/internal/event_loop/io.mbt:56:8-56:16:
    | }
    | 
    | ///|
-55 | pub fn IoHandle::kind(handle : IoHandle) -> @fd_util.FileKind {
+56 | pub fn IoHandle::kind(handle : IoHandle) -> @fd_util.FileKind {
    |        ^^^^^^^^
    |   handle.kind
    | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:55:32-55:40:
+<WORKDIR>/src/internal/event_loop/io.mbt:56:32-56:40:
    | }
    | 
    | ///|
-55 | pub fn IoHandle::kind(handle : IoHandle) -> @fd_util.FileKind {
+56 | pub fn IoHandle::kind(handle : IoHandle) -> @fd_util.FileKind {
    |                                ^^^^^^^^
    |   handle.kind
    | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:63:8-63:16:
+<WORKDIR>/src/internal/event_loop/io.mbt:64:8-64:16:
    | /// Detach a file descriptor from the event loop,
    | /// but does not close the file descriptor itself.
    | /// The underlying file descriptor is returned.
-63 | pub fn IoHandle::detach_from_event_loop(handle : IoHandle) -> Unit {
+64 | pub fn IoHandle::detach_from_event_loop(handle : IoHandle) -> Unit {
    |        ^^^^^^^^
    |   guard! curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else { return }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:63:50-63:58:
+<WORKDIR>/src/internal/event_loop/io.mbt:64:50-64:58:
    | /// Detach a file descriptor from the event loop,
    | /// but does not close the file descriptor itself.
    | /// The underlying file descriptor is returned.
-63 | pub fn IoHandle::detach_from_event_loop(handle : IoHandle) -> Unit {
+64 | pub fn IoHandle::detach_from_event_loop(handle : IoHandle) -> Unit {
    |                                                  ^^^^^^^^
    |   guard! curr_loop.val is Some(evloop)
    |   guard @fd_util.fd_is_valid(handle.fd) else { return }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:72:8-72:16:
+<WORKDIR>/src/internal/event_loop/io.mbt:78:8-78:16:
    | ///|
    | /// Close a file descriptor and detach it from the event loop.
    | /// This function is idempotent: it is safe to call `.close()` multiple times.
-72 | pub fn IoHandle::close(handle : IoHandle) -> Unit {
+78 | pub fn IoHandle::close(handle : IoHandle) -> Unit {
    |        ^^^^^^^^
    |   handle.detach_from_event_loop()
    |   if @fd_util.fd_is_valid(handle.fd) {
 
-<WORKDIR>/src/internal/event_loop/io.mbt:72:33-72:41:
+<WORKDIR>/src/internal/event_loop/io.mbt:78:33-78:41:
    | ///|
    | /// Close a file descriptor and detach it from the event loop.
    | /// This function is idempotent: it is safe to call `.close()` multiple times.
-72 | pub fn IoHandle::close(handle : IoHandle) -> Unit {
+78 | pub fn IoHandle::close(handle : IoHandle) -> Unit {
    |                                 ^^^^^^^^
    |   handle.detach_from_event_loop()
    |   if @fd_util.fd_is_valid(handle.fd) {
 
-<WORKDIR>/src/internal/event_loop/io.mbt:94:8-94:16:
-   | /// - `read_only` indicates whether the handle has the concept of writing.
-   | ///   By default, `IoHandle::from_fd` will register both read/write events for the file descriptor,
-   | ///   If `read_only=true`, only read event will be registered.
-94 | pub fn IoHandle::from_fd(
-   |        ^^^^^^^^
-   |   fd : @fd_util.Fd,
-   |   kind~ : @fd_util.FileKind,
+<WORKDIR>/src/internal/event_loop/io.mbt:100:8-100:16:
+    | /// - `read_only` indicates whether the handle has the concept of writing.
+    | ///   By default, `IoHandle::from_fd` will register both read/write events for the file descriptor,
+    | ///   If `read_only=true`, only read event will be registered.
+100 | pub fn IoHandle::from_fd(
+    |        ^^^^^^^^
+    |   fd : @fd_util.Fd,
+    |   kind~ : @fd_util.FileKind,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:99:6-99:14:
-   |   kind~ : @fd_util.FileKind,
-   |   is_async? : Bool = true,
-   |   read_only? : Bool = false,
-99 | ) -> IoHandle raise {
-   |      ^^^^^^^^
-   |   let context = "@event_loop.IoHandle::from_fd()"
-   |   errdefer @fd_util.close(fd, kind~, context~)
+<WORKDIR>/src/internal/event_loop/io.mbt:105:6-105:14:
+    |   kind~ : @fd_util.FileKind,
+    |   is_async~ : Bool = true,
+    |   read_only~ : Bool = false,
+105 | ) -> IoHandle raise {
+    |      ^^^^^^^^
+    |   let context = "@event_loop.IoHandle::from_fd()"
+    |   errdefer @fd_util.close(fd, kind~, context~)
 
-<WORKDIR>/src/internal/event_loop/io.mbt:129:10-129:18:
+<WORKDIR>/src/internal/event_loop/io.mbt:136:10-136:18:
     | ///|
     | /// Perform a read operation on the IO handle via the thread pool.
     | /// Used for handling objects that do not support native async reading.
-129 | async fn IoHandle::read_via_worker(
+136 | async fn IoHandle::read_via_worker(
     |          ^^^^^^^^
     |   handle : IoHandle,
     |   buf : FixedArray[Byte],
 
-<WORKDIR>/src/internal/event_loop/io.mbt:130:12-130:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:137:12-137:20:
     | /// Perform a read operation on the IO handle via the thread pool.
     | /// Used for handling objects that do not support native async reading.
     | async fn IoHandle::read_via_worker(
-130 |   handle : IoHandle,
+137 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : FixedArray[Byte],
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:151:14-151:22:
+<WORKDIR>/src/internal/event_loop/io.mbt:166:10-166:18:
+    | const IS_NATIVE_WINDOWS : Bool = false
+    | 
+    | ///|
+166 | async fn IoHandle::read_console(
+    |          ^^^^^^^^
+    |   handle : IoHandle,
+    |   buf : FixedArray[Byte],
+
+<WORKDIR>/src/internal/event_loop/io.mbt:167:12-167:20:
+    | 
+    | ///|
+    | async fn IoHandle::read_console(
+167 |   handle : IoHandle,
+    |            ^^^^^^^^
+    |   buf : FixedArray[Byte],
+    |   offset~ : Int32,
+
+<WORKDIR>/src/internal/event_loop/io.mbt:263:14-263:22:
     | }
     | 
     | ///|
-151 | pub async fn IoHandle::read(
+263 | pub async fn IoHandle::read(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   buf : FixedArray[Byte],
 
-<WORKDIR>/src/internal/event_loop/io.mbt:152:12-152:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:264:12-264:20:
     | 
     | ///|
     | pub async fn IoHandle::read(
-152 |   handle : IoHandle,
+264 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : FixedArray[Byte],
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:175:10-175:18:
+<WORKDIR>/src/internal/event_loop/io.mbt:290:10-290:18:
     | ///|
     | /// Perform a write operation on the IO handle via the thread pool.
     | /// Used for handling objects that do not support native async writing.
-175 | async fn IoHandle::write_via_worker(
+290 | async fn IoHandle::write_via_worker(
     |          ^^^^^^^^
     |   handle : IoHandle,
     |   buf : Bytes,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:176:12-176:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:291:12-291:20:
     | /// Perform a write operation on the IO handle via the thread pool.
     | /// Used for handling objects that do not support native async writing.
     | async fn IoHandle::write_via_worker(
-176 |   handle : IoHandle,
+291 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:203:14-203:22:
+<WORKDIR>/src/internal/event_loop/io.mbt:346:10-346:18:
     | }
     | 
     | ///|
-203 | pub async fn IoHandle::write(
+346 | async fn IoHandle::write_console(
+    |          ^^^^^^^^
+    |   handle : IoHandle,
+    |   buf : Bytes,
+
+<WORKDIR>/src/internal/event_loop/io.mbt:347:12-347:20:
+    | 
+    | ///|
+    | async fn IoHandle::write_console(
+347 |   handle : IoHandle,
+    |            ^^^^^^^^
+    |   buf : Bytes,
+    |   offset~ : Int32,
+
+<WORKDIR>/src/internal/event_loop/io.mbt:455:14-455:22:
+    | }
+    | 
+    | ///|
+455 | pub async fn IoHandle::write(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   buf : Bytes,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:204:12-204:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:456:12-456:20:
     | 
     | ///|
     | pub async fn IoHandle::write(
-204 |   handle : IoHandle,
+456 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:228:14-228:22:
+<WORKDIR>/src/internal/event_loop/io.mbt:483:14-483:22:
     | /// Perform a random access read on the IO handle.
     | /// Since only regular files support random access IO,
     | /// `read_at` is always dispatched to the thread pool.
-228 | pub async fn IoHandle::read_at(
+483 | pub async fn IoHandle::read_at(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   buf : FixedArray[Byte],
 
-<WORKDIR>/src/internal/event_loop/io.mbt:229:12-229:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:484:12-484:20:
     | /// Since only regular files support random access IO,
     | /// `read_at` is always dispatched to the thread pool.
     | pub async fn IoHandle::read_at(
-229 |   handle : IoHandle,
+484 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : FixedArray[Byte],
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:247:14-247:22:
+<WORKDIR>/src/internal/event_loop/io.mbt:502:14-502:22:
     | /// Perform a random access write on the IO handle.
     | /// Since only regular files support random access IO,
     | /// `write_at` is always dispatched to the thread pool.
-247 | pub async fn IoHandle::write_at(
+502 | pub async fn IoHandle::write_at(
     |              ^^^^^^^^
     |   handle : IoHandle,
     |   buf : Bytes,
 
-<WORKDIR>/src/internal/event_loop/io.mbt:248:12-248:20:
+<WORKDIR>/src/internal/event_loop/io.mbt:503:12-503:20:
     | /// Since only regular files support random access IO,
     | /// `write_at` is always dispatched to the thread pool.
     | pub async fn IoHandle::write_at(
-248 |   handle : IoHandle,
+503 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/io_unix.mbt:17:14-17:22:
    | 
@@ -431,7 +467,7 @@ Found 108 references for symbol 'IoHandle':
 70 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
-   |   offset~ : Int,
+   |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/io_unix.mbt:97:10-97:18:
    | 
@@ -449,7 +485,7 @@ Found 108 references for symbol 'IoHandle':
 98 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
-   |   offset~ : Int,
+   |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/io_unix.mbt:130:10-130:18:
     | 
@@ -467,7 +503,7 @@ Found 108 references for symbol 'IoHandle':
 131 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/io_unix.mbt:158:10-158:18:
     | 
@@ -485,7 +521,7 @@ Found 108 references for symbol 'IoHandle':
 159 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/network.mbt:74:14-74:22:
    | }
@@ -521,7 +557,7 @@ Found 108 references for symbol 'IoHandle':
 52 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
-   |   offset~ : Int,
+   |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/network_unix.mbt:80:14-80:22:
    | 
@@ -539,7 +575,7 @@ Found 108 references for symbol 'IoHandle':
 81 |   handle : IoHandle,
    |            ^^^^^^^^
    |   buf : FixedArray[Byte],
-   |   offset~ : Int,
+   |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/network_unix.mbt:118:10-118:18:
     | 
@@ -557,7 +593,7 @@ Found 108 references for symbol 'IoHandle':
 119 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/network_unix.mbt:145:14-145:22:
     | 
@@ -575,7 +611,7 @@ Found 108 references for symbol 'IoHandle':
 146 |   handle : IoHandle,
     |            ^^^^^^^^
     |   buf : Bytes,
-    |   offset~ : Int,
+    |   offset~ : Int32,
 
 <WORKDIR>/src/internal/event_loop/network_unix.mbt:183:10-183:18:
     | 
@@ -651,7 +687,7 @@ Found 108 references for symbol 'IoHandle':
 <WORKDIR>/src/internal/event_loop/process.mbt:19:17-19:25:
    | #valtype
    | pub struct Process {
-   |   pid : Int
+   |   pid : Int32
 19 |   priv handle : IoHandle?
    |                 ^^^^^^^^
    | }
@@ -676,7 +712,7 @@ Found 108 references for symbol 'IoHandle':
    |   { pid, handle, }
 
 <WORKDIR>/src/internal/event_loop/stdio.mbt:70:38-70:46:
-   | fn get_stdio_handle(id : Int) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+   | fn get_stdio_handle(id : Int32) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
    | 
    | ///|
 70 | let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
@@ -684,38 +720,38 @@ Found 108 references for symbol 'IoHandle':
    | 
    | ///|
 
-<WORKDIR>/src/internal/event_loop/stdio.mbt:73:48-73:56:
+<WORKDIR>/src/internal/event_loop/stdio.mbt:73:50-73:58:
    | let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
    | 
    | ///|
-73 | fn setup_stdio(id : Int, context~ : String) -> IoHandle raise {
-   |                                                ^^^^^^^^
+73 | fn setup_stdio(id : Int32, context~ : String) -> IoHandle raise {
+   |                                                  ^^^^^^^^
    |   let fd = get_stdio_handle(id)
    |   if !@fd_util.fd_is_valid(fd) {
 
-<WORKDIR>/src/internal/event_loop/stdio.mbt:119:24-119:32:
+<WORKDIR>/src/internal/event_loop/stdio.mbt:120:24-120:32:
     | }
     | 
     | ///|
-119 | pub let stdin : Result[IoHandle, Error] = try
+120 | pub let stdin : Result[IoHandle, Error] = try
     |                        ^^^^^^^^
     |   setup_stdio(0, context="initialize `stdin`")
     | catch {
 
-<WORKDIR>/src/internal/event_loop/stdio.mbt:128:25-128:33:
+<WORKDIR>/src/internal/event_loop/stdio.mbt:129:25-129:33:
     | }
     | 
     | ///|
-128 | pub let stdout : Result[IoHandle, Error] = try
+129 | pub let stdout : Result[IoHandle, Error] = try
     |                         ^^^^^^^^
     |   setup_stdio(1, context="initialize `stdout`")
     | catch {
 
-<WORKDIR>/src/internal/event_loop/stdio.mbt:137:25-137:33:
+<WORKDIR>/src/internal/event_loop/stdio.mbt:138:25-138:33:
     | }
     | 
     | ///|
-137 | pub let stderr : Result[IoHandle, Error] = try
+138 | pub let stderr : Result[IoHandle, Error] = try
     |                         ^^^^^^^^
     |   setup_stdio(2, context="initialize `stderr`")
     | catch {
@@ -945,29 +981,29 @@ Found 108 references for symbol 'IoHandle':
    |   errdefer io.close()
    |   let dst_addr = if addr.is_multicast() {
 
-<WORKDIR>/src/socket/udp.mbt:177:25-177:33:
+<WORKDIR>/src/socket/udp.mbt:180:25-180:33:
     | /// The essence of `UdpServer` is a UDP socket with a fixed/well-known port.
     | pub struct UdpServer {
     |   addr : Addr
-177 |   priv io : @event_loop.IoHandle
+180 |   priv io : @event_loop.IoHandle
     |                         ^^^^^^^^
     |   priv is_multicast_only : Bool
     | }
 
-<WORKDIR>/src/socket/udp.mbt:219:24-219:32:
+<WORKDIR>/src/socket/udp.mbt:222:24-222:32:
     |   let context = "@socket.UdpServer::new()"
     |   let family = addr.family()
     |   let sock = make_udp_socket(family, multicast=false, context~)
-219 |   let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
+222 |   let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
     |                        ^^^^^^^^
     |   errdefer io.close()
     |   if addr.is_ipv6() && addr.is_ipv6_wildcard() {
 
-<WORKDIR>/src/socket/udp.mbt:264:24-264:32:
+<WORKDIR>/src/socket/udp.mbt:267:24-267:32:
     |     abort("@socket.UdpServer::multicast() is IPv4 only")
     |   }
     |   let sock = make_udp_socket(family, multicast=true, context~)
-264 |   let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
+267 |   let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
     |                        ^^^^^^^^
     |   errdefer io.close()
     |   if @event_loop.platform is Windows {
@@ -981,11 +1017,11 @@ Found 108 references for symbol 'IoHandle':
    |   read_buf : @io.ReaderBuffer
    | }
 
-<WORKDIR>/src/stdio/stdio.mbt:45:34-45:42:
+<WORKDIR>/src/stdio/stdio.mbt:55:34-55:42:
    | }
    | 
    | ///|
-45 | struct Output(Result[@event_loop.IoHandle, Error])
+55 | struct Output(Result[@event_loop.IoHandle, Error])
    |                                  ^^^^^^^^
    | 
    | ///|

@@ -366,7 +366,7 @@ pub fn exercise_result_core(
   value.map(x => x.to_string()) (escaped)
         ^^^
         ```moonbit
-        fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E]
+        fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U raise?) -> Result[U, E] raise?
         ```
         ---
         
@@ -530,12 +530,14 @@ pub fn exercise_hashmap_map(
   scores.map((key, value) => key + ":" + value.to_string()) (escaped)
          ^^^
          ```moonbit
-         fn[K, V, V2] @hashmap.HashMap::map(self : @hashmap.HashMap[K, V], f : (K, V) -> V2) -> @hashmap.HashMap[K, V2]
+         fn[K, V, V2] @hashmap.HashMap::map(self : @hashmap.HashMap[K, V], f : (K, V) -> V2 raise?) -> @hashmap.HashMap[K, V2] raise?
          ```
          ---
          
-          Applies a function to each key-value pair in the map and 
+          Applies a function to each key-value pair in the map and
           returns a new map with the results, using the original keys.
+         
+          `f` may raise; the error propagates and `self` is left unchanged.
 }
 
 ```

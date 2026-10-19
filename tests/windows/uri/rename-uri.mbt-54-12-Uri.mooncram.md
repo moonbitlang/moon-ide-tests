@@ -98,8 +98,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  /// # See Also
  ///
  /// - `effective_port()` - Get the effective port including scheme defaults
--pub fn Uri::port(self : Uri) -> Int? {
-+pub fn UriRenamed::port(self : UriRenamed) -> Int? {
+-pub fn Uri::port(self : Uri) -> Int32? {
++pub fn UriRenamed::port(self : UriRenamed) -> Int32? {
    match self.authority {
      Some(auth) => auth.port
      None => None
@@ -152,8 +152,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  
  ///|
  /// Create a new URI with the specified port
--pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
-+pub fn UriRenamed::with_port(self : UriRenamed, new_port : Int?) -> UriRenamed {
+-pub fn Uri::with_port(self : Uri, new_port : Int32?) -> Uri {
++pub fn UriRenamed::with_port(self : UriRenamed, new_port : Int32?) -> UriRenamed {
    match self.authority {
      Some(auth) => {
        let new_authority = Some({ ..auth, port: new_port, })
@@ -200,8 +200,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  
  ///|
  /// Get the effective port (explicit port or default port for scheme) (escaped)
--pub fn Uri::effective_port(self : Uri) -> Int? {
-+pub fn UriRenamed::effective_port(self : UriRenamed) -> Int? {
+-pub fn Uri::effective_port(self : Uri) -> Int32? {
++pub fn UriRenamed::effective_port(self : UriRenamed) -> Int32? {
    match self.authority {
      Some(auth) =>
        match auth.port {

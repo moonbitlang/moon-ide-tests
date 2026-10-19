@@ -21,38 +21,38 @@ Found 42 references for symbol 'platform':
    |     return
    |   }
 
-<WORKDIR>/src\fs\dir.mbt:34:29-34:37:
+<WORKDIR>/src\fs\dir.mbt:45:29-45:37:
    |     @os_error.OSError(_) as err if recursive && err.is_ENOENT() => {
    |       let last_path_sep_index = match path.rev_find("/") {
    |         Some(index) => index
-34 |         None if @event_loop.platform is Windows &&
+45 |         None if @event_loop.platform is Windows &&
    |                             ^^^^^^^^
    |           path.rev_find("\\") is Some(index) => index
    |         None => raise err
 
-<WORKDIR>/src\fs\dir.mbt:39:35-39:43:
+<WORKDIR>/src\fs\dir.mbt:50:35-50:43:
    |         None => raise err
    |       }
    |       let parent = path[:last_path_sep_index].trim_end(chars="/")
-39 |       let parent = if @event_loop.platform is Windows {
+50 |       let parent = if @event_loop.platform is Windows {
    |                                   ^^^^^^^^
    |         parent.trim_end(chars="\\")
    |       } else {
 
-<WORKDIR>/src\fs\dir.mbt:65:31-65:39:
+<WORKDIR>/src\fs\dir.mbt:76:31-76:39:
    | ) -> Unit nocancel {
    |   let context = "@fs.rmdir()"
    |   if recursive {
-65 |     let base = if @event_loop.platform is Windows {
+76 |     let base = if @event_loop.platform is Windows {
    |                               ^^^^^^^^
    |       path.trim_end(chars="/\\")
    |     } else {
 
-<WORKDIR>/src\fs\dir.mbt:303:43-303:51:
+<WORKDIR>/src\fs\dir.mbt:323:43-323:51:
     |   let offset = dir.offset
     |   dir.offset += entry_len
     |   dir.count += 1
-303 |   let need_more_entry = match @event_loop.platform {
+323 |   let need_more_entry = match @event_loop.platform {
     |                                           ^^^^^^^^
     |     Linux => dir.offset >= dir.job_ret
     |     MacOS => dir.count >= dir.job_ret
@@ -156,38 +156,38 @@ Found 42 references for symbol 'platform':
    |         read_only=access is 0,
    |       )
 
-<WORKDIR>/src\internal\event_loop\io.mbt:146:17-146:25:
+<WORKDIR>/src\internal\event_loop\io.mbt:153:17-153:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-146 |     cancellable=platform is Windows || handle.kind.can_poll(),
+153 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src\internal\event_loop\io.mbt:198:17-198:25:
+<WORKDIR>/src\internal\event_loop\io.mbt:313:17-313:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-198 |     cancellable=platform is Windows || handle.kind.can_poll(),
+313 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src\internal\event_loop\io.mbt:240:52-240:60:
+<WORKDIR>/src\internal\event_loop\io.mbt:495:52-495:60:
     |   guard! !handle.is_async
     |   let job = Job::read(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-240 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
+495 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
     |                                                    ^^^^^^^^
     | }
     | 
 
-<WORKDIR>/src\internal\event_loop\io.mbt:264:59-264:67:
+<WORKDIR>/src\internal\event_loop\io.mbt:519:59-519:67:
     |   }
     |   let job = Job::write(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-264 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
+519 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
     |                                                           ^^^^^^^^
     | }
 
@@ -201,7 +201,7 @@ Found 42 references for symbol 'platform':
    |     )
 
 <WORKDIR>/src\process\cancellation.mbt:39:54-39:62:
-   | pub(all) struct CancellationHandler(async (Int) -> Unit)
+   | pub(all) struct CancellationHandler(async (Int32) -> Unit)
    | 
    | ///|
 39 | let default_signal : @signal.Signal = if @event_loop.platform is Windows {
@@ -362,11 +362,11 @@ Found 42 references for symbol 'platform':
    |       let local_addr = Addr::any(family)
    |       io.bind(local_addr.0, context~)
 
-<WORKDIR>/src\socket\udp.mbt:266:18-266:26:
+<WORKDIR>/src\socket\udp.mbt:269:18-269:26:
     |   let sock = make_udp_socket(family, multicast=true, context~)
     |   let io = @event_loop.IoHandle::from_fd(sock, kind=Socket)
     |   errdefer io.close()
-266 |   if @event_loop.platform is Windows {
+269 |   if @event_loop.platform is Windows {
     |                  ^^^^^^^^
     |     let local_addr = Addr::new(0, multi_addr.port())
     |     io.bind(local_addr.0, context~)

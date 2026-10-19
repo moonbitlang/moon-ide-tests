@@ -131,7 +131,7 @@ Found 105 references for symbol 'Uri':
     | /// # See Also
     | ///
     | /// - `effective_port()` - Get the effective port including scheme defaults
-402 | pub fn Uri::port(self : Uri) -> Int? {
+402 | pub fn Uri::port(self : Uri) -> Int32? {
     |        ^^^
     |   match self.authority {
     |     Some(auth) => auth.port
@@ -140,7 +140,7 @@ Found 105 references for symbol 'Uri':
     | /// # See Also
     | ///
     | /// - `effective_port()` - Get the effective port including scheme defaults
-402 | pub fn Uri::port(self : Uri) -> Int? {
+402 | pub fn Uri::port(self : Uri) -> Int32? {
     |                         ^^^
     |   match self.authority {
     |     Some(auth) => auth.port
@@ -257,7 +257,7 @@ Found 105 references for symbol 'Uri':
     | 
     | ///|
     | /// Create a new URI with the specified port
-768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
+768 | pub fn Uri::with_port(self : Uri, new_port : Int32?) -> Uri {
     |        ^^^
     |   match self.authority {
     |     Some(auth) => {
@@ -266,17 +266,17 @@ Found 105 references for symbol 'Uri':
     | 
     | ///|
     | /// Create a new URI with the specified port
-768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
+768 | pub fn Uri::with_port(self : Uri, new_port : Int32?) -> Uri {
     |                              ^^^
     |   match self.authority {
     |     Some(auth) => {
 
-<WORKDIR>/uri.mbt:768:55-768:58:
+<WORKDIR>/uri.mbt:768:57-768:60:
     | 
     | ///|
     | /// Create a new URI with the specified port
-768 | pub fn Uri::with_port(self : Uri, new_port : Int?) -> Uri {
-    |                                                       ^^^
+768 | pub fn Uri::with_port(self : Uri, new_port : Int32?) -> Uri {
+    |                                                         ^^^
     |   match self.authority {
     |     Some(auth) => {
 
@@ -401,7 +401,7 @@ Found 105 references for symbol 'Uri':
     | 
     | ///|
     | /// Get the effective port (explicit port or default port for scheme)
-844 | pub fn Uri::effective_port(self : Uri) -> Int? {
+844 | pub fn Uri::effective_port(self : Uri) -> Int32? {
     |        ^^^
     |   match self.authority {
     |     Some(auth) =>
@@ -410,7 +410,7 @@ Found 105 references for symbol 'Uri':
     | 
     | ///|
     | /// Get the effective port (explicit port or default port for scheme)
-844 | pub fn Uri::effective_port(self : Uri) -> Int? {
+844 | pub fn Uri::effective_port(self : Uri) -> Int32? {
     |                                   ^^^
     |   match self.authority {
     |     Some(auth) =>

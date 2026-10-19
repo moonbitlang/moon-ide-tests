@@ -18,6 +18,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'input' --loc 'src/tests/json_testsuite_y_test.mbt:8:7'
-Error: could not get package of file <WORKDIR>/src/tests/json_testsuite_y_test.mbt
-[1]
+Found 1 references for symbol 'input':
+<WORKDIR>/src/tests/json_testsuite_y_test.mbt:9:50-9:55:
+  | ///|
+  | test "json_testsuite y_array_arraysWithSpaces" {
+  |   let input = "[[]   ]"
+9 |   expect_accept("y_array_arraysWithSpaces.json", input)
+  |                                                  ^^^^^
+  | }
+  | 
+
+[0]
 ```

@@ -201,7 +201,7 @@ pub fn[T, U] Option::map(T?, (T) -> U raise?) -> U? raise?
 ```mooncram
 $ run_moon_ide moon ide doc Result::map
 package "moonbitlang/core/result"
-pub fn[T, E, U] Result::map(Self[T, E], (T) -> U) -> Self[U, E]
+pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
   Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged.
    # Example
    ```mbt check
@@ -324,8 +324,6 @@ enum List[A] {
   pub fn[A] List::from_iter(Iter[A]) -> Self[A]
   #as_free_fn
   pub fn[A] List::from_iter_rev(Iter[A]) -> Self[A]
-  #as_free_fn
-  pub fn[A : @json.FromJson] List::from_json(Json) -> Self[A] raise @json.JsonDecodeError
   pub fn[A : Eq] List::has_prefix(Self[A], Self[A]) -> Bool
   pub fn[A : Eq] List::has_suffix(Self[A], Self[A]) -> Bool
   pub fn[A : Hash] List::hash(Self[A]) -> Int
@@ -342,12 +340,7 @@ enum List[A] {
   pub fn[A, B] List::mapi(Self[A], (Int, A) -> B raise?) -> Self[B] raise?
   pub fn[A : Compare] List::maximum(Self[A]) -> A?
   pub fn[A : Compare] List::minimum(Self[A]) -> A?
-  #alias(empty)
-  #as_free_fn(empty)
-  #as_free_fn
-  pub fn[A] List::new() -> Self[A]
   pub fn[A] List::nth(Self[A], Int) -> A?
-  #alias(add)
   pub fn[A] List::prepend(Self[A], A) -> Self[A]
   pub fn[A : Eq] List::remove(Self[A], A) -> Self[A]
   pub fn[A] List::remove_at(Self[A], Int) -> Self[A]
@@ -366,7 +359,6 @@ enum List[A] {
   pub fn[A] List::take(Self[A], Int) -> Self[A]
   pub fn[A] List::take_while(Self[A], (A) -> Bool raise?) -> Self[A] raise?
   pub fn[A] List::to_array(Self[A]) -> Array[A]
-  pub fn[A : ToJson] List::to_json(Self[A]) -> Json
   #as_free_fn
   pub fn[A, S] List::unfold((S) -> (A, S)? raise?, init~ : S) -> Self[A] raise?
   pub fn[A] List::unsafe_tail(Self[A]) -> Self[A]
@@ -409,7 +401,8 @@ pub fn[K : Hash + Eq, V] HashMap::get(Self[K, V], K) -> V?
 ```mooncram
 $ run_moon_ide moon ide doc @moonbitlang/core/hashmap.HashMap::map
 package "moonbitlang/core/hashmap"
-pub fn[K, V, V2] HashMap::map(Self[K, V], (K, V) -> V2) -> Self[K, V2]
-  Applies a function to each key-value pair in the map and 
+pub fn[K, V, V2] HashMap::map(Self[K, V], (K, V) -> V2 raise?) -> Self[K, V2] raise?
+  Applies a function to each key-value pair in the map and
    returns a new map with the results, using the original keys.
+   `f` may raise; the error propagates and `self` is left unchanged.
 ```

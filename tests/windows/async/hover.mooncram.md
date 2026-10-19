@@ -36,40 +36,51 @@ async test "blocking unbuffered" {
     group.spawn_bg() <| () => {
 ```
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'mkfifo' --loc 'src\fs\named_pipe_test.mbt:18:15'
-No hover information found for symbol 'mkfifo' at src\fs\named_pipe_test.mbt:18:15
-[1]
-```
+Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'path' --loc 'src\fs\named_pipe_test.mbt:18:22'
-No hover information found for symbol 'path' at src\fs\named_pipe_test.mbt:18:22
-[1]
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'IoHandle' --loc 'src\internal\event_loop\io_unix.mbt:17:14'
-No hover information found for symbol 'IoHandle' at src\internal\event_loop\io_unix.mbt:17:14
-[1]
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'wait_read' --loc 'src\internal\event_loop\io_unix.mbt:17:24'
-No hover information found for symbol 'wait_read' at src\internal\event_loop\io_unix.mbt:17:24
-[1]
-```
-
+<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
 No hover information found for symbol 'fstatx_sync' at src\internal\event_loop\stdio.mbt:18:15
 [1]
 ```
 
+Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'fd' --loc 'src\internal\event_loop\stdio.mbt:19:3'
 No hover information found for symbol 'fd' at src\internal\event_loop\stdio.mbt:19:3
 [1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\internal\event_loop\unimplemented_test.mbt:17:5' --target js
+///|
+#cfg(not(any(target="native", target="wasm")))
+let _ignore_unused_import : Unit = {
+    ^^^^^^^^^^^^^^^^^^^^^
+    ```moonbit
+    Unit
+    ```
+    ---
+    
+  ignore(@async.sleep)
+  ignore(@fs.unimplemented)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'sleep' --loc 'src\internal\event_loop\unimplemented_test.mbt:18:17' --target js
+///|
+#cfg(not(any(target="native", target="wasm")))
+let _ignore_unused_import : Unit = {
+  ignore(@async.sleep)
+         ^^^^^^^^^^^^
+         ```moonbit
+         async fn @moonbitlang/async.sleep(duration : Int) -> Unit noraise
+         ```
+  ignore(@fs.unimplemented)
+  ignore(@utf8.encode(""))
 ```
 
 ```mooncram
@@ -132,15 +143,32 @@ async test "read_exactly" {
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\pipe\unimplemented_test.mbt:17:5'
-Error: could not get package of loc src\pipe\unimplemented_test.mbt:17:5
-[1]
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\pipe\unimplemented_test.mbt:17:5' --target js
+///|
+#cfg(not(target="native"))
+let _ignore_unused_import : Unit = {
+    ^^^^^^^^^^^^^^^^^^^^^
+    ```moonbit
+    Unit
+    ```
+    ---
+    
+  ignore(@async.sleep)
+  ignore(@utf8.encode(""))
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17'
-Error: could not get package of loc src\pipe\unimplemented_test.mbt:18:17
-[1]
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
+///|
+#cfg(not(target="native"))
+let _ignore_unused_import : Unit = {
+  ignore(@async.sleep)
+         ^^^^^^^^^^^^
+         ```moonbit
+         async fn @moonbitlang/async.sleep(duration : Int) -> Unit noraise
+         ```
+  ignore(@utf8.encode(""))
+  ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
 ```
 
 ```mooncram
@@ -205,13 +233,71 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'Linux' --loc 'src
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9'
-No hover information found for symbol 'unimplemented' at src\socket\unimplemented.mbt:19:9
-[1]
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9' --target js
+/// This package currently does not support JavaScript backend
+#cfg(not(any(target="native", target="wasm")))
+#coverage.skip
+pub let unimplemented : Unit = {
+        ^^^^^^^^^^^^^
+        ```moonbit
+        Unit
+        ```
+        ---
+        
+         This package currently does not support JavaScript backend
+  ignore(() => @string.parse_int("0"))
+  ignore(@io.pipe)
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'parse_int' --loc 'src\socket\unimplemented.mbt:20:24'
-No hover information found for symbol 'parse_int' at src\socket\unimplemented.mbt:20:24
-[1]
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'parse_int' --loc 'src\socket\unimplemented.mbt:20:24' --target js
+#cfg(not(any(target="native", target="wasm")))
+#coverage.skip
+pub let unimplemented : Unit = {
+  ignore(() => @string.parse_int("0"))
+               ^^^^^^^^^^^^^^^^^
+               ```moonbit
+               fn @moonbitlang/core/string.parse_int(str : StringView, base? : Int) -> Int raise
+               ```
+               ---
+               
+                Parse a string in the given base (0, 2 to 36), return a Int number or an error.
+                If the `base` argument is 0, the base will be inferred by the prefix.
+  ignore(@io.pipe)
+  ignore(@event_loop.Timer::new)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover '_ignore_unused_import' --loc 'src\tls\unimplemented_test.mbt:17:5' --target js
+///|
+#cfg(not(any(target="native", target="wasm")))
+let _ignore_unused_import : Unit = {
+    ^^^^^^^^^^^^^^^^^^^^^
+    ```moonbit
+    Unit
+    ```
+    ---
+    
+  ignore(@utf8.encode(""))
+  ignore(@async.sleep)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'encode' --loc 'src\tls\unimplemented_test.mbt:18:16' --target js
+///|
+#cfg(not(any(target="native", target="wasm")))
+let _ignore_unused_import : Unit = {
+  ignore(@utf8.encode(""))
+         ^^^^^^^^^^^^
+         ```moonbit
+         fn @moonbitlang/core/encoding/utf8.encode(str : StringView, bom? : Bool) -> Bytes
+         ```
+         ---
+         
+          Encodes a string into a UTF-8 byte array.
+         
+          Unpaired surrogates are replaced with U+FFFD, matching `TextEncoder`.
+          The other backends panic on them instead.
+  ignore(@async.sleep)
+  ignore(@socket.unimplemented)
 ```
