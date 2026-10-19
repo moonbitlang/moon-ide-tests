@@ -1252,5 +1252,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_reject' 'e
  }
 *** End Patch
 
-[0]
 ```

@@ -11,5 +11,4 @@ Found 1 references for symbol 'message':
   | }
   | 
 
-[0]
 ```

@@ -470,7 +470,7 @@ Definition found at file <MOON_HOME>/lib\core\internal\strconv\strconv_int.mbt
     | ///|
     | /// Parse a string in the given base (0, 2 to 36), return a Int number or an error.
     | /// If the `base` argument is 0, the base will be inferred by the prefix.
-148 | pub fn parse_int(str : StringView, base? : Int = 0) -> Int raise {
+148 | pub fn parse_int(str : StringView, base~ : Int32 = 0) -> Int32 raise {
     |        ^^^^^^^^^
     |   let n = parse_int64(str, base~)
     |   if n < INT_MIN.to_int64() || n > INT_MAX.to_int64() {
@@ -521,7 +521,7 @@ Definition found at file <MOON_HOME>/lib\core\encoding\utf8\encode_js.mbt
    | ///
    | /// Unpaired surrogates are replaced with U+FFFD, matching `TextEncoder`.
    | /// The other backends panic on them instead.
-44 | pub fn encode(str : StringView, bom? : Bool = false) -> Bytes {
+44 | pub fn encode(str : StringView, bom~ : Bool = false) -> Bytes {
    |        ^^^^^^
    |   encode_utf8_js(str.data(), str.start_offset(), str.length(), bom)
    | }

@@ -17,5 +17,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'input' 'input_ren
  ///|
 *** End Patch
 
-[0]
 ```

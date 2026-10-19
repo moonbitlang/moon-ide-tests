@@ -31,5 +31,4 @@ $ run_moon_ide moon ide rename 'message' 'message_renamed' --loc 'src/tests/json
  ///|
 *** End Patch
 
-[0]
 ```

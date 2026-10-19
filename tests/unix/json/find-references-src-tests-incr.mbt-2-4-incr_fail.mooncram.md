@@ -73,5 +73,4 @@ Found 6 references for symbol 'incr_fail':
     |   }
     | }
 
-[0]
 ```

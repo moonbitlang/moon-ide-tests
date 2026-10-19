@@ -56,5 +56,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'incr_fail' 'incr_
  
 *** End Patch
 
-[0]
 ```

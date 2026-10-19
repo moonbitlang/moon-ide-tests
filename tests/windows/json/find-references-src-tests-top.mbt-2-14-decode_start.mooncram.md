@@ -21,5 +21,4 @@ Found 2 references for symbol 'decode_start':
    |     is Finish({ value, .. })
    |   let expected = Json::object({
 
-[0]
 ```

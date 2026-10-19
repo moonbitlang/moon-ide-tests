@@ -78,7 +78,7 @@ pub fn[A, B] Array::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
 $ run_moon_ide moon ide doc String::length
 package "moonbitlang/core/string"
 #alias(charcode_length, deprecated)
-pub fn String::length(String) -> Int
+pub fn String::length(String) -> Int32
   Returns the number of UTF-16 code units in the string. Note that this is not
    necessarily equal to the number of Unicode characters (code points) in the
    string, as some characters may be represented by multiple UTF-16 code units.
@@ -113,7 +113,7 @@ pub fn String::split(String, StringView) -> Iter[StringView]
 $ run_moon_ide moon ide doc StringBuilder::new
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
-pub fn StringBuilder::StringBuilder(size_hint? : Int) -> Self
+pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
    * `size_hint` : An optional initial capacity hint for the internal buffer. If
@@ -124,7 +124,7 @@ pub fn StringBuilder::StringBuilder(size_hint? : Int) -> Self
 
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
-pub fn StringBuilder::StringBuilder(size_hint? : Int) -> Self
+pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
    * `size_hint` : An optional initial capacity hint for the internal buffer. If
@@ -146,7 +146,7 @@ pub fn &Logger::write_string(Self, String) -> Unit
 ```mooncram
 $ run_moon_ide moon ide doc Int::abs
 package "moonbitlang/core/int"
-pub fn Int::abs(Int) -> Int
+pub fn Int32::abs(Int32) -> Int32
   Computes the absolute value of an integer.
    Parameters:
    * `self` : The integer whose absolute value is to be computed.
@@ -156,9 +156,9 @@ pub fn Int::abs(Int) -> Int
    Example:
    ```mbt check
    test {
-     inspect(Int::abs(42), content="42")
-     inspect(Int::abs(-42), content="42")
-     inspect(Int::abs(0), content="0")
+     inspect(Int32::abs(42), content="42")
+     inspect(Int32::abs(-42), content="42")
+     inspect(Int32::abs(0), content="0")
    }
    ```
 ```
@@ -166,7 +166,7 @@ pub fn Int::abs(Int) -> Int
 ```mooncram
 $ run_moon_ide moon ide doc Int::to_string
 package "moonbitlang/core/int"
-pub fn Int::to_string(Int, radix? : Int) -> String
+pub fn Int32::to_string(Int32, radix? : Int32) -> String
   Converts an integer to its string representation in the specified radix (base).
    Example:
    ```
@@ -199,8 +199,8 @@ pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
    # Example
    ```mbt check
    test {
-     let x : Result[Int, Unit] = Ok(6)
-     let y = x.map((v : Int) => v * 7) (escaped)
+     let x : Result[Int32, Unit] = Ok(6)
+     let y = x.map((v : Int32) => v * 7)
      @test.assert_eq(y, Ok(42))
    }
    ```
@@ -260,51 +260,51 @@ enum List[A] {
   pub fn[A] List::List(ArrayView[A]) -> Self[A]
   pub fn[A] List::all(Self[A], (A) -> Bool raise?) -> Bool raise?
   pub fn[A] List::any(Self[A], (A) -> Bool raise?) -> Bool raise?
-  pub fn[A : Compare] List::compare(Self[A], Self[A]) -> Int
+  pub fn[A : Compare] List::compare(Self[A], Self[A]) -> Int32
   pub fn[A] List::concat(Self[A], Self[A]) -> Self[A]
   #as_free_fn
   pub fn[A] List::cons(A, Self[A]) -> Self[A]
   pub fn[A : Eq] List::contains(Self[A], A) -> Bool
-  pub fn[A] List::drop(Self[A], Int) -> Self[A]
+  pub fn[A] List::drop(Self[A], Int32) -> Self[A]
   pub fn[A] List::drop_while(Self[A], (A) -> Bool raise?) -> Self[A] raise?
   pub fn[A] List::each(Self[A], (A) -> Unit raise?) -> Unit raise?
-  pub fn[A] List::eachi(Self[A], (Int, A) -> Unit raise?) -> Unit raise?
+  pub fn[A] List::eachi(Self[A], (Int32, A) -> Unit raise?) -> Unit raise?
   pub fn[A : Eq] List::equal(Self[A], Self[A]) -> Bool
   pub fn[A] List::filter(Self[A], (A) -> Bool raise?) -> Self[A] raise?
   pub fn[A, B] List::filter_map(Self[A], (A) -> B? raise?) -> Self[B] raise?
   pub fn[A] List::find(Self[A], (A) -> Bool raise?) -> A? raise?
-  pub fn[A] List::find_index(Self[A], (A) -> Bool raise?) -> Int? raise?
-  pub fn[A] List::findi(Self[A], (A, Int) -> Bool raise?) -> A? raise?
+  pub fn[A] List::find_index(Self[A], (A) -> Bool raise?) -> Int32? raise?
+  pub fn[A] List::findi(Self[A], (A, Int32) -> Bool raise?) -> A? raise?
   pub fn[A, B] List::flat_map(Self[A], (A) -> Self[B] raise?) -> Self[B] raise?
   pub fn[A] List::flatten(Self[Self[A]]) -> Self[A]
   pub fn[A, B] List::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
-  pub fn[A, B] List::foldi(Self[A], init~ : B, (Int, B, A) -> B raise?) -> B raise?
+  pub fn[A, B] List::foldi(Self[A], init~ : B, (Int32, B, A) -> B raise?) -> B raise?
   #as_free_fn
   pub fn[A] List::from_iter(Iter[A]) -> Self[A]
   #as_free_fn
   pub fn[A] List::from_iter_rev(Iter[A]) -> Self[A]
   pub fn[A : Eq] List::has_prefix(Self[A], Self[A]) -> Bool
   pub fn[A : Eq] List::has_suffix(Self[A], Self[A]) -> Bool
-  pub fn[A : Hash] List::hash(Self[A]) -> Int
+  pub fn[A : Hash] List::hash(Self[A]) -> Int32
   pub fn[A] List::head(Self[A]) -> A?
   pub fn[A] List::intercalate(Self[Self[A]], Self[A]) -> Self[A]
   pub fn[A] List::intersperse(Self[A], A) -> Self[A]
   pub fn[A] List::is_empty(Self[A]) -> Bool
   pub fn[A] List::iter(Self[A]) -> Iter[A]
-  pub fn[A] List::iter2(Self[A]) -> Iter2[Int, A]
+  pub fn[A] List::iter2(Self[A]) -> Iter2[Int32, A]
   pub fn[A] List::last(Self[A]) -> A?
-  pub fn[A] List::length(Self[A]) -> Int
+  pub fn[A] List::length(Self[A]) -> Int32
   pub fn[A : Eq, B] List::lookup(Self[(A, B)], A) -> B?
   pub fn[A, B] List::map(Self[A], (A) -> B raise?) -> Self[B] raise?
-  pub fn[A, B] List::mapi(Self[A], (Int, A) -> B raise?) -> Self[B] raise?
+  pub fn[A, B] List::mapi(Self[A], (Int32, A) -> B raise?) -> Self[B] raise?
   pub fn[A : Compare] List::maximum(Self[A]) -> A?
   pub fn[A : Compare] List::minimum(Self[A]) -> A?
-  pub fn[A] List::nth(Self[A], Int) -> A?
+  pub fn[A] List::nth(Self[A], Int32) -> A?
   pub fn[A] List::prepend(Self[A], A) -> Self[A]
   pub fn[A : Eq] List::remove(Self[A], A) -> Self[A]
-  pub fn[A] List::remove_at(Self[A], Int) -> Self[A]
+  pub fn[A] List::remove_at(Self[A], Int32) -> Self[A]
   #as_free_fn
-  pub fn[A] List::repeat(Int, A) -> Self[A]
+  pub fn[A] List::repeat(Int32, A) -> Self[A]
   pub fn[A] List::rev(Self[A]) -> Self[A]
   pub fn[A] List::rev_concat(Self[A], Self[A]) -> Self[A]
   pub fn[A, B] List::rev_map(Self[A], (A) -> B raise?) -> Self[B] raise?
@@ -315,7 +315,7 @@ enum List[A] {
   #as_free_fn
   pub fn[A] List::singleton(A) -> Self[A]
   pub fn[A : Compare] List::sort(Self[A]) -> Self[A]
-  pub fn[A] List::take(Self[A], Int) -> Self[A]
+  pub fn[A] List::take(Self[A], Int32) -> Self[A]
   pub fn[A] List::take_while(Self[A], (A) -> Bool raise?) -> Self[A] raise?
   pub fn[A] List::to_array(Self[A]) -> Array[A]
   #as_free_fn

@@ -39,5 +39,4 @@ Found 4 references for symbol 'json_testsuite_fail':
    |         "expected JSONTestSuite accept or parser rejection, got non-parser error: " +
    |         name,
 
-[0]
 ```

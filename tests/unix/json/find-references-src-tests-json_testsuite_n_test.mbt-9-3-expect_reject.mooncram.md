@@ -1637,5 +1637,4 @@ Found 180 references for symbol 'expect_reject':
    |   ^^^^^^^^^^^^^
    | }
 
-[0]
 ```

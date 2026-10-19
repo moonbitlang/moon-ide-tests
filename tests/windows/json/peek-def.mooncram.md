@@ -172,7 +172,6 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
   |   }
   | }
   | 
-[0]
 ```
 
 ```mooncram
@@ -195,7 +194,6 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
   |   }
   | }
   | 
-[0]
 ```
 
 ```mooncram
@@ -218,7 +216,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-[0]
 ```
 
 ```mooncram
@@ -241,7 +238,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-[0]
 ```
 
 ```mooncram
@@ -268,7 +264,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_n_test.mbt
   |   let input = "[\"\"],"
   |   expect_reject("n_array_comma_after_close.json", input)
   | }
-[0]
 ```
 
 ```mooncram
@@ -295,7 +290,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
    |   }
    | }
    | 
-[0]
 ```
 
 ```mooncram
@@ -322,7 +316,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_y_test.mbt
   |   let input = "[]"
   |   expect_accept("y_array_empty.json", input)
   | }
-[0]
 ```
 
 ```mooncram
@@ -349,7 +342,6 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   |     _ =>
   |       json_testsuite_fail(
   |         "expected JSONTestSuite parser rejection, got non-parser error: " + name,
-[0]
 ```
 
 ```mooncram
@@ -373,7 +365,6 @@ Definition found at file <WORKDIR>/src\tests\json_value_semantics_test.mbt
   | test "json value semantics duplicate object key keeps first value" {
   |   let actual = @json.decode("{\"a\":\"b\",\"a\":\"c\"}")
   |   let expected = Json::object({ "a": Json::string("b") })
-[0]
 ```
 
 ```mooncram
@@ -414,7 +405,6 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-[0]
 ```
 
 ```mooncram
@@ -455,7 +445,6 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   value(ctx)
-[0]
 ```
 
 ```mooncram
@@ -496,7 +485,6 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     Value | NumberI(_) | NumberD(_) | FloatError(_, _) => value(ctx)
    |     ArrayPush(v) => array_push(ctx, v)
    |     ObjectKey => object_key(ctx)
-[0]
 ```
 
 ```mooncram
@@ -533,7 +521,6 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
   | ///|
   | impl Decode for Unit with array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc)
-[0]
 ```
 
 ```mooncram
@@ -560,5 +547,4 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-[0]
 ```

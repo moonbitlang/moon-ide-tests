@@ -31,5 +31,4 @@ $ run_moon_ide moon ide rename 'message' 'message_renamed' --loc 'src/tests/incr
  ///|
 *** End Patch
 
-[0]
 ```

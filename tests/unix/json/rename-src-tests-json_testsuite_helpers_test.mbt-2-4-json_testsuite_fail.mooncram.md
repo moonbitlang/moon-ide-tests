@@ -62,5 +62,4 @@ $ run_moon_ide moon ide rename 'json_testsuite_fail' 'json_testsuite_fail_rename
        )
 *** End Patch
 
-[0]
 ```

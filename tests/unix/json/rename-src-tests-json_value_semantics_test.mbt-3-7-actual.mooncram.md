@@ -39,5 +39,4 @@ $ run_moon_ide moon ide rename 'actual' 'actual_renamed' --loc 'src/tests/json_v
  ///|
 *** End Patch
 
-[0]
 ```

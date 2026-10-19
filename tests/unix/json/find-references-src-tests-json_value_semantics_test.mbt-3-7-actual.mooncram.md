@@ -28,5 +28,4 @@ Found 1 references for symbol 'actual':
    | }
    | 
 
-[0]
 ```

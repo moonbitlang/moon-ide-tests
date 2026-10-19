@@ -74,5 +74,4 @@ Found 8 references for symbol 'decode':
    |   @debug.assert_eq(actual, Json::string("\u{1d11e}"))
    | }
 
-[0]
 ```
