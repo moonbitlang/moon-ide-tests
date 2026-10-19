@@ -46,5 +46,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'json_testsuite_fa
        )
 *** End Patch
 
-[0]
 ```

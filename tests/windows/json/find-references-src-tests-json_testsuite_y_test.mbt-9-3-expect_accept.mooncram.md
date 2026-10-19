@@ -857,5 +857,4 @@ Found 95 references for symbol 'expect_accept':
     |   ^^^^^^^^^^^^^
     | }
 
-[0]
 ```

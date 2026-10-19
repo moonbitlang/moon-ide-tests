@@ -86,5 +86,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode' 'decode_r
    type Value,
 *** End Patch
 
-[0]
 ```

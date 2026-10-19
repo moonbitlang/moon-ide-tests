@@ -20,5 +20,4 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode_continue' 
 +using @json {decode_start, decode_continue_renamed, type Value}
 *** End Patch
 
-[0]
 ```
