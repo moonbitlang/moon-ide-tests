@@ -5,9 +5,14 @@ priv struct Args {
   repo_slug : String
   test_repo_path : String
   platform : TestPlatform
-  max_per_file : Int
-  max_files : Int
-  max_file_size : Int
+  max_per_file : Int32
+  max_files : Int32
+  max_file_size : Int32
+}
+
+///|
+priv suberror ArgsError {
+  ArgsError(String)
 }
 
 ///|
@@ -193,7 +198,7 @@ fn without_program_name(args : Array[String]) -> Array[String] {
 }
 
 ///|
-fn parse_args(args : Array[String]) -> Args {
+fn parse_args(args : Array[String]) -> Args raise {
   let repo_path_raw : Ref[String] = Ref("")
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
@@ -203,107 +208,85 @@ fn parse_args(args : Array[String]) -> Args {
   let max_files_raw : Ref[String] = Ref("0")
   let max_file_size_raw : Ref[String] = Ref("102400")
   let spec = [
+    ("repo", 'r', repo_path_raw, "Path to the MoonBit repository to scan"),
     (
-      "--repo",
-      "-r",
-      @arg_parser.Spec::Set_string(repo_path_raw),
-      "Path to the MoonBit repository to scan",
+      "output-dir", 'o', output_dir_raw, "Directory where generated Moon Cram markdown files are written",
     ),
     (
-      "--output-dir",
-      "-o",
-      @arg_parser.Spec::Set_string(output_dir_raw),
-      "Directory where generated Moon Cram markdown files are written",
+      "repo-slug", 's', repo_slug_raw, "Stable repository slug used in generated markdown titles",
     ),
     (
-      "--repo-slug",
-      "-s",
-      @arg_parser.Spec::Set_string(repo_slug_raw),
-      "Stable repository slug used in generated markdown titles",
+      "test-repo", 't', test_repo_path_raw, "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
-      "--test-repo",
-      "-t",
-      @arg_parser.Spec::Set_string(test_repo_path_raw),
-      "Repository path embedded in generated tests; defaults to --repo",
+      "platform", 'p', platform_raw, "Generated test shell platform: unix or windows (default: unix)",
     ),
     (
-      "--platform",
-      "-p",
-      @arg_parser.Spec::Set_string(platform_raw),
-      "Generated test shell platform: unix or windows (default: unix)",
+      "max-per-file", 'm', max_per_file_raw, "Cap collected AST locations with --loc per source file (default: 50)",
     ),
     (
-      "--max-per-file",
-      "-m",
-      @arg_parser.Spec::Set_string(max_per_file_raw),
-      "Cap collected AST locations with --loc per source file (default: 50)",
+      "max-files", 'f', max_files_raw, "Cap sampled MoonBit source files per repository; 0 means no cap (default: 0)",
     ),
     (
-      "--max-files",
-      "-f",
-      @arg_parser.Spec::Set_string(max_files_raw),
-      "Cap sampled MoonBit source files per repository; 0 means no cap (default: 0)",
-    ),
-    (
-      "--max-file-size",
-      "-z",
-      @arg_parser.Spec::Set_string(max_file_size_raw),
-      "Skip source files larger than this many characters; 0 means no limit (default: 102400)",
+      "max-file-size", 'z', max_file_size_raw, "Skip source files larger than this many characters; 0 means no limit (default: 102400)",
     ),
   ]
-  @arg_parser.parse(
-    spec,
-    arg => fatal("unexpected positional argument: \{arg}"),
-    "Usage: testgen --repo <path> --output-dir <dir> --repo-slug <slug> [options]",
-    args,
-  ) catch {
-    @arg_parser.ErrorMsg(message) => fatal(message)
-    err => fatal(debug_text(err))
+  let command = @argparse.Command(
+    "testgen",
+    options=spec.map(option => {
+      let (name, short, _, about) = option
+      @argparse.OptionArg(
+        name,
+        short~,
+        long=name,
+        about~,
+        action=Append,
+        allow_hyphen_values=true,
+      )
+    }),
+  )
+  let matches = command.parse(argv=args[:])
+  for (name, _, destination, _) in spec {
+    if matches.values.get(name) is Some([.., value]) {
+      destination.val = value
+    }
   }
   let max_per_file = @string.parse_int(max_per_file_raw.val) catch {
-    _ => {
-      fatal("invalid --max-per-file value: \{max_per_file_raw.val}")
-      0
-    }
+    _ =>
+      raise ArgsError("invalid --max-per-file value: \{max_per_file_raw.val}")
   }
   let max_files = @string.parse_int(max_files_raw.val) catch {
-    _ => {
-      fatal("invalid --max-files value: \{max_files_raw.val}")
-      0
-    }
+    _ => raise ArgsError("invalid --max-files value: \{max_files_raw.val}")
   }
   let max_file_size = @string.parse_int(max_file_size_raw.val) catch {
-    _ => {
-      fatal("invalid --max-file-size value: \{max_file_size_raw.val}")
-      0
-    }
+    _ =>
+      raise ArgsError("invalid --max-file-size value: \{max_file_size_raw.val}")
   }
   if repo_path_raw.val == "" {
-    fatal("--repo is required")
+    raise ArgsError("--repo is required")
   }
   if output_dir_raw.val == "" {
-    fatal("--output-dir is required")
+    raise ArgsError("--output-dir is required")
   }
   if repo_slug_raw.val == "" {
-    fatal("--repo-slug is required")
+    raise ArgsError("--repo-slug is required")
   }
   if max_per_file < 0 {
-    fatal("--max-per-file must be non-negative")
+    raise ArgsError("--max-per-file must be non-negative")
   }
   if max_files < 0 {
-    fatal("--max-files must be non-negative")
+    raise ArgsError("--max-files must be non-negative")
   }
   if max_file_size < 0 {
-    fatal("--max-file-size must be non-negative")
+    raise ArgsError("--max-file-size must be non-negative")
   }
   let platform = match platform_raw.val {
     "unix" => TestPlatform::Unix
     "windows" => TestPlatform::Windows
-    other => {
-      fatal("invalid --platform value: \{other}; expected unix or windows")
-      TestPlatform::Unix
-    }
+    other =>
+      raise ArgsError(
+        "invalid --platform value: \{other}; expected unix or windows",
+      )
   }
   let test_repo_path = if test_repo_path_raw.val == "" {
     repo_path_raw.val
@@ -324,7 +307,16 @@ fn parse_args(args : Array[String]) -> Args {
 
 ///|
 fn run(args : Array[String]) -> Unit {
-  let config = parse_args(args)
+  let config = parse_args(args) catch {
+    ArgsError(message) => {
+      fatal(message)
+      return
+    }
+    err => {
+      fatal(err.to_string())
+      return
+    }
+  }
   ensure_repo_dir(config.repo_path)
   let result = collect_cases(
     config.repo_path,

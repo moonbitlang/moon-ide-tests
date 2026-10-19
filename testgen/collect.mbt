@@ -108,18 +108,18 @@ fn should_keep_symbol(sym : String) -> Bool {
 ///|
 priv struct LocCollector {
   file : String
-  max_per_file : Int
+  max_per_file : Int32
   out : Array[TestCase]
   seen : @hashset.HashSet[TestCase]
-  count : Ref[Int]
+  count : Ref[Int32]
 }
 
 ///|
 fn LocCollector::append_symbol(
   self : LocCollector,
   sym : String,
-  line : Int,
-  col : Int,
+  line : Int32,
+  col : Int32,
 ) -> Unit {
   if !should_keep_symbol(sym) {
     return
@@ -202,9 +202,9 @@ impl @syntax.IterVisitor for LocCollector with fn visit_TypeDecl(env, type_decl)
   }
   ignore(type_decl.params)
   @syntax.IterVisitor::visit_TypeDesc(env, type_decl.components)
-  type_decl.deriving.each(x =>
+  type_decl.deriving.each(x => {
     @syntax.IterVisitor::visit_DerivingDirective(env, x)
-  )
+  })
   @syntax.IterVisitor::visit_Visibility(env, type_decl.type_vis)
 }
 
@@ -259,9 +259,8 @@ impl @syntax.IterVisitor for LocCollector with fn visit_ConstrDecl(
 ) {
   env.append_from_loc(constr_decl.name.name, constr_decl.name.loc)
   match constr_decl.args {
-    Some(args) => args.each(arg =>
-      @syntax.IterVisitor::visit_ConstrParam(env, arg)
-    )
+    Some(args) =>
+      args.each(arg => @syntax.IterVisitor::visit_ConstrParam(env, arg))
     None => ()
   }
 }
@@ -303,7 +302,7 @@ impl @syntax.IterVisitor for LocCollector with fn visit_Expr_DotApply(
 fn collect_loc_cases(
   file : String,
   impls : @syntax.Impls,
-  max_per_file : Int,
+  max_per_file : Int32,
 ) -> Array[TestCase] {
   let cases = Array(capacity=0)
   let seen : @hashset.HashSet[TestCase] = @hashset.HashSet([])
@@ -350,7 +349,7 @@ fn emit_parser_reports(file : String, reports : Array[@basic.Report]) -> Unit {
 fn collect_cases_for_text(
   file : String,
   text : String,
-  max_per_file : Int,
+  max_per_file : Int32,
 ) -> CollectResult {
   let (impls, reports) = @parser.parse_string(text, name=file)
   emit_parser_reports(file, reports)
@@ -429,8 +428,8 @@ fn normalize_separators(path : String) -> String {
 /// FNV-1a hash of the slug-seeded, separator-normalized relative path.
 /// Selection must be identical across platforms and independent of
 /// directory read order, so it may depend only on the file set itself.
-fn selection_key(seed : String, rel_path : String) -> UInt {
-  let mut hash : UInt = 2166136261
+fn selection_key(seed : String, rel_path : String) -> UInt32 {
+  let mut hash : UInt32 = 2166136261
   fn mix(text : String) -> Unit {
     for ch in text {
       hash = (hash ^ ch.to_int().reinterpret_as_uint()) * 16777619
@@ -447,7 +446,7 @@ fn selection_key(seed : String, rel_path : String) -> UInt {
 /// Character-wise path comparison. The default String order compares
 /// length first, which scatters files from one directory across the
 /// generated suites; this keeps them grouped.
-fn compare_paths(left : String, right : String) -> Int {
+fn compare_paths(left : String, right : String) -> Int32 {
   let a = normalize_separators(left)
   let b = normalize_separators(right)
   let shorter = if a.length() < b.length() { a.length() } else { b.length() }
@@ -464,8 +463,8 @@ fn compare_paths(left : String, right : String) -> Int {
 fn select_files(
   files : Array[String],
   seed : String,
-  max_files : Int,
-  skip? : (String) -> Bool = _ => false,
+  max_files : Int32,
+  skip~ : (String) -> Bool = _ => false,
 ) -> Array[String] {
   files.sort_by_key(rel_path => {
     (selection_key(seed, rel_path), normalize_separators(rel_path))
@@ -486,7 +485,7 @@ fn select_files(
 ///|
 /// CRLF-insensitive character count, so Windows checkouts measure the
 /// same size as Unix ones and both platforms skip the same files.
-fn normalized_char_count(text : String) -> Int {
+fn normalized_char_count(text : String) -> Int32 {
   let mut count = 0
   for ch in text {
     if ch != '\r' {
@@ -500,8 +499,8 @@ fn normalized_char_count(text : String) -> Int {
 fn collect_files(
   project_root : String,
   seed : String,
-  max_files : Int,
-  max_file_size : Int,
+  max_files : Int32,
+  max_file_size : Int32,
 ) -> Array[String] {
   let files = Array(capacity=0)
   walk_dir(project_root, "", files)
@@ -531,9 +530,9 @@ fn collect_files(
 fn collect_cases(
   project_root : String,
   seed : String,
-  max_per_file : Int,
-  max_files : Int,
-  max_file_size : Int,
+  max_per_file : Int32,
+  max_files : Int32,
+  max_file_size : Int32,
 ) -> CollectResult {
   let source_files = collect_files(project_root, seed, max_files, max_file_size)
   let loc_cases = Array(capacity=0)

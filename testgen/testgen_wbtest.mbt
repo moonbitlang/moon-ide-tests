@@ -26,6 +26,80 @@ test "parse_args defaults limits" {
 }
 
 ///|
+test "parse_args accepts every short option" {
+  let config = parse_args([
+    "-r", "repo", "-o", "out", "-s", "slug", "-t", "fixtures/custom", "-p", "windows",
+    "-m", "4", "-f", "3", "-z", "200",
+  ])
+  inspect(config.repo_path, content="repo")
+  inspect(config.output_dir, content="out")
+  inspect(config.repo_slug, content="slug")
+  inspect(config.test_repo_path, content="fixtures/custom")
+  debug_inspect(config.platform, content="Windows")
+  inspect(config.max_per_file, content="4")
+  inspect(config.max_files, content="3")
+  inspect(config.max_file_size, content="200")
+}
+
+///|
+test "parse_args preserves the last repeated option value" {
+  let config = parse_args([
+    "--repo", "first", "-r", "last", "--output-dir", "out", "--repo-slug", "slug",
+    "--max-files", "3", "-f", "0",
+  ])
+  inspect(config.repo_path, content="last")
+  inspect(config.test_repo_path, content="last")
+  inspect(config.max_files, content="0")
+}
+
+///|
+test "parse_args rejects invalid generator options" {
+  let required = [
+    "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
+  ]
+  for
+    (extra, message) in [
+      (["--max-per-file", "-1"], "--max-per-file must be non-negative"),
+      (["--max-files", "-1"], "--max-files must be non-negative"),
+      (["--max-file-size", "-1"], "--max-file-size must be non-negative"),
+      (["--max-files", "invalid"], "invalid --max-files value"),
+      (["--platform", "invalid"], "invalid --platform value"),
+      (["--unknown", "value"], "--unknown"),
+      (["unexpected"], "unexpected"),
+      (["--max-files"], "--max-files"),
+    ] {
+    let error = try parse_args(required + extra) catch {
+      ArgsError(message) => Some(message)
+      err => Some(err.to_string())
+    } noraise {
+      _ => None
+    }
+    assert_true(
+      error is Some(text) && text.contains(message),
+      msg="arguments: \{debug_text(extra)}, error: \{debug_text(error)}",
+    )
+  }
+}
+
+///|
+test "parse_args requires nonempty generation paths and slug" {
+  for
+    args in [
+      ["--output-dir", "out", "--repo-slug", "slug"],
+      ["--repo", "repo", "--repo-slug", "slug"],
+      ["--repo", "repo", "--output-dir", "out"],
+      ["--repo", "", "--output-dir", "out", "--repo-slug", "slug"],
+    ] {
+    let rejected = try parse_args(args) catch {
+      _ => true
+    } noraise {
+      _ => false
+    }
+    assert_true(rejected)
+  }
+}
+
+///|
 test "should_skip_dir covers dependency and vcs dirs" {
   debug_inspect(
     [
