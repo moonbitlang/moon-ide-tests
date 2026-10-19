@@ -414,6 +414,15 @@ jobs:
               body,
             });
 
+      - name: Upload OpenSeek result
+        if: always() && steps.diff.outputs.has_test_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-openseek-result
+          path: .daily-test/openseek-review.json
+          if-no-files-found: ignore
+          include-hidden-files: true
+
       - name: Upload scoped review inputs
         if: always() && steps.diff.outputs.has_test_changes == 'true'
         uses: actions/upload-artifact@v7
