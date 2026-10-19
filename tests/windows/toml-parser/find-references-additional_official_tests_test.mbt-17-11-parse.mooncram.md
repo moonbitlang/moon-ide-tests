@@ -1532,20 +1532,20 @@ Found 191 references for symbol 'parse':
   |     e => {
   |       let s = e.to_string()
 
-<WORKDIR>/toml_cli\main.mbt:105:25-105:30:
+<WORKDIR>/toml_cli\main.mbt:108:25-108:30:
     |       return 1
     |     }
     |   }
-105 |   let value = @toml_lib.parse(source) catch {
+108 |   let value = @toml_lib.parse(source) catch {
     |                         ^^^^^
     |     err => {
     |       println("error: failed to parse \{path}: \{err}")
 
-<WORKDIR>/toml_cli\main.mbt:123:21-123:26:
+<WORKDIR>/toml_cli\main.mbt:126:21-126:26:
     |       return 1
     |     }
     |   }
-123 |   let _ = @toml_lib.parse(source) catch {
+126 |   let _ = @toml_lib.parse(source) catch {
     |                     ^^^^^
     |     err => {
     |       println("error: failed to parse \{path}: \{err}")

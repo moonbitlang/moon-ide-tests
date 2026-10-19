@@ -3,17 +3,38 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'SheetSideRenamed' --loc 'rui\sheet.mbt:3:15'
 *** Begin Patch
+*** Update File: <WORKDIR>/e2e\apps\rui\dialogs\sheet.mbt
+@@
+ }
+ 
+ ///|
+-fn sheet_edge_fixture(edge : String, side : @rui.SheetSide) -> Html {
++fn sheet_edge_fixture(edge : String, side : @rui.SheetSideRenamed) -> Html {
+   let id = "fixture-sheet-" + edge
+   fragment([
+     @rui.button(
 *** Update File: <WORKDIR>/rui\sheet.mbt
 @@
  ///|
- /// Edge from which a [`sheet_content`] surface enters the viewport.
+ /// Edge from which a [`sheet`] enters the viewport.
 -pub(all) enum SheetSide {
 +pub(all) enum SheetSideRenamed {
    SheetTop
    SheetRight
    SheetBottom
 @@
- const SheetCloseButtonStyle : String = "position:absolute;top:1rem;inset-inline-end:1rem;background:var(--rui-close-bg,var(--rui-button-bg,var(--rui-button-base-bg,transparent)));color:var(--rui-close-fg,var(--rui-button-fg,var(--rui-button-base-fg,currentColor)));box-shadow:var(--rui-close-shadow,var(--rui-button-shadow,var(--rui-button-base-shadow,none)));opacity:var(--rui-close-opacity,var(--rui-close-base-opacity,0.7))"
+ } derive(Debug, Eq)
+ 
+ ///|
+-pub extend SheetSide with Debug::{to_repr}
++pub extend SheetSideRenamed with Debug::{to_repr}
+ 
+ ///|
+-pub extend SheetSide with Eq::{equal, not_equal}
++pub extend SheetSideRenamed with Eq::{equal, not_equal}
+ 
+ ///|
+ const SheetStyle : String = "min-width:0;min-height:0;max-height:100dvh;margin:0;border:0;border-radius:0;box-shadow:0 16px 48px rgb(0 0 0 / 0.2)"
  
  ///|
 -fn sheet_side_value(side : SheetSide) -> String {
@@ -25,20 +46,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'Sh
  }
  
  ///|
--fn sheet_positioner_side_style(side : SheetSide) -> String {
-+fn sheet_positioner_side_style(side : SheetSideRenamed) -> String {
-   match side {
-     SheetTop => "align-items:flex-start"
-     SheetRight => "justify-content:flex-end"
-@@
- }
- 
- ///|
--fn sheet_surface_side_style(side : SheetSide) -> String {
-+fn sheet_surface_side_style(side : SheetSideRenamed) -> String {
+-fn sheet_side_style(side : SheetSide) -> String {
++fn sheet_side_style(side : SheetSideRenamed) -> String {
    match side {
      SheetTop =>
-       "width:100%;max-height:85vh;border-bottom:1px solid var(--rui-border,oklch(0.922 0 0))"
+       "inset:0 0 auto;width:100%;max-height:85dvh;border-bottom:1px solid var(--rui-border,oklch(0.922 0 0))"
 @@
  }
  
@@ -49,23 +61,14 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'Sh
      SheetTop => "translate3d(0,-2.5rem,0)"
      SheetRight => "translate3d(2.5rem,0,0)"
 @@
- }
- 
- ///|
--fn sheet_motion_style(side : SheetSide, open : Bool) -> String {
-+fn sheet_motion_style(side : SheetSideRenamed, open : Bool) -> String {
-   let closed_transform = sheet_closed_transform(side)
-   if open {
-     "--rui-sheet-closed-transform:\{closed_transform};--rui-sheet-opacity:1;--rui-sheet-transform:translate3d(0,0,0);animation:rui-sheet-enter 200ms ease-in-out"
-@@
- /// overridden without copying the component.
- pub fn[C : @html.IsChildren] sheet_content(
-   scope : SheetScope,
--  side? : SheetSide = SheetRight,
-+  side? : SheetSideRenamed = SheetRight,
-   close_on_overlay? : Bool = true,
-   show_close? : Bool = true,
-   close_label? : String = "Close",
+   class? : String,
+   title? : String,
+   hidden? : Bool,
+-  side~ : SheetSide = SheetRight,
++  side~ : SheetSideRenamed = SheetRight,
+   open? : Bool,
+   closedby~ : String = "any",
+   show_close~ : Bool = true,
 *** Update File: <WORKDIR>/website\homepage\components\interactions_gallery.mbt
 @@
  ///|
@@ -74,8 +77,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'Sh
 -  side : @rui.SheetSide,
 +  side : @rui.SheetSideRenamed,
    trigger_label : String,
- ) -> @rabbita.Val[@html.Html] {
-   @rui.sheet(id~, scope => {
+ ) -> @html.Html {
+   @html.fragment([
 *** End Patch
 
 ```

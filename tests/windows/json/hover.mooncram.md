@@ -100,84 +100,184 @@ pub enum Value {
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'incr_fail' --loc 'src\tests\incr.mbt:2:4'
-Error: could not get package of loc src\tests\incr.mbt:2:4
-[1]
+///|
+fn incr_fail(message : String) -> Unit raise {
+   ^^^^^^^^^
+   ```moonbit
+   fn incr_fail(message : String) -> Unit raise
+   ```
+  raise InspectError::InspectError(message)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'message' --loc 'src\tests\incr.mbt:2:14'
-Error: could not get package of loc src\tests\incr.mbt:2:14
-[1]
+///|
+fn incr_fail(message : String) -> Unit raise {
+             ^^^^^^^
+             ```moonbit
+             String
+             ```
+  raise InspectError::InspectError(message)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'json_testsuite_fail' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
-Error: could not get package of loc src\tests\json_testsuite_helpers_test.mbt:2:4
-[1]
+///|
+fn json_testsuite_fail(message : String) -> Unit raise {
+   ^^^^^^^^^^^^^^^^^^^
+   ```moonbit
+   fn json_testsuite_fail(message : String) -> Unit raise
+   ```
+  raise InspectError::InspectError(message)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
-Error: could not get package of loc src\tests\json_testsuite_helpers_test.mbt:2:24
-[1]
+///|
+fn json_testsuite_fail(message : String) -> Unit raise {
+                       ^^^^^^^
+                       ```moonbit
+                       String
+                       ```
+  raise InspectError::InspectError(message)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'input' --loc 'src\tests\json_testsuite_n_test.mbt:8:7'
-Error: could not get package of loc src\tests\json_testsuite_n_test.mbt:8:7
-[1]
+///|
+test "json_testsuite n_array_1_true_without_comma" {
+  let input = "[1 true]"
+      ^^^^^
+      ```moonbit
+      String
+      ```
+  expect_reject("n_array_1_true_without_comma.json", input)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'expect_reject' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
-Error: could not get package of loc src\tests\json_testsuite_n_test.mbt:9:3
-[1]
+///|
+test "json_testsuite n_array_1_true_without_comma" {
+  let input = "[1 true]"
+  expect_reject("n_array_1_true_without_comma.json", input)
+  ^^^^^^^^^^^^^
+  ```moonbit
+  fn expect_reject(name : String, input : String) -> Unit raise
+  ```
+}
+
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
-Error: could not get package of loc src\tests\json_testsuite_y_test.mbt:8:7
-[1]
+///|
+test "json_testsuite y_array_arraysWithSpaces" {
+  let input = "[[]   ]"
+      ^^^^^
+      ```moonbit
+      String
+      ```
+  expect_accept("y_array_arraysWithSpaces.json", input)
+}
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
-Error: could not get package of loc src\tests\json_testsuite_y_test.mbt:9:3
-[1]
+///|
+test "json_testsuite y_array_arraysWithSpaces" {
+  let input = "[[]   ]"
+  expect_accept("y_array_arraysWithSpaces.json", input)
+  ^^^^^^^^^^^^^
+  ```moonbit
+  fn expect_accept(name : String, input : String) -> Unit raise
+  ```
+}
+
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'actual' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
-Error: could not get package of loc src\tests\json_value_semantics_test.mbt:3:7
-[1]
+///|
+test "json value semantics basics" {
+  let actual = @json.decode("[false,1,\"x\",null,{\"a\":true}]")
+      ^^^^^^
+      ```moonbit
+      Json
+      ```
+  let expected = Json::array([
+    Json::boolean(false),
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'decode' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
-Error: could not get package of loc src\tests\json_value_semantics_test.mbt:3:22
-[1]
+///|
+test "json value semantics basics" {
+  let actual = @json.decode("[false,1,\"x\",null,{\"a\":true}]")
+               ^^^^^^^^^^^^
+               ```moonbit
+               fn @jinser/json.decode(input : String, decode? : &@lib.Decode) -> Json raise
+               ```
+  let expected = Json::array([
+    Json::boolean(false),
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'decode_start' --loc 'src\tests\top.mbt:2:14'
-Error: could not get package of loc src\tests\top.mbt:2:14
-[1]
+///|
+using @json {decode_start, decode_continue, type Value}
+             ^^^^^^^^^^^^
+             ```moonbit
+             fn @jinser/json.decode_start(input : String, decode? : &@lib.Decode) -> @lib.Value raise
+             ```
+[0]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'decode_continue' --loc 'src\tests\top.mbt:2:28'
-Error: could not get package of loc src\tests\top.mbt:2:28
-[1]
+///|
+using @json {decode_start, decode_continue, type Value}
+                           ^^^^^^^^^^^^^^^
+                           ```moonbit
+                           fn @jinser/json.decode_continue(cont : String, state : @lib.ContinueValue) -> @lib.Value raise
+                           ```
+[0]
 ```
 
+Known IDE limitation: hover on the trait imported by using reports no information; its declaration hover and imported-name peek-def work.
+
+<!-- known-ide-limitation: using-trait-hover -->
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'Decode' --loc 'src\top.mbt:3:9'
-Error: could not get package of loc src\top.mbt:3:9
+No hover information found for symbol 'Decode' at src\top.mbt:3:9
 [1]
 ```
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide hover 'decode' --loc 'src\top.mbt:4:3'
-Error: could not get package of loc src\top.mbt:4:3
-[1]
+///|
+pub using @lib {
+  trait Decode,
+  decode,
+  ^^^^^^
+  ```moonbit
+  fn @jinser/json/lib.decode(input : String, decode? : &@lib.Decode) -> Json raise
+  ```
+  decode_start,
+  decode_continue,
+[0]
 ```

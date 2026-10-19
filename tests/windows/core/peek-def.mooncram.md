@@ -10,8 +10,8 @@ Definition found at file <WORKDIR>/builtin\exact_view_test.mbt
    | test "exact_view uses the same bounds on all array types" {
 17 |   let arr = [1, 2, 3, 4]
    |       ^^^
-   |   let fixed : FixedArray[Int] = [1, 2, 3, 4]
-   |   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+   |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
+   |   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
    |   let view = [0, 1, 2, 3, 4, 5][1:5]
    |   let mutable = arr.mut_view()
    |   let raw = @builtin.UninitializedArray::make(4)
@@ -34,9 +34,9 @@ Definition found at file <WORKDIR>/builtin\exact_view_test.mbt
    | ///|
    | test "exact_view uses the same bounds on all array types" {
    |   let arr = [1, 2, 3, 4]
-18 |   let fixed : FixedArray[Int] = [1, 2, 3, 4]
+18 |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
    |       ^^^^^
-   |   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+   |   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
    |   let view = [0, 1, 2, 3, 4, 5][1:5]
    |   let mutable = arr.mut_view()
    |   let raw = @builtin.UninitializedArray::make(4)
@@ -86,7 +86,7 @@ Definition found at file <WORKDIR>/builtin\int64.mbt
    | ///   inspect(Int64::from_int(42), content="42")
    | /// }
    | /// ```
-44 | pub fn Int64::from_int(i : Int) -> Int64 {
+44 | pub fn Int64::from_int(i : Int32) -> Int64 {
    |               ^^^^^^^^
    |   i.to_int64()
    | }
@@ -152,67 +152,55 @@ Definition found at file <WORKDIR>/builtin\string_like.mbt
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'decode_utf8_js' --loc 'encoding\utf8\decode_js.mbt:16:16'
-Error: could not get package of loc encoding\utf8\decode_js.mbt:16:16
-[1]
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'bytes' --loc 'encoding\utf8\decode_js.mbt:17:3'
-Error: could not get package of loc encoding\utf8\decode_js.mbt:17:3
-[1]
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'ThreadSet' --loc 'internal\regex_engine\automata\thread_set.mbt:46:11'
-Definition found at file <WORKDIR>/internal\regex_engine\automata\thread_set.mbt
-   | /// # Usage in Automaton
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-46 | priv enum ThreadSet {
-   |           ^^^^^^^^^
-   |   Empty
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
-   | }
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'decode_utf8_js' --loc 'encoding\utf8\decode_js.mbt:16:16' --target js
+Definition found at file <WORKDIR>/encoding\utf8\decode_js.mbt
+   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
    | 
    | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
+16 | extern "js" fn decode_utf8_js(
+   |                ^^^^^^^^^^^^^^
+   |   bytes : Bytes,
+   |   start : Int32,
+   |   len : Int32,
+   |   preserve_bom : Bool,
+   | ) -> FixedArray[String] =
+   |   #| ((preserveBOMDecoder, dropBOMDecoder) => function(bytes, start, len, preserveBOM) {
+   |   #|   try {
+   |   #|     const end = start + len;
+   |   #|     const slice = bytes.subarray(start, end);
+   |   #|     const decoder = preserveBOM ? preserveBOMDecoder : dropBOMDecoder;
+   |   #|     return [decoder.decode(slice)];
+   |   #|   } catch (_) {
+   |   #|     return [];
+   |   #|   }
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'Empty' --loc 'internal\regex_engine\automata\thread_set.mbt:47:3'
-Definition found at file <WORKDIR>/internal\regex_engine\automata\thread_set.mbt
-   | ///
-   | /// During execution, each `State` contains a `ThreadSet` collection representing all
-   | /// possible execution paths from that state. When computing the derivative with
-   | /// respect to input, threads are transformed and may split into multiple threads.
-   | priv enum ThreadSet {
-47 |   Empty
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'bytes' --loc 'encoding\utf8\decode_js.mbt:17:3' --target js
+Definition found at file <WORKDIR>/encoding\utf8\decode_js.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | extern "js" fn decode_utf8_js(
+17 |   bytes : Bytes,
    |   ^^^^^
-   |   Node(
-   |     i~ : ThreadSetNodeInfo,
-   |     l~ : ThreadSet,
-   |     t~ : Thread,
-   |     r~ : ThreadSet,
-   |     p~ : Int
-   |   )
-   | }
-   | 
-   | ///|
-   | #valtype
-   | priv struct ThreadSetNodeInfo {
-   |   // No match inside this subtree
-   |   no_match : Bool
+   |   start : Int32,
+   |   len : Int32,
+   |   preserve_bom : Bool,
+   | ) -> FixedArray[String] =
+   |   #| ((preserveBOMDecoder, dropBOMDecoder) => function(bytes, start, len, preserveBOM) {
+   |   #|   try {
+   |   #|     const end = start + len;
+   |   #|     const slice = bytes.subarray(start, end);
+   |   #|     const decoder = preserveBOM ? preserveBOMDecoder : dropBOMDecoder;
+   |   #|     return [decoder.decode(slice)];
+   |   #|   } catch (_) {
+   |   #|     return [];
+   |   #|   }
+   |   #| })(
 ```
 
 ```mooncram
@@ -268,55 +256,55 @@ Definition found at file <WORKDIR>/lazy\lazy.mbt
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'Regex' --loc 'string\internal\regex_engine\regex.mbt:16:8'
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'UNKNOWN' --loc 'string\internal\regex_engine\regex.mbt:17:7'
 Definition found at file <WORKDIR>/string\internal\regex_engine\regex.mbt
-   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
    | 
    | ///|
-16 | struct Regex {
-   |        ^^^^^
-   |   profile : Profile
-   |   ctx : @automata.Context
-   |   expr : @automata.Expr
-   |   groups : ReadOnlyArray[String?]
-   |   symbol_table : @symbol_map.Table
-   |   symbol_repr : ReadOnlyArray[Rechar]
-   |   start_states : Array[(Category, StateId)]
-   |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
+   | /// Transition table entry: the transition has not been built yet.
+17 | const UNKNOWN : Int32 = -1
+   |       ^^^^^^^
+   | 
+   | ///|
+   | /// Transition table entry: no thread survives and nothing was accepted.
+   | /// Entries below `DEAD` denote a terminal state or a transition that moves
+   | /// registers, see `terminal` and `moving`.
+   | const DEAD : Int32 = -2
+   | 
+   | ///|
+   | /// Register of a tag while a transition is being built: the tag is set by
+   | /// this very transition and still needs a register.
+   | const CURRENT : Int32 = -1
+   | 
+   | ///|
+   | /// Default budget for the lazy DFA cache, in machine words (table entries
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'profile' --loc 'string\internal\regex_engine\regex.mbt:17:3'
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'DEAD' --loc 'string\internal\regex_engine\regex.mbt:23:7'
 Definition found at file <WORKDIR>/string\internal\regex_engine\regex.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
    | 
    | ///|
-   | struct Regex {
-17 |   profile : Profile
-   |   ^^^^^^^
-   |   ctx : @automata.Context
-   |   expr : @automata.Expr
-   |   groups : ReadOnlyArray[String?]
-   |   symbol_table : @symbol_map.Table
-   |   symbol_repr : ReadOnlyArray[Rechar]
-   |   start_states : Array[(Category, StateId)]
-   |   state_table : @hashmap.HashMap[@automata.State, StateId]
-   |   mut transition_table : FixedArray[StateId]
-   |   mut final_table : FixedArray[
-   |     @list.List[(Category, @automata.Slot, @automata.Status)],
-   |   ]
-   |   mut states : FixedArray[@automata.State]
-   |   mut num_states : Int
-   | }
+   | /// Transition table entry: no thread survives and nothing was accepted.
+   | /// Entries below `DEAD` denote a terminal state or a transition that moves
+   | /// registers, see `terminal` and `moving`.
+23 | const DEAD : Int32 = -2
+   |       ^^^^
+   | 
+   | ///|
+   | /// Register of a tag while a transition is being built: the tag is set by
+   | /// this very transition and still needs a register.
+   | const CURRENT : Int32 = -1
+   | 
+   | ///|
+   | /// Default budget for the lazy DFA cache, in machine words (table entries
+   | /// plus state descriptions); a word is an `Int`, so this is 64 MB of table
+   | /// and state data. A state that does not fit is not added when a cached
+   | /// state can stand in for it, see `reuse`; otherwise the cache is dropped and
+   | /// rebuilt on demand. Memory therefore does not grow without bound on
+   | /// patterns whose DFA is huge, at the price of rebuilding states, which is
+   | /// several times slower than a cached step. The budget is large enough for a
 ```
 
 ```mooncram
@@ -353,11 +341,11 @@ Definition found at file <WORKDIR>/string\regex.mbt
     | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
     | /// }
     | /// ```
-350 | pub fn Regex::execute(
+356 | pub fn Regex::execute(
     |               ^^^^^^^
     |   self : Regex,
     |   input : StringView,
-    |   last_index? : Int = 0,
+    |   last_index~ : Int32 = 0,
     | ) -> MatchResult? {
     |   match self.re().execute(input, last_index) {
     |     None => None
@@ -369,6 +357,59 @@ Definition found at file <WORKDIR>/string\regex.mbt
     | ///|
     | /// Wraps this regex in a named capture group.
     | ///
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'Test' --loc 'test\extends.mbt:22:12'
+Definition found at file <WORKDIR>/test\types.mbt
+   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+16 | struct Test {
+   |        ^^^^
+   |   name : String
+   |   buffer : StringBuilder
+   | } derive(@debug.Debug)
+   | 
+   | ///|
+   | /// Create a new instance.
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+   | pub fn Test::Test(name : String) -> Test {
+   |   { name, buffer: StringBuilder(), }
+   | }
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'to_repr' --loc 'test\extends.mbt:22:37'
+Definition found at file <WORKDIR>/test\extends.mbt
+   | // --- deprecated: hidden from the generated interface ---
+   | 
+   | ///|
+   | #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+   | #doc(hidden)
+22 | pub extend Test with @debug.Debug::{to_repr}
+   |                                     ^^^^^^^
+Definition found at file <WORKDIR>/test\types.mbt
+   | 
+   | ///|
+   | struct Test {
+   |   name : String
+   |   buffer : StringBuilder
+19 | } derive(@debug.Debug)
+   |          ^^^^^^^^^^^^
+   | 
+   | ///|
+   | /// Create a new instance.
+   | #alias(new, deprecated="Use `Test()` instead")
+   | #as_free_fn
+   | #as_free_fn(new, deprecated="Use `Test()` instead")
+   | pub fn Test::Test(name : String) -> Test {
+   |   { name, buffer: StringBuilder(), }
+   | }
 ```
 
 ```mooncram

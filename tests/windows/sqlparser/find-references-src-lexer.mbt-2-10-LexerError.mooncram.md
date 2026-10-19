@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'LexerError' --loc 'src\lexer.mbt:2:10'
-Found 12 references for symbol 'LexerError':
+Found 9 references for symbol 'LexerError':
 <WORKDIR>/src\export.mbt:3:14-3:24:
   | ///|
   | pub suberror SqlParserError {
@@ -13,7 +13,7 @@ Found 12 references for symbol 'LexerError':
 
 <WORKDIR>/src\lexer.mbt:58:25-58:35:
    | pub fn tokenize(
-   |   dialect? : &Dialect = MySQL::{ },
+   |   dialect~ : &Dialect = MySQL::{ },
    |   input : String,
 58 | ) -> Array[Token] raise LexerError {
    |                         ^^^^^^^^^^
@@ -29,65 +29,38 @@ Found 12 references for symbol 'LexerError':
    |   match skip_whitespace(input) {
    |     [',', .. rest] => (Comma, rest)
 
-<WORKDIR>/src\lexer.mbt:476:32-476:42:
+<WORKDIR>/src\lexer.mbt:474:32-474:42:
     | fn Lexer::read_single_quoted_string(
     |   self : Lexer,
     |   input : StringView,
-476 | ) -> (Token, StringView) raise LexerError {
+474 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
     |   let result = StringBuilder()
     |   let rest = for rest = input {
 
-<WORKDIR>/src\lexer.mbt:513:19-513:29:
-    |         result.write_char(c)
-    |         continue rest
-    |       }
-513 |       [] => raise LexerError::UnterminatedString
-    |                   ^^^^^^^^^^
-    |     }
-    |   }
-
-<WORKDIR>/src\lexer.mbt:523:32-523:42:
+<WORKDIR>/src\lexer.mbt:521:32-521:42:
     | fn Lexer::read_double_quoted_string(
     |   self : Lexer,
     |   input : StringView,
-523 | ) -> (Token, StringView) raise LexerError {
+521 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
     |   let result = StringBuilder()
     |   let rest = for rest = input {
 
-<WORKDIR>/src\lexer.mbt:556:19-556:29:
-    |         result.write_char(c)
-    |         continue rest
-    |       }
-556 |       [] => raise LexerError::UnterminatedString
-    |                   ^^^^^^^^^^
-    |     }
-    |   }
-
-<WORKDIR>/src\lexer.mbt:566:32-566:42:
+<WORKDIR>/src\lexer.mbt:564:32-564:42:
     | fn Lexer::read_backtick_quoted_identifier(
     |   self : Lexer,
     |   input : StringView,
-566 | ) -> (Token, StringView) raise LexerError {
+564 | ) -> (Token, StringView) raise LexerError {
     |                                ^^^^^^^^^^
     |   let result = StringBuilder()
     |   let rest = for rest = input {
 
-<WORKDIR>/src\lexer.mbt:587:19-587:29:
-    |         result.write_char(c)
-    |         continue rest
-    |       }
-587 |       [] => raise LexerError::UnterminatedString
-    |                   ^^^^^^^^^^
-    |     }
-    |   }
-
-<WORKDIR>/src\lexer.mbt:853:12-853:22:
+<WORKDIR>/src\lexer.mbt:851:12-851:22:
     | }
     | 
     | ///|
-853 | pub extend LexerError with Debug::{to_repr}
+851 | pub extend LexerError with Debug::{to_repr}
     |            ^^^^^^^^^^
     | 
     | ///|

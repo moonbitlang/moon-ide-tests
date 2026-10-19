@@ -30,7 +30,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn value(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      // skip whitespace
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // number {{{
  
@@ -183,7 +183,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn array_start(ctx : Context, len : Int) -> ValueRenamed raise {
    let { decode, skip, arr_acc, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -192,7 +192,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn array_push(ctx : Context, value0 : Json) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // object {{{
  
@@ -201,7 +201,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_start(ctx : Context, len : Int) -> ValueRenamed raise {
    let { obj_acc, skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -210,7 +210,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_value(ctx : Context, key : String) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -219,7 +219,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_push(ctx : Context, value0 : Json, key : String) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -228,7 +228,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_key(ctx : Context) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // }}}
  
@@ -247,7 +247,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
    let { rest, original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     ['\ ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
 -    [] => Value::Finish({ value, arr_acc, obj_acc, rest: [][:] })
 +    [] => ValueRenamed::Finish({ value, arr_acc, obj_acc, rest: [][:] })
      _ => {
@@ -281,6 +281,16 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
    Continue(ContinueValue)
    Finish(FinishValue)
  }
+*** Update File: <WORKDIR>/src\top.mbt
+@@
+   decode,
+   decode_start,
+   decode_continue,
+-  type Value,
++  type ValueRenamed,
+   type ContinueValue,
+   type FinishValue,
+   type ParseError,
 *** End Patch
 
 ```
