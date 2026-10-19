@@ -1,28 +1,37 @@
 # Daily Test Review
 
-Review the generated Daily Test pull request for MoonBit IDE baselines.
+Review only this Daily Test run's updates under `tests/unix/` and `tests/windows/`.
 
-Use the repository checkout and local command-line tools to inspect the result. Do not edit files or make network calls. Start with these read-only checks:
+Your working directory is a scoped review bundle, not the repository checkout.
+`tests.diff` compares the exact commit that started this run with the refreshed
+tests. Work already present on the starting branch is outside your scope, even
+when that branch belongs to another pull request. Do not review generator code,
+workflow changes, fixture repository source, or the parent pull request.
+
+Use only the provided test diff and execution logs. Do not edit files, leave this
+directory, or make network calls. Start with these read-only checks:
 
 ```sh
-git status --short
-git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows
-git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows
-cat .daily-test/status.txt
-cat .daily-test/unix-status.txt
-cat .daily-test/windows-status.txt
-cat .daily-test/submodules.txt
-cat .daily-test/unix-cram-test-status.txt
-cat .daily-test/windows-cram-test-status.txt
-cat .daily-test/unix-cram-test.log
-cat .daily-test/windows-cram-test.log
-cat .daily-test/unix-cram-update.log
-cat .daily-test/windows-cram-update.log
+cat tests-stat.txt
+cat tests-status.txt
+cat tests.diff
+cat unix-cram-test-status.txt
+cat windows-cram-test-status.txt
+cat unix-cram-test.log
+cat windows-cram-test.log
+cat unix-cram-update.log
+cat windows-cram-update.log
 ```
 
-Decide whether the daily refresh contains a failed test, wrong expected output, suspicious baseline promotion, or another issue that needs human attention.
+Decide whether these test updates contain a failed test, wrong expected output,
+or suspicious baseline promotion that needs human attention. In particular,
+project-loading errors must not be accepted as healthy IDE output merely because
+the refreshed snapshot now passes.
 
-Treat ordinary fixture submodule fast-forwards, generated baseline drift, and passing cram output as normal unless the diff or logs show a concrete test problem. If cram failed, inspect the log and explain the specific failing or suspicious tests.
+Treat ordinary generated baseline drift and passing cram output as normal unless
+the test diff or logs show a concrete problem. If cram failed, inspect the log and
+explain the specific failing or suspicious tests. Mention fixture or toolchain
+errors only to explain their effect on the tests being reviewed.
 
 Return JSON only:
 
