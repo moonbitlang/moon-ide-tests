@@ -198,15 +198,116 @@ Found 1 symbols matching 'StringBuilder::new':
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Int::abs'
-No symbols found matching 'Int::abs'
-[1]
+$ run_moon_ide moon ide peek-def 'Int32::abs'
+Found 1 symbols matching 'Int32::abs':
+
+`pub fn Int32::abs` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/int.mbt:172-198
+172 | ///|
+    | /// Computes the absolute value of an integer.
+    | ///
+    | /// Parameters:
+    | ///
+    | /// * `self` : The integer whose absolute value is to be computed.
+    | ///
+    | /// Returns the absolute value of the integer. When the input is
+    | /// `@int.min_value` (-2147483648), returns `@int.min_value` itself, since its
+    | /// absolute value is not representable as an `Int`.
+    | ///
+    | /// Example:
+    | ///
+    | /// ```mbt check
+    | /// test {
+    | ///   inspect(Int32::abs(42), content="42")
+    | ///   inspect(Int32::abs(-42), content="42")
+    | ///   inspect(Int32::abs(0), content="0")
+    | /// }
+    | /// ```
+    | pub fn Int32::abs(self : Int32) -> Int32 {
+    |   if self < 0 {
+    |     -self
+    |   } else {
+    |     self
+    |   }
+    | } (no-eol) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'Int::to_string'
-No symbols found matching 'Int::to_string'
-[1]
+$ run_moon_ide moon ide peek-def 'Int32::to_string'
+Found 2 symbols matching 'Int32::to_string':
+
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-265
+202 | ///|
+    | /// Converts an integer to its string representation in the specified radix (base).
+    | /// Example:
+    | /// ```
+    | /// inspect((255).to_string(radix=16), content="ff")
+    | /// inspect((-255).to_string(radix=16), content="-ff")
+    | /// ```
+    | #cfg(not(target="js"))
+    | pub fn Int32::to_string(self : Int32, radix~ : Int32 = 10) -> String {
+    |   // Validate radix
+    |   if radix < 2 || radix > 36 {
+    |     abort("radix must be between 2 and 36")
+    |   }
+    |  (escaped)
+    |   // Special case for zero
+    |   if self == 0 {
+    |     return "0"
+    |   }
+    |  (escaped)
+    |   // Handle negative numbers
+    |   let is_negative = self < 0
+    |   let num : UInt32 = if is_negative {
+    |     // Negate and reinterpret as UInt
+    |     // Works correctly for Int::min_value due to two's complement:
+    |     // -Int::min_value wraps to itself, then reinterpreting gives 2147483648U
+    |     (-self).reinterpret_as_uint()
+    |   } else {
+    |     self.reinterpret_as_uint()
+    |   }
+    |  (escaped)
+    |   // Calculate length, allocate buffer, and write digits
+    |   let buffer = match radix {
+    |     10 => {
+    |       let digit_len = dec_count32(num)
+    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
+    |       let digit_start = if is_negative { 1 } else { 0 }
+    |       int_to_string_dec(buffer, num, digit_start, total_len)
+    |       buffer
+    |     }
+    |     16 => {
+    |       let digit_len = hex_count32(num)
+    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
+    |       let digit_start = if is_negative { 1 } else { 0 }
+    |       int_to_string_hex(buffer, num, digit_start, total_len)
+    |       buffer
+    |     }
+    |     _ => {
+    |       let digit_len = radix_count32(num, radix)
+    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
+    |       let digit_start = if is_negative { 1 } else { 0 }
+    |       int_to_string_generic(buffer, num, digit_start, total_len, radix)
+    |       buffer
+    |     }
+    |   }
+    |  (escaped)
+    |   // Write minus sign if negative
+    |   if is_negative {
+    |     buffer.unsafe_set(0, 0x002D)
+    |   }
+    |   unsafe_fixedarray_uint16_to_string(buffer)
+    | }
+
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:309-314
+309 | ///|
+    | /// Converts an integer to its string representation in the specified radix (base).
+    | #cfg(target="js")
+    | pub fn Int32::to_string(self : Int32, radix~ : Int32 = 10) -> String {
+    |   int_to_string_js(self, radix)
+    | } (no-eol) (escaped)
 ```
 
 ```mooncram
