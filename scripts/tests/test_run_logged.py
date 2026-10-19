@@ -97,8 +97,8 @@ public class NativeProbe {
     def tearDownClass(cls):
         cls.temp.cleanup()
 
-    def run_refresh(self, status):
-        root = self.directory / f"repository {status}"
+    def run_refresh(self, status, parent=None):
+        root = (self.directory if parent is None else parent) / f"repository {status}"
         scripts = root / "scripts"
         scripts.mkdir(parents=True)
         for name in ("update-windows-tests.ps1", "prepare-fixtures.py", "run-logged.py"):
@@ -117,11 +117,16 @@ public class NativeProbe {
             cwd=root, env=env, capture_output=True,
         )
         self.assertEqual((root / ".daily-test/windows-cram-update.log").read_bytes(), EXPECTED)
-        self.assertEqual(args.read_text(encoding="utf-8").splitlines(), [
+        arguments = args.read_text(encoding="utf-8").splitlines()
+        self.assertEqual(len(arguments), 9)
+        self.assertEqual(arguments[:7], [
             "cram", "update", "--replace", "--assume-yes", "--cram-compat",
-            "--no-keep-output-crlf", "--shell", str(scripts / "moon-cram-powershell.cmd"),
-            str(root / "tests/windows"),
+            "--no-keep-output-crlf", "--shell",
         ])
+        # Git expands Windows 8.3 aliases (e.g. RUNNER~1) in the repository root.
+        # Compare canonical paths while retaining exact command/flag assertions.
+        self.assertEqual(Path(arguments[7]).resolve(), (scripts / "moon-cram-powershell.cmd").resolve())
+        self.assertEqual(Path(arguments[8]).resolve(), (root / "tests/windows").resolve())
         return result
 
     def test_successful_refresh_keeps_raw_utf8_log(self):
@@ -132,6 +137,24 @@ public class NativeProbe {
         result = self.run_refresh(23)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(b"moon cram update exited with status 23", result.stderr)
+
+    def test_refresh_accepts_windows_short_path_alias(self):
+        import ctypes
+        from ctypes import wintypes
+
+        parent = (self.directory / "long parent directory").resolve()
+        parent.mkdir()
+        short_path = ctypes.WinDLL("kernel32", use_last_error=True).GetShortPathNameW
+        short_path.argtypes = (wintypes.LPCWSTR, wintypes.LPWSTR, wintypes.DWORD)
+        short_path.restype = wintypes.DWORD
+        buffer = ctypes.create_unicode_buffer(32768)
+        length = short_path(str(parent), buffer, len(buffer))
+        if not length or length >= len(buffer) or buffer.value.casefold() == str(parent).casefold():
+            self.skipTest("the temporary directory has no Windows short-path alias")
+        alias = Path(buffer.value)
+        self.assertEqual(alias.resolve(), parent)
+        result = self.run_refresh(0, parent=alias)
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
 
 
 if __name__ == "__main__":
