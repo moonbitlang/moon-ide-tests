@@ -102,5 +102,4 @@ $ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
    type Value,
 *** End Patch
 
-[0]
 ```

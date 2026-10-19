@@ -1268,5 +1268,4 @@ $ run_moon_ide moon ide rename 'expect_reject' 'expect_reject_renamed' --loc 'sr
  }
 *** End Patch
 
-[0]
 ```

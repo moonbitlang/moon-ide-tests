@@ -33,5 +33,4 @@ $ run_moon_ide moon ide rename 'input' 'input_renamed' --loc 'src/tests/json_tes
  ///|
 *** End Patch
 
-[0]
 ```

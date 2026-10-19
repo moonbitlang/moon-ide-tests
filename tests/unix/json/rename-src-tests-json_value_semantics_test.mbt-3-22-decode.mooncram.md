@@ -102,5 +102,4 @@ $ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/tests/json_v
    type Value,
 *** End Patch
 
-[0]
 ```

@@ -28,5 +28,4 @@ Found 1 references for symbol 'decode_continue':
    |     ([_, ..], Finish(_)) =>
    |       raise InspectError::InspectError("parser finished before all chunks")
 
-[0]
 ```

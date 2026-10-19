@@ -124,7 +124,6 @@ fn incr_fail(message : String) -> Unit raise {
    ```
   raise InspectError::InspectError(message)
 }
-[0]
 ```
 
 ```mooncram
@@ -137,7 +136,6 @@ fn incr_fail(message : String) -> Unit raise {
              ```
   raise InspectError::InspectError(message)
 }
-[0]
 ```
 
 ```mooncram
@@ -150,7 +148,6 @@ fn json_testsuite_fail(message : String) -> Unit raise {
    ```
   raise InspectError::InspectError(message)
 }
-[0]
 ```
 
 ```mooncram
@@ -163,7 +160,6 @@ fn json_testsuite_fail(message : String) -> Unit raise {
                        ```
   raise InspectError::InspectError(message)
 }
-[0]
 ```
 
 ```mooncram
@@ -177,7 +173,6 @@ test "json_testsuite n_array_1_true_without_comma" {
       ```
   expect_reject("n_array_1_true_without_comma.json", input)
 }
-[0]
 ```
 
 ```mooncram
@@ -192,7 +187,6 @@ test "json_testsuite n_array_1_true_without_comma" {
   ```
 }
 
-[0]
 ```
 
 ```mooncram
@@ -206,7 +200,6 @@ test "json_testsuite y_array_arraysWithSpaces" {
       ```
   expect_accept("y_array_arraysWithSpaces.json", input)
 }
-[0]
 ```
 
 ```mooncram
@@ -221,7 +214,6 @@ test "json_testsuite y_array_arraysWithSpaces" {
   ```
 }
 
-[0]
 ```
 
 ```mooncram
@@ -235,7 +227,6 @@ test "json value semantics basics" {
       ```
   let expected = Json::array([
     Json::boolean(false),
-[0]
 ```
 
 ```mooncram
@@ -249,7 +240,6 @@ test "json value semantics basics" {
                ```
   let expected = Json::array([
     Json::boolean(false),
-[0]
 ```
 
 ```mooncram
@@ -260,7 +250,6 @@ using @json {decode_start, decode_continue, type Value}
              ```moonbit
              fn @jinser/json.decode_start(input : String, decode? : &@lib.Decode) -> @lib.Value raise
              ```
-[0]
 ```
 
 ```mooncram
@@ -271,7 +260,6 @@ using @json {decode_start, decode_continue, type Value}
                            ```moonbit
                            fn @jinser/json.decode_continue(cont : String, state : @lib.ContinueValue) -> @lib.Value raise
                            ```
-[0]
 ```
 
 Known IDE limitation: hover on the trait imported by using reports no information; its declaration hover and imported-name peek-def work.
@@ -295,5 +283,4 @@ pub using @lib {
   ```
   decode_start,
   decode_continue,
-[0]
 ```

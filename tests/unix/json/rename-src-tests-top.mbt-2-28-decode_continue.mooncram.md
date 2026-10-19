@@ -36,5 +36,4 @@ $ run_moon_ide moon ide rename 'decode_continue' 'decode_continue_renamed' --loc
 +using @json {decode_start, decode_continue_renamed, type Value}
 *** End Patch
 
-[0]
 ```

@@ -72,5 +72,4 @@ $ run_moon_ide moon ide rename 'incr_fail' 'incr_fail_renamed' --loc 'src/tests/
  
 *** End Patch
 
-[0]
 ```
