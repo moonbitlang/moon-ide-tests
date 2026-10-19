@@ -32,12 +32,15 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test --target wasm
+        run: |
+          python -m unittest discover -s scripts/tests
+          moon -C testgen test --target wasm
 
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
-          git diff --exit-code -- tests/unix
+          python scripts/check-generated-tests.py tests/unix
+          python scripts/check-baseline-health.py tests/unix
 
       - name: Run Unix baselines
         run: moon cram test --cram-compat tests/unix
@@ -74,7 +77,13 @@ jobs:
         shell: powershell
         run: |
           .\scripts\update-windows-tests.ps1
-          git diff --exit-code -- tests\windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s scripts/tests
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/check-generated-tests.py tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/check-baseline-health.py tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Run Windows baselines
         shell: powershell

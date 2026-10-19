@@ -90,6 +90,8 @@ function Escape-EmptyParenLines {
   }
 }
 
+Invoke-Checked "python" @((Join-Path $root "scripts\prepare-fixtures.py"))
+
 $repos = Get-FixtureRepos (Join-Path $root "fixtures\repos.yaml")
 
 foreach ($repo in $repos) {
@@ -130,16 +132,16 @@ if ($RefreshSnapshots) {
   Normalize-MoonCramFiles $windowsTests
   Escape-EmptyParenLines $windowsTests
 
-  $previousErrorActionPreference = $ErrorActionPreference
-  $ErrorActionPreference = "Continue"
-  & moon cram update --replace --assume-yes --cram-compat --no-keep-output-crlf `
-    --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") `
-    $windowsTests *> $updateLog
+  # Redirect the native handles directly. PowerShell 5.1's *> converts output
+  # into formatted objects and writes UTF-16 instead of the native UTF-8 bytes.
+  & python (Join-Path $root "scripts\run-logged.py") $updateLog -- `
+    (Get-Command moon -CommandType Application | Select-Object -First 1).Source `
+    cram update --replace --assume-yes --cram-compat --no-keep-output-crlf `
+    --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") $windowsTests
   $updateStatus = $LASTEXITCODE
-  $ErrorActionPreference = $previousErrorActionPreference
 
   if ($updateStatus -ne 0) {
-    Get-Content -LiteralPath $updateLog
+    Get-Content -LiteralPath $updateLog -Encoding UTF8
     throw "moon cram update exited with status $updateStatus"
   }
 

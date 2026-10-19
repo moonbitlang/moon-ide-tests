@@ -324,6 +324,7 @@ fn run(args : Array[String]) -> Unit {
     config.max_per_file,
     config.max_files,
     config.max_file_size,
+    platform=config.platform,
   )
   let files = render_cram_files(
     result,

@@ -64,7 +64,9 @@ jobs:
           done
 
       - name: Test generator
-        run: moon -C testgen test --target wasm
+        run: |
+          python -m unittest discover -s scripts/tests
+          moon -C testgen test --target wasm
 
       - name: Update generated Unix tests
         run: scripts/update-tests.sh
@@ -99,8 +101,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- fixtures/repos tests/unix; then
-            git add fixtures/repos tests/unix
+          git add --all -- fixtures/repos tests/unix
+          if ! git diff --cached --quiet -- fixtures/repos tests/unix; then
             git commit -m "chore: update daily Unix IDE baselines"
           fi
 
@@ -289,6 +291,16 @@ jobs:
           mkdir -p .daily-test
           git status --short > .daily-test/status.txt
 
+      - name: Check baseline health
+        run: |
+          set +e
+          python scripts/check-baseline-health.py tests/unix tests/windows \
+            > .daily-test/baseline-health.log 2>&1
+          status=$?
+          set -e
+          echo "$status" > .daily-test/baseline-health-status.txt
+          cat .daily-test/baseline-health.log
+
       - name: Detect daily diff
         id: diff
         run: |
@@ -311,11 +323,7 @@ jobs:
           git diff --no-ext-diff --no-color "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests.diff"
           git diff --stat "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-stat.txt"
           git diff --name-status "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-status.txt"
-          for platform in unix windows; do
-            cp ".daily-test/$platform-cram-test-status.txt" "$review_dir/"
-            cp ".daily-test/$platform-cram-test.log" "$review_dir/"
-            cp ".daily-test/$platform-cram-update.log" "$review_dir/"
-          done
+          python scripts/prepare-review.py .daily-test "$review_dir"
 
       - name: Create or update pull request
         id: pr
@@ -414,13 +422,18 @@ jobs:
           path: ${{ runner.temp }}/daily-test-review
           if-no-files-found: error
 
-      - name: Fail if cram tests failed without test updates
-        if: steps.diff.outputs.has_test_changes == 'false'
+      - name: Require healthy baselines and review
+        if: always()
+        env:
+          REVIEW_HAS_PROBLEM: ${{ steps.openseek-result.outputs.has_problem }}
         run: |
           unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
           windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
+          health_status="$(cat .daily-test/baseline-health-status.txt 2>/dev/null || echo 1)"
 
-          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
+          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ] || \
+             [ "$health_status" != "0" ] || [ "$REVIEW_HAS_PROBLEM" = "true" ]; then
+            cat .daily-test/baseline-health.log 2>/dev/null || true
             cat .daily-test/unix-cram-test.log 2>/dev/null || true
             cat .daily-test/windows-cram-test.log 2>/dev/null || true
             exit 1

@@ -14,8 +14,15 @@ fn append_markdown_header(
 }
 
 ///|
-fn append_mooncram_block(sb : StringBuilder, command : String) -> Unit {
+fn append_mooncram_block(
+  sb : StringBuilder,
+  command : String,
+  annotation~ : String? = None,
+) -> Unit {
   append_line(sb, "")
+  if annotation is Some(text) {
+    append_line(sb, text)
+  }
   append_line(sb, "```mooncram")
   append_line(sb, command)
   append_line(sb, "```")
@@ -93,12 +100,13 @@ fn append_unique_command(
   sb : StringBuilder,
   seen : @hashset.HashSet[String],
   command : String,
+  annotation~ : String? = None,
 ) -> Bool {
   if seen.contains(command) {
     false
   } else {
     seen.add(command)
-    append_mooncram_block(sb, command)
+    append_mooncram_block(sb, command, annotation~)
     true
   }
 }
@@ -109,10 +117,16 @@ fn append_case_commands(
   seen : @hashset.HashSet[String],
   cases : Array[TestCase],
   to_command : (TestCase) -> String,
+  annotation~ : (TestCase) -> String? = _ => None,
 ) -> Bool {
   let mut has_command = false
   for test_case in cases {
-    if append_unique_command(sb, seen, to_command(test_case)) {
+    if append_unique_command(
+        sb,
+        seen,
+        to_command(test_case),
+        annotation=annotation(test_case),
+      ) {
       has_command = true
     }
   }
@@ -177,7 +191,13 @@ fn render_symbol_file(
   append_markdown_header(sb, current_repo_slug.val, suite)
   append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
-  let has_command = append_case_commands(sb, seen, loc_cases, to_command)
+  let has_command = append_case_commands(sb, seen, loc_cases, to_command, annotation=test_case => {
+    if suite == "hover" {
+      fixture_hover_annotation(current_repo_slug.val, test_case)
+    } else {
+      None
+    }
+  })
   if has_command {
     Some(CramFile::{ name, content: sb.to_string(), })
   } else {
@@ -189,7 +209,7 @@ fn render_symbol_file(
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
     run_moon_ide_command(
-      "moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -198,7 +218,7 @@ fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
 fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
     run_moon_ide_command(
-      "moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -267,7 +287,7 @@ fn render_split_symbol_files(
 fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -285,7 +305,7 @@ fn rename_target(symbol : String) -> String {
 fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_split_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
-      "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}",
+      "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }

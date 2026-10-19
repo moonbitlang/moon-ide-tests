@@ -3,6 +3,8 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
+python "$ROOT/scripts/prepare-fixtures.py"
+
 while IFS=$'\t' read -r slug path max_files max_per_file; do
   repo_path="$ROOT/$path"
   unix_out_dir="$ROOT/tests/unix/$slug"

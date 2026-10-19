@@ -63,6 +63,36 @@ moon -C testgen run --target wasm cmd/main -- \
 - Parser diagnostics are printed to the generation log and do not change generated files.
 - `hover`, `peek-def`, `find-references`, and `rename` share one location-based case collection (`--loc`).
 - `main` function symbols are excluded from collection.
+- Prelude/compiler builtin symbols, including `Int32` and `UInt32`, are excluded
+  before applying the per-file location limit.
+- `policy.mbt` records explicit fixture exceptions by `--repo-slug` and normalized
+  relative path. Rabbita's uninstantiated `warren/templates/` projects are excluded
+  before sampling; their placeholder dependency versions are not runnable
+  workspace packages. Similar-looking paths in other fixtures remain eligible.
+- On Windows, async's `src/fs/named_pipe_test.mbt` and
+  `src/internal/event_loop/io_unix.mbt` are also excluded before sampling: their
+  first collected locations are POSIX-only `mkfifo` / `IoHandle::wait_read`
+  declarations disabled by `#cfg(not(platform="windows"))`. The next eligible
+  candidates fill their sample slots; Unix retains both files.
+- Location queries use native for Rabbita's non-JS `host_ssr_wbtest.mbt`, JS for
+  core's `encoding/utf8/decode_js.mbt`, and JS for async's pipe/socket
+  `unimplemented.mbt` and `unimplemented_test.mbt` plus
+  `src/tls/unimplemented_test.mbt` and
+  `src/internal/event_loop/unimplemented_test.mbt`. Other files retain their
+  project default backend. These policies intentionally do not reimplement
+  moonbuild's workspace/target resolution; review them against fixture manifests
+  when updating fixtures.
+- Precise hover cases remain as IDE reproductions: core's extension
+  declaration `test/extends.mbt` (`to_repr`), its intrinsic parameter
+  `builtin/int64.mbt` (`self`), and Rabbita's imported trait in
+  `rabbita/internal/vdom/vdom.mbt` (`Scheduler`). Each gets a descriptive note and
+  `<!-- known-ide-limitation: ... -->` immediately before its command fence.
+  Other locations and other IDE operations are unmarked. Their failed output is
+  still captured so a future IDE fix is visible in the snapshots.
+- The same annotation mechanism preserves extern declaration/parameter hover
+  failures in core's `encoding/utf8/decode_js.mbt` and async's
+  `src/fs/named_pipe_test.mbt` (Unix) and `src/internal/event_loop/stdio.mbt`.
+  These functions and parameters still receive every navigation/rename query.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
 - Generated Unix tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/unix`.

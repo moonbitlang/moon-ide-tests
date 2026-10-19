@@ -79,8 +79,10 @@ fn should_keep_symbol(sym : String) -> Bool {
       | "Int16"
       | "UInt16"
       | "Int"
+      | "Int32"
       | "Int64"
       | "UInt"
+      | "UInt32"
       | "UInt64"
       | "Float"
       | "Double"
@@ -465,7 +467,13 @@ fn select_files(
   seed : String,
   max_files : Int32,
   skip~ : (String) -> Bool = _ => false,
+  platform~ : TestPlatform = TestPlatform::Unix,
 ) -> Array[String] {
+  // Apply fixture eligibility before ranking/capping so templates cannot
+  // consume slots in the deterministic sample.
+  let files = files.filter(file => {
+    !should_skip_fixture_file(seed, file, platform)
+  })
   files.sort_by_key(rel_path => {
     (selection_key(seed, rel_path), normalize_separators(rel_path))
   })
@@ -501,10 +509,11 @@ fn collect_files(
   seed : String,
   max_files : Int32,
   max_file_size : Int32,
+  platform~ : TestPlatform = TestPlatform::Unix,
 ) -> Array[String] {
   let files = Array(capacity=0)
   walk_dir(project_root, "", files)
-  select_files(files, seed, max_files, skip=rel_path => {
+  select_files(files, seed, max_files, platform~, skip=rel_path => {
     if max_file_size <= 0 {
       return false
     }
@@ -533,8 +542,15 @@ fn collect_cases(
   max_per_file : Int32,
   max_files : Int32,
   max_file_size : Int32,
+  platform~ : TestPlatform = TestPlatform::Unix,
 ) -> CollectResult {
-  let source_files = collect_files(project_root, seed, max_files, max_file_size)
+  let source_files = collect_files(
+    project_root,
+    seed,
+    max_files,
+    max_file_size,
+    platform~,
+  )
   let loc_cases = Array(capacity=0)
   for rel_path in source_files {
     let abs_path = @path.Path::join(project_root, rel_path).to_string()
