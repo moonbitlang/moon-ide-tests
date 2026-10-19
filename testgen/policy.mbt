@@ -48,6 +48,23 @@ fn fixture_target_option(repo_slug : String, file : String) -> String {
 }
 
 ///|
+fn should_skip_fixture_rename(repo_slug : String, test_case : TestCase) -> Bool {
+  // These sampled names resolve into core dependency packages. The IDE cannot
+  // rename outside the workspace; their hover/peek-def/references remain useful.
+  match
+    (
+      repo_slug,
+      normalize_separators(test_case.file),
+      test_case.sym,
+      test_case.col,
+    ) {
+    ("async", "src/socket/unimplemented.mbt", "parse_int", 24)
+    | ("async", "src/tls/unimplemented_test.mbt", "encode", 16) => true
+    _ => false
+  }
+}
+
+///|
 /// Preserve these failing IDE queries as reproductions, with the marker outside
 /// the command block. Matching includes the column to avoid marking successful
 /// call sites or ordinary parameters with the same spelling. Lines may move.

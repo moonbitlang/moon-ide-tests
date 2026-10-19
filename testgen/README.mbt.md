@@ -93,6 +93,10 @@ moon -C testgen run --target wasm cmd/main -- \
   failures in core's `encoding/utf8/decode_js.mbt` and async's
   `src/fs/named_pipe_test.mbt` (Unix) and `src/internal/event_loop/stdio.mbt`.
   These functions and parameters still receive every navigation/rename query.
+- Two sampled async names resolve into core dependencies (`parse_int` in
+  `src/socket/unimplemented.mbt` and `encode` in `src/tls/unimplemented_test.mbt`).
+  Their hover, definition, and reference queries remain; their rename commands
+  are omitted because the IDE cannot rename symbols outside the workspace.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
 - Generated Unix tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/unix`.

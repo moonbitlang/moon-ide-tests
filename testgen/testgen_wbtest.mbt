@@ -938,3 +938,40 @@ test "Windows skips async POSIX fixtures before sampling" {
     3,
   )
 }
+
+///|
+test "dependency functions retain navigation without an invalid workspace rename" {
+  for
+    (file, line, col, sym) in [
+      ("src/socket/unimplemented.mbt", 20, 24, "parse_int"),
+      ("src/tls/unimplemented_test.mbt", 18, 16, "encode"),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line, col, sym, }],
+      },
+      "async",
+      "fixtures/repos/async",
+      TestPlatform::Windows,
+    )
+    assert_eq(files.length(), 4)
+    assert_eq(files[1].name, "hover.mooncram.md")
+    assert_eq(files[2].name, "peek-def.mooncram.md")
+    assert_true(files[3].name.has_prefix("find-references-"))
+    assert_false(files.any(file => file.name.has_prefix("rename-")))
+    for slug in ["async", "example"] {
+      let controls = render_cram_files(
+        CollectResult::{
+          source_files: [file],
+          loc_cases: [TestCase::{ file, line, col, sym: "local_function", }],
+        },
+        slug,
+        "fixtures/repos/\{slug}",
+        TestPlatform::Windows,
+      )
+      assert_eq(controls.length(), 5)
+      assert_true(controls[4].name.has_prefix("rename-"))
+    }
+  }
+}

@@ -303,6 +303,9 @@ fn rename_target(symbol : String) -> String {
 
 ///|
 fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
+  let cases = cases.filter(test_case => {
+    !should_skip_fixture_rename(current_repo_slug.val, test_case)
+  })
   render_split_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
       "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
