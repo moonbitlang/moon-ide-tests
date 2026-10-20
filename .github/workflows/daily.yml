@@ -41,10 +41,8 @@ jobs:
             echo "::error::Run Daily Test on a branch so its pull request has a branch to target."
             exit 1
           fi
-          git fetch --no-tags origin "$BASE_BRANCH"
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
           git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
-          git submodule update --init --recursive
           mkdir -p .daily-test
           printf ".daily-test/\n" >> .git/info/exclude
 
@@ -80,7 +78,6 @@ jobs:
           scripts/escape-cram-empty-parens.sh tests/unix
 
       - name: Run Unix cram tests
-        id: unix-cram
         run: |
           set +e
           moon cram test --cram-compat tests/unix \
@@ -88,14 +85,6 @@ jobs:
           status=$?
           set -e
           echo "$status" > .daily-test/unix-cram-test-status.txt
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-
-      - name: Collect Unix review inputs
-        if: always()
-        run: |
-          mkdir -p .daily-test
-          git submodule status --recursive > .daily-test/submodules.txt
-          git status --short > .daily-test/unix-status.txt
 
       - name: Commit Unix daily changes
         run: |
@@ -167,14 +156,12 @@ jobs:
         run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
 
       - name: Run Windows cram tests
-        id: windows-cram
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
           cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
           $status = $LASTEXITCODE
           [System.IO.File]::WriteAllText(".daily-test\windows-cram-test-status.txt", [string]$status, [System.Text.Encoding]::ASCII)
-          "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
       - name: Commit Windows daily changes
@@ -199,20 +186,6 @@ jobs:
 
           git diff --cached --quiet -- tests/windows
           $diffStatus = $LASTEXITCODE
-
-          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
-          if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
-          }
-          $windowsStatusText = $windowsStatus -join [Environment]::NewLine
-          if ($windowsStatusText.Length -gt 0) {
-            $windowsStatusText += [Environment]::NewLine
-          }
-          [System.IO.File]::WriteAllText(
-            ".daily-test\windows-status.txt",
-            $windowsStatusText,
-            [System.Text.UTF8Encoding]::new($false)
-          )
 
           if ($diffStatus -eq 1) {
             git commit -m "chore: update daily Windows IDE baselines"
@@ -246,7 +219,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          submodules: recursive
 
       - name: Install MoonBit
         run: |
@@ -269,10 +241,8 @@ jobs:
         run: |
           cp .github/scripts/parse-openseek-result.mbtx "$RUNNER_TEMP/parse-openseek-result.mbtx"
           cp .github/codex/prompts/daily-test-review.md "$RUNNER_TEMP/daily-test-review.md"
-          git fetch --no-tags origin "$BASE_BRANCH"
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
           git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
-          git submodule update --init --recursive
 
       - name: Download Unix review inputs
         uses: actions/download-artifact@v8
@@ -285,11 +255,6 @@ jobs:
         with:
           name: daily-windows-review-inputs
           path: .daily-test
-
-      - name: Collect final review inputs
-        run: |
-          mkdir -p .daily-test
-          git status --short > .daily-test/status.txt
 
       - name: Check baseline health
         run: |
@@ -323,7 +288,10 @@ jobs:
           git diff --no-ext-diff --no-color "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests.diff"
           git diff --stat "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-stat.txt"
           git diff --name-status "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-status.txt"
-          python scripts/prepare-review.py .daily-test "$review_dir"
+          # Both platforms write native UTF-8 logs; status files are ASCII.
+          cp .daily-test/baseline-health{.log,-status.txt} \
+            .daily-test/{unix,windows}-cram-{test-status.txt,test.log,update.log} \
+            "$review_dir/"
 
       - name: Create or update pull request
         id: pr
@@ -361,7 +329,6 @@ jobs:
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
 
       - name: Review daily output with OpenSeek
-        id: openseek
         if: steps.diff.outputs.has_test_changes == 'true'
         env:
           DEEPSEEK: ${{ secrets.DEEPSEEK_API_KEY }}

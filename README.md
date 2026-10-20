@@ -121,7 +121,7 @@ commit and execution logs. Existing changes on the selected branch are excluded.
 
 Daily checks both cram results and baseline health before succeeding: refreshing
 snapshots cannot turn an unexpected command failure into an accepted baseline.
-The narrowly marked [known IDE limitations](docs/known-ide-limitations.md) retain
+The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 
 ## CI
@@ -131,7 +131,8 @@ The PR workflow:
 ```sh
 moon -C testgen test --target wasm
 scripts/update-tests.sh
-python scripts/check-generated-tests.py tests/unix tests/windows
+git add --all -- tests/unix tests/windows
+git diff --cached --exit-code HEAD -- tests/unix tests/windows
 python scripts/check-baseline-health.py tests/unix tests/windows
 moon cram test --cram-compat tests/unix
 moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows

@@ -39,7 +39,8 @@ jobs:
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
-          python scripts/check-generated-tests.py tests/unix
+          git add --all -- tests/unix
+          git diff --cached --exit-code HEAD -- tests/unix
           python scripts/check-baseline-health.py tests/unix
 
       - name: Run Unix baselines
@@ -80,7 +81,9 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s scripts/tests
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          python scripts/check-generated-tests.py tests/windows
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git diff --cached --exit-code HEAD -- tests/windows
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python scripts/check-baseline-health.py tests/windows
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
