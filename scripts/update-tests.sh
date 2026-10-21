@@ -3,6 +3,11 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
+command -v moon > /dev/null
+mkdir -p "$ROOT/.daily-test"
+baseline_paths="$ROOT/.daily-test/unix-baseline-paths.txt"
+printf '%s\n' tests/unix/core-project tests/unix/core-standalone > "$baseline_paths"
+
 while IFS=$'\t' read -r slug path max_files max_per_file; do
   repo_path="$ROOT/$path"
   unix_out_dir="$ROOT/tests/unix/$slug"
@@ -10,6 +15,13 @@ while IFS=$'\t' read -r slug path max_files max_per_file; do
   if [[ ! -d "$repo_path" ]]; then
     echo "missing fixture repo for $slug at $path; run scripts/update-submodules.sh" >&2
     exit 1
+  fi
+
+  check_log="$ROOT/.daily-test/unix-check-$slug.log"
+  if ! moon -C "$repo_path" check > "$check_log" 2>&1; then
+    cat "$check_log"
+    echo "::notice::Skipping $slug: moon check failed; keeping its Unix baselines unchanged."
+    continue
   fi
 
   mkdir -p "$unix_out_dir"
@@ -21,6 +33,7 @@ while IFS=$'\t' read -r slug path max_files max_per_file; do
     --platform unix \
     --max-files "$max_files" \
     --max-per-file "$max_per_file"
+  printf 'tests/unix/%s\n' "$slug" >> "$baseline_paths"
 done < <(
   awk '
     function flush() {

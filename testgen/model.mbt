@@ -1,8 +1,8 @@
 ///|
 priv struct TestCase {
   file : String
-  line : Int
-  col : Int
+  line : Int32
+  col : Int32
   sym : String
 } derive(Eq, Hash, Debug)
 

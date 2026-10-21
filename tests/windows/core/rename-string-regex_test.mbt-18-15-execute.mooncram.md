@@ -143,7 +143,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
 +pub fn Regex::execute_renamed(
    self : Regex,
    input : StringView,
-   last_index? : Int = 0,
+   last_index~ : Int32 = 0,
 @@
  /// test {
  ///   let digit = re"[[:digit:]]+".capture("number")
@@ -190,6 +190,26 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
      }
    })
  }
+@@
+     // A fresh regex measures state construction on every sample. A periodic
+     // literal keeps one thread alive per period, producing large state keys.
+     let re = @string.Regex::string(pattern)
+-    it.keep(re.execute(no_match))
++    it.keep(re.execute_renamed(no_match))
+-    it.keep(re.execute(with_match))
++    it.keep(re.execute_renamed(with_match))
+   })
+ }
+*** Update File: <WORKDIR>/string\regex_lexmatch_spec_test.mbt
+@@
+     let expected = results.split(" ").collect()
+     assert_eq(expected.length(), lexmatch_inputs.length())
+     for i, input in lexmatch_inputs {
+-      let actual = match re.execute(input) {
++      let actual = match re.execute_renamed(input) {
+         None => "-"
+         Some(m) => "\{m.before().length()},\{m.content().length()}"
+       }
 *** Update File: <WORKDIR>/string\regex_literal_test.mbt
 @@
  
@@ -228,6 +248,141 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
          None => {
            done = true
            return Some(str[copy_index:])
+*** Update File: <WORKDIR>/string\regex_methods_test.mbt
+@@
+ ///|
+ test "capture group indices cannot wrap around" {
+   let regex = re"(a)"
+-  guard regex.execute("a") is Some(matched) else { fail("expected match") }
++  guard regex.execute_renamed("a") is Some(matched) else { fail("expected match") }
+   for index in [-2147483648, -1073741824, -1, 2, 1073741824, 2147483647] {
+     assert_eq(matched.group(index) is None, true)
+   }
+*** Update File: <WORKDIR>/string\regex_semantics_test.mbt
+@@
+ 
+ ///|
+ fn matched(pattern : String, input : String) -> String {
+-  match @string.Regex::unsafe_from_string(pattern).execute(input) {
++  match @string.Regex::unsafe_from_string(pattern).execute_renamed(input) {
+     None => "no match"
+     Some(m) => "[\{m.before()}](\{m.content()})[\{m.after()}]"
+   }
+@@
+ ///|
+ test "captures inside repetitions keep the last iteration" {
+   let re = @string.Regex::unsafe_from_string("(?:(a)|(b))+")
+-  guard re.execute("aab") is Some(m) else { fail("expected a match") }
++  guard re.execute_renamed("aab") is Some(m) else { fail("expected a match") }
+   debug_inspect(
+     (m.group(0), m.group(1), m.group(2)),
+     content=(
+@@
+     ),
+   )
+   let re = @string.Regex::unsafe_from_string("([ab]*)*")
+-  guard re.execute("ab") is Some(m) else { fail("expected a match") }
++  guard re.execute_renamed("ab") is Some(m) else { fail("expected a match") }
+   // The repetition stops instead of adding an empty iteration.
+   debug_inspect(
+     m.group(1),
+@@
+     let input = c.to_string()
+     inspect(matched("^..$", input), content="no match")
+     let re = @string.Regex::unsafe_from_string("^(?<prefix>.*)(?<last>.$)")
+-    guard re.execute(input) is Some(m) else { fail("expected a match") }
++    guard re.execute_renamed(input) is Some(m) else { fail("expected a match") }
+     assert_true(m.named_group("prefix") is Some(""))
+     assert_true(m.named_group("last") is Some(last) && last == input)
+     let padded = "!" + input + "?"
+     let view = padded[1:1 + input.length()]
+     let re = @string.Regex::unsafe_from_string("^.$")
+-    assert_true(re.execute(view) is Some(m) && m.content() == input)
++    assert_true(re.execute_renamed(view) is Some(m) && m.content() == input)
+     let re = @string.Regex::unsafe_from_string("^.")
+-    assert_true(re.execute(input) is Some(m) && m.after().length() == 0)
++    assert_true(re.execute_renamed(input) is Some(m) && m.after().length() == 0)
+   }
+   inspect(matched("^.", ""), content="no match")
+   inspect(matched("^$", ""), content="[]()[]")
+@@
+ ///|
+ test "last_index keeps anchors and word boundaries relative to the input" {
+   let re = @string.Regex::unsafe_from_string("^ab")
+-  assert_true(re.execute("abab", last_index=0) is Some(_))
++  assert_true(re.execute_renamed("abab", last_index=0) is Some(_))
+-  assert_true(re.execute("abab", last_index=2) is None)
++  assert_true(re.execute_renamed("abab", last_index=2) is None)
+   let re = @string.Regex::unsafe_from_string("\\bab")
+   assert_true(
+-    re.execute("xab ab", last_index=1) is Some(m) && m.before() == "xab ",
++    re.execute_renamed("xab ab", last_index=1) is Some(m) && m.before() == "xab ",
+   )
+   let re = @string.Regex::unsafe_from_string("b$")
+-  assert_true(re.execute("ab", last_index=2) is None)
++  assert_true(re.execute_renamed("ab", last_index=2) is None)
+   let re = @string.Regex::unsafe_from_string("$")
+-  assert_true(re.execute("ab", last_index=2) is Some(m) && m.before() == "ab")
++  assert_true(re.execute_renamed("ab", last_index=2) is Some(m) && m.before() == "ab")
+ }
+ 
+ ///|
+@@
+   for i in 1..<400 {
+     words = words | @string.Regex::string("w\{i};")
+   }
+-  assert_true(words.execute("...w399;...") is Some(m) && m.content() == "w399;")
++  assert_true(words.execute_renamed("...w399;...") is Some(m) && m.content() == "w399;")
+-  assert_true(words.execute("...w400;...") is None)
++  assert_true(words.execute_renamed("...w400;...") is None)
+ }
+ 
+ ///|
+@@
+ test "periodic literals keep the correct match after a failed search" {
+   let literal = "ab".repeat(30)
+   let re = @string.Regex::string(literal + "c")
+-  assert_true(re.execute(literal + literal) is None)
++  assert_true(re.execute_renamed(literal + literal) is None)
+-  guard re.execute("ab" + literal + "c") is Some(m) else {
++  guard re.execute_renamed("ab" + literal + "c") is Some(m) else {
+     fail("expected a match")
+   }
+   inspect(m.before(), content="ab")
+@@
+   let seen = []
+   for m in outer {
+     // Run another search on the same regex while iterating.
+-    guard re.execute("zz=9") is Some(inner) else { fail("expected a match") }
++    guard re.execute_renamed("zz=9") is Some(inner) else { fail("expected a match") }
+     seen.push(
+       "\{m.group(1).unwrap()}:\{m.group(2).unwrap()}/\{inner.content()}",
+     )
+@@
+ /// match all of them, because folding the complement put them back.
+ test "a negated class in a case-insensitive group" {
+   let folded = @string.Regex("^(?i:[^a-c])$")
+-  assert_true(folded.execute("a") is None)
++  assert_true(folded.execute_renamed("a") is None)
+-  assert_true(folded.execute("B") is None)
++  assert_true(folded.execute_renamed("B") is None)
+-  assert_true(folded.execute("d") is Some(_))
++  assert_true(folded.execute_renamed("d") is Some(_))
+-  assert_true(folded.execute("D") is Some(_))
++  assert_true(folded.execute_renamed("D") is Some(_))
+   // Outside the group nothing is folded.
+   let plain = @string.Regex("^[^a-c]$")
+-  assert_true(plain.execute("a") is None)
++  assert_true(plain.execute_renamed("a") is None)
+-  assert_true(plain.execute("A") is Some(_))
++  assert_true(plain.execute_renamed("A") is Some(_))
+   // A class that is not negated is unchanged.
+   let positive = @string.Regex("^(?i:[a-c])$")
+-  assert_true(positive.execute("B") is Some(_))
++  assert_true(positive.execute_renamed("B") is Some(_))
+-  assert_true(positive.execute("d") is None)
++  assert_true(positive.execute_renamed("d") is None)
+ }
 *** Update File: <WORKDIR>/string\regex_test.mbt
 @@
  ///|
@@ -263,6 +418,53 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
 -  guard regex.execute("😀") is None else {
 +  guard regex.execute_renamed("😀") is None else {
      fail("Expected no surrogate-half match")
+   }
+ }
+@@
+ test "execute/colon_range" {
+   let regex = @string.Regex("^[:-@]$")
+   for ch in [":", ";", "<", "=", ">", "?", "@"] {
+-    guard regex.execute(ch) is Some(_) else {
++    guard regex.execute_renamed(ch) is Some(_) else {
+       fail("Expected colon range endpoint to match")
+     }
+   }
+   for ch in ["!", "A", "["] {
+-    guard regex.execute(ch) is None else {
++    guard regex.execute_renamed(ch) is None else {
+       fail("Expected character outside colon range not to match")
+     }
+   }
+   let inverse = @string.Regex("^[^:-@]$")
+-  guard inverse.execute("A") is Some(_) else {
++  guard inverse.execute_renamed("A") is Some(_) else {
+     fail("Expected inverse colon range to match")
+   }
+-  guard inverse.execute(":") is None else {
++  guard inverse.execute_renamed(":") is None else {
+     fail("Expected inverse colon range to exclude colon")
+   }
+   for pattern in ["^[:]$", "^[::]$", "^[:-:]$"] {
+     let regex = @string.Regex(pattern)
+-    guard regex.execute(":") is Some(_) else {
++    guard regex.execute_renamed(":") is Some(_) else {
+       fail("Expected literal colon to match")
+     }
+-    guard regex.execute("-") is None else {
++    guard regex.execute_renamed("-") is None else {
+       fail("Expected range syntax to exclude literal hyphen")
+     }
+   }
+   let literals = @string.Regex("^[:\\-@]$")
+   for ch in [":", "-", "@"] {
+-    guard literals.execute(ch) is Some(_) else {
++    guard literals.execute_renamed(ch) is Some(_) else {
+       fail("Expected escaped hyphen class to match its literal atoms")
+     }
+   }
+-  guard literals.execute(";") is None else {
++  guard literals.execute_renamed(";") is None else {
+     fail("Expected escaped hyphen not to introduce a range")
    }
  }
 @@
@@ -715,6 +917,30 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
    debug_inspect(
      m.named_group("first"),
      content=(
+@@
+   }
+   let literal = sb.to_string()
+   let re = @string.Regex::string(literal)
+-  guard re.execute("x" + literal + "x") is Some(m) else {
++  guard re.execute_renamed("x" + literal + "x") is Some(m) else {
+     fail("Expected match")
+   }
+   inspect(m.content().length(), content="100000")
+   let twice = re.repeat(min=2, max=2)
+-  guard twice.execute(literal + literal) is Some(m2) else {
++  guard twice.execute_renamed(literal + literal) is Some(m2) else {
+     fail("Expected match")
+   }
+   inspect(m2.content().length(), content="200000")
+@@
+   // group-0 start mark, so this pattern needed slot 2048 and the match was
+   // silently lost (release) or `debug_assert` fired (debug).
+   let re = @string.Regex::unsafe_from_string("(a)(?:a{256}){9}")
+-  guard re.execute("a".repeat(2400)) is Some(m) else { fail("Expected match") }
++  guard re.execute_renamed("a".repeat(2400)) is Some(m) else { fail("Expected match") }
+   inspect(m.before().length(), content="0")
+   inspect(m.content().length(), content="2305")
+   debug_inspect(
 *** End Patch
 
 ```

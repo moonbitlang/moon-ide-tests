@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'Decode' --loc 'src/lib/decode.mbt:8:11'
-Found 15 references for symbol 'Decode':
+Found 16 references for symbol 'Decode':
 <WORKDIR>/src/lib/decode.mbt:21:6-21:12:
    | }
    | 
@@ -153,5 +153,13 @@ Found 15 references for symbol 'Decode':
    |             ^^^^^^ (escaped)
    |   checkpoint : Checkpoint (escaped)
    | } (escaped)
+
+<WORKDIR>/src/top.mbt:3:9-3:15:
+  | ///|
+  | pub using @lib {
+3 |   trait Decode,
+  |         ^^^^^^
+  |   decode,
+  |   decode_start,
 
 ```

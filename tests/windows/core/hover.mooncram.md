@@ -9,8 +9,8 @@ test "exact_view uses the same bounds on all array types" {
       ```moonbit
       Array[Int]
       ```
-  let fixed : FixedArray[Int] = [1, 2, 3, 4]
-  let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+  let fixed : FixedArray[Int32] = [1, 2, 3, 4]
+  let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
 ```
 
 ```mooncram
@@ -18,15 +18,18 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'fixed' --loc 'buil
 ///|
 test "exact_view uses the same bounds on all array types" {
   let arr = [1, 2, 3, 4]
-  let fixed : FixedArray[Int] = [1, 2, 3, 4]
+  let fixed : FixedArray[Int32] = [1, 2, 3, 4]
       ^^^^^
       ```moonbit
       FixedArray[Int]
       ```
-  let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+  let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
   let view = [0, 1, 2, 3, 4, 5][1:5]
 ```
 
+Known IDE limitation: hover on the intrinsic declaration parameter reports no information; ordinary function parameters have hover information.
+
+<!-- known-ide-limitation: intrinsic-parameter-hover -->
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'self' --loc 'builtin\int64.mbt:26:21'
 No hover information found for symbol 'self' at builtin\int64.mbt:26:21
@@ -38,7 +41,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'from_int' --loc 'b
 ///   inspect(Int64::from_int(42), content="42")
 /// }
 /// ```
-pub fn Int64::from_int(i : Int) -> Int64 {
+pub fn Int64::from_int(i : Int32) -> Int64 {
               ^^^^^^^^
               ```moonbit
               fn Int64::from_int(i : Int) -> Int64
@@ -99,79 +102,22 @@ pub trait ToStringView {
 
 ```
 
+Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'decode_utf8_js' --loc 'encoding\utf8\decode_js.mbt:16:16'
-Error: could not get package of loc encoding\utf8\decode_js.mbt:16:16
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'decode_utf8_js' --loc 'encoding\utf8\decode_js.mbt:16:16' --target js
+No hover information found for symbol 'decode_utf8_js' at encoding\utf8\decode_js.mbt:16:16
 [1]
 ```
 
+Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
+
+<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'bytes' --loc 'encoding\utf8\decode_js.mbt:17:3'
-Error: could not get package of loc encoding\utf8\decode_js.mbt:17:3
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'bytes' --loc 'encoding\utf8\decode_js.mbt:17:3' --target js
+No hover information found for symbol 'bytes' at encoding\utf8\decode_js.mbt:17:3
 [1]
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'ThreadSet' --loc 'internal\regex_engine\automata\thread_set.mbt:46:11'
-/// During execution, each `State` contains a `ThreadSet` collection representing all
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-          ^^^^^^^^^
-          ```moonbit
-          enum ThreadSet {
-            Empty
-            Node(i~ : ThreadSetNodeInfo, l~ : ThreadSet, t~ : Thread, r~ : ThreadSet, p~ : Int)
-          }
-          ```
-          ---
-          
-           A collection of execution threads stored in a Treap-based rope structure.
-          
-           `ThreadSet` maintains an ordered set of `Thread` instances representing all active
-           execution paths in the automaton. The order matters because it encodes matching
-           priorities - the first thread to reach an `End` state produces the match result.
-          
-           # Data Structure
-          
-           Uses a Treap (randomized binary search tree) to efficiently:
-           - Maintain thread ordering while allowing efficient insertion/merging
-           - Track metadata (`ThreadSetNodeInfo`) to optimize operations
-           - Support efficient operations like `flat_map`, `merge`, and iteration
-          
-           Each node tracks `no_match`: true if no thread in the subtree has reached `End` state.
-           This allows quick pruning of subtrees that cannot contribute to matches.
-          
-           # Key Operations
-          
-           - `merge`/`+`: Combines two thread sets while preserving order
-           - `flat_map`: Applies a function that may expand each thread to multiple threads
-           - `find_first_match`: Finds the first successful match (if any)
-           - `remove_matches`: Removes all threads in `End` state from the collection
-           - `remove_duplicates`: Eliminates redundant threads with same state
-           - `split_at_first_match`: Separates threads before/after first match
-          
-           # Usage in Automaton
-          
-           During execution, each `State` contains a `ThreadSet` collection representing all
-           possible execution paths from that state. When computing the derivative with
-           respect to input, threads are transformed and may split into multiple threads.
-  Empty
-  Node(
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'Empty' --loc 'internal\regex_engine\automata\thread_set.mbt:47:3'
-/// possible execution paths from that state. When computing the derivative with
-/// respect to input, threads are transformed and may split into multiple threads.
-priv enum ThreadSet {
-  Empty
-  ^^^^^
-  ```moonbit
-  ThreadSet
-  ```
-  Node(
-    i~ : ThreadSetNodeInfo,
 ```
 
 ```mooncram
@@ -217,43 +163,38 @@ priv enum LazyState[A] {
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'Regex' --loc 'string\internal\regex_engine\regex.mbt:16:8'
-// limitations under the License.
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'UNKNOWN' --loc 'string\internal\regex_engine\regex.mbt:17:7'
+///|
+/// Transition table entry: the transition has not been built yet.
+const UNKNOWN : Int32 = -1
+      ^^^^^^^
+      ```moonbit
+      Int
+      ```
+      ---
+      
+       Transition table entry: the transition has not been built yet.
 
 ///|
-struct Regex {
-       ^^^^^
-       ```moonbit
-       struct Regex {
-         profile: @shared_types.Profile
-         ctx: @automata.Context
-         expr: @automata.Expr
-         groups: ReadOnlyArray[String?]
-         symbol_table: @symbol_map.Table
-         symbol_repr: ReadOnlyArray[Int]
-         start_states: Array[(@shared_types.Category, StateId)]
-         state_table: @hashmap.HashMap[@automata.State, StateId]
-         mut transition_table: FixedArray[StateId]
-         mut final_table: FixedArray[@list.List[(@shared_types.Category, @automata.Slot, @automata.Status)]]
-         mut states: FixedArray[@automata.State]
-         mut num_states: Int
-       }
-       ```
-  profile : Profile
-  ctx : @automata.Context
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'profile' --loc 'string\internal\regex_engine\regex.mbt:17:3'
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'DEAD' --loc 'string\internal\regex_engine\regex.mbt:23:7'
+/// Transition table entry: no thread survives and nothing was accepted.
+/// Entries below `DEAD` denote a terminal state or a transition that moves
+/// registers, see `terminal` and `moving`.
+const DEAD : Int32 = -2
+      ^^^^
+      ```moonbit
+      Int
+      ```
+      ---
+      
+       Transition table entry: no thread survives and nothing was accepted.
+       Entries below `DEAD` denote a terminal state or a transition that moves
+       registers, see `terminal` and `moving`.
+
 ///|
-struct Regex {
-  profile : Profile
-  ^^^^^^^
-  ```moonbit
-  @shared_types.Profile
-  ```
-  ctx : @automata.Context
-  expr : @automata.Expr
 ```
 
 ```mooncram
@@ -340,6 +281,30 @@ test "execute/non_capture_group" {
                ```
   debug_inspect(
     m,
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'Test' --loc 'test\extends.mbt:22:12'
+///|
+#deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+#doc(hidden)
+pub extend Test with @debug.Debug::{to_repr}
+           ^^^^
+           ```moonbit
+           struct Test {
+             name: String
+             buffer: StringBuilder
+           } derive(@debug.Debug)
+           ```
+```
+
+Known IDE limitation: extension declaration hover reports no information; call-site hover and declaration rename work, including without the deprecated/hidden attributes.
+
+<!-- known-ide-limitation: extension-declaration-hover -->
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide hover 'to_repr' --loc 'test\extends.mbt:22:37'
+No hover information found for symbol 'to_repr' at test\extends.mbt:22:37
+[1]
 ```
 
 ```mooncram

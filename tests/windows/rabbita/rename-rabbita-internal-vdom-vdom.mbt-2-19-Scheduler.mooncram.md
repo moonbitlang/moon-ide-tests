@@ -25,7 +25,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'Scheduler' 'Sc
 -  let slots : Map[String, Ref[(@dom.Event, &Scheduler) -> Unit]] = Map([])
 +  let slots : Map[String, Ref[(@dom.Event, &SchedulerRenamed) -> Unit]] = Map([])
    for event, handler in handlers {
-     let slot = @ref.new(handler)
+     let slot = Ref(handler)
      element.add_event_listener(event, event => (slot.val)(event, scheduler))
 @@
  fn insert_children(

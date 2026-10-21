@@ -60,7 +60,7 @@ Found 58 references for symbol 'Parser':
 70 | fn Parser::parse_value(
    |    ^^^^^^
    |   self : Self,
-   |   skip_newlines? : Bool = false,
+   |   skip_newlines~ : Bool = false,
 
 <WORKDIR>/parser.mbt:140:4-140:10:
     | 
@@ -474,7 +474,7 @@ Found 58 references for symbol 'Parser':
 55 | fn Parser::view(
    |    ^^^^^^
    |   self : Self,
-   |   skip_newlines? : Bool = false,
+   |   skip_newlines~ : Bool = false,
 
 <WORKDIR>/toml.mbt:83:4-83:10:
    | /// from that point. The new position is read from the view's start offset
