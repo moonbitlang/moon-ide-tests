@@ -1,3 +1,4 @@
+#requires -Version 7.4
 param(
   [switch] $RefreshSnapshots
 )
@@ -61,38 +62,13 @@ function Invoke-Checked {
   }
 }
 
-function Normalize-MoonCramFiles {
-  param([string] $TestsRoot)
-
-  foreach ($file in Get-ChildItem -LiteralPath $TestsRoot -Filter "*.mooncram.md" -Recurse) {
-    $text = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
-    if ($text.Contains("`r")) {
-      $normalized = $text.Replace("`r`n", "`n").Replace("`r", "`n")
-      [System.IO.File]::WriteAllText($file.FullName, $normalized, [System.Text.UTF8Encoding]::new($false))
-    }
-  }
-}
-
-# moon cram's parser rejects expected-output lines ending with " ()" (the
-# parens parse as an annotation with an empty rule name), yet moon cram
-# update writes such lines verbatim. Appending "(escaped)" round-trips.
-# Keep in sync with scripts/escape-cram-empty-parens.sh.
-function Escape-EmptyParenLines {
-  param([string] $TestsRoot)
-
-  foreach ($file in Get-ChildItem -LiteralPath $TestsRoot -Filter "*.mooncram.md" -Recurse) {
-    $text = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
-    $updated = [System.Text.RegularExpressions.Regex]::Replace(
-      $text, '(?m)^(?!\$ )(.*) \(\)$', '$1 () (escaped)')
-    if ($updated -ne $text) {
-      [System.IO.File]::WriteAllText($file.FullName, $updated, [System.Text.UTF8Encoding]::new($false))
-    }
-  }
-}
-
-Invoke-Checked "python" @((Join-Path $root "scripts\prepare-fixtures.py"))
-
 $repos = Get-FixtureRepos (Join-Path $root "fixtures\repos.yaml")
+$dailyDir = Join-Path $root ".daily-test"
+New-Item -ItemType Directory -Force -Path $dailyDir | Out-Null
+$baselinePaths = @()
+$baselinePathsFile = Join-Path $dailyDir "windows-baseline-paths.txt"
+[System.IO.File]::WriteAllText($baselinePathsFile, "", [System.Text.Encoding]::ASCII)
+$moon = (Get-Command moon -CommandType Application | Select-Object -First 1).Source
 
 foreach ($repo in $repos) {
   if (!$repo.Path) {
@@ -104,6 +80,14 @@ foreach ($repo in $repos) {
 
   if (!(Test-Path -LiteralPath $repoPath -PathType Container)) {
     throw "missing fixture repo for $($repo.Slug) at $($repo.Path); run scripts\update-submodules.sh"
+  }
+
+  $checkLog = Join-Path $dailyDir "windows-check-$($repo.Slug).log"
+  & $moon -C $repoPath check *> $checkLog
+  if ($LASTEXITCODE -ne 0) {
+    Get-Content -LiteralPath $checkLog -Encoding UTF8
+    Write-Host "::notice::Skipping $($repo.Slug): moon check failed; keeping its Windows baselines unchanged."
+    continue
   }
 
   New-Item -ItemType Directory -Force -Path $windowsOutDir | Out-Null
@@ -118,33 +102,29 @@ foreach ($repo in $repos) {
     "--max-files", $repo.MaxFiles,
     "--max-per-file", $repo.MaxPerFile
   )
-
+  $baselinePaths += "tests/windows/$($repo.Slug)"
 }
 
+# The Linux review job consumes this list too, so write LF on both platforms.
+$pathsText = if ($baselinePaths.Count -gt 0) { ($baselinePaths -join "`n") + "`n" } else { "" }
+[System.IO.File]::WriteAllText($baselinePathsFile, $pathsText, [System.Text.Encoding]::ASCII)
+
 if ($RefreshSnapshots) {
-  $dailyDir = Join-Path $root ".daily-test"
-  $windowsTests = Join-Path $root "tests\windows"
-  New-Item -ItemType Directory -Force -Path $dailyDir | Out-Null
   $updateLog = Join-Path $dailyDir "windows-cram-update.log"
+  if ($baselinePaths.Count -eq 0) {
+    [System.IO.File]::WriteAllText($updateLog, "No compatible Windows fixture baselines.`n", [System.Text.Encoding]::ASCII)
+    exit 0
+  }
 
-  # moon cram parses the existing snapshots before updating them. Normalize
-  # legacy ` ()` output annotations first so the update can start.
-  Normalize-MoonCramFiles $windowsTests
-  Escape-EmptyParenLines $windowsTests
-
-  # Redirect the native handles directly. PowerShell 5.1's *> converts output
-  # into formatted objects and writes UTF-16 instead of the native UTF-8 bytes.
-  & python (Join-Path $root "scripts\run-logged.py") $updateLog -- `
-    (Get-Command moon -CommandType Application | Select-Object -First 1).Source `
+  & $moon `
     cram update --replace --assume-yes --cram-compat --no-keep-output-crlf `
-    --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") $windowsTests
+    --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") @baselinePaths *> $updateLog
   $updateStatus = $LASTEXITCODE
 
   if ($updateStatus -ne 0) {
     Get-Content -LiteralPath $updateLog -Encoding UTF8
     throw "moon cram update exited with status $updateStatus"
   }
-
-  Normalize-MoonCramFiles $windowsTests
-  Escape-EmptyParenLines $windowsTests
 }
+
+exit 0

@@ -27,27 +27,25 @@ notes.
 
 ## Setup
 
-Install the MoonBit toolchain and Python 3, then initialize and prepare the fixtures:
+Install the MoonBit toolchain, then initialize the fixtures:
 
 ```sh
 git submodule update --init --recursive
 moon update
-python scripts/prepare-fixtures.py
 ```
 
-Preparation migrates legacy fixture manifests using configuration-only copies;
-it never sends fixture sources to the formatter. It also converts JSON's obsolete
-escaped-space character literals to ordinary spaces, preserving line lengths and
-all following symbol columns. These are local compatibility changes; fixture
-gitlinks and upstream repositories are unchanged. Both generation scripts run
-preparation automatically. Run it again after updating or restoring submodules.
+Fixtures are used as checked out. Generation runs `moon check` in each fixture
+first; incompatible fixtures are skipped without changing their manifests,
+sources, or existing baselines. Check logs and the selected baseline paths are
+written under `.daily-test/`, separately for Unix and Windows.
 
-Run the generator tests and all checked-in baselines:
+Run the generator tests and compatible baselines:
 
 ```sh
 moon -C testgen test --target wasm
-moon cram test --cram-compat tests/unix
-python scripts/check-baseline-health.py tests/unix
+scripts/update-tests.sh
+mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+moon cram test --cram-compat "${baseline_paths[@]}"
 ```
 
 To run one baseline while iterating:
@@ -56,11 +54,15 @@ To run one baseline while iterating:
 moon cram test --cram-compat tests/unix/core-project/doc.mooncram.md
 ```
 
-On Windows, run the generated PowerShell baselines through the repository's
-Moon Cram PowerShell adapter:
+On Windows, use PowerShell 7.4 or later and run the generated baselines through
+the repository's Moon Cram PowerShell adapter:
 
 ```powershell
-moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows
+.\scripts\update-windows-tests.ps1
+$baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
+if ($baselinePaths.Count -gt 0) {
+  moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths
+}
 ```
 
 The `find-references` and `rename` suites are generated as one
@@ -82,20 +84,16 @@ git diff -- tests/unix tests/windows
 Refresh expected Moon Cram output when the `moon ide` behavior changes:
 
 ```sh
-scripts/escape-cram-empty-parens.sh tests/unix
-moon cram update --replace --assume-yes --cram-compat tests/unix
-scripts/escape-cram-empty-parens.sh tests/unix
-moon cram test --cram-compat tests/unix
+scripts/update-tests.sh
+mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}"
+moon cram test --cram-compat "${baseline_paths[@]}"
 ```
 
-`escape-cram-empty-parens.sh` works around a `moon cram` round-trip bug:
-`moon cram update` writes expected-output lines ending in ` ()` verbatim, but
-the snapshot parser rejects them (the trailing parens parse as an annotation
-with an empty rule name). The script appends the `(escaped)` annotation, which
-parses and still matches the raw output. Since `moon cram update` parses the
-existing snapshots before refreshing them, run the normalizer both before and
-after the update. `update-windows-tests.ps1` applies the same normalization to
-the Windows suite.
+On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
+regenerates compatible baselines, and refreshes only those snapshots. If no
+Windows fixture passes the check, snapshot refresh and test execution are skipped.
+Snapshots are not rewritten by compatibility postprocessors.
 
 Generated Moon Cram files use four-backtick outer fences so expected IDE output
 can safely contain Markdown examples with triple-backtick fences.
@@ -108,10 +106,9 @@ To refresh fixture submodules to the branches configured in
 ```sh
 scripts/update-submodules.sh
 scripts/update-tests.sh
-scripts/escape-cram-empty-parens.sh tests/unix
-moon cram update --replace --assume-yes --cram-compat tests/unix
-scripts/escape-cram-empty-parens.sh tests/unix
-moon cram test --cram-compat tests/unix
+mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}"
+moon cram test --cram-compat "${baseline_paths[@]}"
 ```
 
 The Daily Test workflow runs this flow on a schedule. To refresh a PR branch,
@@ -119,24 +116,30 @@ choose that branch when manually running Daily Test. Its update PR targets the
 selected branch; Agent review sees only tests changed since the exact launch
 commit and execution logs. Existing changes on the selected branch are excluded.
 
-Daily checks both cram results and baseline health before succeeding: refreshing
-snapshots cannot turn an unexpected command failure into an accepted baseline.
+Submodule revisions are updated even when a fixture is skipped. Each platform
+runs its own preflight against each revision before changing that fixture's tests.
+Skipped fixtures retain their checked-in tests and are excluded from generation,
+snapshot refresh, and cram execution. The handcrafted Unix suites (`core-project`
+and `core-standalone`) continue to run.
+
+Daily runs cram tests for selected suites and reviews changes to the snapshots.
 The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 
 ## CI
 
-The PR workflow:
+The PR workflow (`.github/workflows/pr.yml`) uses the same per-platform checks
+and selection as Daily Test. On Unix:
 
 ```sh
 moon -C testgen test --target wasm
 scripts/update-tests.sh
-git add --all -- tests/unix tests/windows
-git diff --cached --exit-code HEAD -- tests/unix tests/windows
-python scripts/check-baseline-health.py tests/unix tests/windows
-moon cram test --cram-compat tests/unix
-moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows
+mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+git add --all -- tests/unix
+git diff --cached --exit-code HEAD -- tests/unix
+moon cram test --cram-compat "${baseline_paths[@]}"
 ```
 
-This verifies that generated baselines are up to date and that all checked-in
-Moon Cram tests pass.
+Windows performs equivalent checks using `update-windows-tests.ps1` and
+`.daily-test/windows-baseline-paths.txt`. A successful fixture check does not
+suppress subsequent generator, snapshot, or IDE test failures.

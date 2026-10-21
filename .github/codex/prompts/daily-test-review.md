@@ -21,8 +21,6 @@ cat unix-cram-test.log
 cat windows-cram-test.log
 cat unix-cram-update.log
 cat windows-cram-update.log
-cat baseline-health-status.txt
-cat baseline-health.log
 ```
 
 Decide whether these test updates contain a failed test, wrong expected output,
@@ -30,9 +28,14 @@ or suspicious baseline promotion that needs human attention. In particular,
 project-loading errors must not be accepted as healthy IDE output merely because
 the refreshed snapshot now passes.
 
-The deterministic health report checks all snapshots and reports specific known
-IDE hover limitations separately. A `known-ide-limitation` annotation applies only
-to its identified command and exact `No hover information found` output with exit
+The per-platform `*-baseline-paths.txt` lists select the baselines whose fixtures
+passed `moon check` on that platform, plus the handcrafted Unix suites. Failed
+fixture checks are recorded in `*-check-*.log`; those fixtures keep their existing
+tests unchanged and are excluded from snapshot refresh and cram tests. A skipped
+fixture is not an IDE regression.
+
+A `known-ide-limitation` annotation applies only to its identified command and
+exact `No hover information found` output with exit
 status 1. Those documented cases are intentional reproductions; other failed
 commands and project-loading errors require attention. Do not infer a module's
 health from an unrelated documentation test or assume files absent from the diff
