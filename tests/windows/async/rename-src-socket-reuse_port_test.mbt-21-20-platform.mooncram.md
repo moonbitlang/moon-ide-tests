@@ -218,7 +218,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'platform' 'platf
      |> Some
 *** Update File: <WORKDIR>/src\process\cancellation.mbt
 @@
- pub(all) struct CancellationHandler(async (Int) -> Unit)
+ pub(all) struct CancellationHandler(async (Int32) -> Unit)
  
  ///|
 -let default_signal : @signal.Signal = if @event_loop.platform is Windows {

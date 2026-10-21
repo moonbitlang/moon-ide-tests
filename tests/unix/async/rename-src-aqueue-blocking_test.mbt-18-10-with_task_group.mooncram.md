@@ -184,7 +184,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int32] = Queue(kind=Unbounded)
      group.spawn_bg() <| () => {
        for i in 0..<3 {
 @@
@@ -235,10 +235,10 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "fan-out distributes work to a pool" {
-   let work_by_worker : Array[Array[Int]] = [[], [], []]
+   let work_by_worker : Array[Array[Int32]] = [[], [], []]
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let q : @aqueue.Queue[Int] = Queue(kind=Blocking(1))
+     let q : @aqueue.Queue[Int32] = Queue(kind=Blocking(1))
      for w in 0..<3 {
        group.spawn_bg(allow_failure=true) <| () => {
 @@
@@ -247,7 +247,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let log = []
 -  @async.with_task_group(root => {
 +  @async.with_task_group_renamed(root => {
-     let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
+     let q : @aqueue.Queue[Int32] = Queue(kind=Unbounded)
      // Reader 1 starts waiting at ~0 ms.
      root.spawn_bg(() => log.push("r1 got \{q.get()}"))
 *** Update File: <WORKDIR>/src/aqueue/aqueue_test.mbt
@@ -427,7 +427,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "close with blocking get" {
-   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int32] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let start = @async.now()
@@ -436,7 +436,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "close with completed get" {
-   let q : @aqueue.Queue[Int] = Queue(kind=Unbounded)
+   let q : @aqueue.Queue[Int32] = Queue(kind=Unbounded)
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      group.spawn_bg() <| () => {
@@ -445,7 +445,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 *** Update File: <WORKDIR>/src/async.mbt
 @@
    f : async () -> X,
-   error? : Error = TimeoutError,
+   error~ : Error = TimeoutError,
  ) -> X {
 -  with_task_group() <| group => {
 +  with_task_group_renamed() <| group => {
@@ -455,7 +455,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  /// - If `f` is still running after `timeout` milliseconds,
  /// ` with_timeout_opt` will return `None` immediately, and `f` will be cancelled.
- pub async fn[X] with_timeout_opt(time : Int, f : async () -> X) -> X? {
+ pub async fn[X] with_timeout_opt(time : Int32, f : async () -> X) -> X? {
 -  with_task_group() <| group => {
 +  with_task_group_renamed() <| group => {
      group.spawn_bg(no_wait=true) <| () => {
@@ -693,8 +693,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        group.spawn_bg(allow_failure~) <| () => {
 *** Update File: <WORKDIR>/src/fs/lock_test.mbt
 @@
+ ///|
  async test "flock exclusive vs exclusive" {
-   let log = []
    let file_name = "_build/flock_ex_ex"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -702,8 +702,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock exclusive vs exclusive blocking" {
-   let log = []
    let file_name = "_build/flock_ex_ex_blocking"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -711,8 +711,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs exclusive" {
-   let log = []
    let file_name = "_build/flock_sh_ex"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -720,8 +720,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs exclusive blocking" {
-   let log = []
    let file_name = "_build/flock_sh_ex_blocking"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -729,8 +729,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock exclusive vs shared" {
-   let log = []
    let file_name = "_build/flock_ex_sh"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -738,8 +738,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock exclusive vs shared blocking" {
-   let log = []
    let file_name = "_build/flock_ex_sh_blocking"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -747,8 +747,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs shared" {
-   let log = []
    let file_name = "_build/flock_sh_sh"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -756,8 +756,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs shared blocking" {
-   let log = []
    let file_name = "_build/flock_sh_sh_blocking"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -765,8 +765,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs shared vs exclusive" {
-   let log = []
    let file_name = "_build/flock_sh_sh_ex"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -774,8 +774,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock shared vs shared vs exclusive blocking" {
-   let log = []
    let file_name = "_build/flock_sh_sh_ex_blocking"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -783,8 +783,8 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock cancelled" {
-   let log = []
    let file_name = "_build/flock_cancel"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -792,14 +792,37 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      defer file.close()
      group.add_defer(() => @fs.remove(file_name))
 @@
+ ///|
  async test "flock advisory" {
-   let log = []
    let file_name = "_build/flock_advisory"
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      @fs.write_file(file_name, "abcd")
      let file = @fs.open(file_name, mode=ReadWrite)
      defer file.close()
+*** Update File: <WORKDIR>/src/fs/mkdir_test.mbt
+@@
+ 
+ ///|
+ async test "mkdir allow_exist" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let base_path = "_build/mkdir_allow_exist"
+     let path = "\{base_path}/directory"
+     @fs.mkdir(path, recursive=true)
+@@
+ 
+ ///|
+ async test "mkdir recursive concurrent with shared parents" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let base_path = "_build/recursive_mkdir_concurrent"
+     group.add_defer(() => @fs.rmdir(base_path, recursive=true))
+-    @async.with_task_group() <| workers => {
++    @async.with_task_group_renamed() <| workers => {
+       for i in 0..<8 {
+         workers.spawn_bg(() => {
+           @fs.mkdir("\{base_path}/shared/parent/\{i}", recursive=true)
 *** Update File: <WORKDIR>/src/fs/named_pipe_test.mbt
 @@
  ///|
@@ -811,33 +834,6 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      if mkfifo(@os_string.encode(path), 0o644) < 0 {
        @os_error.check_errno("mkfifo")
 *** Update File: <WORKDIR>/src/fs/watch_test.mbt
-@@
-   report_child_event~ : Bool,
- ) -> Array[String] {
-   let log = []
--  @async.with_task_group(group => {
-+  @async.with_task_group_renamed(group => {
-     let test_dir = Dir({
-       "root_file": File("abcd"),
-       "inner_dir": Dir({ "inner_file": File("efgh") }),
-@@
-   report_child_event~ : Bool,
- ) -> Array[String] {
-   let log = []
--  @async.with_task_group(group => {
-+  @async.with_task_group_renamed(group => {
-     let test_dir = Dir({
-       "root_file": File("abcd"),
-       "inner_dir": Dir({ "inner_file": File("efgh") }),
-@@
-   report_child_event~ : Bool,
- ) -> Array[String] {
-   let log = []
--  @async.with_task_group(group => {
-+  @async.with_task_group_renamed(group => {
-     let test_dir = Dir({
-       "watched": Dir({
-         "root_file": File("abcd"),
 @@
  
  ///|
@@ -857,23 +853,14 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        "outer": Dir({
          "file": File("abcd"),
 @@
- ///|
- async test "watch ignored path" {
-   let log = []
--  @async.with_task_group(group => {
-+  @async.with_task_group_renamed(group => {
-     let path = "_build/watch_ignored_path_test"
-     let test_dir = Dir({
-       "ignored": Dir({ "file": File("abcd") }),
-@@
-     "root_file": File("abcd"),
-     "inner_dir": Dir({ "inner_file": File("efgh") }),
-   })
+   defer @fs.rmdir(path, recursive=true)
+ 
+   let log = StringBuilder()
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
-     let path = "_build/watch_init_event_test"
-     test_dir.instantiate(path)
-     group.add_defer(() => {
+     let watcher = @fs.Watcher(
+       watched_path,
+       debounce_timeout=400,
 *** Update File: <WORKDIR>/src/group_defer_test.mbt
 @@
  ///|
@@ -914,7 +901,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 *** Update File: <WORKDIR>/src/gzip/gzip_test.mbt
 @@
  ///|
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async fn node_gzip(mode : String, input : Bytes) -> Bytes {
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -922,7 +909,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let runner = group.spawn(() => {
        @process.collect_output("node", ["src/gzip/node_gzip.js", mode], stdin~)
 @@
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async fn encode_with_moonbit(input : Bytes) -> Bytes {
    let (r, w) = @io.pipe()
 -  @async.with_task_group() <| group => {
@@ -931,7 +918,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        defer w.close()
        @gzip.Encoder(w)..write(input).end()
 @@
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async fn decode_with_moonbit(input : Bytes) -> Bytes {
    let (r, w) = @io.pipe()
 -  @async.with_task_group() <| group => {
@@ -1003,6 +990,43 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let server = @http.Server(@socket.Addr::parse("127.0.0.1:0"))
      let port = server.addr.port()
      group.spawn_bg(no_wait=true) <| () => {
+@@
+ #cfg(any(target="native", target="wasm"))
+ async test "1XX response" {
+   let log = StringBuilder()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let port = test_server(group, log)
+     let client = @http.Client("http://localhost:\{port}")
+     defer client.close()
+*** Update File: <WORKDIR>/src/http/parser_trailer_wbtest.mbt
+@@
+ 
+ ///|
+ async test "trailer chunked" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "trailer fixed length" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "trailer close delimited" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
 *** Update File: <WORKDIR>/src/http/parser_wbtest.mbt
 @@
  ///|
@@ -1059,6 +1083,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      root.spawn_bg() <| () => {
        defer w.close()
 @@
+ 
+ ///|
+ async test "empty header value" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
+@@
  ///|
  async test "read_response basic" {
    let log = StringBuilder()
@@ -1079,15 +1112,6 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "read_response 204 No Content (no body)" {
-   let log = StringBuilder()
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     let (r, w) = @io.pipe()
-     root.spawn_bg() <| () => {
-       defer w.close()
-@@
- ///|
- async test "read_response 205 Reset Content (no body)" {
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
@@ -1161,6 +1185,42 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
  
  ///|
  async test "read_response parse cookie" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r, w) = @io.pipe()
+     group.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "chunk extension" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "fixed length early EOF" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r, w) = @io.pipe()
+     group.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "chunked early EOF: within chunk" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r, w) = @io.pipe()
+     group.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "chunked early EOF: chunk boundary" {
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @io.pipe()
@@ -1394,6 +1454,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let (r, w) = @io.pipe()
      root.spawn_bg() <| () => {
        defer w.close()
+@@
+ 
+ ///|
+ async test "reject header injection" {
+-  @async.with_task_group() <| root => {
++  @async.with_task_group_renamed() <| root => {
+     let (r, w) = @io.pipe()
+     root.spawn_bg() <| () => {
+       defer w.close()
 *** Update File: <WORKDIR>/src/internal/coroutine/pause_test.mbt
 @@
  test "coroutine ping-pong" {
@@ -1437,12 +1506,12 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 @@
  ///|
  async test "worker multiple" {
-   let log = StringBuilder()
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
-         @async.sleep(200)
+   let start = @async.now()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     for _ in 0..<3 {
+       group.spawn_bg(() => perform_sleep_job(200))
+     }
 @@
  ///|
  async test "worker cancel1" {
@@ -1463,13 +1532,13 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          @async.sleep(400)
 @@
  test "max worker limit" {
-   let log = []
+   let time_of_jobs = [0, 0, 0, 0]
    with_event_loop(max_worker_count=2, () => {
 -    @async.with_task_group <| group => {
 +    @async.with_task_group_renamed <| group => {
-       let start = @async.now()
        for i in 0..<4 {
          group.spawn_bg() <| () => {
+           let start = @async.now()
 @@
  test "cancel queued job" {
    let log = []
@@ -1478,7 +1547,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 +    @async.with_task_group_renamed <| group => {
        let start = @async.now()
        fn tick() {
-         (@async.now() - start + 50).to_int() / 100
+         (@async.now() - start + 50).to_int() / 200
 *** Update File: <WORKDIR>/src/io/README.mbt.md
 @@
  ```moonbit check
@@ -2101,7 +2170,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
            }
 @@
    no_console_window? : Bool,
- ) -> (Int, &@io.Data) {
+ ) -> (Int32, &@io.Data) {
    let (r, w) = read_from_process()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -2110,7 +2179,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        run(
 @@
    no_console_window? : Bool,
- ) -> (Int, &@io.Data) {
+ ) -> (Int32, &@io.Data) {
    let (r, w) = read_from_process()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -2118,7 +2187,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let exit_code = group.spawn(() => {
        run(
 @@
- ) -> (Int, &@io.Data, &@io.Data) {
+ ) -> (Int32, &@io.Data, &@io.Data) {
    let (r_out, w_out) = read_from_process()
    let (r_err, w_err) = read_from_process()
 -  @async.with_task_group() <| group => {
@@ -2128,7 +2197,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          cmd,
 @@
    no_console_window? : Bool,
- ) -> (Int, &@io.Data) {
+ ) -> (Int32, &@io.Data) {
    let (r, w) = read_from_process()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -2194,9 +2263,9 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.add_defer(() => @fs.remove(output_file))
      let w = @process.redirect_to_file(output_file)
 @@
+ 
  ///|
  async test "pipe" {
-   let log = []
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let cat = cat.wait()
@@ -2902,7 +2971,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 *** Update File: <WORKDIR>/src/stdio/stdio_test.mbt
 @@
  ///|
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async test "redirect pipe" {
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
@@ -2910,7 +2979,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let (cat_read, we_write) = @process.write_to_process()
      let (we_read, cat_write) = @process.read_from_process()
 @@
- #cfg(target="native")
+ #cfg(any(target="native", target="wasm"))
  async test "stdio cancel" {
    let cat = cat.wait()
 -  @async.with_task_group() <| group => {

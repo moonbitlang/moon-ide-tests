@@ -24,9 +24,9 @@ $ run_moon_ide moon ide rename 'fixed' 'fixed_renamed' --loc 'builtin/exact_view
  ///|
  test "exact_view uses the same bounds on all array types" {
    let arr = [1, 2, 3, 4]
--  let fixed : FixedArray[Int] = [1, 2, 3, 4]
-+  let fixed_renamed : FixedArray[Int] = [1, 2, 3, 4]
-   let ro : ReadOnlyArray[Int] = [1, 2, 3, 4]
+-  let fixed : FixedArray[Int32] = [1, 2, 3, 4]
++  let fixed_renamed : FixedArray[Int32] = [1, 2, 3, 4]
+   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
    let view = [0, 1, 2, 3, 4, 5][1:5]
    let mutable = arr.mut_view()
 @@

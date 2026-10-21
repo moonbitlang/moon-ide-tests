@@ -43,10 +43,8 @@ fn parse_json_code_blocks(text : String) -> Json? {
 
     let language = text[header_start:header_end].trim().to_lower()
     if language == "" || language == "json" {
-      match try_parse_json(text[content_start:closing].trim()) {
-        Some(parsed) => last_json = Some(parsed)
-        None => ()
-      }
+      // A malformed final result must not fall back to an earlier example.
+      last_json = try_parse_json(text[content_start:closing].trim())
     }
     offset = closing + 3
   }
@@ -54,8 +52,69 @@ fn parse_json_code_blocks(text : String) -> Json? {
 }
 
 ///|
+fn parse_trailing_json(text : String) -> Json? {
+  let mut opening : Int? = None
+  let mut depth = 0
+  let mut quoted = false
+  let mut escaped = false
+  for i in 0..<text.length() {
+    let ch = text[i]
+    if opening is None {
+      if ch == '{' || ch == '[' {
+        opening = Some(i)
+        depth = 1
+      }
+      continue
+    }
+    if quoted {
+      if escaped {
+        escaped = false
+      } else if ch == '\\' {
+        escaped = true
+      } else if ch == '"' {
+        quoted = false
+      }
+      continue
+    }
+    if ch == '"' {
+      quoted = true
+    } else if ch == '{' || ch == '[' {
+      depth += 1
+    } else if ch == '}' || ch == ']' {
+      depth -= 1
+    }
+    if depth == 0 {
+      if opening is Some(start) && text[i + 1:].trim().is_empty() {
+        return match try_parse_json(text[start:i + 1]) {
+          Some(parsed) => Some(parsed)
+          None => abort("OpenSeek answer does not contain valid JSON")
+        }
+      }
+      opening = None
+    }
+  }
+  // Never reinterpret a nested object, or an earlier fenced example, as the
+  // result when the final JSON container is incomplete.
+  if opening is Some(_) {
+    abort("OpenSeek answer does not contain valid JSON")
+  }
+  None
+}
+
+///|
 fn parse_answer(text : String) -> Json {
-  match try_parse_json(text.trim()) {
+  let trimmed = text.trim().to_owned()
+  match try_parse_json(trimmed[:]) {
+    Some(parsed) => return parsed
+    None => ()
+  }
+  // Do not salvage a nested object from a malformed JSON response.
+  if trimmed.has_prefix("{") || trimmed.has_prefix("[") {
+    abort("OpenSeek answer does not contain valid JSON")
+  }
+  // Some completed responses include a prose review before the final object.
+  // Prefer that final result over JSON examples in earlier fenced blocks.
+  match parse_trailing_json(text) {
     Some(parsed) => return parsed
     None => ()
   }

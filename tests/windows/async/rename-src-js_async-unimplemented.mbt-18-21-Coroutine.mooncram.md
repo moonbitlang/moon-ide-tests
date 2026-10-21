@@ -5,31 +5,24 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 *** Begin Patch
 *** Update File: <WORKDIR>/src\aqueue\aqueue.mbt
 @@
-   /// `value` must be `Some(_)` when the reader is woken
+   /// - `Some(_)` otherwise
    mut value : X?
    /// `None` indicates that the reader is cancelled
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
- ///|
- priv struct Writer[X] {
-   value : X
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
- ///|
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   /// For intrusive cancellable queue
+   mut index : Int32
+   mut next : Int32
 *** Update File: <WORKDIR>/src\cond_var\cond_var.mbt
 @@
-   // So we set `woken = true` after waking up a waiter,
-   // and use this flag to protect against dangerous cancellation.
-   mut woken : Bool
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
  
  ///|
+ priv struct Waiter {
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   /// For intrusive cancellable queue
+   mut index : Int32
+   mut next : Int32
 *** Update File: <WORKDIR>/src\fs\watch.mbt
 @@
    pending_remove : Set[FileIdentity]
@@ -51,7 +44,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 -  mut waiter : @coroutine.Coroutine?
 +  mut waiter : @coroutine.CoroutineRenamed?
    debounce_timer : @async.Timer
-   max_debounce_delay : Int
+   max_debounce_delay : Int32
  }
 *** Update File: <WORKDIR>/src\internal\coroutine\coroutine.mbt
 @@
@@ -60,7 +53,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
  ///|
 -pub struct Coroutine {
 +pub struct CoroutineRenamed {
-   priv coro_id : Int
+   priv coro_id : Int32
    priv mut state : State
    priv mut shielded : Bool
    priv mut cancelled : Bool
@@ -85,9 +78,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
  ///|
 -pub fn Coroutine::wake(self : Coroutine) -> Unit {
 +pub fn CoroutineRenamed::wake(self : CoroutineRenamed) -> Unit {
-   if !self.ready {
-     self.ready = true
-     scheduler.run_later.push_back(self)
+   // Only a suspended coroutine can be resumed: a running one observes
+   // `cancelled` at its next suspension point, and a finished one never runs
+   // again. Enqueueing either would leave a stale entry in `run_later`.
 @@
  }
  
@@ -133,11 +126,24 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
    match coro.state {
      Fail(err) => raise err
      Done | Cancelled | Running | Suspend(_) => () (escaped)
+*** Update File: <WORKDIR>/src\internal\coroutine\deprecated.mbt
+@@
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend Coroutine with Eq::{not_equal, equal}
++pub extend CoroutineRenamed with Eq::{not_equal, equal}
+ 
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend Coroutine with Hash::{hash, hash_combine}
++pub extend CoroutineRenamed with Hash::{hash, hash_combine}
 *** Update File: <WORKDIR>/src\internal\coroutine\scheduler.mbt
 @@
  ///|
  priv struct Scheduler {
-   mut coro_id : Int
+   mut coro_id : Int32
 -  mut curr_coro : Coroutine?
 +  mut curr_coro : CoroutineRenamed?
 -  run_later : @deque.Deque[Coroutine]
@@ -168,18 +174,18 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 @@
    job_queue : Set[QueuedJob]
    idle_workers : @deque.Deque[Worker]
-   running_workers : Map[Int, Worker]
--  jobs : Map[Int, @coroutine.Coroutine]
-+  jobs : Map[Int, @coroutine.CoroutineRenamed]
+   running_workers : Map[Int32, Worker]
+-  jobs : Map[Int32, @coroutine.Coroutine]
++  jobs : Map[Int32, @coroutine.CoroutineRenamed]
    timers : @sorted_set.SortedSet[Timer]
 -  mut main : @coroutine.Coroutine?
 +  mut main : @coroutine.CoroutineRenamed?
-   mut killed_by_signal : Int?
-   mut blocked_tasks : Int
+   mut killed_by_signal : Int32?
+   mut blocked_tasks : Int32
  }
 @@
  priv struct QueuedJob {
-   job_id : Int
+   job_id : Int32
    job : Job
 -  waiter : @coroutine.Coroutine
 +  waiter : @coroutine.CoroutineRenamed
@@ -214,8 +220,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 -    coro~ : @coroutine.Coroutine,
 +    coro~ : @coroutine.CoroutineRenamed,
      buf~ : FixedArray[Byte],
-     offset~ : Int,
-     max_len~ : Int,
+     offset~ : Int32,
+     max_len~ : Int32,
 @@
    NoWriter
    WriteEndClosed
@@ -223,8 +229,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 -    coro~ : @coroutine.Coroutine,
 +    coro~ : @coroutine.CoroutineRenamed,
      buf~ : Bytes,
-     offset~ : Int,
-     len~ : Int,
+     offset~ : Int32,
+     len~ : Int32,
 *** Update File: <WORKDIR>/src\js_async\unimplemented.mbt
 @@
  ///|
@@ -256,14 +262,14 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
  }
 *** Update File: <WORKDIR>/src\semaphore\semaphore.mbt
 @@
-   // and use this flag to protect against dangerous cancellation.
-   mut acquired : Bool
-   // `None` indicates that the waiter is cancelled
--  mut coro : @coroutine.Coroutine?
-+  mut coro : @coroutine.CoroutineRenamed?
- }
- 
  ///|
+ priv struct Waiter {
+   // `None` indicates that the waiter is cancelled
+-  coro : @coroutine.Coroutine
++  coro : @coroutine.CoroutineRenamed
+   mut index : Int32
+   mut prev : Int32
+   mut next : Int32
 *** Update File: <WORKDIR>/src\task.mbt
 @@
  /// it can be used to wait and retrieve the result value of the task.
@@ -283,7 +289,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 +  children : Set[@coroutine.CoroutineRenamed]
 -  parent : @coroutine.Coroutine
 +  parent : @coroutine.CoroutineRenamed
-   mut waiting : Int
+   mut waiting : Int32
    mut state : TaskGroupState
    mut result : X?
 @@

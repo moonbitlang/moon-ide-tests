@@ -44,7 +44,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
 -fn Parser::parse_value(
 +fn ParserRenamed::parse_value(
    self : Self,
-   skip_newlines? : Bool = false,
+   skip_newlines~ : Bool = false,
  ) -> TomlValue raise {
 @@
  
@@ -259,7 +259,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
 -priv struct Parser {
 +priv struct ParserRenamed {
    tokens : Array[@tokenize.Token]
-   mut position : Int
+   mut position : Int32
  }
 @@
  /// breaks are insignificant (e.g. between top-level statements). The
@@ -268,7 +268,7 @@ $ run_moon_ide moon ide rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
 -fn Parser::view(
 +fn ParserRenamed::view(
    self : Self,
-   skip_newlines? : Bool = false,
+   skip_newlines~ : Bool = false,
  ) -> ArrayView[@tokenize.Token] {
 @@
  /// from that point. The new position is read from the view's start offset

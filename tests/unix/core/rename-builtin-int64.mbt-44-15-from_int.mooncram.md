@@ -28,8 +28,8 @@ $ run_moon_ide moon ide rename 'from_int' 'from_int_renamed' --loc 'builtin/int6
 +///   inspect(Int64::from_int_renamed(42), content="42")
  /// }
  /// ```
--pub fn Int64::from_int(i : Int) -> Int64 {
-+pub fn Int64::from_int_renamed(i : Int) -> Int64 {
+-pub fn Int64::from_int(i : Int32) -> Int64 {
++pub fn Int64::from_int_renamed(i : Int32) -> Int64 {
    i.to_int64()
  }
  
@@ -48,12 +48,6 @@ $ run_moon_ide moon ide rename 'from_int' 'from_int_renamed' --loc 'builtin/int6
  
  ///|
  test "Int64::from_int" {
--  inspect(Int64::from_int(1256), content="1256")
-+  inspect(Int64::from_int_renamed(1256), content="1256")
- }
- 
- ///|
- test "from_int" {
 -  inspect(Int64::from_int(1256), content="1256")
 +  inspect(Int64::from_int_renamed(1256), content="1256")
  }

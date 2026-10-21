@@ -26,6 +26,80 @@ test "parse_args defaults limits" {
 }
 
 ///|
+test "parse_args accepts every short option" {
+  let config = parse_args([
+    "-r", "repo", "-o", "out", "-s", "slug", "-t", "fixtures/custom", "-p", "windows",
+    "-m", "4", "-f", "3", "-z", "200",
+  ])
+  inspect(config.repo_path, content="repo")
+  inspect(config.output_dir, content="out")
+  inspect(config.repo_slug, content="slug")
+  inspect(config.test_repo_path, content="fixtures/custom")
+  debug_inspect(config.platform, content="Windows")
+  inspect(config.max_per_file, content="4")
+  inspect(config.max_files, content="3")
+  inspect(config.max_file_size, content="200")
+}
+
+///|
+test "parse_args preserves the last repeated option value" {
+  let config = parse_args([
+    "--repo", "first", "-r", "last", "--output-dir", "out", "--repo-slug", "slug",
+    "--max-files", "3", "-f", "0",
+  ])
+  inspect(config.repo_path, content="last")
+  inspect(config.test_repo_path, content="last")
+  inspect(config.max_files, content="0")
+}
+
+///|
+test "parse_args rejects invalid generator options" {
+  let required = [
+    "--repo", "repo", "--output-dir", "out", "--repo-slug", "slug",
+  ]
+  for
+    (extra, message) in [
+      (["--max-per-file", "-1"], "--max-per-file must be non-negative"),
+      (["--max-files", "-1"], "--max-files must be non-negative"),
+      (["--max-file-size", "-1"], "--max-file-size must be non-negative"),
+      (["--max-files", "invalid"], "invalid --max-files value"),
+      (["--platform", "invalid"], "invalid --platform value"),
+      (["--unknown", "value"], "--unknown"),
+      (["unexpected"], "unexpected"),
+      (["--max-files"], "--max-files"),
+    ] {
+    let error = try parse_args(required + extra) catch {
+      ArgsError(message) => Some(message)
+      err => Some(err.to_string())
+    } noraise {
+      _ => None
+    }
+    assert_true(
+      error is Some(text) && text.contains(message),
+      msg="arguments: \{debug_text(extra)}, error: \{debug_text(error)}",
+    )
+  }
+}
+
+///|
+test "parse_args requires nonempty generation paths and slug" {
+  for
+    args in [
+      ["--output-dir", "out", "--repo-slug", "slug"],
+      ["--repo", "repo", "--repo-slug", "slug"],
+      ["--repo", "repo", "--output-dir", "out"],
+      ["--repo", "", "--output-dir", "out", "--repo-slug", "slug"],
+    ] {
+    let rejected = try parse_args(args) catch {
+      _ => true
+    } noraise {
+      _ => false
+    }
+    assert_true(rejected)
+  }
+}
+
+///|
 test "should_skip_dir covers dependency and vcs dirs" {
   debug_inspect(
     [
@@ -593,4 +667,312 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
       #|
     ),
   )
+}
+
+///|
+test "builtin Int32 and UInt32 do not consume collected location slots" {
+  let text =
+    #|fn f(value : Int32, other : UInt32) -> Int32 {
+    #|  let answer = value
+    #|  answer
+    #|}
+  let cases = collect_cases_for_text("a.mbt", text, 4).loc_cases
+  debug_inspect(
+    cases.map(c => c.sym),
+    content=(
+      #|["f", "value", "other", "answer"]
+    ),
+  )
+}
+
+///|
+test "Rabbita templates are excluded before applying the sample cap" {
+  let files = [
+    "warren/templates/basic/main.mbt", "warren\\templates\\spa\\main.mbt", "rabbita/a.mbt",
+    "warren/b.mbt", "warren/templates-extra/c.mbt",
+  ]
+  let expected = [
+    "rabbita/a.mbt", "warren/b.mbt", "warren/templates-extra/c.mbt",
+  ]
+  assert_eq(select_files(files.copy(), "rabbita", 0), expected)
+  assert_eq(select_files(files.copy(), "rabbita", 3), expected)
+  assert_eq(select_files(files.copy(), "example", 0).length(), 5)
+}
+
+///|
+test "location queries use explicit fixture backends on both platforms" {
+  for platform in [TestPlatform::Unix, TestPlatform::Windows] {
+    for
+      (slug, file, target) in [
+        ("rabbita", "rabbita/internal/runtime/host_ssr_wbtest.mbt", "native"),
+        ("core", "encoding/utf8/decode_js.mbt", "js"),
+        ("async", "src/pipe/unimplemented_test.mbt", "js"),
+        ("async", "src/socket/unimplemented.mbt", "js"),
+        ("async", "src/tls/unimplemented_test.mbt", "js"),
+        ("async", "src/internal/event_loop/unimplemented_test.mbt", "js"),
+      ] {
+      let files = render_cram_files(
+        CollectResult::{
+          source_files: [file],
+          loc_cases: [TestCase::{ file, line: 4, col: 7, sym: "host", }],
+        },
+        slug,
+        "fixtures/repos/\{slug}",
+        platform,
+      )
+      assert_eq(files.length(), 5)
+      for generated in files[1:] {
+        assert_true(
+          generated.content.contains(" --target \{target}"),
+          msg="\{slug}: \{generated.name}",
+        )
+      }
+    }
+  }
+}
+
+///|
+test "backend policy preserves defaults for unaffected files and fixtures" {
+  for
+    (slug, file) in [
+      ("rabbita", "rabbita/internal/runtime/host_js.mbt"),
+      ("core", "encoding/utf8/decode.mbt"),
+      ("async", "src/pipe/pipe.mbt"),
+      ("example", "rabbita/internal/runtime/host_ssr_wbtest.mbt"),
+      ("example", "encoding/utf8/decode_js.mbt"),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line: 4, col: 7, sym: "host", }],
+      },
+      slug,
+      "fixtures/repos/\{slug}",
+      TestPlatform::Unix,
+    )
+    for generated in files {
+      assert_false(generated.content.contains(" --target "))
+    }
+  }
+}
+
+///|
+test "extension declaration hover remains generated with a narrow limitation marker" {
+  let marker = "<!-- known-ide-limitation: extension-declaration-hover -->"
+  for platform in [TestPlatform::Unix, TestPlatform::Windows] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: ["test/extends.mbt"],
+        loc_cases: [
+          TestCase::{
+            file: "test/extends.mbt",
+            line: 22,
+            col: 37,
+            sym: "to_repr",
+          },
+          // The declaration can move without losing its annotation.
+          TestCase::{
+            file: "test\\extends.mbt",
+            line: 25,
+            col: 37,
+            sym: "to_repr",
+          },
+        ],
+      },
+      "core",
+      "fixtures/repos/core",
+      platform,
+    )
+    let hover = files[1].content
+    assert_true(hover.contains("\{marker}\n```mooncram\n$ run_moon_ide "))
+    assert_true(hover.contains("moon ide hover 'to_repr' --loc '"))
+    assert_true(hover.contains(":22:37'"))
+    assert_true(hover.contains(":25:37'"))
+    assert_true(hover.contains("declaration hover"))
+    for generated in files[2:] {
+      assert_false(generated.content.contains(marker))
+    }
+    let refreshed = preserve_expected_output(
+      hover,
+      hover.replace(
+        old=":22:37'\n```",
+        new=":22:37'\nNo hover information found\n[1]\n```",
+      ),
+    )
+    assert_true(refreshed.contains("No hover information found\n[1]\n```"))
+    assert_true(refreshed.contains("\{marker}\n```mooncram"))
+  }
+  for
+    (slug, file, col, sym) in [
+      ("core", "test/extends.mbt", 5, "to_repr"),
+      ("core", "test/extends.mbt", 37, "other"),
+      ("core", "other/extends.mbt", 37, "to_repr"),
+      ("example", "test/extends.mbt", 37, "to_repr"),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line: 22, col, sym, }],
+      },
+      slug,
+      "fixtures/repos/\{slug}",
+      TestPlatform::Unix,
+    )
+    assert_false(files[1].content.contains(marker))
+  }
+}
+
+///|
+test "intrinsic parameter and imported trait hover limitations are narrowly marked" {
+  for
+    (slug, file, col, sym, marker) in [
+      ("core", "builtin/int64.mbt", 21, "self", "intrinsic-parameter-hover"),
+      (
+        "rabbita", "rabbita/internal/vdom/vdom.mbt", 19, "Scheduler", "using-trait-hover",
+      ),
+      ("json", "src/top.mbt", 9, "Decode", "using-trait-hover"),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line: 26, col, sym, }],
+      },
+      slug,
+      "fixtures/repos/\{slug}",
+      TestPlatform::Unix,
+    )
+    assert_true(
+      files[1].content.contains(
+        "<!-- known-ide-limitation: \{marker} -->\n```mooncram\n$ run_moon_ide ",
+      ),
+    )
+    for generated in files[2:] {
+      assert_false(generated.content.contains("known-ide-limitation:"))
+    }
+    let controls = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line: 26, col: col + 1, sym, }],
+      },
+      slug,
+      "fixtures/repos/\{slug}",
+      TestPlatform::Unix,
+    )
+    assert_false(controls[1].content.contains("known-ide-limitation:"))
+  }
+}
+
+///|
+test "extern hover limitations retain navigation and backend policy" {
+  for
+    (slug, file, line, col, sym, marker) in [
+      (
+        "core", "encoding/utf8/decode_js.mbt", 16, 16, "decode_utf8_js", "extern-function-hover",
+      ),
+      (
+        "core", "encoding/utf8/decode_js.mbt", 17, 3, "bytes", "extern-parameter-hover",
+      ),
+      (
+        "async", "src/fs/named_pipe_test.mbt", 18, 15, "mkfifo", "extern-function-hover",
+      ),
+      (
+        "async", "src/fs/named_pipe_test.mbt", 18, 22, "path", "extern-parameter-hover",
+      ),
+      (
+        "async", "src/internal/event_loop/stdio.mbt", 18, 15, "fstatx_sync", "extern-function-hover",
+      ),
+      (
+        "async", "src/internal/event_loop/stdio.mbt", 19, 3, "fd", "extern-parameter-hover",
+      ),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line, col, sym, }],
+      },
+      slug,
+      "fixtures/repos/\{slug}",
+      TestPlatform::Unix,
+    )
+    assert_eq(files.length(), 5)
+    assert_true(
+      files[1].content.contains(
+        "<!-- known-ide-limitation: \{marker} -->\n```mooncram\n$ run_moon_ide ",
+      ),
+    )
+    assert_true(files[1].content.contains("moon ide hover '\{sym}' --loc '"))
+    for generated in files[2:] {
+      assert_false(generated.content.contains("known-ide-limitation:"))
+    }
+    if slug == "core" {
+      for generated in files[1:] {
+        assert_true(generated.content.contains(" --target js"))
+      }
+    }
+  }
+}
+
+///|
+test "Windows skips async POSIX fixtures before sampling" {
+  let candidates = [
+    "src/fs/named_pipe_test.mbt", "src/internal/event_loop/io_unix.mbt", "src/pipe/pipe.mbt",
+  ]
+  assert_eq(
+    select_files(candidates.copy(), "async", 0, platform=TestPlatform::Windows),
+    ["src/pipe/pipe.mbt"],
+  )
+  assert_eq(
+    select_files(candidates.copy(), "async", 1, platform=TestPlatform::Windows),
+    ["src/pipe/pipe.mbt"],
+  )
+  assert_eq(
+    select_files(candidates.copy(), "async", 0, platform=TestPlatform::Unix).length(),
+    3,
+  )
+  assert_eq(
+    select_files(
+      candidates.copy(),
+      "example",
+      0,
+      platform=TestPlatform::Windows,
+    ).length(),
+    3,
+  )
+}
+
+///|
+test "dependency functions retain navigation without an invalid workspace rename" {
+  for
+    (file, line, col, sym) in [
+      ("src/socket/unimplemented.mbt", 20, 24, "parse_int"),
+      ("src/tls/unimplemented_test.mbt", 18, 16, "encode"),
+    ] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: [file],
+        loc_cases: [TestCase::{ file, line, col, sym, }],
+      },
+      "async",
+      "fixtures/repos/async",
+      TestPlatform::Windows,
+    )
+    assert_eq(files.length(), 4)
+    assert_eq(files[1].name, "hover.mooncram.md")
+    assert_eq(files[2].name, "peek-def.mooncram.md")
+    assert_true(files[3].name.has_prefix("find-references-"))
+    assert_false(files.any(file => file.name.has_prefix("rename-")))
+    for slug in ["async", "example"] {
+      let controls = render_cram_files(
+        CollectResult::{
+          source_files: [file],
+          loc_cases: [TestCase::{ file, line, col, sym: "local_function", }],
+        },
+        slug,
+        "fixtures/repos/\{slug}",
+        TestPlatform::Windows,
+      )
+      assert_eq(controls.length(), 5)
+      assert_true(controls[4].name.has_prefix("rename-"))
+    }
+  }
 }

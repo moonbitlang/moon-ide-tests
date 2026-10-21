@@ -28,20 +28,20 @@ Found 3 references for symbol 'Unforced':
    |   }
    | }
 
-<WORKDIR>/lazy/lazy.mbt:89:12-89:20:
+<WORKDIR>/lazy/lazy.mbt:90:12-90:20:
    | /// ```
    | #owned(thunk)
    | pub fn[A] Lazy::Lazy(thunk : () -> A) -> Lazy[A] {
-89 |   { state: Unforced(thunk), }
+90 |   { state: Unforced(thunk), }
    |            ^^^^^^^^
    | }
    | 
 
-<WORKDIR>/lazy/lazy.mbt:144:5-144:13:
+<WORKDIR>/lazy/lazy.mbt:145:5-145:13:
     |   match self.state {
     |     Forced(v) => v
     |     Forcing => abort("Lazy::force: reentrant force on the same cell")
-144 |     Unforced(thunk) => {
+145 |     Unforced(thunk) => {
     |     ^^^^^^^^
     |       self.state = Forcing
     |       let v = thunk()

@@ -357,7 +357,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 -  self : Parser,
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
-   min_bp : Int,
+   min_bp : Int32,
  ) -> ParserResult[SetExpr] raise ParserError {
 @@
  }
@@ -423,7 +423,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 -  self : Parser,
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
-   min_bp : Int,
+   min_bp : Int32,
  ) -> ParserResult[Expr] raise ParserError {
 @@
  }
@@ -435,7 +435,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
 +  self : ParserRenamed,
    tokens : ArrayView[Token],
    left : Expr,
-   min_bp : Int,
+   min_bp : Int32,
 @@
  }
  
@@ -863,7 +863,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
  ) -> ArrayView[Token] raise ParserError {
 @@
    tokens : ArrayView[Token],
-   dialect? : &Dialect = MySQL::{ },
+   dialect~ : &Dialect = MySQL::{ },
  ) -> Array[Statement] raise ParserError {
 -  let parser = Parser::{ dialect, }
 +  let parser = ParserRenamed::{ dialect, }

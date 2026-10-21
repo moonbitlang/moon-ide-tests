@@ -18,6 +18,14 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'decode_continue' --loc 'src/tests/top.mbt:2:28'
-Error: could not get package of file <WORKDIR>/src/tests/top.mbt
-[1]
+Found 1 references for symbol 'decode_continue':
+<WORKDIR>/src/tests/incr.mbt:11:29-11:44:
+   |   match (chunks, value) {
+   |     ([], value) => value
+   |     ([chunk, .. rest], Continue(state)) =>
+11 |       continue_chunks(rest, decode_continue(chunk, state))
+   |                             ^^^^^^^^^^^^^^^
+   |     ([_, ..], Finish(_)) =>
+   |       raise InspectError::InspectError("parser finished before all chunks")
+
 ```

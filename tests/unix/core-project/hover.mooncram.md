@@ -301,9 +301,9 @@ pub fn exercise_int_core(n : Int) -> String {
     
      ```mbt check
      test {
-       inspect(Int::abs(42), content="42")
-       inspect(Int::abs(-42), content="42")
-       inspect(Int::abs(0), content="0")
+       inspect(Int32::abs(42), content="42")
+       inspect(Int32::abs(-42), content="42")
+       inspect(Int32::abs(0), content="0")
      }
      ```
 }
@@ -366,7 +366,7 @@ pub fn exercise_result_core(
   value.map(x => x.to_string()) (escaped)
         ^^^
         ```moonbit
-        fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U) -> Result[U, E]
+        fn[T, E, U] Result::map(self : Result[T, E], f : (T) -> U raise?) -> Result[U, E] raise?
         ```
         ---
         
@@ -376,8 +376,8 @@ pub fn exercise_result_core(
         
          ```mbt check
          test {
-           let x : Result[Int, Unit] = Ok(6)
-           let y = x.map((v : Int) => v * 7) (escaped)
+           let x : Result[Int32, Unit] = Ok(6)
+           let y = x.map((v : Int32) => v * 7)
            @test.assert_eq(y, Ok(42))
          }
          ```
@@ -530,12 +530,14 @@ pub fn exercise_hashmap_map(
   scores.map((key, value) => key + ":" + value.to_string()) (escaped)
          ^^^
          ```moonbit
-         fn[K, V, V2] @hashmap.HashMap::map(self : @hashmap.HashMap[K, V], f : (K, V) -> V2) -> @hashmap.HashMap[K, V2]
+         fn[K, V, V2] @hashmap.HashMap::map(self : @hashmap.HashMap[K, V], f : (K, V) -> V2 raise?) -> @hashmap.HashMap[K, V2] raise?
          ```
          ---
          
-          Applies a function to each key-value pair in the map and 
+          Applies a function to each key-value pair in the map and
           returns a new map with the results, using the original keys.
+         
+          `f` may raise; the error propagates and `self` is left unchanged.
 }
 
 ```
@@ -641,7 +643,11 @@ pub fn build_core_scores() -> CoreScores {
   
    ```mbt check
    test {
-     let arr : ReadOnlyArray[(Int, String)] = [(1, "one"), (2, "two"), (1, "ONE")]
+     let arr : ReadOnlyArray[(Int32, String)] = [
+       (1, "one"),
+       (2, "two"),
+       (1, "ONE"),
+     ]
      let map = @hashmap.HashMap(arr)
      debug_inspect(map.get(1), content="Some(\"ONE\")")
      debug_inspect(map.get(2), content="Some(\"two\")")

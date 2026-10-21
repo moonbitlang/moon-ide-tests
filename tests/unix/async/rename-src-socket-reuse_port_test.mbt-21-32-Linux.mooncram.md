@@ -80,7 +80,7 @@ $ run_moon_ide moon ide rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_po
 *** Update File: <WORKDIR>/src/os_error/error.mbt
 @@
  ///|
- fn errno_is_nonblocking_io_error(errno : Int) -> Bool {
+ fn errno_is_nonblocking_io_error(errno : Int32) -> Bool {
    match @env_util.platform {
 -    Linux =>
 +    LinuxRenamed =>
@@ -144,7 +144,7 @@ $ run_moon_ide moon ide rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_po
 @@
  
  ///|
- pub let errno_ENOTDIR : Int = match @env_util.platform {
+ pub let errno_ENOTDIR : Int32 = match @env_util.platform {
 -  Linux => linux_ENOTDIR
 +  LinuxRenamed => linux_ENOTDIR
    MacOS => macos_ENOTDIR
@@ -153,7 +153,7 @@ $ run_moon_ide moon ide rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_po
 @@
  
  ///|
- pub let errno_ENOTSUP : Int = match @env_util.platform {
+ pub let errno_ENOTSUP : Int32 = match @env_util.platform {
 -  Linux => linux_ENOTSUP
 +  LinuxRenamed => linux_ENOTSUP
    MacOS => macos_ENOTSUP

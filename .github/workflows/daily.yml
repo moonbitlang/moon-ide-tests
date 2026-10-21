@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: daily-test
+  group: daily-test-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -16,7 +16,9 @@ permissions:
   issues: write
 
 env:
-  DAILY_BRANCH: daily-test/update-baselines
+  BASE_BRANCH: ${{ github.ref_name }}
+  BASE_SHA: ${{ github.sha }}
+  DAILY_BRANCH: ${{ github.ref_name == 'main' && 'daily-test/update-baselines' || format('daily-test/{0}/update-baselines', github.ref_name) }}
 
 jobs:
   daily-test:
@@ -35,11 +37,13 @@ jobs:
 
       - name: Prepare daily branch
         run: |
-          git fetch --no-tags origin main
+          if [ "$GITHUB_REF_TYPE" != "branch" ]; then
+            echo "::error::Run Daily Test on a branch so its pull request has a branch to target."
+            exit 1
+          fi
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
-          git checkout -B "$DAILY_BRANCH" origin/main
+          git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
           mkdir -p .daily-test
-          printf ".daily-test/\n" >> .git/info/exclude
 
       - name: Update fixture repos
         run: scripts/update-submodules.sh
@@ -64,36 +68,26 @@ jobs:
 
       - name: Refresh Unix snapshots
         run: |
-          mkdir -p .daily-test
-          scripts/escape-cram-empty-parens.sh tests/unix
-          moon cram update --replace --assume-yes --cram-compat tests/unix \
+          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+          moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}" \
             > .daily-test/unix-cram-update.log 2>&1
-          scripts/escape-cram-empty-parens.sh tests/unix
 
       - name: Run Unix cram tests
-        id: unix-cram
         run: |
+          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
           set +e
-          moon cram test --cram-compat tests/unix \
+          moon cram test --cram-compat "${baseline_paths[@]}" \
             > .daily-test/unix-cram-test.log 2>&1
           status=$?
           set -e
           echo "$status" > .daily-test/unix-cram-test-status.txt
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-
-      - name: Collect Unix review inputs
-        if: always()
-        run: |
-          mkdir -p .daily-test
-          git submodule status --recursive > .daily-test/submodules.txt
-          git status --short > .daily-test/unix-status.txt
 
       - name: Commit Unix daily changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- fixtures/repos tests/unix; then
-            git add fixtures/repos tests/unix
+          git add --all -- fixtures/repos tests/unix
+          if ! git diff --cached --quiet -- fixtures/repos tests/unix; then
             git commit -m "chore: update daily Unix IDE baselines"
           fi
 
@@ -120,24 +114,26 @@ jobs:
           submodules: recursive
 
       - name: Install MoonBit
-        shell: powershell
+        shell: pwsh
         run: |
           Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
           irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Prepare daily branch
-        shell: powershell
+        shell: pwsh
         run: |
-          git fetch --no-tags origin main
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git checkout -B $env:DAILY_BRANCH "origin/$($env:DAILY_BRANCH)"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git submodule update --init --recursive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          ".daily-test/" | Out-File -FilePath .git\info\exclude -Encoding utf8 -Append
 
       - name: Update MoonBit registry
-        shell: powershell
+        shell: pwsh
         run: |
           foreach ($attempt in 1, 2, 3) {
             moon update
@@ -151,25 +147,37 @@ jobs:
           }
 
       - name: Update Windows snapshots
-        shell: powershell
+        shell: pwsh
         run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
 
       - name: Run Windows cram tests
-        id: windows-cram
-        shell: powershell
+        shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
-          $status = $LASTEXITCODE
+          $baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
+          $status = 0
+          if ($baselinePaths.Count -gt 0) {
+            moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths `
+              *> .daily-test/windows-cram-test.log
+            $status = $LASTEXITCODE
+          } else {
+            [System.IO.File]::WriteAllText(".daily-test\windows-cram-test.log", "No compatible Windows fixture baselines.`n", [System.Text.Encoding]::ASCII)
+          }
           [System.IO.File]::WriteAllText(".daily-test\windows-cram-test-status.txt", [string]$status, [System.Text.Encoding]::ASCII)
-          "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
       - name: Commit Windows daily changes
-        shell: powershell
+        shell: pwsh
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Add removals and new files before renormalizing the remaining index;
+          # --renormalize alone tries to stat deleted tracked files and fails.
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
 
           # Stage first: the Windows checkout can report CRLF-only worktree
           # changes that disappear once Git normalizes them into the index.
@@ -180,20 +188,6 @@ jobs:
 
           git diff --cached --quiet -- tests/windows
           $diffStatus = $LASTEXITCODE
-
-          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
-          if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
-          }
-          $windowsStatusText = $windowsStatus -join [Environment]::NewLine
-          if ($windowsStatusText.Length -gt 0) {
-            $windowsStatusText += [Environment]::NewLine
-          }
-          [System.IO.File]::WriteAllText(
-            ".daily-test\windows-status.txt",
-            $windowsStatusText,
-            [System.Text.UTF8Encoding]::new($false)
-          )
 
           if ($diffStatus -eq 1) {
             git commit -m "chore: update daily Windows IDE baselines"
@@ -227,7 +221,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          submodules: recursive
 
       - name: Install MoonBit
         run: |
@@ -250,10 +243,8 @@ jobs:
         run: |
           cp .github/scripts/parse-openseek-result.mbtx "$RUNNER_TEMP/parse-openseek-result.mbtx"
           cp .github/codex/prompts/daily-test-review.md "$RUNNER_TEMP/daily-test-review.md"
-          git fetch --no-tags origin main
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
           git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
-          git submodule update --init --recursive
 
       - name: Download Unix review inputs
         uses: actions/download-artifact@v8
@@ -267,19 +258,33 @@ jobs:
           name: daily-windows-review-inputs
           path: .daily-test
 
-      - name: Collect final review inputs
-        run: |
-          mkdir -p .daily-test
-          git status --short > .daily-test/status.txt
-
       - name: Detect daily diff
         id: diff
         run: |
-          if git diff --quiet origin/main...HEAD -- fixtures/repos tests/unix tests/windows; then
+          if git diff --quiet "$BASE_SHA"...HEAD -- fixtures/repos tests/unix tests/windows; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
+          if git diff --quiet "$BASE_SHA"...HEAD -- tests/unix tests/windows; then
+            echo "has_test_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_test_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare scoped review inputs
+        if: steps.diff.outputs.has_test_changes == 'true'
+        run: |
+          review_dir="$RUNNER_TEMP/daily-test-review"
+          mkdir -p "$review_dir"
+          git diff --no-ext-diff --no-color "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests.diff"
+          git diff --stat "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-stat.txt"
+          git diff --name-status "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-status.txt"
+          # Both platforms write native UTF-8 logs; status files are ASCII.
+          cp .daily-test/{unix,windows}-cram-{test-status.txt,test.log,update.log} \
+            .daily-test/{unix,windows}-baseline-paths.txt \
+            .daily-test/{unix,windows}-check-*.log \
+            "$review_dir/"
 
       - name: Create or update pull request
         id: pr
@@ -289,34 +294,35 @@ jobs:
         run: |
           pr_number="$(gh pr list \
             --head "$DAILY_BRANCH" \
-            --base main \
+            --base "$BASE_BRANCH" \
             --state open \
             --json number \
             --jq '.[0].number // empty')"
 
-          body="$(printf '%s\n\n%s\n%s\n' \
-            "This PR was generated by the Daily Test workflow." \
+          body_file="$RUNNER_TEMP/daily-pr-body.txt"
+          printf '%s\n\n%s\n%s\n\n%s\n' \
+            "This PR was generated by the Daily Test workflow from $BASE_BRANCH ($BASE_SHA)." \
             "It refreshes fixture submodules, regenerates IDE baseline tests with testgen," \
-            "promotes Unix Moon Cram snapshots, and promotes Windows Moon Cram snapshots.")"
+            "and promotes Unix and Windows snapshots only for fixtures that pass moon check on that platform." \
+            "Agent review covers only tests/unix and tests/windows changes since that starting commit." > "$body_file"
 
           if [ -z "$pr_number" ]; then
             pr_url="$(gh pr create \
-              --base main \
+              --base "$BASE_BRANCH" \
               --head "$DAILY_BRANCH" \
               --title "chore: update daily IDE baselines" \
-              --body "$body")"
+              --body-file "$body_file")"
             pr_number="${pr_url##*/}"
           else
             gh pr edit "$pr_number" \
               --title "chore: update daily IDE baselines" \
-              --body "$body"
+              --body-file "$body_file"
           fi
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
 
       - name: Review daily output with OpenSeek
-        id: openseek
-        if: steps.diff.outputs.has_changes == 'true'
+        if: steps.diff.outputs.has_test_changes == 'true'
         env:
           DEEPSEEK: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
@@ -332,18 +338,18 @@ jobs:
             run \
             --approval never \
             --no-session \
-            --dir "$GITHUB_WORKSPACE" \
-            --result-file .daily-test/openseek-review.json \
+            --dir "$RUNNER_TEMP/daily-test-review" \
+            --result-file "$GITHUB_WORKSPACE/.daily-test/openseek-review.json" \
             "$(cat "$RUNNER_TEMP/daily-test-review.md")"
 
       - name: Parse OpenSeek review
         id: openseek-result
-        if: steps.diff.outputs.has_changes == 'true'
+        if: steps.diff.outputs.has_test_changes == 'true'
         run: |
           moon run --target native "$RUNNER_TEMP/parse-openseek-result.mbtx"
 
       - name: Comment on pull request
-        if: steps.diff.outputs.has_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
+        if: steps.diff.outputs.has_test_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
         uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
@@ -368,13 +374,33 @@ jobs:
               body,
             });
 
-      - name: Fail if cram tests failed without a diff
-        if: steps.diff.outputs.has_changes == 'false'
+      - name: Upload OpenSeek result
+        if: always() && steps.diff.outputs.has_test_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-openseek-result
+          path: .daily-test/openseek-review.json
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+      - name: Upload scoped review inputs
+        if: always() && steps.diff.outputs.has_test_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-tests-review
+          path: ${{ runner.temp }}/daily-test-review
+          if-no-files-found: error
+
+      - name: Require passing tests and review
+        if: always()
+        env:
+          REVIEW_HAS_PROBLEM: ${{ steps.openseek-result.outputs.has_problem }}
         run: |
           unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
           windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
 
-          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
+          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ] || \
+             [ "$REVIEW_HAS_PROBLEM" = "true" ]; then
             cat .daily-test/unix-cram-test.log 2>/dev/null || true
             cat .daily-test/windows-cram-test.log 2>/dev/null || true
             exit 1
