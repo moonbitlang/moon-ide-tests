@@ -580,7 +580,7 @@ Found 130 references for symbol 'execute':
 
 <WORKDIR>/string\regex_test.mbt:95:17-95:24:
    |   }
-   |   for pattern in ["^[:]$", "^[::]$", "^[:-:]$", "^[:-@:]$", "^[:a-z:]$"] {
+   |   for pattern in ["^[:]$", "^[::]$", "^[:-:]$"] {
    |     let regex = @string.Regex(pattern)
 95 |     guard regex.execute(":") is Some(_) else {
    |                 ^^^^^^^

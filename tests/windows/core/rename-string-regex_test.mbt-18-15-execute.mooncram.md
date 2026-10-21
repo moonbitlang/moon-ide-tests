@@ -444,7 +444,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
 +  guard inverse.execute_renamed(":") is None else {
      fail("Expected inverse colon range to exclude colon")
    }
-   for pattern in ["^[:]$", "^[::]$", "^[:-:]$", "^[:-@:]$", "^[:a-z:]$"] {
+   for pattern in ["^[:]$", "^[::]$", "^[:-:]$"] {
      let regex = @string.Regex(pattern)
 -    guard regex.execute(":") is Some(_) else {
 +    guard regex.execute_renamed(":") is Some(_) else {
