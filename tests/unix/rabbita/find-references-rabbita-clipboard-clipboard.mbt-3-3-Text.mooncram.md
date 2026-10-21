@@ -55,11 +55,11 @@ Found 10 references for symbol 'Text':
   |     content="ClipboardCopy(Text(\"hello\"))",
   |   )
 
-<WORKDIR>/rui/markdown/block.mbt:102:32-102:36:
+<WORKDIR>/rui/markdown/block.mbt:107:32-107:36:
     |       type_="button",
     |       title="Copy code",
     |       attrs=@html.Attrs::build().aria_label("Copy code"),
-102 |       on_click=@clipboard.copy(Text(source)),
+107 |       on_click=@clipboard.copy(Text(source)),
     |                                ^^^^
     |       @html.span(
     |         style=["display:flex"],
