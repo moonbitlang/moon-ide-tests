@@ -1,2 +1,4 @@
 _build/
 artifacts/
+__pycache__/
+.daily-test/

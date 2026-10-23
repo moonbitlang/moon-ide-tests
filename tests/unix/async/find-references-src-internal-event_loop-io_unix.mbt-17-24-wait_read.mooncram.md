@@ -19,11 +19,11 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
 Found 8 references for symbol 'wait_read':
-<WORKDIR>/src/fs/watch_inotify.mbt:283:20-283:29:
+<WORKDIR>/src/fs/watch_inotify.mbt:289:20-289:29:
     |       if self.waiter is Some(coro) {
     |         coro.wake()
     |       }
-283 |       self.inotify.wait_read()
+289 |       self.inotify.wait_read()
     |                    ^^^^^^^^^
     |       continue
     |     }

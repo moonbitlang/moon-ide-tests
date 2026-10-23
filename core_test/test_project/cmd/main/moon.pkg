@@ -1,0 +1,5 @@
+import {
+  "username/test_project" @lib,
+}
+
+pkgtype(kind: "executable")

@@ -3,6 +3,13 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 'src\process\redirect.mbt:17:8'
 *** Begin Patch
+*** Update File: <WORKDIR>/src\process\deprecated.mbt
+@@
+ ///|
+ #deprecated
+ #doc(hidden)
+-pub extend ReadFromProcess with @io.Reader::{_direct_read, _get_internal_buffer}
++pub extend ReadFromProcessRenamed with @io.Reader::{_direct_read, _get_internal_buffer}
 *** Update File: <WORKDIR>/src\process\redirect.mbt
 @@
  
@@ -16,7 +23,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess'
 @@
  /// the read end `r` will fail to observe EOF from children process.
  pub fn read_from_process(
-   shared? : Bool = false,
+   shared~ : Bool = false,
 -) -> (ReadFromProcess, &ProcessOutput) raise {
 +) -> (ReadFromProcessRenamed, &ProcessOutput) raise {
    let context = "@process.read_from_process()"
@@ -59,8 +66,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess'
  async fn read_bounded(
 -  reader : @process.ReadFromProcess,
 +  reader : @process.ReadFromProcessRenamed,
-   captured : Ref[Int],
-   limit : Int,
+   captured : Ref[Int32],
+   limit : Int32,
    stream : String,
 @@
  /// bound. A CRLF terminator's CR is punctuation, not content, and so does not
@@ -69,7 +76,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess'
 -  reader : @process.ReadFromProcess,
 +  reader : @process.ReadFromProcessRenamed,
    on_line : async (String) -> Unit,
-   limit : Int,
+   limit : Int32,
  ) -> Unit {
 *** End Patch
 

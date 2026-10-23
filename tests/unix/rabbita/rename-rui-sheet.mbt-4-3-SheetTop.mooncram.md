@@ -19,10 +19,20 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide rename 'SheetTop' 'SheetTopRenamed' --loc 'rui/sheet.mbt:4:3'
 *** Begin Patch
+*** Update File: <WORKDIR>/e2e/apps/rui/dialogs/sheet.mbt
+@@
+       ],
+     ),
+     sheet_edge_fixture("bottom", SheetBottom),
+-    sheet_edge_fixture("top", SheetTop),
++    sheet_edge_fixture("top", SheetTopRenamed),
+     sheet_edge_fixture("left", SheetLeft),
+   ])
+ }
 *** Update File: <WORKDIR>/rui/sheet.mbt
 @@
  ///|
- /// Edge from which a [`sheet_content`] surface enters the viewport.
+ /// Edge from which a [`sheet`] enters the viewport.
  pub(all) enum SheetSide {
 -  SheetTop
 +  SheetTopRenamed
@@ -40,22 +50,13 @@ $ run_moon_ide moon ide rename 'SheetTop' 'SheetTopRenamed' --loc 'rui/sheet.mbt
      SheetLeft => "left"
 @@
  ///|
- fn sheet_positioner_side_style(side : SheetSide) -> String {
-   match side {
--    SheetTop => "align-items:flex-start"
-+    SheetTopRenamed => "align-items:flex-start"
-     SheetRight => "justify-content:flex-end"
-     SheetBottom => "align-items:flex-end"
-     SheetLeft => "justify-content:flex-start"
-@@
- ///|
- fn sheet_surface_side_style(side : SheetSide) -> String {
+ fn sheet_side_style(side : SheetSide) -> String {
    match side {
 -    SheetTop =>
 +    SheetTopRenamed =>
-       "width:100%;max-height:85vh;border-bottom:1px solid var(--rui-border,oklch(0.922 0 0))"
+       "inset:0 0 auto;width:100%;max-height:85dvh;border-bottom:1px solid var(--rui-border,oklch(0.922 0 0))"
      SheetRight =>
-       "width:min(85vw,24rem);height:100%;border-left:1px solid var(--rui-border,oklch(0.922 0 0))"
+       "inset:0 0 0 auto;width:min(85vw,24rem);height:100dvh;border-left:1px solid var(--rui-border,oklch(0.922 0 0))"
 @@
  ///|
  fn sheet_closed_transform(side : SheetSide) -> String {

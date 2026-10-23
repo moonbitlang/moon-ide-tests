@@ -319,7 +319,7 @@ Definition found at file <WORKDIR>/toml.mbt
 42 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
-   |   mut position : Int
+   |   mut position : Int32
    | }
    | 
    | ///|

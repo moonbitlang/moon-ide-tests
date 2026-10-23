@@ -317,7 +317,7 @@ $ run_moon_ide moon ide outline 'parser.mbt'
     |...
  70 |fn Parser::parse_value(
  71 |  self : Self,
- 72 |  skip_newlines? : Bool = false,
+ 72 |  skip_newlines~ : Bool = false,
  73 |) -> TomlValue raise {
     |...
 140 |fn Parser::parse_array(self : Self) -> TomlValue raise {

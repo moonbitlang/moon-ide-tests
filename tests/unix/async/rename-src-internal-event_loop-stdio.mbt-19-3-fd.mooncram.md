@@ -26,9 +26,9 @@ $ run_moon_ide moon ide rename 'fd' 'fd_renamed' --loc 'src/internal/event_loop/
  extern "C" fn fstatx_sync(
 -  fd : @fd_util.Fd,
 +  fd_renamed : @fd_util.Fd,
-   request : UInt,
+   request : UInt32,
    buf : FixedArray[Byte],
-   buf_len : Int,
+   buf_len : Int32,
 *** End Patch
 
 ```

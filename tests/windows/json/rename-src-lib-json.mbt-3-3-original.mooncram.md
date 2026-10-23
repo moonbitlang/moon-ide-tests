@@ -141,7 +141,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 +  let { rest, original_renamed: original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     ['\ ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
 @@
    len : Int,
    func_data : Checkpoint,

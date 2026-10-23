@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'from_int' --loc 'builtin/int64.mbt:44:15'
-Found 4 references for symbol 'from_int':
+Found 3 references for symbol 'from_int':
 <WORKDIR>/builtin/int64.mbt:41:22-41:30:
    | ///
    | /// ```mbt check
@@ -42,15 +42,6 @@ Found 4 references for symbol 'from_int':
    | ///|
    | test "Int64::from_int" {
 25 |   inspect(Int64::from_int(1256), content="1256")
-   |                  ^^^^^^^^
-   | }
-   | 
-
-<WORKDIR>/int64/int64_test.mbt:30:18-30:26:
-   | 
-   | ///|
-   | test "from_int" {
-30 |   inspect(Int64::from_int(1256), content="1256")
    |                  ^^^^^^^^
    | }
    | 

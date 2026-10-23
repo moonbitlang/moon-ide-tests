@@ -22,6 +22,20 @@ cat .daily-test/windows-cram-update.log
 
 Decide whether the daily refresh contains a failed test, wrong expected output, suspicious baseline promotion, or another issue that needs human attention.
 
+The per-platform `*-baseline-paths.txt` lists select the baselines whose fixtures
+passed `moon check` on that platform, plus the handcrafted Unix suites. Failed
+fixture checks are recorded in `*-check-*.log`; those fixtures keep their existing
+tests unchanged and are excluded from snapshot refresh and cram tests. A skipped
+fixture is not an IDE regression.
+
+A `known-ide-limitation` annotation applies only to its identified command and
+exact `No hover information found` output with exit
+status 1. Those documented cases are intentional reproductions; other failed
+commands and project-loading errors require attention. Do not infer a module's
+health from an unrelated documentation test or assume files absent from the diff
+exist. Logs are UTF-8; report a decoding problem as such, without treating the
+decoder's error message as the original log content.
+
 Treat ordinary fixture submodule fast-forwards, generated baseline drift, and passing cram output as normal unless the diff or logs show a concrete test problem. If cram failed, inspect the log and explain the specific failing or suspicious tests.
 
 Return JSON only:

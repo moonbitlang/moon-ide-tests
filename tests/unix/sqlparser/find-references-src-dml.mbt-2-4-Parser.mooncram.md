@@ -205,326 +205,326 @@ Found 199 references for symbol 'Parser':
    |   tokens : ArrayView[Token],
    | ) -> ParserResult[CreateIndexStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:345:4-345:10:
+<WORKDIR>/src/ddl.mbt:337:4-337:10:
     | }
     | 
     | ///|
-345 | fn Parser::parse_column_defs(
+337 | fn Parser::parse_column_defs(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:346:10-346:16:
+<WORKDIR>/src/ddl.mbt:338:10-338:16:
     | 
     | ///|
     | fn Parser::parse_column_defs(
-346 |   self : Parser,
+338 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[(Array[ColumnDef], Array[TableConstraint])] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:393:4-393:10:
+<WORKDIR>/src/ddl.mbt:385:4-385:10:
     | }
     | 
     | ///|
-393 | fn Parser::parse_data_type(
+385 | fn Parser::parse_data_type(
     |    ^^^^^^
     |   _self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:394:11-394:17:
+<WORKDIR>/src/ddl.mbt:386:11-386:17:
     | 
     | ///|
     | fn Parser::parse_data_type(
-394 |   _self : Parser,
+386 |   _self : Parser,
     |           ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[DataType] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:481:4-481:10:
+<WORKDIR>/src/ddl.mbt:467:4-467:10:
     | }
     | 
     | ///|
-481 | fn Parser::parse_column_def_option(
+467 | fn Parser::parse_column_def_option(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:482:10-482:16:
+<WORKDIR>/src/ddl.mbt:468:10-468:16:
     | 
     | ///|
     | fn Parser::parse_column_def_option(
-482 |   self : Parser,
+468 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[ColumnDefOption]] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:527:4-527:10:
+<WORKDIR>/src/ddl.mbt:513:4-513:10:
     | }
     | 
     | ///|
-527 | fn Parser::parse_create_view_statement(
+513 | fn Parser::parse_create_view_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:528:10-528:16:
+<WORKDIR>/src/ddl.mbt:514:10-514:16:
     | 
     | ///|
     | fn Parser::parse_create_view_statement(
-528 |   self : Parser,
+514 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[CreateViewStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:570:4-570:10:
+<WORKDIR>/src/ddl.mbt:553:4-553:10:
     | }
     | 
     | ///|
-570 | fn Parser::parse_view_column_def(
+553 | fn Parser::parse_view_column_def(
     |    ^^^^^^
     |   _self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:571:11-571:17:
+<WORKDIR>/src/ddl.mbt:554:11-554:17:
     | 
     | ///|
     | fn Parser::parse_view_column_def(
-571 |   _self : Parser,
+554 |   _self : Parser,
     |           ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[ViewColumnDef] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:600:4-600:10:
+<WORKDIR>/src/ddl.mbt:583:4-583:10:
     | }
     | 
     | ///|
-600 | fn Parser::parse_drop_view_statement(
+583 | fn Parser::parse_drop_view_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:601:10-601:16:
+<WORKDIR>/src/ddl.mbt:584:10-584:16:
     | 
     | ///|
     | fn Parser::parse_drop_view_statement(
-601 |   self : Parser,
+584 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[DropViewStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:628:4-628:10:
+<WORKDIR>/src/ddl.mbt:608:4-608:10:
     | }
     | 
     | ///|
-628 | fn Parser::parse_table_constraint(
+608 | fn Parser::parse_table_constraint(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:629:10-629:16:
+<WORKDIR>/src/ddl.mbt:609:10-609:16:
     | 
     | ///|
     | fn Parser::parse_table_constraint(
-629 |   self : Parser,
+609 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[TableConstraint] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:682:4-682:10:
+<WORKDIR>/src/ddl.mbt:662:4-662:10:
     | }
     | 
     | ///|
-682 | fn Parser::parse_foreign_key_constraint(
+662 | fn Parser::parse_foreign_key_constraint(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:683:10-683:16:
+<WORKDIR>/src/ddl.mbt:663:10-663:16:
     | 
     | ///|
     | fn Parser::parse_foreign_key_constraint(
-683 |   self : Parser,
+663 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[TableConstraint] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:787:4-787:10:
+<WORKDIR>/src/ddl.mbt:767:4-767:10:
     | }
     | 
     | ///|
-787 | fn Parser::parse_drop_table_statement(
+767 | fn Parser::parse_drop_table_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:788:10-788:16:
+<WORKDIR>/src/ddl.mbt:768:10-768:16:
     | 
     | ///|
     | fn Parser::parse_drop_table_statement(
-788 |   self : Parser,
+768 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[DropTableStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:828:4-828:10:
+<WORKDIR>/src/ddl.mbt:808:4-808:10:
     | }
     | 
     | ///|
-828 | fn Parser::parse_drop_index_statement(
+808 | fn Parser::parse_drop_index_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:829:10-829:16:
+<WORKDIR>/src/ddl.mbt:809:10-809:16:
     | 
     | ///|
     | fn Parser::parse_drop_index_statement(
-829 |   self : Parser,
+809 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[DropIndexStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:934:4-934:10:
+<WORKDIR>/src/ddl.mbt:909:4-909:10:
     | }
     | 
     | ///|
-934 | fn Parser::parse_alter_table_statement(
+909 | fn Parser::parse_alter_table_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:935:10-935:16:
+<WORKDIR>/src/ddl.mbt:910:10-910:16:
     | 
     | ///|
     | fn Parser::parse_alter_table_statement(
-935 |   self : Parser,
+910 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[AlterTableStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:980:4-980:10:
+<WORKDIR>/src/ddl.mbt:955:4-955:10:
     | 
     | ///|
     | /// ALTER INDEX statement
-980 | fn Parser::parse_alter_index_statement(
+955 | fn Parser::parse_alter_index_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:981:10-981:16:
+<WORKDIR>/src/ddl.mbt:956:10-956:16:
     | ///|
     | /// ALTER INDEX statement
     | fn Parser::parse_alter_index_statement(
-981 |   self : Parser,
+956 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[AlterIndexStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1240:4-1240:10:
+<WORKDIR>/src/ddl.mbt:1209:4-1209:10:
      | }
      | 
      | ///|
-1240 | fn Parser::parse_create_database_statement(
+1209 | fn Parser::parse_create_database_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1241:10-1241:16:
+<WORKDIR>/src/ddl.mbt:1210:10-1210:16:
      | 
      | ///|
      | fn Parser::parse_create_database_statement(
-1241 |   self : Parser,
+1210 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[CreateDatabaseStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1289:4-1289:10:
+<WORKDIR>/src/ddl.mbt:1255:4-1255:10:
      | }
      | 
      | ///|
-1289 | fn Parser::parse_create_schema_statement(
+1255 | fn Parser::parse_create_schema_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1290:10-1290:16:
+<WORKDIR>/src/ddl.mbt:1256:10-1256:16:
      | 
      | ///|
      | fn Parser::parse_create_schema_statement(
-1290 |   self : Parser,
+1256 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[CreateSchemaStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1413:4-1413:10:
+<WORKDIR>/src/ddl.mbt:1376:4-1376:10:
      | }
      | 
      | ///|
-1413 | fn Parser::parse_create_function_statement(
+1376 | fn Parser::parse_create_function_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1414:10-1414:16:
+<WORKDIR>/src/ddl.mbt:1377:10-1377:16:
      | 
      | ///|
      | fn Parser::parse_create_function_statement(
-1414 |   self : Parser,
+1377 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[CreateFunctionStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1508:4-1508:10:
+<WORKDIR>/src/ddl.mbt:1466:4-1466:10:
      | }
      | 
      | ///|
-1508 | fn Parser::parse_create_procedure_statement(
+1466 | fn Parser::parse_create_procedure_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1509:10-1509:16:
+<WORKDIR>/src/ddl.mbt:1467:10-1467:16:
      | 
      | ///|
      | fn Parser::parse_create_procedure_statement(
-1509 |   self : Parser,
+1467 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[CreateProcedureStmt] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1577:4-1577:10:
+<WORKDIR>/src/ddl.mbt:1533:4-1533:10:
      | }
      | 
      | ///|
-1577 | fn Parser::parse_function_parameter(
+1533 | fn Parser::parse_function_parameter(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1578:10-1578:16:
+<WORKDIR>/src/ddl.mbt:1534:10-1534:16:
      | 
      | ///|
      | fn Parser::parse_function_parameter(
-1578 |   self : Parser,
+1534 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[FunctionParameter] raise ParserError {
 
-<WORKDIR>/src/ddl.mbt:1706:4-1706:10:
+<WORKDIR>/src/ddl.mbt:1660:4-1660:10:
      | }
      | 
      | ///|
-1706 | fn Parser::parse_create_sequence_statement(
+1660 | fn Parser::parse_create_sequence_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/ddl.mbt:1707:10-1707:16:
+<WORKDIR>/src/ddl.mbt:1661:10-1661:16:
      | 
      | ///|
      | fn Parser::parse_create_sequence_statement(
-1707 |   self : Parser,
+1661 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[CreateSequenceStmt] raise ParserError {
@@ -560,742 +560,742 @@ Found 199 references for symbol 'Parser':
 3 |   self : Parser,
   |          ^^^^^^
   |   tokens : ArrayView[Token],
-  |   min_bp : Int,
+  |   min_bp : Int32,
 
-<WORKDIR>/src/dml.mbt:48:4-48:10:
+<WORKDIR>/src/dml.mbt:47:4-47:10:
    | }
    | 
    | ///|
-48 | fn Parser::parse_select(
+47 | fn Parser::parse_select(
    |    ^^^^^^
    |   self : Parser,
    |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:49:10-49:16:
+<WORKDIR>/src/dml.mbt:48:10-48:16:
    | 
    | ///|
    | fn Parser::parse_select(
-49 |   self : Parser,
+48 |   self : Parser,
    |          ^^^^^^
    |   tokens : ArrayView[Token],
    | ) -> ParserResult[SelectStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:85:4-85:10:
+<WORKDIR>/src/dml.mbt:84:4-84:10:
    | }
    | 
    | ///|
-85 | fn Parser::parse_query(
+84 | fn Parser::parse_query(
    |    ^^^^^^
    |   self : Parser,
    |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:86:10-86:16:
+<WORKDIR>/src/dml.mbt:85:10-85:16:
    | 
    | ///|
    | fn Parser::parse_query(
-86 |   self : Parser,
+85 |   self : Parser,
    |          ^^^^^^
    |   tokens : ArrayView[Token],
    | ) -> ParserResult[QueryStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:119:4-119:10:
+<WORKDIR>/src/dml.mbt:118:4-118:10:
     | }
     | 
     | ///|
-119 | fn Parser::parse_aliasing(
+118 | fn Parser::parse_aliasing(
     |    ^^^^^^
     |   _self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:120:11-120:17:
+<WORKDIR>/src/dml.mbt:119:11-119:17:
     | 
     | ///|
     | fn Parser::parse_aliasing(
-120 |   _self : Parser,
+119 |   _self : Parser,
     |           ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[TableAlias?] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:161:4-161:10:
+<WORKDIR>/src/dml.mbt:158:4-158:10:
     | }
     | 
     | ///|
-161 | fn Parser::parse_projections(
+158 | fn Parser::parse_projections(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:162:10-162:16:
+<WORKDIR>/src/dml.mbt:159:10-159:16:
     | 
     | ///|
     | fn Parser::parse_projections(
-162 |   self : Parser,
+159 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[Projection]] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:201:4-201:10:
+<WORKDIR>/src/dml.mbt:197:4-197:10:
     | }
     | 
     | ///|
-201 | fn Parser::parse_expr(
+197 | fn Parser::parse_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:202:10-202:16:
+<WORKDIR>/src/dml.mbt:198:10-198:16:
     | 
     | ///|
     | fn Parser::parse_expr(
-202 |   self : Parser,
+198 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Expr] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:230:4-230:10:
+<WORKDIR>/src/dml.mbt:226:4-226:10:
     | }
     | 
     | ///|
-230 | fn Parser::parse_binary_expr(
+226 | fn Parser::parse_binary_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:231:10-231:16:
+<WORKDIR>/src/dml.mbt:227:10-227:16:
     | 
     | ///|
     | fn Parser::parse_binary_expr(
-231 |   self : Parser,
+227 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
-    |   min_bp : Int,
+    |   min_bp : Int32,
 
-<WORKDIR>/src/dml.mbt:250:4-250:10:
+<WORKDIR>/src/dml.mbt:246:4-246:10:
     | }
     | 
     | ///|
-250 | fn Parser::parse_infix(
+246 | fn Parser::parse_infix(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:251:10-251:16:
+<WORKDIR>/src/dml.mbt:247:10-247:16:
     | 
     | ///|
     | fn Parser::parse_infix(
-251 |   self : Parser,
+247 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     |   left : Expr,
 
-<WORKDIR>/src/dml.mbt:334:4-334:10:
+<WORKDIR>/src/dml.mbt:330:4-330:10:
     | }
     | 
     | ///|
-334 | fn Parser::parse_primary_expr(
+330 | fn Parser::parse_primary_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:335:10-335:16:
+<WORKDIR>/src/dml.mbt:331:10-331:16:
     | 
     | ///|
     | fn Parser::parse_primary_expr(
-335 |   self : Parser,
+331 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Expr] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:511:4-511:10:
+<WORKDIR>/src/dml.mbt:493:4-493:10:
     | }
     | 
     | ///|
-511 | fn Parser::parse_postfix_expr(
+493 | fn Parser::parse_postfix_expr(
     |    ^^^^^^
     |   self : Parser,
     |   expr : Expr,
 
-<WORKDIR>/src/dml.mbt:512:10-512:16:
+<WORKDIR>/src/dml.mbt:494:10-494:16:
     | 
     | ///|
     | fn Parser::parse_postfix_expr(
-512 |   self : Parser,
+494 |   self : Parser,
     |          ^^^^^^
     |   expr : Expr,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:542:4-542:10:
+<WORKDIR>/src/dml.mbt:524:4-524:10:
     | }
     | 
     | ///|
-542 | fn Parser::parse_subscript(
+524 | fn Parser::parse_subscript(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:543:10-543:16:
+<WORKDIR>/src/dml.mbt:525:10-525:16:
     | 
     | ///|
     | fn Parser::parse_subscript(
-543 |   self : Parser,
+525 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Subscript] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:619:4-619:10:
+<WORKDIR>/src/dml.mbt:591:4-591:10:
     | }
     | 
     | ///|
-619 | fn Parser::parse_table_refs(
+591 | fn Parser::parse_table_refs(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:620:10-620:16:
+<WORKDIR>/src/dml.mbt:592:10-592:16:
     | 
     | ///|
     | fn Parser::parse_table_refs(
-620 |   self : Parser,
+592 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[TableRef]] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:640:4-640:10:
+<WORKDIR>/src/dml.mbt:612:4-612:10:
     | }
     | 
     | ///|
-640 | fn Parser::parse_table_ref(
+612 | fn Parser::parse_table_ref(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:641:10-641:16:
+<WORKDIR>/src/dml.mbt:613:10-613:16:
     | 
     | ///|
     | fn Parser::parse_table_ref(
-641 |   self : Parser,
+613 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[TableRef] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:743:4-743:10:
+<WORKDIR>/src/dml.mbt:713:4-713:10:
     | }
     | 
     | ///|
-743 | fn Parser::parse_table_factor(
+713 | fn Parser::parse_table_factor(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:744:10-744:16:
+<WORKDIR>/src/dml.mbt:714:10-714:16:
     | 
     | ///|
     | fn Parser::parse_table_factor(
-744 |   self : Parser,
+714 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[TableFactor] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:777:4-777:10:
+<WORKDIR>/src/dml.mbt:744:4-744:10:
     | }
     | 
     | ///|
-777 | fn Parser::parse_group_by(
+744 | fn Parser::parse_group_by(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:778:10-778:16:
+<WORKDIR>/src/dml.mbt:745:10-745:16:
     | 
     | ///|
     | fn Parser::parse_group_by(
-778 |   self : Parser,
+745 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[Expr]] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:797:4-797:10:
+<WORKDIR>/src/dml.mbt:764:4-764:10:
     | }
     | 
     | ///|
-797 | fn Parser::parse_order_by(
+764 | fn Parser::parse_order_by(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:798:10-798:16:
+<WORKDIR>/src/dml.mbt:765:10-765:16:
     | 
     | ///|
     | fn Parser::parse_order_by(
-798 |   self : Parser,
+765 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[OrderByExpr]] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:817:4-817:10:
+<WORKDIR>/src/dml.mbt:784:4-784:10:
     | }
     | 
     | ///|
-817 | fn Parser::parse_order_by_expr(
+784 | fn Parser::parse_order_by_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:818:10-818:16:
+<WORKDIR>/src/dml.mbt:785:10-785:16:
     | 
     | ///|
     | fn Parser::parse_order_by_expr(
-818 |   self : Parser,
+785 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[OrderByExpr] raise ParserError {
+
+<WORKDIR>/src/dml.mbt:803:4-803:10:
+    | }
+    | 
+    | ///|
+803 | fn Parser::parse_date_expr(
+    |    ^^^^^^
+    |   _self : Parser,
+    |   tokens : ArrayView[Token],
+
+<WORKDIR>/src/dml.mbt:804:11-804:17:
+    | 
+    | ///|
+    | fn Parser::parse_date_expr(
+804 |   _self : Parser,
+    |           ^^^^^^
+    |   tokens : ArrayView[Token],
+    | ) -> ParserResult[Expr] raise ParserError {
+
+<WORKDIR>/src/dml.mbt:818:4-818:10:
+    | }
+    | 
+    | ///|
+818 | fn Parser::parse_interval_expr(
+    |    ^^^^^^
+    |   self : Parser,
+    |   tokens : ArrayView[Token],
+
+<WORKDIR>/src/dml.mbt:819:10-819:16:
+    | 
+    | ///|
+    | fn Parser::parse_interval_expr(
+819 |   self : Parser,
+    |          ^^^^^^
+    |   tokens : ArrayView[Token],
+    | ) -> ParserResult[Expr] raise ParserError {
 
 <WORKDIR>/src/dml.mbt:836:4-836:10:
     | }
     | 
     | ///|
-836 | fn Parser::parse_date_expr(
-    |    ^^^^^^
-    |   _self : Parser,
-    |   tokens : ArrayView[Token],
-
-<WORKDIR>/src/dml.mbt:837:11-837:17:
-    | 
-    | ///|
-    | fn Parser::parse_date_expr(
-837 |   _self : Parser,
-    |           ^^^^^^
-    |   tokens : ArrayView[Token],
-    | ) -> ParserResult[Expr] raise ParserError {
-
-<WORKDIR>/src/dml.mbt:854:4-854:10:
-    | }
-    | 
-    | ///|
-854 | fn Parser::parse_interval_expr(
+836 | fn Parser::parse_extract_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:855:10-855:16:
-    | 
-    | ///|
-    | fn Parser::parse_interval_expr(
-855 |   self : Parser,
-    |          ^^^^^^
-    |   tokens : ArrayView[Token],
-    | ) -> ParserResult[Expr] raise ParserError {
-
-<WORKDIR>/src/dml.mbt:875:4-875:10:
-    | }
-    | 
-    | ///|
-875 | fn Parser::parse_extract_expr(
-    |    ^^^^^^
-    |   self : Parser,
-    |   tokens : ArrayView[Token],
-
-<WORKDIR>/src/dml.mbt:876:10-876:16:
+<WORKDIR>/src/dml.mbt:837:10-837:16:
     | 
     | ///|
     | fn Parser::parse_extract_expr(
-876 |   self : Parser,
+837 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Expr] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:897:4-897:10:
+<WORKDIR>/src/dml.mbt:855:4-855:10:
     | }
     | 
     | ///|
-897 | fn Parser::parse_case_expr(
+855 | fn Parser::parse_case_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:898:10-898:16:
+<WORKDIR>/src/dml.mbt:856:10-856:16:
     | 
     | ///|
     | fn Parser::parse_case_expr(
-898 |   self : Parser,
+856 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Expr] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:944:4-944:10:
+<WORKDIR>/src/dml.mbt:899:4-899:10:
     | }
     | 
     | ///|
-944 | fn Parser::parse_interval_qualifier(
+899 | fn Parser::parse_interval_qualifier(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:945:10-945:16:
+<WORKDIR>/src/dml.mbt:900:10-900:16:
     | 
     | ///|
     | fn Parser::parse_interval_qualifier(
-945 |   self : Parser,
+900 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[IntervalQualifier] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:961:4-961:10:
+<WORKDIR>/src/dml.mbt:916:4-916:10:
     | }
     | 
     | ///|
-961 | fn Parser::parse_primary_datetime_field(
+916 | fn Parser::parse_primary_datetime_field(
     |    ^^^^^^
     |   _self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:962:11-962:17:
+<WORKDIR>/src/dml.mbt:917:11-917:17:
     | 
     | ///|
     | fn Parser::parse_primary_datetime_field(
-962 |   _self : Parser,
+917 |   _self : Parser,
     |           ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[PrimaryDatetimeField] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:993:4-993:10:
+<WORKDIR>/src/dml.mbt:948:4-948:10:
     | }
     | 
     | ///|
-993 | fn Parser::parse_between_expr(
+948 | fn Parser::parse_between_expr(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:994:10-994:16:
+<WORKDIR>/src/dml.mbt:949:10-949:16:
     | 
     | ///|
     | fn Parser::parse_between_expr(
-994 |   self : Parser,
+949 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     |   left : Expr,
 
-<WORKDIR>/src/dml.mbt:1021:4-1021:10:
+<WORKDIR>/src/dml.mbt:973:4-973:10:
+    | }
+    | 
+    | ///|
+973 | fn Parser::parse_in_expr(
+    |    ^^^^^^
+    |   self : Parser,
+    |   tokens : ArrayView[Token],
+
+<WORKDIR>/src/dml.mbt:974:10-974:16:
+    | 
+    | ///|
+    | fn Parser::parse_in_expr(
+974 |   self : Parser,
+    |          ^^^^^^
+    |   tokens : ArrayView[Token],
+    |   left : Expr,
+
+<WORKDIR>/src/dml.mbt:1025:4-1025:10:
      | }
      | 
      | ///|
-1021 | fn Parser::parse_in_expr(
+1025 | fn Parser::parse_substring_expr(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:1022:10-1022:16:
-     | 
-     | ///|
-     | fn Parser::parse_in_expr(
-1022 |   self : Parser,
-     |          ^^^^^^
-     |   tokens : ArrayView[Token],
-     |   left : Expr,
-
-<WORKDIR>/src/dml.mbt:1079:4-1079:10:
-     | }
-     | 
-     | ///|
-1079 | fn Parser::parse_substring_expr(
-     |    ^^^^^^
-     |   self : Parser,
-     |   tokens : ArrayView[Token],
-
-<WORKDIR>/src/dml.mbt:1080:10-1080:16:
+<WORKDIR>/src/dml.mbt:1026:10-1026:16:
      | 
      | ///|
      | fn Parser::parse_substring_expr(
-1080 |   self : Parser,
+1026 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[Expr] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:1115:4-1115:10:
+<WORKDIR>/src/dml.mbt:1061:4-1061:10:
      | }
      | 
      | ///|
-1115 | fn Parser::parse_array_expr(
+1061 | fn Parser::parse_array_expr(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:1116:10-1116:16:
+<WORKDIR>/src/dml.mbt:1062:10-1062:16:
      | 
      | ///|
      | fn Parser::parse_array_expr(
-1116 |   self : Parser,
+1062 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      |   named : Bool,
 
-<WORKDIR>/src/dml.mbt:1770:4-1770:10:
+<WORKDIR>/src/dml.mbt:1713:4-1713:10:
      | }
      | 
      | ///|
-1770 | fn Parser::parse_object_name(
+1713 | fn Parser::parse_object_name(
      |    ^^^^^^
      |   _self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:1771:11-1771:17:
+<WORKDIR>/src/dml.mbt:1714:11-1714:17:
      | 
      | ///|
      | fn Parser::parse_object_name(
-1771 |   _self : Parser,
+1714 |   _self : Parser,
      |           ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[ObjectName] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:1842:4-1842:10:
+<WORKDIR>/src/dml.mbt:1782:4-1782:10:
      | }
      | 
      | ///|
-1842 | fn Parser::parse_top(
+1782 | fn Parser::parse_top(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:1843:10-1843:16:
+<WORKDIR>/src/dml.mbt:1783:10-1783:16:
      | 
      | ///|
      | fn Parser::parse_top(
-1843 |   self : Parser,
+1783 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[Top?] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:1878:4-1878:10:
+<WORKDIR>/src/dml.mbt:1818:4-1818:10:
      | }
      | 
      | ///|
-1878 | fn Parser::parse_insert_statement(
+1818 | fn Parser::parse_insert_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:1879:10-1879:16:
+<WORKDIR>/src/dml.mbt:1819:10-1819:16:
      | 
      | ///|
      | fn Parser::parse_insert_statement(
-1879 |   self : Parser,
+1819 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[InsertStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2136:4-2136:10:
+<WORKDIR>/src/dml.mbt:2072:4-2072:10:
      | }
      | 
      | ///|
-2136 | fn Parser::parse_delete_statement(
+2072 | fn Parser::parse_delete_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2137:10-2137:16:
+<WORKDIR>/src/dml.mbt:2073:10-2073:16:
      | 
      | ///|
      | fn Parser::parse_delete_statement(
-2137 |   self : Parser,
+2073 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[DeleteStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2181:4-2181:10:
+<WORKDIR>/src/dml.mbt:2117:4-2117:10:
      | }
      | 
      | ///|
-2181 | fn Parser::parse_update_statement(
+2117 | fn Parser::parse_update_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2182:10-2182:16:
+<WORKDIR>/src/dml.mbt:2118:10-2118:16:
      | 
      | ///|
      | fn Parser::parse_update_statement(
-2182 |   self : Parser,
+2118 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[UpdateStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2261:4-2261:10:
+<WORKDIR>/src/dml.mbt:2197:4-2197:10:
      | }
      | 
      | ///|
-2261 | fn Parser::parse_truncate_statement(
+2197 | fn Parser::parse_truncate_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2262:10-2262:16:
+<WORKDIR>/src/dml.mbt:2198:10-2198:16:
      | 
      | ///|
      | fn Parser::parse_truncate_statement(
-2262 |   self : Parser,
+2198 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[TruncateStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2271:4-2271:10:
+<WORKDIR>/src/dml.mbt:2207:4-2207:10:
      | }
      | 
      | ///|
-2271 | fn Parser::parse_cte_list(
+2207 | fn Parser::parse_cte_list(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2272:10-2272:16:
+<WORKDIR>/src/dml.mbt:2208:10-2208:16:
      | 
      | ///|
      | fn Parser::parse_cte_list(
-2272 |   self : Parser,
+2208 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[Array[Cte]] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2292:4-2292:10:
+<WORKDIR>/src/dml.mbt:2228:4-2228:10:
      | }
      | 
      | ///|
-2292 | fn Parser::parse_cte(
+2228 | fn Parser::parse_cte(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2293:10-2293:16:
+<WORKDIR>/src/dml.mbt:2229:10-2229:16:
      | 
      | ///|
      | fn Parser::parse_cte(
-2293 |   self : Parser,
+2229 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[Cte] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2349:4-2349:10:
+<WORKDIR>/src/dml.mbt:2285:4-2285:10:
      | 
      | ///|
      | /// Parse window specification: [PARTITION BY ...] [ORDER BY ...] [frame_clause]
-2349 | fn Parser::parse_window_spec(
+2285 | fn Parser::parse_window_spec(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2350:10-2350:16:
+<WORKDIR>/src/dml.mbt:2286:10-2286:16:
      | ///|
      | /// Parse window specification: [PARTITION BY ...] [ORDER BY ...] [frame_clause]
      | fn Parser::parse_window_spec(
-2350 |   self : Parser,
+2286 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[WindowSpec] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2402:4-2402:10:
+<WORKDIR>/src/dml.mbt:2338:4-2338:10:
      | 
      | ///|
      | /// Parse window frame clause: ROWS/RANGE [BETWEEN ... AND ...] or ROWS/RANGE ...
-2402 | fn Parser::parse_window_frame_clause(
+2338 | fn Parser::parse_window_frame_clause(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2403:10-2403:16:
+<WORKDIR>/src/dml.mbt:2339:10-2339:16:
      | ///|
      | /// Parse window frame clause: ROWS/RANGE [BETWEEN ... AND ...] or ROWS/RANGE ...
      | fn Parser::parse_window_frame_clause(
-2403 |   self : Parser,
+2339 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[WindowFrameClause?] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2417:4-2417:10:
+<WORKDIR>/src/dml.mbt:2351:4-2351:10:
      | 
      | ///|
      | /// Parse frame bounds: [BETWEEN ... AND ...] or single bound
-2417 | fn Parser::parse_frame_bounds(
+2351 | fn Parser::parse_frame_bounds(
      |    ^^^^^^
      |   self : Parser,
      |   frame_units : WindowFrameUnits,
 
-<WORKDIR>/src/dml.mbt:2418:10-2418:16:
+<WORKDIR>/src/dml.mbt:2352:10-2352:16:
      | ///|
      | /// Parse frame bounds: [BETWEEN ... AND ...] or single bound
      | fn Parser::parse_frame_bounds(
-2418 |   self : Parser,
+2352 |   self : Parser,
      |          ^^^^^^
      |   frame_units : WindowFrameUnits,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2471:4-2471:10:
+<WORKDIR>/src/dml.mbt:2397:4-2397:10:
      | 
      | ///|
      | /// Parse individual frame bound
-2471 | fn Parser::parse_frame_bound(
+2397 | fn Parser::parse_frame_bound(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2472:10-2472:16:
+<WORKDIR>/src/dml.mbt:2398:10-2398:16:
      | ///|
      | /// Parse individual frame bound
      | fn Parser::parse_frame_bound(
-2472 |   self : Parser,
+2398 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[WindowFrameBound] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2757:4-2757:10:
+<WORKDIR>/src/dml.mbt:2677:4-2677:10:
      | }
      | 
      | ///|
-2757 | fn Parser::parse_merge_statement(
+2677 | fn Parser::parse_merge_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2758:10-2758:16:
+<WORKDIR>/src/dml.mbt:2678:10-2678:16:
      | 
      | ///|
      | fn Parser::parse_merge_statement(
-2758 |   self : Parser,
+2678 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[MergeStmt] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2834:4-2834:10:
+<WORKDIR>/src/dml.mbt:2754:4-2754:10:
      | }
      | 
      | ///|
-2834 | fn Parser::parse_merge_when_clause(
+2754 | fn Parser::parse_merge_when_clause(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2835:10-2835:16:
+<WORKDIR>/src/dml.mbt:2755:10-2755:16:
      | 
      | ///|
      | fn Parser::parse_merge_when_clause(
-2835 |   self : Parser,
+2755 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[MergeWhenClause] raise ParserError {
 
-<WORKDIR>/src/dml.mbt:2869:4-2869:10:
+<WORKDIR>/src/dml.mbt:2785:4-2785:10:
      | }
      | 
      | ///|
-2869 | fn Parser::parse_merge_action(
+2785 | fn Parser::parse_merge_action(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/dml.mbt:2870:10-2870:16:
+<WORKDIR>/src/dml.mbt:2786:10-2786:16:
      | 
      | ///|
      | fn Parser::parse_merge_action(
-2870 |   self : Parser,
+2786 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[MergeAction] raise ParserError {
@@ -1347,7 +1347,7 @@ Found 199 references for symbol 'Parser':
 
 <WORKDIR>/src/parser.mbt:47:16-47:22:
    |   tokens : ArrayView[Token],
-   |   dialect? : &Dialect = MySQL::{ },
+   |   dialect~ : &Dialect = MySQL::{ },
    | ) -> Array[Statement] raise ParserError {
 47 |   let parser = Parser::{ dialect, }
    |                ^^^^^^
@@ -1372,290 +1372,290 @@ Found 199 references for symbol 'Parser':
    |   tokens : ArrayView[Token],
    | ) -> ParserResult[Statement] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:215:4-215:10:
+<WORKDIR>/src/parser.mbt:185:4-185:10:
     | ///|
     | 
     | ///|
-215 | fn Parser::parse_show_statement(
+185 | fn Parser::parse_show_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:216:10-216:16:
+<WORKDIR>/src/parser.mbt:186:10-186:16:
     | 
     | ///|
     | fn Parser::parse_show_statement(
-216 |   self : Parser,
+186 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[ShowStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:323:4-323:10:
+<WORKDIR>/src/parser.mbt:290:4-290:10:
     | }
     | 
     | ///|
-323 | fn Parser::parse_set_statement(
+290 | fn Parser::parse_set_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:324:10-324:16:
+<WORKDIR>/src/parser.mbt:291:10-291:16:
     | 
     | ///|
     | fn Parser::parse_set_statement(
-324 |   self : Parser,
+291 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[SetStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:350:4-350:10:
+<WORKDIR>/src/parser.mbt:317:4-317:10:
     | }
     | 
     | ///|
-350 | fn Parser::parse_set_assignments(
+317 | fn Parser::parse_set_assignments(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:351:10-351:16:
+<WORKDIR>/src/parser.mbt:318:10-318:16:
     | 
     | ///|
     | fn Parser::parse_set_assignments(
-351 |   self : Parser,
+318 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[SetAssignment]] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:393:4-393:10:
+<WORKDIR>/src/parser.mbt:360:4-360:10:
     | }
     | 
     | ///|
-393 | fn Parser::parse_replace_statement(
+360 | fn Parser::parse_replace_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:394:10-394:16:
+<WORKDIR>/src/parser.mbt:361:10-361:16:
     | 
     | ///|
     | fn Parser::parse_replace_statement(
-394 |   self : Parser,
+361 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[InsertStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:480:4-480:10:
+<WORKDIR>/src/parser.mbt:438:4-438:10:
     | }
     | 
     | ///|
-480 | fn Parser::parse_copy_statement(
+438 | fn Parser::parse_copy_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:481:10-481:16:
+<WORKDIR>/src/parser.mbt:439:10-439:16:
     | 
     | ///|
     | fn Parser::parse_copy_statement(
-481 |   self : Parser,
+439 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[CopyStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:570:4-570:10:
+<WORKDIR>/src/parser.mbt:528:4-528:10:
     | }
     | 
     | ///|
-570 | fn Parser::parse_copy_options(
+528 | fn Parser::parse_copy_options(
     |    ^^^^^^
     |   _self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:571:11-571:17:
+<WORKDIR>/src/parser.mbt:529:11-529:17:
     | 
     | ///|
     | fn Parser::parse_copy_options(
-571 |   _self : Parser,
+529 |   _self : Parser,
     |           ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[CopyOption]] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:748:4-748:10:
+<WORKDIR>/src/parser.mbt:706:4-706:10:
     | }
     | 
     | ///|
-748 | fn Parser::parse_use_statement(
+706 | fn Parser::parse_use_statement(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:749:10-749:16:
+<WORKDIR>/src/parser.mbt:707:10-707:16:
     | 
     | ///|
     | fn Parser::parse_use_statement(
-749 |   self : Parser,
+707 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[UseStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:760:4-760:10:
+<WORKDIR>/src/parser.mbt:718:4-718:10:
     | }
     | 
     | ///|
-760 | fn Parser::parse_comma_separated_exprs(
+718 | fn Parser::parse_comma_separated_exprs(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:761:10-761:16:
+<WORKDIR>/src/parser.mbt:719:10-719:16:
     | 
     | ///|
     | fn Parser::parse_comma_separated_exprs(
-761 |   self : Parser,
+719 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[Expr]] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:946:4-946:10:
+<WORKDIR>/src/parser.mbt:894:4-894:10:
     | }
     | 
     | ///|
-946 | fn Parser::parse_duplicate_key_assignments(
+894 | fn Parser::parse_duplicate_key_assignments(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:947:10-947:16:
+<WORKDIR>/src/parser.mbt:895:10-895:16:
     | 
     | ///|
     | fn Parser::parse_duplicate_key_assignments(
-947 |   self : Parser,
+895 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[Array[Assignment]] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:975:4-975:10:
+<WORKDIR>/src/parser.mbt:923:4-923:10:
     | }
     | 
     | ///|
-975 | fn Parser::parse_on_conflict_clause(
+923 | fn Parser::parse_on_conflict_clause(
     |    ^^^^^^
     |   self : Parser,
     |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:976:10-976:16:
+<WORKDIR>/src/parser.mbt:924:10-924:16:
     | 
     | ///|
     | fn Parser::parse_on_conflict_clause(
-976 |   self : Parser,
+924 |   self : Parser,
     |          ^^^^^^
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[OnConflictClause] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:1113:4-1113:10:
+<WORKDIR>/src/parser.mbt:1047:4-1047:10:
      | }
      | 
      | ///|
-1113 | fn Parser::parse_load_data_statement(
+1047 | fn Parser::parse_load_data_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1114:10-1114:16:
+<WORKDIR>/src/parser.mbt:1048:10-1048:16:
      | 
      | ///|
      | fn Parser::parse_load_data_statement(
-1114 |   self : Parser,
+1048 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[LoadDataStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:1283:4-1283:10:
+<WORKDIR>/src/parser.mbt:1216:4-1216:10:
      | }
      | 
      | ///|
-1283 | fn Parser::parse_load_data_fields_options(
+1216 | fn Parser::parse_load_data_fields_options(
      |    ^^^^^^
      |   _self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1284:11-1284:17:
+<WORKDIR>/src/parser.mbt:1217:11-1217:17:
      | 
      | ///|
      | fn Parser::parse_load_data_fields_options(
-1284 |   _self : Parser,
+1217 |   _self : Parser,
      |           ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[LoadDataFieldsOptions] {
 
-<WORKDIR>/src/parser.mbt:1324:4-1324:10:
+<WORKDIR>/src/parser.mbt:1257:4-1257:10:
      | }
      | 
      | ///|
-1324 | fn Parser::parse_load_data_lines_options(
+1257 | fn Parser::parse_load_data_lines_options(
      |    ^^^^^^
      |   _self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1325:11-1325:17:
+<WORKDIR>/src/parser.mbt:1258:11-1258:17:
      | 
      | ///|
      | fn Parser::parse_load_data_lines_options(
-1325 |   _self : Parser,
+1258 |   _self : Parser,
      |           ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[LoadDataLinesOptions] {
 
-<WORKDIR>/src/parser.mbt:1349:4-1349:10:
+<WORKDIR>/src/parser.mbt:1282:4-1282:10:
      | ///|
      | /// Parse PREPARE statement
      | /// Syntax: PREPARE name [(data_type [, ...])] AS statement
-1349 | fn Parser::parse_prepare_statement(
+1282 | fn Parser::parse_prepare_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1350:10-1350:16:
+<WORKDIR>/src/parser.mbt:1283:10-1283:16:
      | /// Parse PREPARE statement
      | /// Syntax: PREPARE name [(data_type [, ...])] AS statement
      | fn Parser::parse_prepare_statement(
-1350 |   self : Parser,
+1283 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[PrepareStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:1403:4-1403:10:
+<WORKDIR>/src/parser.mbt:1336:4-1336:10:
      | ///   EXECUTE name [(param [, ...])]
      | ///   EXECUTE name USING expr [, ...]
      | ///   EXECUTE IMMEDIATE 'sql_string' [INTO var [, ...]] [USING expr [, ...]]
-1403 | fn Parser::parse_execute_statement(
+1336 | fn Parser::parse_execute_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1404:10-1404:16:
+<WORKDIR>/src/parser.mbt:1337:10-1337:16:
      | ///   EXECUTE name USING expr [, ...]
      | ///   EXECUTE IMMEDIATE 'sql_string' [INTO var [, ...]] [USING expr [, ...]]
      | fn Parser::parse_execute_statement(
-1404 |   self : Parser,
+1337 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[ExecuteStmt] raise ParserError {
 
-<WORKDIR>/src/parser.mbt:1502:4-1502:10:
+<WORKDIR>/src/parser.mbt:1435:4-1435:10:
      | ///|
      | /// Parse DEALLOCATE statement
      | /// Syntax: DEALLOCATE [PREPARE] name
-1502 | fn Parser::parse_deallocate_statement(
+1435 | fn Parser::parse_deallocate_statement(
      |    ^^^^^^
      |   self : Parser,
      |   tokens : ArrayView[Token],
 
-<WORKDIR>/src/parser.mbt:1503:10-1503:16:
+<WORKDIR>/src/parser.mbt:1436:10-1436:16:
      | /// Parse DEALLOCATE statement
      | /// Syntax: DEALLOCATE [PREPARE] name
      | fn Parser::parse_deallocate_statement(
-1503 |   self : Parser,
+1436 |   self : Parser,
      |          ^^^^^^
      |   tokens : ArrayView[Token],
      | ) -> ParserResult[DeallocateStmt] raise ParserError {

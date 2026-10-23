@@ -1866,9 +1866,9 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
      content=(
 *** Update File: <WORKDIR>/src/parser.mbt
 @@
-     Token::Identifier("t"),
-     Token::Semicolon,
-   ]
+ ///|
+ test "Parse simple select statement" {
+   let tokens = [Keyword(Select), Mul, Keyword(From), Identifier("t"), Semicolon]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
    inspect(
@@ -1877,15 +1877,15 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
 @@
  ///|
  test "Parse USE database statement" {
-   let tokens = [Keyword(Use), Token::Identifier("mydb"), Token::Semicolon]
+   let tokens = [Keyword(Use), Identifier("mydb"), Semicolon]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
    inspect(stmt, content="USE mydb;")
  }
  
 @@
-     Token::Identifier("production"),
-     Token::Semicolon,
+     Identifier("production"),
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
@@ -1893,17 +1893,17 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  }
  
 @@
-     Token::Identifier("my database"),
-     Token::Semicolon,
-   ]
+ ///|
+ test "Parse USE database statement with backtick quoted name" {
+   let tokens = [Keyword(Use), Identifier("my database"), Semicolon]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
    inspect(stmt, content="USE `my database`;")
  }
  
 @@
-     Token::StringLiteral("/tmp/users.csv"),
-     Token::Semicolon,
+     StringLiteral("/tmp/users.csv"),
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
@@ -1911,8 +1911,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  }
  
 @@
-     Token::RParen,
-     Token::Semicolon,
+     RParen,
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
@@ -1921,7 +1921,7 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
      content="COPY products FROM '/data/products.csv' (FORMAT CSV, HEADER);",
 @@
      Keyword(Stdout),
-     Token::Semicolon,
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
@@ -1929,8 +1929,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
  }
  
 @@
-     Token::RParen,
-     Token::Semicolon,
+     RParen,
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed
@@ -1938,8 +1938,8 @@ $ run_moon_ide moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/
      stmt,
      content="COPY (\n  SELECT\n    *\n  FROM\n    customers\n) TO '/tmp/customers.csv' (FORMAT CSV, DELIMITER ',', NULL '');",
 @@
-     Token::RParen,
-     Token::Semicolon,
+     RParen,
+     Semicolon,
    ]
 -  let stmt = parse(tokens)[0] |> pretty_print
 +  let stmt = parse(tokens)[0] |> pretty_print_renamed

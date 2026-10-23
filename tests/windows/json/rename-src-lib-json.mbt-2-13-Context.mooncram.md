@@ -46,7 +46,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn value(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
      // skip whitespace
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // number {{{
  
@@ -235,7 +235,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn array_start(ctx : ContextRenamed, len : Int) -> Value raise {
    let { decode, skip, arr_acc, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -244,7 +244,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn array_push(ctx : ContextRenamed, value0 : Json) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // object {{{
  
@@ -253,7 +253,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn object_start(ctx : ContextRenamed, len : Int) -> Value raise {
    let { obj_acc, skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -262,7 +262,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn object_value(ctx : ContextRenamed, key : String) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -271,7 +271,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn object_push(ctx : ContextRenamed, value0 : Json, key : String) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -280,7 +280,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
 +fn object_key(ctx : ContextRenamed) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['\ ' | '\n' | '\r' | '\t', .. rest] =>
+     [' '  | '\n' | '\r' | '\t', .. rest] =>
 @@
  // }}}
  

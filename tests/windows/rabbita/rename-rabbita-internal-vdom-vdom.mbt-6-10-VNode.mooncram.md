@@ -19,6 +19,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
 +pub(all) struct Html(@vdom.VNodeRenamed) derive(Eq)
  
  ///|
+ pub extend Html with Eq::{equal, not_equal}
+ 
+ ///|
 -pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
 +pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNodeRenamed {
    self.0
@@ -300,6 +303,15 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    )
    inspect(
      server_side_render(() => div),
+@@
+     "readOnly": Boolean(true),
+     "noValidate": Boolean(false),
+   }
+-  let input = VNode::elem("input", Props::new({}, props, {}, {}), Array([]))
++  let input = VNodeRenamed::elem("input", Props::new({}, props, {}, {}), Array([]))
+   inspect(
+     server_side_render(() => input),
+     content=(
 *** Update File: <WORKDIR>/rabbita\internal\vdom\vdom.mbt
 @@
  
@@ -312,8 +324,8 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    Text(String)
 -  Frag(Array[VNode])
 +  Frag(Array[VNodeRenamed])
--  Thunk(Int, () -> VNode)
-+  Thunk(Int, () -> VNodeRenamed)
+-  Thunk(Int32, () -> VNode)
++  Thunk(Int32, () -> VNodeRenamed)
  }
  
  ///|
@@ -322,12 +334,18 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    physical_equal(a, b)
  }
  
+ ///|
+-pub extend VNode with Eq::{equal, not_equal}
++pub extend VNodeRenamed with Eq::{equal, not_equal}
+ 
+ ///|
+ const CAPTURED_LINK_TAG : String = "RABBITA_CAPTURED_LINK"
 @@
  }
  
  ///|
--pub fn VNode::thunk(hash : Int, f : () -> VNode) -> VNode {
-+pub fn VNodeRenamed::thunk(hash : Int, f : () -> VNodeRenamed) -> VNodeRenamed {
+-pub fn VNode::thunk(hash : Int32, f : () -> VNode) -> VNode {
++pub fn VNodeRenamed::thunk(hash : Int32, f : () -> VNodeRenamed) -> VNodeRenamed {
 -  VNode::Thunk(hash, f)
 +  VNodeRenamed::Thunk(hash, f)
  }
@@ -357,7 +375,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
    props : Props,
 -  children : Children[VNode],
 +  children : Children[VNodeRenamed],
-   escape? : Bool = false,
+   escape~ : Bool = false,
 -) -> VNode {
 +) -> VNodeRenamed {
    let tag = if escape { "a" } else { CAPTURED_LINK_TAG }
@@ -416,7 +434,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'VNode' 'VNodeR
  
 @@
    children : Array[Svg],
-   ns? : String = @dom.namespace_svg,
+   ns~ : String = @dom.namespace_svg,
  ) -> Svg {
 -  let vnode = @vdom.VNode::elem(
 +  let vnode = @vdom.VNodeRenamed::elem(

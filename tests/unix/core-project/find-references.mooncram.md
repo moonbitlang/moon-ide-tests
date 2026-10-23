@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'map' --loc 'core_ide_cases.mbt:12:22'
-Found 1 references for symbol 'map':
+Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:12:22-12:25:
    | 
    | ///|
@@ -27,6 +27,14 @@ Found 1 references for symbol 'map':
    |                      ^^^
    |   let large = doubled.filter(x => x > 3)
    |   large.fold(init=0, (sum, x) => sum + x)
+
+<WORKDIR>/test_project_test.mbt:3:31-3:34:
+  | ///|
+  | test "fib" {
+3 |   let array = [1, 2, 3, 4, 5].map(fib)
+  |                               ^^^
+  | 
+  |   // `inspect` is used to check the output of the function
 
 ```
 

@@ -39,7 +39,6 @@ jobs:
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
           git checkout -B "$DAILY_BRANCH" origin/main
           mkdir -p .daily-test
-          printf ".daily-test/\n" >> .git/info/exclude
 
       - name: Update fixture repos
         run: scripts/update-submodules.sh
@@ -64,22 +63,19 @@ jobs:
 
       - name: Refresh Unix snapshots
         run: |
-          mkdir -p .daily-test
-          scripts/escape-cram-empty-parens.sh tests/unix
-          moon cram update --replace --assume-yes --cram-compat tests/unix \
+          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+          moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}" \
             > .daily-test/unix-cram-update.log 2>&1
-          scripts/escape-cram-empty-parens.sh tests/unix
 
       - name: Run Unix cram tests
-        id: unix-cram
         run: |
+          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
           set +e
-          moon cram test --cram-compat tests/unix \
+          moon cram test --cram-compat "${baseline_paths[@]}" \
             > .daily-test/unix-cram-test.log 2>&1
           status=$?
           set -e
           echo "$status" > .daily-test/unix-cram-test-status.txt
-          echo "status=$status" >> "$GITHUB_OUTPUT"
 
       - name: Collect Unix review inputs
         if: always()
@@ -92,8 +88,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet -- fixtures/repos tests/unix; then
-            git add fixtures/repos tests/unix
+          git add --all -- fixtures/repos tests/unix
+          if ! git diff --cached --quiet -- fixtures/repos tests/unix; then
             git commit -m "chore: update daily Unix IDE baselines"
           fi
 
@@ -120,24 +116,26 @@ jobs:
           submodules: recursive
 
       - name: Install MoonBit
-        shell: powershell
+        shell: pwsh
         run: |
           Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
           irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Prepare daily branch
-        shell: powershell
+        shell: pwsh
         run: |
-          git fetch --no-tags origin main
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git checkout -B $env:DAILY_BRANCH "origin/$($env:DAILY_BRANCH)"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git submodule update --init --recursive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          ".daily-test/" | Out-File -FilePath .git\info\exclude -Encoding utf8 -Append
 
       - name: Update MoonBit registry
-        shell: powershell
+        shell: pwsh
         run: |
           foreach ($attempt in 1, 2, 3) {
             moon update
@@ -151,25 +149,37 @@ jobs:
           }
 
       - name: Update Windows snapshots
-        shell: powershell
+        shell: pwsh
         run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
 
       - name: Run Windows cram tests
-        id: windows-cram
-        shell: powershell
+        shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
-          cmd.exe /D /C "moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd tests\windows > .daily-test\windows-cram-test.log 2>&1"
-          $status = $LASTEXITCODE
+          $baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
+          $status = 0
+          if ($baselinePaths.Count -gt 0) {
+            moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths `
+              *> .daily-test/windows-cram-test.log
+            $status = $LASTEXITCODE
+          } else {
+            [System.IO.File]::WriteAllText(".daily-test\windows-cram-test.log", "No compatible Windows fixture baselines.`n", [System.Text.Encoding]::ASCII)
+          }
           [System.IO.File]::WriteAllText(".daily-test\windows-cram-test-status.txt", [string]$status, [System.Text.Encoding]::ASCII)
-          "status=$status" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           exit 0
 
       - name: Commit Windows daily changes
-        shell: powershell
+        shell: pwsh
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Add removals and new files before renormalizing the remaining index;
+          # --renormalize alone tries to stat deleted tracked files and fails.
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
 
           # Stage first: the Windows checkout can report CRLF-only worktree
           # changes that disappear once Git normalizes them into the index.
@@ -368,13 +378,16 @@ jobs:
               body,
             });
 
-      - name: Fail if cram tests failed without a diff
-        if: steps.diff.outputs.has_changes == 'false'
+      - name: Require passing tests and review
+        if: always()
+        env:
+          REVIEW_HAS_PROBLEM: ${{ steps.openseek-result.outputs.has_problem }}
         run: |
           unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
           windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
 
-          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
+          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ] || \
+             [ "$REVIEW_HAS_PROBLEM" = "true" ]; then
             cat .daily-test/unix-cram-test.log 2>/dev/null || true
             cat .daily-test/windows-cram-test.log 2>/dev/null || true
             exit 1

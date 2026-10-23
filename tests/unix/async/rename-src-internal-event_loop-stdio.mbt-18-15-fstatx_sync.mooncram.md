@@ -27,7 +27,7 @@ $ run_moon_ide moon ide rename 'fstatx_sync' 'fstatx_sync_renamed' --loc 'src/in
 -extern "C" fn fstatx_sync(
 +extern "C" fn fstatx_sync_renamed(
    fd : @fd_util.Fd,
-   request : UInt,
+   request : UInt32,
    buf : FixedArray[Byte],
 @@
    context~ : String,
