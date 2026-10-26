@@ -1,4 +1,4 @@
-# core rename to_repr test/extends.mbt:22:37
+# core rename to_repr async/aqueue/deprecated.mbt:18:51
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,15 +17,18 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'to_repr' 'to_repr_renamed' --loc 'test/extends.mbt:22:37'
+$ run_moon_ide moon ide rename 'to_repr' 'to_repr_renamed' --loc 'async/aqueue/deprecated.mbt:18:51'
 *** Begin Patch
-*** Update File: <WORKDIR>/test/extends.mbt
+*** Update File: <WORKDIR>/async/aqueue/deprecated.mbt
 @@
  ///|
- #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
+ #deprecated
  #doc(hidden)
--pub extend Test with @debug.Debug::{to_repr}
-+pub extend Test with @debug.Debug::{to_repr_renamed}
+-pub extend QueueAlreadyClosed with @debug.Debug::{to_repr}
++pub extend QueueAlreadyClosed with @debug.Debug::{to_repr_renamed}
+ 
+ ///|
+ #deprecated
 *** End Patch
 
 ```

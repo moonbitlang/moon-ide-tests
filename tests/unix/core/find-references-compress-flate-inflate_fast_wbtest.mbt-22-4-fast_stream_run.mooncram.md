@@ -1,4 +1,4 @@
-# core find-references regex string/regex_test.mbt:17:7
+# core find-references fast_stream_run compress/flate/inflate_fast_wbtest.mbt:22:4
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,15 +17,15 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'regex' --loc 'string/regex_test.mbt:17:7'
-Found 1 references for symbol 'regex':
-<WORKDIR>/string/regex_test.mbt:18:9-18:14:
-   | ///|
-   | test "execute/non_capture_group" {
-   |   let regex = re"(?:ab)(c)(?:d)"
-18 |   guard regex.execute("abcd") is Some(m) else { fail("Expected match") }
-   |         ^^^^^
-   |   debug_inspect(
-   |     m,
+$ run_moon_ide moon ide find-references 'fast_stream_run' --loc 'compress/flate/inflate_fast_wbtest.mbt:22:4'
+Found 1 references for symbol 'fast_stream_run':
+<WORKDIR>/compress/flate/inflate_fast_wbtest.mbt:280:11-280:26:
+    |         ] {
+    |         let (chunk, room, fixed) = schedule
+    |         @test.assert_eq(
+280 |           fast_stream_run(stream, chunk, room, fixed),
+    |           ^^^^^^^^^^^^^^^
+    |           Err(Corrupt),
+    |         )
 
 ```

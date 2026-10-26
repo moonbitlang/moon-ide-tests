@@ -1,4 +1,4 @@
-# core find-references self builtin/int64.mbt:26:21
+# core find-references path async/fs/named_pipe_test.mbt:18:22
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,6 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'self' --loc 'builtin/int64.mbt:26:21'
-Found 0 references for symbol 'self':
+$ run_moon_ide moon ide find-references 'path' --loc 'async/fs/named_pipe_test.mbt:18:22'
+Error: could not get package of file <WORKDIR>/async/fs/named_pipe_test.mbt
+[1]
 ```
