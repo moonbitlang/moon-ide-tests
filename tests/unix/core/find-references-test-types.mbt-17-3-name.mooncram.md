@@ -19,11 +19,11 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```mooncram
 $ run_moon_ide moon ide find-references 'name' --loc 'test/types.mbt:17:3'
 Found 2 references for symbol 'name':
-<WORKDIR>/test/test.mbt:239:8-239:12:
+<WORKDIR>/test/test.mbt:278:8-278:12:
     | ///|
     | /// Return the name of the test.
     | pub fn Test::name(self : Self) -> String {
-239 |   self.name
+278 |   self.name
     |        ^^^^
     | }
 
