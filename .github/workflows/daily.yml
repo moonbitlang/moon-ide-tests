@@ -374,6 +374,15 @@ jobs:
         run: |
           moon run --target native "$RUNNER_TEMP/parse-openseek-result.mbtx"
 
+      - name: Upload OpenSeek result
+        if: always() && steps.diff.outputs.has_baseline_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-openseek-result
+          path: .daily-test/openseek-review.json
+          if-no-files-found: ignore
+          include-hidden-files: true
+
       - name: Comment on pull request
         if: steps.diff.outputs.has_baseline_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
         uses: actions/github-script@v9
