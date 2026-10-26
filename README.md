@@ -111,8 +111,12 @@ moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}"
 moon cram test --cram-compat "${baseline_paths[@]}"
 ```
 
-The Daily Test workflow runs this flow on a schedule and opens a fixture and
-baseline update pull request against `main`.
+The Daily Test workflow runs this flow on a schedule against `main`. To refresh
+a PR branch, choose that branch when manually running Daily Test. Its update PR
+targets the selected branch. Agent review receives baseline changes since the
+exact launch commit, fixture submodule revisions and diff, and execution logs.
+Existing changes on the selected branch and testgen dependency updates are
+excluded from the review bundle.
 
 Submodule revisions are updated even when a fixture is skipped. Each platform
 runs its own preflight against each revision before changing that fixture's tests.

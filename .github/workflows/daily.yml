@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: daily-test
+  group: daily-test-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -16,7 +16,9 @@ permissions:
   issues: write
 
 env:
-  DAILY_BRANCH: daily-test/update-baselines
+  BASE_BRANCH: ${{ github.ref_name }}
+  BASE_SHA: ${{ github.sha }}
+  DAILY_BRANCH: ${{ github.ref_name == 'main' && 'daily-test/update-baselines' || format('daily-test/{0}/update-baselines', github.ref_name) }}
 
 jobs:
   daily-test:
@@ -35,9 +37,12 @@ jobs:
 
       - name: Prepare daily branch
         run: |
-          git fetch --no-tags origin main
+          if [ "$GITHUB_REF_TYPE" != "branch" ]; then
+            echo "::error::Run Daily Test on a branch so its pull request has a branch to target."
+            exit 1
+          fi
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
-          git checkout -B "$DAILY_BRANCH" origin/main
+          git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
           mkdir -p .daily-test
 
       - name: Update testgen dependencies
@@ -100,7 +105,6 @@ jobs:
         run: |
           mkdir -p .daily-test
           git submodule status --recursive > .daily-test/submodules.txt
-          git status --short > .daily-test/unix-status.txt
 
       - name: Commit Unix daily changes
         run: |
@@ -207,20 +211,6 @@ jobs:
           git diff --cached --quiet -- tests/windows
           $diffStatus = $LASTEXITCODE
 
-          $windowsStatus = @(git diff --cached --name-status -- tests/windows)
-          if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
-          }
-          $windowsStatusText = $windowsStatus -join [Environment]::NewLine
-          if ($windowsStatusText.Length -gt 0) {
-            $windowsStatusText += [Environment]::NewLine
-          }
-          [System.IO.File]::WriteAllText(
-            ".daily-test\windows-status.txt",
-            $windowsStatusText,
-            [System.Text.UTF8Encoding]::new($false)
-          )
-
           if ($diffStatus -eq 1) {
             git commit -m "chore: update daily Windows IDE baselines"
             if ($LASTEXITCODE -ne 0) {
@@ -276,7 +266,6 @@ jobs:
         run: |
           cp .github/scripts/parse-openseek-result.mbtx "$RUNNER_TEMP/parse-openseek-result.mbtx"
           cp .github/codex/prompts/daily-test-review.md "$RUNNER_TEMP/daily-test-review.md"
-          git fetch --no-tags origin main
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH"
           git checkout -B "$DAILY_BRANCH" "origin/$DAILY_BRANCH"
           git submodule update --init --recursive
@@ -293,25 +282,36 @@ jobs:
           name: daily-windows-review-inputs
           path: .daily-test
 
-      - name: Collect final review inputs
-        run: |
-          mkdir -p .daily-test
-          git status --short > .daily-test/status.txt
-
       - name: Detect daily diff
         id: diff
         run: |
-          if git diff --quiet origin/main...HEAD -- testgen/moon.mod fixtures/repos tests/unix tests/windows; then
+          if git diff --quiet "$BASE_SHA"...HEAD -- testgen/moon.mod fixtures/repos tests/unix tests/windows; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
 
-          if git diff --quiet origin/main...HEAD -- tests/unix tests/windows; then
+          if git diff --quiet "$BASE_SHA"...HEAD -- tests/unix tests/windows; then
             echo "has_baseline_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_baseline_changes=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Prepare scoped review inputs
+        if: steps.diff.outputs.has_baseline_changes == 'true'
+        run: |
+          review_dir="$RUNNER_TEMP/daily-test-review"
+          mkdir -p "$review_dir"
+          git diff --no-ext-diff --no-color "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests.diff"
+          git diff --stat "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-stat.txt"
+          git diff --name-status "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-status.txt"
+          git diff --no-ext-diff --no-color --submodule=log "$BASE_SHA"...HEAD -- fixtures/repos > "$review_dir/submodules.diff"
+          # Both platforms write native UTF-8 logs; status files are ASCII.
+          cp .daily-test/submodules.txt \
+            .daily-test/{unix,windows}-cram-{test-status.txt,test.log,update.log} \
+            .daily-test/{unix,windows}-baseline-paths.txt \
+            .daily-test/{unix,windows}-check-*.log \
+            "$review_dir/"
 
       - name: Create or update pull request
         id: pr
@@ -321,27 +321,29 @@ jobs:
         run: |
           pr_number="$(gh pr list \
             --head "$DAILY_BRANCH" \
-            --base main \
+            --base "$BASE_BRANCH" \
             --state open \
             --json number \
             --jq '.[0].number // empty')"
 
-          body="$(printf '%s\n\n%s\n%s\n' \
-            "This PR was generated by the Daily Test workflow." \
+          body_file="$RUNNER_TEMP/daily-pr-body.txt"
+          printf '%s\n\n%s\n%s\n\n%s\n' \
+            "This PR was generated by the Daily Test workflow from $BASE_BRANCH ($BASE_SHA)." \
             "It upgrades testgen dependencies, refreshes fixture submodules, regenerates IDE baseline tests with testgen," \
-            "promotes Unix Moon Cram snapshots, and promotes Windows Moon Cram snapshots.")"
+            "and promotes Unix and Windows snapshots only for fixtures that pass moon check on that platform." \
+            "Agent review covers baseline changes since that starting commit, with fixture submodule context and execution logs." > "$body_file"
 
           if [ -z "$pr_number" ]; then
             pr_url="$(gh pr create \
-              --base main \
+              --base "$BASE_BRANCH" \
               --head "$DAILY_BRANCH" \
               --title "chore: update daily IDE baselines" \
-              --body "$body")"
+              --body-file "$body_file")"
             pr_number="${pr_url##*/}"
           else
             gh pr edit "$pr_number" \
               --title "chore: update daily IDE baselines" \
-              --body "$body"
+              --body-file "$body_file"
           fi
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
@@ -364,8 +366,8 @@ jobs:
             run \
             --approval never \
             --no-session \
-            --dir "$GITHUB_WORKSPACE" \
-            --result-file .daily-test/openseek-review.json \
+            --dir "$RUNNER_TEMP/daily-test-review" \
+            --result-file "$GITHUB_WORKSPACE/.daily-test/openseek-review.json" \
             "$(cat "$RUNNER_TEMP/daily-test-review.md")"
 
       - name: Parse OpenSeek review
@@ -408,6 +410,14 @@ jobs:
               issue_number,
               body,
             });
+
+      - name: Upload scoped review inputs
+        if: always() && steps.diff.outputs.has_baseline_changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: daily-tests-review
+          path: ${{ runner.temp }}/daily-test-review
+          if-no-files-found: error
 
       - name: Require passing tests and review
         if: always()
