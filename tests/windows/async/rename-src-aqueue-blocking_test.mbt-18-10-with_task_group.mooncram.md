@@ -121,7 +121,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
      group.spawn_bg(no_wait=true, () => start_echo_server(port=49001))
-     let client = @websocket.connect("ws://localhost:49001")
+     let client = @websocket.connect("ws://127.0.0.1:49001")
      defer client.close()
 *** Update File: <WORKDIR>/examples\xargs\main.mbt
 @@
@@ -990,7 +990,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let port = test_server(group, log)
-     let client = @http.Client("http://localhost:\{port}")
+     let client = @http.Client("http://127.0.0.1:\{port}")
      defer client.close()
 *** Update File: <WORKDIR>/src\http\parser_trailer_wbtest.mbt
 @@
@@ -1168,6 +1168,15 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
 @@
       0x00, 0x00, 0x00,
    ]
+   let (r, w) = @io.pipe()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     group.spawn_bg() <| () => {
+       defer w.close()
+       w
+@@
+ ///|
+ async test "close-delimited gzip" {
    let (r, w) = @io.pipe()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
@@ -2223,11 +2232,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
    let sleep = sleep_prog.wait()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let child = @process.spawn(group, sleep, ["450", "-exit-code", "42"])
-     @async.sleep(300)
+     let child = @process.spawn(group, sleep, ["200", "-exit-code", "42"])
      debug_inspect(child.try_wait(), content="None")
+     @async.sleep(400)
 @@
- async test "Process:cancel" {
+ async test "Process::cancel" {
    let sleep = sleep_prog.wait()
    let mut t0 = 0L
 -  @async.with_task_group() <| group => {
@@ -2618,22 +2627,22 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
          }
 *** Update File: <WORKDIR>/src\socket\dual_stack_test.mbt
 @@
- ///|
- async test "Only_V4 server" {
+   // so that there is no collision with randomly assigned IPv6 port
+   let port = 8344
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
-     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:0"))
-     let port = server.addr.port()
+     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
      root.spawn_bg(no_wait=true) <| () => {
+       server.run_forever() <| ((conn, addr) => {
 @@
- ///|
- async test "Only_V6 server" {
+   // so that there is no collision with randomly assigned IPv4 port
+   let port = 8346
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.TcpServer(
-       @socket.Addr::parse("[::]:0"),
+       @socket.Addr::parse("[::]:\{port}"),
        dual_stack=false,
 @@
  ///|
@@ -2645,22 +2654,22 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      let port = server.addr.port()
      root.spawn_bg(no_wait=true) <| () => {
 @@
- ///|
- async test "Only_V4 UDP server" {
+   // so that there is no collision with randomly assigned IPv6 port
+   let port = 8344
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
-     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
-     let port = server.addr.port()
+     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
      root.spawn_bg(no_wait=true) <| () => {
+       defer server.close()
 @@
- ///|
- async test "Only_V6 UDP server" {
+   // so that there is no collision with randomly assigned IPv4 port
+   let port = 8346
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.UdpServer(
-       @socket.Addr::parse("[::]:0"),
+       @socket.Addr::parse("[::]:\{port}"),
        dual_stack=false,
 @@
  ///|
@@ -2777,14 +2786,14 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
        lock.release()
 *** Update File: <WORKDIR>/src\socket\reuse_addr_test.mbt
 @@
- ///|
- async test "reuse addr" {
-   let mut port = 0
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     group.spawn_bg() <| () => {
-       for _ in 0..<2 {
-         let server = @socket.TcpServer(
+   async fn run_server(server : @socket.TcpServer) -> Unit {
+     defer server.close()
+     let port = server.addr.port()
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       group.spawn_bg() <| () => {
+         let (conn, _) = server.accept()
+         defer conn.close()
 *** Update File: <WORKDIR>/src\socket\reuse_port_test.mbt
 @@
    let mut accepted1 = 0
@@ -3153,7 +3162,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3171,7 +3180,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3189,7 +3198,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3210,7 +3219,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3228,7 +3237,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3269,7 +3278,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
      group.spawn_bg(no_wait=true) <| () => {
 @@
      }
-     let client = @websocket.connect("ws://localhost:\{port}")
+     let client = @websocket.connect("ws://127.0.0.1:\{port}")
      defer client.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {

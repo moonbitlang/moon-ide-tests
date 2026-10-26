@@ -1,154 +1,340 @@
 # core peek-def
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'arr' --loc 'builtin\exact_view_test.mbt:17:7'
-Definition found at file <WORKDIR>/builtin\exact_view_test.mbt
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'QueueAlreadyClosed' --loc 'async\aqueue\deprecated.mbt:18:12'
+Definition found at file <WORKDIR>/async\aqueue\aqueue.mbt
+    |   data
+    | }
+    | 
+    | ///|
+    | /// Default error raised when trying to access an already-closed queue
+328 | pub suberror QueueAlreadyClosed derive(@debug.Debug, @json.ToJson)
+    |              ^^^^^^^^^^^^^^^^^^
+    | 
+    | ///|
+    | /// Close an async queue. After the queue is closed:
+    | ///
+    | /// - blocking `put` and `get` operations will fail immediately.
+    | /// - subsequent `put` and `try_put` operations also fail immediately
+    | /// - if `clear = false` (`false` by default),
+    | ///   sbusequent `get` and `try_get` operations can still retrieve
+    | ///   buffered elements in the queue before `close`.
+    | ///   After the queue becomes empty,
+    | ///   subsequent `get` and `try_get` operations also fail immediately
+    | /// - if `clear = true`, buffered elements in the queue will be cleared
+    | ///
+    | /// By default, writing to or reading from a closed queue
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'to_repr' --loc 'async\aqueue\deprecated.mbt:18:51'
+Definition found at file <WORKDIR>/async\aqueue\deprecated.mbt
+   | // limitations under the License.
+   | 
+   | ///|
+   | #deprecated
+   | #doc(hidden)
+18 | pub extend QueueAlreadyClosed with @debug.Debug::{to_repr}
+   |                                                   ^^^^^^^
+   | 
+   | ///|
+   | #deprecated
+   | #doc(hidden)
+   | pub extend QueueAlreadyClosed with @json.ToJson::{to_json}
+Definition found at file <WORKDIR>/async\aqueue\aqueue.mbt
+    |   data
+    | }
+    | 
+    | ///|
+    | /// Default error raised when trying to access an already-closed queue
+328 | pub suberror QueueAlreadyClosed derive(@debug.Debug, @json.ToJson)
+    |                                        ^^^^^^^^^^^^
+    | 
+    | ///|
+    | /// Close an async queue. After the queue is closed:
+    | ///
+    | /// - blocking `put` and `get` operations will fail immediately.
+    | /// - subsequent `put` and `try_put` operations also fail immediately
+    | /// - if `clear = false` (`false` by default),
+    | ///   sbusequent `get` and `try_get` operations can still retrieve
+    | ///   buffered elements in the queue before `close`.
+    | ///   After the queue becomes empty,
+    | ///   subsequent `get` and `try_get` operations also fail immediately
+    | /// - if `clear = true`, buffered elements in the queue will be cleared
+    | ///
+    | /// By default, writing to or reading from a closed queue
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'mkfifo' --loc 'async\fs\named_pipe_test.mbt:18:15'
+Error: could not get package of loc async\fs\named_pipe_test.mbt:18:15
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'path' --loc 'async\fs\named_pipe_test.mbt:18:22'
+Error: could not get package of loc async\fs\named_pipe_test.mbt:18:22
+[1]
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'CaseInsensitiveString' --loc 'async\http\case_insensitive_string.mbt:18:17'
+Definition found at file <WORKDIR>/async\http\case_insensitive_string.mbt
+   | // limitations under the License.
+   | 
+   | ///|
+   | /// String type with case insensitive comparison (in the ASCII sense).
+   | /// This type is implicitly convertible from `String` & string literal.
+18 | pub(all) struct CaseInsensitiveString(String) derive(@json.ToJson)
+   |                 ^^^^^^^^^^^^^^^^^^^^^
+   | 
+   | ///|
+   | pub impl Eq for CaseInsensitiveString with fn equal(x, y) {
+   |   Compare::compare(x, y) == 0
+   | }
+   | 
+   | ///|
+   | pub impl Compare for CaseInsensitiveString with fn compare(x, y) {
+   |   x.0.compare_ignore_ascii_case(y.0)
+   | }
+   | 
+   | ///|
+   | pub impl @debug.Debug for CaseInsensitiveString with fn to_repr(self) {
+   |   @debug.Debug::to_repr(self.0)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'CaseInsensitiveString' --loc 'async\http\case_insensitive_string.mbt:21:17'
+Definition found at file <WORKDIR>/async\http\case_insensitive_string.mbt
+   | // limitations under the License.
+   | 
+   | ///|
+   | /// String type with case insensitive comparison (in the ASCII sense).
+   | /// This type is implicitly convertible from `String` & string literal.
+18 | pub(all) struct CaseInsensitiveString(String) derive(@json.ToJson)
+   |                 ^^^^^^^^^^^^^^^^^^^^^
+   | 
+   | ///|
+   | pub impl Eq for CaseInsensitiveString with fn equal(x, y) {
+   |   Compare::compare(x, y) == 0
+   | }
+   | 
+   | ///|
+   | pub impl Compare for CaseInsensitiveString with fn compare(x, y) {
+   |   x.0.compare_ignore_ascii_case(y.0)
+   | }
+   | 
+   | ///|
+   | pub impl @debug.Debug for CaseInsensitiveString with fn to_repr(self) {
+   |   @debug.Debug::to_repr(self.0)
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'WINDOWS_CONSOLE_BUFFER_SIZE' --loc 'async\internal\event_loop\windows_console.mbt:16:7'
+Definition found at file <WORKDIR>/async\internal\event_loop\windows_console.mbt
+   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
    | 
    | ///|
-   | test "exact_view uses the same bounds on all array types" {
-17 |   let arr = [1, 2, 3, 4]
-   |       ^^^
-   |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
-   |   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
-   |   let view = [0, 1, 2, 3, 4, 5][1:5]
-   |   let mutable = arr.mut_view()
-   |   let raw = @builtin.UninitializedArray::make(4)
-   |   for i in 0..<4 {
-   |     raw[i] = i + 1
-   |   }
-   |   for
-   |     result in [
-   |       arr.exact_view(start=1, end=3),
-   |       fixed.exact_view(start=1, end=3),
-   |       ro.exact_view(start=1, end=3),
-   |       view.exact_view(start=1, end=3),
+16 | const WINDOWS_CONSOLE_BUFFER_SIZE : Int32 = 4096
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   | 
+   | ///|
+   | /// Intermediate buffer for automatic decoding in Windows console handling.
+   | /// Binary IO over Windows console is interpreted as UTF-8,
+   | /// so we need to perform encoding/decoding before actually invoking
+   | /// `ReadConsoleW`/`WriteConsoleW`.
+   | priv struct WindowsConsoleBuffer {
+   |   buffer : FixedArray[UInt16]
+   |   /// For console input: unpaired high surrogate from the last read.
+   |   /// Zero if there is no unpaired surrogate.
+   |   mut unpaired_surrogate : UInt16
+   |   /// - For console input: bytes from the last read character,
+   |   ///   not delivered due to insufficient user buffer.
+   |   ///   The whole byte sequence is stored right-aligned in `pending`,
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'fixed' --loc 'builtin\exact_view_test.mbt:18:7'
-Definition found at file <WORKDIR>/builtin\exact_view_test.mbt
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'WindowsConsoleBuffer' --loc 'async\internal\event_loop\windows_console.mbt:23:13'
+Definition found at file <WORKDIR>/async\internal\event_loop\windows_console.mbt
+   | ///|
+   | /// Intermediate buffer for automatic decoding in Windows console handling.
+   | /// Binary IO over Windows console is interpreted as UTF-8,
+   | /// so we need to perform encoding/decoding before actually invoking
+   | /// `ReadConsoleW`/`WriteConsoleW`.
+23 | priv struct WindowsConsoleBuffer {
+   |             ^^^^^^^^^^^^^^^^^^^^
+   |   buffer : FixedArray[UInt16]
+   |   /// For console input: unpaired high surrogate from the last read.
+   |   /// Zero if there is no unpaired surrogate.
+   |   mut unpaired_surrogate : UInt16
+   |   /// - For console input: bytes from the last read character,
+   |   ///   not delivered due to insufficient user buffer.
+   |   ///   The whole byte sequence is stored right-aligned in `pending`,
+   |   ///   and the number of remaining bytes is determined by `pending_len`
+   |   /// - for console output: incomplete UTF-8 sequence from the last write
+   |   pending : FixedArray[Byte]
+   |   /// number of bytes in `pending`
+   |   mut pending_len : Int32
+   | }
+   | 
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'FileKind' --loc 'async\internal\fd_util\stat.mbt:17:15'
+Definition found at file <WORKDIR>/async\internal\fd_util\stat.mbt
+   | // See the License for the specific language governing permissions and
    | // limitations under the License.
    | 
    | ///|
-   | test "exact_view uses the same bounds on all array types" {
-   |   let arr = [1, 2, 3, 4]
-18 |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
-   |       ^^^^^
-   |   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
-   |   let view = [0, 1, 2, 3, 4, 5][1:5]
-   |   let mutable = arr.mut_view()
-   |   let raw = @builtin.UninitializedArray::make(4)
-   |   for i in 0..<4 {
-   |     raw[i] = i + 1
-   |   }
-   |   for
-   |     result in [
-   |       arr.exact_view(start=1, end=3),
-   |       fixed.exact_view(start=1, end=3),
-   |       ro.exact_view(start=1, end=3),
-   |       view.exact_view(start=1, end=3),
-   |       mutable.exact_view(start=1, end=3),
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'self' --loc 'builtin\int64.mbt:26:21'
-Definition found at file <WORKDIR>/builtin\int64.mbt
-   | /// ```mbt check
-   | /// test {
-   | ///   inspect(Int64(3), content="3")
-   | /// }
-   | /// ```
-26 | pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
-   |                     ^^^^
-   | 
-   | ///|
-   | /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
-   | ///
-   | /// Parameters:
-   | ///
-   | /// * `i` : The integer value to be converted.
-   | ///
-   | /// Returns the converted 64-bit integer (`Int64`) value.
-   | ///
-   | /// Example:
-   | ///
-   | /// ```mbt check
-   | /// test {
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'from_int' --loc 'builtin\int64.mbt:44:15'
-Definition found at file <WORKDIR>/builtin\int64.mbt
-   | /// ```mbt check
-   | /// test {
-   | ///   inspect(Int64::from_int(42), content="42")
-   | /// }
-   | /// ```
-44 | pub fn Int64::from_int(i : Int32) -> Int64 {
+   | /// Kind of a file descriptor/Windows HANDLE.
+17 | pub(all) enum FileKind {
    |               ^^^^^^^^
-   |   i.to_int64()
-   | }
+   |   Unknown = 0
+   |   Regular = 1
+   |   Directory = 2
+   |   SymLink = 3
+   |   Socket = 4
+   |   Pipe = 5
+   |   BlockDevice = 6
+   |   CharDevice = 7
+   |   Console = 8
+   | } derive(Eq, @debug.Debug)
    | 
    | ///|
-   | /// Computes the absolute value of a 64-bit integer.
-   | ///
-   | /// Parameters:
-   | ///
-   | /// * `self` : The 64-bit integer whose absolute value is to be computed.
-   | ///
-   | /// Returns the absolute value of the input integer. When the input is
-   | /// `@int64.MIN_VALUE` (-9223372036854775808), returns `@int64.MIN_VALUE`
-   | /// itself, since its absolute value is not representable as an `Int64`.
-   | ///
+   | let known_kinds : ReadOnlyArray[FileKind] = [
+   |   Regular,
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'ToStringView' --loc 'builtin\string_like.mbt:19:11'
-Definition found at file <WORKDIR>/builtin\string_like.mbt
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'Unknown' --loc 'async\internal\fd_util\stat.mbt:18:3'
+Definition found at file <WORKDIR>/async\internal\fd_util\stat.mbt
+   | // limitations under the License.
    | 
    | ///|
-   | /// Trait for values that can be viewed as `StringView`.
-   | ///
-   | /// Types implementing this trait provide zero-copy access to string-like data.
-19 | pub trait ToStringView {
-   | ^
-   |   fn to_string_view(Self) -> StringView
+   | /// Kind of a file descriptor/Windows HANDLE.
+   | pub(all) enum FileKind {
+18 |   Unknown = 0
+   |   ^^^^^^^
+   |   Regular = 1
+   |   Directory = 2
+   |   SymLink = 3
+   |   Socket = 4
+   |   Pipe = 5
+   |   BlockDevice = 6
+   |   CharDevice = 7
+   |   Console = 8
+   | } derive(Eq, @debug.Debug)
+   | 
+   | ///|
+   | let known_kinds : ReadOnlyArray[FileKind] = [
+   |   Regular,
+   |   Directory,
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'TlsConnectionHandle' --loc 'async\tls\tls.wasm.mbt:17:13'
+Definition found at file <WORKDIR>/async\tls\tls.wasm.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | // A single TLS session: handshake state, encrypted/plain buffers, and wants flags.
+17 | priv struct TlsConnectionHandle(UInt64)
+   |             ^^^^^^^^^^^^^^^^^^^
+   | 
+   | ///|
+   | priv enum TlsTrustMode {
+   |   TrustNoVerification = 0
+   |   TrustSystemRoot = 1
+   |   TrustCustomRoot = 2
    | }
    | 
    | ///|
-   | pub impl ToStringView for String with fn to_string_view(self) -> StringView {
-   |   self
+   | priv enum TlsState {
+   |   Completed = 0
+   |   WantRead = 1
+   |   WantWrite = 2
+   |   Error = 3
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'TlsTrustMode' --loc 'async\tls\tls.wasm.mbt:20:11'
+Definition found at file <WORKDIR>/async\tls\tls.wasm.mbt
+   | ///|
+   | // A single TLS session: handshake state, encrypted/plain buffers, and wants flags.
+   | priv struct TlsConnectionHandle(UInt64)
+   | 
+   | ///|
+20 | priv enum TlsTrustMode {
+   |           ^^^^^^^^^^^^
+   |   TrustNoVerification = 0
+   |   TrustSystemRoot = 1
+   |   TrustCustomRoot = 2
    | }
    | 
    | ///|
-   | pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
-   |   self
+   | priv enum TlsState {
+   |   Completed = 0
+   |   WantRead = 1
+   |   WantWrite = 2
+   |   Error = 3
+   |   Eof = 4
+   |   ReNegotiation = 5
    | }
 ```
 
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'to_string_view' --loc 'builtin\string_like.mbt:20:6'
-Definition found at file <WORKDIR>/builtin\string_like.mbt
-   | ///|
-   | /// Trait for values that can be viewed as `StringView`.
-   | ///
-   | /// Types implementing this trait provide zero-copy access to string-like data.
-   | pub trait ToStringView {
-20 |   fn to_string_view(Self) -> StringView
-   |      ^^^^^^^^^^^^^^
-   | }
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'fast_stream_run' --loc 'compress\flate\inflate_fast_wbtest.mbt:22:4'
+Definition found at file <WORKDIR>/compress\flate\inflate_fast_wbtest.mbt
+   | // With less room every unit takes the careful path. Both must give the same
+   | // bytes, the same consumption (bytes behind the stream stay unread) and the
+   | // same verdict on damaged streams.
    | 
    | ///|
-   | pub impl ToStringView for String with fn to_string_view(self) -> StringView {
-   |   self
-   | }
+22 | fn fast_stream_run(
+   |    ^^^^^^^^^^^^^^^
+   |   input : Bytes,
+   |   chunk : Int32,
+   |   room : Int32,
+   |   fixed : Bool,
+   | ) -> Result[(Bytes, Int32), InflateErrorKind] {
+   |   let inflater = Inflater()
+   |   let output = if fixed {
+   |     FixedArray::make(room, b'\x00').mut_view()
+   |   } else {
+   |     Array::make(room, b'\x00').mut_view()
+   |   }
+   |   let decoded = @buffer.Buffer()
+   |   let mut position = 0
+   |   for ;; {
+```
+
+```mooncram
+$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'input' --loc 'compress\flate\inflate_fast_wbtest.mbt:23:3'
+Definition found at file <WORKDIR>/compress\flate\inflate_fast_wbtest.mbt
+   | // bytes, the same consumption (bytes behind the stream stay unread) and the
+   | // same verdict on damaged streams.
    | 
    | ///|
-   | pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
-   |   self
-   | }
+   | fn fast_stream_run(
+23 |   input : Bytes,
+   |   ^^^^^
+   |   chunk : Int32,
+   |   room : Int32,
+   |   fixed : Bool,
+   | ) -> Result[(Bytes, Int32), InflateErrorKind] {
+   |   let inflater = Inflater()
+   |   let output = if fixed {
+   |     FixedArray::make(room, b'\x00').mut_view()
+   |   } else {
+   |     Array::make(room, b'\x00').mut_view()
+   |   }
+   |   let decoded = @buffer.Buffer()
+   |   let mut position = 0
+   |   for ;; {
+   |     let end = (position + chunk).min(input.length())
 ```
 
 ```mooncram
@@ -253,163 +439,6 @@ Definition found at file <WORKDIR>/lazy\lazy.mbt
    | /// rationale below.
    | ///
    | /// ## Why force is non-raising / non-async
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'UNKNOWN' --loc 'string\internal\regex_engine\regex.mbt:17:7'
-Definition found at file <WORKDIR>/string\internal\regex_engine\regex.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
-   | 
-   | ///|
-   | /// Transition table entry: the transition has not been built yet.
-17 | const UNKNOWN : Int32 = -1
-   |       ^^^^^^^
-   | 
-   | ///|
-   | /// Transition table entry: no thread survives and nothing was accepted.
-   | /// Entries below `DEAD` denote a terminal state or a transition that moves
-   | /// registers, see `terminal` and `moving`.
-   | const DEAD : Int32 = -2
-   | 
-   | ///|
-   | /// Register of a tag while a transition is being built: the tag is set by
-   | /// this very transition and still needs a register.
-   | const CURRENT : Int32 = -1
-   | 
-   | ///|
-   | /// Default budget for the lazy DFA cache, in machine words (table entries
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'DEAD' --loc 'string\internal\regex_engine\regex.mbt:23:7'
-Definition found at file <WORKDIR>/string\internal\regex_engine\regex.mbt
-   | 
-   | ///|
-   | /// Transition table entry: no thread survives and nothing was accepted.
-   | /// Entries below `DEAD` denote a terminal state or a transition that moves
-   | /// registers, see `terminal` and `moving`.
-23 | const DEAD : Int32 = -2
-   |       ^^^^
-   | 
-   | ///|
-   | /// Register of a tag while a transition is being built: the tag is set by
-   | /// this very transition and still needs a register.
-   | const CURRENT : Int32 = -1
-   | 
-   | ///|
-   | /// Default budget for the lazy DFA cache, in machine words (table entries
-   | /// plus state descriptions); a word is an `Int`, so this is 64 MB of table
-   | /// and state data. A state that does not fit is not added when a cached
-   | /// state can stand in for it, see `reuse`; otherwise the cache is dropped and
-   | /// rebuilt on demand. Memory therefore does not grow without bound on
-   | /// patterns whose DFA is huge, at the price of rebuilding states, which is
-   | /// several times slower than a cached step. The budget is large enough for a
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'regex' --loc 'string\regex_test.mbt:17:7'
-Definition found at file <WORKDIR>/string\regex_test.mbt
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
-   | 
-   | ///|
-   | test "execute/non_capture_group" {
-17 |   let regex = re"(?:ab)(c)(?:d)"
-   |       ^^^^^
-   |   guard regex.execute("abcd") is Some(m) else { fail("Expected match") }
-   |   debug_inspect(
-   |     m,
-   |     content=(
-   |       #|{
-   |       #|  input: <StringView: "abcd">,
-   |       #|  group_names: <ReadOnlyArray: [None, None]>,
-   |       #|  result: MatchResult([0, 4, 2, 3]),
-   |       #|}
-   |     ),
-   |   )
-   | }
-   | 
-   | ///|
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'execute' --loc 'string\regex_test.mbt:18:15'
-Definition found at file <WORKDIR>/string\regex.mbt
-    | ///   let anchored = re"^ab$"
-    | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
-    | ///   inspect(anchored.execute("xaby", last_index=1) is Some(_), content="false")
-    | /// }
-    | /// ```
-356 | pub fn Regex::execute(
-    |               ^^^^^^^
-    |   self : Regex,
-    |   input : StringView,
-    |   last_index~ : Int32 = 0,
-    | ) -> MatchResult? {
-    |   match self.re().execute(input, last_index) {
-    |     None => None
-    |     Some(result) =>
-    |       Some({ input, group_names: self.re().group_names(), result, })
-    |   }
-    | }
-    | 
-    | ///|
-    | /// Wraps this regex in a named capture group.
-    | ///
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'Test' --loc 'test\extends.mbt:22:12'
-Definition found at file <WORKDIR>/test\types.mbt
-   | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   | // See the License for the specific language governing permissions and
-   | // limitations under the License.
-   | 
-   | ///|
-16 | struct Test {
-   |        ^^^^
-   |   name : String
-   |   buffer : StringBuilder
-   | } derive(@debug.Debug)
-   | 
-   | ///|
-   | /// Create a new instance.
-   | #alias(new, deprecated="Use `Test()` instead")
-   | #as_free_fn
-   | #as_free_fn(new, deprecated="Use `Test()` instead")
-   | pub fn Test::Test(name : String) -> Test {
-   |   { name, buffer: StringBuilder(), }
-   | }
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide peek-def 'to_repr' --loc 'test\extends.mbt:22:37'
-Definition found at file <WORKDIR>/test\extends.mbt
-   | // --- deprecated: hidden from the generated interface ---
-   | 
-   | ///|
-   | #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
-   | #doc(hidden)
-22 | pub extend Test with @debug.Debug::{to_repr}
-   |                                     ^^^^^^^
-Definition found at file <WORKDIR>/test\types.mbt
-   | 
-   | ///|
-   | struct Test {
-   |   name : String
-   |   buffer : StringBuilder
-19 | } derive(@debug.Debug)
-   |          ^^^^^^^^^^^^
-   | 
-   | ///|
-   | /// Create a new instance.
-   | #alias(new, deprecated="Use `Test()` instead")
-   | #as_free_fn
-   | #as_free_fn(new, deprecated="Use `Test()` instead")
-   | pub fn Test::Test(name : String) -> Test {
-   |   { name, buffer: StringBuilder(), }
-   | }
 ```
 
 ```mooncram
