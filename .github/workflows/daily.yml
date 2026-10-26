@@ -30,6 +30,20 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Cancel pending auto-merge before updating daily branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr_number="$(gh pr list \
+            --head "$DAILY_BRANCH" \
+            --base "$BASE_BRANCH" \
+            --state open \
+            --json number,autoMergeRequest \
+            --jq '.[0] | select(.autoMergeRequest != null) | .number // empty')"
+          if [ -n "$pr_number" ]; then
+            gh pr merge "$pr_number" --disable-auto
+          fi
+
       - name: Install MoonBit
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
@@ -414,13 +428,34 @@ jobs:
         if: always()
         env:
           REVIEW_HAS_PROBLEM: ${{ steps.openseek-result.outputs.has_problem }}
+          HAS_BASELINE_CHANGES: ${{ steps.diff.outputs.has_baseline_changes }}
         run: |
           unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
           windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
 
           if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ] || \
-             [ "$REVIEW_HAS_PROBLEM" = "true" ]; then
+             { [ "$HAS_BASELINE_CHANGES" = "true" ] && [ "$REVIEW_HAS_PROBLEM" != "false" ]; }; then
             cat .daily-test/unix-cram-test.log 2>/dev/null || true
             cat .daily-test/windows-cram-test.log 2>/dev/null || true
             exit 1
           fi
+
+      - name: Auto-merge reviewed daily pull request
+        if: steps.diff.outputs.has_baseline_changes == 'true' && steps.openseek-result.outputs.has_problem == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
+        run: |
+          test -n "$PR_NUMBER"
+          reviewed_head="$(git rev-parse HEAD)"
+          gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -e \
+            --arg repo "$GITHUB_REPOSITORY" \
+            --arg head "$DAILY_BRANCH" \
+            --arg base "$BASE_BRANCH" \
+            --arg base_sha "$BASE_SHA" \
+            --arg head_sha "$reviewed_head" \
+            '.state == "open" and .draft == false and
+             .head.repo.full_name == $repo and .head.ref == $head and .head.sha == $head_sha and
+             .base.repo.full_name == $repo and .base.ref == $base and .base.sha == $base_sha' \
+            > /dev/null
+          gh pr merge "$PR_NUMBER" --auto --squash --match-head-commit "$reviewed_head"
