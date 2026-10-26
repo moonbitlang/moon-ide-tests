@@ -22,46 +22,113 @@ fn workspace_path(path : String) -> String {
 }
 
 ///|
-fn parse_json_code_blocks(text : String) -> Json? {
-  let mut offset = 0
-  let mut last_json : Json? = None
-  while offset < text.length() {
-    let opening = match text[offset:].find("```") {
-      Some(pos) => offset + pos
-      None => break
-    }
-    let header_start = opening + 3
-    let header_end = match text[header_start:].find("\n") {
-      Some(pos) => header_start + pos
-      None => break
-    }
-    let content_start = header_end + 1
-    let closing = match text[content_start:].find("```") {
-      Some(pos) => content_start + pos
-      None => break
-    }
-
-    let language = text[header_start:header_end].trim().to_lower()
-    if language == "" || language == "json" {
-      match try_parse_json(text[content_start:closing].trim()) {
-        Some(parsed) => last_json = Some(parsed)
-        None => ()
-      }
-    }
-    offset = closing + 3
-  }
-  last_json
-}
-
-///|
 fn parse_answer(text : String) -> Json {
   match try_parse_json(text.trim()) {
     Some(parsed) => return parsed
     None => ()
   }
-  match parse_json_code_blocks(text) {
-    Some(parsed) => parsed
-    None => abort("OpenSeek answer does not contain valid JSON")
+  let mut offset = 0
+  let mut fence_size = 0
+  let mut content_start = 0
+  let mut json_fence = false
+  let mut opening : Int32? = None
+  let closings : Array[UInt16] = []
+  let mut quoted = false
+  let mut escaped = false
+  let mut candidate : (Int32, Int32)? = None
+  for line in text.split("\n") {
+    let end = offset + line.length()
+    let next = if end < text.length() { end + 1 } else { end }
+    let trimmed = line.trim()
+    let mut ticks = 0
+    while ticks < trimmed.length() && trimmed[ticks] == '\u0060' {
+      ticks += 1
+    }
+    if fence_size > 0 {
+      if ticks >= fence_size && trimmed[ticks:].trim().is_empty() {
+        candidate = if json_fence {
+          Some((content_start, offset))
+        } else {
+          None
+        }
+        fence_size = 0
+      }
+    } else if ticks >= 3 {
+      // A fence cannot discard an unfinished enclosing JSON container.
+      if opening is Some(_) {
+        abort("OpenSeek answer contains an incomplete JSON container")
+      }
+      candidate = None
+      fence_size = ticks
+      content_start = next
+      let language = trimmed[ticks:].trim().to_lower()
+      json_fence = language == "" || language == "json"
+    } else {
+      let mut line_start = true
+      let mut after_colon = false
+      for i in offset..<end {
+        let ch = text[i]
+        if opening is None {
+          if ch == ' ' || ch == '\t' || ch == '\r' {
+            continue
+          }
+          // Results begin a line or follow a prose colon. Brackets elsewhere
+          // in explanatory text are punctuation, even when they are unmatched.
+          candidate = None
+          if (ch == '{' || ch == '[') && (line_start || after_colon) {
+            opening = Some(i)
+            closings.push(if ch == '{' { '}' } else { ']' })
+          }
+          line_start = false
+          after_colon = ch == ':' || ch == '\uFF1A'
+          continue
+        }
+        if quoted {
+          if escaped {
+            escaped = false
+          } else if ch == '\\' {
+            escaped = true
+          } else if ch == '"' {
+            quoted = false
+          }
+          continue
+        }
+        if ch == '"' {
+          quoted = true
+        } else if ch == '{' || ch == '[' {
+          closings.push(if ch == '{' { '}' } else { ']' })
+        } else if ch == '}' || ch == ']' {
+          if closings.pop() != Some(ch) {
+            abort("OpenSeek answer contains mismatched JSON delimiters")
+          }
+          if closings.is_empty() {
+            if opening is Some(start) {
+              candidate = Some((start, i + 1))
+            }
+            opening = None
+            line_start = false
+            after_colon = false
+          }
+        }
+      }
+    }
+    offset = next
+  }
+  if fence_size > 0 {
+    abort("OpenSeek answer contains an incomplete code fence")
+  }
+  if opening is Some(_) {
+    abort("OpenSeek answer contains an incomplete JSON container")
+  }
+  // Only the final candidate survives. Later prose, scalar values, malformed
+  // JSON, or non-JSON blocks must never restore an earlier review example.
+  match candidate {
+    Some((start, end)) =>
+      match try_parse_json(text[start:end].trim()) {
+        Some(parsed) => parsed
+        None => abort("OpenSeek answer does not contain valid JSON")
+      }
+    None => abort("OpenSeek answer does not contain a final JSON result")
   }
 }
 
