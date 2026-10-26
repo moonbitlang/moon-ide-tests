@@ -1,26 +1,39 @@
 # Daily Test Review
 
-Review the generated Daily Test pull request for MoonBit IDE baselines.
+Review this Daily Test run's updates under `tests/unix/` and `tests/windows/`,
+using the fixture submodule changes and execution logs as context.
 
-Use the repository checkout and local command-line tools to inspect the result. Do not edit files or make network calls. Start with these read-only checks:
+Your working directory contains a scoped review bundle. `tests.diff` compares
+the exact commit that started this run with the refreshed tests. Work already
+present on the starting branch is outside your scope, even when that branch
+belongs to another pull request. Do not review generator code, workflow changes,
+testgen dependency updates, or the parent pull request.
+
+`submodules.diff` records fixture revision changes and their commit summaries;
+`submodules.txt` records the checked-out fixture revisions. Use them to interpret
+baseline changes and fixture check failures.
+
+Use only the provided diff and execution logs. Do not edit files, leave this
+directory, or make network calls. Start with these read-only checks:
 
 ```sh
-git status --short
-git diff --stat origin/main...HEAD -- fixtures/repos tests/unix tests/windows
-git diff --submodule=log origin/main...HEAD -- fixtures/repos tests/unix tests/windows
-cat .daily-test/status.txt
-cat .daily-test/unix-status.txt
-cat .daily-test/windows-status.txt
-cat .daily-test/submodules.txt
-cat .daily-test/unix-cram-test-status.txt
-cat .daily-test/windows-cram-test-status.txt
-cat .daily-test/unix-cram-test.log
-cat .daily-test/windows-cram-test.log
-cat .daily-test/unix-cram-update.log
-cat .daily-test/windows-cram-update.log
+cat tests-stat.txt
+cat tests-status.txt
+cat tests.diff
+cat submodules.diff
+cat submodules.txt
+cat unix-cram-test-status.txt
+cat windows-cram-test-status.txt
+cat unix-cram-test.log
+cat windows-cram-test.log
+cat unix-cram-update.log
+cat windows-cram-update.log
 ```
 
-Decide whether the daily refresh contains a failed test, wrong expected output, suspicious baseline promotion, or another issue that needs human attention.
+Decide whether these test updates contain a failed test, wrong expected output,
+or suspicious baseline promotion that needs human attention. Project-loading
+errors must not be accepted as healthy IDE output merely because the refreshed
+snapshot now passes.
 
 The per-platform `*-baseline-paths.txt` lists select the baselines whose fixtures
 passed `moon check` on that platform, plus the handcrafted Unix suites. Failed
