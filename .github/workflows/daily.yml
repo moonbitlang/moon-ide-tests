@@ -442,11 +442,21 @@ jobs:
           unix_status="$(cat .daily-test/unix-cram-test-status.txt 2>/dev/null || echo 1)"
           windows_status="$(cat .daily-test/windows-cram-test-status.txt 2>/dev/null || echo 1)"
 
-          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ] || \
-             { [ "$HAS_BASELINE_CHANGES" = "true" ] && [ "$REVIEW_HAS_PROBLEM" != "false" ]; }; then
+          if [ "$unix_status" != "0" ] || [ "$windows_status" != "0" ]; then
             cat .daily-test/unix-cram-test.log 2>/dev/null || true
             cat .daily-test/windows-cram-test.log 2>/dev/null || true
             exit 1
+          fi
+
+          if [ "$HAS_BASELINE_CHANGES" = "true" ] &&
+             [ "$REVIEW_HAS_PROBLEM" != "true" ] &&
+             [ "$REVIEW_HAS_PROBLEM" != "false" ]; then
+            echo "::error::Agent review did not return a valid result."
+            exit 1
+          fi
+
+          if [ "$REVIEW_HAS_PROBLEM" = "true" ]; then
+            echo "::notice::Agent found a problem; leaving the daily PR open for review."
           fi
 
       - name: Auto-merge reviewed daily pull request
