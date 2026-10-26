@@ -1,4 +1,4 @@
-# core find-references to_repr test/extends.mbt:22:37
+# core rename mkfifo async/fs/named_pipe_test.mbt:18:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,6 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide find-references 'to_repr' --loc 'test/extends.mbt:22:37'
-Found 0 references for symbol 'to_repr':
+$ run_moon_ide moon ide rename 'mkfifo' 'mkfifo_renamed' --loc 'async/fs/named_pipe_test.mbt:18:15'
+Error: could not get package of file <WORKDIR>/async/fs/named_pipe_test.mbt
+[1]
 ```

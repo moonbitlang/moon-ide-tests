@@ -1,4 +1,4 @@
-# core rename self builtin/int64.mbt:26:21
+# core find-references mkfifo async/fs/named_pipe_test.mbt:18:15
 
 ```mooncram
 $ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
@@ -17,18 +17,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 ```
 
 ```mooncram
-$ run_moon_ide moon ide rename 'self' 'self_renamed' --loc 'builtin/int64.mbt:26:21'
-*** Begin Patch
-*** Update File: <WORKDIR>/builtin/int64.mbt
-@@
- ///   inspect(Int64(3), content="3")
- /// }
- /// ```
--pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
-+pub fn Int64::Int64(self_renamed : Int64) -> Int64 = "%identity"
- 
- ///|
- /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
-*** End Patch
-
+$ run_moon_ide moon ide find-references 'mkfifo' --loc 'async/fs/named_pipe_test.mbt:18:15'
+Error: could not get package of file <WORKDIR>/async/fs/named_pipe_test.mbt
+[1]
 ```
