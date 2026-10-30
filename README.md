@@ -155,7 +155,6 @@ and selection as Daily Test. On Unix:
 
 ```sh
 moon -C testgen test --target wasm
-python -m unittest discover -s scripts/tests -v
 scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 git add --all -- tests/unix

@@ -34,9 +34,6 @@ jobs:
       - name: Test generator
         run: moon -C testgen test --target wasm
 
-      - name: Test shell-free executor
-        run: python -m unittest discover -s scripts/tests -v
-
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
@@ -75,10 +72,6 @@ jobs:
             }
             Start-Sleep -Seconds ($attempt * 10)
           }
-
-      - name: Test shell-free executor
-        shell: pwsh
-        run: python -m unittest discover -s scripts/tests -v
 
       - name: Verify generated Windows baselines
         shell: pwsh

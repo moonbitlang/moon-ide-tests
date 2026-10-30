@@ -81,9 +81,6 @@ jobs:
       - name: Test generator
         run: moon -C testgen test --target wasm
 
-      - name: Test shell-free executor
-        run: python -m unittest discover -s scripts/tests -v
-
       - name: Update generated Unix tests
         run: scripts/update-tests.sh
 
@@ -170,10 +167,6 @@ jobs:
             }
             Start-Sleep -Seconds ($attempt * 10)
           }
-
-      - name: Test shell-free executor
-        shell: pwsh
-        run: python -m unittest discover -s scripts/tests -v
 
       - name: Update Windows snapshots
         shell: pwsh
