@@ -1,23 +1,7 @@
 # sqlparser find-references Generic src/generic.mbt:8:22
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Generic' --loc 'src/generic.mbt:8:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'Generic' --loc 'src/generic.mbt:8:22'
 Found 13 references for symbol 'Generic':
 <WORKDIR>/src/generic.mbt:8:22-8:29:
   | pub(all) struct Generic {}
@@ -135,5 +119,5 @@ Found 13 references for symbol 'Generic':
     |                               ^^^^^^^
     |     abort("Expected parsing to fail with Generic dialect")
     |   } catch {
-
-```
+"" (escaped)
+````

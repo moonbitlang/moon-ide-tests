@@ -1,7 +1,7 @@
 # sqlparser rename read_and_parse src\tests\tpch_test.mbt:2:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'read_and_parse' 'read_and_parse_renamed' --loc 'src\tests\tpch_test.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'read_and_parse' 'read_and_parse_renamed' --loc 'src\tests\tpch_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\tpch_test.mbt
 @@
@@ -210,5 +210,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'read_and_par
      stmt,
      content=(
 *** End Patch
-
-```
+"" (escaped)
+````

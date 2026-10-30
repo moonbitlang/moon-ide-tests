@@ -1,7 +1,7 @@
 # core rename Unforced lazy\lazy.mbt:25:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Unforced' 'UnforcedRenamed' --loc 'lazy\lazy.mbt:25:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'Unforced' 'UnforcedRenamed' --loc 'lazy\lazy.mbt:25:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/lazy\debug.mbt
 @@
@@ -41,5 +41,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Unforced' 'Unforc
        let v = thunk()
        self.state = Forced(v)
 *** End Patch
-
-```
+"" (escaped)
+````

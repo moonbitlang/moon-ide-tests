@@ -1,7 +1,7 @@
 # json rename expect_accept src\tests\json_testsuite_y_test.mbt:9:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_accept' 'expect_accept_renamed' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'expect_accept' 'expect_accept_renamed' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 @@
@@ -684,5 +684,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_accept' 'e
 +  expect_accept_renamed("y_structure_whitespace_array.json", input)
  }
 *** End Patch
-
-```
+"" (escaped)
+````

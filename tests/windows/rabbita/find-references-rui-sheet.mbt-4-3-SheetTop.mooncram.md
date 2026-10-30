@@ -1,7 +1,7 @@
 # rabbita find-references SheetTop rui\sheet.mbt:4:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide find-references 'SheetTop' --loc 'rui\sheet.mbt:4:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'SheetTop' --loc 'rui\sheet.mbt:4:3'
 Found 5 references for symbol 'SheetTop':
 <WORKDIR>/e2e\apps\rui\dialogs\sheet.mbt:34:31-34:39:
    |       ],
@@ -47,5 +47,5 @@ Found 5 references for symbol 'SheetTop':
      |     ^^^^^^^^
      |     "Open top sheet",
      |   )
-
-```
+"" (escaped)
+````

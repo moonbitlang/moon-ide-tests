@@ -398,23 +398,21 @@ test "render_cram_files emits mooncram markdown commands" {
   inspect(files.length(), content="5")
   inspect(files[0].name, content="outline.mooncram.md")
   assert_true(files[0].content.contains("```mooncram"))
+  assert_true(files[0].content.contains("../../../fixtures/repos/example"))
   assert_true(
     files[0].content.contains(
-      "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../fixtures/repos/example\" && pwd)\"",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide outline 'a.mbt'",
     ),
   )
-  assert_true(
-    files[0].content.contains("$ run_moon_ide moon ide outline 'a.mbt'"),
-  )
-  assert_true(files[1].content.contains("<MOON_HOME>"))
+  assert_false(files[1].content.contains("export "))
   assert_true(
     files[1].content.contains(
-      "$ run_moon_ide moon ide hover 'f' --loc 'a.mbt:1:4'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover 'f' --loc 'a.mbt:1:4'",
     ),
   )
   assert_true(
     files[2].content.contains(
-      "$ run_moon_ide moon ide peek-def 'f' --loc 'a.mbt:1:4'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide peek-def 'f' --loc 'a.mbt:1:4'",
     ),
   )
   inspect(files[3].name, content="find-references-a.mbt-1-4-f.mooncram.md")
@@ -423,15 +421,90 @@ test "render_cram_files emits mooncram markdown commands" {
   )
   assert_true(
     files[3].content.contains(
-      "$ run_moon_ide moon ide find-references 'f' --loc 'a.mbt:1:4'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide find-references 'f' --loc 'a.mbt:1:4'",
     ),
   )
   inspect(files[4].name, content="rename-a.mbt-1-4-f.mooncram.md")
   assert_true(
     files[4].content.contains(
-      "$ run_moon_ide moon ide rename 'f' 'f_renamed' --loc 'a.mbt:1:4'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide rename 'f' 'f_renamed' --loc 'a.mbt:1:4'",
     ),
   )
+}
+
+///|
+test "shell-free cases use the same executor on both platforms" {
+  let result = CollectResult::{ source_files: ["a.mbt"], loc_cases: [], }
+  for platform in [TestPlatform::Unix, TestPlatform::Windows] {
+    let files = render_cram_files(
+      result, "example", "fixtures/repos/example", platform,
+    )
+    assert_true(
+      files[0].content.contains(
+        "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide outline 'a.mbt'",
+      ),
+    )
+    assert_false(files[0].content.contains("export "))
+    assert_false(files[0].content.contains("run_moon_ide"))
+  }
+}
+
+///|
+test "shell-free regeneration preserves snapshots and nonzero statuses" {
+  let generated =
+    #|```mooncram
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover 'f'
+    #|```
+    #|
+  let existing =
+    #|```mooncram
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover 'f'
+    #|"  ```mbt" (escaped)
+    #|[1]
+    #|```
+    #|
+  assert_eq(preserve_expected_output(generated, existing), existing)
+}
+
+///|
+test "regeneration retains fences normalized by mooncram update" {
+  let generated =
+    #|````mooncram
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide outline 'a.mbt'
+    #|````
+    #|
+  for output in ["", "line\n\"\" (escaped)\n"] {
+    let existing = "```mooncram\n$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide outline 'a.mbt'\n" +
+      output +
+      "```\n"
+    assert_eq(preserve_expected_output(generated, existing), existing)
+  }
+}
+
+///|
+test "snapshot retention respects longer fences around embedded Markdown" {
+  let generated =
+    #|````mooncram
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc 'Array::map'
+    #|````
+    #|
+  let existing =
+    #|`````mooncram
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc 'Array::map'
+    #|```mbt
+    #|code
+    #|```
+    #|````
+    #|after embedded fence
+    #|[1]
+    #|`````
+    #|
+  assert_eq(preserve_expected_output(generated, existing), existing)
+}
+
+///|
+test "command arguments quote apostrophes without shell syntax" {
+  inspect(command_quote("a'b\\c 中文"), content="\"a'b\\\\c 中文\"")
 }
 
 ///|
@@ -447,7 +520,7 @@ test "render_split_symbol_files emits one file per case" {
   ]
   let files = render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
     )
   })
   debug_inspect(
@@ -464,7 +537,7 @@ test "render_split_symbol_files emits one file per case" {
   )
   assert_true(
     files[0].content.contains(
-      "$ run_moon_ide moon ide find-references 'f' --loc 'src/deep/a.mbt:3:5'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide find-references 'f' --loc 'src/deep/a.mbt:3:5'",
     ),
   )
 }
@@ -513,7 +586,7 @@ test "split suite output detection covers legacy and per-case names" {
 }
 
 ///|
-test "render_cram_files emits windows powershell bootstrap" {
+test "render_cram_files emits Windows script invocations" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
     loc_cases: [TestCase::{ file: "a.mbt", line: 1, col: 4, sym: "f", }],
@@ -528,12 +601,12 @@ test "render_cram_files emits windows powershell bootstrap" {
   inspect(files[0].name, content="outline.mooncram.md")
   assert_true(
     files[0].content.contains(
-      "$ run_moon_ide '..\\..\\..\\fixtures\\repos\\example' moon ide outline 'a.mbt'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide outline 'a.mbt'",
     ),
   )
   assert_true(
     files[1].content.contains(
-      "$ run_moon_ide '..\\..\\..\\fixtures\\repos\\example' moon ide hover 'f' --loc 'a.mbt:1:4'",
+      "$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover 'f' --loc 'a.mbt:1:4'",
     ),
   )
 }
@@ -571,24 +644,24 @@ test "preserve_expected_output keeps matching command output" {
     #|# example hover
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover f --loc 'a.mbt:1:4'
     #|```
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover g --loc 'a.mbt:2:4'
     #|```
     #|
   let existing =
     #|# example hover
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover f --loc 'a.mbt:1:4'
     #|hover output
     #|  detail
     #|```
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide hover old --loc 'a.mbt:3:4'
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover old --loc 'a.mbt:3:4'
     #|stale output
     #|```
     #|
@@ -598,13 +671,13 @@ test "preserve_expected_output keeps matching command output" {
       #|# example hover
       #|
       #|```mooncram
-      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover f --loc 'a.mbt:1:4'
       #|hover output
       #|  detail
       #|```
       #|
       #|```mooncram
-      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover g --loc 'a.mbt:2:4'
       #|```
       #|
     ),
@@ -615,13 +688,13 @@ test "preserve_expected_output keeps matching command output" {
       #|# example hover
       #|
       #|```mooncram
-      #|$ run_moon_ide moon ide hover f --loc 'a.mbt:1:4'
+      #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover f --loc 'a.mbt:1:4'
       #|hover output
       #|  detail
       #|```
       #|
       #|```mooncram
-      #|$ run_moon_ide moon ide hover g --loc 'a.mbt:2:4'
+      #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide hover g --loc 'a.mbt:2:4'
       #|```
       #|
     ),
@@ -634,14 +707,14 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
     #|# example doc
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide doc Array::map
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide doc Array::map
     #|```
     #|
   let existing =
     #|# example doc
     #|
     #|```mooncram
-    #|$ run_moon_ide moon ide doc Array::map
+    #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide doc Array::map
     #|package "moonbitlang/core/array"
     #|  ```mbt check
     #|  test {
@@ -656,7 +729,7 @@ test "preserve_expected_output keeps embedded indented markdown fences" {
       #|# example doc
       #|
       #|```mooncram
-      #|$ run_moon_ide moon ide doc Array::map
+      #|$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/example' moon ide doc Array::map
       #|package "moonbitlang/core/array"
       #|  ```mbt check
       #|  test {
@@ -784,7 +857,11 @@ test "extension declaration hover remains generated with a narrow limitation mar
       platform,
     )
     let hover = files[1].content
-    assert_true(hover.contains("\{marker}\n```mooncram\n$ run_moon_ide "))
+    assert_true(
+      hover.contains(
+        "\{marker}\n````mooncram\n$ moonx '../../../scripts/run-moon-ide.mbtx' ",
+      ),
+    )
     assert_true(hover.contains("moon ide hover 'to_repr' --loc '"))
     assert_true(hover.contains(":22:37'"))
     assert_true(hover.contains(":25:37'"))
@@ -800,7 +877,7 @@ test "extension declaration hover remains generated with a narrow limitation mar
       ),
     )
     assert_true(refreshed.contains("No hover information found\n[1]\n```"))
-    assert_true(refreshed.contains("\{marker}\n```mooncram"))
+    assert_true(refreshed.contains("\{marker}\n````mooncram"))
   }
   for
     (slug, file, col, sym) in [
@@ -843,7 +920,7 @@ test "intrinsic parameter and imported trait hover limitations are narrowly mark
     )
     assert_true(
       files[1].content.contains(
-        "<!-- known-ide-limitation: \{marker} -->\n```mooncram\n$ run_moon_ide ",
+        "<!-- known-ide-limitation: \{marker} -->\n````mooncram\n$ moonx '../../../scripts/run-moon-ide.mbtx' ",
       ),
     )
     for generated in files[2:] {
@@ -897,7 +974,7 @@ test "extern hover limitations retain navigation and backend policy" {
     assert_eq(files.length(), 5)
     assert_true(
       files[1].content.contains(
-        "<!-- known-ide-limitation: \{marker} -->\n```mooncram\n$ run_moon_ide ",
+        "<!-- known-ide-limitation: \{marker} -->\n````mooncram\n$ moonx '../../../scripts/run-moon-ide.mbtx' ",
       ),
     )
     assert_true(files[1].content.contains("moon ide hover '\{sym}' --loc '"))

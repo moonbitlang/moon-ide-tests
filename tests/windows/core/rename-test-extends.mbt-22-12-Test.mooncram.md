@@ -1,7 +1,7 @@
 # core rename Test test\extends.mbt:22:12
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Test' 'TestRenamed' --loc 'test\extends.mbt:22:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'Test' 'TestRenamed' --loc 'test\extends.mbt:22:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/diff\diff_html_test.mbt
 @@
@@ -135,5 +135,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Test' 'TestRename
    { name, buffer: StringBuilder(), }
  }
 *** End Patch
-
-```
+"" (escaped)
+````

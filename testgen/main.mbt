@@ -219,7 +219,7 @@ fn parse_args(args : Array[String]) -> Args raise {
       "test-repo", 't', test_repo_path_raw, "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
-      "platform", 'p', platform_raw, "Generated test shell platform: unix or windows (default: unix)",
+      "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
     ),
     (
       "max-per-file", 'm', max_per_file_raw, "Cap collected AST locations with --loc per source file (default: 50)",

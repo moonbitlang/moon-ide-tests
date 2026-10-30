@@ -1,7 +1,7 @@
 # async rename log src\pipe\read_exactly_test.mbt:18:6
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'log' 'log_renamed' --loc 'src\pipe\read_exactly_test.mbt:18:6'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'log' 'log_renamed' --loc 'src\pipe\read_exactly_test.mbt:18:6'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\pipe\read_exactly_test.mbt
 @@
@@ -39,5 +39,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'log' 'log_rename
      }
    }
 *** End Patch
-
-```
+"" (escaped)
+````

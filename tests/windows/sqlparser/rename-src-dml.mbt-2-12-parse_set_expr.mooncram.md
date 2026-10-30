@@ -1,7 +1,7 @@
 # sqlparser rename parse_set_expr src\dml.mbt:2:12
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'parse_set_expr' 'parse_set_expr_renamed' --loc 'src\dml.mbt:2:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'parse_set_expr' 'parse_set_expr_renamed' --loc 'src\dml.mbt:2:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\dml.mbt
 @@
@@ -30,5 +30,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'parse_set_ex
      [Keyword(Order), Keyword(By), .. tokens] => self.parse_order_by(tokens)
      _ => ([], tokens)
 *** End Patch
-
-```
+"" (escaped)
+````

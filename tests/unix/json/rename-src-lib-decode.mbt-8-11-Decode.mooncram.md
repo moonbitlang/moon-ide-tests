@@ -1,23 +1,7 @@
 # json rename Decode src/lib/decode.mbt:8:11
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
 @@
@@ -106,8 +90,8 @@ $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mb
 +pub fn decode(input : String, decode? : &DecodeRenamed) -> Json raise {
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
-     Some(decode) => decode (escaped)
-     None => () (escaped)
+"     Some(decode) => decode" (escaped)
+"     None => ()" (escaped)
    }
 @@
  }
@@ -117,8 +101,8 @@ $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mb
 +pub fn decode_start(input : String, decode? : &DecodeRenamed) -> Value raise {
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
-     Some(decode) => decode (escaped)
-     None => () (escaped)
+"     Some(decode) => decode" (escaped)
+"     None => ()" (escaped)
    }
 *** Update File: <WORKDIR>/src/lib/value.mbt
 @@
@@ -140,5 +124,5 @@ $ run_moon_ide moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mb
    decode_start,
    decode_continue,
 *** End Patch
-
-```
+"" (escaped)
+````

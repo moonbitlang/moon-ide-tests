@@ -1,23 +1,7 @@
 # indexmap rename hash src/types.mbt:18:3
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/indexmap" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
 @@
@@ -39,7 +23,7 @@ $ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
      value,
      next: -1, // 无后继
 @@
-     Some(idx) => { (escaped)
+"     Some(idx) => {" (escaped)
        // 获取被删除元素的链表信息
        let entry = self.core.entries[idx]
 -      let hash = entry.hash
@@ -76,5 +60,5 @@ $ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
    mut value : V // 值
    mut next : Int // 链表后继索引，-1表示没有后继
 *** End Patch
-
-```
+"" (escaped)
+````

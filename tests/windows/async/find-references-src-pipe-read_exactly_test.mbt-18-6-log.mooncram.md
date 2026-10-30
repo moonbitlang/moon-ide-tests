@@ -1,7 +1,7 @@
 # async find-references log src\pipe\read_exactly_test.mbt:18:6
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'log' --loc 'src\pipe\read_exactly_test.mbt:18:6'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'log' --loc 'src\pipe\read_exactly_test.mbt:18:6'
 Found 5 references for symbol 'log':
 <WORKDIR>/src\pipe\read_exactly_test.mbt:28:7-28:10:
    |     root.spawn_bg() <| () => {
@@ -47,5 +47,5 @@ Found 5 references for symbol 'log':
    |       ^^^
    |       w.write("ghijkl")
    |     }
-
-```
+"" (escaped)
+````

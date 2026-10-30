@@ -1,7 +1,7 @@
 # indexmap hover
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
 ///|
 const Default_init_capacity = 8
       ^^^^^^^^^^^^^^^^^^^^^
@@ -12,10 +12,10 @@ const Default_init_capacity = 8
       
 
 ///|
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
 const Default_init_capacity = 8
 
 ///|
@@ -26,10 +26,10 @@ fn calc_grow_threshold(capacity : Int) -> Int {
    ```
   capacity * 3 / 4 // 75% 负载因子
 }
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'm' --loc 'src\IndexMap_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'm' --loc 'src\IndexMap_test.mbt:17:7'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
@@ -39,10 +39,10 @@ test "new" {
       ```
   inspect(m.capacity(), content="8")
   @debug.assert_eq(m.size(), 0)
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'T' --loc 'src\IndexMap_test.mbt:17:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'T' --loc 'src\IndexMap_test.mbt:17:19'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
@@ -65,10 +65,10 @@ test "new" {
            assert_eq(map.get_at(0), (3, "updated"))  // Access by insertion order
   inspect(m.capacity(), content="8")
   @debug.assert_eq(m.size(), 0)
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'Bucket' --loc 'src\types.mbt:17:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'Bucket' --loc 'src\types.mbt:17:13'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {
@@ -87,10 +87,10 @@ priv struct Bucket[K, V] {
              桶结构，包含键值对信息和链表指针
   hash : Int // 键的哈希值（缓存以避免重复计算）
   key : K // 键
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide hover 'hash' --loc 'src\types.mbt:18:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'hash' --loc 'src\types.mbt:18:3'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {
@@ -101,4 +101,4 @@ priv struct Bucket[K, V] {
   ```
   key : K // 键
   mut value : V // 值
-```
+````

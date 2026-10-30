@@ -1,7 +1,7 @@
 # toml-parser rename OffsetDateTime datetime_extended_test.mbt:4:30
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'datetime_extended_test.mbt:4:30'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'datetime_extended_test.mbt:4:30'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
 @@
@@ -486,5 +486,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'OffsetDate
    debug_inspect(
      table,
 *** End Patch
-
-```
+"" (escaped)
+````

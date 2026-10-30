@@ -1,7 +1,7 @@
 # sqlparser find-references LexerError src\lexer.mbt:2:10
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'LexerError' --loc 'src\lexer.mbt:2:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'LexerError' --loc 'src\lexer.mbt:2:10'
 Found 9 references for symbol 'LexerError':
 <WORKDIR>/src\export.mbt:3:14-3:24:
   | ///|
@@ -82,5 +82,5 @@ Found 9 references for symbol 'LexerError':
     |            ^^^^^^^^^^
     | 
     | ///|
-
-```
+"" (escaped)
+````

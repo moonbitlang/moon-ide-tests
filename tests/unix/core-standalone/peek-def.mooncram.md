@@ -1,204 +1,186 @@
 # core-standalone peek-def
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../core_test" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'Array::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
 `pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:619-640
 619 | ///|
-    | /// Maps a function over the elements of the array. (escaped)
-    | /// (escaped)
-    | /// # Example (escaped)
-    | /// ```mbt check (escaped)
-    | /// test { (escaped)
-    | ///   let v = [3, 4, 5] (escaped)
-    | ///   let v2 = v.map(x => x + 1) (escaped)
+    | /// Maps a function over the elements of the array.
+    | ///
+    | /// # Example
+    | /// ```mbt check
+    | /// test {
+    | ///   let v = [3, 4, 5]
+    | ///   let v2 = v.map(x => x + 1)
     | ///   @test.assert_eq(v2, [4, 5, 6])
-    | /// } (escaped)
-    | /// ``` (escaped)
-    | #locals(f) (escaped)
-    | pub fn[T, U] Array::map( (escaped)
-    |   self : Array[T], (escaped)
-    |   f : (T) -> U raise?, (escaped)
-    | ) -> Array[U] raise? { (escaped)
+    | /// }
+    | /// ```
+    | #locals(f)
+    | pub fn[T, U] Array::map(
+    |   self : Array[T],
+    |   f : (T) -> U raise?,
+    | ) -> Array[U] raise? {
     |   let arr = Array::unsafe_make_uninit(self.length())
-    |   for i, v in self { (escaped)
-    |     arr.unsafe_set(i, f(v)) (escaped)
-    |   } (escaped)
-    |   arr (escaped)
-    | } (no-eol) (escaped)
-```
+    |   for i, v in self {
+    |     arr.unsafe_set(i, f(v))
+    |   }
+    |   arr
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Array::filter'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
-`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:712-746
+`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:712-742
 712 | ///|
-    | /// Creates a new array containing all elements from the input array that satisfy (escaped)
-    | /// the given predicate function. (escaped)
-    | /// (escaped)
-    | /// Parameters: (escaped)
-    | /// (escaped)
-    | /// * `array` : The array to filter. (escaped)
-    | /// * `predicate` : A function that takes an element and returns a boolean (escaped)
-    | /// indicating whether the element should be included in the result. (escaped)
-    | /// (escaped)
-    | /// Returns a new array containing only the elements for which the predicate (escaped)
-    | /// function returns `true`. The relative order of the elements is preserved. (escaped)
-    | /// (escaped)
-    | /// Example: (escaped)
-    | /// (escaped)
-    | /// ```mbt check (escaped)
-    | /// test { (escaped)
-    | ///   let arr = [1, 2, 3, 4, 5] (escaped)
-    | ///   let evens = arr.filter(x => x % 2 == 0) (escaped)
-    | ///   debug_inspect(evens, content="[2, 4]") (escaped)
-    | /// } (escaped)
-    | /// ``` (escaped)
-    | #locals(f) (escaped)
-    | pub fn[T] Array::filter( (escaped)
-    |   self : Array[T], (escaped)
-    |   f : (T) -> Bool raise?, (escaped)
-    | ) -> Array[T] raise? { (escaped)
-    |   let arr = [] (escaped)
-    |   for v in self { (escaped)
-    |     if f(v) { (escaped)
-    |       arr.push(v) (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    |   arr (escaped)
-    | } (no-eol) (escaped)
-```
+    | /// Creates a new array containing all elements from the input array that satisfy
+    | /// the given predicate function.
+    | ///
+    | /// Parameters:
+    | ///
+    | /// * `array` : The array to filter.
+    | /// * `predicate` : A function that takes an element and returns a boolean
+    | /// indicating whether the element should be included in the result.
+    | ///
+    | /// Returns a new array containing only the elements for which the predicate
+    | /// function returns `true`. The relative order of the elements is preserved.
+    | ///
+    | /// Example:
+    | ///
+    | /// ```mbt check
+    | /// test {
+    | ///   let arr = [1, 2, 3, 4, 5]
+    | ///   let evens = arr.filter(x => x % 2 == 0)
+    | ///   debug_inspect(evens, content="[2, 4]")
+    | /// }
+    | /// ```
+    | #locals(f)
+    | pub fn[T] Array::filter(
+    |   self : Array[T],
+    |   f : (T) -> Bool raise?,
+    | ) -> Array[T] raise? {
+    |   [
+    |     for v in self if f(v) => v
+    |   ]
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Array::fold'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1364-1394
-1364 | ///|
-     | /// Fold out values from an array according to certain rules. (escaped)
-     | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
-     | /// bounds are fixed when folding starts. (escaped)
-     | /// (escaped)
-     | /// Structural mutations to `self` inside `f` are unsupported. Appended (escaped)
-     | /// elements are not visited, and shrinking the array with operations such as (escaped)
-     | /// `remove`, `truncate`, `clear`, or `drain` may cause later fold steps to (escaped)
-     | /// fail. (escaped)
-     | /// (escaped)
-     | /// Example: (escaped)
-     | /// (escaped)
-     | /// ```mbt check (escaped)
-     | /// test { (escaped)
-     | ///   let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem) (escaped)
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1360-1390
+1360 | ///|
+     | /// Fold out values from an array according to certain rules.
+     | /// This method traverses the array through `self.iter()`, so the traversal
+     | /// bounds are fixed when folding starts.
+     | ///
+     | /// Structural mutations to `self` inside `f` are unsupported. Appended
+     | /// elements are not visited, and shrinking the array with operations such as
+     | /// `remove`, `truncate`, `clear`, or `drain` may cause later fold steps to
+     | /// fail.
+     | ///
+     | /// Example:
+     | ///
+     | /// ```mbt check
+     | /// test {
+     | ///   let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem)
      | ///   @test.assert_eq(sum, 15)
-     | /// } (escaped)
-     | /// ``` (escaped)
-     | #locals(f) (escaped)
-     | #alias(fold_left, deprecated) (escaped)
-     | pub fn[A, B] Array::fold( (escaped)
-     |   self : Array[A], (escaped)
-     |   init~ : B, (escaped)
-     |   f : (B, A) -> B raise?, (escaped)
-     | ) -> B raise? { (escaped)
-     |   for item in self; acc = init { (escaped)
-     |     continue f(acc, item) (escaped)
-     |   } nobreak { (escaped)
-     |     acc (escaped)
-     |   } (escaped)
-     | } (no-eol) (escaped)
-```
+     | /// }
+     | /// ```
+     | #locals(f)
+     | #alias(fold_left, deprecated)
+     | pub fn[A, B] Array::fold(
+     |   self : Array[A],
+     |   init~ : B,
+     |   f : (B, A) -> B raise?,
+     | ) -> B raise? {
+     |   for item in self; acc = init {
+     |     continue f(acc, item)
+     |   } nobreak {
+     |     acc
+     |   }
+     | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'String::length'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
-`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1807-1828
-1807 | ///|
-     | /// Returns the number of UTF-16 code units in the string. Note that this is not (escaped)
-     | /// necessarily equal to the number of Unicode characters (code points) in the (escaped)
-     | /// string, as some characters may be represented by multiple UTF-16 code units. (escaped)
-     | /// (escaped)
-     | /// Parameters: (escaped)
-     | /// (escaped)
-     | /// * `string` : The string whose length is to be determined. (escaped)
-     | /// (escaped)
-     | /// Returns the number of UTF-16 code units in the string. (escaped)
-     | /// (escaped)
-     | /// Example: (escaped)
-     | /// (escaped)
-     | /// ```mbt check (escaped)
-     | /// test { (escaped)
-     | ///   inspect("hello".length(), content="5") (escaped)
-     | ///   inspect("🤣".length(), content="2") // Emoji uses two UTF-16 code units (escaped)
-     | ///   inspect("".length(), content="0") // Empty string (escaped)
-     | /// } (escaped)
-     | /// ``` (escaped)
-     | #alias(charcode_length, deprecated) (escaped)
+`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1812-1833
+1812 | ///|
+     | /// Returns the number of UTF-16 code units in the string. Note that this is not
+     | /// necessarily equal to the number of Unicode characters (code points) in the
+     | /// string, as some characters may be represented by multiple UTF-16 code units.
+     | ///
+     | /// Parameters:
+     | ///
+     | /// * `string` : The string whose length is to be determined.
+     | ///
+     | /// Returns the number of UTF-16 code units in the string.
+     | ///
+     | /// Example:
+     | ///
+     | /// ```mbt check
+     | /// test {
+     | ///   inspect("hello".length(), content="5")
+     | ///   inspect("🤣".length(), content="2") // Emoji uses two UTF-16 code units
+     | ///   inspect("".length(), content="0") // Empty string
+     | /// }
+     | /// ```
+     | #alias(charcode_length, deprecated)
      | pub fn String::length(self : String) -> Int32 = "%string_length" (no-eol)
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'String::split'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
 `pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1727-1738
 1727 | ///|
-     | /// Splits the string into all substrings separated by the given separator. (escaped)
-     | ///  (escaped)
-     | /// If the string does not contain the separator and the separator is not empty, (escaped)
-     | /// the returned iterator will contain only one element, which is the original (escaped)
-     | /// string. (escaped)
-     | ///  (escaped)
-     | /// If the separator is empty, the returned iterator will contain all the (escaped)
-     | /// characters in the string as single elements. (escaped)
-     | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] { (escaped)
-     |   self[:].split(sep) (escaped)
-     | } (no-eol) (escaped)
-```
+     | /// Splits the string into all substrings separated by the given separator.
+"     | /// " (escaped)
+     | /// If the string does not contain the separator and the separator is not empty,
+     | /// the returned iterator will contain only one element, which is the original
+     | /// string.
+"     | /// " (escaped)
+     | /// If the separator is empty, the returned iterator will contain all the
+     | /// characters in the string as single elements.
+     | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+     |   self[:].split(sep)
+     | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'StringBuilder::new'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
-`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:21-37
-21 | ///| (escaped)
-   | /// Creates a new string builder with an optional initial capacity hint. (escaped)
-   | /// (escaped)
-   | /// Parameters: (escaped)
-   | /// (escaped)
-   | /// * `size_hint` : An optional initial capacity hint for the internal buffer. If (escaped)
-   | /// less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes,  (escaped)
-   | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example. (escaped)
-   | /// (escaped)
-   | /// Returns a new `StringBuilder` instance with the specified initial capacity. (escaped)
-   | /// (escaped)
+`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:22-40
+22 | ///|
+   | /// Creates a new string builder with an optional initial capacity hint.
+   | ///
+   | /// Parameters:
+   | ///
+   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
+   | ///
+   | /// Returns a new `StringBuilder` instance.
+   | ///
+   | /// Aborts if `size_hint` is negative.
+   | ///
    | #alias(new, deprecated="Use `StringBuilder()` instead")
-   | pub fn StringBuilder::StringBuilder(size_hint~ : Int32 = 0) -> StringBuilder {
-   |   let initial = if size_hint < 1 { 1 } else { (size_hint + 1) / 2 } (escaped)
-   |   let data : FixedArray[UInt16] = FixedArray::make(initial, 0) (escaped)
+   | pub fn StringBuilder::StringBuilder(size_hint~ : Int32 = 8) -> StringBuilder {
+   |   guard size_hint >= 0 else { abort("size_hint must be non-negative") }
+   |   let data : UninitializedArray[UInt16] = UninitializedArray::make(size_hint)
    |   { data, len: 0, }
-   | } (no-eol) (escaped)
-```
+   | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Int32::abs'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::abs'
 Found 1 symbols matching 'Int32::abs':
 
 `pub fn Int32::abs` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/int.mbt:172-198
@@ -228,14 +210,14 @@ Found 1 symbols matching 'Int32::abs':
     |   } else {
     |     self
     |   }
-    | } (no-eol) (escaped)
-```
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Int32::to_string'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::to_string'
 Found 2 symbols matching 'Int32::to_string':
 
-`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-265
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-263
 202 | ///|
     | /// Converts an integer to its string representation in the specified radix (base).
     | /// Example:
@@ -249,12 +231,12 @@ Found 2 symbols matching 'Int32::to_string':
     |   if radix < 2 || radix > 36 {
     |     abort("radix must be between 2 and 36")
     |   }
-    |  (escaped)
+"    | " (escaped)
     |   // Special case for zero
     |   if self == 0 {
     |     return "0"
     |   }
-    |  (escaped)
+"    | " (escaped)
     |   // Handle negative numbers
     |   let is_negative = self < 0
     |   let num : UInt32 = if is_negative {
@@ -265,35 +247,33 @@ Found 2 symbols matching 'Int32::to_string':
     |   } else {
     |     self.reinterpret_as_uint()
     |   }
-    |  (escaped)
+"    | " (escaped)
     |   // Calculate length, allocate buffer, and write digits
+    |   let digit_start = if is_negative { 1 } else { 0 }
     |   let buffer = match radix {
     |     10 => {
     |       let digit_len = dec_count32(num)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_dec(buffer, num, digit_start, total_len)
     |       buffer
     |     }
     |     16 => {
     |       let digit_len = hex_count32(num)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_hex(buffer, num, digit_start, total_len)
     |       buffer
     |     }
     |     _ => {
     |       let digit_len = radix_count32(num, radix)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_generic(buffer, num, digit_start, total_len, radix)
     |       buffer
     |     }
     |   }
-    |  (escaped)
+"    | " (escaped)
     |   // Write minus sign if negative
     |   if is_negative {
     |     buffer.unsafe_set(0, 0x002D)
@@ -301,323 +281,321 @@ Found 2 symbols matching 'Int32::to_string':
     |   unsafe_fixedarray_uint16_to_string(buffer)
     | }
 
-`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:309-314
-309 | ///|
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:307-312
+307 | ///|
     | /// Converts an integer to its string representation in the specified radix (base).
     | #cfg(target="js")
     | pub fn Int32::to_string(self : Int32, radix~ : Int32 = 10) -> String {
     |   int_to_string_js(self, radix)
-    | } (no-eol) (escaped)
-```
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Option::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Option::map'
 Found 1 symbols matching 'Option::map':
 
 `pub fn Option::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/option.mbt:115-133
 115 | ///|
-    | /// Maps the value of an `Option` using a provided function. (escaped)
-    | /// (escaped)
-    | /// # Example (escaped)
-    | /// (escaped)
-    | /// ```mbt check (escaped)
-    | /// test { (escaped)
-    | ///   let a = Some(5) (escaped)
+    | /// Maps the value of an `Option` using a provided function.
+    | ///
+    | /// # Example
+    | ///
+    | /// ```mbt check
+    | /// test {
+    | ///   let a = Some(5)
     | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
-    | ///   let b = None (escaped)
+    | ///   let b = None
     | ///   @test.assert_eq(b.map(x => x * 2), None)
-    | /// } (escaped)
-    | /// ``` (escaped)
-    | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? { (escaped)
-    |   match self { (escaped)
-    |     Some(t) => Some(f(t)) (escaped)
-    |     None => None (escaped)
-    |   } (escaped)
-    | } (no-eol) (escaped)
-```
+    | /// }
+    | /// ```
+    | pub fn[T, U] Option::map(self : T?, f : (T) -> U raise?) -> U? raise? {
+    |   match self {
+    |     Some(t) => Some(f(t))
+    |     None => None
+    |   }
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Result::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Result::map'
 Found 1 symbols matching 'Result::map':
 
 `pub fn Result::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/result.mbt:15-35
-15 | ///| (escaped)
-   | /// Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged. (escaped)
-   | /// (escaped)
-   | /// # Example (escaped)
-   | /// (escaped)
-   | /// ```mbt check (escaped)
-   | /// test { (escaped)
+15 | ///|
+   | /// Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged.
+   | ///
+   | /// # Example
+   | ///
+   | /// ```mbt check
+   | /// test {
    | ///   let x : Result[Int32, Unit] = Ok(6)
    | ///   let y = x.map((v : Int32) => v * 7)
    | ///   @test.assert_eq(y, Ok(42))
-   | /// } (escaped)
-   | /// ``` (escaped)
+   | /// }
+   | /// ```
    | pub fn[T, E, U] Result::map(
    |   self : Result[T, E],
    |   f : (T) -> U raise?,
    | ) -> Result[U, E] raise? {
-   |   match self { (escaped)
-   |     Ok(value) => Ok(f(value)) (escaped)
-   |     Err(err) => Err(err) (escaped)
-   |   } (escaped)
-   | } (no-eol) (escaped)
-```
+   |   match self {
+   |     Ok(value) => Ok(f(value))
+   |     Err(err) => Err(err)
+   |   }
+   | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Iter::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:348-377
-348 | ///|
-    | /// Transforms the elements of the iterator using a mapping function. (escaped)
-    | /// (escaped)
-    | /// # Type Parameters (escaped)
-    | /// (escaped)
-    | /// - `X`: The type of the elements in the iterator. (escaped)
-    | /// - `Y`: The type of the transformed elements. (escaped)
-    | /// (escaped)
-    | /// # Arguments (escaped)
-    | /// (escaped)
-    | /// * `self` - The input iterator. (escaped)
-    | /// * `f` - The mapping function that transforms each element of the iterator. (escaped)
-    | /// (escaped)
-    | /// # Returns (escaped)
-    | /// (escaped)
-    | /// A new iterator that contains the transformed elements. (escaped)
-    | /// (escaped)
-    | /// # Note (escaped)
-    | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-    | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] { (escaped)
-    |   { (escaped)
-    |     f: fn() { (escaped)
-    |       match self.next() { (escaped)
-    |         Some(x) => Some(f(x)) (escaped)
-    |         None => None (escaped)
-    |       } (escaped)
-    |     }, (escaped)
-    |     size_hint: self.size_hint, (escaped)
-    |   } (escaped)
-    | } (no-eol) (escaped)
-```
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:346-373
+346 | ///|
+    | /// Transforms the elements of the iterator using a mapping function.
+    | ///
+    | /// # Type Parameters
+    | ///
+    | /// - `X`: The type of the elements in the iterator.
+    | /// - `Y`: The type of the transformed elements.
+    | ///
+    | /// # Arguments
+    | ///
+    | /// * `self` - The input iterator.
+    | /// * `f` - The mapping function that transforms each element of the iterator.
+    | ///
+    | /// # Returns
+    | ///
+    | /// A new iterator that contains the transformed elements.
+    | ///
+    | /// # Note
+    | /// The old iterator `self` must not be used again after calling `map`.
+    | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+    |   {
+    |     f: fn() {
+    |       guard self.next() is Some(x) else { None }
+    |       Some(f(x))
+    |     },
+    |     size_hint: self.size_hint,
+    |   }
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Iter::filter'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:318-346
-318 | ///|
-    | /// Filters the elements of the iterator based on a predicate function. (escaped)
-    | /// (escaped)
-    | /// # Type Parameters (escaped)
-    | /// (escaped)
-    | /// - `X`: The type of the elements in the iterator. (escaped)
-    | /// (escaped)
-    | /// # Arguments (escaped)
-    | /// (escaped)
-    | /// * `self` - The input iterator. (escaped)
-    | /// * `f` - The predicate function that determines whether an element should be included in the filtered iterator. (escaped)
-    | /// (escaped)
-    | /// # Returns (escaped)
-    | /// (escaped)
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:316-344
+316 | ///|
+    | /// Filters the elements of the iterator based on a predicate function.
+    | ///
+    | /// # Type Parameters
+    | ///
+    | /// - `X`: The type of the elements in the iterator.
+    | ///
+    | /// # Arguments
+    | ///
+    | /// * `self` - The input iterator.
+    | /// * `f` - The predicate function that determines whether an element should be included in the filtered iterator.
+    | ///
+    | /// # Returns
+    | ///
     | /// A new iterator that only contains the elements for which the predicate function returns `true`.
-    | /// (escaped)
-    | /// # Note (escaped)
-    | /// The old iterator `self` must not be used again after calling `filter`. (escaped)
-    | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] { (escaped)
-    |   Iter::new(fn() { (escaped)
-    |     while self.next() is Some(x) { (escaped)
-    |       if f(x) { (escaped)
-    |         break Some(x) (escaped)
-    |       } (escaped)
-    |     } nobreak { (escaped)
-    |       None (escaped)
-    |     } (escaped)
-    |   }) (escaped)
-    | } (no-eol) (escaped)
-```
+    | ///
+    | /// # Note
+    | /// The old iterator `self` must not be used again after calling `filter`.
+    | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+    |   Iter::new(fn() {
+    |     for x in self {
+    |       if f(x) {
+    |         break Some(x)
+    |       }
+    |     } nobreak {
+    |       None
+    |     }
+    |   })
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Iter::to_array'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:812-825
-812 | ///|
-    | /// Collects the elements of the iterator into an array. (escaped)
-    | /// The old iterator `self` must not be used again. (escaped)
-    | #alias(collect) (escaped)
-    | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] { (escaped)
-    |   let result = match self.size_hint { (escaped)
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:816-829
+816 | ///|
+    | /// Collects the elements of the iterator into an array.
+    | /// The old iterator `self` must not be used again.
+    | #alias(collect)
+    | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+    |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
-    |     None => [] (escaped)
-    |   } (escaped)
-    |   while self.next() is Some(x) { (escaped)
-    |     result.push(x) (escaped)
-    |   } (escaped)
-    |   result (escaped)
-    | } (no-eol) (escaped)
-```
+    |     None => []
+    |   }
+    |   while self.next() is Some(x) {
+    |     result.push(x)
+    |   }
+    |   result
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List'
 Found 1 symbols matching '@moonbitlang/core/list.List':
 
 `pub enum List` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/types.mbt:15-21
-15 | ///| (escaped)
-   | /// Type `List` used by this package APIs. (escaped)
+15 | ///|
+   | /// Type `List` used by this package APIs.
    | #unsafe_cycle_free
-   | pub enum List[A] { (escaped)
-   |   Empty (escaped)
-   |   More(A, mut tail~ : List[A]) (escaped)
-   | } (no-eol) (escaped)
-```
+   | pub enum List[A] {
+   |   Empty
+   |   More(A, mut tail~ : List[A])
+   | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def '@moonbitlang/core/list.List::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
 `pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:222-255
 222 | ///|
-    | /// Maps the list. (escaped)
-    | /// (escaped)
-    | /// # Example (escaped)
-    | /// (escaped)
-    | /// ```mbt check (escaped)
-    | /// test { (escaped)
-    | ///   @debug.assert_eq( (escaped)
+    | /// Maps the list.
+    | ///
+    | /// # Example
+    | ///
+    | /// ```mbt check
+    | /// test {
+    | ///   @debug.assert_eq(
     | ///     @list.List([1, 2, 3, 4, 5]).map(x => x * 2),
     | ///     List([2, 4, 6, 8, 10]),
-    | ///   ) (escaped)
-    | /// } (escaped)
-    | /// ``` (escaped)
-    | #locals(f) (escaped)
-    | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? { (escaped)
-    |   match self { (escaped)
-    |     Empty => Empty (escaped)
-    |     More(hd, tail~) => { (escaped)
-    |       let dest = More(f(hd), tail=Empty) (escaped)
-    |       for d = dest, t = tail { (escaped)
-    |         match (d, t) { (escaped)
-    |           (_, Empty) => break (escaped)
-    |           (More(_) as dest, More(hd, tail~)) => { (escaped)
-    |             dest.tail = More(f(hd), tail=Empty) (escaped)
-    |             continue dest.tail, tail (escaped)
-    |           } (escaped)
-    |           // unreachable (escaped)
-    |           (Empty, _) => panic() (escaped)
-    |         } (escaped)
-    |       } (escaped)
-    |       dest (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    | } (no-eol) (escaped)
-```
+    | ///   )
+    | /// }
+    | /// ```
+    | #locals(f)
+    | pub fn[A, B] List::map(self : List[A], f : (A) -> B raise?) -> List[B] raise? {
+    |   match self {
+    |     Empty => Empty
+    |     More(hd, tail~) => {
+    |       let dest = More(f(hd), tail=Empty)
+    |       for d = dest, t = tail {
+    |         match (d, t) {
+    |           (_, Empty) => break
+    |           (More(_) as dest, More(hd, tail~)) => {
+    |             dest.tail = More(f(hd), tail=Empty)
+    |             continue dest.tail, tail
+    |           }
+    |           // unreachable
+    |           (Empty, _) => panic()
+    |         }
+    |       }
+    |       dest
+    |     }
+    |   }
+    | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::get'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::get'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 
 `pub fn HashMap::get` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:208-241
 208 | ///|
-    | /// Retrieves the value associated with a given key in the hash map. (escaped)
-    | /// (escaped)
-    | /// Parameters: (escaped)
-    | /// (escaped)
-    | /// * `self` : The hash map to search in. (escaped)
-    | /// * `key` : The key to look up in the map. (escaped)
-    | /// (escaped)
-    | /// Returns `Some(value)` if the key exists in the map, `None` otherwise. (escaped)
-    | /// (escaped)
-    | /// Example: (escaped)
-    | /// (escaped)
-    | /// ```mbt check (escaped)
-    | /// test { (escaped)
-    | ///   let map = @hashmap.from_array([("key", 42)]) (escaped)
-    | ///   debug_inspect(map.get("key"), content="Some(42)") (escaped)
-    | ///   debug_inspect(map.get("nonexistent"), content="None") (escaped)
-    | /// } (escaped)
-    | /// ``` (escaped)
-    | pub fn[K : Hash + Eq, V] HashMap::get(self : HashMap[K, V], key : K) -> V? { (escaped)
-    |   // self.get_with_hash(key, key.hash()) (escaped)
+    | /// Retrieves the value associated with a given key in the hash map.
+    | ///
+    | /// Parameters:
+    | ///
+    | /// * `self` : The hash map to search in.
+    | /// * `key` : The key to look up in the map.
+    | ///
+    | /// Returns `Some(value)` if the key exists in the map, `None` otherwise.
+    | ///
+    | /// Example:
+    | ///
+    | /// ```mbt check
+    | /// test {
+    | ///   let map = @hashmap.from_array([("key", 42)])
+    | ///   debug_inspect(map.get("key"), content="Some(42)")
+    | ///   debug_inspect(map.get("nonexistent"), content="None")
+    | /// }
+    | /// ```
+    | pub fn[K : Hash + Eq, V] HashMap::get(self : HashMap[K, V], key : K) -> V? {
+    |   // self.get_with_hash(key, key.hash())
     |   let hash = Hash::hash(key)
     |   // SAFETY: masked probe index; see the note at the top of this file.
-    |   for i = 0, idx = hash & self.capacity_mask { (escaped)
+    |   for i = 0, idx = hash & self.capacity_mask {
     |     guard self.entries.unsafe_get(idx) is Some(entry) else { break None }
-    |     if entry.hash == hash && entry.key == key { (escaped)
-    |       break Some(entry.value) (escaped)
-    |     } (escaped)
-    |     if i > entry.psl { (escaped)
-    |       break None (escaped)
-    |     } (escaped)
-    |     continue i + 1, (idx + 1) & self.capacity_mask (escaped)
-    |   } (escaped)
-    | } (escaped)
+    |     if entry.hash == hash && entry.key == key {
+    |       break Some(entry.value)
+    |     }
+    |     if i > entry.psl {
+    |       break None
+    |     }
+    |     continue i + 1, (idx + 1) & self.capacity_mask
+    |   }
+    | }
 
 `pub fn HashMap::get` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:70-78
 70 | ///|
-   | /// Lookup a key from a hash map (escaped)
-   | #alias(find, deprecated) (escaped)
-   | pub fn[K : Eq + Hash, V] HashMap::get(self : HashMap[K, V], key : K) -> V? { (escaped)
+   | /// Lookup a key from a hash map
+   | #alias(find, deprecated)
+   | pub fn[K : Eq + Hash, V] HashMap::get(self : HashMap[K, V], key : K) -> V? {
    |   match self.data {
-   |     None => None (escaped)
-   |     Some(node) => node.get_with_path(key, @path.of(key)) (escaped)
-   |   } (escaped)
-   | } (no-eol) (escaped)
-```
+   |     None => None
+   |     Some(node) => node.get_with_path(key, @path.of(key))
+   |   }
+   | } (no-eol)
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
 `pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:853-877
 853 | ///|
     | /// Applies a function to each key-value pair in the map and
-    | /// returns a new map with the results, using the original keys. (escaped)
+    | /// returns a new map with the results, using the original keys.
     | ///
     | /// `f` may raise; the error propagates and `self` is left unchanged.
-    | pub fn[K, V, V2] HashMap::map( (escaped)
-    |   self : HashMap[K, V], (escaped)
+    | pub fn[K, V, V2] HashMap::map(
+    |   self : HashMap[K, V],
     |   f : (K, V) -> V2 raise?,
     | ) -> HashMap[K, V2] raise? {
-    |   let other = { (escaped)
-    |     capacity: self.capacity, (escaped)
-    |     entries: FixedArray::make(self.capacity, None), (escaped)
-    |     size: self.size, (escaped)
-    |     capacity_mask: self.capacity_mask, (escaped)
-    |   } (escaped)
-    |   if self.size == 0 { (escaped)
-    |     return other (escaped)
-    |   } (escaped)
-    |   for i in 0..<self.capacity { (escaped)
+    |   let other = {
+    |     capacity: self.capacity,
+    |     entries: FixedArray::make(self.capacity, None),
+    |     size: self.size,
+    |     capacity_mask: self.capacity_mask,
+    |   }
+    |   if self.size == 0 {
+    |     return other
+    |   }
+    |   for i in 0..<self.capacity {
     |     if self.entries[i] is Some({ key, value, hash, psl, }) {
     |       other.entries[i] = Some({ psl, key, value: f(key, value), hash, })
-    |     } (escaped)
-    |   } (escaped)
-    |   other (escaped)
-    | } (escaped)
+    |     }
+    |   }
+    |   other
+    | }
 
 `pub fn HashMap::map` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:415-437
 415 | ///|
-    | /// Maps over the key-value pairs in the map (escaped)
-    | #alias(map_with_key, deprecated) (escaped)
-    | pub fn[K, V, A] HashMap::map( (escaped)
-    |   self : HashMap[K, V], (escaped)
-    |   f : (K, V) -> A raise?, (escaped)
-    | ) -> HashMap[K, A] raise? { (escaped)
-    |   fn go(m : Node[K, V]) -> Node[K, A] raise? { (escaped)
-    |     match m { (escaped)
-    |       Leaf(k, v, bucket) => (escaped)
-    |         Leaf(k, f(k, v), bucket.map(kv => (kv.0, f(kv.0, kv.1)))) (escaped)
-    |       Flat(k, v, path) => Flat(k, f(k, v), path) (escaped)
-    |       Branch(children) => Branch(children.map(go)) (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    |  (escaped)
+    | /// Maps over the key-value pairs in the map
+    | #alias(map_with_key, deprecated)
+    | pub fn[K, V, A] HashMap::map(
+    |   self : HashMap[K, V],
+    |   f : (K, V) -> A raise?,
+    | ) -> HashMap[K, A] raise? {
+    |   fn go(m : Node[K, V]) -> Node[K, A] raise? {
+    |     match m {
+    |       Leaf(k, v, bucket) =>
+    |         Leaf(k, f(k, v), bucket.map(kv => (kv.0, f(kv.0, kv.1))))
+    |       Flat(k, v, path) => Flat(k, f(k, v), path)
+    |       Branch(children) => Branch(children.map(go))
+    |     }
+    |   }
+"    | " (escaped)
     |   {
     |     data: match self.data {
     |       None => None
     |       Some(node) => Some(go(node))
     |     },
-    |   } (escaped)
-    | } (no-eol) (escaped)
-```
+    |   }
+    | } (no-eol)
+````

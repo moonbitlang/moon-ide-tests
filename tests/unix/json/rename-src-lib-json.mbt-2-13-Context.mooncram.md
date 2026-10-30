@@ -1,23 +1,7 @@
 # json rename Context src/lib/json.mbt:2:13
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
 @@
@@ -28,8 +12,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
    rest : ArrayView[Char]
    skip : Int
 @@
-     Some(decode) => decode (escaped)
-     None => () (escaped)
+"     Some(decode) => decode" (escaped)
+"     None => ()" (escaped)
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -37,8 +21,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
      original: input.to_array(),
      skip: 0,
 @@
-     Some(decode) => decode (escaped)
-     None => () (escaped)
+"     Some(decode) => decode" (escaped)
+"     None => ()" (escaped)
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -71,7 +55,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 +fn number_zero(ctx : ContextRenamed, len : Int) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     [] => { (escaped)
+"     [] => {" (escaped)
 @@
  }
  
@@ -80,7 +64,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 +fn number(ctx : ContextRenamed, len : Int) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -88,8 +72,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn number_frac(ctx : Context, len : Int) -> Value raise {
 +fn number_frac(ctx : ContextRenamed, len : Int) -> Value raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
-     _ => unexpected(ctx, len, 0, Checkpoint::Value) (escaped)
+"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
 @@
  }
  
@@ -98,7 +82,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 +fn number_frac_cont(ctx : ContextRenamed, len : Int) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  
  ///|
@@ -115,8 +99,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn number_exp(ctx : Context, len : Int) -> Value raise {
 +fn number_exp(ctx : ContextRenamed, len : Int) -> Value raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
-     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -124,8 +108,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn number_exp_sign(ctx : Context, len : Int) -> Value raise {
 +fn number_exp_sign(ctx : ContextRenamed, len : Int) -> Value raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
-     _ => unexpected(ctx, len, 0, Checkpoint::Value) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
 @@
  }
  
@@ -134,7 +118,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 +fn number_exp_cont(ctx : ContextRenamed, len : Int) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -142,8 +126,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn number_minus(ctx : Context) -> Value raise {
 +fn number_minus(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2) (escaped)
-     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2) (escaped)
+"     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2)" (escaped)
+"     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2)" (escaped)
 @@
  }
  
@@ -151,7 +135,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn integer_decode(ctx : Context, token : ArrayView[Char]) -> Int raise {
 +fn integer_decode(ctx : ContextRenamed, token : ArrayView[Char]) -> Int raise {
    try ctx.decode.integer(token) catch {
-     _ => raise ParseError(UnexpectedSequence(token.to_owned(), ctx.skip)) (escaped)
+"     _ => raise ParseError(UnexpectedSequence(token.to_owned(), ctx.skip))" (escaped)
    } noraise {
 @@
  // constants {{{
@@ -160,7 +144,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn true_(ctx : Context) -> Value raise {
 +fn true_(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-     ['r', 'u', 'e', .. rest] => (escaped)
+"     ['r', 'u', 'e', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::boolean(true))
 @@
  }
@@ -169,7 +153,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn false_(ctx : Context) -> Value raise {
 +fn false_(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-     ['a', 'l', 's', 'e', .. rest] => (escaped)
+"     ['a', 'l', 's', 'e', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 5 }, Json::boolean(false))
 @@
  }
@@ -178,7 +162,7 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn null(ctx : Context) -> Value raise {
 +fn null(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-     ['u', 'l', 'l', .. rest] => (escaped)
+"     ['u', 'l', 'l', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::null())
 @@
  // string {{{
@@ -232,8 +216,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn hex_value(ctx : Context, index : Int, c : Char) -> Int raise {
 +fn hex_value(ctx : ContextRenamed, index : Int, c : Char) -> Int raise {
    match c {
-     '0'..='9' => c.to_int() - '0'.to_int() (escaped)
-     'a'..='f' => c.to_int() - 'a'.to_int() + 10 (escaped)
+"     '0'..='9' => c.to_int() - '0'.to_int()" (escaped)
+"     'a'..='f' => c.to_int() - 'a'.to_int() + 10" (escaped)
 @@
  
  ///|
@@ -304,8 +288,8 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
 -fn continue_(ctx : Context, value : Json) -> Value raise {
 +fn continue_(ctx : ContextRenamed, value : Json) -> Value raise {
    match ctx.stack.last() {
-     None => terminate(ctx, value) (escaped)
-     Some(Frame::Array(_)) => array_push(ctx, value) (escaped)
+"     None => terminate(ctx, value)" (escaped)
+"     Some(Frame::Array(_)) => array_push(ctx, value)" (escaped)
 @@
  }
  
@@ -325,5 +309,5 @@ $ run_moon_ide moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mb
    len : Int,
    func_data : Checkpoint,
 *** End Patch
-
-```
+"" (escaped)
+````

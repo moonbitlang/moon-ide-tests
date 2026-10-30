@@ -1,7 +1,7 @@
 # json rename decode src\tests\json_value_semantics_test.mbt:3:22
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode' 'decode_renamed' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'decode' 'decode_renamed' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 @@
@@ -12,14 +12,14 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode' 'decode_r
 +  try @json.decode_renamed(input) catch {
      _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
    } noraise {
-     _ => () (escaped)
+"     _ => ()" (escaped)
 @@
  
  ///|
  fn expect_reject(name : String, input : String) -> Unit raise {
 -  try @json.decode(input) catch {
 +  try @json.decode_renamed(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
        json_testsuite_fail(
 @@
@@ -28,7 +28,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode' 'decode_r
  fn expect_accept_or_reject(name : String, input : String) -> Unit raise {
 -  try @json.decode(input) catch {
 +  try @json.decode_renamed(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
        json_testsuite_fail(
 *** Update File: <WORKDIR>/src\tests\json_value_semantics_test.mbt
@@ -85,5 +85,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode' 'decode_r
    decode_continue,
    type Value,
 *** End Patch
-
-```
+"" (escaped)
+````

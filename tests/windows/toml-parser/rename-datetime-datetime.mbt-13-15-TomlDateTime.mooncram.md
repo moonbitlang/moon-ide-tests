@@ -1,7 +1,7 @@
 # toml-parser rename TomlDateTime datetime\datetime.mbt:13:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTime' 'TomlDateTimeRenamed' --loc 'datetime\datetime.mbt:13:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'TomlDateTime' 'TomlDateTimeRenamed' --loc 'datetime\datetime.mbt:13:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/datetime\datetime.mbt
 @@
@@ -145,5 +145,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'TomlDateTi
  ///|
  /// Extract datetime variant name and value string from a TomlDateTime value.
 *** End Patch
-
-```
+"" (escaped)
+````

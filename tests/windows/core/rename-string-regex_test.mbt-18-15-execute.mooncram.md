@@ -1,7 +1,7 @@
 # core rename execute string\regex_test.mbt:18:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute_renamed' --loc 'string\regex_test.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'execute' 'execute_renamed' --loc 'string\regex_test.mbt:18:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/string\README.mbt.md
 @@
@@ -942,5 +942,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'execute' 'execute
    inspect(m.content().length(), content="2305")
    debug_inspect(
 *** End Patch
-
-```
+"" (escaped)
+````

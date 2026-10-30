@@ -1,7 +1,7 @@
 # core find-references regex string\regex_test.mbt:17:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'regex' --loc 'string\regex_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'regex' --loc 'string\regex_test.mbt:17:7'
 Found 1 references for symbol 'regex':
 <WORKDIR>/string\regex_test.mbt:18:9-18:14:
    | ///|
@@ -11,5 +11,5 @@ Found 1 references for symbol 'regex':
    |         ^^^^^
    |   debug_inspect(
    |     m,
-
-```
+"" (escaped)
+````

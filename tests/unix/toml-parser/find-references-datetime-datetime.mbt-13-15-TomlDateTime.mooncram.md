@@ -1,23 +1,7 @@
 # toml-parser find-references TomlDateTime datetime/datetime.mbt:13:15
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 Found 18 references for symbol 'TomlDateTime':
 <WORKDIR>/datetime/datetime.mbt:22:12-22:24:
    | 
@@ -180,5 +164,5 @@ Found 18 references for symbol 'TomlDateTime':
    |                           ^^^^^^^^^^^^
    | 
    | ///|
-
-```
+"" (escaped)
+````

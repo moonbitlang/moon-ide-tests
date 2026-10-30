@@ -1,7 +1,7 @@
 # core find-references from_int builtin\int64.mbt:44:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'from_int' --loc 'builtin\int64.mbt:44:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'from_int' --loc 'builtin\int64.mbt:44:15'
 Found 3 references for symbol 'from_int':
 <WORKDIR>/builtin\int64.mbt:41:22-41:30:
    | ///
@@ -29,5 +29,5 @@ Found 3 references for symbol 'from_int':
    |                  ^^^^^^^^
    | }
    | 
-
-```
+"" (escaped)
+````

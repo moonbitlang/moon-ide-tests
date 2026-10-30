@@ -1,7 +1,7 @@
 # sqlparser rename path src\tests\tpch_test.mbt:2:19
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'path' 'path_renamed' --loc 'src\tests\tpch_test.mbt:2:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'path' 'path_renamed' --loc 'src\tests\tpch_test.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\tpch_test.mbt
 @@
@@ -14,5 +14,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'path' 'path_
        println("Read file error: \{Repr(e)}")
        panic()
 *** End Patch
-
-```
+"" (escaped)
+````

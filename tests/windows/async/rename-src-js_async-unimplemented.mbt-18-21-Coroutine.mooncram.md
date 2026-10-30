@@ -1,7 +1,7 @@
 # async rename Coroutine src\js_async\unimplemented.mbt:18:21
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src\js_async\unimplemented.mbt:18:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src\js_async\unimplemented.mbt:18:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\aqueue\aqueue.mbt
 @@
@@ -125,7 +125,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
 +pub fn CoroutineRenamed::check_error(coro : CoroutineRenamed) -> Unit raise {
    match coro.state {
      Fail(err) => raise err
-     Done | Cancelled | Running | Suspend(_) => () (escaped)
+"     Done | Cancelled | Running | Suspend(_) => ()" (escaped)
 *** Update File: <WORKDIR>/src\internal\coroutine\deprecated.mbt
 @@
  ///|
@@ -322,5 +322,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
  
  ///|
 *** End Patch
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # rabbita rename fixture_scroll_items e2e\apps\rui\message-scroller\message_scroller.mbt:2:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'fixture_scroll_items' 'fixture_scroll_items_renamed' --loc 'e2e\apps\rui\message-scroller\message_scroller.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'fixture_scroll_items' 'fixture_scroll_items_renamed' --loc 'e2e\apps\rui\message-scroller\message_scroller.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e\apps\rui\message-scroller\message_scroller.mbt
 @@
@@ -21,5 +21,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'fixture_scroll
              }),
            ),
 *** End Patch
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # toml-parser find-references OffsetDateTime datetime\datetime.mbt:14:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide find-references 'OffsetDateTime' --loc 'datetime\datetime.mbt:14:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'OffsetDateTime' --loc 'datetime\datetime.mbt:14:3'
 Found 61 references for symbol 'OffsetDateTime':
 <WORKDIR>/coverage_improvement_comprehensive_test.mbt:246:38-246:52:
     |   debug_inspect(float_str.contains("3.14"), content="true")
@@ -551,5 +551,5 @@ Found 61 references for symbol 'OffsetDateTime':
     |                  ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
-
-```
+"" (escaped)
+````

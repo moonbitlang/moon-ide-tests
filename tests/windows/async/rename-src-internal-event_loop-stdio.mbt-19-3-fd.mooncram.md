@@ -1,7 +1,7 @@
 # async rename fd src\internal\event_loop\stdio.mbt:19:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'fd' 'fd_renamed' --loc 'src\internal\event_loop\stdio.mbt:19:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'fd' 'fd_renamed' --loc 'src\internal\event_loop\stdio.mbt:19:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\internal\event_loop\stdio.mbt
 @@
@@ -14,5 +14,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'fd' 'fd_renamed'
    buf : FixedArray[Byte],
    buf_len : Int32,
 *** End Patch
-
-```
+"" (escaped)
+````

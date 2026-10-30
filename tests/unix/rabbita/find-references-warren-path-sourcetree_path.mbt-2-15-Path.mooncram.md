@@ -1,23 +1,7 @@
 # rabbita find-references Path warren/path/sourcetree_path.mbt:2:15
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/rabbita" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
 Found 8 references for symbol 'Path':
 <WORKDIR>/warren/build.mbt:2:36-2:40:
   | ///|
@@ -87,5 +71,5 @@ Found 8 references for symbol 'Path':
    |                        ^^^^
    |     if parent != "" && parent != "." && !@fs.exists(parent) {
    |       @fs.mkdir(parent, permission=0o755, recursive=true)
-
-```
+"" (escaped)
+````

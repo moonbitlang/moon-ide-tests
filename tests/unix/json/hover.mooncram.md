@@ -1,23 +1,7 @@
 # json hover
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'Decode' --loc 'src/lib/decode.mbt:8:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'Decode' --loc 'src/lib/decode.mbt:8:11'
 pub type JsonObject = Map[String, Json]
 
 ///|
@@ -38,10 +22,10 @@ pub trait Decode {
           ```
   array_start(Self, JsonArray) -> JsonArray
   array_push(Self, Json, JsonArray) -> JsonArray
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'array_start' --loc 'src/lib/decode.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'array_start' --loc 'src/lib/decode.mbt:9:3'
 ///|
 pub trait Decode {
   array_start(Self, JsonArray) -> JsonArray
@@ -51,10 +35,10 @@ pub trait Decode {
   ```
   array_push(Self, Json, JsonArray) -> JsonArray
   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Context' --loc 'src/lib/json.mbt:2:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'Context' --loc 'src/lib/json.mbt:2:13'
 ///|
 priv struct Context {
             ^^^^^^^
@@ -71,10 +55,10 @@ priv struct Context {
             ```
   original : Array[Char]
   rest : ArrayView[Char]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'original' --loc 'src/lib/json.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'original' --loc 'src/lib/json.mbt:3:3'
 ///|
 priv struct Context {
   original : Array[Char]
@@ -84,10 +68,10 @@ priv struct Context {
   ```
   rest : ArrayView[Char]
   skip : Int
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Value' --loc 'src/lib/value.mbt:2:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'Value' --loc 'src/lib/value.mbt:2:10'
 ///|
 pub enum Value {
          ^^^^^
@@ -99,10 +83,10 @@ pub enum Value {
          ```
   Continue(ContinueValue)
   Finish(FinishValue)
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Continue' --loc 'src/lib/value.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'Continue' --loc 'src/lib/value.mbt:3:3'
 ///|
 pub enum Value {
   Continue(ContinueValue)
@@ -112,10 +96,10 @@ pub enum Value {
   ```
   Finish(FinishValue)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'incr_fail' --loc 'src/tests/incr.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'incr_fail' --loc 'src/tests/incr.mbt:2:4'
 ///|
 fn incr_fail(message : String) -> Unit raise {
    ^^^^^^^^^
@@ -124,10 +108,10 @@ fn incr_fail(message : String) -> Unit raise {
    ```
   raise InspectError::InspectError(message)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'message' --loc 'src/tests/incr.mbt:2:14'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'message' --loc 'src/tests/incr.mbt:2:14'
 ///|
 fn incr_fail(message : String) -> Unit raise {
              ^^^^^^^
@@ -136,10 +120,10 @@ fn incr_fail(message : String) -> Unit raise {
              ```
   raise InspectError::InspectError(message)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
 ///|
 fn json_testsuite_fail(message : String) -> Unit raise {
    ^^^^^^^^^^^^^^^^^^^
@@ -148,10 +132,10 @@ fn json_testsuite_fail(message : String) -> Unit raise {
    ```
   raise InspectError::InspectError(message)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'message' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:24'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'message' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:24'
 ///|
 fn json_testsuite_fail(message : String) -> Unit raise {
                        ^^^^^^^
@@ -160,10 +144,10 @@ fn json_testsuite_fail(message : String) -> Unit raise {
                        ```
   raise InspectError::InspectError(message)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'input' --loc 'src/tests/json_testsuite_n_test.mbt:8:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'input' --loc 'src/tests/json_testsuite_n_test.mbt:8:7'
 ///|
 test "json_testsuite n_array_1_true_without_comma" {
   let input = "[1 true]"
@@ -173,10 +157,10 @@ test "json_testsuite n_array_1_true_without_comma" {
       ```
   expect_reject("n_array_1_true_without_comma.json", input)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'expect_reject' --loc 'src/tests/json_testsuite_n_test.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'expect_reject' --loc 'src/tests/json_testsuite_n_test.mbt:9:3'
 ///|
 test "json_testsuite n_array_1_true_without_comma" {
   let input = "[1 true]"
@@ -186,11 +170,11 @@ test "json_testsuite n_array_1_true_without_comma" {
   fn expect_reject(name : String, input : String) -> Unit raise
   ```
 }
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'input' --loc 'src/tests/json_testsuite_y_test.mbt:8:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'input' --loc 'src/tests/json_testsuite_y_test.mbt:8:7'
 ///|
 test "json_testsuite y_array_arraysWithSpaces" {
   let input = "[[]   ]"
@@ -200,10 +184,10 @@ test "json_testsuite y_array_arraysWithSpaces" {
       ```
   expect_accept("y_array_arraysWithSpaces.json", input)
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'expect_accept' --loc 'src/tests/json_testsuite_y_test.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'expect_accept' --loc 'src/tests/json_testsuite_y_test.mbt:9:3'
 ///|
 test "json_testsuite y_array_arraysWithSpaces" {
   let input = "[[]   ]"
@@ -213,11 +197,11 @@ test "json_testsuite y_array_arraysWithSpaces" {
   fn expect_accept(name : String, input : String) -> Unit raise
   ```
 }
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'actual' --loc 'src/tests/json_value_semantics_test.mbt:3:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'actual' --loc 'src/tests/json_value_semantics_test.mbt:3:7'
 ///|
 test "json value semantics basics" {
   let actual = @json.decode("[false,1,\"x\",null,{\"a\":true}]")
@@ -227,10 +211,10 @@ test "json value semantics basics" {
       ```
   let expected = Json::array([
     Json::boolean(false),
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'decode' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'decode' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
 ///|
 test "json value semantics basics" {
   let actual = @json.decode("[false,1,\"x\",null,{\"a\":true}]")
@@ -240,39 +224,39 @@ test "json value semantics basics" {
                ```
   let expected = Json::array([
     Json::boolean(false),
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'decode_start' --loc 'src/tests/top.mbt:2:14'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'decode_start' --loc 'src/tests/top.mbt:2:14'
 ///|
 using @json {decode_start, decode_continue, type Value}
              ^^^^^^^^^^^^
              ```moonbit
              fn @jinser/json.decode_start(input : String, decode? : &@lib.Decode) -> @lib.Value raise
              ```
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'decode_continue' --loc 'src/tests/top.mbt:2:28'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'decode_continue' --loc 'src/tests/top.mbt:2:28'
 ///|
 using @json {decode_start, decode_continue, type Value}
                            ^^^^^^^^^^^^^^^
                            ```moonbit
                            fn @jinser/json.decode_continue(cont : String, state : @lib.ContinueValue) -> @lib.Value raise
                            ```
-```
+````
 
 Known IDE limitation: hover on the trait imported by using reports no information; its declaration hover and imported-name peek-def work.
 
 <!-- known-ide-limitation: using-trait-hover -->
-```mooncram
-$ run_moon_ide moon ide hover 'Decode' --loc 'src/top.mbt:3:9'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'Decode' --loc 'src/top.mbt:3:9'
 No hover information found for symbol 'Decode' at src/top.mbt:3:9
 [1]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'decode' --loc 'src/top.mbt:4:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide hover 'decode' --loc 'src/top.mbt:4:3'
 ///|
 pub using @lib {
   trait Decode,
@@ -283,4 +267,4 @@ pub using @lib {
   ```
   decode_start,
   decode_continue,
-```
+````

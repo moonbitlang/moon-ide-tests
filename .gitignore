@@ -2,3 +2,6 @@ _build/
 artifacts/
 __pycache__/
 .daily-test/
+
+# Local executor checks are not part of the CI suite.
+/scripts/tests/

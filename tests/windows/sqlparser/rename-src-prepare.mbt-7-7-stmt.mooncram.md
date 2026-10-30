@@ -1,7 +1,7 @@
 # sqlparser rename stmt src\prepare.mbt:7:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'stmt' 'stmt_renamed' --loc 'src\prepare.mbt:7:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'stmt' 'stmt_renamed' --loc 'src\prepare.mbt:7:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\prepare.mbt
 @@
@@ -17,5 +17,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'stmt' 'stmt_
        #|PREPARE stmt AS SELECT
        #|  *
 *** End Patch
-
-```
+"" (escaped)
+````

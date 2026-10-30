@@ -1,7 +1,7 @@
 # core find-references DEAD string\internal\regex_engine\regex.mbt:23:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'DEAD' --loc 'string\internal\regex_engine\regex.mbt:23:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'DEAD' --loc 'string\internal\regex_engine\regex.mbt:23:7'
 Found 9 references for symbol 'DEAD':
 <WORKDIR>/string\internal\regex_engine\dfa.mbt:25:3-25:7:
    | /// entry that stops the scan loop. Terminal states take every other entry
@@ -83,5 +83,5 @@ Found 9 references for symbol 'DEAD':
     |                 ^^^^
     |   // A terminal state has no threads, only the row of the match: its length
     |   // and then `(tag, register)` pairs.
-
-```
+"" (escaped)
+````

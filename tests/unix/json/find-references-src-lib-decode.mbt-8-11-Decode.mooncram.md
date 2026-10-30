@@ -1,23 +1,7 @@
 # json find-references Decode src/lib/decode.mbt:8:11
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Decode' --loc 'src/lib/decode.mbt:8:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Decode' --loc 'src/lib/decode.mbt:8:11'
 Found 16 references for symbol 'Decode':
 <WORKDIR>/src/lib/decode.mbt:21:6-21:12:
    | }
@@ -107,52 +91,52 @@ Found 16 references for symbol 'Decode':
 9 |   decode : &Decode
   |             ^^^^^^
   | }
-  |  (escaped)
+"  | " (escaped)
 
 <WORKDIR>/src/lib/json.mbt:20:42-20:48:
-   | } derive(Debug) (escaped)
-   |  (escaped)
-   | ///| (escaped)
-20 | pub fn decode(input : String, decode? : &Decode) -> Json raise { (escaped)
-   |                                          ^^^^^^ (escaped)
-   |   let decode : &Decode = match decode { (escaped)
-   |     Some(decode) => decode (escaped)
+"   | } derive(Debug)" (escaped)
+"   | " (escaped)
+"   | ///|" (escaped)
+"20 | pub fn decode(input : String, decode? : &Decode) -> Json raise {" (escaped)
+"   |                                          ^^^^^^" (escaped)
+"   |   let decode : &Decode = match decode {" (escaped)
+"   |     Some(decode) => decode" (escaped)
 
 <WORKDIR>/src/lib/json.mbt:21:17-21:23:
-   |  (escaped)
-   | ///| (escaped)
-   | pub fn decode(input : String, decode? : &Decode) -> Json raise { (escaped)
-21 |   let decode : &Decode = match decode { (escaped)
-   |                 ^^^^^^ (escaped)
-   |     Some(decode) => decode (escaped)
-   |     None => () (escaped)
+"   | " (escaped)
+"   | ///|" (escaped)
+"   | pub fn decode(input : String, decode? : &Decode) -> Json raise {" (escaped)
+"21 |   let decode : &Decode = match decode {" (escaped)
+"   |                 ^^^^^^" (escaped)
+"   |     Some(decode) => decode" (escaped)
+"   |     None => ()" (escaped)
 
 <WORKDIR>/src/lib/json.mbt:48:48-48:54:
-   | } (escaped)
-   |  (escaped)
-   | ///| (escaped)
-48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise { (escaped)
-   |                                                ^^^^^^ (escaped)
-   |   let decode : &Decode = match decode { (escaped)
-   |     Some(decode) => decode (escaped)
+"   | }" (escaped)
+"   | " (escaped)
+"   | ///|" (escaped)
+"48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {" (escaped)
+"   |                                                ^^^^^^" (escaped)
+"   |   let decode : &Decode = match decode {" (escaped)
+"   |     Some(decode) => decode" (escaped)
 
 <WORKDIR>/src/lib/json.mbt:49:17-49:23:
-   |  (escaped)
-   | ///| (escaped)
-   | pub fn decode_start(input : String, decode? : &Decode) -> Value raise { (escaped)
-49 |   let decode : &Decode = match decode { (escaped)
-   |                 ^^^^^^ (escaped)
-   |     Some(decode) => decode (escaped)
-   |     None => () (escaped)
+"   | " (escaped)
+"   | ///|" (escaped)
+"   | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {" (escaped)
+"49 |   let decode : &Decode = match decode {" (escaped)
+"   |                 ^^^^^^" (escaped)
+"   |     Some(decode) => decode" (escaped)
+"   |     None => ()" (escaped)
 
 <WORKDIR>/src/lib/value.mbt:13:13-13:19:
-   |   arr_acc : JsonArray (escaped)
-   |   obj_acc : JsonObject (escaped)
-   |   stack : Array[Frame] (escaped)
-13 |   decode : &Decode (escaped)
-   |             ^^^^^^ (escaped)
-   |   checkpoint : Checkpoint (escaped)
-   | } (escaped)
+"   |   arr_acc : JsonArray" (escaped)
+"   |   obj_acc : JsonObject" (escaped)
+"   |   stack : Array[Frame]" (escaped)
+"13 |   decode : &Decode" (escaped)
+"   |             ^^^^^^" (escaped)
+"   |   checkpoint : Checkpoint" (escaped)
+"   | }" (escaped)
 
 <WORKDIR>/src/top.mbt:3:9-3:15:
   | ///|
@@ -161,5 +145,5 @@ Found 16 references for symbol 'Decode':
   |         ^^^^^^
   |   decode,
   |   decode_start,
-
-```
+"" (escaped)
+````

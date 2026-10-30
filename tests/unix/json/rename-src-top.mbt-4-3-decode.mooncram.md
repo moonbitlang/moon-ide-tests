@@ -1,23 +1,7 @@
 # json rename decode src/top.mbt:4:3
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
 @@
@@ -28,14 +12,14 @@ $ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
 +  try @json.decode_renamed(input) catch {
      _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
    } noraise {
-     _ => () (escaped)
+"     _ => ()" (escaped)
 @@
  
  ///|
  fn expect_reject(name : String, input : String) -> Unit raise {
 -  try @json.decode(input) catch {
 +  try @json.decode_renamed(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
        json_testsuite_fail(
 @@
@@ -44,7 +28,7 @@ $ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
  fn expect_accept_or_reject(name : String, input : String) -> Unit raise {
 -  try @json.decode(input) catch {
 +  try @json.decode_renamed(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
        json_testsuite_fail(
 *** Update File: <WORKDIR>/src/tests/json_value_semantics_test.mbt
@@ -101,5 +85,5 @@ $ run_moon_ide moon ide rename 'decode' 'decode_renamed' --loc 'src/top.mbt:4:3'
    decode_continue,
    type Value,
 *** End Patch
-
-```
+"" (escaped)
+````

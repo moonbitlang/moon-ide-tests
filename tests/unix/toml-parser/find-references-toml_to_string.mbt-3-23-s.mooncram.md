@@ -1,23 +1,7 @@
 # toml-parser find-references s toml_to_string.mbt:3:23
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 's' --loc 'toml_to_string.mbt:3:23'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 's' --loc 'toml_to_string.mbt:3:23'
 Found 1 references for symbol 's':
 <WORKDIR>/toml_to_string.mbt:5:15-5:16:
   | /// Helper function to escape strings according to TOML spec
@@ -27,5 +11,5 @@ Found 1 references for symbol 's':
   |               ^
   |     match char {
   |       '\b' => result <+ "\\b"
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # async rename fstatx_sync src\internal\event_loop\stdio.mbt:18:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'fstatx_sync' 'fstatx_sync_renamed' --loc 'src\internal\event_loop\stdio.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'fstatx_sync' 'fstatx_sync_renamed' --loc 'src\internal\event_loop\stdio.mbt:18:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\internal\event_loop\stdio.mbt
 @@
@@ -23,5 +23,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'fstatx_sync' 'fs
    }
    guard! buf is [u32le(_), u32le(mask), i64le(kind)]
 *** End Patch
-
-```
+"" (escaped)
+````

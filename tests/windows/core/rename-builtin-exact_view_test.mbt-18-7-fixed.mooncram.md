@@ -1,7 +1,7 @@
 # core rename fixed builtin\exact_view_test.mbt:18:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'fixed' 'fixed_renamed' --loc 'builtin\exact_view_test.mbt:18:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'fixed' 'fixed_renamed' --loc 'builtin\exact_view_test.mbt:18:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin\exact_view_test.mbt
 @@
@@ -23,5 +23,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'fixed' 'fixed_ren
        view.exact_view(start=1, end=3),
        mutable.exact_view(start=1, end=3),
 *** End Patch
-
-```
+"" (escaped)
+````

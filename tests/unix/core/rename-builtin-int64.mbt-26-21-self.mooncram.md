@@ -1,23 +1,7 @@
 # core rename self builtin/int64.mbt:26:21
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'self' 'self_renamed' --loc 'builtin/int64.mbt:26:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'self' 'self_renamed' --loc 'builtin/int64.mbt:26:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin/int64.mbt
 @@
@@ -30,5 +14,5 @@ $ run_moon_ide moon ide rename 'self' 'self_renamed' --loc 'builtin/int64.mbt:26
  ///|
  /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
 *** End Patch
-
-```
+"" (escaped)
+````

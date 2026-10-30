@@ -1,7 +1,7 @@
 # json find-references array_start src\lib\decode.mbt:9:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'array_start' --loc 'src\lib\decode.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'array_start' --loc 'src\lib\decode.mbt:9:3'
 Found 3 references for symbol 'array_start':
 <WORKDIR>/src\lib\decode.mbt:21:27-21:38:
    | }
@@ -29,5 +29,5 @@ Found 3 references for symbol 'array_start':
     |                            ^^^^^^^^^^^
     |       ctx.stack.push(Frame::Array(arr_acc))
     |       value({ ..ctx, rest, skip: skip + len, arr_acc: new_acc })
-
-```
+"" (escaped)
+````

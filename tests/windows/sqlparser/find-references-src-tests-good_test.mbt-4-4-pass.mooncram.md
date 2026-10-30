@@ -1,7 +1,7 @@
 # sqlparser find-references pass src\tests\good_test.mbt:4:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'pass' --loc 'src\tests\good_test.mbt:4:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'pass' --loc 'src\tests\good_test.mbt:4:4'
 Found 38 references for symbol 'pass':
 <WORKDIR>/src\tests\good_test.mbt:16:30-16:34:
    | 
@@ -343,5 +343,5 @@ Found 38 references for symbol 'pass':
 220 |   "ALTER TABLE IF EXISTS mytable DROP COLUMN IF EXISTS mycolumn;" |> pass
     |                                                                      ^^^^
     | }
-
-```
+"" (escaped)
+````

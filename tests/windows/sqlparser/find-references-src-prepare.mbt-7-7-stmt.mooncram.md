@@ -1,7 +1,7 @@
 # sqlparser find-references stmt src\prepare.mbt:7:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'stmt' --loc 'src\prepare.mbt:7:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'stmt' --loc 'src\prepare.mbt:7:7'
 Found 1 references for symbol 'stmt':
 <WORKDIR>/src\prepare.mbt:9:5-9:9:
   |   let sql = "PREPARE stmt AS SELECT * FROM users WHERE id = ?"
@@ -11,5 +11,5 @@ Found 1 references for symbol 'stmt':
   |     ^^^^
   |     content=(
   |       #|PREPARE stmt AS SELECT
-
-```
+"" (escaped)
+````

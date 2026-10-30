@@ -1,7 +1,7 @@
 # indexmap find-references T src\IndexMap_test.mbt:17:19
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'T' --loc 'src\IndexMap_test.mbt:17:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'T' --loc 'src\IndexMap_test.mbt:17:19'
 Found 115 references for symbol 'T':
 <WORKDIR>/src\IndexMap.mbt:27:62-27:63:
    | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)
@@ -645,7 +645,7 @@ Found 115 references for symbol 'T':
 <WORKDIR>/src\IndexMap.mbt:1178:43-1178:44:
      | 
      | ///|
-     | /// Standard ToJson implementation (may not preserve order) (escaped)
+"     | /// Standard ToJson implementation (may not preserve order)" (escaped)
 1178 | pub impl[K : Show, V : ToJson] ToJson for T[K, V] with to_json(self) {
      |                                           ^
      |   // 使用普通Map
@@ -1037,5 +1037,5 @@ Found 115 references for symbol 'T':
      |                       ^
      | 
      |   // 验证初始容量
-
-```
+"" (escaped)
+````

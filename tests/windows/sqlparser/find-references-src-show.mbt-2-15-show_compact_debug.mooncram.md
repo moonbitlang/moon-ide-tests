@@ -1,7 +1,7 @@
 # sqlparser find-references show_compact_debug src\show.mbt:2:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'show_compact_debug' --loc 'src\show.mbt:2:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'show_compact_debug' --loc 'src\show.mbt:2:15'
 Found 112 references for symbol 'show_compact_debug':
 <WORKDIR>/src\show.mbt:40:3-40:21:
    | 
@@ -1010,5 +1010,5 @@ Found 112 references for symbol 'show_compact_debug':
     |   ^^^^^^^^^^^^^^^^^^
     | }
     | 
-
-```
+"" (escaped)
+````

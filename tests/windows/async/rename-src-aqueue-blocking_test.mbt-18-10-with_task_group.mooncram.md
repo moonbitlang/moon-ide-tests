@@ -1,7 +1,7 @@
 # async rename with_task_group src\aqueue\blocking_test.mbt:18:10
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group' 'with_task_group_renamed' --loc 'src\aqueue\blocking_test.mbt:18:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'with_task_group' 'with_task_group_renamed' --loc 'src\aqueue\blocking_test.mbt:18:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/examples\dead_lock\main.mbt
 @@
@@ -3414,5 +3414,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'with_task_group'
        @async.sleep(200)
        log.push("200ms tick")
 *** End Patch
-
-```
+"" (escaped)
+````

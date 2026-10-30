@@ -1,23 +1,7 @@
 # async outline
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/aqueue/blocking_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/aqueue/blocking_test.mbt'
  16 |async test "blocking unbuffered" {
     |...
  40 |async test "blocking buffered" {
@@ -46,11 +30,11 @@ $ run_moon_ide moon ide outline 'src/aqueue/blocking_test.mbt'
     |...
 335 |async test "blocked zero buffered discard latest try_put" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/fs/named_pipe_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/fs/named_pipe_test.mbt'
  16 |#cfg(not(platform="windows"))
  17 |#borrow(path)
  18 |extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
@@ -65,11 +49,11 @@ $ run_moon_ide moon ide outline 'src/fs/named_pipe_test.mbt'
     |...
 120 |#cfg(platform="windows")
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/internal/event_loop/io_unix.mbt'
  16 |#cfg(not(platform="windows"))
  17 |pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
     |...
@@ -150,11 +134,11 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/io_unix.mbt'
 163 |  context~ : String,
 164 |) -> Int32 {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/internal/event_loop/stdio.mbt'
  16 |#cfg(target="native")
  17 |#borrow(buf)
  18 |extern "C" fn fstatx_sync(
@@ -197,11 +181,11 @@ $ run_moon_ide moon ide outline 'src/internal/event_loop/stdio.mbt'
     |...
 138 |pub let stderr : Result[IoHandle, Error] = try
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/js_async/unimplemented.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/js_async/unimplemented.mbt'
  16 |#coverage.skip
     |...
  24 |#external
@@ -300,27 +284,27 @@ $ run_moon_ide moon ide outline 'src/js_async/unimplemented.mbt'
 243 |#coverage.skip
 244 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/pipe/read_exactly_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/pipe/read_exactly_test.mbt'
 16 |async test "read_exactly" {
    |...
 58 |async test "read_exactly failure" {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/pipe/unimplemented_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/pipe/unimplemented_test.mbt'
 16 |#cfg(not(target="native"))
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/process/redirect.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/process/redirect.mbt'
  17 |struct ReadFromProcess {
     |...
  24 |struct WriteToProcess(@event_loop.IoHandle)
@@ -436,19 +420,19 @@ $ run_moon_ide moon ide outline 'src/process/redirect.mbt'
     |...
 393 |impl ProcessInput for RedirectToFile with fn after_spawn(self) {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/socket/reuse_port_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/socket/reuse_port_test.mbt'
 16 |async test "reuse port lb" {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'src/socket/unimplemented.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/socket/unimplemented.mbt'
 17 |#cfg(not(any(target="native", target="wasm")))
    |...
-
-```
+"" (escaped)
+````

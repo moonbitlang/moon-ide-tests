@@ -1,23 +1,7 @@
 # uri outline
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'uri.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri.mbt'
   54 |pub struct Uri {
      |...
   65 |pub extend Uri with ToJson::{to_json}
@@ -130,11 +114,11 @@ $ run_moon_ide moon ide outline 'uri.mbt'
      |...
 1597 |fn int_to_hex(value : Int32) -> String {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'uri_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test.mbt'
   3 |test "basic_uri_parsing" {
     |...
  15 |test "empty_uri" {
@@ -177,11 +161,11 @@ $ run_moon_ide moon ide outline 'uri_test.mbt'
     |...
 335 |test "show_trait_implementation" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'uri_test_new_features.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test_new_features.mbt'
   3 |test "url_encoding" {
     |...
  21 |test "url_decoding" {
@@ -206,5 +190,5 @@ $ run_moon_ide moon ide outline 'uri_test_new_features.mbt'
     |...
 291 |test "rfc3986_compliance" {
     |...
-
-```
+"" (escaped)
+````

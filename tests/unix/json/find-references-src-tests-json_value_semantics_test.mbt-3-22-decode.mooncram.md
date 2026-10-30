@@ -1,23 +1,7 @@
 # json find-references decode src/tests/json_value_semantics_test.mbt:3:22
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'decode' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'decode' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
 Found 8 references for symbol 'decode':
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:8:13-8:19:
   | 
@@ -34,7 +18,7 @@ Found 8 references for symbol 'decode':
    | fn expect_reject(name : String, input : String) -> Unit raise {
 17 |   try @json.decode(input) catch {
    |             ^^^^^^
-   |     @lib.ParseError(_) => () (escaped)
+"   |     @lib.ParseError(_) => ()" (escaped)
    |     _ =>
 
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:33:13-33:19:
@@ -43,7 +27,7 @@ Found 8 references for symbol 'decode':
    | fn expect_accept_or_reject(name : String, input : String) -> Unit raise {
 33 |   try @json.decode(input) catch {
    |             ^^^^^^
-   |     @lib.ParseError(_) => () (escaped)
+"   |     @lib.ParseError(_) => ()" (escaped)
    |     _ =>
 
 <WORKDIR>/src/tests/json_value_semantics_test.mbt:3:22-3:28:
@@ -89,5 +73,5 @@ Found 8 references for symbol 'decode':
    |                      ^^^^^^
    |   @debug.assert_eq(actual, Json::string("\u{1d11e}"))
    | }
-
-```
+"" (escaped)
+````

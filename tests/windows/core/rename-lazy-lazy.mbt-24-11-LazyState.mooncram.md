@@ -1,7 +1,7 @@
 # core rename LazyState lazy\lazy.mbt:24:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'LazyState' 'LazyStateRenamed' --loc 'lazy\lazy.mbt:24:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'LazyState' 'LazyStateRenamed' --loc 'lazy\lazy.mbt:24:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/lazy\lazy.mbt
 @@
@@ -23,5 +23,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'LazyState' 'LazyS
  
  ///|
 *** End Patch
-
-```
+"" (escaped)
+````

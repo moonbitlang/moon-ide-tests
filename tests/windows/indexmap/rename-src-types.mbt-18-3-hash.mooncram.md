@@ -1,7 +1,7 @@
 # indexmap rename hash src\types.mbt:18:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'hash' 'hash_renamed' --loc 'src\types.mbt:18:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'hash' 'hash_renamed' --loc 'src\types.mbt:18:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\IndexMap.mbt
 @@
@@ -60,5 +60,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'hash' 'hash_r
    mut value : V // 值
    mut next : Int // 链表后继索引，-1表示没有后继
 *** End Patch
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # core find-references ToStringView builtin\string_like.mbt:19:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'ToStringView' --loc 'builtin\string_like.mbt:19:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'ToStringView' --loc 'builtin\string_like.mbt:19:11'
 Found 10 references for symbol 'ToStringView':
 <WORKDIR>/builtin\array.mbt:2233:12-2233:24:
      | ///   inspect(s.split(" ").to_array().join(":"), content="hello:world")
@@ -92,5 +92,5 @@ Found 10 references for symbol 'ToStringView':
    |                           ^^^^^^^^^^^^
    | 
    | ///|
-
-```
+"" (escaped)
+````

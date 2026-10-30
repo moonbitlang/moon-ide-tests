@@ -87,14 +87,14 @@ jobs:
       - name: Refresh Unix snapshots
         run: |
           mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-          moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}" \
+          moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}" \
             > .daily-test/unix-cram-update.log 2>&1
 
       - name: Run Unix cram tests
         run: |
           mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
           set +e
-          moon cram test --cram-compat "${baseline_paths[@]}" \
+          moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}" \
             > .daily-test/unix-cram-test.log 2>&1
           status=$?
           set -e
@@ -179,7 +179,7 @@ jobs:
           $baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
           $status = 0
           if ($baselinePaths.Count -gt 0) {
-            moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths `
+            moonx moonbit-community/mooncram@0.1.0 test @baselinePaths `
               *> .daily-test/windows-cram-test.log
             $status = $LASTEXITCODE
           } else {

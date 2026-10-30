@@ -1,7 +1,7 @@
 # indexmap rename calc_grow_threshold src\IndexMap.mbt:5:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_renamed' --loc 'src\IndexMap.mbt:5:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_renamed' --loc 'src\IndexMap.mbt:5:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\IndexMap.mbt
 @@
@@ -32,5 +32,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'calc_grow_thr
    self.core.entries = []
    self.core.head = -1
 *** End Patch
-
-```
+"" (escaped)
+````

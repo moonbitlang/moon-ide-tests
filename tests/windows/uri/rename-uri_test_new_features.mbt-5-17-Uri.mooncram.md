@@ -1,7 +1,7 @@
 # uri rename Uri uri_test_new_features.mbt:5:17
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
 @@
@@ -181,7 +181,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
  }
  
  ///|
- /// Check if the URI is absolute (has a scheme) (escaped)
+" /// Check if the URI is absolute (has a scheme)" (escaped)
 -pub fn Uri::is_absolute(self : Uri) -> Bool {
 +pub fn UriRenamed::is_absolute(self : UriRenamed) -> Bool {
    match self.scheme {
@@ -190,7 +190,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 @@
  
  ///|
- /// Check if the URI is relative (no scheme) (escaped)
+" /// Check if the URI is relative (no scheme)" (escaped)
 -pub fn Uri::is_relative(self : Uri) -> Bool {
 +pub fn UriRenamed::is_relative(self : UriRenamed) -> Bool {
    !self.is_absolute()
@@ -199,7 +199,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 @@
  
  ///|
- /// Get the effective port (explicit port or default port for scheme) (escaped)
+" /// Get the effective port (explicit port or default port for scheme)" (escaped)
 -pub fn Uri::effective_port(self : Uri) -> Int32? {
 +pub fn UriRenamed::effective_port(self : UriRenamed) -> Int32? {
    match self.authority {
@@ -208,7 +208,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 @@
  
  ///|
- /// Normalize a URI (remove default ports, normalize path, etc.) (escaped)
+" /// Normalize a URI (remove default ports, normalize path, etc.)" (escaped)
 -pub fn Uri::normalize(self : Uri) -> Uri {
 +pub fn UriRenamed::normalize(self : UriRenamed) -> UriRenamed {
    let mut normalized = self
@@ -327,7 +327,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 @@
  /// # Returns
  ///
- /// Array of path segments (excluding empty segments from leading/trailing slashes) (escaped)
+" /// Array of path segments (excluding empty segments from leading/trailing slashes)" (escaped)
 -pub fn Uri::path_segments(self : Uri) -> Array[String] {
 +pub fn UriRenamed::path_segments(self : UriRenamed) -> Array[String] {
    if self.path.length() == 0 {
@@ -363,7 +363,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 @@
  /// # Returns
  ///
- /// Optional tuple of (username, optional password) (escaped)
+" /// Optional tuple of (username, optional password)" (escaped)
 -pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
 +pub fn UriRenamed::userinfo_components(self : UriRenamed) -> (String, String?)? {
    match self.authority {
@@ -420,7 +420,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 +  let encoded = UriRenamed::encode("hello world!")
    json_inspect(encoded, content="hello%20world%21")
  
-   // Test unreserved characters (should not be encoded) (escaped)
+"   // Test unreserved characters (should not be encoded)" (escaped)
    let unreserved = "hello-world_123.test~"
 -  let encoded_unreserved = Uri::encode(unreserved)
 +  let encoded_unreserved = UriRenamed::encode(unreserved)
@@ -441,7 +441,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
 +  let decoded = UriRenamed::decode("hello%20world%21")
    json_inspect(decoded, content="hello world!")
  
-   // Test invalid hex sequences (should be left as-is) (escaped)
+"   // Test invalid hex sequences (should be left as-is)" (escaped)
 -  let invalid_hex = Uri::decode("hello%ZZ")
 +  let invalid_hex = UriRenamed::decode("hello%ZZ")
    json_inspect(invalid_hex, content="hello%ZZ")
@@ -533,5 +533,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'Uri' 'UriRenamed' 
      ["query", "value=with&special"],
      ["other", "normal"],
 *** End Patch
-
-```
+"" (escaped)
+````

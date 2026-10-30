@@ -1,0 +1,72 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+fn replace_path(
+  text : StringView,
+  path : StringView,
+  marker : String,
+) -> String {
+  // Windows IDE output may lowercase the drive or other path components.
+  // Match paths without changing the case of the remaining IDE output.
+  if !path.contains("\\") && !(path.length() > 1 && path[1] == ':') {
+    return text.replace_all(old=path, new=marker).to_owned()
+  }
+  let folded = text.to_lower()
+  let needle = path.to_lower()
+  let sb = StringBuilder()
+  let mut start = 0
+  while folded[start:].find(needle) is Some(offset) {
+    let end = start + offset
+    sb.write_view(text[start:end])
+    sb.write_string(marker)
+    start = end + path.length()
+  }
+  sb.write_view(text[start:])
+  sb.to_string()
+}
+
+///|
+fn replace_paths(text : String, path : String, marker : String) -> String {
+  let replaced = replace_path(text[:], path[:], marker)
+  replace_path(replaced[:], path[:].replace_all(old="\\", new="/"), marker)[:]
+  .replace_all(old=marker + "\\", new=marker + "/")
+  .to_owned()
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  if args.length() < 3 {
+    abort("usage: run-moon-ide.mbtx <fixture-dir> <executable> [args...]")
+  }
+  let repo = @fs.realpath(args[1])
+  let moon_home = @fs.realpath(
+    @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
+      let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {
+        @env.get_env_var("HOME").unwrap_or_else(() => {
+          abort("MOON_HOME, USERPROFILE or HOME is required")
+        })
+      })
+      home + "/.moon"
+    }),
+  )
+  let (status, output) = @process.collect_output_merged(
+    args[2],
+    args[3:].to_owned(),
+    cwd=repo,
+    extra_env={ "MOON_HOME": moon_home },
+  )
+  let text = replace_paths(output.text(), repo, "<WORKDIR>")
+  @stdio.stdout.write(replace_paths(text, moon_home, "<MOON_HOME>"))
+  @sys.exit(status)
+}

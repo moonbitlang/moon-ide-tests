@@ -1,7 +1,7 @@
 # json find-references Continue src\lib\value.mbt:3:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Continue' --loc 'src\lib\value.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Continue' --loc 'src\lib\value.mbt:3:3'
 Found 9 references for symbol 'Continue':
 <WORKDIR>/src\lib\json.mbt:37:5-37:13:
    |   match value(ctx) {
@@ -83,5 +83,5 @@ Found 9 references for symbol 'Continue':
     |     ^^^^^^^^
     |       incr_fail("expected chunked parser to finish with trailing rest")
     |   }
-
-```
+"" (escaped)
+````

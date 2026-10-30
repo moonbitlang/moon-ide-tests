@@ -1,7 +1,7 @@
 # core rename decode_utf8_js encoding\utf8\decode_js.mbt:16:16
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'decode_utf8_js' 'decode_utf8_js_renamed' --loc 'encoding\utf8\decode_js.mbt:16:16' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'decode_utf8_js' 'decode_utf8_js_renamed' --loc 'encoding\utf8\decode_js.mbt:16:16' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/encoding\utf8\decode_js.mbt
 @@
@@ -23,5 +23,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'decode_utf8_js' '
      bytes.start_offset(),
      bytes.length(),
 *** End Patch
-
-```
+"" (escaped)
+````

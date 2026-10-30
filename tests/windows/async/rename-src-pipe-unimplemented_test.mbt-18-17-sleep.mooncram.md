@@ -1,7 +1,7 @@
 # async rename sleep src\pipe\unimplemented_test.mbt:18:17
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_renamed' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'sleep' 'sleep_renamed' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src\all_any_test.mbt
 @@
@@ -619,7 +619,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
              log <+ "causing other error in cancellation handler\n"
              raise Err
 @@
-           Some(_) => () (escaped)
+"           Some(_) => ()" (escaped)
          }
        }
 -      @async.sleep(200)
@@ -1636,7 +1636,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
            }
          }
 @@
-         Some(_) => () (escaped)
+"         Some(_) => ()" (escaped)
        }
      }
 -    @async.sleep(200)
@@ -2166,7 +2166,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
      })
      root.spawn_bg() <| () => {
 @@
-         Some(_) => () (escaped)
+"         Some(_) => ()" (escaped)
        }
      }
 -    @async.sleep(20)
@@ -2353,5 +2353,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
          Some(_) => log.push("task finished after 2s")
        }
 *** End Patch
-
-```
+"" (escaped)
+````

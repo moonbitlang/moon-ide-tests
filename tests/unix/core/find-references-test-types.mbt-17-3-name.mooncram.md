@@ -1,23 +1,7 @@
 # core find-references name test/types.mbt:17:3
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'name' --loc 'test/types.mbt:17:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'name' --loc 'test/types.mbt:17:3'
 Found 2 references for symbol 'name':
 <WORKDIR>/test/test.mbt:239:8-239:12:
     | ///|
@@ -34,5 +18,5 @@ Found 2 references for symbol 'name':
 27 |   { name, buffer: StringBuilder(), }
    |     ^^^^
    | }
-
-```
+"" (escaped)
+````

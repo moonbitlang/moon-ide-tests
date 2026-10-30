@@ -1,7 +1,7 @@
 # indexmap outline
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\IndexMap.mbt'
    2 |const Default_init_capacity = 8
      |...
    5 |fn calc_grow_threshold(capacity : Int) -> Int {
@@ -162,11 +162,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap
      |...
 1542 |pub fn[K : Hash + Eq, V] T::reversed(self : T[K, V]) -> T[K, V] {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\IndexMap_test.mbt'
   16 |test "new" {
      |...
   23 |test "get" {
@@ -329,16 +329,16 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\IndexMap
      |...
 1250 |test "set_with_hash_growth_from_zero_capacity" {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide outline 'src\types.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\types.mbt'
 17 |priv struct Bucket[K, V] {
    |...
 27 |priv struct IndexMapCore[K, V] {
    |...
 54 |struct T[K, V] {
    |...
-
-```
+"" (escaped)
+````

@@ -1,23 +1,7 @@
 # json rename original src/lib/json.mbt:3:3
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'original' 'original_renamed' --loc 'src/lib/json.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
 @@
@@ -62,7 +46,7 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     [] => { (escaped)
+"     [] => {" (escaped)
        let token = original[skip:skip + len]
 @@
  
@@ -71,8 +55,8 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1) (escaped)
-     ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)" (escaped)
+"     ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  
  ///|
@@ -80,8 +64,8 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
-     ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  
  ///|
@@ -89,11 +73,11 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
-     _ => { (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     _ => {" (escaped)
 @@
-     ['\\\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder) (escaped)
-     [c, .. rest] => (escaped)
+"     ['\\\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder)" (escaped)
+"     [c, .. rest] =>" (escaped)
        if c.to_int() < 0x20 {
 -        raise invalid_byte(ctx.original, skip + len)
 +        raise invalid_byte(ctx.original_renamed, skip + len)
@@ -102,11 +86,11 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
          string_scan({ ..ctx, rest, }, len + 1, builder)
 @@
      }
-     ['u', ..] => (escaped)
+"     ['u', ..] =>" (escaped)
        unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 6, 0, Checkpoint::Value)
--    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1) (escaped)
-+    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1) (escaped)
-     [] => (escaped)
+"-    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1)" (escaped)
+"+    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1)" (escaped)
+"     [] =>" (escaped)
        unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 2, 0, Checkpoint::Value)
    }
 @@
@@ -117,13 +101,13 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 +          raise invalid_byte(ctx.original_renamed, ctx.skip + len + 8)
          }
        }
-       ['\\\\', 'u', ..] => (escaped)
+"       ['\\\\', 'u', ..] =>" (escaped)
 @@
            0,
            Checkpoint::Value,
          )
--      _ => raise invalid_byte(ctx.original, ctx.skip + len + 6) (escaped)
-+      _ => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 6) (escaped)
+"-      _ => raise invalid_byte(ctx.original, ctx.skip + len + 6)" (escaped)
+"+      _ => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 6)" (escaped)
      }
    } else if code_unit.is_trailing_surrogate() {
 -    raise invalid_byte(ctx.original, ctx.skip + len + 2)
@@ -132,20 +116,20 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
      write_codepoint(ctx, ctx.skip + len + 2, code_unit, builder)
      string_scan({ ..ctx, rest, }, len + 6, builder)
 @@
-     '0'..='9' => c.to_int() - '0'.to_int() (escaped)
-     'a'..='f' => c.to_int() - 'a'.to_int() + 10 (escaped)
-     'A'..='F' => c.to_int() - 'A'.to_int() + 10 (escaped)
--    _ => raise invalid_byte(ctx.original, index) (escaped)
-+    _ => raise invalid_byte(ctx.original_renamed, index) (escaped)
+"     '0'..='9' => c.to_int() - '0'.to_int()" (escaped)
+"     'a'..='f' => c.to_int() - 'a'.to_int() + 10" (escaped)
+"     'A'..='F' => c.to_int() - 'A'.to_int() + 10" (escaped)
+"-    _ => raise invalid_byte(ctx.original, index)" (escaped)
+"+    _ => raise invalid_byte(ctx.original_renamed, index)" (escaped)
    }
  }
  
 @@
  ) -> Unit raise {
    match codepoint.to_char() {
-     Some(c) => builder.write_char(c) (escaped)
--    None => raise invalid_byte(ctx.original, index) (escaped)
-+    None => raise invalid_byte(ctx.original_renamed, index) (escaped)
+"     Some(c) => builder.write_char(c)" (escaped)
+"-    None => raise invalid_byte(ctx.original, index)" (escaped)
+"+    None => raise invalid_byte(ctx.original_renamed, index)" (escaped)
    }
  }
  
@@ -177,5 +161,5 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
  }
  
 *** End Patch
-
-```
+"" (escaped)
+````

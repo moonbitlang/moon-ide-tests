@@ -1,7 +1,7 @@
 # toml-parser find-references parse_expect_to_fail test_utils_test.mbt:2:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide find-references 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
 Found 85 references for symbol 'parse_expect_to_fail':
 <WORKDIR>/comprehensive_test.mbt:425:5-425:25:
     | 
@@ -767,5 +767,5 @@ Found 85 references for symbol 'parse_expect_to_fail':
    |     ^^^^^^^^^^^^^^^^^^^^
    |     content=(
    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
-
-```
+"" (escaped)
+````

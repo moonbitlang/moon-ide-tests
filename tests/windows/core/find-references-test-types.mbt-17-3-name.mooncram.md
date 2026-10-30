@@ -1,7 +1,7 @@
 # core find-references name test\types.mbt:17:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'name' --loc 'test\types.mbt:17:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'name' --loc 'test\types.mbt:17:3'
 Found 2 references for symbol 'name':
 <WORKDIR>/test\test.mbt:239:8-239:12:
     | ///|
@@ -18,5 +18,5 @@ Found 2 references for symbol 'name':
 27 |   { name, buffer: StringBuilder(), }
    |     ^^^^
    | }
-
-```
+"" (escaped)
+````

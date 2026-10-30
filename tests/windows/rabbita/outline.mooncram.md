@@ -1,65 +1,65 @@
 # rabbita outline
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'e2e\apps\rui\fixture\fixture.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\fixture\fixture.mbt'
  2 |using @rabbita {type Html, type Val}
    |...
  5 |pub fn section(id : String, title : String, body : Array[Html]) -> Html {
    |...
 24 |pub fn mount(name : String, app : () -> Val[Html]) -> Unit {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'e2e\apps\rui\message-scroller\message_scroller.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\message-scroller\message_scroller.mbt'
  2 |fn fixture_scroll_items(prefix : String) -> Array[Html] {
    |...
 17 |fn message_scroller_fixture() -> Val[Html] {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'e2e\apps\rui\toast\main.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\toast\main.mbt'
 2 |using @rabbita {type Html, type Val}
   |...
 5 |using @html {div}
   |...
 8 |fn main {
   |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\clipboard\clipboard.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\clipboard\clipboard.mbt'
  2 |pub(all) enum Item {
    |...
 13 |pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
    |...
 23 |pub fn paste(pasted~ : (Item) -> Cmd, failed? : (String) -> Cmd) -> Cmd {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\dom\gpu_canvas_context.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\dom\gpu_canvas_context.mbt'
 2 |#cfg(target="js")
 3 |#external
 4 |type GPUCanvasContext
   |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\internal\runtime\host_ssr_wbtest.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\runtime\host_ssr_wbtest.mbt'
 2 |#cfg(not(target="js"))
   |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\internal\vdom\diff.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\vdom\diff.mbt'
   2 |#cfg(target="js")
   3 |struct VDom {
     |...
@@ -216,11 +216,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\inter
 780 |#cfg(target="js")
 781 |fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\internal\vdom\vdom.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\vdom\vdom.mbt'
   2 |using @cmd {trait Scheduler}
     |...
   5 |#warnings("-unused_constructor")
@@ -285,11 +285,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rabbita\inter
     |...
 149 |pub fn Props::copy(self : Props) -> Props {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rui\sheet.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rui\sheet.mbt'
   3 |pub(all) enum SheetSide {
     |...
  11 |pub extend SheetSide with Debug::{to_repr}
@@ -357,11 +357,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'rui\sheet.mbt
 198 |  children : C,
 199 |) -> @html.Html {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'warren\path\sourcetree_path.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'warren\path\sourcetree_path.mbt'
  2 |pub type Path = @p.Path
    |...
  5 |struct SourcePath(String) derive(Eq, Compare, Hash)
@@ -386,5 +386,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide outline 'warren\path\s
    |...
 43 |pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
    |...
-
-```
+"" (escaped)
+````

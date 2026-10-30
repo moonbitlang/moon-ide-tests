@@ -1,7 +1,7 @@
 # json find-references original src\lib\json.mbt:3:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'original' --loc 'src\lib\json.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'original' --loc 'src\lib\json.mbt:3:3'
 Found 17 references for symbol 'original':
 <WORKDIR>/src\lib\json.mbt:27:5-27:13:
    |   }
@@ -155,5 +155,5 @@ Found 17 references for symbol 'original':
     |                            ^^^^^^^^
     |   }
     | }
-
-```
+"" (escaped)
+````

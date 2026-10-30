@@ -1,7 +1,7 @@
 # uri rename parse uri_test.mbt:5:18
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'parse' 'parse_renamed' --loc 'uri_test.mbt:5:18'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'parse' 'parse_renamed' --loc 'uri_test.mbt:5:18'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@
@@ -391,17 +391,17 @@ $ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide rename 'parse' 'parse_rena
 @@
    ])
  
-   // Test case sensitivity in scheme (should be case-insensitive in practice, but we store as-is) (escaped)
+"   // Test case sensitivity in scheme (should be case-insensitive in practice, but we store as-is)" (escaped)
 -  let upper_scheme = parse("HTTPS://example.com")
 +  let upper_scheme = parse_renamed("HTTPS://example.com")
    json_inspect(upper_scheme.scheme(), content=["HTTPS"])
  
-   // Test IPv6 addresses (basic support) (escaped)
+"   // Test IPv6 addresses (basic support)" (escaped)
 -  let ipv6_uri = parse("http://[2001:db8::1]:8080/path")
 +  let ipv6_uri = parse_renamed("http://[2001:db8::1]:8080/path")
    json_inspect(ipv6_uri.host(), content=["[2001:db8::1]"])
    json_inspect(ipv6_uri.port(), content=[8080])
  }
 *** End Patch
-
-```
+"" (escaped)
+````

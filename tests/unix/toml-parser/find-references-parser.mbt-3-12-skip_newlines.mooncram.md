@@ -1,23 +1,7 @@
 # toml-parser find-references skip_newlines parser.mbt:3:12
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'skip_newlines' --loc 'parser.mbt:3:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'skip_newlines' --loc 'parser.mbt:3:12'
 Found 5 references for symbol 'skip_newlines':
 <WORKDIR>/parser.mbt:166:8-166:21:
     | /// No trailing comma allowed unlike Array
@@ -63,5 +47,5 @@ Found 5 references for symbol 'skip_newlines':
     |            ^^^^^^^^^^^^^
     |     match parser.view() {
     |       [EOF, ..] => break
-
-```
+"" (escaped)
+````

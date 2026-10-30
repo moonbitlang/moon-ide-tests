@@ -1,7 +1,7 @@
 # json outline
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\decode.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\lib\decode.mbt'
  2 |pub type JsonArray = Array[Json]
    |...
  5 |pub type JsonObject = Map[String, Json]
@@ -26,11 +26,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\decode.m
    |...
 64 |impl Decode for Unit with string(_self, s) {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\json.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\lib\json.mbt'
   2 |priv struct Context {
     |...
  13 |enum Frame {
@@ -138,11 +138,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\json.mbt
     |...
 639 |fn invalid_byte(arr : Array[Char], skip : Int) -> ParseError {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\value.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\lib\value.mbt'
  2 |pub enum Value {
    |...
  8 |pub struct ContinueValue {
@@ -151,11 +151,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\lib\value.mb
    |...
 26 |enum Checkpoint {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\incr.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\incr.mbt'
   2 |fn incr_fail(message : String) -> Unit raise {
     |...
   7 |fn continue_chunks(chunks : ArrayView[String], value : Value) -> Value raise {
@@ -187,11 +187,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\incr.m
     |...
 145 |test "incr nested stack resumes across chunks" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_testsuite_helpers_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\json_testsuite_helpers_test.mbt'
  2 |fn json_testsuite_fail(message : String) -> Unit raise {
    |...
  7 |fn expect_accept(name : String, input : String) -> Unit raise {
@@ -200,11 +200,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_t
    |...
 32 |fn expect_accept_or_reject(name : String, input : String) -> Unit raise {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_testsuite_n_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\json_testsuite_n_test.mbt'
    7 |test "json_testsuite n_array_1_true_without_comma" {
      |...
   13 |test "json_testsuite n_array_colon_instead_of_comma" {
@@ -553,11 +553,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_t
      |...
 1045 |test "json_testsuite n_structure_whitespace_formfeed" {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_testsuite_y_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\json_testsuite_y_test.mbt'
   7 |test "json_testsuite y_array_arraysWithSpaces" {
     |...
  13 |test "json_testsuite y_array_empty-string" {
@@ -748,11 +748,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_t
     |...
 573 |test "json_testsuite y_structure_whitespace_array" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_value_semantics_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\json_value_semantics_test.mbt'
  2 |test "json value semantics basics" {
    |...
 15 |test "json value semantics duplicate object key keeps first value" {
@@ -765,18 +765,18 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\json_v
    |...
 43 |test "json value semantics invalid string escapes are parser errors" {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\tests\top.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\tests\top.mbt'
 2 |using @json {decode_start, decode_continue, type Value}
   |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\top.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src\top.mbt'
  2 |pub using @lib {
  3 |  trait Decode,
  4 |  decode,
@@ -789,5 +789,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide outline 'src\top.mbt'
 11 |  type Reason,
 12 |}
    |...
-
-```
+"" (escaped)
+````

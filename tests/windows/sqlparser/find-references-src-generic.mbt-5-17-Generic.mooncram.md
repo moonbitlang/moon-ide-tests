@@ -1,7 +1,7 @@
 # sqlparser find-references Generic src\generic.mbt:5:17
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'Generic' --loc 'src\generic.mbt:5:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'Generic' --loc 'src\generic.mbt:5:17'
 Found 13 references for symbol 'Generic':
 <WORKDIR>/src\generic.mbt:8:22-8:29:
   | pub(all) struct Generic {}
@@ -119,5 +119,5 @@ Found 13 references for symbol 'Generic':
     |                               ^^^^^^^
     |     abort("Expected parsing to fail with Generic dialect")
     |   } catch {
-
-```
+"" (escaped)
+````

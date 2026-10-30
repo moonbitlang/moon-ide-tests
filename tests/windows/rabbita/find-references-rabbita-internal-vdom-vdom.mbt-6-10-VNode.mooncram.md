@@ -1,7 +1,7 @@
 # rabbita find-references VNode rabbita\internal\vdom\vdom.mbt:6:10
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide find-references 'VNode' --loc 'rabbita\internal\vdom\vdom.mbt:6:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'VNode' --loc 'rabbita\internal\vdom\vdom.mbt:6:10'
 Found 70 references for symbol 'VNode':
 <WORKDIR>/rabbita\html\html.mbt:2:34-2:39:
   | ///|
@@ -627,5 +627,5 @@ Found 70 references for symbol 'VNode':
    |             ^^^^^
    | }
    | 
-
-```
+"" (escaped)
+````

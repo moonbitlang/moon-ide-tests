@@ -1,7 +1,7 @@
 # sqlparser rename Generic src\generic.mbt:8:22
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Generic' 'GenericRenamed' --loc 'src\generic.mbt:8:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'Generic' 'GenericRenamed' --loc 'src\generic.mbt:8:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\generic.mbt
 @@
@@ -101,5 +101,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Generic' 'Ge
    } catch {
      _e => () // Expected behavior - parsing should fail
 *** End Patch
-
-```
+"" (escaped)
+````

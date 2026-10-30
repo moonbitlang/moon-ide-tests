@@ -1,7 +1,7 @@
 # sqlparser find-references parse_set_expr src\dml.mbt:2:12
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'parse_set_expr' --loc 'src\dml.mbt:2:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'parse_set_expr' --loc 'src\dml.mbt:2:12'
 Found 2 references for symbol 'parse_set_expr':
 <WORKDIR>/src\dml.mbt:41:32-41:46:
    |     if next_bp <= min_bp {
@@ -20,5 +20,5 @@ Found 2 references for symbol 'parse_set_expr':
    |                             ^^^^^^^^^^^^^^
    |   let (order_by, tokens) = match tokens {
    |     [Keyword(Order), Keyword(By), .. tokens] => self.parse_order_by(tokens)
-
-```
+"" (escaped)
+````

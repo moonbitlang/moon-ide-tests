@@ -1,7 +1,7 @@
 # core find-references execute string\regex_test.mbt:18:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'execute' --loc 'string\regex_test.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'execute' --loc 'string\regex_test.mbt:18:15'
 Found 130 references for symbol 'execute':
 <WORKDIR>/string\README.mbt.md:253:15-253:22:
     | test "string regex basics" {
@@ -1171,5 +1171,5 @@ Found 130 references for symbol 'execute':
     |            ^^^^^^^
     |   inspect(m.before().length(), content="0")
     |   inspect(m.content().length(), content="2305")
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # toml-parser rename result coverage_improvement_comprehensive_test.mbt:9:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'result' 'result_renamed' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'result' 'result_renamed' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
 @@
@@ -21,5 +21,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'result' 'r
        #|TomlTable({})
      ),
 *** End Patch
-
-```
+"" (escaped)
+````

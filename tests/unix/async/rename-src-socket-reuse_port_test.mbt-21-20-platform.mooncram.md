@@ -1,23 +1,7 @@
 # async rename platform src/socket/reuse_port_test.mbt:21:20
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/reuse_port_test.mbt:21:20'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/reuse_port_test.mbt:21:20'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/access_test.mbt
 @@
@@ -445,5 +429,5 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
  ///|
  fn decode_pem_certificates(pem : String) -> Array[Bytes] raise TlsError {
 *** End Patch
-
-```
+"" (escaped)
+````

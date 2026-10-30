@@ -1,7 +1,7 @@
 # sqlparser rename Parser src\dml.mbt:2:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'ParserRenamed' --loc 'src\dml.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'Parser' 'ParserRenamed' --loc 'src\dml.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\ansi.mbt
 @@
@@ -1165,5 +1165,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'Parser' 'Par
  ) -> ParserResult[ReleaseSavepointStmt] raise ParserError {
    let tokens = self.expect_token(tokens, Keyword(Release))
 *** End Patch
-
-```
+"" (escaped)
+````

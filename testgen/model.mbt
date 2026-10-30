@@ -31,4 +31,5 @@ priv enum TestPlatform {
 priv struct ExpectedBlock {
   command : String
   output : Array[String]
+  fence : String
 }

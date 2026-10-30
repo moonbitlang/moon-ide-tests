@@ -1,7 +1,7 @@
 # core rename name test\types.mbt:17:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'name' 'name_renamed' --loc 'test\types.mbt:17:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'name' 'name_renamed' --loc 'test\types.mbt:17:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/test\test.mbt
 @@
@@ -29,5 +29,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'name' 'name_renam
 +  { name_renamed: name, buffer: StringBuilder(), }
  }
 *** End Patch
-
-```
+"" (escaped)
+````

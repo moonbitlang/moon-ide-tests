@@ -1,7 +1,7 @@
 # sqlparser rename LexerError src\lexer.mbt:2:10
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src\lexer.mbt:2:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src\lexer.mbt:2:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\export.mbt
 @@
@@ -94,5 +94,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'LexerError' 
  ///|
  pub extend Literal with Show::{to_string, output}
 *** End Patch
-
-```
+"" (escaped)
+````

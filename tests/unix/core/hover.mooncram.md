@@ -1,23 +1,7 @@
 # core hover
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide hover 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
 ///|
 test "exact_view uses the same bounds on all array types" {
   let arr = [1, 2, 3, 4]
@@ -27,10 +11,10 @@ test "exact_view uses the same bounds on all array types" {
       ```
   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
 ///|
 test "exact_view uses the same bounds on all array types" {
   let arr = [1, 2, 3, 4]
@@ -41,19 +25,19 @@ test "exact_view uses the same bounds on all array types" {
       ```
   let ro : ReadOnlyArray[Int32] = [1, 2, 3, 4]
   let view = [0, 1, 2, 3, 4, 5][1:5]
-```
+````
 
 Known IDE limitation: hover on the intrinsic declaration parameter reports no information; ordinary function parameters have hover information.
 
 <!-- known-ide-limitation: intrinsic-parameter-hover -->
-```mooncram
-$ run_moon_ide moon ide hover 'self' --loc 'builtin/int64.mbt:26:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'self' --loc 'builtin/int64.mbt:26:21'
 No hover information found for symbol 'self' at builtin/int64.mbt:26:21
 [1]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'from_int' --loc 'builtin/int64.mbt:44:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'from_int' --loc 'builtin/int64.mbt:44:15'
 ///   inspect(Int64::from_int(42), content="42")
 /// }
 /// ```
@@ -81,10 +65,10 @@ pub fn Int64::from_int(i : Int32) -> Int64 {
                ```
   i.to_int64()
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
 /// Trait for values that can be viewed as `StringView`.
 ///
 /// Types implementing this trait provide zero-copy access to string-like data.
@@ -102,10 +86,10 @@ pub trait ToStringView {
            Types implementing this trait provide zero-copy access to string-like data.
   fn to_string_view(Self) -> StringView
 }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
 ///
 /// Types implementing this trait provide zero-copy access to string-like data.
 pub trait ToStringView {
@@ -115,29 +99,29 @@ pub trait ToStringView {
      (Self) -> StringView
      ```
 }
-
-```
+"" (escaped)
+````
 
 Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
 
 <!-- known-ide-limitation: extern-function-hover -->
-```mooncram
-$ run_moon_ide moon ide hover 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
 No hover information found for symbol 'decode_utf8_js' at encoding/utf8/decode_js.mbt:16:16
 [1]
-```
+````
 
 Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
 
 <!-- known-ide-limitation: extern-parameter-hover -->
-```mooncram
-$ run_moon_ide moon ide hover 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
 No hover information found for symbol 'bytes' at encoding/utf8/decode_js.mbt:17:3
 [1]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'LazyState' --loc 'lazy/lazy.mbt:24:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'LazyState' --loc 'lazy/lazy.mbt:24:11'
 ///   the thunk and silently break the at-most-once guarantee.
 /// - `Forced(v)`: the thunk has produced `v`; the thunk reference is
 ///   dropped so its captures can be reclaimed.
@@ -162,10 +146,10 @@ priv enum LazyState[A] {
              dropped so its captures can be reclaimed.
   Unforced(() -> A)
   Forcing
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Unforced' --loc 'lazy/lazy.mbt:25:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'Unforced' --loc 'lazy/lazy.mbt:25:3'
 /// - `Forced(v)`: the thunk has produced `v`; the thunk reference is
 ///   dropped so its captures can be reclaimed.
 priv enum LazyState[A] {
@@ -176,10 +160,10 @@ priv enum LazyState[A] {
   ```
   Forcing
   Forced(A)
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
 ///|
 /// Transition table entry: the transition has not been built yet.
 const UNKNOWN : Int32 = -1
@@ -192,10 +176,10 @@ const UNKNOWN : Int32 = -1
        Transition table entry: the transition has not been built yet.
 
 ///|
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
 /// Transition table entry: no thread survives and nothing was accepted.
 /// Entries below `DEAD` denote a terminal state or a transition that moves
 /// registers, see `terminal` and `moving`.
@@ -211,10 +195,10 @@ const DEAD : Int32 = -2
        registers, see `terminal` and `moving`.
 
 ///|
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'regex' --loc 'string/regex_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'regex' --loc 'string/regex_test.mbt:17:7'
 ///|
 test "execute/non_capture_group" {
   let regex = re"(?:ab)(c)(?:d)"
@@ -224,10 +208,10 @@ test "execute/non_capture_group" {
       ```
   guard regex.execute("abcd") is Some(m) else { fail("Expected match") }
   debug_inspect(
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'execute' --loc 'string/regex_test.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'execute' --loc 'string/regex_test.mbt:18:15'
 ///|
 test "execute/non_capture_group" {
   let regex = re"(?:ab)(c)(?:d)"
@@ -297,10 +281,10 @@ test "execute/non_capture_group" {
                ```
   debug_inspect(
     m,
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Test' --loc 'test/extends.mbt:22:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'Test' --loc 'test/extends.mbt:22:12'
 ///|
 #deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
 #doc(hidden)
@@ -312,19 +296,19 @@ pub extend Test with @debug.Debug::{to_repr}
              buffer: StringBuilder
            } derive(@debug.Debug)
            ```
-```
+````
 
 Known IDE limitation: extension declaration hover reports no information; call-site hover and declaration rename work, including without the deprecated/hidden attributes.
 
 <!-- known-ide-limitation: extension-declaration-hover -->
-```mooncram
-$ run_moon_ide moon ide hover 'to_repr' --loc 'test/extends.mbt:22:37'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'to_repr' --loc 'test/extends.mbt:22:37'
 No hover information found for symbol 'to_repr' at test/extends.mbt:22:37
 [1]
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'Test' --loc 'test/types.mbt:16:8'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'Test' --loc 'test/types.mbt:16:8'
 // limitations under the License.
 
 ///|
@@ -338,10 +322,10 @@ struct Test {
        ```
   name : String
   buffer : StringBuilder
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide hover 'name' --loc 'test/types.mbt:17:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide hover 'name' --loc 'test/types.mbt:17:3'
 ///|
 struct Test {
   name : String
@@ -351,4 +335,4 @@ struct Test {
   ```
   buffer : StringBuilder
 } derive(@debug.Debug)
-```
+````
