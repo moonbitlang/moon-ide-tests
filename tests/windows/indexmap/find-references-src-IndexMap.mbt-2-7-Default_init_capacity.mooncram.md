@@ -3,12 +3,12 @@
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
 Found 1 references for symbol 'Default_init_capacity':
-<WORKDIR>/src\IndexMap.mbt:27:36-27:57:
+<WORKDIR>/src\IndexMap.mbt:27:38-27:59:
    | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)
    | /// inspect(map.capacity(), content="16")
    | /// inspect(map.is_empty(), content="true")
-27 | pub fn[K, V] new(capacity? : Int = Default_init_capacity) -> T[K, V] {
-   |                                    ^^^^^^^^^^^^^^^^^^^^^
+27 | pub fn[K, V] new(capacity~ : Int32 = Default_init_capacity) -> T[K, V] {
+   |                                      ^^^^^^^^^^^^^^^^^^^^^
    |   {
    |     core: {
 

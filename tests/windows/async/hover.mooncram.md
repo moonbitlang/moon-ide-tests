@@ -36,21 +36,15 @@ async test "blocking unbuffered" {
     group.spawn_bg() <| () => {
 ```
 
-Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
-No hover information found for symbol 'fstatx_sync' at src\internal\event_loop\stdio.mbt:18:15
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'from_core_stdio' --loc 'src\internal\event_loop\stdio.mbt:17:4'
+No hover information found for symbol 'from_core_stdio' at src\internal\event_loop\stdio.mbt:17:4
 [1]
 ```
 
-Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'fd' --loc 'src\internal\event_loop\stdio.mbt:19:3'
-No hover information found for symbol 'fd' at src\internal\event_loop\stdio.mbt:19:3
+$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide hover 'x' --loc 'src\internal\event_loop\stdio.mbt:18:3'
+No hover information found for symbol 'x' at src\internal\event_loop\stdio.mbt:18:3
 [1]
 ```
 

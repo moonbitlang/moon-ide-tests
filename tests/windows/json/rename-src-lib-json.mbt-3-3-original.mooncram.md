@@ -10,7 +10,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 -  original : Array[Char]
 +  original_renamed : Array[Char]
    rest : ArrayView[Char]
-   skip : Int
+   skip : Int32
    arr_acc : Array[Json]
 @@
    }
@@ -42,7 +42,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 @@
  
  ///|
- fn number_zero(ctx : Context, len : Int) -> Value raise {
+ fn number_zero(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
@@ -51,29 +51,29 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 @@
  
  ///|
- fn number(ctx : Context, len : Int) -> Value raise {
+ fn number(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number({ ..ctx, rest, }, len + 1)
      ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1)
 @@
  
  ///|
- fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
      ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1)
 @@
  
  ///|
- fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
      _ => {
 @@
      ['\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder)
@@ -87,11 +87,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 @@
      }
      ['u', ..] =>
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 6, 0, Checkpoint::Value)
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 6, 0, Checkpoint::Value)
 -    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1)
 +    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1)
      [] =>
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 2, 0, Checkpoint::Value)
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 2, 0, Checkpoint::Value)
    }
 @@
            write_codepoint(ctx, ctx.skip + len, codepoint, builder)
@@ -116,9 +116,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
      write_codepoint(ctx, ctx.skip + len + 2, code_unit, builder)
      string_scan({ ..ctx, rest, }, len + 6, builder)
 @@
-     '0'..='9' => c.to_int() - '0'.to_int()
-     'a'..='f' => c.to_int() - 'a'.to_int() + 10
-     'A'..='F' => c.to_int() - 'A'.to_int() + 10
+     '0'..<='9' => c.to_int() - '0'.to_int()
+     'a'..<='f' => c.to_int() - 'a'.to_int() + 10
+     'A'..<='F' => c.to_int() - 'A'.to_int() + 10
 -    _ => raise invalid_byte(ctx.original, index)
 +    _ => raise invalid_byte(ctx.original_renamed, index)
    }
@@ -141,9 +141,9 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'original' 'origin
 +  let { rest, original_renamed: original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+     [' ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
 @@
-   len : Int,
+   len : Int32,
    func_data : Checkpoint,
  ) -> Value raise {
 -  let { original, arr_acc, obj_acc, skip, stack, decode, .. } = ctx

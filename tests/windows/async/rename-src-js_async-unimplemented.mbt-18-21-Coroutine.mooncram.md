@@ -154,7 +154,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Coroutine' 'Coro
  
  ///|
 @@
- }
+ )
  
  ///|
 -pub fn current_coroutine() -> Coroutine {

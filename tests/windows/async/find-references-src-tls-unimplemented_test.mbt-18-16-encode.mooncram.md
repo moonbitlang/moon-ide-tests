@@ -45,8 +45,8 @@ Found 19 references for symbol 'encode':
    |   ignore((_ : @env_util.Platform) => ())
 27 |   ignore(@utf8.encode(""))
    |                ^^^^^^
+   |   ignore(@runtime_internal.get_current_scheduler())
    | }
-   | 
 
 <WORKDIR>/src\internal\event_loop\unimplemented_test.mbt:20:16-20:22:
    | let _ignore_unused_import : Unit = {

@@ -66,7 +66,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'Test' 'TestRename
  /// See also `@test.Test::writeln`
 -pub fn Test::write(self : Test, obj : &Show) -> Unit {
 +pub fn TestRenamed::write(self : TestRenamed, obj : &Show) -> Unit {
-   self.buffer.write_string(obj.to_string())
+   self.buffer <+ "\{obj}"
  }
  
 @@
