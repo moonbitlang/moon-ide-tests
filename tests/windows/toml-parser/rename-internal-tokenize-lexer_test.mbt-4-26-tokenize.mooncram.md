@@ -1,7 +1,7 @@
 # toml-parser rename tokenize internal\tokenize\lexer_test.mbt:4:26
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal\tokenize\lexer_test.mbt:4:26'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'tokenize' 'tokenize_renamed' --loc 'internal\tokenize\lexer_test.mbt:4:26'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_test.mbt
 @@
@@ -1462,5 +1462,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'tokenize' 
    let result = parser.parse_dotted_key()
    debug_inspect(
 *** End Patch
-
-```
+"" (escaped)
+````

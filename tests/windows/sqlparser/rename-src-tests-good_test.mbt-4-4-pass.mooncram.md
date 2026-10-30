@@ -1,7 +1,7 @@
 # sqlparser rename pass src\tests\good_test.mbt:4:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'pass' 'pass_renamed' --loc 'src\tests\good_test.mbt:4:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'pass' 'pass_renamed' --loc 'src\tests\good_test.mbt:4:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\good_test.mbt
 @@
@@ -262,5 +262,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'pass' 'pass_
 +  "ALTER TABLE IF EXISTS mytable DROP COLUMN IF EXISTS mycolumn;" |> pass_renamed
  }
 *** End Patch
-
-```
+"" (escaped)
+````

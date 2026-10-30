@@ -1,7 +1,7 @@
 # toml-parser rename input test_utils_test.mbt:2:25
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'input' 'input_renamed' --loc 'test_utils_test.mbt:2:25'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'input' 'input_renamed' --loc 'test_utils_test.mbt:2:25'
 *** Begin Patch
 *** Update File: <WORKDIR>/test_utils_test.mbt
 @@
@@ -14,5 +14,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'input' 'in
        let s = e.to_string()
        // e.to_string() gives: Failure("...FAILED: actual_message")
 *** End Patch
-
-```
+"" (escaped)
+````

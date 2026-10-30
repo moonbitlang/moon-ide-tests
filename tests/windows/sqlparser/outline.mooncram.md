@@ -1,7 +1,7 @@
 # sqlparser outline
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\ast.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\ast.mbt'
    2 |pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
      |...
    7 |pub fn[T : Show] structural_print(obj : T) -> String {
@@ -1123,11 +1123,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\ast.mbt
      |...
 3962 |pub extend WindowSpec with Eq::{not_equal, equal}
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\bigquery.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\bigquery.mbt'
   3 |pub(all) struct BigQuery {}
     |...
   6 |pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
@@ -1188,11 +1188,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\bigquer
 169 |  read_keyword,
 170 |}
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\dml.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\dml.mbt'
    2 |fn Parser::parse_set_expr(
    3 |  self : Parser,
    4 |  tokens : ArrayView[Token],
@@ -1564,11 +1564,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\dml.mbt
      |...
 2926 |test "MERGE with DELETE action" {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\generic.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\generic.mbt'
  5 |pub(all) struct Generic {}
    |...
  8 |pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
@@ -1617,11 +1617,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\generic
 78 |  read_keyword,
 79 |}
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\lexer.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\lexer.mbt'
   2 |suberror LexerError {
     |...
   8 |pub(all) enum Token {
@@ -1725,11 +1725,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\lexer.m
     |...
 857 |pub extend Token with Eq::{not_equal, equal}
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\prepare.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\prepare.mbt'
   5 |test "PREPARE simple SELECT" {
     |...
  22 |test "PREPARE with data types" {
@@ -1776,11 +1776,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\prepare
     |...
 346 |test "PREPARE with multiple data types" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\redshift.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\redshift.mbt'
  3 |pub(all) struct Redshift {}
    |...
  6 |pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
@@ -1829,11 +1829,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\redshif
 76 |  read_keyword,
 77 |}
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\show.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\show.mbt'
   2 |fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
     |...
  39 |pub impl Show for Statements with fn output(self, logger) {
@@ -2284,11 +2284,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\show.mb
     |...
 932 |pub extend WindowSpec with Show::{to_string, output}
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\tests\good_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\tests\good_test.mbt'
   4 |fn pass(input : String) -> Unit {
     |...
  15 |test {
@@ -2367,11 +2367,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\tests\g
     |...
 219 |test {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\tests\tpch_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\tests\tpch_test.mbt'
   2 |fn read_and_parse(path : String) -> @sqlparser.Statements {
     |...
  22 |test "TPCH 1" {
@@ -2418,5 +2418,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide outline 'src\tests\t
     |...
 826 |test "TPCH 22" {
     |...
-
-```
+"" (escaped)
+````

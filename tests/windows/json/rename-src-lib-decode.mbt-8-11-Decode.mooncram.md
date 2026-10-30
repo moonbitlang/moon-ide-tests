@@ -1,7 +1,7 @@
 # json rename Decode src\lib\decode.mbt:8:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRenamed' --loc 'src\lib\decode.mbt:8:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Decode' 'DecodeRenamed' --loc 'src\lib\decode.mbt:8:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\lib\decode.mbt
 @@
@@ -12,7 +12,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
 +pub trait DecodeRenamed {
    array_start(Self, JsonArray) -> JsonArray
    array_push(Self, Json, JsonArray) -> JsonArray
-   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
+"   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
 @@
  }
  
@@ -52,7 +52,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
  ///|
 -impl Decode for Unit with object_finish(_self, acc, old_acc) {
 +impl DecodeRenamed for Unit with object_finish(_self, acc, old_acc) {
-   (acc, old_acc) (escaped)
+"   (acc, old_acc)" (escaped)
  }
  
  ///|
@@ -91,7 +91,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
      Some(decode) => decode
-     None => () (escaped)
+"     None => ()" (escaped)
    }
 @@
  }
@@ -102,7 +102,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
      Some(decode) => decode
-     None => () (escaped)
+"     None => ()" (escaped)
    }
 *** Update File: <WORKDIR>/src\lib\value.mbt
 @@
@@ -124,5 +124,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Decode' 'DecodeRe
    decode_start,
    decode_continue,
 *** End Patch
-
-```
+"" (escaped)
+````

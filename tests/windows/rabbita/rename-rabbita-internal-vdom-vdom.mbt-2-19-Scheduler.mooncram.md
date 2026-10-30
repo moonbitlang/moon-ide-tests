@@ -1,7 +1,7 @@
 # rabbita rename Scheduler rabbita\internal\vdom\vdom.mbt:2:19
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'Scheduler' 'SchedulerRenamed' --loc 'rabbita\internal\vdom\vdom.mbt:2:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Scheduler' 'SchedulerRenamed' --loc 'rabbita\internal\vdom\vdom.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita\internal\vdom\diff.mbt
 @@
@@ -199,5 +199,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'Scheduler' 'Sc
    { handlers, attrs, styles, props, }
  }
 *** End Patch
-
-```
+"" (escaped)
+````

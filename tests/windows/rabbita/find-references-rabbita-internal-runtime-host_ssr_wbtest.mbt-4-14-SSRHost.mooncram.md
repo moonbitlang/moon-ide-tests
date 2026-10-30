@@ -1,7 +1,7 @@
 # rabbita find-references SSRHost rabbita\internal\runtime\host_ssr_wbtest.mbt:4:14
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide find-references 'SSRHost' --loc 'rabbita\internal\runtime\host_ssr_wbtest.mbt:4:14' --target native
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'SSRHost' --loc 'rabbita\internal\runtime\host_ssr_wbtest.mbt:4:14' --target native
 Found 2 references for symbol 'SSRHost':
 <WORKDIR>/rabbita\internal\runtime\host_ssr_wbtest.mbt:4:14-4:21:
   | ///|
@@ -20,5 +20,5 @@ Found 2 references for symbol 'SSRHost':
    |                         ^^^^^^^
    |       let output = (self.builder)()
    |       output.0.map(html => html.0)
-
-```
+"" (escaped)
+````

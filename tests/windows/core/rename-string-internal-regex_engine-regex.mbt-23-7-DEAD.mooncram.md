@@ -1,7 +1,7 @@
 # core rename DEAD string\internal\regex_engine\regex.mbt:23:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'DEAD' 'DEADRenamed' --loc 'string\internal\regex_engine\regex.mbt:23:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'DEAD' 'DEADRenamed' --loc 'string\internal\regex_engine\regex.mbt:23:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/string\internal\regex_engine\dfa.mbt
 @@
@@ -76,5 +76,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'DEAD' 'DEADRename
  ///|
  /// Register of a tag while a transition is being built: the tag is set by
 *** End Patch
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # core rename self builtin\int64.mbt:26:21
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'self' 'self_renamed' --loc 'builtin\int64.mbt:26:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'self' 'self_renamed' --loc 'builtin\int64.mbt:26:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin\int64.mbt
 @@
@@ -14,5 +14,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'self' 'self_renam
  ///|
  /// Converts a 32-bit integer (`Int`) to a 64-bit integer (`Int64`).
 *** End Patch
-
-```
+"" (escaped)
+````

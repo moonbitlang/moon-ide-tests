@@ -1,7 +1,7 @@
 # sqlparser rename BigQuery src\bigquery.mbt:6:22
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'BigQuery' 'BigQueryRenamed' --loc 'src\bigquery.mbt:6:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'BigQuery' 'BigQueryRenamed' --loc 'src\bigquery.mbt:6:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\bigquery.mbt
 @@
@@ -132,5 +132,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'BigQuery' 'B
    parse_statement,
    supports_within_after_array_aggregation,
 *** End Patch
-
-```
+"" (escaped)
+````

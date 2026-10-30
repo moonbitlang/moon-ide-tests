@@ -1,7 +1,7 @@
 # json find-references input src\tests\json_testsuite_y_test.mbt:8:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
 Found 1 references for symbol 'input':
 <WORKDIR>/src\tests\json_testsuite_y_test.mbt:9:50-9:55:
   | ///|
@@ -11,5 +11,5 @@ Found 1 references for symbol 'input':
   |                                                  ^^^^^
   | }
   | 
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # core find-references LazyState lazy\lazy.mbt:24:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'LazyState' --loc 'lazy\lazy.mbt:24:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'LazyState' --loc 'lazy\lazy.mbt:24:11'
 Found 1 references for symbol 'LazyState':
 <WORKDIR>/lazy\lazy.mbt:69:15-69:24:
    | /// `Lazy[A]` is not thread-safe. Sharing one across threads requires
@@ -11,5 +11,5 @@ Found 1 references for symbol 'LazyState':
    |               ^^^^^^^^^
    | }
    | 
-
-```
+"" (escaped)
+````

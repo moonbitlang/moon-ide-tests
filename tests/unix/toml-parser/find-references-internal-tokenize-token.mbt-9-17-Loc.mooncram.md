@@ -1,23 +1,7 @@
 # toml-parser find-references Loc internal/tokenize/token.mbt:9:17
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
 Found 23 references for symbol 'Loc':
 <WORKDIR>/internal/tokenize/token.mbt:16:12-16:15:
    | 
@@ -224,5 +208,5 @@ Found 23 references for symbol 'Loc':
    |                                                                        ^^^
    |   { start: start_pos, end: end_pos, }
    | }
-
-```
+"" (escaped)
+````

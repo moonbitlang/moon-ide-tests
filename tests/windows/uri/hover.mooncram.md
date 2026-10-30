@@ -1,7 +1,7 @@
 # uri hover
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'Uri' --loc 'uri.mbt:54:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'Uri' --loc 'uri.mbt:54:12'
 /// - path: hierarchical path to resource
 /// - query: additional parameters
 /// - fragment: reference to a secondary resource
@@ -47,7 +47,7 @@ pub struct Uri {
             inspect(uri.port(), content="Some(8080)")
             inspect(uri.path(), content="/path")
            
-            // Modify URI (immutable) (escaped)
+"            // Modify URI (immutable)" (escaped)
             let new_uri = uri.with_host(Some("newhost.com")).with_port(Some(9000))
             inspect(new_uri.to_string(), content="https://user:pass@newhost.com:9000/path?query=value#fragment")
            
@@ -65,17 +65,17 @@ pub struct Uri {
             scheme://authority/path?query#fragment
             
             Where:
-            - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
+"            - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
             - authority: contains user info, host, and port
             - path: hierarchical path to resource
             - query: additional parameters
             - fragment: reference to a secondary resource
   scheme : String?
   authority : Authority?
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'scheme' --loc 'uri.mbt:55:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'scheme' --loc 'uri.mbt:55:3'
 /// - query: additional parameters
 /// - fragment: reference to a secondary resource
 pub struct Uri {
@@ -86,10 +86,10 @@ pub struct Uri {
   ```
   authority : Authority?
   path : String
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'uri' --loc 'uri_test.mbt:5:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'uri' --loc 'uri_test.mbt:5:7'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
   // Test simple HTTP URI
@@ -100,10 +100,10 @@ test "basic_uri_parsing" {
       ```
   json_inspect(uri, content={
     "scheme": "https",
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'parse' --loc 'uri_test.mbt:5:18'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'parse' --loc 'uri_test.mbt:5:18'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
   // Test simple HTTP URI
@@ -141,10 +141,10 @@ test "basic_uri_parsing" {
              - Other `UriError` variants for various parsing failures
   json_inspect(uri, content={
     "scheme": "https",
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 /// Test URL encoding functionality
 test "url_encoding" {
   // Test basic encoding
@@ -154,11 +154,11 @@ test "url_encoding" {
       String
       ```
   json_inspect(encoded, content="hello%20world%21")
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 /// Test URL encoding functionality
 test "url_encoding" {
   // Test basic encoding
@@ -204,7 +204,7 @@ test "url_encoding" {
                  inspect(uri.port(), content="Some(8080)")
                  inspect(uri.path(), content="/path")
                 
-                 // Modify URI (immutable) (escaped)
+"                 // Modify URI (immutable)" (escaped)
                  let new_uri = uri.with_host(Some("newhost.com")).with_port(Some(9000))
                  inspect(new_uri.to_string(), content="https://user:pass@newhost.com:9000/path?query=value#fragment")
                 
@@ -222,11 +222,11 @@ test "url_encoding" {
                  scheme://authority/path?query#fragment
                  
                  Where:
-                 - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
+"                 - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
                  - authority: contains user info, host, and port
                  - path: hierarchical path to resource
                  - query: additional parameters
                  - fragment: reference to a secondary resource
   json_inspect(encoded, content="hello%20world%21")
-
-```
+"" (escaped)
+````

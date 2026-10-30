@@ -1,7 +1,7 @@
 # core find-references arr builtin\exact_view_test.mbt:17:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide find-references 'arr' --loc 'builtin\exact_view_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'arr' --loc 'builtin\exact_view_test.mbt:17:7'
 Found 2 references for symbol 'arr':
 <WORKDIR>/builtin\exact_view_test.mbt:21:17-21:20:
    |   let fixed : FixedArray[Int32] = [1, 2, 3, 4]
@@ -20,5 +20,5 @@ Found 2 references for symbol 'arr':
    |       ^^^
    |       fixed.exact_view(start=1, end=3),
    |       ro.exact_view(start=1, end=3),
-
-```
+"" (escaped)
+````

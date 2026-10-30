@@ -1,7 +1,7 @@
 # async rename _ignore_unused_import src\js_async\unimplemented.mbt:17:5
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src\js_async\unimplemented.mbt:17:5'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src\js_async\unimplemented.mbt:17:5'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\js_async\unimplemented.mbt
 @@
@@ -14,5 +14,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename '_ignore_unused_i
    ignore(@event_loop.Timer::new)
  }
 *** End Patch
-
-```
+"" (escaped)
+````

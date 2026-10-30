@@ -1,7 +1,7 @@
 # json rename array_start src\lib\decode.mbt:9:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'array_start' 'array_start_renamed' --loc 'src\lib\decode.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'array_start' 'array_start_renamed' --loc 'src\lib\decode.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\lib\decode.mbt
 @@
@@ -11,7 +11,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'array_start' 'arr
 -  array_start(Self, JsonArray) -> JsonArray
 +  array_start_renamed(Self, JsonArray) -> JsonArray
    array_push(Self, Json, JsonArray) -> JsonArray
-   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
+"   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
    object_start(Self, JsonObject) -> JsonObject
 @@
  }
@@ -42,5 +42,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'array_start' 'arr
        value({ ..ctx, rest, skip: skip + len, arr_acc: new_acc })
      }
 *** End Patch
-
-```
+"" (escaped)
+````

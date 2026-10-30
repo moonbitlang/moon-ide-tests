@@ -1,7 +1,7 @@
 # rabbita rename SheetSide rui\sheet.mbt:3:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'SheetSideRenamed' --loc 'rui\sheet.mbt:3:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'SheetSide' 'SheetSideRenamed' --loc 'rui\sheet.mbt:3:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e\apps\rui\dialogs\sheet.mbt
 @@
@@ -80,5 +80,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SheetSide' 'Sh
  ) -> @html.Html {
    @html.fragment([
 *** End Patch
-
-```
+"" (escaped)
+````

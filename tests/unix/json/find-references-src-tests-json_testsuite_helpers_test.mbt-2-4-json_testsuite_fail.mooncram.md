@@ -1,23 +1,7 @@
 # json find-references json_testsuite_fail src/tests/json_testsuite_helpers_test.mbt:2:4
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
 Found 4 references for symbol 'json_testsuite_fail':
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:9:10-9:29:
   | ///|
@@ -26,11 +10,11 @@ Found 4 references for symbol 'json_testsuite_fail':
 9 |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |          ^^^^^^^^^^^^^^^^^^^
   |   } noraise {
-  |     _ => () (escaped)
+"  |     _ => ()" (escaped)
 
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:20:7-20:26:
    |   try @json.decode(input) catch {
-   |     @lib.ParseError(_) => () (escaped)
+"   |     @lib.ParseError(_) => ()" (escaped)
    |     _ =>
 20 |       json_testsuite_fail(
    |       ^^^^^^^^^^^^^^^^^^^
@@ -48,11 +32,11 @@ Found 4 references for symbol 'json_testsuite_fail':
 
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:36:7-36:26:
    |   try @json.decode(input) catch {
-   |     @lib.ParseError(_) => () (escaped)
+"   |     @lib.ParseError(_) => ()" (escaped)
    |     _ =>
 36 |       json_testsuite_fail(
    |       ^^^^^^^^^^^^^^^^^^^
    |         "expected JSONTestSuite accept or parser rejection, got non-parser error: " +
    |         name,
-
-```
+"" (escaped)
+````

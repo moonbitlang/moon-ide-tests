@@ -1,7 +1,7 @@
 # sqlparser rename input src\tests\good_test.mbt:4:9
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'input' 'input_renamed' --loc 'src\tests\good_test.mbt:4:9'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'input' 'input_renamed' --loc 'src\tests\good_test.mbt:4:9'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\good_test.mbt
 @@
@@ -16,5 +16,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide rename 'input' 'inpu
        println(e)
        panic()
 *** End Patch
-
-```
+"" (escaped)
+````

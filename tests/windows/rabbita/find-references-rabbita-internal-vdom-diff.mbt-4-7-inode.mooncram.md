@@ -1,7 +1,7 @@
 # rabbita find-references inode rabbita\internal\vdom\diff.mbt:4:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide find-references 'inode' --loc 'rabbita\internal\vdom\diff.mbt:4:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'inode' --loc 'rabbita\internal\vdom\diff.mbt:4:7'
 Found 6 references for symbol 'inode':
 <WORKDIR>/rabbita\internal\vdom\diff.mbt:287:8-287:13:
     | ///|
@@ -56,5 +56,5 @@ Found 6 references for symbol 'inode':
     |                                     ^^^^^
     |     }
     |     // VDom root invariant: the root must be either a `(Some(id), _)` or a 
-
-```
+"" (escaped)
+````

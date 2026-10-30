@@ -1,7 +1,7 @@
 # json find-references Decode src\lib\decode.mbt:8:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Decode' --loc 'src\lib\decode.mbt:8:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Decode' --loc 'src\lib\decode.mbt:8:11'
 Found 16 references for symbol 'Decode':
 <WORKDIR>/src\lib\decode.mbt:21:6-21:12:
    | }
@@ -109,7 +109,7 @@ Found 16 references for symbol 'Decode':
 21 |   let decode : &Decode = match decode {
    |                 ^^^^^^
    |     Some(decode) => decode
-   |     None => () (escaped)
+"   |     None => ()" (escaped)
 
 <WORKDIR>/src\lib\json.mbt:48:48-48:54:
    | }
@@ -127,7 +127,7 @@ Found 16 references for symbol 'Decode':
 49 |   let decode : &Decode = match decode {
    |                 ^^^^^^
    |     Some(decode) => decode
-   |     None => () (escaped)
+"   |     None => ()" (escaped)
 
 <WORKDIR>/src\lib\value.mbt:13:13-13:19:
    |   arr_acc : JsonArray
@@ -145,5 +145,5 @@ Found 16 references for symbol 'Decode':
   |         ^^^^^^
   |   decode,
   |   decode_start,
-
-```
+"" (escaped)
+````

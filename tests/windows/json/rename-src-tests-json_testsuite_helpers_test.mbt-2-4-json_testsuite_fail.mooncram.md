@@ -1,7 +1,7 @@
 # json rename json_testsuite_fail src\tests\json_testsuite_helpers_test.mbt:2:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'json_testsuite_fail' 'json_testsuite_fail_renamed' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'json_testsuite_fail' 'json_testsuite_fail_renamed' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 @@
@@ -18,11 +18,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'json_testsuite_fa
 -    _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
 +    _ => json_testsuite_fail_renamed("expected JSONTestSuite accept: " + name)
    } noraise {
-     _ => () (escaped)
+"     _ => ()" (escaped)
    }
 @@
    try @json.decode(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
 -      json_testsuite_fail(
 +      json_testsuite_fail_renamed(
@@ -37,7 +37,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'json_testsuite_fa
    }
 @@
    try @json.decode(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
 -      json_testsuite_fail(
 +      json_testsuite_fail_renamed(
@@ -45,5 +45,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'json_testsuite_fa
          name,
        )
 *** End Patch
-
-```
+"" (escaped)
+````

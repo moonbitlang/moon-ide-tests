@@ -1,23 +1,7 @@
 # indexmap rename T src/IndexMap_test.mbt:17:19
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/indexmap" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
 @@
@@ -75,7 +59,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub fn[K : Hash + Eq, V] TRenamed::get(self : TRenamed[K, V], key : K) -> V? {
    // 直接从键到索引的映射中查找
    match self.key_to_idx.get(key) {
-     Some(idx) => Some(self.core.entries[idx].value) (escaped)
+"     Some(idx) => Some(self.core.entries[idx].value)" (escaped)
 @@
  
  ///|
@@ -93,7 +77,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +fn[K : Eq, V] TRenamed::get_with_hash(self : TRenamed[K, V], key : K, hash : Int) -> V? {
    // 首先检查哈希值是否在 hash_to_idx 中
    match self.core.hash_to_idx.get(hash) {
-     Some(idx) => { (escaped)
+"     Some(idx) => {" (escaped)
 @@
  /// let map = @IndexMap.of([("key", 42)])
  /// inspect(map["key"], content="Some(42)")
@@ -132,8 +116,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 -pub fn[K : Hash + Eq, V] T::contains(self : T[K, V], key : K) -> Bool {
 +pub fn[K : Hash + Eq, V] TRenamed::contains(self : TRenamed[K, V], key : K) -> Bool {
    match self.get(key) {
-     Some(_) => true (escaped)
-     None => false (escaped)
+"     Some(_) => true" (escaped)
+"     None => false" (escaped)
 @@
  
  ///|
@@ -340,7 +324,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub fn[K : Hash + Eq, V] TRenamed::index_of(self : TRenamed[K, V], key : K) -> Int? {
    // 先检查键是否存在
    match self.key_to_idx.get(key) {
-     Some(bucket_idx) => (escaped)
+"     Some(bucket_idx) =>" (escaped)
 @@
  ///
  /// let map = @IndexMap.of([("a", 1), ("b", 2)])
@@ -610,5 +594,5 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
    mut size : Int // 元素数量
    mut capacity : Int // 当前哈希表容量
 *** End Patch
-
-```
+"" (escaped)
+````

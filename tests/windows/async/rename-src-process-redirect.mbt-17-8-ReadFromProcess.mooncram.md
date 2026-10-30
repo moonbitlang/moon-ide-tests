@@ -1,7 +1,7 @@
 # async rename ReadFromProcess src\process\redirect.mbt:17:8
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 'src\process\redirect.mbt:17:8'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 'src\process\redirect.mbt:17:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\process\deprecated.mbt
 @@
@@ -79,5 +79,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'ReadFromProcess'
    limit : Int32,
  ) -> Unit {
 *** End Patch
-
-```
+"" (escaped)
+````

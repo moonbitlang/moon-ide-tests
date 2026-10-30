@@ -1,23 +1,7 @@
 # core rename UNKNOWN string/internal/regex_engine/regex.mbt:17:7
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'UNKNOWN' 'UNKNOWNRenamed' --loc 'string/internal/regex_engine/regex.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'UNKNOWN' 'UNKNOWNRenamed' --loc 'string/internal/regex_engine/regex.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/string/internal/regex_engine/dfa.mbt
 @@
@@ -89,5 +73,5 @@ $ run_moon_ide moon ide rename 'UNKNOWN' 'UNKNOWNRenamed' --loc 'string/internal
      cache_words: 0,
      max_cache_words,
 *** End Patch
-
-```
+"" (escaped)
+````

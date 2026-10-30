@@ -1,7 +1,7 @@
 # json rename Continue src\lib\value.mbt:3:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Continue' 'ContinueRenamed' --loc 'src\lib\value.mbt:3:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Continue' 'ContinueRenamed' --loc 'src\lib\value.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\lib\json.mbt
 @@
@@ -78,5 +78,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Continue' 'Contin
    }
  }
 *** End Patch
-
-```
+"" (escaped)
+````

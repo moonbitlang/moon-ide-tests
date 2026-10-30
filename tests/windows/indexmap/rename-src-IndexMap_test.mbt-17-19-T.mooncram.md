@@ -1,7 +1,7 @@
 # indexmap rename T src\IndexMap_test.mbt:17:19
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'T' 'TRenamed' --loc 'src\IndexMap_test.mbt:17:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'T' 'TRenamed' --loc 'src\IndexMap_test.mbt:17:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\IndexMap.mbt
 @@
@@ -373,7 +373,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'T' 'TRenamed'
 @@
  
  ///|
- /// Standard ToJson implementation (may not preserve order) (escaped)
+" /// Standard ToJson implementation (may not preserve order)" (escaped)
 -pub impl[K : Show, V : ToJson] ToJson for T[K, V] with to_json(self) {
 +pub impl[K : Show, V : ToJson] ToJson for TRenamed[K, V] with to_json(self) {
    // 使用普通Map
@@ -594,5 +594,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'T' 'TRenamed'
    mut size : Int // 元素数量
    mut capacity : Int // 当前哈希表容量
 *** End Patch
-
-```
+"" (escaped)
+````

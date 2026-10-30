@@ -1,9 +1,9 @@
 # uri peek-def
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'Uri' --loc 'uri.mbt:54:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'Uri' --loc 'uri.mbt:54:12'
 Definition found at file <WORKDIR>/uri.mbt
-   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
+"   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
    | /// - authority: contains user info, host, and port
    | /// - path: hierarchical path to resource
    | /// - query: additional parameters
@@ -24,10 +24,10 @@ Definition found at file <WORKDIR>/uri.mbt
    | 
    | ///|
    | /// Authority component of a URI
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'scheme' --loc 'uri.mbt:55:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'scheme' --loc 'uri.mbt:55:3'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - authority: contains user info, host, and port
    | /// - path: hierarchical path to resource
@@ -50,10 +50,10 @@ Definition found at file <WORKDIR>/uri.mbt
    | ///|
    | /// Authority component of a URI
    | /// Contains optional user info, required host, and optional port
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'uri' --loc 'uri_test.mbt:5:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'uri' --loc 'uri_test.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test.mbt
   | ///|
   | /// Test basic URI parsing functionality
@@ -75,10 +75,10 @@ Definition found at file <WORKDIR>/uri_test.mbt
   |   json_inspect(empty_uri, content={ "path": "" })
   | }
   | 
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'parse' --loc 'uri_test.mbt:5:18'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'parse' --loc 'uri_test.mbt:5:18'
 Definition found at file <WORKDIR>/uri.mbt
     | ///
     | /// - `UriError::EmptyUri` if the input string is empty
@@ -101,10 +101,10 @@ Definition found at file <WORKDIR>/uri.mbt
     |   // Check for scheme
     |   if remaining.contains("://") {
     |     let parts = remaining.split("://").collect()
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | ///|
   | /// Test URL encoding functionality
@@ -114,7 +114,7 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
   |       ^^^^^^^
   |   json_inspect(encoded, content="hello%20world%21")
   | 
-  |   // Test unreserved characters (should not be encoded) (escaped)
+"  |   // Test unreserved characters (should not be encoded)" (escaped)
   |   let unreserved = "hello-world_123.test~"
   |   let encoded_unreserved = Uri::encode(unreserved)
   |   json_inspect(encoded_unreserved, content="hello-world_123.test~")
@@ -126,12 +126,12 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | }
   | 
   | ///|
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Definition found at file <WORKDIR>/uri.mbt
-   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp") (escaped)
+"   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
    | /// - authority: contains user info, host, and port
    | /// - path: hierarchical path to resource
    | /// - query: additional parameters
@@ -152,4 +152,4 @@ Definition found at file <WORKDIR>/uri.mbt
    | 
    | ///|
    | /// Authority component of a URI
-```
+````

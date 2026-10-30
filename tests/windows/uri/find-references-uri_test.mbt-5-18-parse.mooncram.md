@@ -1,7 +1,7 @@
 # uri find-references parse uri_test.mbt:5:18
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\uri' moon ide find-references 'parse' --loc 'uri_test.mbt:5:18'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'parse' --loc 'uri_test.mbt:5:18'
 Found 46 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:36:18-36:23:
    | ///|
@@ -402,7 +402,7 @@ Found 46 references for symbol 'parse':
 <WORKDIR>/uri_test_new_features.mbt:305:22-305:27:
     |   ])
     | 
-    |   // Test case sensitivity in scheme (should be case-insensitive in practice, but we store as-is) (escaped)
+"    |   // Test case sensitivity in scheme (should be case-insensitive in practice, but we store as-is)" (escaped)
 305 |   let upper_scheme = parse("HTTPS://example.com")
     |                      ^^^^^
     |   json_inspect(upper_scheme.scheme(), content=["HTTPS"])
@@ -411,10 +411,10 @@ Found 46 references for symbol 'parse':
 <WORKDIR>/uri_test_new_features.mbt:309:18-309:23:
     |   json_inspect(upper_scheme.scheme(), content=["HTTPS"])
     | 
-    |   // Test IPv6 addresses (basic support) (escaped)
+"    |   // Test IPv6 addresses (basic support)" (escaped)
 309 |   let ipv6_uri = parse("http://[2001:db8::1]:8080/path")
     |                  ^^^^^
     |   json_inspect(ipv6_uri.host(), content=["[2001:db8::1]"])
     |   json_inspect(ipv6_uri.port(), content=[8080])
-
-```
+"" (escaped)
+````

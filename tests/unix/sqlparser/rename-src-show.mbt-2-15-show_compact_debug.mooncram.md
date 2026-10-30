@@ -1,23 +1,7 @@
 # sqlparser rename show_compact_debug src/show.mbt:2:15
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/sqlparser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'show_compact_debug' 'show_compact_debug_renamed' --loc 'src/show.mbt:2:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'show_compact_debug' 'show_compact_debug_renamed' --loc 'src/show.mbt:2:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/show.mbt
 @@
@@ -703,5 +687,5 @@ $ run_moon_ide moon ide rename 'show_compact_debug' 'show_compact_debug_renamed'
  
  ///|
 *** End Patch
-
-```
+"" (escaped)
+````

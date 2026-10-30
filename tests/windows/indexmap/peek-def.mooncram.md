@@ -1,7 +1,7 @@
 # indexmap peek-def
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
 Definition found at file <WORKDIR>/src\IndexMap.mbt
   | ///|
 2 | const Default_init_capacity = 8
@@ -20,10 +20,10 @@ Definition found at file <WORKDIR>/src\IndexMap.mbt
   | /// Parameters:
   | ///
   | /// * `capacity` : The desired minimum capacity of the hash map. Must be a
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
 Definition found at file <WORKDIR>/src\IndexMap.mbt
   | ///|
   | const Default_init_capacity = 8
@@ -45,10 +45,10 @@ Definition found at file <WORKDIR>/src\IndexMap.mbt
   | /// non-negative integer. Defaults to 8 if not specified.
   | ///
   | /// Returns a new empty hash map of type `T[K, V]`, where `K` is the key type and
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'm' --loc 'src\IndexMap_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'm' --loc 'src\IndexMap_test.mbt:17:7'
 Definition found at file <WORKDIR>/src\IndexMap_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -71,10 +71,10 @@ Definition found at file <WORKDIR>/src\IndexMap_test.mbt
    |   @debug.debug_inspect(m.get("a"), content="Some(1)")
    |   @debug.debug_inspect(m.get("b"), content="Some(2)")
    |   @debug.debug_inspect(m.get("c"), content="Some(3)")
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'T' --loc 'src\IndexMap_test.mbt:17:19'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'T' --loc 'src\IndexMap_test.mbt:17:19'
 Definition found at file <WORKDIR>/src\types.mbt
    | /// assert_eq(map.get(2), None)
    | /// assert_eq(map.get(3), Some("three"))
@@ -89,10 +89,10 @@ Definition found at file <WORKDIR>/src\types.mbt
    |   mut growAt : Int // 扩容阈值
    |   mut key_to_idx : @hashmap.HashMap[K, Int] // 键到索引的直接映射，用于O(1)查找
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'Bucket' --loc 'src\types.mbt:17:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'Bucket' --loc 'src\types.mbt:17:13'
 Definition found at file <WORKDIR>/src\types.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -115,10 +115,10 @@ Definition found at file <WORKDIR>/src\types.mbt
    |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息
    |   mut head : Int // 链表头节点索引，-1表示空链表
    |   mut tail : Int // 链表尾节点索引，-1表示空链表
-```
+````
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide peek-def 'hash' --loc 'src\types.mbt:18:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'hash' --loc 'src\types.mbt:18:3'
 Definition found at file <WORKDIR>/src\types.mbt
    | // limitations under the License.
    | 
@@ -141,4 +141,4 @@ Definition found at file <WORKDIR>/src\types.mbt
    |   mut head : Int // 链表头节点索引，-1表示空链表
    |   mut tail : Int // 链表尾节点索引，-1表示空链表
    |   mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问
-```
+````

@@ -1,7 +1,7 @@
 # indexmap find-references hash src\types.mbt:18:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'hash' --loc 'src\types.mbt:18:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'hash' --loc 'src\types.mbt:18:3'
 Found 5 references for symbol 'hash':
 <WORKDIR>/src\IndexMap.mbt:112:5-112:9:
     |   // 创建新的桶
@@ -47,5 +47,5 @@ Found 5 references for symbol 'hash':
      |                                           ^^^^
      |   self.key_to_idx.remove(key)
      | 
-
-```
+"" (escaped)
+````

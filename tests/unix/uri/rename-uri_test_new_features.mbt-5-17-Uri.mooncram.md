@@ -1,23 +1,7 @@
 # uri rename Uri uri_test_new_features.mbt:5:17
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/uri" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
 @@
@@ -171,7 +155,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::with_port(self : Uri, new_port : Int32?) -> Uri {
 +pub fn UriRenamed::with_port(self : UriRenamed, new_port : Int32?) -> UriRenamed {
    match self.authority {
-     Some(auth) => { (escaped)
+"     Some(auth) => {" (escaped)
        let new_authority = Some({ ..auth, port: new_port, })
 @@
  
@@ -201,8 +185,8 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::is_absolute(self : Uri) -> Bool {
 +pub fn UriRenamed::is_absolute(self : UriRenamed) -> Bool {
    match self.scheme {
-     Some(_) => true (escaped)
-     None => false (escaped)
+"     Some(_) => true" (escaped)
+"     None => false" (escaped)
 @@
  
  ///|
@@ -219,7 +203,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::effective_port(self : Uri) -> Int32? {
 +pub fn UriRenamed::effective_port(self : UriRenamed) -> Int32? {
    match self.authority {
-     Some(auth) => (escaped)
+"     Some(auth) =>" (escaped)
        match auth.port {
 @@
  
@@ -246,7 +230,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::get_query_param(self : Uri, param_name : String) -> String? {
 +pub fn UriRenamed::get_query_param(self : UriRenamed, param_name : String) -> String? {
    match self.query {
-     Some(query_str) => { (escaped)
+"     Some(query_str) => {" (escaped)
        let params = parse_query(query_str)
 @@
  
@@ -261,8 +245,8 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -) -> Uri {
 +) -> UriRenamed {
    let current_params = match self.query {
-     Some(query_str) => parse_query(query_str) (escaped)
-     None => [] (escaped)
+"     Some(query_str) => parse_query(query_str)" (escaped)
+"     None => []" (escaped)
 @@
  
  ///|
@@ -270,7 +254,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::remove_query_param(self : Uri, param_name : String) -> Uri {
 +pub fn UriRenamed::remove_query_param(self : UriRenamed, param_name : String) -> UriRenamed {
    match self.query {
-     Some(query_str) => { (escaped)
+"     Some(query_str) => {" (escaped)
        let current_params = parse_query(query_str)
 @@
  /// # See Also
@@ -383,7 +367,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -pub fn Uri::userinfo_components(self : Uri) -> (String, String?)? {
 +pub fn UriRenamed::userinfo_components(self : UriRenamed) -> (String, String?)? {
    match self.authority {
-     Some(auth) => (escaped)
+"     Some(auth) =>" (escaped)
        match auth.userinfo {
 @@
            if userinfo.contains(":") {
@@ -404,7 +388,7 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 +            let username = UriRenamed::decode(userinfo)
              Some((username, None))
            }
-         None => None (escaped)
+"         None => None" (escaped)
 @@
  /// # Returns
  ///
@@ -418,12 +402,12 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
 -) -> Uri {
 +) -> UriRenamed {
    match username {
-     Some(user) => { (escaped)
+"     Some(user) => {" (escaped)
        let userinfo = match password {
--        Some(pass) => Uri::encode(user) + ":" + Uri::encode(pass) (escaped)
-+        Some(pass) => UriRenamed::encode(user) + ":" + UriRenamed::encode(pass) (escaped)
--        None => Uri::encode(user) (escaped)
-+        None => UriRenamed::encode(user) (escaped)
+"-        Some(pass) => Uri::encode(user) + \":\" + Uri::encode(pass)" (escaped)
+"+        Some(pass) => UriRenamed::encode(user) + \":\" + UriRenamed::encode(pass)" (escaped)
+"-        None => Uri::encode(user)" (escaped)
+"+        None => UriRenamed::encode(user)" (escaped)
        }
  
        let new_authority = match self.authority {
@@ -549,5 +533,5 @@ $ run_moon_ide moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.m
      ["query", "value=with&special"],
      ["other", "normal"],
 *** End Patch
-
-```
+"" (escaped)
+````

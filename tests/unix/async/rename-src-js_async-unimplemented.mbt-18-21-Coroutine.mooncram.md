@@ -1,23 +1,7 @@
 # async rename Coroutine src/js_async/unimplemented.mbt:18:21
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_async/unimplemented.mbt:18:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_async/unimplemented.mbt:18:21'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/aqueue/aqueue.mbt
 @@
@@ -141,7 +125,7 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
 +pub fn CoroutineRenamed::check_error(coro : CoroutineRenamed) -> Unit raise {
    match coro.state {
      Fail(err) => raise err
-     Done | Cancelled | Running | Suspend(_) => () (escaped)
+"     Done | Cancelled | Running | Suspend(_) => ()" (escaped)
 *** Update File: <WORKDIR>/src/internal/coroutine/deprecated.mbt
 @@
  ///|
@@ -348,5 +332,5 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
  
  ///|
 *** End Patch
-
-```
+"" (escaped)
+````

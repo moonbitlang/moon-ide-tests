@@ -1,7 +1,7 @@
 # indexmap rename Bucket src\types.mbt:17:13
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'Bucket' 'BucketRenamed' --loc 'src\types.mbt:17:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'Bucket' 'BucketRenamed' --loc 'src\types.mbt:17:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\types.mbt
 @@
@@ -23,5 +23,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide rename 'Bucket' 'Buck
    mut tail : Int // 链表尾节点索引，-1表示空链表
    mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问
 *** End Patch
-
-```
+"" (escaped)
+````

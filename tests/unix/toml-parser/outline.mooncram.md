@@ -1,23 +1,7 @@
 # toml-parser outline
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/toml-parser" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'additional_official_tests_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'additional_official_tests_test.mbt'
   7 |test "key name variations" {
     |...
  34 |test "numeric keys" {
@@ -38,11 +22,11 @@ $ run_moon_ide moon ide outline 'additional_official_tests_test.mbt'
     |...
 352 |test "validation comprehensive" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'coverage_improvement_comprehensive_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'coverage_improvement_comprehensive_test.mbt'
   7 |test "parser_eof_handling" {
     |...
  24 |test "inline_table_with_integer_key" {
@@ -101,11 +85,11 @@ $ run_moon_ide moon ide outline 'coverage_improvement_comprehensive_test.mbt'
     |...
 451 |test "multiline_string_line_ending_backslash" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'datetime/datetime.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'datetime/datetime.mbt'
 13 |pub(all) enum TomlDateTime {
    |...
 21 |#deprecated("compare with `==`; the Eq impl is unaffected")
@@ -121,11 +105,11 @@ $ run_moon_ide moon ide outline 'datetime/datetime.mbt'
    |...
 38 |pub impl Show for TomlDateTime with fn output(self, logger) {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'datetime_extended_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'datetime_extended_test.mbt'
  3 |test "test TomlDateTime types and equality" {
    |...
 18 |test "test datetime token debug representation" {
@@ -134,11 +118,11 @@ $ run_moon_ide moon ide outline 'datetime_extended_test.mbt'
    |...
 57 |test "test datetime token creation and usage" {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'internal/tokenize/lexer_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'internal/tokenize/lexer_test.mbt'
    3 |test "tokenize simple key-value" {
      |...
   30 |test "tokenize integer" {
@@ -281,11 +265,11 @@ $ run_moon_ide moon ide outline 'internal/tokenize/lexer_test.mbt'
      |...
 1872 |test "consecutive _ in octal number" {
      |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'internal/tokenize/token.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'internal/tokenize/token.mbt'
  9 |pub(all) struct Loc {
    |...
 15 |#deprecated("compare with `==`; the Eq impl is unaffected")
@@ -306,11 +290,11 @@ $ run_moon_ide moon ide outline 'internal/tokenize/token.mbt'
    |...
 69 |pub fn Token::loc(self : Self) -> Loc {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'parser.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'parser.mbt'
   3 |fn Parser::skip_newlines(self : Parser) -> Unit {
     |...
  23 |fn Parser::try_parse_single_key(self : Parser) -> String? {
@@ -344,11 +328,11 @@ $ run_moon_ide moon ide outline 'parser.mbt'
     |...
 429 |fn cleanup_value_markers(value : TomlValue) -> Unit {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'parser_wbtest.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'parser_wbtest.mbt'
   5 |test "parse_dotted_key - simple identifier" {
     |...
  19 |test "parse_dotted_key - dotted identifiers" {
@@ -381,20 +365,20 @@ $ run_moon_ide moon ide outline 'parser_wbtest.mbt'
     |...
 239 |test "parse_dotted_key - zero values" {
     |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'test_utils_test.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'test_utils_test.mbt'
  2 |fn parse_expect_to_fail(input : String) -> String {
    |...
 24 |test "verify parse_expect_to_fail output" {
    |...
+"" (escaped)
+````
 
-```
-
-```mooncram
-$ run_moon_ide moon ide outline 'toml_to_string.mbt'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide outline 'toml_to_string.mbt'
   3 |fn escape_toml_string(s : String) -> String {
     |...
  40 |fn is_bare_toml_key_char(char : Char) -> Bool {
@@ -435,5 +419,5 @@ $ run_moon_ide moon ide outline 'toml_to_string.mbt'
     |...
 327 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
     |...
-
-```
+"" (escaped)
+````

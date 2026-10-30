@@ -1,23 +1,7 @@
 # async find-references Linux src/socket/reuse_port_test.mbt:21:32
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:32'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:32'
 Found 19 references for symbol 'Linux':
 <WORKDIR>/src/fs/dir.mbt:324:5-324:10:
     |   dir.offset += entry_len
@@ -189,5 +173,5 @@ Found 19 references for symbol 'Linux':
     |                              ^^^^^
     |     guard allow_reuse_port(sock) >= 0 else { @os_error.check_errno(context) }
     |   }
-
-```
+"" (escaped)
+````

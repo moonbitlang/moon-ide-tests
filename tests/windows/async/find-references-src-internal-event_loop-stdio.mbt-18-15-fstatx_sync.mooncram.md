@@ -1,7 +1,7 @@
 # async find-references fstatx_sync src\internal\event_loop\stdio.mbt:18:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
 Found 1 references for symbol 'fstatx_sync':
 <WORKDIR>/src\internal\event_loop\stdio.mbt:32:6-32:17:
    |   context~ : String,
@@ -11,5 +11,5 @@ Found 1 references for symbol 'fstatx_sync':
    |      ^^^^^^^^^^^
    |     @os_error.check_errno(context)
    |   }
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # rabbita rename SourcePath warren\path\sourcetree_path.mbt:5:8
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SourcePath' 'SourcePathRenamed' --loc 'warren\path\sourcetree_path.mbt:5:8'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'SourcePath' 'SourcePathRenamed' --loc 'warren\path\sourcetree_path.mbt:5:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/warren\build.mbt
 @@
@@ -104,5 +104,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide rename 'SourcePath' 'S
  ///|
  pub(all) enum VirtualFs {
 *** End Patch
-
-```
+"" (escaped)
+````

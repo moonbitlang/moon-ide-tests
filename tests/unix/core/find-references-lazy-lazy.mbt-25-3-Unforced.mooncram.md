@@ -1,23 +1,7 @@
 # core find-references Unforced lazy/lazy.mbt:25:3
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'Unforced' --loc 'lazy/lazy.mbt:25:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'Unforced' --loc 'lazy/lazy.mbt:25:3'
 Found 3 references for symbol 'Unforced':
 <WORKDIR>/lazy/debug.mbt:30:5-30:13:
    |   match self.state {
@@ -45,5 +29,5 @@ Found 3 references for symbol 'Unforced':
     |     ^^^^^^^^
     |       self.state = Forcing
     |       let v = thunk()
-
-```
+"" (escaped)
+````

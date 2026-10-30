@@ -1,11 +1,11 @@
 # json find-references Context src\lib\json.mbt:2:13
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'Context' --loc 'src\lib\json.mbt:2:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Context' --loc 'src\lib\json.mbt:2:13'
 Found 33 references for symbol 'Context':
 <WORKDIR>/src\lib\json.mbt:25:13-25:20:
    |     Some(decode) => decode
-   |     None => () (escaped)
+"   |     None => ()" (escaped)
    |   }
 25 |   let ctx = Context::{
    |             ^^^^^^^
@@ -14,7 +14,7 @@ Found 33 references for symbol 'Context':
 
 <WORKDIR>/src\lib\json.mbt:53:13-53:20:
    |     Some(decode) => decode
-   |     None => () (escaped)
+"   |     None => ()" (escaped)
    |   }
 53 |   let ctx = Context::{
    |             ^^^^^^^
@@ -299,5 +299,5 @@ Found 33 references for symbol 'Context':
     |         ^^^^^^^
     |   pos : Int,
     |   len : Int,
-
-```
+"" (escaped)
+````

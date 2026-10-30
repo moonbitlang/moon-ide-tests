@@ -1,7 +1,7 @@
 # core rename to_string_view builtin\string_like.mbt:20:6
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'to_string_view' 'to_string_view_renamed' --loc 'builtin\string_like.mbt:20:6'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'to_string_view' 'to_string_view_renamed' --loc 'builtin\string_like.mbt:20:6'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin\arrayview.mbt
 @@
@@ -97,5 +97,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\core' moon ide rename 'to_string_view' '
    self
  }
 *** End Patch
-
-```
+"" (escaped)
+````

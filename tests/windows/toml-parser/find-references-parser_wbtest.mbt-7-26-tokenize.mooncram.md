@@ -1,7 +1,7 @@
 # toml-parser find-references tokenize parser_wbtest.mbt:7:26
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide find-references 'tokenize' --loc 'parser_wbtest.mbt:7:26'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 Found 160 references for symbol 'tokenize':
 <WORKDIR>/coverage_improvement_test.mbt:72:26-72:34:
    | ///|
@@ -1442,5 +1442,5 @@ Found 160 references for symbol 'tokenize':
     |                          ^^^^^^^^
     |   let parser = Parser::Parser(tokens)
     |   let result = parser.parse_dotted_key()
-
-```
+"" (escaped)
+````

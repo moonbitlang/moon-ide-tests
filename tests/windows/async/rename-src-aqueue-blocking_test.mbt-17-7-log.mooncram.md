@@ -1,7 +1,7 @@
 # async rename log src\aqueue\blocking_test.mbt:17:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'log' 'log_renamed' --loc 'src\aqueue\blocking_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'log' 'log_renamed' --loc 'src\aqueue\blocking_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\aqueue\blocking_test.mbt
 @@
@@ -34,5 +34,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'log' 'log_rename
    ])
  }
 *** End Patch
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # json rename expect_reject src\tests\json_testsuite_n_test.mbt:9:3
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_reject' 'expect_reject_renamed' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'expect_reject' 'expect_reject_renamed' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 @@
@@ -11,7 +11,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_reject' 'e
 -fn expect_reject(name : String, input : String) -> Unit raise {
 +fn expect_reject_renamed(name : String, input : String) -> Unit raise {
    try @json.decode(input) catch {
-     @lib.ParseError(_) => () (escaped)
+"     @lib.ParseError(_) => ()" (escaped)
      _ =>
 *** Update File: <WORKDIR>/src\tests\json_testsuite_n_test.mbt
 @@
@@ -1251,5 +1251,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'expect_reject' 'e
 +  expect_reject_renamed("manual lone low surrogate", "\"\\uDD1E\"")
  }
 *** End Patch
-
-```
+"" (escaped)
+````

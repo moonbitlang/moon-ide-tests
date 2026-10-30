@@ -1,7 +1,7 @@
 # json rename Context src\lib\json.mbt:2:13
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'ContextRenamed' --loc 'src\lib\json.mbt:2:13'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Context' 'ContextRenamed' --loc 'src\lib\json.mbt:2:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\lib\json.mbt
 @@
@@ -13,7 +13,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
    skip : Int
 @@
      Some(decode) => decode
-     None => () (escaped)
+"     None => ()" (escaped)
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -22,7 +22,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
      skip: 0,
 @@
      Some(decode) => decode
-     None => () (escaped)
+"     None => ()" (escaped)
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -309,5 +309,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Context' 'Context
    len : Int,
    func_data : Checkpoint,
 *** End Patch
-
-```
+"" (escaped)
+````

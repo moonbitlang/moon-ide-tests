@@ -1,7 +1,7 @@
 # indexmap find-references Default_init_capacity src\IndexMap.mbt:2:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\indexmap' moon ide find-references 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
 Found 1 references for symbol 'Default_init_capacity':
 <WORKDIR>/src\IndexMap.mbt:27:36-27:57:
    | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)
@@ -11,5 +11,5 @@ Found 1 references for symbol 'Default_init_capacity':
    |                                    ^^^^^^^^^^^^^^^^^^^^^
    |   {
    |     core: {
-
-```
+"" (escaped)
+````

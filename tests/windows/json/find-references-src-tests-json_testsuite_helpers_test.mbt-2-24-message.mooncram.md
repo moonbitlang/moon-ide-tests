@@ -1,7 +1,7 @@
 # json find-references message src\tests\json_testsuite_helpers_test.mbt:2:24
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide find-references 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
 Found 1 references for symbol 'message':
 <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt:3:36-3:43:
   | ///|
@@ -10,5 +10,5 @@ Found 1 references for symbol 'message':
   |                                    ^^^^^^^
   | }
   | 
-
-```
+"" (escaped)
+````

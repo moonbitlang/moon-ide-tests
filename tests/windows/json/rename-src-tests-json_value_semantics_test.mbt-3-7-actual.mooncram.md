@@ -1,7 +1,7 @@
 # json rename actual src\tests\json_value_semantics_test.mbt:3:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'actual' 'actual_renamed' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'actual' 'actual_renamed' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_value_semantics_test.mbt
 @@
@@ -22,5 +22,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'actual' 'actual_r
  
  ///|
 *** End Patch
-
-```
+"" (escaped)
+````

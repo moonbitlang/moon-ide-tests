@@ -1,7 +1,7 @@
 # toml-parser find-references Parser parser.mbt:3:4
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide find-references 'Parser' --loc 'parser.mbt:3:4'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'Parser' --loc 'parser.mbt:3:4'
 Found 58 references for symbol 'Parser':
 <WORKDIR>/parser.mbt:3:4-3:10:
   | ///|
@@ -522,5 +522,5 @@ Found 58 references for symbol 'Parser':
     |                        ^^^^^^
     |   debug_inspect(parser.position, content="0")
     |   debug_inspect(parser.tokens.length(), content="3")
-
-```
+"" (escaped)
+````

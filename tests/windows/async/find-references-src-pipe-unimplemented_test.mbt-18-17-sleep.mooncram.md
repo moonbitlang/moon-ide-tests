@@ -1,7 +1,7 @@
 # async find-references sleep src\pipe\unimplemented_test.mbt:18:17
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
 Found 320 references for symbol 'sleep':
 <WORKDIR>/src\all_any_test.mbt:20:14-20:19:
    |   let start = @async.now()
@@ -742,7 +742,7 @@ Found 320 references for symbol 'sleep':
     |             log <+ "causing other error in cancellation handler\n"
 
 <WORKDIR>/src\cancellation_test.mbt:220:14-220:19:
-    |           Some(_) => () (escaped)
+"    |           Some(_) => ()" (escaped)
     |         }
     |       }
 220 |       @async.sleep(200)
@@ -1993,7 +1993,7 @@ Found 320 references for symbol 'sleep':
     |           }
 
 <WORKDIR>/src\protect_from_cancel_test.mbt:243:12-243:17:
-    |         Some(_) => () (escaped)
+"    |         Some(_) => ()" (escaped)
     |       }
     |     }
 243 |     @async.sleep(200)
@@ -2641,7 +2641,7 @@ Found 320 references for symbol 'sleep':
    |     })
 
 <WORKDIR>/src\wait_test.mbt:58:12-58:17:
-   |         Some(_) => () (escaped)
+"   |         Some(_) => ()" (escaped)
    |       }
    |     }
 58 |     @async.sleep(20)
@@ -2882,5 +2882,5 @@ Found 320 references for symbol 'sleep':
     |                                                     ^^^^^
     |         None => log.push("task cancelled")
     |         Some(_) => log.push("task finished after 2s")
-
-```
+"" (escaped)
+````

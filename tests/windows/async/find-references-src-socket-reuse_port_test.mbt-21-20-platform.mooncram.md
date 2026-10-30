@@ -1,7 +1,7 @@
 # async find-references platform src\socket\reuse_port_test.mbt:21:20
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'platform' --loc 'src\socket\reuse_port_test.mbt:21:20'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'platform' --loc 'src\socket\reuse_port_test.mbt:21:20'
 Found 42 references for symbol 'platform':
 <WORKDIR>/src\fs\access_test.mbt:45:18-45:26:
    | async test "can_execute" {
@@ -379,5 +379,5 @@ Found 42 references for symbol 'platform':
    |                                                          ^^^^^^^^
    | 
    | ///|
-
-```
+"" (escaped)
+````

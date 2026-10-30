@@ -1,7 +1,7 @@
 # sqlparser find-references pretty_print src\ast.mbt:2:24
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'pretty_print' --loc 'src\ast.mbt:2:24'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'pretty_print' --loc 'src\ast.mbt:2:24'
 Found 297 references for symbol 'pretty_print':
 <WORKDIR>/src\bigquery.mbt:73:67-73:79:
    | 
@@ -2675,5 +2675,5 @@ Found 297 references for symbol 'pretty_print':
     |                                                                    ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
-
-```
+"" (escaped)
+````

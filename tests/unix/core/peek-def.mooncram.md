@@ -1,23 +1,7 @@
 # core peek-def
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/core" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
 Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -40,10 +24,10 @@ Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    |       fixed.exact_view(start=1, end=3),
    |       ro.exact_view(start=1, end=3),
    |       view.exact_view(start=1, end=3),
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
 Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    | // limitations under the License.
    | 
@@ -66,10 +50,10 @@ Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    |       ro.exact_view(start=1, end=3),
    |       view.exact_view(start=1, end=3),
    |       mutable.exact_view(start=1, end=3),
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'self' --loc 'builtin/int64.mbt:26:21'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'self' --loc 'builtin/int64.mbt:26:21'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
@@ -92,10 +76,10 @@ Definition found at file <WORKDIR>/builtin/int64.mbt
    | ///
    | /// ```mbt check
    | /// test {
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
@@ -118,10 +102,10 @@ Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// `@int64.MIN_VALUE` (-9223372036854775808), returns `@int64.MIN_VALUE`
    | /// itself, since its absolute value is not representable as an `Int64`.
    | ///
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
 Definition found at file <WORKDIR>/builtin/string_like.mbt
    | 
    | ///|
@@ -142,10 +126,10 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
    | pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
    |   self
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
 Definition found at file <WORKDIR>/builtin/string_like.mbt
    | ///|
    | /// Trait for values that can be viewed as `StringView`.
@@ -165,10 +149,10 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
    | pub impl ToStringView for StringView with fn to_string_view(self) -> StringView {
    |   self
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
 Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -191,10 +175,10 @@ Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    |   #|   } catch (_) {
    |   #|     return [];
    |   #|   }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
 Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -217,10 +201,10 @@ Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    |   #|     return [];
    |   #|   }
    |   #| })(
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'LazyState' --loc 'lazy/lazy.mbt:24:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'LazyState' --loc 'lazy/lazy.mbt:24:11'
 Definition found at file <WORKDIR>/lazy/lazy.mbt
    | /// - `Forcing`: the thunk is currently running. Used to detect reentrant
    | ///   `force` calls on the same cell, which would otherwise re-evaluate
@@ -243,10 +227,10 @@ Definition found at file <WORKDIR>/lazy/lazy.mbt
    | /// inside the thunk — failure as data is the recommended shape; see the
    | /// rationale below.
    | ///
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Unforced' --loc 'lazy/lazy.mbt:25:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Unforced' --loc 'lazy/lazy.mbt:25:3'
 Definition found at file <WORKDIR>/lazy/lazy.mbt
    | ///   `force` calls on the same cell, which would otherwise re-evaluate
    | ///   the thunk and silently break the at-most-once guarantee.
@@ -269,10 +253,10 @@ Definition found at file <WORKDIR>/lazy/lazy.mbt
    | /// rationale below.
    | ///
    | /// ## Why force is non-raising / non-async
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -295,10 +279,10 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | 
    | ///|
    | /// Default budget for the lazy DFA cache, in machine words (table entries
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | 
    | ///|
@@ -321,10 +305,10 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | /// rebuilt on demand. Memory therefore does not grow without bound on
    | /// patterns whose DFA is huge, at the price of rebuilding states, which is
    | /// several times slower than a cached step. The budget is large enough for a
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'regex' --loc 'string/regex_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'regex' --loc 'string/regex_test.mbt:17:7'
 Definition found at file <WORKDIR>/string/regex_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -347,10 +331,10 @@ Definition found at file <WORKDIR>/string/regex_test.mbt
    | }
    | 
    | ///|
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'execute' --loc 'string/regex_test.mbt:18:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'execute' --loc 'string/regex_test.mbt:18:15'
 Definition found at file <WORKDIR>/string/regex.mbt
     | ///   let anchored = re"^ab$"
     | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
@@ -373,10 +357,10 @@ Definition found at file <WORKDIR>/string/regex.mbt
     | ///|
     | /// Wraps this regex in a named capture group.
     | ///
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Test' --loc 'test/extends.mbt:22:12'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Test' --loc 'test/extends.mbt:22:12'
 Definition found at file <WORKDIR>/test/types.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -397,10 +381,10 @@ Definition found at file <WORKDIR>/test/types.mbt
    | pub fn Test::Test(name : String) -> Test {
    |   { name, buffer: StringBuilder(), }
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'to_repr' --loc 'test/extends.mbt:22:37'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'to_repr' --loc 'test/extends.mbt:22:37'
 Definition found at file <WORKDIR>/test/extends.mbt
    | // --- deprecated: hidden from the generated interface ---
    | 
@@ -426,10 +410,10 @@ Definition found at file <WORKDIR>/test/types.mbt
    | pub fn Test::Test(name : String) -> Test {
    |   { name, buffer: StringBuilder(), }
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'Test' --loc 'test/types.mbt:16:8'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Test' --loc 'test/types.mbt:16:8'
 Definition found at file <WORKDIR>/test/types.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -450,10 +434,10 @@ Definition found at file <WORKDIR>/test/types.mbt
    | pub fn Test::Test(name : String) -> Test {
    |   { name, buffer: StringBuilder(), }
    | }
-```
+````
 
-```mooncram
-$ run_moon_ide moon ide peek-def 'name' --loc 'test/types.mbt:17:3'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'name' --loc 'test/types.mbt:17:3'
 Definition found at file <WORKDIR>/test/types.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -473,4 +457,4 @@ Definition found at file <WORKDIR>/test/types.mbt
    | pub fn Test::Test(name : String) -> Test {
    |   { name, buffer: StringBuilder(), }
    | }
-```
+````

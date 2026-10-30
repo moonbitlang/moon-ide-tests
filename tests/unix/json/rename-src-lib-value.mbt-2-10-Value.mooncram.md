@@ -1,23 +1,7 @@
 # json rename Value src/lib/value.mbt:2:10
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/json" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
 @@
@@ -27,8 +11,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
 +pub fn decode_start(input : String, decode? : &Decode) -> ValueRenamed raise {
    let decode : &Decode = match decode {
-     Some(decode) => decode (escaped)
-     None => () (escaped)
+"     Some(decode) => decode" (escaped)
+"     None => ()" (escaped)
 @@
  }
  
@@ -55,7 +39,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +fn number_zero(ctx : Context, len : Int) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     [] => { (escaped)
+"     [] => {" (escaped)
 @@
  }
  
@@ -64,7 +48,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +fn number(ctx : Context, len : Int) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -72,8 +56,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn number_frac(ctx : Context, len : Int) -> Value raise {
 +fn number_frac(ctx : Context, len : Int) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
-     _ => unexpected(ctx, len, 0, Checkpoint::Value) (escaped)
+"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
 @@
  }
  
@@ -82,7 +66,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +fn number_frac_cont(ctx : Context, len : Int) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
 @@
    ctx : Context,
    len : Int,
@@ -91,7 +75,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [] => (escaped)
+"     [] =>" (escaped)
 @@
  }
  
@@ -99,8 +83,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn number_exp(ctx : Context, len : Int) -> Value raise {
 +fn number_exp(ctx : Context, len : Int) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
-     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -108,8 +92,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn number_exp_sign(ctx : Context, len : Int) -> Value raise {
 +fn number_exp_sign(ctx : Context, len : Int) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
-     _ => unexpected(ctx, len, 0, Checkpoint::Value) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
 @@
  }
  
@@ -118,7 +102,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +fn number_exp_cont(ctx : Context, len : Int) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
+"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
 @@
  }
  
@@ -126,8 +110,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn number_minus(ctx : Context) -> Value raise {
 +fn number_minus(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
-     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2) (escaped)
-     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2) (escaped)
+"     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2)" (escaped)
+"     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2)" (escaped)
 @@
  // constants {{{
  
@@ -135,7 +119,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn true_(ctx : Context) -> Value raise {
 +fn true_(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
-     ['r', 'u', 'e', .. rest] => (escaped)
+"     ['r', 'u', 'e', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::boolean(true))
 @@
  }
@@ -144,7 +128,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn false_(ctx : Context) -> Value raise {
 +fn false_(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
-     ['a', 'l', 's', 'e', .. rest] => (escaped)
+"     ['a', 'l', 's', 'e', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 5 }, Json::boolean(false))
 @@
  }
@@ -153,7 +137,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn null(ctx : Context) -> Value raise {
 +fn null(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
-     ['u', 'l', 'l', .. rest] => (escaped)
+"     ['u', 'l', 'l', .. rest] =>" (escaped)
        continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::null())
 @@
  // string {{{
@@ -172,7 +156,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     ['"', .. rest] => { (escaped)
+"     ['\"', .. rest] => {" (escaped)
 @@
    ctx : Context,
    len : Int,
@@ -180,7 +164,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -) -> Value raise {
 +) -> ValueRenamed raise {
    match ctx.rest {
-     ['"', .. rest] => { (escaped)
+"     ['\"', .. rest] => {" (escaped)
        builder.write_char('"')
 @@
    code_unit : Int,
@@ -190,7 +174,7 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 +) -> ValueRenamed raise {
    if code_unit.is_leading_surrogate() {
      match rest {
-       ['\\\\', 'u', a, b, c, d, .. rest] => { (escaped)
+"       ['\\\\', 'u', a, b, c, d, .. rest] => {" (escaped)
 @@
  // array {{{
  
@@ -252,8 +236,8 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
 -fn continue_(ctx : Context, value : Json) -> Value raise {
 +fn continue_(ctx : Context, value : Json) -> ValueRenamed raise {
    match ctx.stack.last() {
-     None => terminate(ctx, value) (escaped)
-     Some(Frame::Array(_)) => array_push(ctx, value) (escaped)
+"     None => terminate(ctx, value)" (escaped)
+"     Some(Frame::Array(_)) => array_push(ctx, value)" (escaped)
 @@
  }
  
@@ -264,9 +248,9 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
    match rest {
      // skip whitespace
      [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
--    [] => Value::Finish({ value, arr_acc, obj_acc, rest: [][:] }) (escaped)
-+    [] => ValueRenamed::Finish({ value, arr_acc, obj_acc, rest: [][:] }) (escaped)
-     _ => { (escaped)
+"-    [] => Value::Finish({ value, arr_acc, obj_acc, rest: [][:] })" (escaped)
+"+    [] => ValueRenamed::Finish({ value, arr_acc, obj_acc, rest: [][:] })" (escaped)
+"     _ => {" (escaped)
        let rest = original[skip:]
 -      Value::Finish({ value, arr_acc, obj_acc, rest })
 +      ValueRenamed::Finish({ value, arr_acc, obj_acc, rest })
@@ -308,5 +292,5 @@ $ run_moon_ide moon ide rename 'Value' 'ValueRenamed' --loc 'src/lib/value.mbt:2
    type FinishValue,
    type ParseError,
 *** End Patch
-
-```
+"" (escaped)
+````

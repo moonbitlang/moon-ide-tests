@@ -1,23 +1,7 @@
 # async find-references with_task_group src/aqueue/blocking_test.mbt:18:10
 
-```mooncram
-$ export MOON_HOME="${MOON_HOME:-$HOME/.moon}"
-```
-
-```mooncram
-$ export TEST_REPO_ROOT="$(cd "$TESTDIR/../../../fixtures/repos/async" && pwd)"
-```
-
-```mooncram
-$ normalize_moon_ide_output() { sed -e "s|$TEST_REPO_ROOT|<WORKDIR>|g" -e "s|$MOON_HOME|<MOON_HOME>|g"; }
-```
-
-```mooncram
-$ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST_REPO_ROOT" && "$@"; echo "$?" > "$status_file" ) 2>&1 | normalize_moon_ide_output; status=$(cat "$status_file"); rm -f "$status_file"; return "$status"; }
-```
-
-```mooncram
-$ run_moon_ide moon ide find-references 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
 Found 385 references for symbol 'with_task_group':
 <WORKDIR>/examples/dead_lock/main.mbt:19:10-19:25:
    | async fn main {
@@ -3483,5 +3467,5 @@ Found 385 references for symbol 'with_task_group':
     |          ^^^^^^^^^^^^^^^
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
-
-```
+"" (escaped)
+````

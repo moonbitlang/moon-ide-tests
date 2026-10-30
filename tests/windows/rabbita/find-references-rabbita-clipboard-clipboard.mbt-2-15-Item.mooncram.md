@@ -1,7 +1,7 @@
 # rabbita find-references Item rabbita\clipboard\clipboard.mbt:2:15
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\rabbita' moon ide find-references 'Item' --loc 'rabbita\clipboard\clipboard.mbt:2:15'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'Item' --loc 'rabbita\clipboard\clipboard.mbt:2:15'
 Found 4 references for symbol 'Item':
 <WORKDIR>/rabbita\clipboard\clipboard.mbt:13:20-13:24:
    | /// 
@@ -37,5 +37,5 @@ Found 4 references for symbol 'Item':
   |                   ^^^^
   | }
   | 
-
-```
+"" (escaped)
+````

@@ -1,7 +1,7 @@
 # async find-references buf src\pipe\read_exactly_test.mbt:17:7
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'buf' --loc 'src\pipe\read_exactly_test.mbt:17:7'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'buf' --loc 'src\pipe\read_exactly_test.mbt:17:7'
 Found 2 references for symbol 'buf':
 <WORKDIR>/src\pipe\read_exactly_test.mbt:19:5-19:8:
    | async test "read_exactly" {
@@ -20,5 +20,5 @@ Found 2 references for symbol 'buf':
    |     ^^^
    |     content=(
    |       #|first message sent
-
-```
+"" (escaped)
+````

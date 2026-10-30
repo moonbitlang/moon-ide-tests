@@ -1,7 +1,7 @@
 # toml-parser rename parse additional_official_tests_test.mbt:17:11
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'parse' 'parse_renamed' --loc 'additional_official_tests_test.mbt:17:11'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'parse' 'parse_renamed' --loc 'additional_official_tests_test.mbt:17:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@
@@ -1653,5 +1653,5 @@ $ run_moon_ide '..\..\..\fixtures\repos\toml-parser' moon ide rename 'parse' 'pa
    assert_eq(value, roundtripped)
  }
 *** End Patch
-
-```
+"" (escaped)
+````

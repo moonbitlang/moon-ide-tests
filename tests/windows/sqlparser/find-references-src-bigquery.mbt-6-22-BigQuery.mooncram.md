@@ -1,7 +1,7 @@
 # sqlparser find-references BigQuery src\bigquery.mbt:6:22
 
-```mooncram
-$ run_moon_ide '..\..\..\fixtures\repos\sqlparser' moon ide find-references 'BigQuery' --loc 'src\bigquery.mbt:6:22'
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'BigQuery' --loc 'src\bigquery.mbt:6:22'
 Found 17 references for symbol 'BigQuery':
 <WORKDIR>/src\bigquery.mbt:6:22-6:30:
   | pub(all) struct BigQuery {}
@@ -155,5 +155,5 @@ Found 17 references for symbol 'BigQuery':
     |            ^^^^^^^^
     |   supports_filter_during_aggregation,
     |   parse_statement,
-
-```
+"" (escaped)
+````
