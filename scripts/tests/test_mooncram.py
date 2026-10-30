@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,6 +26,33 @@ class ExecutorTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_standalone_peek_snapshot_marks_missing_final_newline(self):
+        # Replay the committed expectation against controlled output: escaping
+        # the no-eol marker as ordinary text silently changes this assertion.
+        baseline = (ROOT / "tests/unix/core-standalone/peek-def.mooncram.md").read_text(
+            encoding="utf-8"
+        )
+        block = next(
+            block
+            for _, block in re.findall(
+                r"^(`{3,})mooncram\n(.*?)^\1[ \t]*$", baseline, re.MULTILINE | re.DOTALL
+            )
+            if "moon ide peek-def 'Int32::abs'" in block.splitlines()[0]
+        )
+        terminal_expectation = block.splitlines()[-1]
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            command = " ".join(json.dumps(str(arg)) for arg in [
+                "moonx", RUNNER, root, sys.executable, "-c",
+                "import sys;sys.stdout.write('    | }')",
+            ])
+            document = root / "committed-no-eol.md"
+            document.write_text(
+                "```mooncram\n$ " + command + "\n" + terminal_expectation + "\n```\n",
+                encoding="utf-8",
+            )
+            self.run_document(document)
+
     def test_preserves_terminal_blank_lines_and_no_eol(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -32,6 +60,7 @@ class ExecutorTests(unittest.TestCase):
             for actual, expected in [
                 ("line\n\n", 'line\n"" (escaped)'),
                 ("line", "line (no-eol)"),
+                ("quoted\tline", '"quoted\\tline" (escaped) (no-eol)'),
                 ("\n\n", '"" (escaped)\n"" (escaped)'),
             ]:
                 # Python's source literal supplies newlines without asking

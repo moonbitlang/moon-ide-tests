@@ -111,7 +111,9 @@ Regeneration retains the safe fence length chosen by `mooncram update` for each
 existing case, including longer fences around embedded Markdown.
 Mooncram 0.1.0 uses JSON strings for `(escaped)` expected lines and normalizes
 CRLF automatically. Trailing empty expected lines use `"" (escaped)` so they
-remain asserted. `update` writes expectations directly without a confirmation
+remain asserted. Combine escaped output and a missing final newline as
+`"ready> " (escaped) (no-eol)`, keeping `(no-eol)` outside the JSON string.
+`update` writes expectations directly without a confirmation
 prompt; inspect its diff before committing. Keep the selected baseline paths in
 the commands above: omitting paths recursively discovers Markdown in the current
 directory, including fixture documentation.

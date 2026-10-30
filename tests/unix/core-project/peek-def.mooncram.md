@@ -70,108 +70,108 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'filter' --loc 'core_ide_cases.mbt:13:23'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
-"    | ///   let evens = arr.filter(x => x % 2 == 0)" (escaped)
-"    | ///   debug_inspect(evens, content=\"[2, 4]\")" (escaped)
-"    | /// }" (escaped)
-"    | /// ```" (escaped)
-"    | #locals(f)" (escaped)
+    | ///   let evens = arr.filter(x => x % 2 == 0)
+    | ///   debug_inspect(evens, content="[2, 4]")
+    | /// }
+    | /// ```
+    | #locals(f)
 735 | pub fn[T] Array::filter(
-"    |                  ^^^^^^" (escaped)
-"    |   self : Array[T]," (escaped)
-"    |   f : (T) -> Bool raise?," (escaped)
-"    | ) -> Array[T] raise? {" (escaped)
-"    |   let arr = []" (escaped)
-"    |   for v in self {" (escaped)
-"    |     if f(v) {" (escaped)
-"    |       arr.push(v)" (escaped)
-"    |     }" (escaped)
-"    |   }" (escaped)
-"    |   arr" (escaped)
-"    | }" (escaped)
+    |                  ^^^^^^
+    |   self : Array[T],
+    |   f : (T) -> Bool raise?,
+    | ) -> Array[T] raise? {
+    |   [
+    |     for v in self if f(v) => v
+    |   ]
+    | }
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Tests whether the array contains no elements." (escaped)
+    | ///|
+    | /// Tests whether the array contains no elements.
+    | ///
+    | /// Parameters:
+    | ///
+    | /// * `array` : The array to check.
 ````
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'fold' --loc 'core_ide_cases.mbt:14:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | ///   @test.assert_eq(sum, 15)
-"     | /// }" (escaped)
-"     | /// ```" (escaped)
-"     | #locals(f)" (escaped)
-"     | #alias(fold_left, deprecated)" (escaped)
-1384 | pub fn[A, B] Array::fold(
-"     |                     ^^^^" (escaped)
-"     |   self : Array[A]," (escaped)
-"     |   init~ : B," (escaped)
-"     |   f : (B, A) -> B raise?," (escaped)
-"     | ) -> B raise? {" (escaped)
-"     |   for item in self; acc = init {" (escaped)
-"     |     continue f(acc, item)" (escaped)
-"     |   } nobreak {" (escaped)
-"     |     acc" (escaped)
-"     |   }" (escaped)
-"     | }" (escaped)
+     | /// }
+     | /// ```
+     | #locals(f)
+     | #alias(fold_left, deprecated)
+1380 | pub fn[A, B] Array::fold(
+     |                     ^^^^
+     |   self : Array[A],
+     |   init~ : B,
+     |   f : (B, A) -> B raise?,
+     | ) -> B raise? {
+     |   for item in self; acc = init {
+     |     continue f(acc, item)
+     |   } nobreak {
+     |     acc
+     |   }
+     | }
 "     | " (escaped)
-"     | ///|" (escaped)
-"     | /// Fold out values from an array according to certain rules in reversed turn." (escaped)
-"     | ///" (escaped)
+     | ///|
+     | /// Fold out values from an array according to certain rules in reversed turn.
+     | ///
 ````
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'StringBuilder' --loc 'core_ide_cases.mbt:19:17'
 Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
-"   |   type Json," (escaped)
-"   |   type Map," (escaped)
-"   |   type InspectError," (escaped)
-"   |   type SnapshotError," (escaped)
-"   |   type SourceLoc," (escaped)
+   |   type Json,
+   |   type Map,
+   |   type InspectError,
+   |   type SnapshotError,
+   |   type SourceLoc,
 70 |   type StringBuilder,
-"   |        ^^^^^^^^^^^^^" (escaped)
-"   | }" (escaped)
+   |        ^^^^^^^^^^^^^
+   | }
 "   | " (escaped)
-"   | ///|" (escaped)
-"   | #deprecated(\"Use !expr instead\")" (escaped)
-"   | #warnings(\"-deprecated\")" (escaped)
-"   | pub using @builtin {not}" (escaped)
-"   | " (escaped)
-"   | ///|" (escaped)
-   | pub using @debug {debug, type Repr, trait Debug, debug_inspect, repr}
-   | 
    | ///|
-   | #deprecated("Use `Repr(x)` instead")
-"   | #warnings(\"-deprecated\")" (escaped)
-   | pub using @debug {to_repr}
+   | pub using @builtin {
+   |   type Unit,
+   |   type Bool,
+   |   type Byte,
+   |   type Char,
+   |   type Int,
+   |   type Int32,
+   |   type Int64,
+   |   type UInt,
+   |   type UInt32,
+   |   type UInt16,
 Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
 "   | " (escaped)
-"   | ///|" (escaped)
-"16 | struct StringBuilder {" (escaped)
-"   |        ^^^^^^^^^^^^^" (escaped)
-"   |   mut data : FixedArray[UInt16]" (escaped)
+   | ///|
+16 | struct StringBuilder {
+   |        ^^^^^^^^^^^^^
+   |   // Only 0..<len is initialized. Returned strings have separate storage.
+   |   mut data : UninitializedArray[UInt16]
    |   mut len : Int32
-"   | }" (escaped)
+   | }
 "   | " (escaped)
-"   | ///|" (escaped)
-"   | /// Creates a new string builder with an optional initial capacity hint." (escaped)
-"   | ///" (escaped)
-"   | /// Parameters:" (escaped)
-"   | ///" (escaped)
-"   | /// * `size_hint` : An optional initial capacity hint for the internal buffer. If" (escaped)
-"   | /// less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes, " (escaped)
-"   | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example." (escaped)
-"   | ///" (escaped)
-"   | /// Returns a new `StringBuilder` instance with the specified initial capacity." (escaped)
+   | ///|
+   | /// Creates a new string builder with an optional initial capacity hint.
+   | ///
+   | /// Parameters:
+   | ///
+   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
+   | ///
 ````
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'write_string' --loc 'core_ide_cases.mbt:20:11'
 Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | pub extend String with ToStringView::{to_string_view}
-    | 
+"    | " (escaped)
     | ///|
     | pub extend StringBuilder with Logger::{
     |   write_char,
@@ -180,24 +180,24 @@ Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     |   write_substring,
     |   write_view,
     | }
-    | 
+"    | " (escaped)
     | ///|
     | pub extend StringView with Add::{add}
-    | 
+"    | " (escaped)
     | ///|
     | pub extend StringView with Compare::{compare}
-    | 
+"    | " (escaped)
     | ///|
     | pub extend StringView with Eq::{equal}
-    | 
+"    | " (escaped)
     | ///|
 Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
-    |   }
-    | }
-    | 
+    |   buffer : UninitializedArray[UInt16],
+    | ) -> FixedArray[UInt16] = "%identity"
+"    | " (escaped)
     | ///|
     | /// Writes a string to the StringBuilder.
-146 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+166 | pub impl Logger for StringBuilder with fn write_string(self, str) {
     |                                           ^^^^^^^^^^^^
     |   let str_len = str.length()
     |   if str_len == 0 {
@@ -207,10 +207,10 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
     |   if required > self.data.length() || required < self.len {
     |     self.grow(required)
     |   }
-    |   self.data.unsafe_blit_from_string(self.len, str, 0, str_len)
+    |   self.data.unsafe_blit_from_string_uninit(self.len, str, 0, str_len)
     |   self.len += str_len
     | }
-    | 
+"    | " (escaped)
     | ///|
     | /// Writes a character to the StringBuilder.
 ````
@@ -218,27 +218,27 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'length' --loc 'core_ide_cases.mbt:21:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
-"     | ///   inspect(\"🤣\".length(), content=\"2\") // Emoji uses two UTF-16 code units" (escaped)
-"     | ///   inspect(\"\".length(), content=\"0\") // Empty string" (escaped)
-"     | /// }" (escaped)
-"     | /// ```" (escaped)
-"     | #alias(charcode_length, deprecated)" (escaped)
-1828 | pub fn String::length(self : String) -> Int32 = "%string_length"
-"     |                ^^^^^^" (escaped)
+     | ///   inspect("🤣".length(), content="2") // Emoji uses two UTF-16 code units
+     | ///   inspect("".length(), content="0") // Empty string
+     | /// }
+     | /// ```
+     | #alias(charcode_length, deprecated)
+1833 | pub fn String::length(self : String) -> Int32 = "%string_length"
+     |                ^^^^^^
 "     | " (escaped)
-"     | ///|" (escaped)
-"     | /// Returns the UTF-16 code unit at the given index." (escaped)
+     | ///|
+     | /// Returns the UTF-16 code unit at the given index.
 "     | /// " (escaped)
-"     | /// This method has O(1) complexity." (escaped)
-"     | /// Panics if the index is out of bounds." (escaped)
-"     | #alias(\"_[_]\")" (escaped)
-"     | #alias(code_unit_at)" (escaped)
+     | /// This method has O(1) complexity.
+     | /// Panics if the index is out of bounds.
+     | #alias("_[_]")
+     | #alias(code_unit_at)
      | pub fn String::at(self : String, idx : Int32) -> UInt16 = "%string_get"
 "     | " (escaped)
-"     | ///|" (escaped)
-"     | /// Get string UTF-16 code unit without bounds checks." (escaped)
-"     | /// Unsafe variant of `get`." (escaped)
-"     | #internal(unsafe, \"Undefined behavior if index is out of bounds.\")" (escaped)
+     | ///|
+     | /// Get string UTF-16 code unit without bounds checks.
+     | /// Unsafe variant of `get`.
+     | #internal(unsafe, "Undefined behavior if index is out of bounds.")
 ````
 
 ````mooncram
@@ -271,25 +271,25 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'to_array' --loc 'core_ide_cases.mbt:21:35'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Collects the elements of the iterator into an array." (escaped)
-"    | /// The old iterator `self` must not be used again." (escaped)
-"    | #alias(collect)" (escaped)
-816 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
-"    |                 ^^^^^^^^" (escaped)
-"    |   let result = match self.size_hint {" (escaped)
+    | ///|
+    | /// Collects the elements of the iterator into an array.
+    | /// The old iterator `self` must not be used again.
+    | #alias(collect)
+820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+    |                 ^^^^^^^^
+    |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
-"    |     None => []" (escaped)
-"    |   }" (escaped)
-"    |   while self.next() is Some(x) {" (escaped)
-"    |     result.push(x)" (escaped)
-"    |   }" (escaped)
-"    |   result" (escaped)
-"    | }" (escaped)
+    |     None => []
+    |   }
+    |   while self.next() is Some(x) {
+    |     result.push(x)
+    |   }
+    |   result
+    | }
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Return this iterator itself." (escaped)
-"    | /// Return an iterator via `iter`." (escaped)
+    | ///|
+    | /// Return this iterator itself.
+    | /// Return an iterator via `iter`.
     | #alias(iterator, deprecated)
 ````
 
@@ -392,52 +392,52 @@ Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:43:15'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
-"    | ///" (escaped)
-"    | /// A new iterator that contains the transformed elements." (escaped)
-"    | ///" (escaped)
-"    | /// # Note" (escaped)
-"    | /// The old iterator `self` must not be used again after calling `map`." (escaped)
-367 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
-"    |                    ^^^" (escaped)
-"    |   {" (escaped)
-"    |     f: fn() {" (escaped)
-"    |       match self.next() {" (escaped)
-"    |         Some(x) => Some(f(x))" (escaped)
-"    |         None => None" (escaped)
-"    |       }" (escaped)
-"    |     }," (escaped)
-"    |     size_hint: self.size_hint," (escaped)
-"    |   }" (escaped)
-"    | }" (escaped)
+    | ///
+    | /// A new iterator that contains the transformed elements.
+    | ///
+    | /// # Note
+    | /// The old iterator `self` must not be used again after calling `map`.
+365 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+    |                    ^^^
+    |   {
+    |     f: fn() {
+    |       guard self.next() is Some(x) else { None }
+    |       Some(f(x))
+    |     },
+    |     size_hint: self.size_hint,
+    |   }
+    | }
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Transforms the elements of the iterator using a mapping function." (escaped)
-"    | ///" (escaped)
+    | ///|
+    | /// Transforms the elements of the iterator using a mapping function.
+    | ///
+    | /// # Type Parameters
+    | ///
 ````
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'to_array' --loc 'core_ide_cases.mbt:43:45'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Collects the elements of the iterator into an array." (escaped)
-"    | /// The old iterator `self` must not be used again." (escaped)
-"    | #alias(collect)" (escaped)
-816 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
-"    |                 ^^^^^^^^" (escaped)
-"    |   let result = match self.size_hint {" (escaped)
+    | ///|
+    | /// Collects the elements of the iterator into an array.
+    | /// The old iterator `self` must not be used again.
+    | #alias(collect)
+820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+    |                 ^^^^^^^^
+    |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
-"    |     None => []" (escaped)
-"    |   }" (escaped)
-"    |   while self.next() is Some(x) {" (escaped)
-"    |     result.push(x)" (escaped)
-"    |   }" (escaped)
-"    |   result" (escaped)
-"    | }" (escaped)
+    |     None => []
+    |   }
+    |   while self.next() is Some(x) {
+    |     result.push(x)
+    |   }
+    |   result
+    | }
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Return this iterator itself." (escaped)
-"    | /// Return an iterator via `iter`." (escaped)
+    | ///|
+    | /// Return this iterator itself.
+    | /// Return an iterator via `iter`.
     | #alias(iterator, deprecated)
 ````
 
@@ -600,27 +600,27 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'filter' --loc 'core_ide_cases.mbt:73:4'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
-"    | ///" (escaped)
+    | ///
     | /// A new iterator that only contains the elements for which the predicate function returns `true`.
-"    | ///" (escaped)
-"    | /// # Note" (escaped)
-"    | /// The old iterator `self` must not be used again after calling `filter`." (escaped)
-336 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
-"    |                 ^^^^^^" (escaped)
-"    |   Iter::new(fn() {" (escaped)
-"    |     while self.next() is Some(x) {" (escaped)
-"    |       if f(x) {" (escaped)
-"    |         break Some(x)" (escaped)
-"    |       }" (escaped)
-"    |     } nobreak {" (escaped)
-"    |       None" (escaped)
-"    |     }" (escaped)
-"    |   })" (escaped)
-"    | }" (escaped)
+    | ///
+    | /// # Note
+    | /// The old iterator `self` must not be used again after calling `filter`.
+334 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+    |                 ^^^^^^
+    |   Iter::new(fn() {
+    |     for x in self {
+    |       if f(x) {
+    |         break Some(x)
+    |       }
+    |     } nobreak {
+    |       None
+    |     }
+    |   })
+    | }
 "    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Transforms the elements of the iterator using a mapping function." (escaped)
-"    | ///" (escaped)
+    | ///|
+    | /// Transforms the elements of the iterator using a mapping function.
+    | ///
 ````
 
 ````mooncram

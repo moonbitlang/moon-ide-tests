@@ -100,10 +100,11 @@ package "moonbitlang/core/builtin"
 pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
-   * `size_hint` : An optional initial capacity hint for the internal buffer. If
-   less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes, 
-   not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
-   Returns a new `StringBuilder` instance with the specified initial capacity.
+   * `size_hint` : An optional initial capacity hint for the internal buffer,
+   in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   buffer. `size_hint` may be ignored on some platforms, JS for example.
+   Returns a new `StringBuilder` instance.
+   Aborts if `size_hint` is negative.
 // target is:
 
 package "moonbitlang/core/builtin"
@@ -111,10 +112,11 @@ package "moonbitlang/core/builtin"
 pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
-   * `size_hint` : An optional initial capacity hint for the internal buffer. If
-   less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes, 
-   not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
-   Returns a new `StringBuilder` instance with the specified initial capacity.
+   * `size_hint` : An optional initial capacity hint for the internal buffer,
+   in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   buffer. `size_hint` may be ignored on some platforms, JS for example.
+   Returns a new `StringBuilder` instance.
+   Aborts if `size_hint` is negative.
 ````
 
 ````mooncram
@@ -184,7 +186,7 @@ pub fn[T, U] Option::map(T?, (T) -> U raise?) -> U? raise?
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide doc Result::map
-package "moonbitlang/core/result"
+package "moonbitlang/core/builtin"
 pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
   Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged.
    # Example
