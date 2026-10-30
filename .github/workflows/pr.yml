@@ -34,6 +34,9 @@ jobs:
       - name: Test generator
         run: moon -C testgen test --target wasm
 
+      - name: Test shell-free executor
+        run: python -m unittest discover -s scripts/tests -v
+
       - name: Verify generated baselines
         run: |
           scripts/update-tests.sh
@@ -43,7 +46,7 @@ jobs:
       - name: Run Unix baselines
         run: |
           mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-          moon cram test --cram-compat "${baseline_paths[@]}"
+          moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 
   windows-baseline:
     runs-on: windows-latest
@@ -73,6 +76,10 @@ jobs:
             Start-Sleep -Seconds ($attempt * 10)
           }
 
+      - name: Test shell-free executor
+        shell: pwsh
+        run: python -m unittest discover -s scripts/tests -v
+
       - name: Verify generated Windows baselines
         shell: pwsh
         run: |
@@ -91,4 +98,4 @@ jobs:
             Write-Host "No compatible Windows fixture baselines."
             exit 0
           }
-          moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths
+          moonx moonbit-community/mooncram@0.1.0 test @baselinePaths

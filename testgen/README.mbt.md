@@ -100,5 +100,5 @@ moon -C testgen run --target wasm cmd/main -- \
   are omitted because the IDE cannot rename symbols outside the workspace.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
-- Generated Unix tests are self-contained and locate their fixture repository relative to `$TESTDIR`, so they can be run with plain `moon cram test --cram-compat tests/unix`.
-- Generated Windows tests use PowerShell syntax and should be run with `moon cram test --cram-compat --no-keep-output-crlf --shell scripts/moon-cram-powershell.cmd tests/windows`.
+- Both platforms emit `moonx ../../../scripts/run-moon-ide.mbtx <fixture-dir> moon ide ...` in four-backtick Mooncram fences. Paths are relative to the Markdown document, with no shell state or expansion. The script launches the IDE directly, merges its output streams, normalizes repository/toolchain paths, and preserves the exit code.
+- Run selected Unix or Windows paths with `moonx moonbit-community/mooncram@0.1.0 test <paths...>`. Use `check` to validate without executing, and `update` to refresh expectations. Generation preserves existing output, including JSON-escaped lines, nonzero exit codes, and the updater's fence lengths, when the command is unchanged.

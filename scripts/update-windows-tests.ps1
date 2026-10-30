@@ -116,14 +116,12 @@ if ($RefreshSnapshots) {
     exit 0
   }
 
-  & $moon `
-    cram update --replace --assume-yes --cram-compat --no-keep-output-crlf `
-    --shell (Join-Path $root "scripts\moon-cram-powershell.cmd") @baselinePaths *> $updateLog
+  moonx moonbit-community/mooncram@0.1.0 update @baselinePaths *> $updateLog
   $updateStatus = $LASTEXITCODE
 
   if ($updateStatus -ne 0) {
     Get-Content -LiteralPath $updateLog -Encoding UTF8
-    throw "moon cram update exited with status $updateStatus"
+    throw "mooncram update exited with status $updateStatus"
   }
 }
 

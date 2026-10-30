@@ -10,8 +10,9 @@ fixture set for local development.
 
 ## Repository Layout
 
-- `tests/unix/`: checked-in Moon Cram markdown baselines for Unix-like shells.
-- `tests/windows/`: checked-in Moon Cram markdown baselines for PowerShell.
+- `tests/unix/`: checked-in Mooncram baselines for Unix fixture selection.
+- `tests/windows/`: checked-in Mooncram baselines for Windows fixture selection.
+- `scripts/run-moon-ide.mbtx`: shared shell-free IDE executor and output normalizer.
 - `core_test/test_project/`: handcrafted project fixture for core-library IDE
   cases.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
@@ -45,31 +46,40 @@ Run the generator tests and compatible baselines:
 moon -C testgen test --target wasm
 scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-moon cram test --cram-compat "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
 To run one baseline while iterating:
 
 ```sh
-moon cram test --cram-compat tests/unix/core-project/doc.mooncram.md
+moonx moonbit-community/mooncram@0.1.0 test tests/unix/core-project/doc.mooncram.md
 ```
 
-On Windows, use PowerShell 7.4 or later and run the generated baselines through
-the repository's Moon Cram PowerShell adapter:
+On Windows, use PowerShell 7.4 or later to generate and select the baselines:
 
 ```powershell
 .\scripts\update-windows-tests.ps1
 $baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
 if ($baselinePaths.Count -gt 0) {
-  moon cram test --cram-compat --no-keep-output-crlf --shell scripts\moon-cram-powershell.cmd @baselinePaths
+  moonx moonbit-community/mooncram@0.1.0 test @baselinePaths
 }
 ```
+
+Cases on both platforms run through `moonx ../../../scripts/run-moon-ide.mbtx`.
+The script directly starts `moon ide` in the fixture directory, combines stdout
+and stderr, replaces repository/toolchain paths with `<WORKDIR>`/`<MOON_HOME>`,
+and returns the IDE exit code. Test cases do not invoke Bash or PowerShell.
+The executor pins `moonbitlang/async@0.22.5` and `moonbitlang/x@0.5.6`, so
+registry updates do not silently change its build dependencies.
+Paths in cases are relative to their Markdown file, without `$TESTDIR` or shell
+variable expansion. The separate directories retain platform-specific fixture
+selection and snapshots.
 
 The `find-references` and `rename` suites are generated as one
 `.mooncram.md` file per test case (for example
 `find-references-src-ast.mbt-2-24-pretty_print.mooncram.md`), because a
-monolithic suite file can grow past what Moon Cram's markdown parser
-handles — around 190 KB used to overflow its stack on Windows.
+monolithic suite file exceeded the former runner's Markdown parser limits
+(around 190 KB on Windows). The split layout is retained for reviewability.
 
 ## Updating Baselines
 
@@ -86,8 +96,8 @@ Refresh expected Moon Cram output when the `moon ide` behavior changes:
 ```sh
 scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}"
-moon cram test --cram-compat "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
 On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
@@ -95,8 +105,16 @@ regenerates compatible baselines, and refreshes only those snapshots. If no
 Windows fixture passes the check, snapshot refresh and test execution are skipped.
 Snapshots are not rewritten by compatibility postprocessors.
 
-Generated Moon Cram files use four-backtick outer fences so expected IDE output
-can safely contain Markdown examples with triple-backtick fences.
+Newly generated Mooncram files use four-backtick outer fences so expected IDE
+output can safely contain Markdown examples with triple-backtick fences.
+Regeneration retains the safe fence length chosen by `mooncram update` for each
+existing case, including longer fences around embedded Markdown.
+Mooncram 0.1.0 uses JSON strings for `(escaped)` expected lines and normalizes
+CRLF automatically. Trailing empty expected lines use `"" (escaped)` so they
+remain asserted. `update` writes expectations directly without a confirmation
+prompt; inspect its diff before committing. Keep the selected baseline paths in
+the commands above: omitting paths recursively discovers Markdown in the current
+directory, including fixture documentation.
 
 ## Updating Fixture Repositories
 
@@ -107,8 +125,8 @@ To refresh fixture submodules to the branches configured in
 scripts/update-submodules.sh
 scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-moon cram update --replace --assume-yes --cram-compat "${baseline_paths[@]}"
-moon cram test --cram-compat "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
 The Daily Test workflow runs this flow on a schedule against `main`. To refresh
@@ -135,11 +153,12 @@ and selection as Daily Test. On Unix:
 
 ```sh
 moon -C testgen test --target wasm
+python -m unittest discover -s scripts/tests -v
 scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 git add --all -- tests/unix
 git diff --cached --exit-code HEAD -- tests/unix
-moon cram test --cram-compat "${baseline_paths[@]}"
+moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
 Windows performs equivalent checks using `update-windows-tests.ps1` and

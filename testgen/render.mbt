@@ -23,30 +23,9 @@ fn append_mooncram_block(
   if annotation is Some(text) {
     append_line(sb, text)
   }
-  append_line(sb, "```mooncram")
+  append_line(sb, "````mooncram")
   append_line(sb, command)
-  append_line(sb, "```")
-}
-
-///|
-fn append_unix_header(sb : StringBuilder) -> Unit {
-  append_mooncram_block(sb, "$ export MOON_HOME=\"${MOON_HOME:-$HOME/.moon}\"")
-  append_mooncram_block(
-    sb,
-    "$ export TEST_REPO_ROOT=\"$(cd \"$TESTDIR/../../../\{current_repo_path.val}\" && pwd)\"",
-  )
-  append_mooncram_block(
-    sb, "$ normalize_moon_ide_output() { sed -e \"s|$TEST_REPO_ROOT|<WORKDIR>|g\" -e \"s|$MOON_HOME|<MOON_HOME>|g\"; }",
-  )
-  append_mooncram_block(
-    sb, "$ run_moon_ide() { status_file=\"${TMPDIR:-/tmp}/moon-ide-status.$$\"; ( cd \"$TEST_REPO_ROOT\" && \"$@\"; echo \"$?\" > \"$status_file\" ) 2>&1 | normalize_moon_ide_output; status=$(cat \"$status_file\"); rm -f \"$status_file\"; return \"$status\"; }",
-  )
-}
-
-///|
-fn powershell_single_quote(arg : String) -> String {
-  let escaped = arg.replace(old="'", new="''")
-  "'\{escaped}'"
+  append_line(sb, "````")
 }
 
 ///|
@@ -73,26 +52,13 @@ fn platform_file_path(path : String) -> String {
 }
 
 ///|
-fn append_windows_header(sb : StringBuilder) -> Unit {
-  ignore(sb)
-}
-
-///|
-fn append_fixed_header(sb : StringBuilder) -> Unit {
-  match current_platform.val {
-    TestPlatform::Unix => append_unix_header(sb)
-    TestPlatform::Windows => append_windows_header(sb)
-  }
-}
-
-///|
 fn location(test_case : TestCase) -> String {
   "\{platform_file_path(test_case.file)}:\{test_case.line}:\{test_case.col}"
 }
 
 ///|
 fn quoted_location(test_case : TestCase) -> String {
-  shell_quote(location(test_case))
+  command_quote(location(test_case))
 }
 
 ///|
@@ -134,32 +100,28 @@ fn append_case_commands(
 }
 
 ///|
-fn shell_quote(arg : String) -> String {
-  let escaped = arg.replace(old="'", new="'\\''")
-  "'\{escaped}'"
+fn command_quote(arg : String) -> String {
+  if arg.contains("'") {
+    Json(arg).stringify()
+  } else {
+    "'\{arg}'"
+  }
 }
 
 ///|
 fn test_repo_root_arg() -> String {
-  powershell_single_quote(
-    "..\\..\\..\\\{windows_repo_path(current_repo_path.val)}",
-  )
+  command_quote("../../../\{normalize_separators(current_repo_path.val)}")
 }
 
 ///|
 fn run_moon_ide_command(invocation : String) -> String {
-  match current_platform.val {
-    TestPlatform::Unix => "$ run_moon_ide \{invocation}"
-    TestPlatform::Windows =>
-      "$ run_moon_ide \{test_repo_root_arg()} \{invocation}"
-  }
+  "$ moonx '../../../scripts/run-moon-ide.mbtx' \{test_repo_root_arg()} \{invocation}"
 }
 
 ///|
 fn render_outline_file(source_files : Array[String]) -> CramFile? {
   let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, "outline")
-  append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
   let mut has_command = false
   for file in source_files {
@@ -167,7 +129,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
         sb,
         seen,
         run_moon_ide_command(
-          "moon ide outline \{shell_quote(platform_file_path(file))}",
+          "moon ide outline \{command_quote(platform_file_path(file))}",
         ),
       ) {
       has_command = true
@@ -189,7 +151,6 @@ fn render_symbol_file(
 ) -> CramFile? {
   let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, suite)
-  append_fixed_header(sb)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
   let has_command = append_case_commands(sb, seen, loc_cases, to_command, annotation=test_case => {
     if suite == "hover" {
@@ -209,7 +170,7 @@ fn render_symbol_file(
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
     run_moon_ide_command(
-      "moon ide hover \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "moon ide hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -218,7 +179,7 @@ fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
 fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
     run_moon_ide_command(
-      "moon ide peek-def \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "moon ide peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -273,7 +234,6 @@ fn render_split_symbol_files(
       current_repo_slug.val,
       "\{prefix} \{test_case.sym} \{location(test_case)}",
     )
-    append_fixed_header(sb)
     append_mooncram_block(sb, command)
     files.push(CramFile::{
       name: split_case_file_name(prefix, test_case, used),
@@ -287,7 +247,7 @@ fn render_split_symbol_files(
 fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{shell_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -308,7 +268,7 @@ fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   })
   render_split_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
-      "moon ide rename \{shell_quote(test_case.sym)} \{shell_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "moon ide rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -368,12 +328,19 @@ fn split_lines(text : String) -> Array[String] {
 
 ///|
 fn is_generated_command(line : String) -> Bool {
-  line.has_prefix("$ run_moon_ide ")
+  line.has_prefix("$ moonx '../../../scripts/run-moon-ide.mbtx' ")
 }
 
 ///|
-fn is_mooncram_fence_close(line : String) -> Bool {
-  line == "```" || line == "````"
+fn mooncram_fence(line : String) -> String? {
+  if !line.has_suffix("mooncram") {
+    return None
+  }
+  let fence = line[:line.length() - 8]
+  if fence.length() < 3 || !fence.iter().all(ch => ch == '`') {
+    return None
+  }
+  Some(fence.to_owned())
 }
 
 ///|
@@ -381,42 +348,31 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
   let lines = split_lines(existing)
   let blocks = Array(capacity=0)
   let mut i = 0
+  let mut fence = ""
   while i < lines.length() {
     let line = lines[i]
-    if is_generated_command(line) {
+    if mooncram_fence(line) is Some(opening) && fence == "" {
+      fence = opening
+      i = i + 1
+    } else if line == fence {
+      fence = ""
+      i = i + 1
+    } else if fence != "" && is_generated_command(line) {
       let command = line
       let output = Array(capacity=0)
       i = i + 1
       while i < lines.length() &&
             !lines[i].has_prefix("$ ") &&
-            !is_mooncram_fence_close(lines[i]) {
+            lines[i] != fence {
         output.push(lines[i])
         i = i + 1
       }
-      if output.length() > 0 {
-        blocks.push(ExpectedBlock::{ command, output, })
-      }
+      blocks.push(ExpectedBlock::{ command, output, fence, })
     } else {
       i = i + 1
     }
   }
   blocks
-}
-
-///|
-fn append_preserved_output(
-  sb : StringBuilder,
-  blocks : Array[ExpectedBlock],
-  command : String,
-) -> Unit {
-  for block in blocks {
-    if block.command == command {
-      for line in block.output {
-        append_line(sb, line)
-      }
-      return
-    }
-  }
 }
 
 ///|
@@ -430,11 +386,33 @@ fn preserve_expected_output(generated : String, existing : String) -> String {
     if i == lines.length() - 1 && line == "" {
       break
     }
-    append_line(sb, line)
-    if is_generated_command(line) {
-      append_preserved_output(sb, blocks, line)
+    if mooncram_fence(line) is Some(fence) &&
+      i + 1 < lines.length() &&
+      is_generated_command(lines[i + 1]) {
+      let command = lines[i + 1]
+      let mut end = i + 2
+      while end < lines.length() && lines[end] != fence {
+        end = end + 1
+      }
+      match blocks.iter().find_first(block => block.command == command) {
+        Some(block) => {
+          append_line(sb, "\{block.fence}mooncram")
+          append_line(sb, command)
+          for output in block.output {
+            append_line(sb, output)
+          }
+          append_line(sb, block.fence)
+        }
+        None =>
+          for j in i..<=end.min(lines.length() - 1) {
+            append_line(sb, lines[j])
+          }
+      }
+      i = end + 1
+    } else {
+      append_line(sb, line)
+      i = i + 1
     }
-    i = i + 1
   }
   sb.to_string()
 }
