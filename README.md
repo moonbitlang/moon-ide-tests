@@ -4,9 +4,9 @@ Regression tests for `moon ide` behavior across MoonBit core cases and selected
 community projects.
 
 The repository stores Moon Cram baselines for IDE commands such as `outline`,
-`hover`, `peek-def`, `find-references`, `rename`, and `doc`. These baselines are
-used in CI to catch changes in MoonBit IDE output and to provide a repeatable
-fixture set for local development.
+`hover`, `peek-def`, `find-references`, `rename`, `doc`, and `analyze`. These
+baselines are used in CI to catch changes in MoonBit IDE output and to provide a
+repeatable fixture set for local development.
 
 ## Repository Layout
 
@@ -15,6 +15,9 @@ fixture set for local development.
 - `scripts/run-moon-ide.mbtx`: shared shell-free IDE executor and output normalizer.
 - `core_test/test_project/`: handcrafted project fixture for core-library IDE
   cases.
+- `core_test/analyze_reexport/`: isolated public re-export usage fixture for
+  [issue #40](https://github.com/moonbitlang/moon-ide-tests/issues/40), exercised
+  by `tests/unix/core-project/analyze-reexport.mooncram.md`.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
 - `fixtures/repos/`: Git submodules for community project fixtures.
 - `testgen/`: MoonBit CLI that generates fixture baselines from source files.
