@@ -26,7 +26,7 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 -  original : Array[Char]
 +  original_renamed : Array[Char]
    rest : ArrayView[Char]
-   skip : Int
+   skip : Int32
    arr_acc : Array[Json]
 @@
    }
@@ -58,7 +58,7 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 @@
  
  ///|
- fn number_zero(ctx : Context, len : Int) -> Value raise {
+ fn number_zero(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
@@ -67,29 +67,29 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 @@
  
  ///|
- fn number(ctx : Context, len : Int) -> Value raise {
+ fn number(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1) (escaped)
+     ['0'..<='9', .. rest] => number({ ..ctx, rest, }, len + 1)
      ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1) (escaped)
 @@
  
  ///|
- fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1) (escaped)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
      ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1) (escaped)
 @@
  
  ///|
- fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1) (escaped)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
      _ => { (escaped)
 @@
      ['\\\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder) (escaped)
@@ -103,11 +103,11 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 @@
      }
      ['u', ..] => (escaped)
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 6, 0, Checkpoint::Value)
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 6, 0, Checkpoint::Value)
 -    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1) (escaped)
 +    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1) (escaped)
      [] => (escaped)
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 2, 0, Checkpoint::Value)
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 2, 0, Checkpoint::Value)
    }
 @@
            write_codepoint(ctx, ctx.skip + len, codepoint, builder)
@@ -132,9 +132,9 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
      write_codepoint(ctx, ctx.skip + len + 2, code_unit, builder)
      string_scan({ ..ctx, rest, }, len + 6, builder)
 @@
-     '0'..='9' => c.to_int() - '0'.to_int() (escaped)
-     'a'..='f' => c.to_int() - 'a'.to_int() + 10 (escaped)
-     'A'..='F' => c.to_int() - 'A'.to_int() + 10 (escaped)
+     '0'..<='9' => c.to_int() - '0'.to_int()
+     'a'..<='f' => c.to_int() - 'a'.to_int() + 10
+     'A'..<='F' => c.to_int() - 'A'.to_int() + 10
 -    _ => raise invalid_byte(ctx.original, index) (escaped)
 +    _ => raise invalid_byte(ctx.original_renamed, index) (escaped)
    }
@@ -157,9 +157,9 @@ $ run_moon_ide moon ide rename 'original' 'original_renamed' --loc 'src/lib/json
 +  let { rest, original_renamed: original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+     [' ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
 @@
-   len : Int,
+   len : Int32,
    func_data : Checkpoint,
  ) -> Value raise {
 -  let { original, arr_acc, obj_acc, skip, stack, decode, .. } = ctx

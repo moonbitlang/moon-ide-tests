@@ -233,20 +233,20 @@ Found 44 references for symbol 'Coroutine':
    | }
    | 
 
-<WORKDIR>/src/internal/coroutine/scheduler.mbt:32:31-32:40:
-   | }
+<WORKDIR>/src/internal/coroutine/scheduler.mbt:48:31-48:40:
+   | )
    | 
    | ///|
-32 | pub fn current_coroutine() -> Coroutine {
+48 | pub fn current_coroutine() -> Coroutine {
    |                               ^^^^^^^^^
    |   scheduler.curr_coro.unwrap()
    | }
 
-<WORKDIR>/src/internal/coroutine/scheduler.mbt:66:32-66:41:
+<WORKDIR>/src/internal/coroutine/scheduler.mbt:82:32-82:41:
    | }
    | 
    | ///|
-66 | pub fn all_coroutines() -> Set[Coroutine] {
+82 | pub fn all_coroutines() -> Set[Coroutine] {
    |                                ^^^^^^^^^
    |   scheduler.all_coros
    | }

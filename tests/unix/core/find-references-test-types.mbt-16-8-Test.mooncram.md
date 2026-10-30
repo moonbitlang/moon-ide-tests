@@ -28,11 +28,11 @@ Found 18 references for symbol 'Test':
     |   // Example 0: verbatim git history — diff/extends.mbt across the API
     |   // redesign (commit 25334bf6 -> current main), fetched with `git show`.
 
-<WORKDIR>/diff/diff_test.mbt:611:70-611:74:
+<WORKDIR>/diff/diff_test.mbt:607:70-607:74:
     | }
     | 
     | ///|
-611 | test "third-party HTML renderer over the public Hunk API" (t : @test.Test) {
+607 | test "third-party HTML renderer over the public Hunk API" (t : @test.Test) {
     |                                                                      ^^^^
     |   // File-based snapshot: the result is a real page at
     |   // diff/__snapshot__/hunk.html - open it in a browser.
@@ -71,74 +71,74 @@ Found 18 references for symbol 'Test':
 22 | pub extend Test with @debug.Debug::{to_repr}
    |            ^^^^
 
-<WORKDIR>/test/test.mbt:192:8-192:12:
+<WORKDIR>/test/test.mbt:231:8-231:12:
     | /// Write data to snapshot buffer, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::writeln`
-192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+231 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
     |        ^^^^
-    |   self.buffer.write_string(obj.to_string())
+    |   self.buffer <+ "\{obj}"
     | }
 
-<WORKDIR>/test/test.mbt:192:27-192:31:
+<WORKDIR>/test/test.mbt:231:27-231:31:
     | /// Write data to snapshot buffer, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::writeln`
-192 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
+231 | pub fn Test::write(self : Test, obj : &Show) -> Unit {
     |                           ^^^^
-    |   self.buffer.write_string(obj.to_string())
+    |   self.buffer <+ "\{obj}"
     | }
 
-<WORKDIR>/test/test.mbt:200:8-200:12:
+<WORKDIR>/test/test.mbt:239:8-239:12:
     | /// Write data to snapshot buffer and newline, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::write`
-200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+239 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
     |        ^^^^
     |   self.write(obj)
     |   self.buffer.write_char('\n')
 
-<WORKDIR>/test/test.mbt:200:29-200:33:
+<WORKDIR>/test/test.mbt:239:29-239:33:
     | /// Write data to snapshot buffer and newline, use `snapshot` to output.
     | /// 
     | /// See also `@test.Test::write`
-200 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
+239 | pub fn Test::writeln(self : Test, obj : &Show) -> Unit {
     |                             ^^^^
     |   self.write(obj)
     |   self.buffer.write_char('\n')
 
-<WORKDIR>/test/test.mbt:210:21-210:25:
+<WORKDIR>/test/test.mbt:249:21-249:25:
     | /// 
     | /// ```mbt check
     | /// test {
-210 | ///   let t = @test.Test("test.txt")
+249 | ///   let t = @test.Test("test.txt")
     |                     ^^^^
     | ///   t.writeln("hello")
     | ///   t.snapshot(filename="test.txt") // actual test block end
 
-<WORKDIR>/test/test.mbt:218:8-218:12:
+<WORKDIR>/test/test.mbt:257:8-257:12:
     | ///
     | /// Currently it can only be used once and should be used as the last step.
     | #callsite(autofill(args_loc, loc))
-218 | pub fn Test::snapshot(
+257 | pub fn Test::snapshot(
     |        ^^^^
     |   self : Test,
     |   filename~ : String,
 
-<WORKDIR>/test/test.mbt:219:10-219:14:
+<WORKDIR>/test/test.mbt:258:10-258:14:
     | /// Currently it can only be used once and should be used as the last step.
     | #callsite(autofill(args_loc, loc))
     | pub fn Test::snapshot(
-219 |   self : Test,
+258 |   self : Test,
     |          ^^^^
     |   filename~ : String,
     |   loc~ : SourceLoc,
 
-<WORKDIR>/test/test.mbt:238:8-238:12:
+<WORKDIR>/test/test.mbt:277:8-277:12:
     | 
     | ///|
     | /// Return the name of the test.
-238 | pub fn Test::name(self : Self) -> String {
+277 | pub fn Test::name(self : Self) -> String {
     |        ^^^^
     |   self.name
     | }

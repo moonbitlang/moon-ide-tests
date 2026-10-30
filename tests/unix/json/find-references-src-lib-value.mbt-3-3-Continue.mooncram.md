@@ -23,43 +23,43 @@ Found 9 references for symbol 'Continue':
    |   match value(ctx) { (escaped)
    |     Finish({ value, rest: [], .. }) => value (escaped)
    |     Finish({ rest, .. }) => raise invalid_byte([..rest], 0) (escaped)
-37 |     Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => (escaped)
+37 |     Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => Json(n)
    |     ^^^^^^^^ (escaped)
-   |       n.to_json() (escaped)
-   |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => (escaped)
+   |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
+   |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>
+
+<WORKDIR>/src/lib/json.mbt:38:5-38:13:
+   |     Finish({ value, rest: [], .. }) => value
+   |     Finish({ rest, .. }) => raise invalid_byte([..rest], 0)
+   |     Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => Json(n)
+38 |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
+   |     ^^^^^^^^
+   |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>
+   |       raise ParseError(UnexpectedSequence(token.to_owned(), skip))
 
 <WORKDIR>/src/lib/json.mbt:39:5-39:13:
    |     Finish({ rest, .. }) => raise invalid_byte([..rest], 0) (escaped)
-   |     Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => (escaped)
-   |       n.to_json() (escaped)
-39 |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => (escaped)
-   |     ^^^^^^^^ (escaped)
-   |       n.to_json() (escaped)
-   |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) => (escaped)
-
-<WORKDIR>/src/lib/json.mbt:41:5-41:13:
-   |       n.to_json() (escaped)
-   |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => (escaped)
-   |       n.to_json() (escaped)
-41 |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) => (escaped)
+   |     Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => Json(n)
+   |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
+39 |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>
    |     ^^^^^^^^ (escaped)
    |       raise ParseError(UnexpectedSequence(token.to_owned(), skip)) (escaped)
    |     Continue({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp)) (escaped)
 
-<WORKDIR>/src/lib/json.mbt:43:5-43:13:
-   |       n.to_json() (escaped)
+<WORKDIR>/src/lib/json.mbt:41:5-41:13:
+   |     Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
    |     Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) => (escaped)
    |       raise ParseError(UnexpectedSequence(token.to_owned(), skip)) (escaped)
-43 |     Continue({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp)) (escaped)
+41 |     Continue({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp))
    |     ^^^^^^^^ (escaped)
    |   } (escaped)
    | } (escaped)
 
-<WORKDIR>/src/lib/json.mbt:625:12-625:20:
+<WORKDIR>/src/lib/json.mbt:623:12-623:20:
     |   let original_size = original.length() (escaped)
     |   if original_size <= required_size { (escaped)
     |     let rest = original[skip:] (escaped)
-625 |     Value::Continue(ContinueValue::{ (escaped)
+623 |     Value::Continue(ContinueValue::{
     |            ^^^^^^^^ (escaped)
     |       rest, (escaped)
     |       arr_acc, (escaped)

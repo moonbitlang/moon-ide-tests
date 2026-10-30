@@ -70,11 +70,11 @@ $ run_moon_ide moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
  ///|
  /// 桶结构，包含键值对信息和链表指针
  priv struct Bucket[K, V] {
--  hash : Int // 键的哈希值（缓存以避免重复计算）
-+  hash_renamed : Int // 键的哈希值（缓存以避免重复计算）
+-  hash : Int32 // 键的哈希值（缓存以避免重复计算）
++  hash_renamed : Int32 // 键的哈希值（缓存以避免重复计算）
    key : K // 键
    mut value : V // 值
-   mut next : Int // 链表后继索引，-1表示没有后继
+   mut next : Int32 // 链表后继索引，-1表示没有后继
 *** End Patch
 
 ```

@@ -35,7 +35,7 @@ $ run_moon_ide moon ide hover 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
 const Default_init_capacity = 8
 
 ///|
-fn calc_grow_threshold(capacity : Int) -> Int {
+fn calc_grow_threshold(capacity : Int32) -> Int32 {
    ^^^^^^^^^^^^^^^^^^^
    ```moonbit
    fn calc_grow_threshold(capacity : Int) -> Int
@@ -48,7 +48,7 @@ fn calc_grow_threshold(capacity : Int) -> Int {
 $ run_moon_ide moon ide hover 'm' --loc 'src/IndexMap_test.mbt:17:7'
 ///|
 test "new" {
-  let m : @IndexMap.T[Int, Int] = @IndexMap.new()
+  let m : @IndexMap.T[Int32, Int32] = @IndexMap.new()
       ^
       ```moonbit
       @IndexMap.T[Int, Int]
@@ -61,7 +61,7 @@ test "new" {
 $ run_moon_ide moon ide hover 'T' --loc 'src/IndexMap_test.mbt:17:19'
 ///|
 test "new" {
-  let m : @IndexMap.T[Int, Int] = @IndexMap.new()
+  let m : @IndexMap.T[Int32, Int32] = @IndexMap.new()
           ^^^^^^^^^^^
           ```moonbit
           type @IndexMap.T[K, V]
@@ -84,6 +84,54 @@ test "new" {
 ```
 
 ```mooncram
+$ run_moon_ide moon ide hover 'T' --loc 'src/extends.mbt:2:12'
+///|
+pub extend T with @moonbitlang/core/quickcheck.Arbitrary::{arbitrary}
+           ^
+           ```moonbit
+           struct T[K, V] {
+             core: IndexMapCore[K, V]
+             mut size: Int
+             mut capacity: Int
+             mut growAt: Int
+             mut key_to_idx: @hashmap.HashMap[K, Int]
+           }
+           ```
+           ---
+           
+            Mutable indexed hash map, not thread safe.
+            Maintains insertion order and allows access by index.
+           
+            # Example
+           
+            let map = @IndexMap.of([(3, "three"), (8, "eight"), (1, "one")])
+            assert_eq(map.get(2), None)
+            assert_eq(map.get(3), Some("three"))
+            map.set(3, "updated")
+            assert_eq(map.get(3), Some("updated"))
+            assert_eq(map.get_at(0), (3, "updated"))  // Access by insertion order
+
+///|
+```
+
+```mooncram
+$ run_moon_ide moon ide hover 'Arbitrary' --loc 'src/extends.mbt:2:48'
+///|
+pub extend T with @moonbitlang/core/quickcheck.Arbitrary::{arbitrary}
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                  ```moonbit
+                  trait @quickcheck.Arbitrary {
+                    fn arbitrary(Int, @quickcheck/splitmix.RandomState) -> Self
+                  }
+                  ```
+                  ---
+                  
+                   Trait for types that can be randomly generated
+
+///|
+```
+
+```mooncram
 $ run_moon_ide moon ide hover 'Bucket' --loc 'src/types.mbt:17:13'
 ///|
 /// 桶结构，包含键值对信息和链表指针
@@ -101,7 +149,7 @@ priv struct Bucket[K, V] {
             ---
             
              桶结构，包含键值对信息和链表指针
-  hash : Int // 键的哈希值（缓存以避免重复计算）
+  hash : Int32 // 键的哈希值（缓存以避免重复计算）
   key : K // 键
 ```
 
@@ -110,7 +158,7 @@ $ run_moon_ide moon ide hover 'hash' --loc 'src/types.mbt:18:3'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {
-  hash : Int // 键的哈希值（缓存以避免重复计算）
+  hash : Int32 // 键的哈希值（缓存以避免重复计算）
   ^^^^
   ```moonbit
   Int

@@ -176,11 +176,13 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
                                
                                 Parameters:
                                
-                                * `size_hint` : An optional initial capacity hint for the internal buffer. If
-                                less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes, 
-                                not the size of characters. `size_hint` may be ignored on some platforms, JS for example.
+                                * `size_hint` : An optional initial capacity hint for the internal buffer,
+                                in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+                                buffer. `size_hint` may be ignored on some platforms, JS for example.
                                
-                                Returns a new `StringBuilder` instance with the specified initial capacity.
+                                Returns a new `StringBuilder` instance.
+                               
+                                Aborts if `size_hint` is negative.
   builder.write_string(text)
   (text.length(), text.split(" ").to_array(), builder.to_string())
 ```

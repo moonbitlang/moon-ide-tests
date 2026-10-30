@@ -26,56 +26,56 @@ Definition found at file <WORKDIR>/src/lib/decode.mbt
   | ///| (escaped)
 8 | pub trait Decode { (escaped)
   | ^ (escaped)
-  |   array_start(Self, JsonArray) -> JsonArray (escaped)
-  |   array_push(Self, Json, JsonArray) -> JsonArray (escaped)
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
-  |   object_start(Self, JsonObject) -> JsonObject (escaped)
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject (escaped)
-  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject) (escaped)
-  |   double(Self, ArrayView[Char]) -> Double raise (escaped)
-  |   integer(Self, ArrayView[Char]) -> Int raise (escaped)
-  |   string(Self, String) -> String (escaped)
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray { (escaped)
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   [] (escaped)
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-  | impl Decode for Unit with array_push(_self, elem, acc) { (escaped)
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
   |   [elem, ..acc] (escaped)
   | } (escaped)
   |  (escaped)
   | ///| (escaped)
-  | impl Decode for Unit with array_finish(_self, acc, old_acc) { (escaped)
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc) (escaped)
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'array_start' --loc 'src/lib/decode.mbt:9:3'
+$ run_moon_ide moon ide peek-def 'array_start' --loc 'src/lib/decode.mbt:9:6'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
-  | ///| (escaped)
-  | pub type JsonObject = Map[String, Json] (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | pub trait Decode { (escaped)
-9 |   array_start(Self, JsonArray) -> JsonArray (escaped)
-  |   ^^^^^^^^^^^ (escaped)
-  |   array_push(Self, Json, JsonArray) -> JsonArray (escaped)
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray) (escaped)
-  |   object_start(Self, JsonObject) -> JsonObject (escaped)
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject (escaped)
-  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject) (escaped)
-  |   double(Self, ArrayView[Char]) -> Double raise (escaped)
-  |   integer(Self, ArrayView[Char]) -> Int raise (escaped)
-  |   string(Self, String) -> String (escaped)
-  | } (escaped)
-  |  (escaped)
-  | ///| (escaped)
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray { (escaped)
-  |   [] (escaped)
-  | } (escaped)
+  | ///|
+  | pub type JsonObject = Map[String, Json]
+  | 
+  | ///|
+  | pub trait Decode {
+9 |   fn array_start(Self, JsonArray) -> JsonArray
+  |      ^^^^^^^^^^^
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
+  | }
+  | 
+  | ///|
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
+  |   []
+  | }
 ```
 
 ```mooncram
@@ -86,7 +86,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
   |             ^^^^^^^ (escaped)
   |   original : Array[Char] (escaped)
   |   rest : ArrayView[Char] (escaped)
-  |   skip : Int (escaped)
+  |   skip : Int32
   |   arr_acc : Array[Json] (escaped)
   |   obj_acc : Map[String, Json] (escaped)
   |   stack : Array[Frame] (escaped)
@@ -108,7 +108,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
 3 |   original : Array[Char] (escaped)
   |   ^^^^^^^^ (escaped)
   |   rest : ArrayView[Char] (escaped)
-  |   skip : Int (escaped)
+  |   skip : Int32
   |   arr_acc : Array[Json] (escaped)
   |   obj_acc : Map[String, Json] (escaped)
   |   stack : Array[Frame] (escaped)
@@ -445,7 +445,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    | }
    | 
    | ///|
-48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+46 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
    |        ^^^^^^^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
@@ -485,7 +485,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    | }
    | 
    | ///|
-66 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
+64 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
    |        ^^^^^^^^^^^^^^^
    |   let input = [..state.rest, ..cont.to_array()]
    |   let ctx = Context::{
@@ -513,29 +513,29 @@ Definition found at file <WORKDIR>/src/lib/decode.mbt
   | ///|
 8 | pub trait Decode {
   | ^
-  |   array_start(Self, JsonArray) -> JsonArray
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
-  |   object_start(Self, JsonObject) -> JsonObject
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject
-  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
-  |   double(Self, ArrayView[Char]) -> Double raise
-  |   integer(Self, ArrayView[Char]) -> Int raise
-  |   string(Self, String) -> String
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   []
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_push(_self, elem, acc) {
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
   |   [elem, ..acc]
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc)
 ```
 

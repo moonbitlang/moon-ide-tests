@@ -122,11 +122,11 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 +) -> (IoHandleRenamed, FileIdentity) {
    let path_bytes = @os_string.encode(path)
    let stat_buf = FixedArray::make(32, b'\x00')
-   let job = Job::open(
+   let job = Job::openat(
 @@
          )
        }
-       let kind = @fd_util.FileKind::unsafe_from_int(kind.to_int())
+       let kind = @fd_util.FileKind::from_int(kind.to_int())
 -      let io = IoHandle::from_fd(
 +      let io = IoHandleRenamed::from_fd(
          fd,
@@ -235,7 +235,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    offset~ : Int32,
    len~ : Int32,
 @@
- const IS_NATIVE_WINDOWS : Bool = false
+ }
  
  ///|
 -async fn IoHandle::read_console(
@@ -506,45 +506,32 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
  }
 *** Update File: <WORKDIR>/src/internal/event_loop/stdio.mbt
 @@
- fn get_stdio_handle(id : Int32) -> @fd_util.Fd = "moonbitlang/async" "stdio/get_stdio_handle"
+ #warnings("-alert_internal-result_error_return")
+ fn from_core_stdio(
+   x : @runtime_internal.StdioChannel,
+-) -> Result[IoHandle, Error] = "%identity"
++) -> Result[IoHandleRenamed, Error] = "%identity"
  
  ///|
--let stdio_handles : Map[@fd_util.Fd, IoHandle] = Map([])
-+let stdio_handles : Map[@fd_util.Fd, IoHandleRenamed] = Map([])
+ #warnings("-alert_internal")
+-pub let stdin : Result[IoHandle, Error] = from_core_stdio(
++pub let stdin : Result[IoHandleRenamed, Error] = from_core_stdio(
+   @runtime_internal.stdin,
+ )
  
  ///|
--fn setup_stdio(id : Int32, context~ : String) -> IoHandle raise {
-+fn setup_stdio(id : Int32, context~ : String) -> IoHandleRenamed raise {
-   let fd = get_stdio_handle(id)
-   if !@fd_util.fd_is_valid(fd) {
-     @os_error.check_errno(context)
-@@
- }
+ #warnings("-alert_internal")
+-pub let stdout : Result[IoHandle, Error] = from_core_stdio(
++pub let stdout : Result[IoHandleRenamed, Error] = from_core_stdio(
+   @runtime_internal.stdout,
+ )
  
  ///|
--pub let stdin : Result[IoHandle, Error] = try
-+pub let stdin : Result[IoHandleRenamed, Error] = try
-   setup_stdio(0, context="initialize `stdin`")
- catch {
-   err => Err(err)
-@@
- }
- 
- ///|
--pub let stdout : Result[IoHandle, Error] = try
-+pub let stdout : Result[IoHandleRenamed, Error] = try
-   setup_stdio(1, context="initialize `stdout`")
- catch {
-   err => Err(err)
-@@
- }
- 
- ///|
--pub let stderr : Result[IoHandle, Error] = try
-+pub let stderr : Result[IoHandleRenamed, Error] = try
-   setup_stdio(2, context="initialize `stderr`")
- catch {
-   err => Err(err)
+ #warnings("-alert_internal")
+-pub let stderr : Result[IoHandle, Error] = from_core_stdio(
++pub let stderr : Result[IoHandleRenamed, Error] = from_core_stdio(
+   @runtime_internal.stderr,
+ )
 *** Update File: <WORKDIR>/src/pipe/pipe.mbt
 @@
  ///|

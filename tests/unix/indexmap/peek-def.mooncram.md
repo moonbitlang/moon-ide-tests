@@ -24,7 +24,7 @@ Definition found at file <WORKDIR>/src/IndexMap.mbt
   |       ^^^^^^^^^^^^^^^^^^^^^ (escaped)
   |  (escaped)
   | ///| (escaped)
-  | fn calc_grow_threshold(capacity : Int) -> Int { (escaped)
+  | fn calc_grow_threshold(capacity : Int32) -> Int32 {
   |   capacity * 3 / 4 // 75% 负载因子 (escaped)
   | } (escaped)
   |  (escaped)
@@ -45,7 +45,7 @@ Definition found at file <WORKDIR>/src/IndexMap.mbt
   | const Default_init_capacity = 8 (escaped)
   |  (escaped)
   | ///| (escaped)
-5 | fn calc_grow_threshold(capacity : Int) -> Int { (escaped)
+5 | fn calc_grow_threshold(capacity : Int32) -> Int32 {
   |    ^^^^^^^^^^^^^^^^^^^ (escaped)
   |   capacity * 3 / 4 // 75% 负载因子 (escaped)
   | } (escaped)
@@ -71,7 +71,7 @@ Definition found at file <WORKDIR>/src/IndexMap_test.mbt
    |  (escaped)
    | ///| (escaped)
    | test "new" { (escaped)
-17 |   let m : @IndexMap.T[Int, Int] = @IndexMap.new() (escaped)
+17 |   let m : @IndexMap.T[Int32, Int32] = @IndexMap.new()
    |       ^ (escaped)
    |   inspect(m.capacity(), content="8") (escaped)
    |   @debug.assert_eq(m.size(), 0) (escaped)
@@ -100,11 +100,60 @@ Definition found at file <WORKDIR>/src/types.mbt
 54 | struct T[K, V] { (escaped)
    |        ^ (escaped)
    |   core : IndexMapCore[K, V] // 包含核心数据结构 (escaped)
-   |   mut size : Int // 元素数量 (escaped)
-   |   mut capacity : Int // 当前哈希表容量 (escaped)
-   |   mut growAt : Int // 扩容阈值 (escaped)
-   |   mut key_to_idx : @hashmap.HashMap[K, Int] // 键到索引的直接映射，用于O(1)查找 (escaped)
+   |   mut size : Int32 // 元素数量
+   |   mut capacity : Int32 // 当前哈希表容量
+   |   mut growAt : Int32 // 扩容阈值
+   |   mut key_to_idx : @hashmap.HashMap[K, Int32] // 键到索引的直接映射，用于O(1)查找
    | } (escaped)
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'T' --loc 'src/extends.mbt:2:12'
+Definition found at file <WORKDIR>/src/types.mbt
+   | /// assert_eq(map.get(2), None)
+   | /// assert_eq(map.get(3), Some("three"))
+   | /// map.set(3, "updated")
+   | /// assert_eq(map.get(3), Some("updated"))
+   | /// assert_eq(map.get_at(0), (3, "updated"))  // Access by insertion order
+54 | struct T[K, V] {
+   |        ^
+   |   core : IndexMapCore[K, V] // 包含核心数据结构
+   |   mut size : Int32 // 元素数量
+   |   mut capacity : Int32 // 当前哈希表容量
+   |   mut growAt : Int32 // 扩容阈值
+   |   mut key_to_idx : @hashmap.HashMap[K, Int32] // 键到索引的直接映射，用于O(1)查找
+   | }
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'Arbitrary' --loc 'src/extends.mbt:2:48'
+Definition found at file <MOON_HOME>/lib/core/quickcheck/arbitrary.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | /// Trait for types that can be randomly generated
+17 | pub(open) trait Arbitrary {
+   | ^
+   |   // `arbitrary` takes a size hint and a random number generator, and returns a
+   |   // generated value. Types whose complexity is independent of size may ignore
+   |   // the hint.
+   |   fn arbitrary(Int32, @splitmix.RandomState) -> Self
+   | }
+   | 
+   | ///|
+   | pub impl Arbitrary for Unit with fn arbitrary(_, _) {
+   |   ()
+   | }
+   | 
+   | ///|
+   | pub impl Arbitrary for Bool with fn arbitrary(_, rs) {
+   |   rs.next_double() < 0.5
+   | }
+   | 
+   | ///|
+   | pub impl Arbitrary for Byte with fn arbitrary(_, rs) {
+   |   rs.next_uint().to_byte()
 ```
 
 ```mooncram
@@ -117,20 +166,20 @@ Definition found at file <WORKDIR>/src/types.mbt
    | /// 桶结构，包含键值对信息和链表指针 (escaped)
 17 | priv struct Bucket[K, V] { (escaped)
    |             ^^^^^^ (escaped)
-   |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
+   |   hash : Int32 // 键的哈希值（缓存以避免重复计算）
    |   key : K // 键 (escaped)
    |   mut value : V // 值 (escaped)
-   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
-   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
+   |   mut next : Int32 // 链表后继索引，-1表示没有后继
+   |   mut prev : Int32 // 链表前驱索引，-1表示没有前驱
    | } (escaped)
    |  (escaped)
    | ///| (escaped)
    | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
    | priv struct IndexMapCore[K, V] { (escaped)
-   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
+   |   mut hash_to_idx : @hashmap.HashMap[Int32, Int32] // 哈希值到桶索引的映射
    |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
-   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
-   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
+   |   mut head : Int32 // 链表头节点索引，-1表示空链表
+   |   mut tail : Int32 // 链表尾节点索引，-1表示空链表
 ```
 
 ```mooncram
@@ -141,20 +190,20 @@ Definition found at file <WORKDIR>/src/types.mbt
    | ///| (escaped)
    | /// 桶结构，包含键值对信息和链表指针 (escaped)
    | priv struct Bucket[K, V] { (escaped)
-18 |   hash : Int // 键的哈希值（缓存以避免重复计算） (escaped)
+18 |   hash : Int32 // 键的哈希值（缓存以避免重复计算）
    |   ^^^^ (escaped)
    |   key : K // 键 (escaped)
    |   mut value : V // 值 (escaped)
-   |   mut next : Int // 链表后继索引，-1表示没有后继 (escaped)
-   |   mut prev : Int // 链表前驱索引，-1表示没有前驱 (escaped)
+   |   mut next : Int32 // 链表后继索引，-1表示没有后继
+   |   mut prev : Int32 // 链表前驱索引，-1表示没有前驱
    | } (escaped)
    |  (escaped)
    | ///| (escaped)
    | /// IndexMap核心结构，包含所有数据组织功能 (escaped)
    | priv struct IndexMapCore[K, V] { (escaped)
-   |   mut hash_to_idx : @hashmap.HashMap[Int, Int] // 哈希值到桶索引的映射 (escaped)
+   |   mut hash_to_idx : @hashmap.HashMap[Int32, Int32] // 哈希值到桶索引的映射
    |   mut entries : Array[Bucket[K, V]] // 数组：存储实际的键值对及其链表信息 (escaped)
-   |   mut head : Int // 链表头节点索引，-1表示空链表 (escaped)
-   |   mut tail : Int // 链表尾节点索引，-1表示空链表 (escaped)
-   |   mut position_to_idx : Array[Int] // 位置到桶索引的映射，支持O(1)的索引访问 (escaped)
+   |   mut head : Int32 // 链表头节点索引，-1表示空链表
+   |   mut tail : Int32 // 链表尾节点索引，-1表示空链表
+   |   mut position_to_idx : Array[Int32] // 位置到桶索引的映射，支持O(1)的索引访问
 ```

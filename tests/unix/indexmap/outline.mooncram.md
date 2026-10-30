@@ -20,163 +20,167 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 $ run_moon_ide moon ide outline 'src/IndexMap.mbt'
    2 |const Default_init_capacity = 8
      |...
-   5 |fn calc_grow_threshold(capacity : Int) -> Int {
+   5 |fn calc_grow_threshold(capacity : Int32) -> Int32 {
      |...
-  27 |pub fn[K, V] new(capacity? : Int = Default_init_capacity) -> T[K, V] {
+  27 |pub fn[K, V] new(capacity~ : Int32 = Default_init_capacity) -> T[K, V] {
      |...
   65 |pub fn[K : Hash + Eq, V] from_array(arr : Array[(K, V)]) -> T[K, V] {
      |...
-  97 |pub fn[K : Hash + Eq, V] T::set(self : T[K, V], key : K, value : V) -> Unit {
+  97 |#alias("_[_]=_")
+  98 |pub fn[K : Hash + Eq, V] T::set(self : T[K, V], key : K, value : V) -> Unit {
      |...
- 159 |pub fn[K : Hash + Eq, V] T::set_with_hash(
- 160 |  self : T[K, V],
- 161 |  key : K,
- 162 |  value : V,
- 163 |  hash : Int,
- 164 |) -> Unit {
+ 160 |pub fn[K : Hash + Eq, V] T::set_with_hash(
+ 161 |  self : T[K, V],
+ 162 |  key : K,
+ 163 |  value : V,
+ 164 |  hash : Int32,
+ 165 |) -> Unit {
      |...
- 236 |pub fn[K : Hash + Eq, V] T::op_set(self : T[K, V], key : K, value : V) -> Unit {
+ 234 |#alias("_[_]")
+ 235 |pub fn[K : Hash + Eq, V] T::get(self : T[K, V], key : K) -> V? {
      |...
- 255 |pub fn[K : Hash + Eq, V] T::get(self : T[K, V], key : K) -> V? {
+ 245 |pub fn[K, V] T::get_at(self : T[K, V], index : Int32) -> (K, V)? {
      |...
- 265 |pub fn[K, V] T::get_at(self : T[K, V], index : Int) -> (K, V)? {
+ 261 |fn[K : Eq, V] T::get_with_hash(self : T[K, V], key : K, hash : Int32) -> V? {
      |...
- 281 |fn[K : Eq, V] T::get_with_hash(self : T[K, V], key : K, hash : Int) -> V? {
+ 299 |pub fn[K : Hash + Eq, V] T::get_or_init(
+ 300 |  self : T[K, V],
+ 301 |  key : K,
+ 302 |  init : () -> V,
+ 303 |) -> V {
      |...
- 316 |pub fn[K : Hash + Eq, V] T::op_get(self : T[K, V], key : K) -> V? {
+ 333 |pub fn[K : Hash + Eq, V] T::get_or_default(
+ 334 |  self : T[K, V],
+ 335 |  key : K,
+ 336 |  default : V,
+ 337 |) -> V {
      |...
- 341 |pub fn[K : Hash + Eq, V] T::get_or_init(
- 342 |  self : T[K, V],
- 343 |  key : K,
- 344 |  init : () -> V,
- 345 |) -> V {
+ 359 |pub fn[K : Hash + Eq, V] T::contains(self : T[K, V], key : K) -> Bool {
      |...
- 375 |pub fn[K : Hash + Eq, V] T::get_or_default(
- 376 |  self : T[K, V],
- 377 |  key : K,
- 378 |  default : V,
- 379 |) -> V {
+ 386 |pub fn[K : Hash + Eq, V] T::remove(self : T[K, V], key : K) -> Unit {
      |...
- 401 |pub fn[K : Hash + Eq, V] T::contains(self : T[K, V], key : K) -> Bool {
+ 471 |pub fn[K : Hash + Eq, V] of(arr : FixedArray[(K, V)]) -> T[K, V] {
      |...
- 428 |pub fn[K : Hash + Eq, V] T::remove(self : T[K, V], key : K) -> Unit {
+ 481 |test "of" {
      |...
- 513 |pub fn[K : Hash + Eq, V] of(arr : FixedArray[(K, V)]) -> T[K, V] {
+ 503 |pub impl[K : @quickcheck.Arbitrary + Hash + Eq, V : @quickcheck.Arbitrary] @quickcheck.Arbitrary for T[
+ 504 |  K,
+ 505 |  V,
+ 506 |] with fn arbitrary(size, rs) {
      |...
- 523 |test "of" {
+ 516 |priv struct MyString(String) derive(Eq)
      |...
- 545 |pub impl[K : @quickcheck.Arbitrary + Hash + Eq, V : @quickcheck.Arbitrary] @quickcheck.Arbitrary for T[
- 546 |  K,
- 547 |  V,
- 548 |] with arbitrary(size, rs) {
+ 519 |impl Hash for MyString with fn hash(self) {
      |...
- 558 |priv struct MyString(String) derive(Eq)
+ 524 |impl Hash for MyString with fn hash_combine(self, hasher) {
      |...
- 561 |impl Hash for MyString with hash(self) {
+ 529 |impl Show for MyString with fn output(self, logger) {
      |...
- 566 |impl Hash for MyString with hash_combine(self, hasher) {
+ 534 |test "MyString hash_combine implementation" {
      |...
- 571 |impl Show for MyString with output(self, logger) {
+ 563 |test "arbitrary" {
      |...
- 576 |test "MyString hash_combine implementation" {
+ 580 |test "set" {
      |...
- 605 |test "arbitrary" {
+ 597 |test "remove" {
      |...
- 622 |test "set" {
+ 614 |test "remove_unexist_key" {
      |...
- 639 |test "remove" {
+ 625 |test "clear" {
      |...
- 656 |test "remove_unexist_key" {
+ 648 |test "grow" {
      |...
- 667 |test "clear" {
+ 668 |pub fn[K, V] T::size(self : T[K, V]) -> Int32 {
      |...
- 690 |test "grow" {
+ 673 |pub fn[K, V] T::capacity(self : T[K, V]) -> Int32 {
      |...
- 710 |pub fn[K, V] T::size(self : T[K, V]) -> Int {
+ 679 |pub fn[K, V] T::is_empty(self : T[K, V]) -> Bool {
      |...
- 715 |pub fn[K, V] T::capacity(self : T[K, V]) -> Int {
+ 685 |pub fn[K : Hash + Eq, V] T::contains_key(self : T[K, V], key : K) -> Bool {
      |...
- 721 |pub fn[K, V] T::is_empty(self : T[K, V]) -> Bool {
+ 691 |pub fn[K, V] T::clear(self : T[K, V]) -> Unit {
      |...
- 727 |pub fn[K : Hash + Eq, V] T::contains_key(self : T[K, V], key : K) -> Bool {
+ 707 |pub fn[K, V] T::to_array(self : T[K, V]) -> Array[(K, V)] {
      |...
- 733 |pub fn[K, V] T::clear(self : T[K, V]) -> Unit {
+ 727 |fn[K : Hash + Eq, V] T::grow(self : T[K, V]) -> Unit {
      |...
- 749 |pub fn[K, V] T::to_array(self : T[K, V]) -> Array[(K, V)] {
+ 758 |fn[K : Show, V : Show] T::debug_entries(self : T[K, V]) -> String {
      |...
- 769 |fn[K : Hash + Eq, V] T::grow(self : T[K, V]) -> Unit {
+ 791 |pub fn[K, V] T::iter(self : T[K, V]) -> Iter[(K, V)] {
      |...
- 800 |fn[K : Show, V : Show] T::debug_entries(self : T[K, V]) -> String {
+ 821 |pub fn[K, V] T::iter2(self : T[K, V]) -> Iter2[K, V] {
      |...
- 833 |pub fn[K, V] T::iter(self : T[K, V]) -> Iter[(K, V)] {
+ 861 |pub fn[K : Hash + Eq, V] from_iter(iter : Iter[(K, V)]) -> T[K, V] {
      |...
- 863 |pub fn[K, V] T::iter2(self : T[K, V]) -> Iter2[K, V] {
+ 885 |#deprecated("use `@IndexMap.from_iter` instead")
+ 886 |pub fn[K : Hash + Eq, V] T::from_iter(iter : Iter[(K, V)]) -> T[K, V] {
      |...
- 903 |pub fn[K : Hash + Eq, V] from_iter(iter : Iter[(K, V)]) -> T[K, V] {
+ 906 |pub fn[K, V] T::each(self : T[K, V], f : (K, V) -> Unit) -> Unit {
      |...
- 927 |#deprecated("use `@IndexMap.from_iter` instead")
- 928 |pub fn[K : Hash + Eq, V] T::from_iter(iter : Iter[(K, V)]) -> T[K, V] {
+ 935 |pub fn[K, V] T::eachi(self : T[K, V], f : (Int32, K, V) -> Unit) -> Unit {
      |...
- 948 |pub fn[K, V] T::each(self : T[K, V], f : (K, V) -> Unit) -> Unit {
+ 960 |pub impl[K : Show, V : Show] Show for T[K, V] with fn output(self, logger) {
      |...
- 977 |pub fn[K, V] T::eachi(self : T[K, V], f : (Int, K, V) -> Unit) -> Unit {
+ 993 |pub fn[K : Hash + Eq, V] T::index_of(self : T[K, V], key : K) -> Int32? {
      |...
-1002 |pub impl[K : Show, V : Show] Show for T[K, V] with output(self, logger) {
+1017 |pub fn[K, V] T::first(self : T[K, V]) -> (K, V)? {
      |...
-1035 |pub fn[K : Hash + Eq, V] T::index_of(self : T[K, V], key : K) -> Int? {
+1039 |pub fn[K, V] T::last(self : T[K, V]) -> (K, V)? {
      |...
-1059 |pub fn[K, V] T::first(self : T[K, V]) -> (K, V)? {
+1060 |pub fn[K, V] T::keys(self : T[K, V]) -> Array[K] {
      |...
-1081 |pub fn[K, V] T::last(self : T[K, V]) -> (K, V)? {
+1086 |pub fn[K, V] T::values(self : T[K, V]) -> Array[V] {
      |...
-1102 |pub fn[K, V] T::keys(self : T[K, V]) -> Array[K] {
+1112 |pub fn[K : Show, V : ToJson] T::to_json_string(self : T[K, V]) -> String {
      |...
-1128 |pub fn[K, V] T::values(self : T[K, V]) -> Array[V] {
+1136 |pub impl[K : Show, V : ToJson] ToJson for T[K, V] with fn to_json(self) {
      |...
-1154 |pub fn[K : Show, V : ToJson] T::to_json_string(self : T[K, V]) -> String {
+1166 |pub fn[K : Hash + Eq, V] T::pop(self : T[K, V]) -> (K, V)? {
      |...
-1178 |pub impl[K : Show, V : ToJson] ToJson for T[K, V] with to_json(self) {
+1220 |pub fn[K : Hash + Eq, V] T::shift(self : T[K, V]) -> (K, V)? {
      |...
-1208 |pub fn[K : Hash + Eq, V] T::pop(self : T[K, V]) -> (K, V)? {
+1286 |pub fn[K, V] T::get_first(self : T[K, V]) -> (K, V)? {
      |...
-1262 |pub fn[K : Hash + Eq, V] T::shift(self : T[K, V]) -> (K, V)? {
+1309 |pub fn[K, V] T::get_last(self : T[K, V]) -> (K, V)? {
      |...
-1328 |pub fn[K, V] T::get_first(self : T[K, V]) -> (K, V)? {
+1318 |pub fn[K, V] T::sort_by(
+1319 |  self : T[K, V],
+1320 |  compare : (K, V, K, V) -> Int32,
+1321 |) -> Unit {
      |...
-1351 |pub fn[K, V] T::get_last(self : T[K, V]) -> (K, V)? {
+1371 |pub fn[K, V] T::sort_by_key(self : T[K, V], compare : (K, K) -> Int32) -> Unit {
      |...
-1360 |pub fn[K, V] T::sort_by(self : T[K, V], compare : (K, V, K, V) -> Int) -> Unit {
+1376 |pub fn[K, V] T::sort_by_value(
+1377 |  self : T[K, V],
+1378 |  compare : (V, V) -> Int32,
+1379 |) -> Unit {
      |...
-1410 |pub fn[K, V] T::sort_by_key(self : T[K, V], compare : (K, K) -> Int) -> Unit {
+1384 |pub fn[K : Compare, V] T::sort(self : T[K, V]) -> Unit {
      |...
-1415 |pub fn[K, V] T::sort_by_value(self : T[K, V], compare : (V, V) -> Int) -> Unit {
+1397 |pub fn[K, V] T::reverse(self : T[K, V]) -> Unit {
      |...
-1420 |pub fn[K : Compare, V] T::sort(self : T[K, V]) -> Unit {
+1435 |pub fn[K : Hash + Eq, V] T::sorted_by(
+1436 |  self : T[K, V],
+1437 |  compare : (K, V, K, V) -> Int32,
+1438 |) -> T[K, V] {
      |...
-1433 |pub fn[K, V] T::reverse(self : T[K, V]) -> Unit {
+1462 |pub fn[K : Hash + Eq, V] T::sorted_by_key(
+1463 |  self : T[K, V],
+1464 |  compare : (K, K) -> Int32,
+1465 |) -> T[K, V] {
      |...
-1471 |pub fn[K : Hash + Eq, V] T::sorted_by(
-1472 |  self : T[K, V],
-1473 |  compare : (K, V, K, V) -> Int,
-1474 |) -> T[K, V] {
+1470 |pub fn[K : Hash + Eq, V] T::sorted_by_value(
+1471 |  self : T[K, V],
+1472 |  compare : (V, V) -> Int32,
+1473 |) -> T[K, V] {
      |...
-1498 |pub fn[K : Hash + Eq, V] T::sorted_by_key(
-1499 |  self : T[K, V],
-1500 |  compare : (K, K) -> Int,
-1501 |) -> T[K, V] {
+1478 |pub fn[K : Hash + Eq + Compare, V] T::sorted(self : T[K, V]) -> T[K, V] {
      |...
-1506 |pub fn[K : Hash + Eq, V] T::sorted_by_value(
-1507 |  self : T[K, V],
-1508 |  compare : (V, V) -> Int,
-1509 |) -> T[K, V] {
+1491 |pub fn[K : Hash + Eq, V : Compare] T::sorted_by_values(
+1492 |  self : T[K, V],
+1493 |) -> T[K, V] {
      |...
-1514 |pub fn[K : Hash + Eq + Compare, V] T::sorted(self : T[K, V]) -> T[K, V] {
-     |...
-1527 |pub fn[K : Hash + Eq, V : Compare] T::sorted_by_values(
-1528 |  self : T[K, V],
-1529 |) -> T[K, V] {
-     |...
-1542 |pub fn[K : Hash + Eq, V] T::reversed(self : T[K, V]) -> T[K, V] {
+1506 |pub fn[K : Hash + Eq, V] T::reversed(self : T[K, V]) -> T[K, V] {
      |...
 
 ```
@@ -281,70 +285,81 @@ $ run_moon_ide moon ide outline 'src/IndexMap_test.mbt'
      |...
  498 |test "sort_by" {
      |...
- 507 |test "IndexSet arbitrary" {
+ 507 |test "IndexMap arbitrary preserves unique keys and lookup values" {
      |...
- 528 |test "update_existing_key" {
+ 531 |test "update_existing_key" {
      |...
- 543 |test "first_element_head_update" {
+ 546 |test "first_element_head_update" {
      |...
- 563 |test "get_or_init_function" {
+ 566 |test "get_or_init_function" {
      |...
- 590 |test "remove_on_empty_map" {
+ 593 |test "remove_on_empty_map" {
      |...
- 605 |test "capacity_growth" {
+ 608 |test "capacity_growth" {
      |...
- 640 |test "tail_next_pointer_update" {
+ 643 |test "tail_next_pointer_update" {
      |...
- 666 |test "0 size" {
+ 669 |test "0 size" {
      |...
- 691 |test "to_json_string_function" {
+ 694 |test "to_json_string_function" {
      |...
- 714 |test "contains_key_function" {
+ 717 |test "contains_key_function" {
      |...
- 727 |test "set_update_existing_key" {
+ 730 |test "set_update_existing_key" {
      |...
- 753 |test "reverse_with_small_size" {
+ 756 |test "reverse_with_small_size" {
      |...
- 773 |struct TestKey {
+ 776 |struct TestKey {
      |...
- 779 |impl Hash for TestKey with hash_combine(self, hasher) {
+ 782 |impl Hash for TestKey with fn hash_combine(self, hasher) {
      |...
- 784 |impl Compare for TestKey with compare(self, other) {
+ 787 |impl Compare for TestKey with fn compare(self, other) {
      |...
- 797 |test "sort_with_equal_keys" {
+ 800 |test "sort_with_equal_keys" {
      |...
- 819 |test "sorted_functions_with_equal_values" {
+ 822 |test "sorted_functions_with_equal_values" {
      |...
- 866 |test "idx_to_position_default_handling" {
+ 869 |test "idx_to_position_default_handling" {
      |...
- 891 |test "remove_only_element_clears_list" {
+ 894 |test "remove_only_element_clears_list" {
      |...
- 915 |test "shift_only_element_clears_list" {
+ 918 |test "shift_only_element_clears_list" {
      |...
- 934 |test "pop_only_element_clears_list" {
+ 937 |test "pop_only_element_clears_list" {
      |...
- 953 |test "iteration_early_termination" {
+ 956 |test "iteration_early_termination" {
      |...
- 982 |test "complete_key_update_process" {
+ 985 |test "complete_key_update_process" {
      |...
-1007 |test "tail_next_pointer_complete_update" {
+1010 |test "tail_next_pointer_complete_update" {
      |...
-1032 |test "growth_from_zero_capacity" {
+1035 |test "growth_from_zero_capacity" {
      |...
-1049 |test "iter2_early_termination" {
+1052 |test "iter2_early_termination" {
      |...
-1076 |test "shift_with_missing_position_mapping" {
+1079 |test "shift_with_missing_position_mapping" {
      |...
-1106 |test "sorted_with_equal_keys" {
+1109 |test "sorted_with_equal_keys" {
      |...
-1147 |test "set_with_hash_update_existing_key" {
+1150 |test "set_with_hash_update_existing_key" {
      |...
-1169 |test "set_with_hash_update_tail_next" {
+1172 |test "set_with_hash_update_tail_next" {
      |...
-1210 |test "set_with_hash_triggers_growth" {
+1213 |test "set_with_hash_triggers_growth" {
      |...
-1250 |test "set_with_hash_growth_from_zero_capacity" {
+1253 |test "set_with_hash_growth_from_zero_capacity" {
      |...
+
+```
+
+```mooncram
+$ run_moon_ide moon ide outline 'src/extends.mbt'
+2 |pub extend T with @moonbitlang/core/quickcheck.Arbitrary::{arbitrary}
+  |...
+5 |pub extend T with Show::{to_string, output}
+  |...
+8 |pub extend T with ToJson::{to_json}
+  |...
 
 ```
 

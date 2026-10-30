@@ -173,55 +173,55 @@ Definition found at file <WORKDIR>/src/internal/event_loop/io_unix.mbt
 ```
 
 ```mooncram
-$ run_moon_ide moon ide peek-def 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
+$ run_moon_ide moon ide peek-def 'from_core_stdio' --loc 'src/internal/event_loop/stdio.mbt:17:4'
+Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
+   | // See the License for the specific language governing permissions and
+   | // limitations under the License.
+   | 
+   | ///|
+   | #warnings("-alert_internal-result_error_return")
+17 | fn from_core_stdio(
+   |    ^^^^^^^^^^^^^^^
+   |   x : @runtime_internal.StdioChannel,
+   | ) -> Result[IoHandle, Error] = "%identity"
+   | 
+   | ///|
+   | #warnings("-alert_internal")
+   | pub let stdin : Result[IoHandle, Error] = from_core_stdio(
+   |   @runtime_internal.stdin,
+   | )
+   | 
+   | ///|
+   | #warnings("-alert_internal")
+   | pub let stdout : Result[IoHandle, Error] = from_core_stdio(
+   |   @runtime_internal.stdout,
+   | )
+```
+
+```mooncram
+$ run_moon_ide moon ide peek-def 'x' --loc 'src/internal/event_loop/stdio.mbt:18:3'
 Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
    | // limitations under the License.
    | 
    | ///|
-   | #cfg(target="native")
-   | #borrow(buf)
-18 | extern "C" fn fstatx_sync(
-   |               ^^^^^^^^^^^
-   |   fd : @fd_util.Fd,
-   |   request : UInt32,
-   |   buf : FixedArray[Byte],
-   |   buf_len : Int32,
-   | ) -> Int32 = "moonbitlang_async_fstatx_sync"
+   | #warnings("-alert_internal-result_error_return")
+   | fn from_core_stdio(
+18 |   x : @runtime_internal.StdioChannel,
+   |   ^
+   | ) -> Result[IoHandle, Error] = "%identity"
    | 
    | ///|
-   | #cfg(target="native")
-   | fn kind_of_fd_sync(
-   |   fd : @fd_util.Fd,
-   |   context~ : String,
-   | ) -> @fd_util.FileKind raise {
-   |   let buf = FixedArray::make(16, b'\x00')
-   |   if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
-```
-
-```mooncram
-$ run_moon_ide moon ide peek-def 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
-Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
+   | #warnings("-alert_internal")
+   | pub let stdin : Result[IoHandle, Error] = from_core_stdio(
+   |   @runtime_internal.stdin,
+   | )
    | 
    | ///|
-   | #cfg(target="native")
-   | #borrow(buf)
-   | extern "C" fn fstatx_sync(
-19 |   fd : @fd_util.Fd,
-   |   ^^
-   |   request : UInt32,
-   |   buf : FixedArray[Byte],
-   |   buf_len : Int32,
-   | ) -> Int32 = "moonbitlang_async_fstatx_sync"
+   | #warnings("-alert_internal")
+   | pub let stdout : Result[IoHandle, Error] = from_core_stdio(
+   |   @runtime_internal.stdout,
+   | )
    | 
-   | ///|
-   | #cfg(target="native")
-   | fn kind_of_fd_sync(
-   |   fd : @fd_util.Fd,
-   |   context~ : String,
-   | ) -> @fd_util.FileKind raise {
-   |   let buf = FixedArray::make(16, b'\x00')
-   |   if fstatx_sync(fd, STAT_FILE_KIND, buf, buf.length()) < 0 {
-   |     @os_error.check_errno(context)
 ```
 
 ```mooncram

@@ -55,14 +55,32 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
        } else {
          parent
 @@
- ) -> Unit nocancel {
-   let context = "@fs.rmdir()"
-   if recursive {
--    let base = if @event_loop.platform is Windows {
-+    let base = if @event_loop.platform_renamed is Windows {
-       path.trim_end(chars="/\\")
-     } else {
-       path.trim_end(chars="/")
+   path : StringView,
+   context~ : String,
+ ) -> String raise {
+-  match @event_loop.platform {
++  match @event_loop.platform_renamed {
+     Linux | MacOS =>
+       if path is ['/', ..] {
+         raise Failure(
+@@
+       }
+   }
+   let result = StringBuilder()
+-  let sep = match @event_loop.platform {
++  let sep = match @event_loop.platform_renamed {
+     Linux | MacOS => '/'
+     Windows => '\\'
+   }
+@@
+   for i, c in path.code_units(); component_start = 0 {
+     match c {
+       '/' => ()
+-      '\\' if @event_loop.platform is Windows => ()
++      '\\' if @event_loop.platform_renamed is Windows => ()
+       _ => continue
+     }
+     check_component(path[component_start:i])
 @@
    let offset = dir.offset
    dir.offset += entry_len
@@ -110,6 +128,25 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
      return
    }
    guard! @env.current_dir() is Some(cwd)
+@@
+ // TODO: port to Wasm
+ #cfg(target="native")
+ async test "realpath keeps the extended prefix when the plain form is ambiguous" {
+-  guard @event_loop.platform is Windows else { return }
++  guard @event_loop.platform_renamed is Windows else { return }
+   let build_dir = @fs.realpath("_build")
+   // Normal paths should still have the prefix truncated for better user code compatibility.
+   // If the users' repository directory has strange components, we wish them the best luck
+*** Update File: <WORKDIR>/src/fs/relative_open_wbtest.mbt
+@@
+       context="relative open filename validation",
+     )
+   }
+-  match @event_loop.platform {
++  match @event_loop.platform_renamed {
+     Linux | MacOS => {
+       inspect(check("file"), content="file")
+       inspect(check("a/b//c/"), content="a/b/c")
 *** Update File: <WORKDIR>/src/fs/timestamp_test.mbt
 @@
    // Windows may avoid updating access time eagerly, so keep the POSIX-style
@@ -207,6 +244,15 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
  }
  
 @@
+   context~ : String,
+ ) -> Int32 {
+   @coroutine.check_cancellation()
+-  let n = if platform is Windows && handle.kind is Console {
++  let n = if platform_renamed is Windows && handle.kind is Console {
+     handle.read_console(buf, offset~, len~, context~)
+   } else if handle.is_async {
+     /// The implementation of `read_via_event_bus` is platform dependent,
+@@
    perform_job_in_worker(
      job,
      context~,
@@ -215,6 +261,15 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
    )
  }
  
+@@
+   context~ : String,
+ ) -> Int32 {
+   @coroutine.check_cancellation()
+-  let n = if platform is Windows && handle.kind is Console {
++  let n = if platform_renamed is Windows && handle.kind is Console {
+     handle.write_console(buf, offset~, len~, context~)
+   } else if handle.is_async {
+     /// The implementation of `write_via_event_bus` is platform dependent,
 @@
    guard! !handle.is_async
    let job = Job::read(handle.fd, buf, offset, len, position~)
@@ -260,6 +315,16 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
      // MacOS/BSD, use `kqueue` with `EVFILT_PROC`
      if evloop.bus.register_pid(self.pid) {
        evloop.extra.wait_pid(evloop, self.pid)
+*** Update File: <WORKDIR>/src/internal/event_loop/windows_console.mbt
+@@
+ fn WindowsConsoleBuffer::WindowsConsoleBuffer(
+   kind : @fd_util.FileKind,
+ ) -> WindowsConsoleBuffer {
+-  if kind is Console && platform is Windows {
++  if kind is Console && platform_renamed is Windows {
+     {
+       buffer: FixedArray::make(WINDOWS_CONSOLE_BUFFER_SIZE, 0),
+       unpaired_surrogate: 0,
 *** Update File: <WORKDIR>/src/process/cancellation.mbt
 @@
  pub(all) struct CancellationHandler(async (Int32) -> Unit)

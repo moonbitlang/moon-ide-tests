@@ -137,7 +137,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group <| group => {
 +  @async.with_task_group_renamed <| group => {
      group.spawn_bg(no_wait=true, () => start_echo_server(port=49001))
-     let client = @websocket.connect("ws://localhost:49001")
+     let client = @websocket.connect("ws://127.0.0.1:49001")
      defer client.close()
 *** Update File: <WORKDIR>/examples/xargs/main.mbt
 @@
@@ -997,7 +997,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let port = test_server(group, log)
-     let client = @http.Client("http://localhost:\{port}")
+     let client = @http.Client("http://127.0.0.1:\{port}")
      defer client.close()
 *** Update File: <WORKDIR>/src/http/parser_trailer_wbtest.mbt
 @@
@@ -1182,9 +1182,27 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        defer w.close()
        w
 @@
+ ///|
+ async test "close-delimited gzip" {
+   let (r, w) = @io.pipe()
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     group.spawn_bg() <| () => {
+       defer w.close()
+       w
+@@
  
  ///|
  async test "read_response parse cookie" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let (r, w) = @io.pipe()
+     group.spawn_bg() <| () => {
+       defer w.close()
+@@
+ 
+ ///|
+ async test "read_response ignores malformed Set-Cookie" {
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
      let (r, w) = @io.pipe()
@@ -1290,6 +1308,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg(no_wait=true) <| () => {
        proxy_server.run_forever() <| ((_, _, conn) => {
          conn.send_response(407, "ProxyAuthenticationRequired")
+@@
+ 
+ ///|
+ async test "proxy at an IPv6 address" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let proxy = @socket.TcpServer(@socket.Addr::parse("[::1]:0"))
+     let proxy_port = proxy.addr.port()
+     group.spawn_bg() <| () => {
 *** Update File: <WORKDIR>/src/http/request_test.mbt
 @@
  
@@ -1327,6 +1354,15 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg(no_wait=true) <| () => {
        test_server.run_forever() <| ((req, _body, conn) => {
          let accept_encoding = req.headers.get("accept-encoding")
+@@
+ ///|
+ #cfg(any(target="native", target="wasm"))
+ async test "request to an IPv6 address" {
+-  @async.with_task_group() <| group => {
++  @async.with_task_group_renamed() <| group => {
+     let server = @http.Server(@socket.Addr::parse("[::1]:0"))
+     group.spawn_bg(no_wait=true) <| () => {
+       server.run_forever() <| ((request, _, conn) => {
 *** Update File: <WORKDIR>/src/http/send_wbtest.mbt
 @@
  
@@ -1473,16 +1509,6 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        group.spawn_bg() <| () => {
          log <+ "ping\n"
          @async.pause()
-*** Update File: <WORKDIR>/src/internal/event_loop/missing_close_test.mbt
-@@
-   let log = StringBuilder()
-   @event_loop.check_fd_leak.val = false
-   @event_loop.with_event_loop() <| () => {
--    @async.with_task_group() <| root => {
-+    @async.with_task_group_renamed() <| root => {
-       let (r, w) = @pipe.pipe()
-       root.spawn_bg() <| () => {
-         let data = r.read_exactly(4) |> @utf8.decode
 *** Update File: <WORKDIR>/src/internal/event_loop/starvation_test.mbt
 @@
  ///|
@@ -1493,61 +1519,6 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
        @async.sleep(50)
        log.push("sleep completed")
-*** Update File: <WORKDIR>/src/internal/event_loop/worker_wbtest.mbt
-@@
- ///|
- async test "worker basic" {
-   let log = StringBuilder()
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
-         @async.sleep(400)
-@@
- ///|
- async test "worker multiple" {
-   let start = @async.now()
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     for _ in 0..<3 {
-       group.spawn_bg(() => perform_sleep_job(200))
-     }
-@@
- ///|
- async test "worker cancel1" {
-   let log = StringBuilder()
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<4 {
-         @async.sleep(200)
-@@
- ///|
- async test "worker cancel2" {
-   let log = StringBuilder()
--  @async.with_task_group() <| root => {
-+  @async.with_task_group_renamed() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
-         @async.sleep(400)
-@@
- test "max worker limit" {
-   let time_of_jobs = [0, 0, 0, 0]
-   with_event_loop(max_worker_count=2, () => {
--    @async.with_task_group <| group => {
-+    @async.with_task_group_renamed <| group => {
-       for i in 0..<4 {
-         group.spawn_bg() <| () => {
-           let start = @async.now()
-@@
- test "cancel queued job" {
-   let log = []
-   with_event_loop(max_worker_count=1, () => {
--    @async.with_task_group <| group => {
-+    @async.with_task_group_renamed <| group => {
-       let start = @async.now()
-       fn tick() {
-         (@async.now() - start + 50).to_int() / 200
 *** Update File: <WORKDIR>/src/io/README.mbt.md
 @@
  ```moonbit check
@@ -2312,11 +2283,11 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
    let sleep = sleep_prog.wait()
 -  @async.with_task_group() <| group => {
 +  @async.with_task_group_renamed() <| group => {
-     let child = @process.spawn(group, sleep, ["450", "-exit-code", "42"])
-     @async.sleep(300)
+     let child = @process.spawn(group, sleep, ["200", "-exit-code", "42"])
      debug_inspect(child.try_wait(), content="None")
+     @async.sleep(400)
 @@
- async test "Process:cancel" {
+ async test "Process::cancel" {
    let sleep = sleep_prog.wait()
    let mut t0 = 0L
 -  @async.with_task_group() <| group => {
@@ -2725,22 +2696,22 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
          }
 *** Update File: <WORKDIR>/src/socket/dual_stack_test.mbt
 @@
- ///|
- async test "Only_V4 server" {
+   // so that there is no collision with randomly assigned IPv6 port
+   let port = 8344
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
-     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:0"))
-     let port = server.addr.port()
+     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
      root.spawn_bg(no_wait=true) <| () => {
+       server.run_forever() <| ((conn, addr) => {
 @@
- ///|
- async test "Only_V6 server" {
+   // so that there is no collision with randomly assigned IPv4 port
+   let port = 8346
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.TcpServer(
-       @socket.Addr::parse("[::]:0"),
+       @socket.Addr::parse("[::]:\{port}"),
        dual_stack=false,
 @@
  ///|
@@ -2752,22 +2723,22 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      let port = server.addr.port()
      root.spawn_bg(no_wait=true) <| () => {
 @@
- ///|
- async test "Only_V4 UDP server" {
+   // so that there is no collision with randomly assigned IPv6 port
+   let port = 8344
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
-     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
-     let port = server.addr.port()
+     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
      root.spawn_bg(no_wait=true) <| () => {
+       defer server.close()
 @@
- ///|
- async test "Only_V6 UDP server" {
+   // so that there is no collision with randomly assigned IPv4 port
+   let port = 8346
    let log = StringBuilder()
 -  @async.with_task_group() <| root => {
 +  @async.with_task_group_renamed() <| root => {
      let server = @socket.UdpServer(
-       @socket.Addr::parse("[::]:0"),
+       @socket.Addr::parse("[::]:\{port}"),
        dual_stack=false,
 @@
  ///|
@@ -2884,14 +2855,14 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
        lock.release()
 *** Update File: <WORKDIR>/src/socket/reuse_addr_test.mbt
 @@
- ///|
- async test "reuse addr" {
-   let mut port = 0
--  @async.with_task_group() <| group => {
-+  @async.with_task_group_renamed() <| group => {
-     group.spawn_bg() <| () => {
-       for _ in 0..<2 {
-         let server = @socket.TcpServer(
+   async fn run_server(server : @socket.TcpServer) -> Unit {
+     defer server.close()
+     let port = server.addr.port()
+-    @async.with_task_group <| group => {
++    @async.with_task_group_renamed <| group => {
+       group.spawn_bg() <| () => {
+         let (conn, _) = server.accept()
+         defer conn.close()
 *** Update File: <WORKDIR>/src/socket/reuse_port_test.mbt
 @@
    let mut accepted1 = 0
@@ -3260,7 +3231,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3278,7 +3249,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3296,7 +3267,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3317,7 +3288,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3335,7 +3306,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg() <| () => {
 @@
      }
-     let ws = @websocket.connect("ws://localhost:\{port}")
+     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
      defer ws.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {
@@ -3376,7 +3347,7 @@ $ run_moon_ide moon ide rename 'with_task_group' 'with_task_group_renamed' --loc
      group.spawn_bg(no_wait=true) <| () => {
 @@
      }
-     let client = @websocket.connect("ws://localhost:\{port}")
+     let client = @websocket.connect("ws://127.0.0.1:\{port}")
      defer client.close()
 -    @async.with_task_group() <| group => {
 +    @async.with_task_group_renamed() <| group => {

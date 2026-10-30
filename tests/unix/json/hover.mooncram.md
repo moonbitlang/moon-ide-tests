@@ -36,21 +36,21 @@ pub trait Decode {
             fn string(Self, String) -> String
           }
           ```
-  array_start(Self, JsonArray) -> JsonArray
-  array_push(Self, Json, JsonArray) -> JsonArray
+  fn array_start(Self, JsonArray) -> JsonArray
+  fn array_push(Self, Json, JsonArray) -> JsonArray
 ```
 
 ```mooncram
-$ run_moon_ide moon ide hover 'array_start' --loc 'src/lib/decode.mbt:9:3'
+$ run_moon_ide moon ide hover 'array_start' --loc 'src/lib/decode.mbt:9:6'
 ///|
 pub trait Decode {
-  array_start(Self, JsonArray) -> JsonArray
-  ^^^^^^^^^^^
-  ```moonbit
-  (Self, Array[Json]) -> Array[Json]
-  ```
-  array_push(Self, Json, JsonArray) -> JsonArray
-  array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  fn array_start(Self, JsonArray) -> JsonArray
+     ^^^^^^^^^^^
+     ```moonbit
+     (Self, Array[Json]) -> Array[Json]
+     ```
+  fn array_push(Self, Json, JsonArray) -> JsonArray
+  fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
 ```
 
 ```mooncram
@@ -83,7 +83,7 @@ priv struct Context {
   Array[Char]
   ```
   rest : ArrayView[Char]
-  skip : Int
+  skip : Int32
 ```
 
 ```mooncram

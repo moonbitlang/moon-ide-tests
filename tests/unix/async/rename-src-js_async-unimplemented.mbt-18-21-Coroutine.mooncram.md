@@ -170,7 +170,7 @@ $ run_moon_ide moon ide rename 'Coroutine' 'CoroutineRenamed' --loc 'src/js_asyn
  
  ///|
 @@
- }
+ )
  
  ///|
 -pub fn current_coroutine() -> Coroutine {
