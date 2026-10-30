@@ -24,8 +24,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)
  /// inspect(map.capacity(), content="16")
  /// inspect(map.is_empty(), content="true")
--pub fn[K, V] new(capacity? : Int = Default_init_capacity) -> T[K, V] {
-+pub fn[K, V] new(capacity? : Int = Default_init_capacity) -> TRenamed[K, V] {
+-pub fn[K, V] new(capacity~ : Int32 = Default_init_capacity) -> T[K, V] {
++pub fn[K, V] new(capacity~ : Int32 = Default_init_capacity) -> TRenamed[K, V] {
    {
      core: {
        hash_to_idx: @hashmap.HashMap([], capacity~),
@@ -39,13 +39,13 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
    for i in 0..<arr.length() {
      let (key, value) = arr[i]
 @@
- 
  ///|
  /// Sets a key-value pair into the map. If the key already exists, updates its value.
+ #alias("_[_]=_")
 -pub fn[K : Hash + Eq, V] T::set(self : T[K, V], key : K, value : V) -> Unit {
 +pub fn[K : Hash + Eq, V] TRenamed::set(self : TRenamed[K, V], key : K, value : V) -> Unit {
    // 计算哈希值
-   let hash = key.hash()
+   let hash = Hash::hash(key)
  
 @@
  
@@ -57,20 +57,11 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +  self : TRenamed[K, V],
    key : K,
    value : V,
-   hash : Int,
+   hash : Int32,
 @@
- /// let map : @IndexMap.T[String, Int] = @IndexMap.new()
- /// map["key"] = 42
- /// inspect(map.get("key"), content="Some(42)")
--pub fn[K : Hash + Eq, V] T::op_set(self : T[K, V], key : K, value : V) -> Unit {
-+pub fn[K : Hash + Eq, V] TRenamed::op_set(self : TRenamed[K, V], key : K, value : V) -> Unit {
-   self.set(key, value)
- }
- 
-@@
- /// let map = @IndexMap.of([("key", 42)])
  /// inspect(map.get("key"), content="Some(42)")
  /// inspect(map.get("nonexistent"), content="None")
+ #alias("_[_]")
 -pub fn[K : Hash + Eq, V] T::get(self : T[K, V], key : K) -> V? {
 +pub fn[K : Hash + Eq, V] TRenamed::get(self : TRenamed[K, V], key : K) -> V? {
    // 直接从键到索引的映射中查找
@@ -80,8 +71,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  /// Gets the key-value pair at the given index position.
--pub fn[K, V] T::get_at(self : T[K, V], index : Int) -> (K, V)? {
-+pub fn[K, V] TRenamed::get_at(self : TRenamed[K, V], index : Int) -> (K, V)? {
+-pub fn[K, V] T::get_at(self : T[K, V], index : Int32) -> (K, V)? {
++pub fn[K, V] TRenamed::get_at(self : TRenamed[K, V], index : Int32) -> (K, V)? {
    if index < 0 || index >= self.size {
      return None
    }
@@ -89,20 +80,11 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  }
  
  ///|
--fn[K : Eq, V] T::get_with_hash(self : T[K, V], key : K, hash : Int) -> V? {
-+fn[K : Eq, V] TRenamed::get_with_hash(self : TRenamed[K, V], key : K, hash : Int) -> V? {
+-fn[K : Eq, V] T::get_with_hash(self : T[K, V], key : K, hash : Int32) -> V? {
++fn[K : Eq, V] TRenamed::get_with_hash(self : TRenamed[K, V], key : K, hash : Int32) -> V? {
    // 首先检查哈希值是否在 hash_to_idx 中
    match self.core.hash_to_idx.get(hash) {
      Some(idx) => { (escaped)
-@@
- /// let map = @IndexMap.of([("key", 42)])
- /// inspect(map["key"], content="Some(42)")
- /// inspect(map["nonexistent"], content="None")
--pub fn[K : Hash + Eq, V] T::op_get(self : T[K, V], key : K) -> V? {
-+pub fn[K : Hash + Eq, V] TRenamed::op_get(self : TRenamed[K, V], key : K) -> V? {
-   self.get(key)
- }
- 
 @@
  /// let value = map.get_or_init("key", fn() { 42 })
  /// inspect(value, content="42")
@@ -160,13 +142,13 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub impl[K : @quickcheck.Arbitrary + Hash + Eq, V : @quickcheck.Arbitrary] @quickcheck.Arbitrary for TRenamed[
    K,
    V,
- ] with arbitrary(size, rs) {
+ ] with fn arbitrary(size, rs) {
 @@
  
  ///|
  test "set" {
--  let m : T[MyString, Int] = new()
-+  let m : TRenamed[MyString, Int] = new()
+-  let m : T[MyString, Int32] = new()
++  let m : TRenamed[MyString, Int32] = new()
    m.set("a", 1)
    m.set("b", 1)
    m.set("bc", 2)
@@ -174,8 +156,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "remove" {
--  let m : T[MyString, Int] = new()
-+  let m : TRenamed[MyString, Int] = new()
+-  let m : T[MyString, Int32] = new()
++  let m : TRenamed[MyString, Int32] = new()
    m.set("a", 1)
    m.set("ab", 2)
    m.set("bc", 2)
@@ -183,8 +165,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "remove_unexist_key" {
--  let m : T[MyString, Int] = new()
-+  let m : TRenamed[MyString, Int] = new()
+-  let m : T[MyString, Int32] = new()
++  let m : TRenamed[MyString, Int32] = new()
    m.set("a", 1)
    m.set("ab", 2)
    m.set("abc", 3)
@@ -192,8 +174,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "clear" {
--  let m : T[MyString, Int] = of([("a", 1), ("b", 2), ("c", 3)])
-+  let m : TRenamed[MyString, Int] = of([("a", 1), ("b", 2), ("c", 3)])
+-  let m : T[MyString, Int32] = of([("a", 1), ("b", 2), ("c", 3)])
++  let m : TRenamed[MyString, Int32] = of([("a", 1), ("b", 2), ("c", 3)])
    println(m.capacity())
    let old_capacity = m.capacity()
    m.clear()
@@ -201,8 +183,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "grow" {
--  let m : T[MyString, Int] = new()
-+  let m : TRenamed[MyString, Int] = new()
+-  let m : T[MyString, Int32] = new()
++  let m : TRenamed[MyString, Int32] = new()
    m.set("C", 1)
    m.set("Go", 2)
    m.set("C++", 3)
@@ -210,14 +192,14 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  /// Returns the number of key-value pairs in the map.
--pub fn[K, V] T::size(self : T[K, V]) -> Int {
-+pub fn[K, V] TRenamed::size(self : TRenamed[K, V]) -> Int {
+-pub fn[K, V] T::size(self : T[K, V]) -> Int32 {
++pub fn[K, V] TRenamed::size(self : TRenamed[K, V]) -> Int32 {
    self.size
  }
  
  ///|
--pub fn[K, V] T::capacity(self : T[K, V]) -> Int {
-+pub fn[K, V] TRenamed::capacity(self : TRenamed[K, V]) -> Int {
+-pub fn[K, V] T::capacity(self : T[K, V]) -> Int32 {
++pub fn[K, V] TRenamed::capacity(self : TRenamed[K, V]) -> Int32 {
    self.capacity
  }
  
@@ -318,8 +300,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  /// map.eachi(fn(i, k, _) { if k == "b" { result = i } })
  /// // "b" is at index 1
  /// inspect(result, content="1")
--pub fn[K, V] T::eachi(self : T[K, V], f : (Int, K, V) -> Unit) -> Unit {
-+pub fn[K, V] TRenamed::eachi(self : TRenamed[K, V], f : (Int, K, V) -> Unit) -> Unit {
+-pub fn[K, V] T::eachi(self : T[K, V], f : (Int32, K, V) -> Unit) -> Unit {
++pub fn[K, V] TRenamed::eachi(self : TRenamed[K, V], f : (Int32, K, V) -> Unit) -> Unit {
    let mut current = self.core.head
    let mut idx = 0
    while current != -1 {
@@ -327,8 +309,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  /// inspect(map, content=
  /// #|IndexMap::of([(1, "one"), (2, "two")])
  /// )
--pub impl[K : Show, V : Show] Show for T[K, V] with output(self, logger) {
-+pub impl[K : Show, V : Show] Show for TRenamed[K, V] with output(self, logger) {
+-pub impl[K : Show, V : Show] Show for T[K, V] with fn output(self, logger) {
++pub impl[K : Show, V : Show] Show for TRenamed[K, V] with fn output(self, logger) {
    logger.write_string("IndexMap::of([")
    self.eachi(fn(i, k, v) {
      if i > 0 {
@@ -336,8 +318,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  /// inspect(map.index_of("a"), content="Some(0)")
  /// inspect(map.index_of("b"), content="Some(1)")
  /// inspect(map.index_of("d"), content="None")
--pub fn[K : Hash + Eq, V] T::index_of(self : T[K, V], key : K) -> Int? {
-+pub fn[K : Hash + Eq, V] TRenamed::index_of(self : TRenamed[K, V], key : K) -> Int? {
+-pub fn[K : Hash + Eq, V] T::index_of(self : T[K, V], key : K) -> Int32? {
++pub fn[K : Hash + Eq, V] TRenamed::index_of(self : TRenamed[K, V], key : K) -> Int32? {
    // 先检查键是否存在
    match self.key_to_idx.get(key) {
      Some(bucket_idx) => (escaped)
@@ -390,8 +372,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  /// Standard ToJson implementation (may not preserve order)
--pub impl[K : Show, V : ToJson] ToJson for T[K, V] with to_json(self) {
-+pub impl[K : Show, V : ToJson] ToJson for TRenamed[K, V] with to_json(self) {
+-pub impl[K : Show, V : ToJson] ToJson for T[K, V] with fn to_json(self) {
++pub impl[K : Show, V : ToJson] ToJson for TRenamed[K, V] with fn to_json(self) {
    // 使用普通Map
    let object = Map([], capacity=self.size)
  
@@ -435,24 +417,31 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  }
  
  ///|
--pub fn[K, V] T::sort_by(self : T[K, V], compare : (K, V, K, V) -> Int) -> Unit {
-+pub fn[K, V] TRenamed::sort_by(self : TRenamed[K, V], compare : (K, V, K, V) -> Int) -> Unit {
+-pub fn[K, V] T::sort_by(
++pub fn[K, V] TRenamed::sort_by(
+-  self : T[K, V],
++  self : TRenamed[K, V],
+   compare : (K, V, K, V) -> Int32,
+ ) -> Unit {
    if self.size <= 1 {
-     return // 不需要排序
-   }
 @@
  }
  
  ///|
--pub fn[K, V] T::sort_by_key(self : T[K, V], compare : (K, K) -> Int) -> Unit {
-+pub fn[K, V] TRenamed::sort_by_key(self : TRenamed[K, V], compare : (K, K) -> Int) -> Unit {
+-pub fn[K, V] T::sort_by_key(self : T[K, V], compare : (K, K) -> Int32) -> Unit {
++pub fn[K, V] TRenamed::sort_by_key(self : TRenamed[K, V], compare : (K, K) -> Int32) -> Unit {
    self.sort_by(fn(k1, _, k2, _) { compare(k1, k2) })
  }
  
  ///|
--pub fn[K, V] T::sort_by_value(self : T[K, V], compare : (V, V) -> Int) -> Unit {
-+pub fn[K, V] TRenamed::sort_by_value(self : TRenamed[K, V], compare : (V, V) -> Int) -> Unit {
+-pub fn[K, V] T::sort_by_value(
++pub fn[K, V] TRenamed::sort_by_value(
+-  self : T[K, V],
++  self : TRenamed[K, V],
+   compare : (V, V) -> Int32,
+ ) -> Unit {
    self.sort_by(fn(_, v1, _, v2) { compare(v1, v2) })
+@@
  }
  
  ///|
@@ -478,7 +467,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub fn[K : Hash + Eq, V] TRenamed::sorted_by(
 -  self : T[K, V],
 +  self : TRenamed[K, V],
-   compare : (K, V, K, V) -> Int,
+   compare : (K, V, K, V) -> Int32,
 -) -> T[K, V] {
 +) -> TRenamed[K, V] {
    // 创建新映射
@@ -492,7 +481,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub fn[K : Hash + Eq, V] TRenamed::sorted_by_key(
 -  self : T[K, V],
 +  self : TRenamed[K, V],
-   compare : (K, K) -> Int,
+   compare : (K, K) -> Int32,
 -) -> T[K, V] {
 +) -> TRenamed[K, V] {
    self.sorted_by(fn(k1, _, k2, _) { compare(k1, k2) })
@@ -503,7 +492,7 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 +pub fn[K : Hash + Eq, V] TRenamed::sorted_by_value(
 -  self : T[K, V],
 +  self : TRenamed[K, V],
-   compare : (V, V) -> Int,
+   compare : (V, V) -> Int32,
 -) -> T[K, V] {
 +) -> TRenamed[K, V] {
    self.sorted_by(fn(_, v1, _, v2) { compare(v1, v2) })
@@ -542,8 +531,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "new" {
--  let m : @IndexMap.T[Int, Int] = @IndexMap.new()
-+  let m : @IndexMap.TRenamed[Int, Int] = @IndexMap.new()
+-  let m : @IndexMap.T[Int32, Int32] = @IndexMap.new()
++  let m : @IndexMap.TRenamed[Int32, Int32] = @IndexMap.new()
    inspect(m.capacity(), content="8")
    @debug.assert_eq(m.size(), 0)
  }
@@ -551,15 +540,15 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  
  ///|
  test "from_iter empty iter" {
--  let map : @IndexMap.T[Int, Int] = @IndexMap.from_iter(Iter::empty())
-+  let map : @IndexMap.TRenamed[Int, Int] = @IndexMap.from_iter(Iter::empty())
+-  let map : @IndexMap.T[Int32, Int32] = @IndexMap.from_iter(Iter::empty())
++  let map : @IndexMap.TRenamed[Int32, Int32] = @IndexMap.from_iter(Iter::empty())
    inspect(map, content="IndexMap::of([])")
  }
  
  ///|
  test "@IndexMap.contains/empty" {
--  let map : @IndexMap.T[Int, String] = @IndexMap.new()
-+  let map : @IndexMap.TRenamed[Int, String] = @IndexMap.new()
+-  let map : @IndexMap.T[Int32, String] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[Int32, String] = @IndexMap.new()
    inspect(map.contains(42), content="false")
  }
  
@@ -567,20 +556,83 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
    @debug.debug_inspect(map.get_at(4), content="None")
  
    // 测试空映射
--  let empty_map : @IndexMap.T[String, Int] = @IndexMap.new()
-+  let empty_map : @IndexMap.TRenamed[String, Int] = @IndexMap.new()
+-  let empty_map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let empty_map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
    @debug.debug_inspect(empty_map.get_at(0), content="None")
  
    // 测试修改元素后的索引访问
 @@
  
  ///|
- test "IndexSet arbitrary" {
--  let samples : Array[@IndexMap.T[Int, Int]] = @quickcheck.samples(20)
-+  let samples : Array[@IndexMap.TRenamed[Int, Int]] = @quickcheck.samples(20)
-   let sample_arrays_5_10 = []
-   for sample in samples[5:10] {
-     sample_arrays_5_10.push(sample.to_array())
+ test "IndexMap arbitrary preserves unique keys and lookup values" {
+-  let samples : Array[@IndexMap.T[Int32, Int32]] = @quickcheck.samples(100)
++  let samples : Array[@IndexMap.TRenamed[Int32, Int32]] = @quickcheck.samples(100)
+   assert_eq(samples.length(), 100)
+   let mut nonempty = false
+   for sample in samples {
+@@
+ ///|
+ /// 测试键值更新功能
+ test "update_existing_key" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+ 
+   // 首次插入键值对
+   map.set("key1", 100)
+@@
+ ///|
+ /// 测试首次插入元素更新头节点
+ test "first_element_head_update" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+ 
+   // 确认初始状态
+   @debug.assert_eq(map.size(), 0)
+@@
+ ///|
+ /// 测试get_or_init函数
+ test "get_or_init_function" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+ 
+   // 记录init函数调用次数
+   let mut init_calls = 0
+@@
+ ///|
+ /// 测试空映射上的remove操作
+ test "remove_on_empty_map" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+ 
+   // 确认映射为空
+   @debug.assert_eq(map.size(), 0)
+@@
+ /// 测试触发扩容
+ test "capacity_growth" {
+   // 创建一个较小容量的映射
+-  let map : @IndexMap.T[Int32, String] = @IndexMap.new(capacity=4)
++  let map : @IndexMap.TRenamed[Int32, String] = @IndexMap.new(capacity=4)
+ 
+   // 记录初始容量
+   let initial_capacity = map.capacity()
+@@
+ ///|
+ /// 测试尾节点的后继更新
+ test "tail_next_pointer_update" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+ 
+   // 添加第一个元素
+   map.set("first", 1)
+@@
+ 
+ ///|
+ test "0 size" {
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new()
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new()
+   @debug.assert_eq(map.values(), [])
+   @debug.assert_eq(map.keys(), [])
+   @debug.assert_eq(map.to_array(), [])
 @@
  /// 测试reverse函数处理size <= 1的情况
  test "reverse_with_small_size" {
@@ -594,11 +646,24 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
  /// 测试容量为0情况下的自动扩容
  test "growth_from_zero_capacity" {
    // 创建特殊情况：容量为0的映射
--  let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=0)
-+  let map : @IndexMap.TRenamed[String, Int] = @IndexMap.new(capacity=0)
+-  let map : @IndexMap.T[String, Int32] = @IndexMap.new(capacity=0)
++  let map : @IndexMap.TRenamed[String, Int32] = @IndexMap.new(capacity=0)
  
    // 验证初始容量
    @debug.assert_eq(map.capacity(), 0)
+*** Update File: <WORKDIR>/src/extends.mbt
+@@
+ ///|
+-pub extend T with @moonbitlang/core/quickcheck.Arbitrary::{arbitrary}
++pub extend TRenamed with @moonbitlang/core/quickcheck.Arbitrary::{arbitrary}
+ 
+ ///|
+-pub extend T with Show::{to_string, output}
++pub extend TRenamed with Show::{to_string, output}
+ 
+ ///|
+-pub extend T with ToJson::{to_json}
++pub extend TRenamed with ToJson::{to_json}
 *** Update File: <WORKDIR>/src/types.mbt
 @@
  /// map.set(3, "updated")
@@ -607,8 +672,8 @@ $ run_moon_ide moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19
 -struct T[K, V] {
 +struct TRenamed[K, V] {
    core : IndexMapCore[K, V] // 包含核心数据结构
-   mut size : Int // 元素数量
-   mut capacity : Int // 当前哈希表容量
+   mut size : Int32 // 元素数量
+   mut capacity : Int32 // 当前哈希表容量
 *** End Patch
 
 ```

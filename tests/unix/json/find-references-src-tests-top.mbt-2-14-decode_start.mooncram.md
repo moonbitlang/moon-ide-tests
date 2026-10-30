@@ -28,12 +28,12 @@ Found 2 references for symbol 'decode_start':
    |     [] => raise InspectError::InspectError("expected at least one chunk")
    |   }
 
-<WORKDIR>/src/tests/incr.mbt:71:33-71:45:
-   |   guard compelet_json.to_array().chunks(6).map(String::from_array)
+<WORKDIR>/src/tests/incr.mbt:71:34-71:46:
+   |   guard! compelet_json.to_array().chunks(6).map(String::from_array)
    |     is [first_chunk, .. chunks]
    |   // start parsing from `first_chunk`
-71 |   guard continue_chunks(chunks, decode_start(first_chunk))
-   |                                 ^^^^^^^^^^^^
+71 |   guard! continue_chunks(chunks, decode_start(first_chunk))
+   |                                  ^^^^^^^^^^^^
    |     is Finish({ value, .. })
    |   let expected = Json::object({
 

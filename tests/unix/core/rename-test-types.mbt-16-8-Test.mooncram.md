@@ -82,7 +82,7 @@ $ run_moon_ide moon ide rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
  /// See also `@test.Test::writeln`
 -pub fn Test::write(self : Test, obj : &Show) -> Unit {
 +pub fn TestRenamed::write(self : TestRenamed, obj : &Show) -> Unit {
-   self.buffer.write_string(obj.to_string())
+   self.buffer <+ "\{obj}"
  }
  
 @@

@@ -14,11 +14,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'decode_start' 'de
    }
  }
 @@
-   guard compelet_json.to_array().chunks(6).map(String::from_array)
+   guard! compelet_json.to_array().chunks(6).map(String::from_array)
      is [first_chunk, .. chunks]
    // start parsing from `first_chunk`
--  guard continue_chunks(chunks, decode_start(first_chunk))
-+  guard continue_chunks(chunks, decode_start_renamed(first_chunk))
+-  guard! continue_chunks(chunks, decode_start(first_chunk))
++  guard! continue_chunks(chunks, decode_start_renamed(first_chunk))
      is Finish({ value, .. })
    let expected = Json::object({
      "foo": Json::object({ "bar": Json::number(1200.0) }),

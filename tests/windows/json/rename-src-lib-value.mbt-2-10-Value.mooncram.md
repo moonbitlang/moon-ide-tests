@@ -30,13 +30,13 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn value(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // number {{{
  
  ///|
--fn number_zero(ctx : Context, len : Int) -> Value raise {
-+fn number_zero(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_zero(ctx : Context, len : Int32) -> Value raise {
++fn number_zero(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
      [] => {
@@ -44,32 +44,32 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
  }
  
  ///|
--fn number(ctx : Context, len : Int) -> Value raise {
-+fn number(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number(ctx : Context, len : Int32) -> Value raise {
++fn number(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number({ ..ctx, rest, }, len + 1)
 @@
  }
  
  ///|
--fn number_frac(ctx : Context, len : Int) -> Value raise {
-+fn number_frac(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_frac(ctx : Context, len : Int32) -> Value raise {
++fn number_frac(ctx : Context, len : Int32) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
      _ => unexpected(ctx, len, 0, Checkpoint::Value)
 @@
  }
  
  ///|
--fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
-+fn number_frac_cont(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
++fn number_frac_cont(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
 @@
    ctx : Context,
-   len : Int,
+   len : Int32,
    token : ArrayView[Char],
 -) -> Value raise {
 +) -> ValueRenamed raise {
@@ -80,29 +80,29 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
  }
  
  ///|
--fn number_exp(ctx : Context, len : Int) -> Value raise {
-+fn number_exp(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_exp(ctx : Context, len : Int32) -> Value raise {
++fn number_exp(ctx : Context, len : Int32) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
      ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1)
 @@
  }
  
  ///|
--fn number_exp_sign(ctx : Context, len : Int) -> Value raise {
-+fn number_exp_sign(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_exp_sign(ctx : Context, len : Int32) -> Value raise {
++fn number_exp_sign(ctx : Context, len : Int32) -> ValueRenamed raise {
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
      _ => unexpected(ctx, len, 0, Checkpoint::Value)
 @@
  }
  
  ///|
--fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
-+fn number_exp_cont(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
++fn number_exp_cont(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
 @@
  }
  
@@ -111,7 +111,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn number_minus(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      ['0', .. rest] => number_zero({ ..ctx, rest, }, 2)
-     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2)
+     ['1'..<='9', .. rest] => number({ ..ctx, rest, }, 2)
 @@
  // constants {{{
  
@@ -120,7 +120,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn true_(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      ['r', 'u', 'e', .. rest] =>
-       continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::boolean(true))
+       continue_({ ..ctx, rest, skip: ctx.skip + 4, }, Json::boolean(true))
 @@
  }
  
@@ -129,7 +129,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn false_(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      ['a', 'l', 's', 'e', .. rest] =>
-       continue_({ ..ctx, rest, skip: ctx.skip + 5 }, Json::boolean(false))
+       continue_({ ..ctx, rest, skip: ctx.skip + 5, }, Json::boolean(false))
 @@
  }
  
@@ -138,19 +138,19 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn null(ctx : Context) -> ValueRenamed raise {
    match ctx.rest {
      ['u', 'l', 'l', .. rest] =>
-       continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::null())
+       continue_({ ..ctx, rest, skip: ctx.skip + 4, }, Json::null())
 @@
  // string {{{
  
  ///|
--fn string(ctx : Context, len : Int) -> Value raise {
-+fn string(ctx : Context, len : Int) -> ValueRenamed raise {
-   let builder = StringBuilder::new(size_hint=len)
+-fn string(ctx : Context, len : Int32) -> Value raise {
++fn string(ctx : Context, len : Int32) -> ValueRenamed raise {
+   let builder = StringBuilder(size_hint=len)
    string_scan(ctx, len, builder)
  }
 @@
    ctx : Context,
-   len : Int,
+   len : Int32,
    builder : StringBuilder,
 -) -> Value raise {
 +) -> ValueRenamed raise {
@@ -159,7 +159,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
      ['"', .. rest] => {
 @@
    ctx : Context,
-   len : Int,
+   len : Int32,
    builder : StringBuilder,
 -) -> Value raise {
 +) -> ValueRenamed raise {
@@ -167,7 +167,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
      ['"', .. rest] => {
        builder.write_char('"')
 @@
-   code_unit : Int,
+   code_unit : Int32,
    rest : ArrayView[Char],
    builder : StringBuilder,
 -) -> Value raise {
@@ -179,11 +179,11 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
  // array {{{
  
  ///|
--fn array_start(ctx : Context, len : Int) -> Value raise {
-+fn array_start(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn array_start(ctx : Context, len : Int32) -> Value raise {
++fn array_start(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { decode, skip, arr_acc, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -192,16 +192,16 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn array_push(ctx : Context, value0 : Json) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // object {{{
  
  ///|
--fn object_start(ctx : Context, len : Int) -> Value raise {
-+fn object_start(ctx : Context, len : Int) -> ValueRenamed raise {
+-fn object_start(ctx : Context, len : Int32) -> Value raise {
++fn object_start(ctx : Context, len : Int32) -> ValueRenamed raise {
    let { obj_acc, skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -210,7 +210,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_value(ctx : Context, key : String) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -219,7 +219,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_push(ctx : Context, value0 : Json, key : String) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -228,7 +228,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
 +fn object_key(ctx : Context) -> ValueRenamed raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // }}}
  
@@ -247,19 +247,19 @@ $ run_moon_ide '..\..\..\fixtures\repos\json' moon ide rename 'Value' 'ValueRena
    let { rest, original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
--    [] => Value::Finish({ value, arr_acc, obj_acc, rest: [][:] })
-+    [] => ValueRenamed::Finish({ value, arr_acc, obj_acc, rest: [][:] })
+     [' ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+-    [] => Value::Finish({ value, arr_acc, obj_acc, rest: [][:], })
++    [] => ValueRenamed::Finish({ value, arr_acc, obj_acc, rest: [][:], })
      _ => {
        let rest = original[skip:]
--      Value::Finish({ value, arr_acc, obj_acc, rest })
-+      ValueRenamed::Finish({ value, arr_acc, obj_acc, rest })
+-      Value::Finish({ value, arr_acc, obj_acc, rest, })
++      ValueRenamed::Finish({ value, arr_acc, obj_acc, rest, })
      }
    }
  }
 @@
-   pos : Int,
-   len : Int,
+   pos : Int32,
+   len : Int32,
    func_data : Checkpoint,
 -) -> Value raise {
 +) -> ValueRenamed raise {

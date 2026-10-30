@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
-Found 320 references for symbol 'sleep':
+Found 314 references for symbol 'sleep':
 <WORKDIR>/src\all_any_test.mbt:20:14-20:19:
    |   let start = @async.now()
    |   let results = @async.all([
@@ -1076,7 +1076,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src\http\client_test.mbt:72:14-72:19:
    |       log <+ "client sending PUT request\n"
-   |       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+   |       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
    |       defer client.close()
 72 |       @async.sleep(100)
    |              ^^^^^
@@ -1094,7 +1094,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src\http\client_test.mbt:86:14-86:19:
    |       log <+ "client sending POST request\n"
-   |       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+   |       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
    |       defer client.close()
 86 |       @async.sleep(100)
    |              ^^^^^
@@ -1154,60 +1154,6 @@ Found 320 references for symbol 'sleep':
    |                 ^^^^^
    |   ignore(@fs.unimplemented)
    |   ignore(@utf8.encode(""))
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:41:43-41:48:
-   | ///|
-   | #cfg(target="js")
-   | async fn perform_sleep_job(t : Int32) -> Unit {
-41 |   @async.protect_from_cancel(() => @async.sleep(t))
-   |                                           ^^^^^
-   | }
-   | 
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:50:16-50:21:
-   |   @async.with_task_group() <| root => {
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<3 {
-50 |         @async.sleep(400)
-   |                ^^^^^
-   |         log <+ "tick\n"
-   |       }
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:87:16-87:21:
-   |   @async.with_task_group() <| root => {
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<4 {
-87 |         @async.sleep(200)
-   |                ^^^^^
-   |         log <+ "tick\n"
-   |       }
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:97:12-97:17:
-   |         Some(_) => log <+ "done\n"
-   |       }
-   |     })
-97 |     @async.sleep(500)
-   |            ^^^^^
-   |     log <+ "trying to cancel\n"
-   |     task.cancel()
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:121:16-121:21:
-    |   @async.with_task_group() <| root => {
-    |     root.spawn_bg() <| () => {
-    |       for _ in 0..<3 {
-121 |         @async.sleep(400)
-    |                ^^^^^
-    |         log <+ "tick\n"
-    |       }
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:131:12-131:17:
-    |         Some(_) => log <+ "done\n"
-    |       }
-    |     }
-131 |     @async.sleep(600)
-    |            ^^^^^
-    |     log <+ "trying to terminate now\n"
-    |     root.return_immediately(())
 
 <WORKDIR>/src\internal\gzip_internal\gzip_internal_test.mbt:361:17-361:22:
     | ///|

@@ -96,17 +96,17 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
     |   self : Array[T], (escaped)
     |   f : (T) -> Bool raise?, (escaped)
     | ) -> Array[T] raise? { (escaped)
-    |   let arr = [] (escaped)
-    |   for v in self { (escaped)
-    |     if f(v) { (escaped)
-    |       arr.push(v) (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    |   arr (escaped)
+    |   [
+    |     for v in self if f(v) => v
+    |   ]
     | } (escaped)
     |  (escaped)
     | ///| (escaped)
     | /// Tests whether the array contains no elements. (escaped)
+    | ///
+    | /// Parameters:
+    | ///
+    | /// * `array` : The array to check.
 ```
 
 ```mooncram
@@ -117,7 +117,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// ``` (escaped)
      | #locals(f) (escaped)
      | #alias(fold_left, deprecated) (escaped)
-1384 | pub fn[A, B] Array::fold(
+1380 | pub fn[A, B] Array::fold(
      |                     ^^^^ (escaped)
      |   self : Array[A], (escaped)
      |   init~ : B, (escaped)
@@ -148,17 +148,17 @@ Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
    | } (escaped)
    |  (escaped)
    | ///| (escaped)
-   | #deprecated("Use !expr instead") (escaped)
-   | #warnings("-deprecated") (escaped)
-   | pub using @builtin {not} (escaped)
-   |  (escaped)
-   | ///| (escaped)
-   | pub using @debug {debug, type Repr, trait Debug, debug_inspect, repr}
-   | 
-   | ///|
-   | #deprecated("Use `Repr(x)` instead")
-   | #warnings("-deprecated") (escaped)
-   | pub using @debug {to_repr}
+   | pub using @builtin {
+   |   type Unit,
+   |   type Bool,
+   |   type Byte,
+   |   type Char,
+   |   type Int,
+   |   type Int32,
+   |   type Int64,
+   |   type UInt,
+   |   type UInt32,
+   |   type UInt16,
 Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -167,7 +167,8 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | ///| (escaped)
 16 | struct StringBuilder { (escaped)
    |        ^^^^^^^^^^^^^ (escaped)
-   |   mut data : FixedArray[UInt16] (escaped)
+   |   // Only 0..<len is initialized. Returned strings have separate storage.
+   |   mut data : UninitializedArray[UInt16]
    |   mut len : Int32
    | } (escaped)
    |  (escaped)
@@ -176,11 +177,10 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | /// (escaped)
    | /// Parameters: (escaped)
    | /// (escaped)
-   | /// * `size_hint` : An optional initial capacity hint for the internal buffer. If (escaped)
-   | /// less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes,  (escaped)
-   | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example. (escaped)
+   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
    | /// (escaped)
-   | /// Returns a new `StringBuilder` instance with the specified initial capacity. (escaped)
 ```
 
 ```mooncram
@@ -208,12 +208,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | 
     | ///|
 Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
-    |   }
-    | }
+    |   buffer : UninitializedArray[UInt16],
+    | ) -> FixedArray[UInt16] = "%identity"
     | 
     | ///|
     | /// Writes a string to the StringBuilder.
-146 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+166 | pub impl Logger for StringBuilder with fn write_string(self, str) {
     |                                           ^^^^^^^^^^^^
     |   let str_len = str.length()
     |   if str_len == 0 {
@@ -223,7 +223,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
     |   if required > self.data.length() || required < self.len {
     |     self.grow(required)
     |   }
-    |   self.data.unsafe_blit_from_string(self.len, str, 0, str_len)
+    |   self.data.unsafe_blit_from_string_uninit(self.len, str, 0, str_len)
     |   self.len += str_len
     | }
     | 
@@ -239,7 +239,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
      | /// } (escaped)
      | /// ``` (escaped)
      | #alias(charcode_length, deprecated) (escaped)
-1828 | pub fn String::length(self : String) -> Int32 = "%string_length"
+1833 | pub fn String::length(self : String) -> Int32 = "%string_length"
      |                ^^^^^^ (escaped)
      |  (escaped)
      | ///| (escaped)
@@ -291,7 +291,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-816 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::Array(capacity=n)
@@ -413,14 +413,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `map`. (escaped)
-367 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+365 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^ (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
-    |       match self.next() { (escaped)
-    |         Some(x) => Some(f(x)) (escaped)
-    |         None => None (escaped)
-    |       } (escaped)
+    |       guard self.next() is Some(x) else { None }
+    |       Some(f(x))
     |     }, (escaped)
     |     size_hint: self.size_hint, (escaped)
     |   } (escaped)
@@ -429,6 +427,8 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///| (escaped)
     | /// Transforms the elements of the iterator using a mapping function. (escaped)
     | /// (escaped)
+    | /// # Type Parameters
+    | ///
 ```
 
 ```mooncram
@@ -439,7 +439,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)
-816 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^ (escaped)
     |   let result = match self.size_hint { (escaped)
     |     Some(n) => Array::Array(capacity=n)
@@ -621,10 +621,10 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// (escaped)
     | /// # Note (escaped)
     | /// The old iterator `self` must not be used again after calling `filter`. (escaped)
-336 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+334 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
     |                 ^^^^^^ (escaped)
     |   Iter::new(fn() { (escaped)
-    |     while self.next() is Some(x) { (escaped)
+    |     for x in self {
     |       if f(x) { (escaped)
     |         break Some(x) (escaped)
     |       } (escaped)

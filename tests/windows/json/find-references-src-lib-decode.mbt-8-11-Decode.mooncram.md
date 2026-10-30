@@ -7,7 +7,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-21 | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+21 | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
    |      ^^^^^^
    |   []
    | }
@@ -16,7 +16,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-26 | impl Decode for Unit with array_push(_self, elem, acc) {
+26 | impl Decode for Unit with fn array_push(_self, elem, acc) {
    |      ^^^^^^
    |   [elem, ..acc]
    | }
@@ -25,7 +25,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-31 | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+31 | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
    |      ^^^^^^
    |   (acc.rev(), old_acc)
    | }
@@ -34,7 +34,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-36 | impl Decode for Unit with object_start(_self, _old_acc) -> JsonObject {
+36 | impl Decode for Unit with fn object_start(_self, _old_acc) -> JsonObject {
    |      ^^^^^^
    |   Map([])
    | }
@@ -43,7 +43,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-41 | impl Decode for Unit with object_push(_self, key, value, acc) {
+41 | impl Decode for Unit with fn object_push(_self, key, value, acc) {
    |      ^^^^^^
    |   if !acc.contains(key) {
    |     acc[key] = value
@@ -52,7 +52,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-49 | impl Decode for Unit with object_finish(_self, acc, old_acc) {
+49 | impl Decode for Unit with fn object_finish(_self, acc, old_acc) {
    |      ^^^^^^
    |   (acc, old_acc)
    | }
@@ -61,7 +61,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-54 | impl Decode for Unit with double(_self, view) -> Double raise {
+54 | impl Decode for Unit with fn double(_self, view) -> Double raise {
    |      ^^^^^^
    |   @string.parse_double(String::from_iter(view.iter()))
    | }
@@ -70,7 +70,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-59 | impl Decode for Unit with integer(_self, view) -> Int raise {
+59 | impl Decode for Unit with fn integer(_self, view) -> Int32 raise {
    |      ^^^^^^
    |   @string.parse_int(String::from_iter(view.iter()))
    | }
@@ -79,7 +79,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-64 | impl Decode for Unit with string(_self, s) {
+64 | impl Decode for Unit with fn string(_self, s) {
    |      ^^^^^^
    |   s
    | }
@@ -111,20 +111,20 @@ Found 16 references for symbol 'Decode':
    |     Some(decode) => decode
    |     None => () (escaped)
 
-<WORKDIR>/src\lib\json.mbt:48:48-48:54:
+<WORKDIR>/src\lib\json.mbt:46:48-46:54:
    | }
    | 
    | ///|
-48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+46 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
    |                                                ^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
 
-<WORKDIR>/src\lib\json.mbt:49:17-49:23:
+<WORKDIR>/src\lib\json.mbt:47:17-47:23:
    | 
    | ///|
    | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
-49 |   let decode : &Decode = match decode {
+47 |   let decode : &Decode = match decode {
    |                 ^^^^^^
    |     Some(decode) => decode
    |     None => () (escaped)

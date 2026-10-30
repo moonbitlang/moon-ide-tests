@@ -881,7 +881,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
 *** Update File: <WORKDIR>/src\http\client_test.mbt
 @@
        log <+ "client sending PUT request\n"
-       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)
@@ -894,7 +894,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
        let response = client.end_request()
 @@
        log <+ "client sending POST request\n"
-       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)
@@ -954,61 +954,6 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
    ignore(@fs.unimplemented)
    ignore(@utf8.encode(""))
    ignore(@io.Encoding::UTF8)
-*** Update File: <WORKDIR>/src\internal\event_loop\worker_wbtest.mbt
-@@
- ///|
- #cfg(target="js")
- async fn perform_sleep_job(t : Int32) -> Unit {
--  @async.protect_from_cancel(() => @async.sleep(t))
-+  @async.protect_from_cancel(() => @async.sleep_renamed(t))
- }
- 
- ///|
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
--        @async.sleep(400)
-+        @async.sleep_renamed(400)
-         log <+ "tick\n"
-       }
-     }
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<4 {
--        @async.sleep(200)
-+        @async.sleep_renamed(200)
-         log <+ "tick\n"
-       }
-     }
-@@
-         Some(_) => log <+ "done\n"
-       }
-     })
--    @async.sleep(500)
-+    @async.sleep_renamed(500)
-     log <+ "trying to cancel\n"
-     task.cancel()
-   }
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
--        @async.sleep(400)
-+        @async.sleep_renamed(400)
-         log <+ "tick\n"
-       }
-     }
-@@
-         Some(_) => log <+ "done\n"
-       }
-     }
--    @async.sleep(600)
-+    @async.sleep_renamed(600)
-     log <+ "trying to terminate now\n"
-     root.return_immediately(())
-   }
 *** Update File: <WORKDIR>/src\internal\gzip_internal\gzip_internal_test.mbt
 @@
  ///|

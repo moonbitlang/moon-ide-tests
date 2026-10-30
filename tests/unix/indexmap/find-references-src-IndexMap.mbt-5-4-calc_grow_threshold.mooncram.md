@@ -25,14 +25,14 @@ Found 2 references for symbol 'calc_grow_threshold':
    |     capacity,
 39 |     growAt: calc_grow_threshold(capacity),
    |             ^^^^^^^^^^^^^^^^^^^
-   |     key_to_idx: @hashmap.HashMap::default(),
+   |     key_to_idx: Default::default(),
    |   }
 
-<WORKDIR>/src/IndexMap.mbt:780:17-780:36:
+<WORKDIR>/src/IndexMap.mbt:738:17-738:36:
     |   } else { (escaped)
     |     self.capacity = self.capacity * 2 (escaped)
     |   } (escaped)
-780 |   self.growAt = calc_grow_threshold(self.capacity) (escaped)
+738 |   self.growAt = calc_grow_threshold(self.capacity)
     |                 ^^^^^^^^^^^^^^^^^^^ (escaped)
     |   self.core.hash_to_idx = @hashmap.HashMap([], capacity=self.capacity) (escaped)
     |   self.core.entries = [] (escaped)

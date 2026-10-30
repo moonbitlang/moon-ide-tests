@@ -5,6 +5,24 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Linux' 'LinuxRen
 *** Begin Patch
 *** Update File: <WORKDIR>/src\fs\dir.mbt
 @@
+   context~ : String,
+ ) -> String raise {
+   match @event_loop.platform {
+-    Linux | MacOS =>
++    LinuxRenamed | MacOS =>
+       if path is ['/', ..] {
+         raise Failure(
+           "\{context}: relative open does not support absolute path",
+@@
+   }
+   let result = StringBuilder()
+   let sep = match @event_loop.platform {
+-    Linux | MacOS => '/'
++    LinuxRenamed | MacOS => '/'
+     Windows => '\\'
+   }
+   fn check_component(component : StringView) -> Unit raise {
+@@
    dir.offset += entry_len
    dir.count += 1
    let need_more_entry = match @event_loop.platform {
@@ -13,6 +31,16 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'Linux' 'LinuxRen
      MacOS => dir.count >= dir.job_ret
      Windows => entry_len is 0
    }
+*** Update File: <WORKDIR>/src\fs\relative_open_wbtest.mbt
+@@
+     )
+   }
+   match @event_loop.platform {
+-    Linux | MacOS => {
++    LinuxRenamed | MacOS => {
+       inspect(check("file"), content="file")
+       inspect(check("a/b//c/"), content="a/b/c")
+       inspect(check("./a/b/./c"), content="a/b/c")
 *** Update File: <WORKDIR>/src\internal\event_loop\process.mbt
 @@
      IoHandle::from_fd(

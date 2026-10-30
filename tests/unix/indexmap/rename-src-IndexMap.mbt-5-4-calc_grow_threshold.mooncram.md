@@ -24,8 +24,8 @@ $ run_moon_ide moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_rename
  const Default_init_capacity = 8
  
  ///|
--fn calc_grow_threshold(capacity : Int) -> Int {
-+fn calc_grow_threshold_renamed(capacity : Int) -> Int {
+-fn calc_grow_threshold(capacity : Int32) -> Int32 {
++fn calc_grow_threshold_renamed(capacity : Int32) -> Int32 {
    capacity * 3 / 4 // 75% 负载因子
  }
  
@@ -35,7 +35,7 @@ $ run_moon_ide moon ide rename 'calc_grow_threshold' 'calc_grow_threshold_rename
      capacity,
 -    growAt: calc_grow_threshold(capacity),
 +    growAt: calc_grow_threshold_renamed(capacity),
-     key_to_idx: @hashmap.HashMap::default(),
+     key_to_idx: Default::default(),
    }
  }
 @@

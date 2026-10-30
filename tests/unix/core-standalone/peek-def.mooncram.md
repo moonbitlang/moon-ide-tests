@@ -49,7 +49,7 @@ Found 1 symbols matching 'Array::map':
 $ run_moon_ide moon ide peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
-`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:712-746
+`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:712-742
 712 | ///|
     | /// Creates a new array containing all elements from the input array that satisfy (escaped)
     | /// the given predicate function. (escaped)
@@ -77,13 +77,9 @@ Found 1 symbols matching 'Array::filter':
     |   self : Array[T], (escaped)
     |   f : (T) -> Bool raise?, (escaped)
     | ) -> Array[T] raise? { (escaped)
-    |   let arr = [] (escaped)
-    |   for v in self { (escaped)
-    |     if f(v) { (escaped)
-    |       arr.push(v) (escaped)
-    |     } (escaped)
-    |   } (escaped)
-    |   arr (escaped)
+    |   [
+    |     for v in self if f(v) => v
+    |   ]
     | } (no-eol) (escaped)
 ```
 
@@ -91,8 +87,8 @@ Found 1 symbols matching 'Array::filter':
 $ run_moon_ide moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1364-1394
-1364 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1360-1390
+1360 | ///|
      | /// Fold out values from an array according to certain rules. (escaped)
      | /// This method traverses the array through `self.iter()`, so the traversal (escaped)
      | /// bounds are fixed when folding starts. (escaped)
@@ -129,8 +125,8 @@ Found 1 symbols matching 'Array::fold':
 $ run_moon_ide moon ide peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
-`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1807-1828
-1807 | ///|
+`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1812-1833
+1812 | ///|
      | /// Returns the number of UTF-16 code units in the string. Note that this is not (escaped)
      | /// necessarily equal to the number of Unicode characters (code points) in the (escaped)
      | /// string, as some characters may be represented by multiple UTF-16 code units. (escaped)
@@ -177,22 +173,24 @@ Found 1 symbols matching 'String::split':
 $ run_moon_ide moon ide peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
-`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:21-37
-21 | ///| (escaped)
+`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:22-40
+22 | ///|
    | /// Creates a new string builder with an optional initial capacity hint. (escaped)
    | /// (escaped)
    | /// Parameters: (escaped)
    | /// (escaped)
-   | /// * `size_hint` : An optional initial capacity hint for the internal buffer. If (escaped)
-   | /// less than 1, a minimum capacity of 1 is used. Defaults to 0. It is the size of bytes,  (escaped)
-   | /// not the size of characters. `size_hint` may be ignored on some platforms, JS for example. (escaped)
+   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
+   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
    | /// (escaped)
-   | /// Returns a new `StringBuilder` instance with the specified initial capacity. (escaped)
+   | /// Returns a new `StringBuilder` instance.
    | /// (escaped)
+   | /// Aborts if `size_hint` is negative.
+   | ///
    | #alias(new, deprecated="Use `StringBuilder()` instead")
-   | pub fn StringBuilder::StringBuilder(size_hint~ : Int32 = 0) -> StringBuilder {
-   |   let initial = if size_hint < 1 { 1 } else { (size_hint + 1) / 2 } (escaped)
-   |   let data : FixedArray[UInt16] = FixedArray::make(initial, 0) (escaped)
+   | pub fn StringBuilder::StringBuilder(size_hint~ : Int32 = 8) -> StringBuilder {
+   |   guard size_hint >= 0 else { abort("size_hint must be non-negative") }
+   |   let data : UninitializedArray[UInt16] = UninitializedArray::make(size_hint)
    |   { data, len: 0, }
    | } (no-eol) (escaped)
 ```
@@ -235,7 +233,7 @@ Found 1 symbols matching 'Int32::abs':
 $ run_moon_ide moon ide peek-def 'Int32::to_string'
 Found 2 symbols matching 'Int32::to_string':
 
-`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-265
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-263
 202 | ///|
     | /// Converts an integer to its string representation in the specified radix (base).
     | /// Example:
@@ -267,28 +265,26 @@ Found 2 symbols matching 'Int32::to_string':
     |   }
     |  (escaped)
     |   // Calculate length, allocate buffer, and write digits
+    |   let digit_start = if is_negative { 1 } else { 0 }
     |   let buffer = match radix {
     |     10 => {
     |       let digit_len = dec_count32(num)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_dec(buffer, num, digit_start, total_len)
     |       buffer
     |     }
     |     16 => {
     |       let digit_len = hex_count32(num)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_hex(buffer, num, digit_start, total_len)
     |       buffer
     |     }
     |     _ => {
     |       let digit_len = radix_count32(num, radix)
-    |       let total_len = digit_len + (if is_negative { 1 } else { 0 })
+    |       let total_len = digit_len + digit_start
     |       let buffer : FixedArray[UInt16] = FixedArray::make(total_len, 0)
-    |       let digit_start = if is_negative { 1 } else { 0 }
     |       int_to_string_generic(buffer, num, digit_start, total_len, radix)
     |       buffer
     |     }
@@ -301,8 +297,8 @@ Found 2 symbols matching 'Int32::to_string':
     |   unsafe_fixedarray_uint16_to_string(buffer)
     | }
 
-`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:309-314
-309 | ///|
+`pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:307-312
+307 | ///|
     | /// Converts an integer to its string representation in the specified radix (base).
     | #cfg(target="js")
     | pub fn Int32::to_string(self : Int32, radix~ : Int32 = 10) -> String {
@@ -368,8 +364,8 @@ Found 1 symbols matching 'Result::map':
 $ run_moon_ide moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:348-377
-348 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:346-373
+346 | ///|
     | /// Transforms the elements of the iterator using a mapping function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -391,10 +387,8 @@ Found 1 symbols matching 'Iter::map':
     | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] { (escaped)
     |   { (escaped)
     |     f: fn() { (escaped)
-    |       match self.next() { (escaped)
-    |         Some(x) => Some(f(x)) (escaped)
-    |         None => None (escaped)
-    |       } (escaped)
+    |       guard self.next() is Some(x) else { None }
+    |       Some(f(x))
     |     }, (escaped)
     |     size_hint: self.size_hint, (escaped)
     |   } (escaped)
@@ -405,8 +399,8 @@ Found 1 symbols matching 'Iter::map':
 $ run_moon_ide moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:318-346
-318 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:316-344
+316 | ///|
     | /// Filters the elements of the iterator based on a predicate function. (escaped)
     | /// (escaped)
     | /// # Type Parameters (escaped)
@@ -426,7 +420,7 @@ Found 1 symbols matching 'Iter::filter':
     | /// The old iterator `self` must not be used again after calling `filter`. (escaped)
     | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] { (escaped)
     |   Iter::new(fn() { (escaped)
-    |     while self.next() is Some(x) { (escaped)
+    |     for x in self {
     |       if f(x) { (escaped)
     |         break Some(x) (escaped)
     |       } (escaped)
@@ -441,8 +435,8 @@ Found 1 symbols matching 'Iter::filter':
 $ run_moon_ide moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:812-825
-812 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:816-829
+816 | ///|
     | /// Collects the elements of the iterator into an array. (escaped)
     | /// The old iterator `self` must not be used again. (escaped)
     | #alias(collect) (escaped)

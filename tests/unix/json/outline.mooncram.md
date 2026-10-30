@@ -24,23 +24,23 @@ $ run_moon_ide moon ide outline 'src/lib/decode.mbt'
    |...
  8 |pub trait Decode {
    |...
-21 |impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+21 |impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
    |...
-26 |impl Decode for Unit with array_push(_self, elem, acc) {
+26 |impl Decode for Unit with fn array_push(_self, elem, acc) {
    |...
-31 |impl Decode for Unit with array_finish(_self, acc, old_acc) {
+31 |impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
    |...
-36 |impl Decode for Unit with object_start(_self, _old_acc) -> JsonObject {
+36 |impl Decode for Unit with fn object_start(_self, _old_acc) -> JsonObject {
    |...
-41 |impl Decode for Unit with object_push(_self, key, value, acc) {
+41 |impl Decode for Unit with fn object_push(_self, key, value, acc) {
    |...
-49 |impl Decode for Unit with object_finish(_self, acc, old_acc) {
+49 |impl Decode for Unit with fn object_finish(_self, acc, old_acc) {
    |...
-54 |impl Decode for Unit with double(_self, view) -> Double raise {
+54 |impl Decode for Unit with fn double(_self, view) -> Double raise {
    |...
-59 |impl Decode for Unit with integer(_self, view) -> Int raise {
+59 |impl Decode for Unit with fn integer(_self, view) -> Int32 raise {
    |...
-64 |impl Decode for Unit with string(_self, s) {
+64 |impl Decode for Unit with fn string(_self, s) {
    |...
 
 ```
@@ -53,106 +53,108 @@ $ run_moon_ide moon ide outline 'src/lib/json.mbt'
     |...
  20 |pub fn decode(input : String, decode? : &Decode) -> Json raise {
     |...
- 48 |pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+ 46 |pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
     |...
- 66 |pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
+ 64 |pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
     |...
- 87 |fn value(ctx : Context) -> Value raise {
+ 85 |fn value(ctx : Context) -> Value raise {
     |...
-108 |fn number_zero(ctx : Context, len : Int) -> Value raise {
+106 |fn number_zero(ctx : Context, len : Int32) -> Value raise {
     |...
-130 |fn number(ctx : Context, len : Int) -> Value raise {
+128 |fn number(ctx : Context, len : Int32) -> Value raise {
     |...
-153 |fn number_frac(ctx : Context, len : Int) -> Value raise {
+151 |fn number_frac(ctx : Context, len : Int32) -> Value raise {
     |...
-161 |fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
+159 |fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
     |...
-174 |fn float_decode(
-175 |  ctx : Context,
-176 |  len : Int,
-177 |  token : ArrayView[Char],
-178 |) -> Value raise {
+172 |fn float_decode(
+173 |  ctx : Context,
+174 |  len : Int32,
+175 |  token : ArrayView[Char],
+176 |) -> Value raise {
     |...
-197 |fn number_exp(ctx : Context, len : Int) -> Value raise {
+195 |fn number_exp(ctx : Context, len : Int32) -> Value raise {
     |...
-206 |fn number_exp_sign(ctx : Context, len : Int) -> Value raise {
+204 |fn number_exp_sign(ctx : Context, len : Int32) -> Value raise {
     |...
-214 |fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
+212 |fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
     |...
-226 |fn number_minus(ctx : Context) -> Value raise {
+224 |fn number_minus(ctx : Context) -> Value raise {
     |...
-235 |fn integer_decode(ctx : Context, token : ArrayView[Char]) -> Int raise {
+233 |fn integer_decode(ctx : Context, token : ArrayView[Char]) -> Int32 raise {
     |...
-248 |fn true_(ctx : Context) -> Value raise {
+246 |fn true_(ctx : Context) -> Value raise {
     |...
-257 |fn false_(ctx : Context) -> Value raise {
+255 |fn false_(ctx : Context) -> Value raise {
     |...
-266 |fn null(ctx : Context) -> Value raise {
+264 |fn null(ctx : Context) -> Value raise {
     |...
-279 |fn string(ctx : Context, len : Int) -> Value raise {
+277 |fn string(ctx : Context, len : Int32) -> Value raise {
     |...
-285 |fn string_scan(
-286 |  ctx : Context,
-287 |  len : Int,
-288 |  builder : StringBuilder,
-289 |) -> Value raise {
+283 |fn string_scan(
+284 |  ctx : Context,
+285 |  len : Int32,
+286 |  builder : StringBuilder,
+287 |) -> Value raise {
     |...
-310 |fn string_escape(
-311 |  ctx : Context,
-312 |  len : Int,
-313 |  builder : StringBuilder,
-314 |) -> Value raise {
+308 |fn string_escape(
+309 |  ctx : Context,
+310 |  len : Int32,
+311 |  builder : StringBuilder,
+312 |) -> Value raise {
     |...
-361 |fn string_unicode(
-362 |  ctx : Context,
-363 |  len : Int,
-364 |  code_unit : Int,
-365 |  rest : ArrayView[Char],
-366 |  builder : StringBuilder,
-367 |) -> Value raise {
+359 |fn string_unicode(
+360 |  ctx : Context,
+361 |  len : Int32,
+362 |  code_unit : Int32,
+363 |  rest : ArrayView[Char],
+364 |  builder : StringBuilder,
+365 |) -> Value raise {
     |...
-407 |fn unicode_escape_value(
-408 |  ctx : Context,
-409 |  len : Int,
-410 |  a : Char,
-411 |  b : Char,
-412 |  c : Char,
-413 |  d : Char,
-414 |) -> Int raise {
+405 |fn unicode_escape_value(
+406 |  ctx : Context,
+407 |  len : Int32,
+408 |  a : Char,
+409 |  b : Char,
+410 |  c : Char,
+411 |  d : Char,
+412 |) -> Int32 raise {
     |...
-423 |fn hex_value(ctx : Context, index : Int, c : Char) -> Int raise {
+421 |fn hex_value(ctx : Context, index : Int32, c : Char) -> Int32 raise {
     |...
-433 |fn write_codepoint(
-434 |  ctx : Context,
-435 |  index : Int,
-436 |  codepoint : Int,
-437 |  builder : StringBuilder,
-438 |) -> Unit raise {
+431 |fn write_codepoint(
+432 |  ctx : Context,
+433 |  index : Int32,
+434 |  codepoint : Int32,
+435 |  builder : StringBuilder,
+436 |) -> Unit raise {
     |...
-450 |fn array_start(ctx : Context, len : Int) -> Value raise {
+448 |fn array_start(ctx : Context, len : Int32) -> Value raise {
     |...
-475 |fn array_push(ctx : Context, value0 : Json) -> Value raise {
+473 |fn array_push(ctx : Context, value0 : Json) -> Value raise {
     |...
-502 |fn object_start(ctx : Context, len : Int) -> Value raise {
+500 |fn object_start(ctx : Context, len : Int32) -> Value raise {
     |...
-534 |fn object_value(ctx : Context, key : String) -> Value raise {
+532 |fn object_value(ctx : Context, key : String) -> Value raise {
     |...
-548 |fn object_push(ctx : Context, value0 : Json, key : String) -> Value raise {
+546 |fn object_push(ctx : Context, value0 : Json, key : String) -> Value raise {
     |...
-571 |fn object_key(ctx : Context) -> Value raise {
+569 |fn object_key(ctx : Context) -> Value raise {
     |...
-584 |fn continue_(ctx : Context, value : Json) -> Value raise {
+582 |fn continue_(ctx : Context, value : Json) -> Value raise {
     |...
-600 |fn terminate(ctx : Context, value : Json) -> Value raise {
+598 |fn terminate(ctx : Context, value : Json) -> Value raise {
     |...
-614 |fn unexpected(
-615 |  ctx : Context,
-616 |  pos : Int,
-617 |  len : Int,
-618 |  func_data : Checkpoint,
-619 |) -> Value raise {
+612 |fn unexpected(
+613 |  ctx : Context,
+614 |  pos : Int32,
+615 |  len : Int32,
+616 |  func_data : Checkpoint,
+617 |) -> Value raise {
     |...
-639 |fn invalid_byte(arr : Array[Char], skip : Int) -> ParseError {
+637 |fn invalid_byte(arr : Array[Char], skip : Int32) -> ParseError {
+    |...
+643 |pub extend Frame with @debug.Debug::{to_repr}
     |...
 
 ```
@@ -166,6 +168,10 @@ $ run_moon_ide moon ide outline 'src/lib/value.mbt'
 18 |pub struct FinishValue {
    |...
 26 |enum Checkpoint {
+   |...
+38 |pub extend FinishValue with @debug.Debug::{to_repr}
+   |...
+41 |pub extend Checkpoint with @debug.Debug::{to_repr}
    |...
 
 ```

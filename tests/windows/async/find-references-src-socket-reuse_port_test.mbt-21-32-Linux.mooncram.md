@@ -2,15 +2,42 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'Linux' --loc 'src\socket\reuse_port_test.mbt:21:32'
-Found 15 references for symbol 'Linux':
-<WORKDIR>/src\fs\dir.mbt:324:5-324:10:
+Found 18 references for symbol 'Linux':
+<WORKDIR>/src\fs\dir.mbt:214:5-214:10:
+    |   context~ : String,
+    | ) -> String raise {
+    |   match @event_loop.platform {
+214 |     Linux | MacOS =>
+    |     ^^^^^
+    |       if path is ['/', ..] {
+    |         raise Failure(
+
+<WORKDIR>/src\fs\dir.mbt:229:5-229:10:
+    |   }
+    |   let result = StringBuilder()
+    |   let sep = match @event_loop.platform {
+229 |     Linux | MacOS => '/'
+    |     ^^^^^
+    |     Windows => '\\'
+    |   }
+
+<WORKDIR>/src\fs\dir.mbt:507:5-507:10:
     |   dir.offset += entry_len
     |   dir.count += 1
     |   let need_more_entry = match @event_loop.platform {
-324 |     Linux => dir.offset >= dir.job_ret
+507 |     Linux => dir.offset >= dir.job_ret
     |     ^^^^^
     |     MacOS => dir.count >= dir.job_ret
     |     Windows => entry_len is 0
+
+<WORKDIR>/src\fs\relative_open_wbtest.mbt:25:5-25:10:
+   |     )
+   |   }
+   |   match @event_loop.platform {
+25 |     Linux | MacOS => {
+   |     ^^^^^
+   |       inspect(check("file"), content="file")
+   |       inspect(check("a/b//c/"), content="a/b/c")
 
 <WORKDIR>/src\internal\event_loop\process.mbt:48:28-48:33:
    |     IoHandle::from_fd(

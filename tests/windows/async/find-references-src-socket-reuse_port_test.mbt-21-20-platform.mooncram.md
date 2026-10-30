@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'platform' --loc 'src\socket\reuse_port_test.mbt:21:20'
-Found 42 references for symbol 'platform':
+Found 49 references for symbol 'platform':
 <WORKDIR>/src\fs\access_test.mbt:45:18-45:26:
    | async test "can_execute" {
    |   // POSIX execute-bit checks do not match Windows access semantics. Wasm learns
@@ -39,20 +39,38 @@ Found 42 references for symbol 'platform':
    |         parent.trim_end(chars="\\")
    |       } else {
 
-<WORKDIR>/src\fs\dir.mbt:76:31-76:39:
-   | ) -> Unit nocancel {
-   |   let context = "@fs.rmdir()"
-   |   if recursive {
-76 |     let base = if @event_loop.platform is Windows {
-   |                               ^^^^^^^^
-   |       path.trim_end(chars="/\\")
-   |     } else {
+<WORKDIR>/src\fs\dir.mbt:213:21-213:29:
+    |   path : StringView,
+    |   context~ : String,
+    | ) -> String raise {
+213 |   match @event_loop.platform {
+    |                     ^^^^^^^^
+    |     Linux | MacOS =>
+    |       if path is ['/', ..] {
 
-<WORKDIR>/src\fs\dir.mbt:323:43-323:51:
+<WORKDIR>/src\fs\dir.mbt:228:31-228:39:
+    |       }
+    |   }
+    |   let result = StringBuilder()
+228 |   let sep = match @event_loop.platform {
+    |                               ^^^^^^^^
+    |     Linux | MacOS => '/'
+    |     Windows => '\\'
+
+<WORKDIR>/src\fs\dir.mbt:247:27-247:35:
+    |   for i, c in path.code_units(); component_start = 0 {
+    |     match c {
+    |       '/' => ()
+247 |       '\\' if @event_loop.platform is Windows => ()
+    |                           ^^^^^^^^
+    |       _ => continue
+    |     }
+
+<WORKDIR>/src\fs\dir.mbt:506:43-506:51:
     |   let offset = dir.offset
     |   dir.offset += entry_len
     |   dir.count += 1
-323 |   let need_more_entry = match @event_loop.platform {
+506 |   let need_more_entry = match @event_loop.platform {
     |                                           ^^^^^^^^
     |     Linux => dir.offset >= dir.job_ret
     |     MacOS => dir.count >= dir.job_ret
@@ -92,6 +110,24 @@ Found 42 references for symbol 'platform':
    |                  ^^^^^^^^
    |     return
    |   }
+
+<WORKDIR>/src\fs\realpath_test.mbt:98:21-98:29:
+   | // TODO: port to Wasm
+   | #cfg(target="native")
+   | async test "realpath keeps the extended prefix when the plain form is ambiguous" {
+98 |   guard @event_loop.platform is Windows else { return }
+   |                     ^^^^^^^^
+   |   let build_dir = @fs.realpath("_build")
+   |   // Normal paths should still have the prefix truncated for better user code compatibility.
+
+<WORKDIR>/src\fs\relative_open_wbtest.mbt:24:21-24:29:
+   |       context="relative open filename validation",
+   |     )
+   |   }
+24 |   match @event_loop.platform {
+   |                     ^^^^^^^^
+   |     Linux | MacOS => {
+   |       inspect(check("file"), content="file")
 
 <WORKDIR>/src\fs\timestamp_test.mbt:27:18-27:26:
    |   // Windows may avoid updating access time eagerly, so keep the POSIX-style
@@ -147,11 +183,11 @@ Found 42 references for symbol 'platform':
    |     return
    |   }
 
-<WORKDIR>/src\internal\event_loop\fs.mbt:70:36-70:44:
+<WORKDIR>/src\internal\event_loop\fs.mbt:72:36-72:44:
    |       let io = IoHandle::from_fd(
    |         fd,
    |         kind~,
-70 |         is_async=access is 3 || (!(platform is Windows) && kind.can_poll()),
+72 |         is_async=access is 3 || (!(platform is Windows) && kind.can_poll()),
    |                                    ^^^^^^^^
    |         read_only=access is 0,
    |       )
@@ -165,29 +201,47 @@ Found 42 references for symbol 'platform':
     |   )
     | }
 
-<WORKDIR>/src\internal\event_loop\io.mbt:313:17-313:25:
+<WORKDIR>/src\internal\event_loop\io.mbt:263:14-263:22:
+    |   context~ : String,
+    | ) -> Int32 {
+    |   @coroutine.check_cancellation()
+263 |   let n = if platform is Windows && handle.kind is Console {
+    |              ^^^^^^^^
+    |     handle.read_console(buf, offset~, len~, context~)
+    |   } else if handle.is_async {
+
+<WORKDIR>/src\internal\event_loop\io.mbt:304:17-304:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-313 |     cancellable=platform is Windows || handle.kind.can_poll(),
+304 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src\internal\event_loop\io.mbt:495:52-495:60:
+<WORKDIR>/src\internal\event_loop\io.mbt:455:14-455:22:
+    |   context~ : String,
+    | ) -> Int32 {
+    |   @coroutine.check_cancellation()
+455 |   let n = if platform is Windows && handle.kind is Console {
+    |              ^^^^^^^^
+    |     handle.write_console(buf, offset~, len~, context~)
+    |   } else if handle.is_async {
+
+<WORKDIR>/src\internal\event_loop\io.mbt:486:52-486:60:
     |   guard! !handle.is_async
     |   let job = Job::read(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-495 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
+486 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
     |                                                    ^^^^^^^^
     | }
     | 
 
-<WORKDIR>/src\internal\event_loop\io.mbt:519:59-519:67:
+<WORKDIR>/src\internal\event_loop\io.mbt:510:59-510:67:
     |   }
     |   let job = Job::write(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-519 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
+510 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
     |                                                           ^^^^^^^^
     | }
 
@@ -199,6 +253,15 @@ Found 42 references for symbol 'platform':
    |                ^^^^^^^^
    |       read_only=true,
    |     )
+
+<WORKDIR>/src\internal\event_loop\windows_console.mbt:50:25-50:33:
+   | fn WindowsConsoleBuffer::WindowsConsoleBuffer(
+   |   kind : @fd_util.FileKind,
+   | ) -> WindowsConsoleBuffer {
+50 |   if kind is Console && platform is Windows {
+   |                         ^^^^^^^^
+   |     {
+   |       buffer: FixedArray::make(WINDOWS_CONSOLE_BUFFER_SIZE, 0),
 
 <WORKDIR>/src\process\cancellation.mbt:39:54-39:62:
    | pub(all) struct CancellationHandler(async (Int32) -> Unit)

@@ -2,7 +2,7 @@
 
 ```mooncram
 $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide find-references 'with_task_group' --loc 'src\aqueue\blocking_test.mbt:18:10'
-Found 375 references for symbol 'with_task_group':
+Found 372 references for symbol 'with_task_group':
 <WORKDIR>/examples\dead_lock\main.mbt:19:10-19:25:
    | async fn main {
    |   let mutex1 = @async.Mutex()
@@ -118,7 +118,7 @@ Found 375 references for symbol 'with_task_group':
 17 |   @async.with_task_group <| group => {
    |          ^^^^^^^^^^^^^^^
    |     group.spawn_bg(no_wait=true, () => start_echo_server(port=49001))
-   |     let client = @websocket.connect("ws://localhost:49001")
+   |     let client = @websocket.connect("ws://127.0.0.1:49001")
 
 <WORKDIR>/examples\xargs\main.mbt:56:10-56:25:
    |     { "args": args, .. } => args
@@ -669,119 +669,119 @@ Found 375 references for symbol 'with_task_group':
     |       // The following three tasks will start running at the same scheduler slice
     |       group.spawn_bg() <| () => {
 
-<WORKDIR>/src\fs\dir.mbt:450:10-450:25:
+<WORKDIR>/src\fs\dir.mbt:633:10-633:25:
     |   let context = "@fs.walk()"
     |   guard! max_concurrency > 0
     |   let sem = @async.Semaphore(max_concurrency)
-450 |   @async.with_task_group() <| fn(group) {
+633 |   @async.with_task_group() <| fn(group) {
     |          ^^^^^^^^^^^^^^^
     |     fn handle_path(path : String) {
     |       guard !exclude(path) else {  }
 
-<WORKDIR>/src\fs\lock_test.mbt:94:10-94:25:
+<WORKDIR>/src\fs\lock_test.mbt:88:10-88:25:
    | ///|
    | async test "flock exclusive vs exclusive" {
    |   let file_name = "_build/flock_ex_ex"
-94 |   @async.with_task_group() <| group => {
+88 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
    |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:111:10-111:25:
+<WORKDIR>/src\fs\lock_test.mbt:105:10-105:25:
     | ///|
     | async test "flock exclusive vs exclusive blocking" {
     |   let file_name = "_build/flock_ex_ex_blocking"
-111 |   @async.with_task_group() <| group => {
+105 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:127:10-127:25:
+<WORKDIR>/src\fs\lock_test.mbt:121:10-121:25:
     | ///|
     | async test "flock shared vs exclusive" {
     |   let file_name = "_build/flock_sh_ex"
-127 |   @async.with_task_group() <| group => {
+121 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:144:10-144:25:
+<WORKDIR>/src\fs\lock_test.mbt:138:10-138:25:
     | ///|
     | async test "flock shared vs exclusive blocking" {
     |   let file_name = "_build/flock_sh_ex_blocking"
-144 |   @async.with_task_group() <| group => {
+138 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:160:10-160:25:
+<WORKDIR>/src\fs\lock_test.mbt:154:10-154:25:
     | ///|
     | async test "flock exclusive vs shared" {
     |   let file_name = "_build/flock_ex_sh"
-160 |   @async.with_task_group() <| group => {
+154 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:177:10-177:25:
+<WORKDIR>/src\fs\lock_test.mbt:171:10-171:25:
     | ///|
     | async test "flock exclusive vs shared blocking" {
     |   let file_name = "_build/flock_ex_sh_blocking"
-177 |   @async.with_task_group() <| group => {
+171 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:193:10-193:25:
+<WORKDIR>/src\fs\lock_test.mbt:187:10-187:25:
     | ///|
     | async test "flock shared vs shared" {
     |   let file_name = "_build/flock_sh_sh"
-193 |   @async.with_task_group() <| group => {
+187 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:207:10-207:25:
+<WORKDIR>/src\fs\lock_test.mbt:201:10-201:25:
     | ///|
     | async test "flock shared vs shared blocking" {
     |   let file_name = "_build/flock_sh_sh_blocking"
-207 |   @async.with_task_group() <| group => {
+201 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:222:10-222:25:
+<WORKDIR>/src\fs\lock_test.mbt:216:10-216:25:
     | ///|
     | async test "flock shared vs shared vs exclusive" {
     |   let file_name = "_build/flock_sh_sh_ex"
-222 |   @async.with_task_group() <| group => {
+216 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:245:10-245:25:
+<WORKDIR>/src\fs\lock_test.mbt:239:10-239:25:
     | ///|
     | async test "flock shared vs shared vs exclusive blocking" {
     |   let file_name = "_build/flock_sh_sh_ex_blocking"
-245 |   @async.with_task_group() <| group => {
+239 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:264:10-264:25:
+<WORKDIR>/src\fs\lock_test.mbt:258:10-258:25:
     | ///|
     | async test "flock cancelled" {
     |   let file_name = "_build/flock_cancel"
-264 |   @async.with_task_group() <| group => {
+258 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let file = @fs.open(file_name, create_mode=CreateOrTruncate, mode=ReadWrite)
     |     defer file.close()
 
-<WORKDIR>/src\fs\lock_test.mbt:284:10-284:25:
+<WORKDIR>/src\fs\lock_test.mbt:278:10-278:25:
     | ///|
     | async test "flock advisory" {
     |   let file_name = "_build/flock_advisory"
-284 |   @async.with_task_group() <| group => {
+278 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     @fs.write_file(file_name, "abcd")
     |     let file = @fs.open(file_name, mode=ReadWrite)
@@ -849,11 +849,11 @@ Found 375 references for symbol 'with_task_group':
     |     let test_dir = Dir({
     |       "outer": Dir({
 
-<WORKDIR>/src\fs\watch_test.mbt:803:10-803:25:
+<WORKDIR>/src\fs\watch_test.mbt:805:10-805:25:
     |   defer @fs.rmdir(path, recursive=true)
     | 
     |   let log = StringBuilder()
-803 |   @async.with_task_group <| group => {
+805 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let watcher = @fs.Watcher(
     |       watched_path,
@@ -991,7 +991,7 @@ Found 375 references for symbol 'with_task_group':
 227 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let port = test_server(group, log)
-    |     let client = @http.Client("http://localhost:\{port}")
+    |     let client = @http.Client("http://127.0.0.1:\{port}")
 
 <WORKDIR>/src\http\parser_trailer_wbtest.mbt:17:10-17:25:
    | 
@@ -1173,47 +1173,65 @@ Found 375 references for symbol 'with_task_group':
     |     group.spawn_bg() <| () => {
     |       defer w.close()
 
-<WORKDIR>/src\http\parser_wbtest.mbt:639:10-639:25:
+<WORKDIR>/src\http\parser_wbtest.mbt:640:10-640:25:
+    | ///|
+    | async test "close-delimited gzip" {
+    |   let (r, w) = @io.pipe()
+640 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     group.spawn_bg() <| () => {
+    |       defer w.close()
+
+<WORKDIR>/src\http\parser_wbtest.mbt:667:10-667:25:
     | 
     | ///|
     | async test "read_response parse cookie" {
-639 |   @async.with_task_group() <| group => {
+667 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src\http\parser_wbtest.mbt:717:10-717:25:
+<WORKDIR>/src\http\parser_wbtest.mbt:745:10-745:25:
+    | 
+    | ///|
+    | async test "read_response ignores malformed Set-Cookie" {
+745 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let (r, w) = @io.pipe()
+    |     group.spawn_bg() <| () => {
+
+<WORKDIR>/src\http\parser_wbtest.mbt:774:10-774:25:
     | 
     | ///|
     | async test "chunk extension" {
-717 |   @async.with_task_group() <| root => {
+774 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     root.spawn_bg() <| () => {
 
-<WORKDIR>/src\http\parser_wbtest.mbt:747:10-747:25:
+<WORKDIR>/src\http\parser_wbtest.mbt:804:10-804:25:
     | 
     | ///|
     | async test "fixed length early EOF" {
-747 |   @async.with_task_group() <| group => {
+804 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src\http\parser_wbtest.mbt:772:10-772:25:
+<WORKDIR>/src\http\parser_wbtest.mbt:829:10-829:25:
     | 
     | ///|
     | async test "chunked early EOF: within chunk" {
-772 |   @async.with_task_group() <| group => {
+829 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
 
-<WORKDIR>/src\http\parser_wbtest.mbt:797:10-797:25:
+<WORKDIR>/src\http\parser_wbtest.mbt:854:10-854:25:
     | 
     | ///|
     | async test "chunked early EOF: chunk boundary" {
-797 |   @async.with_task_group() <| group => {
+854 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r, w) = @io.pipe()
     |     group.spawn_bg() <| () => {
@@ -1281,6 +1299,15 @@ Found 375 references for symbol 'with_task_group':
     |     group.spawn_bg(no_wait=true) <| () => {
     |       proxy_server.run_forever() <| ((_, _, conn) => {
 
+<WORKDIR>/src\http\proxy_test.mbt:233:10-233:25:
+    | 
+    | ///|
+    | async test "proxy at an IPv6 address" {
+233 |   @async.with_task_group() <| group => {
+    |          ^^^^^^^^^^^^^^^
+    |     let proxy = @socket.TcpServer(@socket.Addr::parse("[::1]:0"))
+    |     let proxy_port = proxy.addr.port()
+
 <WORKDIR>/src\http\request_test.mbt:29:10-29:25:
    | 
    | ///|
@@ -1316,6 +1343,15 @@ Found 375 references for symbol 'with_task_group':
    |          ^^^^^^^^^^^^^^^
    |     group.spawn_bg(no_wait=true) <| () => {
    |       test_server.run_forever() <| ((req, _body, conn) => {
+
+<WORKDIR>/src\http\request_test.mbt:98:10-98:25:
+   | ///|
+   | #cfg(any(target="native", target="wasm"))
+   | async test "request to an IPv6 address" {
+98 |   @async.with_task_group() <| group => {
+   |          ^^^^^^^^^^^^^^^
+   |     let server = @http.Server(@socket.Addr::parse("[::1]:0"))
+   |     group.spawn_bg(no_wait=true) <| () => {
 
 <WORKDIR>/src\http\send_wbtest.mbt:17:10-17:25:
    | 
@@ -1461,15 +1497,6 @@ Found 375 references for symbol 'with_task_group':
    |       group.spawn_bg() <| () => {
    |         log <+ "ping\n"
 
-<WORKDIR>/src\internal\event_loop\missing_close_test.mbt:20:12-20:27:
-   |   let log = StringBuilder()
-   |   @event_loop.check_fd_leak.val = false
-   |   @event_loop.with_event_loop() <| () => {
-20 |     @async.with_task_group() <| root => {
-   |            ^^^^^^^^^^^^^^^
-   |       let (r, w) = @pipe.pipe()
-   |       root.spawn_bg() <| () => {
-
 <WORKDIR>/src\internal\event_loop\starvation_test.mbt:18:10-18:25:
    | ///|
    | async test "starvation" {
@@ -1478,60 +1505,6 @@ Found 375 references for symbol 'with_task_group':
    |          ^^^^^^^^^^^^^^^
    |     group.spawn_bg() <| () => {
    |       @async.sleep(50)
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:47:10-47:25:
-   | ///|
-   | async test "worker basic" {
-   |   let log = StringBuilder()
-47 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<3 {
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:72:10-72:25:
-   | ///|
-   | async test "worker multiple" {
-   |   let start = @async.now()
-72 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     for _ in 0..<3 {
-   |       group.spawn_bg(() => perform_sleep_job(200))
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:84:10-84:25:
-   | ///|
-   | async test "worker cancel1" {
-   |   let log = StringBuilder()
-84 |   @async.with_task_group() <| root => {
-   |          ^^^^^^^^^^^^^^^
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<4 {
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:118:10-118:25:
-    | ///|
-    | async test "worker cancel2" {
-    |   let log = StringBuilder()
-118 |   @async.with_task_group() <| root => {
-    |          ^^^^^^^^^^^^^^^
-    |     root.spawn_bg() <| () => {
-    |       for _ in 0..<3 {
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:151:12-151:27:
-    | test "max worker limit" {
-    |   let time_of_jobs = [0, 0, 0, 0]
-    |   with_event_loop(max_worker_count=2, () => {
-151 |     @async.with_task_group <| group => {
-    |            ^^^^^^^^^^^^^^^
-    |       for i in 0..<4 {
-    |         group.spawn_bg() <| () => {
-
-<WORKDIR>/src\internal\event_loop\worker_wbtest.mbt:170:12-170:27:
-    | test "cancel queued job" {
-    |   let log = []
-    |   with_event_loop(max_worker_count=1, () => {
-170 |     @async.with_task_group <| group => {
-    |            ^^^^^^^^^^^^^^^
-    |       let start = @async.now()
-    |       fn tick() {
 
 <WORKDIR>/src\io\README.mbt.md:27:10-27:25:
    | ```moonbit check
@@ -2205,14 +2178,14 @@ Found 375 references for symbol 'with_task_group':
    |   let sleep = sleep_prog.wait()
 68 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
-   |     let child = @process.spawn(group, sleep, ["450", "-exit-code", "42"])
-   |     @async.sleep(300)
+   |     let child = @process.spawn(group, sleep, ["200", "-exit-code", "42"])
+   |     debug_inspect(child.try_wait(), content="None")
 
-<WORKDIR>/src\process\spawn_in_group_test.mbt:81:10-81:25:
-   | async test "Process:cancel" {
+<WORKDIR>/src\process\spawn_in_group_test.mbt:80:10-80:25:
+   | async test "Process::cancel" {
    |   let sleep = sleep_prog.wait()
    |   let mut t0 = 0L
-81 |   @async.with_task_group() <| group => {
+80 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @process.read_from_process()
    |     group.spawn_bg() <| () => {
@@ -2541,29 +2514,29 @@ Found 375 references for symbol 'with_task_group':
     |     let captured = Ref(0)
     |     let limit = match sink {
 
-<WORKDIR>/src\signal\signal_test.mbt:39:10-39:25:
+<WORKDIR>/src\signal\signal_test.mbt:27:10-27:25:
    | async test "cancel with default signal" {
    |   let test_prog = sleep_prog.wait()
    |   let log = []
-39 |   @async.with_task_group() <| group => {
+27 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (r, w) = @process.read_from_process()
    |     let task = group.spawn(() => {
 
-<WORKDIR>/src\signal\signal_test.mbt:132:10-132:25:
+<WORKDIR>/src\signal\signal_test.mbt:120:10-120:25:
     | async test "change cancellation signal set in the middle #1" {
     |   let test_prog = sleep_prog.wait()
     |   let log = []
-132 |   @async.with_task_group() <| group => {
+120 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r1, w1) = @process.write_to_process()
     |     defer w1.close()
 
-<WORKDIR>/src\signal\signal_test.mbt:160:10-160:25:
+<WORKDIR>/src\signal\signal_test.mbt:148:10-148:25:
     | async test "change cancellation signal set in the middle #2" {
     |   let test_prog = sleep_prog.wait()
     |   let log = []
-160 |   @async.with_task_group() <| group => {
+148 |   @async.with_task_group() <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let (r1, w1) = @process.write_to_process()
     |     defer w1.close()
@@ -2604,56 +2577,56 @@ Found 375 references for symbol 'with_task_group':
    |         for _ in 0..<6 {
    |           ctx.spawn_bg(() => client(b"ping", addr))
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:26:10-26:25:
-   | ///|
-   | async test "Only_V4 server" {
+<WORKDIR>/src\socket\dual_stack_test.mbt:29:10-29:25:
+   |   // so that there is no collision with randomly assigned IPv6 port
+   |   let port = 8344
    |   let log = StringBuilder()
-26 |   @async.with_task_group() <| root => {
+29 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
-   |     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:0"))
-   |     let port = server.addr.port()
+   |     let server = @socket.TcpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
+   |     root.spawn_bg(no_wait=true) <| () => {
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:80:10-80:25:
-   | ///|
-   | async test "Only_V6 server" {
+<WORKDIR>/src\socket\dual_stack_test.mbt:85:10-85:25:
+   |   // so that there is no collision with randomly assigned IPv4 port
+   |   let port = 8346
    |   let log = StringBuilder()
-80 |   @async.with_task_group() <| root => {
+85 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let server = @socket.TcpServer(
-   |       @socket.Addr::parse("[::]:0"),
+   |       @socket.Addr::parse("[::]:\{port}"),
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:137:10-137:25:
+<WORKDIR>/src\socket\dual_stack_test.mbt:141:10-141:25:
     | ///|
     | async test "dual stack server" {
     |   let log = StringBuilder()
-137 |   @async.with_task_group() <| root => {
+141 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.TcpServer(@socket.Addr::parse("[::]:0"))
     |     let port = server.addr.port()
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:188:10-188:25:
-    | ///|
-    | async test "Only_V4 UDP server" {
+<WORKDIR>/src\socket\dual_stack_test.mbt:195:10-195:25:
+    |   // so that there is no collision with randomly assigned IPv6 port
+    |   let port = 8344
     |   let log = StringBuilder()
-188 |   @async.with_task_group() <| root => {
+195 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
-    |     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:0"))
-    |     let port = server.addr.port()
+    |     let server = @socket.UdpServer(@socket.Addr::parse("0.0.0.0:\{port}"))
+    |     root.spawn_bg(no_wait=true) <| () => {
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:241:10-241:25:
-    | ///|
-    | async test "Only_V6 UDP server" {
+<WORKDIR>/src\socket\dual_stack_test.mbt:250:10-250:25:
+    |   // so that there is no collision with randomly assigned IPv4 port
+    |   let port = 8346
     |   let log = StringBuilder()
-241 |   @async.with_task_group() <| root => {
+250 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(
-    |       @socket.Addr::parse("[::]:0"),
+    |       @socket.Addr::parse("[::]:\{port}"),
 
-<WORKDIR>/src\socket\dual_stack_test.mbt:297:10-297:25:
+<WORKDIR>/src\socket\dual_stack_test.mbt:305:10-305:25:
     | ///|
     | async test "dual stack UDP server" {
     |   let log = StringBuilder()
-297 |   @async.with_task_group() <| root => {
+305 |   @async.with_task_group() <| root => {
     |          ^^^^^^^^^^^^^^^
     |     let server = @socket.UdpServer(@socket.Addr::parse("[::]:0"))
     |     let port = server.addr.port()
@@ -2757,14 +2730,14 @@ Found 375 references for symbol 'with_task_group':
    |     let lock = @async.Semaphore(1, initial_value=1)
    |     let task = root.spawn(() => {
 
-<WORKDIR>/src\socket\reuse_addr_test.mbt:18:10-18:25:
-   | ///|
-   | async test "reuse addr" {
-   |   let mut port = 0
-18 |   @async.with_task_group() <| group => {
-   |          ^^^^^^^^^^^^^^^
-   |     group.spawn_bg() <| () => {
-   |       for _ in 0..<2 {
+<WORKDIR>/src\socket\reuse_addr_test.mbt:20:12-20:27:
+   |   async fn run_server(server : @socket.TcpServer) -> Unit {
+   |     defer server.close()
+   |     let port = server.addr.port()
+20 |     @async.with_task_group <| group => {
+   |            ^^^^^^^^^^^^^^^
+   |       group.spawn_bg() <| () => {
+   |         let (conn, _) = server.accept()
 
 <WORKDIR>/src\socket\reuse_port_test.mbt:27:12-27:27:
    |   let mut accepted1 = 0
@@ -2838,29 +2811,29 @@ Found 375 references for symbol 'with_task_group':
    |         group.spawn_bg() <| () => {
    |           // emulate a non-cancellable job,
 
-<WORKDIR>/src\stdio\stdio_test.mbt:48:10-48:25:
+<WORKDIR>/src\stdio\stdio_test.mbt:37:10-37:25:
    | ///|
    | #cfg(any(target="native", target="wasm"))
    | async test "redirect pipe" {
-48 |   @async.with_task_group() <| root => {
+37 |   @async.with_task_group() <| root => {
    |          ^^^^^^^^^^^^^^^
    |     let cat = cat.wait()
    |     let (cat_read, we_write) = @process.write_to_process()
 
-<WORKDIR>/src\stdio\stdio_test.mbt:78:10-78:25:
+<WORKDIR>/src\stdio\stdio_test.mbt:67:10-67:25:
    | #cfg(any(target="native", target="wasm"))
    | async test "stdio cancel" {
    |   let cat = cat.wait()
-78 |   @async.with_task_group() <| group => {
+67 |   @async.with_task_group() <| group => {
    |          ^^^^^^^^^^^^^^^
    |     let (cat_read, we_write) = @process.write_to_process()
    |     let (we_read, cat_write) = @process.read_from_process()
 
-<WORKDIR>/src\stdio\stdio_test.mbt:116:10-116:25:
+<WORKDIR>/src\stdio\stdio_test.mbt:105:10-105:25:
     | async test "stdout and stderr are the same" {
     |   let cat = cat.wait()
     |   let (cat_read, we_write) = @process.write_to_process()
-116 |   @async.with_task_group <| group => {
+105 |   @async.with_task_group <| group => {
     |          ^^^^^^^^^^^^^^^
     |     let cat_task = group.spawn() <| () => {
     |       @process.collect_output_merged(cat, [], stdin=cat_read)
@@ -3110,7 +3083,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\control_test.mbt:162:12-162:27:
     |     }
-    |     let ws = @websocket.connect("ws://localhost:\{port}")
+    |     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer ws.close()
 162 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
@@ -3128,7 +3101,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\control_test.mbt:189:12-189:27:
     |     }
-    |     let ws = @websocket.connect("ws://localhost:\{port}")
+    |     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer ws.close()
 189 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
@@ -3146,7 +3119,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\control_test.mbt:216:12-216:27:
     |     }
-    |     let ws = @websocket.connect("ws://localhost:\{port}")
+    |     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer ws.close()
 216 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
@@ -3173,7 +3146,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\control_test.mbt:247:12-247:27:
     |     }
-    |     let ws = @websocket.connect("ws://localhost:\{port}")
+    |     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer ws.close()
 247 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
@@ -3191,7 +3164,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\control_test.mbt:279:12-279:27:
     |     }
-    |     let ws = @websocket.connect("ws://localhost:\{port}")
+    |     let ws = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer ws.close()
 279 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
@@ -3236,7 +3209,7 @@ Found 375 references for symbol 'with_task_group':
 
 <WORKDIR>/src\websocket\utf8_validation_test.mbt:106:12-106:27:
     |     }
-    |     let client = @websocket.connect("ws://localhost:\{port}")
+    |     let client = @websocket.connect("ws://127.0.0.1:\{port}")
     |     defer client.close()
 106 |     @async.with_task_group() <| group => {
     |            ^^^^^^^^^^^^^^^
