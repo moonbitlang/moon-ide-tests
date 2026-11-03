@@ -1,7 +1,7 @@
 # async rename buf src\pipe\read_exactly_test.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'buf' 'buf_renamed' --loc 'src\pipe\read_exactly_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'buf' 'buf_renamed' --loc 'src\pipe\read_exactly_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\pipe\read_exactly_test.mbt
 @@

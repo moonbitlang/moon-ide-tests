@@ -1,7 +1,7 @@
 # sqlparser peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'pretty_print' --loc 'src/ast.mbt:2:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'pretty_print' --loc 'src/ast.mbt:2:24'
 Definition found at file <WORKDIR>/src/ast.mbt
 "  | ///|" (escaped)
 "2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {" (escaped)
@@ -23,7 +23,7 @@ Definition found at file <WORKDIR>/src/ast.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'obj' --loc 'src/ast.mbt:2:37'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'obj' --loc 'src/ast.mbt:2:37'
 Definition found at file <WORKDIR>/src/ast.mbt
 "  | ///|" (escaped)
 "2 | pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {" (escaped)
@@ -45,7 +45,7 @@ Definition found at file <WORKDIR>/src/ast.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'BigQuery' --loc 'src/bigquery.mbt:3:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'BigQuery' --loc 'src/bigquery.mbt:3:17'
 Definition found at file <WORKDIR>/src/bigquery.mbt
   | ///|
   | /// BigQuery dialect - supports Google BigQuery specific syntax
@@ -68,7 +68,7 @@ Definition found at file <WORKDIR>/src/bigquery.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'BigQuery' --loc 'src/bigquery.mbt:6:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'BigQuery' --loc 'src/bigquery.mbt:6:22'
 Definition found at file <WORKDIR>/src/bigquery.mbt
   | ///|
   | /// BigQuery dialect - supports Google BigQuery specific syntax
@@ -91,7 +91,7 @@ Definition found at file <WORKDIR>/src/bigquery.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'Parser' --loc 'src/dml.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Parser' --loc 'src/dml.mbt:2:4'
 Definition found at file <WORKDIR>/src/parser.mbt
    | 
    | ///|
@@ -117,7 +117,7 @@ Definition found at file <WORKDIR>/src/parser.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'parse_set_expr' --loc 'src/dml.mbt:2:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse_set_expr' --loc 'src/dml.mbt:2:12'
 Definition found at file <WORKDIR>/src/dml.mbt
   | ///|
 2 | fn Parser::parse_set_expr(
@@ -139,7 +139,7 @@ Definition found at file <WORKDIR>/src/dml.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'Generic' --loc 'src/generic.mbt:5:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Generic' --loc 'src/generic.mbt:5:17'
 Definition found at file <WORKDIR>/src/generic.mbt
   | ///|
   | /// Generic SQL dialect that supports the union of all other dialects
@@ -164,7 +164,7 @@ Definition found at file <WORKDIR>/src/generic.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'Generic' --loc 'src/generic.mbt:8:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Generic' --loc 'src/generic.mbt:8:22'
 Definition found at file <WORKDIR>/src/generic.mbt
   | ///|
   | /// Generic SQL dialect that supports the union of all other dialects
@@ -189,7 +189,7 @@ Definition found at file <WORKDIR>/src/generic.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'LexerError' --loc 'src/lexer.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'LexerError' --loc 'src/lexer.mbt:2:10'
 Definition found at file <WORKDIR>/src/lexer.mbt
   | ///|
 2 | suberror LexerError {
@@ -211,7 +211,7 @@ Definition found at file <WORKDIR>/src/lexer.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
 Definition found at file <WORKDIR>/src/lexer.mbt
   | ///|
   | suberror LexerError {
@@ -234,7 +234,7 @@ Definition found at file <WORKDIR>/src/lexer.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'sql' --loc 'src/prepare.mbt:6:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'sql' --loc 'src/prepare.mbt:6:7'
 Definition found at file <WORKDIR>/src/prepare.mbt
   | ///|
   | /// Test cases for PREPARE/EXECUTE/DEALLOCATE statements
@@ -260,7 +260,7 @@ Definition found at file <WORKDIR>/src/prepare.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'stmt' --loc 'src/prepare.mbt:7:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'stmt' --loc 'src/prepare.mbt:7:7'
 Definition found at file <WORKDIR>/src/prepare.mbt
   | /// Test cases for PREPARE/EXECUTE/DEALLOCATE statements
   | 
@@ -286,7 +286,7 @@ Definition found at file <WORKDIR>/src/prepare.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'Redshift' --loc 'src/redshift.mbt:3:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Redshift' --loc 'src/redshift.mbt:3:17'
 Definition found at file <WORKDIR>/src/redshift.mbt
   | ///|
   | /// Redshift dialect - supports Amazon Redshift specific syntax
@@ -309,7 +309,7 @@ Definition found at file <WORKDIR>/src/redshift.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'Redshift' --loc 'src/redshift.mbt:6:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Redshift' --loc 'src/redshift.mbt:6:22'
 Definition found at file <WORKDIR>/src/redshift.mbt
   | ///|
   | /// Redshift dialect - supports Amazon Redshift specific syntax
@@ -332,7 +332,7 @@ Definition found at file <WORKDIR>/src/redshift.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'show_compact_debug' --loc 'src/show.mbt:2:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'show_compact_debug' --loc 'src/show.mbt:2:15'
 Definition found at file <WORKDIR>/src/show.mbt
   | ///|
 2 | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
@@ -354,7 +354,7 @@ Definition found at file <WORKDIR>/src/show.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'obj' --loc 'src/show.mbt:2:34'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'obj' --loc 'src/show.mbt:2:34'
 Definition found at file <WORKDIR>/src/show.mbt
   | ///|
 2 | fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
@@ -376,7 +376,7 @@ Definition found at file <WORKDIR>/src/show.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'pass' --loc 'src/tests/good_test.mbt:4:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'pass' --loc 'src/tests/good_test.mbt:4:4'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
 "  | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql" (escaped)
 "  | " (escaped)
@@ -400,7 +400,7 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'input' --loc 'src/tests/good_test.mbt:4:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src/tests/good_test.mbt:4:9'
 Definition found at file <WORKDIR>/src/tests/good_test.mbt
 "  | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql" (escaped)
 "  | " (escaped)
@@ -424,7 +424,7 @@ Definition found at file <WORKDIR>/src/tests/good_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
 "  | ///|" (escaped)
 "2 | fn read_and_parse(path : String) -> @sqlparser.Statements {" (escaped)
@@ -446,7 +446,7 @@ Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide peek-def 'path' --loc 'src/tests/tpch_test.mbt:2:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 Definition found at file <WORKDIR>/src/tests/tpch_test.mbt
 "  | ///|" (escaped)
 "2 | fn read_and_parse(path : String) -> @sqlparser.Statements {" (escaped)

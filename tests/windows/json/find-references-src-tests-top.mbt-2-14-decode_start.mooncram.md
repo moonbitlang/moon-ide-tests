@@ -1,7 +1,7 @@
 # json find-references decode_start src\tests\top.mbt:2:14
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'decode_start' --loc 'src\tests\top.mbt:2:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'decode_start' --loc 'src\tests\top.mbt:2:14'
 Found 2 references for symbol 'decode_start':
 <WORKDIR>/src\tests\incr.mbt:21:31-21:43:
    | fn decode_chunks(chunks : ArrayView[String]) -> Value raise {

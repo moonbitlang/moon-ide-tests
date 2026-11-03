@@ -1,7 +1,7 @@
 # json rename incr_fail src/tests/incr.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'incr_fail' 'incr_fail_renamed' --loc 'src/tests/incr.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'incr_fail' 'incr_fail_renamed' --loc 'src/tests/incr.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/incr.mbt
 @@

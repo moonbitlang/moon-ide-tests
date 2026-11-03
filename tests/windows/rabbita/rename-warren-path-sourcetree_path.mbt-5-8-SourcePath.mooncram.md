@@ -1,7 +1,7 @@
 # rabbita rename SourcePath warren\path\sourcetree_path.mbt:5:8
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'SourcePath' 'SourcePathRenamed' --loc 'warren\path\sourcetree_path.mbt:5:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SourcePath' 'SourcePathRenamed' --loc 'warren\path\sourcetree_path.mbt:5:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/warren\build.mbt
 @@

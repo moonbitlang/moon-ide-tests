@@ -1,7 +1,7 @@
 # json rename Decode src/lib/decode.mbt:8:11
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
 @@

@@ -1,7 +1,7 @@
 # uri rename Uri uri_test_new_features.mbt:5:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Uri' 'UriRenamed' --loc 'uri_test_new_features.mbt:5:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
 @@

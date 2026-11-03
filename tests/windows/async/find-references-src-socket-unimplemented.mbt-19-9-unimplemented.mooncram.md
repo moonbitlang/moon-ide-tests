@@ -1,7 +1,7 @@
 # async find-references unimplemented src\socket\unimplemented.mbt:19:9
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9' --target js
 Found 4 references for symbol 'unimplemented':
 <WORKDIR>/src\external_loop_integration\unimplemented_test.mbt:35:18-35:31:
    | #cfg(any(target="js", target="wasm-gc"))

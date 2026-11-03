@@ -1,7 +1,7 @@
 # core outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'builtin\exact_view_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'builtin\exact_view_test.mbt'
  16 |test "exact_view uses the same bounds on all array types" {
     |...
  46 |test "exact_view strings and bytes use start and end" {
@@ -36,7 +36,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'builtin\int64.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'builtin\int64.mbt'
   26 |pub fn Int64::Int64(self : Int64) -> Int64 = "%identity"
      |...
   44 |pub fn Int64::from_int(i : Int32) -> Int64 {
@@ -235,7 +235,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'builtin\string_like.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'builtin\string_like.mbt'
 19 |pub trait ToStringView {
    |...
 24 |pub impl ToStringView for String with fn to_string_view(self) -> StringView {
@@ -246,7 +246,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'encoding\utf8\decode_js.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'encoding\utf8\decode_js.mbt'
  16 |extern "js" fn decode_utf8_js(
  17 |  bytes : Bytes,
  18 |  start : Int32,
@@ -280,7 +280,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'lazy\lazy.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'lazy\lazy.mbt'
  24 |priv enum LazyState[A] {
     |...
  68 |struct Lazy[A] {
@@ -299,12 +299,12 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'queue\assertions_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'queue\assertions_test.mbt'
 No symbols found.
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'string\internal\regex_engine\regex.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'string\internal\regex_engine\regex.mbt'
  17 |const UNKNOWN : Int32 = -1
     |...
  23 |const DEAD : Int32 = -2
@@ -341,7 +341,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'string\regex_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'string\regex_test.mbt'
  16 |test "execute/non_capture_group" {
     |...
  32 |test "execute/non_capture_with_named_group" {
@@ -428,7 +428,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'test\extends.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'test\extends.mbt'
 20 |#deprecated("Use `Debug::to_repr` instead", skip_current_package=true)
 21 |#doc(hidden)
 22 |pub extend Test with @debug.Debug::{to_repr}
@@ -437,7 +437,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide outline 'test\types.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'test\types.mbt'
 16 |struct Test {
    |...
 23 |#alias(new, deprecated="Use `Test()` instead")

@@ -1,7 +1,7 @@
 # uri peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'Uri' --loc 'uri.mbt:54:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Uri' --loc 'uri.mbt:54:12'
 Definition found at file <WORKDIR>/uri.mbt
 "   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
 "   | /// - authority: contains user info, host, and port" (escaped)
@@ -27,7 +27,7 @@ Definition found at file <WORKDIR>/uri.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'scheme' --loc 'uri.mbt:55:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'scheme' --loc 'uri.mbt:55:3'
 Definition found at file <WORKDIR>/uri.mbt
 "   | /// - authority: contains user info, host, and port" (escaped)
 "   | /// - path: hierarchical path to resource" (escaped)
@@ -53,7 +53,7 @@ Definition found at file <WORKDIR>/uri.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'uri' --loc 'uri_test.mbt:5:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'uri' --loc 'uri_test.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test.mbt
 "  | ///|" (escaped)
 "  | /// Test basic URI parsing functionality" (escaped)
@@ -78,7 +78,7 @@ Definition found at file <WORKDIR>/uri_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'parse' --loc 'uri_test.mbt:5:18'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse' --loc 'uri_test.mbt:5:18'
 Definition found at file <WORKDIR>/uri.mbt
 "    | ///" (escaped)
 "    | /// - `UriError::EmptyUri` if the input string is empty" (escaped)
@@ -104,7 +104,7 @@ Definition found at file <WORKDIR>/uri.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test_new_features.mbt
 "  | ///|" (escaped)
 "  | /// Test URL encoding functionality" (escaped)
@@ -129,7 +129,7 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Definition found at file <WORKDIR>/uri.mbt
 "   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
 "   | /// - authority: contains user info, host, and port" (escaped)

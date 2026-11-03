@@ -1,7 +1,7 @@
 # indexmap outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\IndexMap.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\IndexMap.mbt'
    2 |const Default_init_capacity = 8
      |...
    5 |fn calc_grow_threshold(capacity : Int) -> Int {
@@ -166,7 +166,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' 
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\IndexMap_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\IndexMap_test.mbt'
   16 |test "new" {
      |...
   23 |test "get" {
@@ -333,7 +333,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' 
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide outline 'src\types.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\types.mbt'
 17 |priv struct Bucket[K, V] {
    |...
 27 |priv struct IndexMapCore[K, V] {

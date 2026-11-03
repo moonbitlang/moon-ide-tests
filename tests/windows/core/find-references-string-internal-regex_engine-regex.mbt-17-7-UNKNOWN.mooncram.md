@@ -1,7 +1,7 @@
 # core find-references UNKNOWN string\internal\regex_engine\regex.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'UNKNOWN' --loc 'string\internal\regex_engine\regex.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'UNKNOWN' --loc 'string\internal\regex_engine\regex.mbt:17:7'
 Found 7 references for symbol 'UNKNOWN':
 <WORKDIR>/string\internal\regex_engine\dfa.mbt:79:19-79:26:
    |   let used = self.kernels.length() * self.width()

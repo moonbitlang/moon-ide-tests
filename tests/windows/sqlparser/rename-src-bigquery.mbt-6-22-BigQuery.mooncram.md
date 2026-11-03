@@ -1,7 +1,7 @@
 # sqlparser rename BigQuery src\bigquery.mbt:6:22
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'BigQuery' 'BigQueryRenamed' --loc 'src\bigquery.mbt:6:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'BigQuery' 'BigQueryRenamed' --loc 'src\bigquery.mbt:6:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\bigquery.mbt
 @@

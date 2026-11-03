@@ -1,7 +1,7 @@
 # json outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/lib/decode.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/lib/decode.mbt'
  2 |pub type JsonArray = Array[Json]
    |...
  5 |pub type JsonObject = Map[String, Json]
@@ -30,7 +30,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/lib/json.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/lib/json.mbt'
   2 |priv struct Context {
     |...
  13 |enum Frame {
@@ -142,7 +142,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/lib/value.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/lib/value.mbt'
  2 |pub enum Value {
    |...
  8 |pub struct ContinueValue {
@@ -155,7 +155,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/incr.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/incr.mbt'
   2 |fn incr_fail(message : String) -> Unit raise {
     |...
   7 |fn continue_chunks(chunks : ArrayView[String], value : Value) -> Value raise {
@@ -191,7 +191,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/json_testsuite_helpers_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/json_testsuite_helpers_test.mbt'
  2 |fn json_testsuite_fail(message : String) -> Unit raise {
    |...
  7 |fn expect_accept(name : String, input : String) -> Unit raise {
@@ -204,7 +204,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/json_testsuite_n_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/json_testsuite_n_test.mbt'
    7 |test "json_testsuite n_array_1_true_without_comma" {
      |...
   13 |test "json_testsuite n_array_colon_instead_of_comma" {
@@ -557,7 +557,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/json_testsuite_y_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/json_testsuite_y_test.mbt'
   7 |test "json_testsuite y_array_arraysWithSpaces" {
     |...
  13 |test "json_testsuite y_array_empty-string" {
@@ -752,7 +752,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/json_value_semantics_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/json_value_semantics_test.mbt'
  2 |test "json value semantics basics" {
    |...
 15 |test "json value semantics duplicate object key keeps first value" {
@@ -769,14 +769,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/tests/top.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/tests/top.mbt'
 2 |using @json {decode_start, decode_continue, type Value}
   |...
 "" (escaped)
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide outline 'src/top.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/top.mbt'
  2 |pub using @lib {
  3 |  trait Decode,
  4 |  decode,

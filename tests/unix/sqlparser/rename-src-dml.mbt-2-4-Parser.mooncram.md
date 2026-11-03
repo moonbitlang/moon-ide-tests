@@ -1,7 +1,7 @@
 # sqlparser rename Parser src/dml.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ansi.mbt
 @@

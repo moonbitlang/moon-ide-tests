@@ -1,7 +1,7 @@
 # rabbita rename prefix e2e\apps\rui\message-scroller\message_scroller.mbt:2:25
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'prefix' 'prefix_renamed' --loc 'e2e\apps\rui\message-scroller\message_scroller.mbt:2:25'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'prefix' 'prefix_renamed' --loc 'e2e\apps\rui\message-scroller\message_scroller.mbt:2:25'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e\apps\rui\message-scroller\message_scroller.mbt
 @@

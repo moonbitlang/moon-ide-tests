@@ -1,7 +1,7 @@
 # uri find-references scheme uri.mbt:55:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'scheme' --loc 'uri.mbt:55:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'scheme' --loc 'uri.mbt:55:3'
 Found 14 references for symbol 'scheme':
 <WORKDIR>/uri.mbt:111:5-111:11:
     | ///

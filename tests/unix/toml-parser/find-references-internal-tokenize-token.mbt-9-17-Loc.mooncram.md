@@ -1,7 +1,7 @@
 # toml-parser find-references Loc internal/tokenize/token.mbt:9:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
 Found 23 references for symbol 'Loc':
 <WORKDIR>/internal/tokenize/token.mbt:16:12-16:15:
    | 

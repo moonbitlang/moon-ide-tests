@@ -1,7 +1,7 @@
 # indexmap find-references T src/IndexMap_test.mbt:17:19
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'T' --loc 'src/IndexMap_test.mbt:17:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'T' --loc 'src/IndexMap_test.mbt:17:19'
 Found 115 references for symbol 'T':
 <WORKDIR>/src/IndexMap.mbt:27:62-27:63:
 "   | /// let map : @IndexMap.T[String, Int] = @IndexMap.new(capacity=16)" (escaped)

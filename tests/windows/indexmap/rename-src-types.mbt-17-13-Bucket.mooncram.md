@@ -1,7 +1,7 @@
 # indexmap rename Bucket src\types.mbt:17:13
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'Bucket' 'BucketRenamed' --loc 'src\types.mbt:17:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Bucket' 'BucketRenamed' --loc 'src\types.mbt:17:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\types.mbt
 @@

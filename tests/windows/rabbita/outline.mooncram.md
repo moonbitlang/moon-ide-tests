@@ -1,7 +1,7 @@
 # rabbita outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\fixture\fixture.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e\apps\rui\fixture\fixture.mbt'
  2 |using @rabbita {type Html, type Val}
    |...
  5 |pub fn section(id : String, title : String, body : Array[Html]) -> Html {
@@ -12,7 +12,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\message-scroller\message_scroller.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e\apps\rui\message-scroller\message_scroller.mbt'
  2 |fn fixture_scroll_items(prefix : String) -> Array[Html] {
    |...
 17 |fn message_scroller_fixture() -> Val[Html] {
@@ -21,7 +21,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'e2e\apps\rui\toast\main.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e\apps\rui\toast\main.mbt'
 2 |using @rabbita {type Html, type Val}
   |...
 5 |using @html {div}
@@ -32,7 +32,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\clipboard\clipboard.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\clipboard\clipboard.mbt'
  2 |pub(all) enum Item {
    |...
 13 |pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
@@ -43,7 +43,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\dom\gpu_canvas_context.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\dom\gpu_canvas_context.mbt'
 2 |#cfg(target="js")
 3 |#external
 4 |type GPUCanvasContext
@@ -52,14 +52,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\runtime\host_ssr_wbtest.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\internal\runtime\host_ssr_wbtest.mbt'
 2 |#cfg(not(target="js"))
   |...
 "" (escaped)
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\vdom\diff.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\internal\vdom\diff.mbt'
   2 |#cfg(target="js")
   3 |struct VDom {
     |...
@@ -220,7 +220,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rabbita\internal\vdom\vdom.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\internal\vdom\vdom.mbt'
   2 |using @cmd {trait Scheduler}
     |...
   5 |#warnings("-unused_constructor")
@@ -289,7 +289,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'rui\sheet.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rui\sheet.mbt'
   3 |pub(all) enum SheetSide {
     |...
  11 |pub extend SheetSide with Debug::{to_repr}
@@ -361,7 +361,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide outline 'warren\path\sourcetree_path.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'warren\path\sourcetree_path.mbt'
  2 |pub type Path = @p.Path
    |...
  5 |struct SourcePath(String) derive(Eq, Compare, Hash)

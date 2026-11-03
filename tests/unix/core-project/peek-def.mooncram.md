@@ -1,7 +1,7 @@
 # core-project peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'HashMap' --loc 'core_ide_cases.mbt:5:28'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Definition found at file <MOON_HOME>/lib/core/hashmap/types.mbt
    | ///   @test.assert_eq(map.get(3), Some("three"))
 "   | ///   map.set(3, \"updated\")" (escaped)
@@ -27,7 +27,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'List' --loc 'core_ide_cases.mbt:8:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'List' --loc 'core_ide_cases.mbt:8:26'
 Definition found at file <MOON_HOME>/lib/core/list/types.mbt
 "   | // limitations under the License." (escaped)
 "   | " (escaped)
@@ -42,7 +42,7 @@ Definition found at file <MOON_HOME>/lib/core/list/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:12:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:12:22'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 "    | ///   let v2 = v.map(x => x + 1)" (escaped)
     | ///   @test.assert_eq(v2, [4, 5, 6])
@@ -68,7 +68,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'filter' --loc 'core_ide_cases.mbt:13:23'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'filter' --loc 'core_ide_cases.mbt:13:23'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
     | ///   let evens = arr.filter(x => x % 2 == 0)
     | ///   debug_inspect(evens, content="[2, 4]")
@@ -94,7 +94,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'fold' --loc 'core_ide_cases.mbt:14:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fold' --loc 'core_ide_cases.mbt:14:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | ///   @test.assert_eq(sum, 15)
      | /// }
@@ -120,7 +120,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'StringBuilder' --loc 'core_ide_cases.mbt:19:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'StringBuilder' --loc 'core_ide_cases.mbt:19:17'
 Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
    |   type Json,
    |   type Map,
@@ -168,7 +168,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'write_string' --loc 'core_ide_cases.mbt:20:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'write_string' --loc 'core_ide_cases.mbt:20:11'
 Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | pub extend String with ToStringView::{to_string_view}
 "    | " (escaped)
@@ -216,7 +216,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'length' --loc 'core_ide_cases.mbt:21:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'length' --loc 'core_ide_cases.mbt:21:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
      | ///   inspect("🤣".length(), content="2") // Emoji uses two UTF-16 code units
      | ///   inspect("".length(), content="0") // Empty string
@@ -242,7 +242,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'split' --loc 'core_ide_cases.mbt:21:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'split' --loc 'core_ide_cases.mbt:21:24'
 Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 "     | /// the returned iterator will contain only one element, which is the original" (escaped)
 "     | /// string." (escaped)
@@ -268,7 +268,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'to_array' --loc 'core_ide_cases.mbt:21:35'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_array' --loc 'core_ide_cases.mbt:21:35'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
     | ///|
@@ -294,7 +294,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'abs' --loc 'core_ide_cases.mbt:26:5'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'abs' --loc 'core_ide_cases.mbt:26:5'
 Definition found at file <MOON_HOME>/lib/core/builtin/int.mbt
     | ///   inspect(Int32::abs(42), content="42")
     | ///   inspect(Int32::abs(-42), content="42")
@@ -312,7 +312,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/int.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'to_string' --loc 'core_ide_cases.mbt:26:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_string' --loc 'core_ide_cases.mbt:26:11'
 Definition found at file <MOON_HOME>/lib/core/builtin/to_string.mbt
 "    | /// ```" (escaped)
 "    | /// inspect((255).to_string(radix=16), content=\"ff\")" (escaped)
@@ -338,7 +338,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/to_string.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:31:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:31:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
     | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
 "    | ///   let b = None" (escaped)
@@ -364,7 +364,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:38:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:38:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
    | ///   let x : Result[Int32, Unit] = Ok(6)
    | ///   let y = x.map((v : Int32) => v * 7)
@@ -390,7 +390,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:43:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:43:15'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// A new iterator that contains the transformed elements.
@@ -416,7 +416,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'to_array' --loc 'core_ide_cases.mbt:43:45'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_array' --loc 'core_ide_cases.mbt:43:45'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
     | ///|
@@ -442,7 +442,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:48:6'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:48:6'
 Definition found at file <MOON_HOME>/lib/core/list/list.mbt
     | ///     List([2, 4, 6, 8, 10]),
 "    | ///   )" (escaped)
@@ -468,7 +468,7 @@ Definition found at file <MOON_HOME>/lib/core/list/list.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'get' --loc 'core_ide_cases.mbt:53:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'get' --loc 'core_ide_cases.mbt:53:10'
 Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
 "    | ///   let map = @hashmap.from_array([(\"key\", 42)])" (escaped)
 "    | ///   debug_inspect(map.get(\"key\"), content=\"Some(42)\")" (escaped)
@@ -494,7 +494,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:53:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:53:22'
 Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
     | ///   @test.assert_eq(a.map(x => x * 2), Some(10))
 "    | ///   let b = None" (escaped)
@@ -520,7 +520,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:60:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:60:10'
 Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
 "    | ///|" (escaped)
     | /// Applies a function to each key-value pair in the map and
@@ -546,7 +546,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'map' --loc 'core_ide_cases.mbt:65:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:65:13'
 Definition found at file <WORKDIR>/types.mbt
 "   |   Value(T)" (escaped)
 "   | }" (escaped)
@@ -572,7 +572,7 @@ Definition found at file <WORKDIR>/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'split' --loc 'core_ide_cases.mbt:71:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'split' --loc 'core_ide_cases.mbt:71:4'
 Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 "     | /// the returned iterator will contain only one element, which is the original" (escaped)
 "     | /// string." (escaped)
@@ -598,7 +598,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'filter' --loc 'core_ide_cases.mbt:73:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'filter' --loc 'core_ide_cases.mbt:73:4'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// A new iterator that only contains the elements for which the predicate function returns `true`.
@@ -624,7 +624,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide peek-def 'from_array' --loc 'core_ide_cases.mbt:84:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Definition found at file <MOON_HOME>/lib/core/list/list.mbt
 "    | /// ```" (escaped)
     | #as_free_fn(deprecated="Use @list.List([...]) instead")

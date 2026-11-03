@@ -1,7 +1,7 @@
 # json find-references Decode src\lib\decode.mbt:8:11
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Decode' --loc 'src\lib\decode.mbt:8:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Decode' --loc 'src\lib\decode.mbt:8:11'
 Found 16 references for symbol 'Decode':
 <WORKDIR>/src\lib\decode.mbt:21:6-21:12:
    | }

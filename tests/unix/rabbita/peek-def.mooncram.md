@@ -1,7 +1,7 @@
 # rabbita peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Html' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Html' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:22'
 Definition found at file <WORKDIR>/rabbita/top.mbt
   | 
   | ///|
@@ -49,7 +49,7 @@ Definition found at file <WORKDIR>/rabbita/html/html.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Val' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Val' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
 Definition found at file <WORKDIR>/rabbita/incremental.mbt
    | ///|
    | /// A lazily evaluated value in Rabbita's incremental graph.
@@ -75,7 +75,7 @@ Definition found at file <WORKDIR>/rabbita/incremental.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'fixture_scroll_items' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fixture_scroll_items' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:4'
 Definition found at file <WORKDIR>/e2e/apps/rui/message-scroller/message_scroller.mbt
   | ///|
 2 | fn fixture_scroll_items(prefix : String) -> Array[Html] {
@@ -97,7 +97,7 @@ Definition found at file <WORKDIR>/e2e/apps/rui/message-scroller/message_scrolle
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'prefix' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:25'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'prefix' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:25'
 Definition found at file <WORKDIR>/e2e/apps/rui/message-scroller/message_scroller.mbt
   | ///|
 2 | fn fixture_scroll_items(prefix : String) -> Array[Html] {
@@ -119,7 +119,7 @@ Definition found at file <WORKDIR>/e2e/apps/rui/message-scroller/message_scrolle
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Html' --loc 'e2e/apps/rui/toast/main.mbt:2:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Html' --loc 'e2e/apps/rui/toast/main.mbt:2:22'
 Definition found at file <WORKDIR>/rabbita/top.mbt
   | 
   | ///|
@@ -167,7 +167,7 @@ Definition found at file <WORKDIR>/rabbita/html/html.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Val' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Val' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
 Definition found at file <WORKDIR>/rabbita/incremental.mbt
    | ///|
    | /// A lazily evaluated value in Rabbita's incremental graph.
@@ -193,7 +193,7 @@ Definition found at file <WORKDIR>/rabbita/incremental.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Item' --loc 'rabbita/clipboard/clipboard.mbt:2:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Item' --loc 'rabbita/clipboard/clipboard.mbt:2:15'
 Definition found at file <WORKDIR>/rabbita/clipboard/clipboard.mbt
   | ///|
 2 | pub(all) enum Item {
@@ -215,7 +215,7 @@ Definition found at file <WORKDIR>/rabbita/clipboard/clipboard.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
 Definition found at file <WORKDIR>/rabbita/clipboard/clipboard.mbt
   | ///|
   | pub(all) enum Item {
@@ -238,7 +238,7 @@ Definition found at file <WORKDIR>/rabbita/clipboard/clipboard.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'host' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:7' --target native
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'host' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:7' --target native
 Definition found at file <WORKDIR>/rabbita/internal/runtime/host_ssr_wbtest.mbt
   | ///|
   | #cfg(not(target="js"))
@@ -262,7 +262,7 @@ Definition found at file <WORKDIR>/rabbita/internal/runtime/host_ssr_wbtest.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'SSRHost' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SSRHost' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
 Definition found at file <WORKDIR>/rabbita/internal/runtime/host_ssr.mbt
    |   )
    |   document.to_string()
@@ -288,7 +288,7 @@ Definition found at file <WORKDIR>/rabbita/internal/runtime/host_ssr.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'VDom' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'VDom' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
 Definition found at file <WORKDIR>/rabbita/internal/vdom/diff.mbt
   | ///|
   | #cfg(target="js")
@@ -311,7 +311,7 @@ Definition found at file <WORKDIR>/rabbita/internal/vdom/diff.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'inode' --loc 'rabbita/internal/vdom/diff.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'inode' --loc 'rabbita/internal/vdom/diff.mbt:4:7'
 Definition found at file <WORKDIR>/rabbita/internal/vdom/diff.mbt
   | ///|
   | #cfg(target="js")
@@ -335,7 +335,7 @@ Definition found at file <WORKDIR>/rabbita/internal/vdom/diff.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Scheduler' --loc 'rabbita/internal/vdom/vdom.mbt:2:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Scheduler' --loc 'rabbita/internal/vdom/vdom.mbt:2:19'
 Definition found at file <WORKDIR>/rabbita/cmd/scheduler.mbt
    |   #internal(experimental, "This API is unstable and may change in the future.")
    |   fn inject_url_request(Self, String) -> Cmd
@@ -369,7 +369,7 @@ Definition found at file <WORKDIR>/rabbita/cmd/scheduler.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'VNode' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'VNode' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
 Definition found at file <WORKDIR>/rabbita/internal/vdom/vdom.mbt
   | ///|
   | using @cmd {trait Scheduler}
@@ -395,7 +395,7 @@ Definition found at file <WORKDIR>/rabbita/internal/vdom/vdom.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'SheetSide' --loc 'rui/sheet.mbt:3:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetSide' --loc 'rui/sheet.mbt:3:15'
 Definition found at file <WORKDIR>/rui/sheet.mbt
   | ///|
   | /// Edge from which a [`sheet`] enters the viewport.
@@ -418,7 +418,7 @@ Definition found at file <WORKDIR>/rui/sheet.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'SheetTop' --loc 'rui/sheet.mbt:4:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetTop' --loc 'rui/sheet.mbt:4:3'
 Definition found at file <WORKDIR>/rui/sheet.mbt
   | ///|
   | /// Edge from which a [`sheet`] enters the viewport.
@@ -442,7 +442,7 @@ Definition found at file <WORKDIR>/rui/sheet.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
 Definition found at file <WORKDIR>/warren/path/sourcetree_path.mbt
   | ///|
 2 | pub type Path = @p.Path
@@ -486,7 +486,7 @@ Definition found at file <WORKDIR>/.mooncakes/moonbitlang/x/path/path.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide peek-def 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
 Definition found at file <WORKDIR>/warren/path/sourcetree_path.mbt
   | ///|
   | pub type Path = @p.Path

@@ -1,7 +1,7 @@
 # json find-references expect_accept src\tests\json_testsuite_y_test.mbt:9:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
 Found 95 references for symbol 'expect_accept':
 <WORKDIR>/src\tests\json_testsuite_y_test.mbt:9:3-9:16:
   | ///|

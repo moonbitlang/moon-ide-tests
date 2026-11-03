@@ -1,7 +1,7 @@
 # rabbita rename Val e2e/apps/rui/toast/main.mbt:2:33
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Val' 'ValRenamed' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Val' 'ValRenamed' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/apps/rui/toast/main.mbt
 @@

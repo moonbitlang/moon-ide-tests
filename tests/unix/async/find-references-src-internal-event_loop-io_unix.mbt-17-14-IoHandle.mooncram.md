@@ -1,7 +1,7 @@
 # async find-references IoHandle src/internal/event_loop/io_unix.mbt:17:14
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'IoHandle' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'IoHandle' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
 Found 112 references for symbol 'IoHandle':
 <WORKDIR>/src/fs/dir.mbt:111:20-111:28:
     | ///|

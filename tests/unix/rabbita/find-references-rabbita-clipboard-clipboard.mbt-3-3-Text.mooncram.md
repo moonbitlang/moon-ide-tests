@@ -1,7 +1,7 @@
 # rabbita find-references Text rabbita/clipboard/clipboard.mbt:3:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
 Found 10 references for symbol 'Text':
 <WORKDIR>/rabbita/clipboard/op.mbt:12:21-12:25:
    |   ..on_invoke(op_invoke)

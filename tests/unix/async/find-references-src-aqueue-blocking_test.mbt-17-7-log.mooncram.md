@@ -1,7 +1,7 @@
 # async find-references log src/aqueue/blocking_test.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'log' --loc 'src/aqueue/blocking_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'log' --loc 'src/aqueue/blocking_test.mbt:17:7'
 Found 3 references for symbol 'log':
 <WORKDIR>/src/aqueue/blocking_test.mbt:23:9-23:12:
    |     group.spawn_bg() <| () => {

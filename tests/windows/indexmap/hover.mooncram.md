@@ -1,7 +1,7 @@
 # indexmap hover
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Default_init_capacity' --loc 'src\IndexMap.mbt:2:7'
 ///|
 const Default_init_capacity = 8
       ^^^^^^^^^^^^^^^^^^^^^
@@ -15,7 +15,7 @@ const Default_init_capacity = 8
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'calc_grow_threshold' --loc 'src\IndexMap.mbt:5:4'
 const Default_init_capacity = 8
 
 ///|
@@ -29,7 +29,7 @@ fn calc_grow_threshold(capacity : Int) -> Int {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'm' --loc 'src\IndexMap_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'm' --loc 'src\IndexMap_test.mbt:17:7'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
@@ -42,7 +42,7 @@ test "new" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'T' --loc 'src\IndexMap_test.mbt:17:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'T' --loc 'src\IndexMap_test.mbt:17:19'
 ///|
 test "new" {
   let m : @IndexMap.T[Int, Int] = @IndexMap.new()
@@ -68,7 +68,7 @@ test "new" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'Bucket' --loc 'src\types.mbt:17:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Bucket' --loc 'src\types.mbt:17:13'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {
@@ -90,7 +90,7 @@ priv struct Bucket[K, V] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide hover 'hash' --loc 'src\types.mbt:18:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'hash' --loc 'src\types.mbt:18:3'
 ///|
 /// 桶结构，包含键值对信息和链表指针
 priv struct Bucket[K, V] {

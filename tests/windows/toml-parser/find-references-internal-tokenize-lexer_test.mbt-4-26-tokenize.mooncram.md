@@ -1,7 +1,7 @@
 # toml-parser find-references tokenize internal\tokenize\lexer_test.mbt:4:26
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'tokenize' --loc 'internal\tokenize\lexer_test.mbt:4:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'tokenize' --loc 'internal\tokenize\lexer_test.mbt:4:26'
 Found 160 references for symbol 'tokenize':
 <WORKDIR>/coverage_improvement_test.mbt:72:26-72:34:
    | ///|

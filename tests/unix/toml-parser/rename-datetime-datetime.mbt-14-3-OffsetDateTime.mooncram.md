@@ -1,7 +1,7 @@
 # toml-parser rename OffsetDateTime datetime/datetime.mbt:14:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'datetime/datetime.mbt:14:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'datetime/datetime.mbt:14:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
 @@

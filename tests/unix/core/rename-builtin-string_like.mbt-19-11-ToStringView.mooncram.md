@@ -1,7 +1,7 @@
 # core rename ToStringView builtin/string_like.mbt:19:11
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'ToStringView' 'ToStringViewRenamed' --loc 'builtin/string_like.mbt:19:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'ToStringView' 'ToStringViewRenamed' --loc 'builtin/string_like.mbt:19:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin/array.mbt
 @@

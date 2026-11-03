@@ -1,7 +1,7 @@
 # toml-parser find-references parse additional_official_tests_test.mbt:17:11
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'parse' --loc 'additional_official_tests_test.mbt:17:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse' --loc 'additional_official_tests_test.mbt:17:11'
 Found 191 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:112:22-112:27:
     | ///|

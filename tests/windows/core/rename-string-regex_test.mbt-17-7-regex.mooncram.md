@@ -1,7 +1,7 @@
 # core rename regex string\regex_test.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'regex' 'regex_renamed' --loc 'string\regex_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'regex' 'regex_renamed' --loc 'string\regex_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/string\regex_test.mbt
 @@
