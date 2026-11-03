@@ -29,7 +29,6 @@ while IFS=$'\t' read -r slug path max_files max_per_file; do
     --repo "$repo_path" \
     --output-dir "$unix_out_dir" \
     --repo-slug "$slug" \
-    --test-repo "$path" \
     --platform unix \
     --max-files "$max_files" \
     --max-per-file "$max_per_file"
