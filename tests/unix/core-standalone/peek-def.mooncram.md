@@ -138,8 +138,8 @@ Found 1 symbols matching 'String::length':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1727-1738
-1727 | ///|
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1728-1739
+1728 | ///|
      | /// Splits the string into all substrings separated by the given separator.
 "     | /// " (escaped)
      | /// If the string does not contain the separator and the separator is not empty,

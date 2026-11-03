@@ -122,12 +122,12 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'StringBuilder' --loc 'core_ide_cases.mbt:19:17'
 Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
-   |   type Json,
+   |   type Iter2,
    |   type Map,
    |   type InspectError,
    |   type SnapshotError,
    |   type SourceLoc,
-70 |   type StringBuilder,
+69 |   type StringBuilder,
    |        ^^^^^^^^^^^^^
    | }
 "   | " (escaped)
@@ -249,7 +249,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 "     | /// " (escaped)
 "     | /// If the separator is empty, the returned iterator will contain all the" (escaped)
 "     | /// characters in the string as single elements." (escaped)
-1736 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
 "     |                ^^^^^" (escaped)
 "     |   self[:].split(sep)" (escaped)
 "     | }" (escaped)
@@ -579,7 +579,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
 "     | /// " (escaped)
 "     | /// If the separator is empty, the returned iterator will contain all the" (escaped)
 "     | /// characters in the string as single elements." (escaped)
-1736 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
 "     |                ^^^^^" (escaped)
 "     |   self[:].split(sep)" (escaped)
 "     | }" (escaped)
