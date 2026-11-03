@@ -1,7 +1,7 @@
 # core rename UNKNOWN string\internal\regex_engine\regex.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'UNKNOWN' 'UNKNOWNRenamed' --loc 'string\internal\regex_engine\regex.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'UNKNOWN' 'UNKNOWNRenamed' --loc 'string\internal\regex_engine\regex.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/string\internal\regex_engine\dfa.mbt
 @@

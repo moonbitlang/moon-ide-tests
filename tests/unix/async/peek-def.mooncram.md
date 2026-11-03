@@ -1,7 +1,7 @@
 # async peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'log' --loc 'src/aqueue/blocking_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'log' --loc 'src/aqueue/blocking_test.mbt:17:7'
 Definition found at file <WORKDIR>/src/aqueue/blocking_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -27,7 +27,7 @@ Definition found at file <WORKDIR>/src/aqueue/blocking_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'with_task_group' --loc 'src/aqueue/blocking_test.mbt:18:10'
 Definition found at file <WORKDIR>/src/task_group.mbt
     | /// which means all child tasks in the group have terminated, including `f`.
     | ///
@@ -53,7 +53,7 @@ Definition found at file <WORKDIR>/src/task_group.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
 Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
    | // limitations under the License.
    | 
@@ -79,7 +79,7 @@ Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'path' --loc 'src/fs/named_pipe_test.mbt:18:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'path' --loc 'src/fs/named_pipe_test.mbt:18:22'
 Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
    | // limitations under the License.
    | 
@@ -105,7 +105,7 @@ Definition found at file <WORKDIR>/src/fs/named_pipe_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'IoHandle' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'IoHandle' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
 Definition found at file <WORKDIR>/src/internal/event_loop/io.mbt
    | }
    | 
@@ -131,7 +131,7 @@ Definition found at file <WORKDIR>/src/internal/event_loop/io.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
 Definition found at file <WORKDIR>/src/internal/event_loop/io_unix.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -157,7 +157,7 @@ Definition found at file <WORKDIR>/src/internal/event_loop/io_unix.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
 Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
    | // limitations under the License.
    | 
@@ -183,7 +183,7 @@ Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
 Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
    | 
    | ///|
@@ -209,7 +209,7 @@ Definition found at file <WORKDIR>/src/internal/event_loop/stdio.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def '_ignore_unused_import' --loc 'src/js_async/unimplemented.mbt:17:5'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '_ignore_unused_import' --loc 'src/js_async/unimplemented.mbt:17:5'
 Definition found at file <WORKDIR>/src/js_async/unimplemented.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -235,7 +235,7 @@ Definition found at file <WORKDIR>/src/js_async/unimplemented.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'Coroutine' --loc 'src/js_async/unimplemented.mbt:18:21'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Coroutine' --loc 'src/js_async/unimplemented.mbt:18:21'
 Definition found at file <WORKDIR>/src/internal/coroutine/coroutine.mbt
    |   Running
    |   Suspend((SuspendResult) -> Unit)
@@ -261,7 +261,7 @@ Definition found at file <WORKDIR>/src/internal/coroutine/coroutine.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'buf' --loc 'src/pipe/read_exactly_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'buf' --loc 'src/pipe/read_exactly_test.mbt:17:7'
 Definition found at file <WORKDIR>/src/pipe/read_exactly_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -287,7 +287,7 @@ Definition found at file <WORKDIR>/src/pipe/read_exactly_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'log' --loc 'src/pipe/read_exactly_test.mbt:18:6'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'log' --loc 'src/pipe/read_exactly_test.mbt:18:6'
 Definition found at file <WORKDIR>/src/pipe/read_exactly_test.mbt
    | // limitations under the License.
    | 
@@ -313,7 +313,7 @@ Definition found at file <WORKDIR>/src/pipe/read_exactly_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '_ignore_unused_import' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
 Definition found at file <WORKDIR>/src/pipe/unimplemented_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -329,7 +329,7 @@ Definition found at file <WORKDIR>/src/pipe/unimplemented_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17' --target js
 Definition found at file <WORKDIR>/src/timer.mbt
    | 
    | ///|
@@ -368,7 +368,7 @@ Definition found at file <WORKDIR>/src/internal/event_loop/timer.js.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'ReadFromProcess' --loc 'src/process/redirect.mbt:17:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'ReadFromProcess' --loc 'src/process/redirect.mbt:17:8'
 Definition found at file <WORKDIR>/src/process/redirect.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -394,7 +394,7 @@ Definition found at file <WORKDIR>/src/process/redirect.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'io' --loc 'src/process/redirect.mbt:18:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'io' --loc 'src/process/redirect.mbt:18:3'
 Definition found at file <WORKDIR>/src/process/redirect.mbt
    | // limitations under the License.
    | 
@@ -420,7 +420,7 @@ Definition found at file <WORKDIR>/src/process/redirect.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'platform' --loc 'src/socket/reuse_port_test.mbt:21:20'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'platform' --loc 'src/socket/reuse_port_test.mbt:21:20'
 Definition found at file <WORKDIR>/src/internal/event_loop/event_loop.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -454,7 +454,7 @@ Definition found at file <WORKDIR>/src/internal/env_util/env_util.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:32'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Linux' --loc 'src/socket/reuse_port_test.mbt:21:32'
 Definition found at file <WORKDIR>/src/types/types.mbt
    | 
    | ///|
@@ -469,7 +469,7 @@ Definition found at file <WORKDIR>/src/types/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9' --target js
 Definition found at file <WORKDIR>/src/socket/unimplemented.mbt
    | 
    | ///|
@@ -490,7 +490,7 @@ Definition found at file <WORKDIR>/src/socket/unimplemented.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
 Definition found at file <MOON_HOME>/lib/core/string/strconv.mbt
    | // limitations under the License.
    | 

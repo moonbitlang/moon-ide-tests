@@ -1,7 +1,7 @@
 # core find-references fixed builtin\exact_view_test.mbt:18:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'fixed' --loc 'builtin\exact_view_test.mbt:18:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'fixed' --loc 'builtin\exact_view_test.mbt:18:7'
 Found 1 references for symbol 'fixed':
 <WORKDIR>/builtin\exact_view_test.mbt:29:7-29:12:
    |   for

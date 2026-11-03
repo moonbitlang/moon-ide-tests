@@ -1,7 +1,7 @@
 # indexmap find-references m src\IndexMap_test.mbt:17:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'm' --loc 'src\IndexMap_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'm' --loc 'src\IndexMap_test.mbt:17:7'
 Found 2 references for symbol 'm':
 <WORKDIR>/src\IndexMap_test.mbt:18:11-18:12:
    | ///|

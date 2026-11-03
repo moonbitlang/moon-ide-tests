@@ -1,7 +1,7 @@
 # rabbita rename inode rabbita/internal/vdom/diff.mbt:4:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'inode' 'inode_renamed' --loc 'rabbita/internal/vdom/diff.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'inode' 'inode_renamed' --loc 'rabbita/internal/vdom/diff.mbt:4:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/internal/vdom/diff.mbt
 @@

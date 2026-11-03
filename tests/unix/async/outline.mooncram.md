@@ -1,7 +1,7 @@
 # async outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/aqueue/blocking_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/aqueue/blocking_test.mbt'
  16 |async test "blocking unbuffered" {
     |...
  40 |async test "blocking buffered" {
@@ -34,7 +34,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/fs/named_pipe_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/fs/named_pipe_test.mbt'
  16 |#cfg(not(platform="windows"))
  17 |#borrow(path)
  18 |extern "C" fn mkfifo(path : @os_string.OsString, mode : Int32) -> Int32 = "mkfifo"
@@ -53,7 +53,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/internal/event_loop/io_unix.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/internal/event_loop/io_unix.mbt'
  16 |#cfg(not(platform="windows"))
  17 |pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
     |...
@@ -138,7 +138,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/internal/event_loop/stdio.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/internal/event_loop/stdio.mbt'
  16 |#cfg(target="native")
  17 |#borrow(buf)
  18 |extern "C" fn fstatx_sync(
@@ -185,7 +185,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/js_async/unimplemented.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/js_async/unimplemented.mbt'
  16 |#coverage.skip
     |...
  24 |#external
@@ -288,7 +288,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/pipe/read_exactly_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/pipe/read_exactly_test.mbt'
 16 |async test "read_exactly" {
    |...
 58 |async test "read_exactly failure" {
@@ -297,14 +297,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/pipe/unimplemented_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/pipe/unimplemented_test.mbt'
 16 |#cfg(not(target="native"))
    |...
 "" (escaped)
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/process/redirect.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/process/redirect.mbt'
  17 |struct ReadFromProcess {
     |...
  24 |struct WriteToProcess(@event_loop.IoHandle)
@@ -424,14 +424,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/socket/reuse_port_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/socket/reuse_port_test.mbt'
 16 |async test "reuse port lb" {
    |...
 "" (escaped)
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide outline 'src/socket/unimplemented.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/socket/unimplemented.mbt'
 17 |#cfg(not(any(target="native", target="wasm")))
    |...
 "" (escaped)

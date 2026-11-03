@@ -1,7 +1,7 @@
 # async find-references mkfifo src/fs/named_pipe_test.mbt:18:15
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
 Found 2 references for symbol 'mkfifo':
 <WORKDIR>/src/fs/named_pipe_test.mbt:24:6-24:12:
    | #cfg(not(platform="windows"))

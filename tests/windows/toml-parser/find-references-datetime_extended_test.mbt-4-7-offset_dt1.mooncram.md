@@ -1,7 +1,7 @@
 # toml-parser find-references offset_dt1 datetime_extended_test.mbt:4:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
 Found 3 references for symbol 'offset_dt1':
 <WORKDIR>/datetime_extended_test.mbt:7:17-7:27:
   |   let offset_dt1 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")

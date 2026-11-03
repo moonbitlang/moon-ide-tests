@@ -44,12 +44,36 @@ fn replace_paths(text : String, path : String, marker : String) -> String {
 }
 
 ///|
+async fn fixture_dir() -> String {
+  let cwd = @fs.realpath(".")
+  let parts = cwd
+    .replace_all(old="\\", new="/")
+    .split("/")
+    .map(s => s.to_owned())
+    .to_array()
+  let slug = match parts {
+    [.., "tests", "unix" | "windows", slug] => slug
+    _ =>
+      abort(
+        "run-moon-ide.mbtx must run from tests/<unix|windows>/<repo>; got: \{cwd}",
+      )
+  }
+  let root = @fs.realpath("../../..")
+  let relative = match slug {
+    "core-project" => "core_test/test_project"
+    "core-standalone" => "core_test"
+    _ => "fixtures/repos/\{slug}"
+  }
+  @fs.realpath(root + "/" + relative)
+}
+
+///|
 async fn main {
   let args = @env.args()
-  if args.length() < 3 {
-    abort("usage: run-moon-ide.mbtx <fixture-dir> <executable> [args...]")
+  if args.length() < 2 {
+    abort("usage: run-moon-ide.mbtx <ide-subcommand> [args...]")
   }
-  let repo = @fs.realpath(args[1])
+  let repo = fixture_dir()
   let moon_home = @fs.realpath(
     @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
       let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {
@@ -61,8 +85,8 @@ async fn main {
     }),
   )
   let (status, output) = @process.collect_output_merged(
-    args[2],
-    args[3:].to_owned(),
+    "moon",
+    ["ide", ..args[1:]],
     cwd=repo,
     extra_env={ "MOON_HOME": moon_home },
   )

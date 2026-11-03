@@ -1,7 +1,7 @@
 # toml-parser rename TomlDateTime datetime/datetime.mbt:13:15
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'TomlDateTime' 'TomlDateTimeRenamed' --loc 'datetime/datetime.mbt:13:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'TomlDateTime' 'TomlDateTimeRenamed' --loc 'datetime/datetime.mbt:13:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/datetime/datetime.mbt
 @@

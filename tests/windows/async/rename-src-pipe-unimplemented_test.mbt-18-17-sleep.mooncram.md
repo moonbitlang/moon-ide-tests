@@ -1,7 +1,7 @@
 # async rename sleep src\pipe\unimplemented_test.mbt:18:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'sleep' 'sleep_renamed' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src\all_any_test.mbt
 @@

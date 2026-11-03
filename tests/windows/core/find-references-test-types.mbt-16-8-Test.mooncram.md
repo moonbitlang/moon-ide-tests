@@ -1,7 +1,7 @@
 # core find-references Test test\types.mbt:16:8
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide find-references 'Test' --loc 'test\types.mbt:16:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Test' --loc 'test\types.mbt:16:8'
 Found 18 references for symbol 'Test':
 <WORKDIR>/diff\diff_html_test.mbt:161:45-161:49:
     | }

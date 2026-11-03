@@ -1,7 +1,7 @@
 # json find-references incr_fail src/tests/incr.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'incr_fail' --loc 'src/tests/incr.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'incr_fail' --loc 'src/tests/incr.mbt:2:4'
 Found 6 references for symbol 'incr_fail':
 <WORKDIR>/src/tests/incr.mbt:35:7-35:16:
    |   match decode_chunks(chunks) {

@@ -1,7 +1,7 @@
 # json rename Value src\lib\value.mbt:2:10
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Value' 'ValueRenamed' --loc 'src\lib\value.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Value' 'ValueRenamed' --loc 'src\lib\value.mbt:2:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\lib\json.mbt
 @@

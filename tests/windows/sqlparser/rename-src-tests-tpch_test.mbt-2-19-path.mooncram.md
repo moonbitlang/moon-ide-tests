@@ -1,7 +1,7 @@
 # sqlparser rename path src\tests\tpch_test.mbt:2:19
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'path' 'path_renamed' --loc 'src\tests\tpch_test.mbt:2:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'path' 'path_renamed' --loc 'src\tests\tpch_test.mbt:2:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\tpch_test.mbt
 @@

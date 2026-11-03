@@ -1,7 +1,7 @@
 # uri outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'uri.mbt'
   54 |pub struct Uri {
      |...
   65 |pub extend Uri with ToJson::{to_json}
@@ -118,7 +118,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'uri_test.mbt'
   3 |test "basic_uri_parsing" {
     |...
  15 |test "empty_uri" {
@@ -165,7 +165,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test_new_features.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'uri_test_new_features.mbt'
   3 |test "url_encoding" {
     |...
  21 |test "url_decoding" {

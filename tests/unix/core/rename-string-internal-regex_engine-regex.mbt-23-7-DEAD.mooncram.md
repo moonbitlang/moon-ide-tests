@@ -1,7 +1,7 @@
 # core rename DEAD string/internal/regex_engine/regex.mbt:23:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'DEAD' 'DEADRenamed' --loc 'string/internal/regex_engine/regex.mbt:23:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'DEAD' 'DEADRenamed' --loc 'string/internal/regex_engine/regex.mbt:23:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/string/internal/regex_engine/dfa.mbt
 @@

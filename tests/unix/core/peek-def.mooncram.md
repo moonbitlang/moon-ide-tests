@@ -1,7 +1,7 @@
 # core peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'arr' --loc 'builtin/exact_view_test.mbt:17:7'
 Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -27,7 +27,7 @@ Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fixed' --loc 'builtin/exact_view_test.mbt:18:7'
 Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
    | // limitations under the License.
    | 
@@ -53,7 +53,7 @@ Definition found at file <WORKDIR>/builtin/exact_view_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'self' --loc 'builtin/int64.mbt:26:21'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'self' --loc 'builtin/int64.mbt:26:21'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
@@ -79,7 +79,7 @@ Definition found at file <WORKDIR>/builtin/int64.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'from_int' --loc 'builtin/int64.mbt:44:15'
 Definition found at file <WORKDIR>/builtin/int64.mbt
    | /// ```mbt check
    | /// test {
@@ -105,7 +105,7 @@ Definition found at file <WORKDIR>/builtin/int64.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'ToStringView' --loc 'builtin/string_like.mbt:19:11'
 Definition found at file <WORKDIR>/builtin/string_like.mbt
    | 
    | ///|
@@ -129,7 +129,7 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_string_view' --loc 'builtin/string_like.mbt:20:6'
 Definition found at file <WORKDIR>/builtin/string_like.mbt
    | ///|
    | /// Trait for values that can be viewed as `StringView`.
@@ -152,7 +152,7 @@ Definition found at file <WORKDIR>/builtin/string_like.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode_utf8_js' --loc 'encoding/utf8/decode_js.mbt:16:16' --target js
 Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -178,7 +178,7 @@ Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'bytes' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
 Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -204,7 +204,7 @@ Definition found at file <WORKDIR>/encoding/utf8/decode_js.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'LazyState' --loc 'lazy/lazy.mbt:24:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'LazyState' --loc 'lazy/lazy.mbt:24:11'
 Definition found at file <WORKDIR>/lazy/lazy.mbt
    | /// - `Forcing`: the thunk is currently running. Used to detect reentrant
    | ///   `force` calls on the same cell, which would otherwise re-evaluate
@@ -230,7 +230,7 @@ Definition found at file <WORKDIR>/lazy/lazy.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Unforced' --loc 'lazy/lazy.mbt:25:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Unforced' --loc 'lazy/lazy.mbt:25:3'
 Definition found at file <WORKDIR>/lazy/lazy.mbt
    | ///   `force` calls on the same cell, which would otherwise re-evaluate
    | ///   the thunk and silently break the at-most-once guarantee.
@@ -256,7 +256,7 @@ Definition found at file <WORKDIR>/lazy/lazy.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'UNKNOWN' --loc 'string/internal/regex_engine/regex.mbt:17:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -282,7 +282,7 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'DEAD' --loc 'string/internal/regex_engine/regex.mbt:23:7'
 Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
    | 
    | ///|
@@ -308,7 +308,7 @@ Definition found at file <WORKDIR>/string/internal/regex_engine/regex.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'regex' --loc 'string/regex_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'regex' --loc 'string/regex_test.mbt:17:7'
 Definition found at file <WORKDIR>/string/regex_test.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.
@@ -334,7 +334,7 @@ Definition found at file <WORKDIR>/string/regex_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'execute' --loc 'string/regex_test.mbt:18:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'execute' --loc 'string/regex_test.mbt:18:15'
 Definition found at file <WORKDIR>/string/regex.mbt
     | ///   let anchored = re"^ab$"
     | ///   inspect(anchored.execute("ab", last_index=0) is Some(_), content="true")
@@ -360,7 +360,7 @@ Definition found at file <WORKDIR>/string/regex.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Test' --loc 'test/extends.mbt:22:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Test' --loc 'test/extends.mbt:22:12'
 Definition found at file <WORKDIR>/test/types.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -384,7 +384,7 @@ Definition found at file <WORKDIR>/test/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'to_repr' --loc 'test/extends.mbt:22:37'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_repr' --loc 'test/extends.mbt:22:37'
 Definition found at file <WORKDIR>/test/extends.mbt
    | // --- deprecated: hidden from the generated interface ---
    | 
@@ -413,7 +413,7 @@ Definition found at file <WORKDIR>/test/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'Test' --loc 'test/types.mbt:16:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Test' --loc 'test/types.mbt:16:8'
 Definition found at file <WORKDIR>/test/types.mbt
    | // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    | // See the License for the specific language governing permissions and
@@ -437,7 +437,7 @@ Definition found at file <WORKDIR>/test/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide peek-def 'name' --loc 'test/types.mbt:17:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'name' --loc 'test/types.mbt:17:3'
 Definition found at file <WORKDIR>/test/types.mbt
    | // See the License for the specific language governing permissions and
    | // limitations under the License.

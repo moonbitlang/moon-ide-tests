@@ -1,7 +1,7 @@
 # toml-parser hover
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
 ///|
 /// Test key names with various characters
 test "key name variations" {
@@ -15,7 +15,7 @@ test "key name variations" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'parse' --loc 'additional_official_tests_test.mbt:17:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'additional_official_tests_test.mbt:17:11'
     #|"ʎǝʞ" = "value"
     #|
   debug_inspect(
@@ -41,7 +41,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parse
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
 /// Test EOF handling in parser - covered by creating empty token arrays
 test "parser_eof_handling" {
   // Test empty parse input to exercise EOF conditions
@@ -55,7 +55,7 @@ test "parser_eof_handling" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
 /// Test EOF handling in parser - covered by creating empty token arrays
 test "parser_eof_handling" {
   // Test empty parse input to exercise EOF conditions
@@ -81,7 +81,7 @@ test "parser_eof_handling" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 /// Values are stored as their original string form. The parser preserves
 /// the spelling supplied in the TOML source; it does not normalize or
 /// validate the underlying calendar arithmetic.
@@ -113,7 +113,7 @@ pub(all) enum TomlDateTime {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
 /// the spelling supplied in the TOML source; it does not normalize or
 /// validate the underlying calendar arithmetic.
 pub(all) enum TomlDateTime {
@@ -127,7 +127,7 @@ pub(all) enum TomlDateTime {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
 ///|
 /// Extended datetime tests for improved coverage
 test "test TomlDateTime types and equality" {
@@ -141,7 +141,7 @@ test "test TomlDateTime types and equality" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
 ///|
 /// Extended datetime tests for improved coverage
 test "test TomlDateTime types and equality" {
@@ -155,7 +155,7 @@ test "test TomlDateTime types and equality" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'tokens' --loc 'internal/tokenize/lexer_test.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokens' --loc 'internal/tokenize/lexer_test.mbt:4:7'
 ///|
 /// Tests for the TOML lexer
 test "tokenize simple key-value" {
@@ -169,7 +169,7 @@ test "tokenize simple key-value" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
 ///|
 /// Tests for the TOML lexer
 test "tokenize simple key-value" {
@@ -186,7 +186,7 @@ test "tokenize simple key-value" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
 /// `adjacent` (no gap) when one's `end` equals the other's `start`, which
 /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
 /// (a nested array literal opening a normal table header).
@@ -212,7 +212,7 @@ pub(all) struct Loc {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'start' --loc 'internal/tokenize/token.mbt:10:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'start' --loc 'internal/tokenize/token.mbt:10:3'
 /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
 /// (a nested array literal opening a normal table header).
 pub(all) struct Loc {
@@ -226,7 +226,7 @@ pub(all) struct Loc {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'Parser' --loc 'parser.mbt:3:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Parser' --loc 'parser.mbt:3:4'
 ///|
 /// Skip newline tokens
 fn Parser::skip_newlines(self : Parser) -> Unit {
@@ -245,7 +245,7 @@ fn Parser::skip_newlines(self : Parser) -> Unit {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'skip_newlines' --loc 'parser.mbt:3:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'skip_newlines' --loc 'parser.mbt:3:12'
 ///|
 /// Skip newline tokens
 fn Parser::skip_newlines(self : Parser) -> Unit {
@@ -261,7 +261,7 @@ fn Parser::skip_newlines(self : Parser) -> Unit {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'tokens' --loc 'parser_wbtest.mbt:7:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokens' --loc 'parser_wbtest.mbt:7:7'
 ///|
 test "parse_dotted_key - simple identifier" {
   // Test parsing a simple identifier key
@@ -275,7 +275,7 @@ test "parse_dotted_key - simple identifier" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'tokenize' --loc 'parser_wbtest.mbt:7:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 ///|
 test "parse_dotted_key - simple identifier" {
   // Test parsing a simple identifier key
@@ -292,7 +292,7 @@ test "parse_dotted_key - simple identifier" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
 ///|
 fn parse_expect_to_fail(input : String) -> String {
    ^^^^^^^^^^^^^^^^^^^^
@@ -304,7 +304,7 @@ fn parse_expect_to_fail(input : String) -> String {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'input' --loc 'test_utils_test.mbt:2:25'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'input' --loc 'test_utils_test.mbt:2:25'
 ///|
 fn parse_expect_to_fail(input : String) -> String {
                         ^^^^^
@@ -316,7 +316,7 @@ fn parse_expect_to_fail(input : String) -> String {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
 ///|
 /// Helper function to escape strings according to TOML spec
 fn escape_toml_string(s : String) -> String {
@@ -332,7 +332,7 @@ fn escape_toml_string(s : String) -> String {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide hover 's' --loc 'toml_to_string.mbt:3:23'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 's' --loc 'toml_to_string.mbt:3:23'
 ///|
 /// Helper function to escape strings according to TOML spec
 fn escape_toml_string(s : String) -> String {

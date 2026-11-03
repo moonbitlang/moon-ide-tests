@@ -109,13 +109,8 @@ fn command_quote(arg : String) -> String {
 }
 
 ///|
-fn test_repo_root_arg() -> String {
-  command_quote("../../../\{normalize_separators(current_repo_path.val)}")
-}
-
-///|
 fn run_moon_ide_command(invocation : String) -> String {
-  "$ moonx '../../../scripts/run-moon-ide.mbtx' \{test_repo_root_arg()} \{invocation}"
+  "$ moonx '../../../scripts/run-moon-ide.mbtx' \{invocation}"
 }
 
 ///|
@@ -129,7 +124,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
         sb,
         seen,
         run_moon_ide_command(
-          "moon ide outline \{command_quote(platform_file_path(file))}",
+          "outline \{command_quote(platform_file_path(file))}",
         ),
       ) {
       has_command = true
@@ -170,7 +165,7 @@ fn render_symbol_file(
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
     run_moon_ide_command(
-      "moon ide hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -179,7 +174,7 @@ fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
 fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
     run_moon_ide_command(
-      "moon ide peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -247,7 +242,7 @@ fn render_split_symbol_files(
 fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -268,7 +263,7 @@ fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   })
   render_split_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
-      "moon ide rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -285,20 +280,15 @@ fn append_if_some(files : Array[CramFile], maybe_file : CramFile?) -> Unit {
 let current_repo_slug : Ref[String] = Ref("")
 
 ///|
-let current_repo_path : Ref[String] = Ref("")
-
-///|
 let current_platform : Ref[TestPlatform] = Ref(TestPlatform::Unix)
 
 ///|
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
-  repo_path : String,
   platform : TestPlatform,
 ) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
-  current_repo_path.val = repo_path
   current_platform.val = platform
   let files = Array(capacity=0)
   append_if_some(files, render_outline_file(result.source_files))

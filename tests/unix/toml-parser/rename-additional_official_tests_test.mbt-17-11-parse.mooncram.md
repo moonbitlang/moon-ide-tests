@@ -1,7 +1,7 @@
 # toml-parser rename parse additional_official_tests_test.mbt:17:11
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'parse' 'parse_renamed' --loc 'additional_official_tests_test.mbt:17:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --loc 'additional_official_tests_test.mbt:17:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@

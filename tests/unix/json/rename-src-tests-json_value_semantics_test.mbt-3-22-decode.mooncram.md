@@ -1,7 +1,7 @@
 # json rename decode src/tests/json_value_semantics_test.mbt:3:22
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'decode' 'decode_renamed' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'decode' 'decode_renamed' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
 @@

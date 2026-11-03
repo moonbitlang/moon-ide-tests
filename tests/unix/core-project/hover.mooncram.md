@@ -1,7 +1,7 @@
 # core-project hover
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'HashMap' --loc 'core_ide_cases.mbt:5:28'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 type CoreIntArray = Array[Int]
 
 ///|
@@ -30,7 +30,7 @@ type CoreScores = @hashmap.HashMap[String, Int]
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'List' --loc 'core_ide_cases.mbt:8:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'List' --loc 'core_ide_cases.mbt:8:26'
 type CoreScores = @hashmap.HashMap[String, Int]
 
 ///|
@@ -51,7 +51,7 @@ type CoreIntList = @list.List[Int]
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:12:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:12:22'
 ///|
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 "  let doubled = nums.map(x => x * 2)" (escaped)
@@ -76,7 +76,7 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'filter' --loc 'core_ide_cases.mbt:13:23'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'filter' --loc 'core_ide_cases.mbt:13:23'
 ///|
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 "  let doubled = nums.map(x => x * 2)" (escaped)
@@ -113,7 +113,7 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'fold' --loc 'core_ide_cases.mbt:14:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fold' --loc 'core_ide_cases.mbt:14:9'
 pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 "  let doubled = nums.map(x => x * 2)" (escaped)
 "  let large = doubled.filter(x => x > 3)" (escaped)
@@ -146,7 +146,7 @@ pub fn exercise_array_core(nums : CoreIntArray) -> Int {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'new' --loc 'core_ide_cases.mbt:19:32'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'new' --loc 'core_ide_cases.mbt:19:32'
 ///|
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
@@ -172,7 +172,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'write_string' --loc 'core_ide_cases.mbt:20:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'write_string' --loc 'core_ide_cases.mbt:20:11'
 ///|
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
@@ -186,7 +186,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'length' --loc 'core_ide_cases.mbt:21:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'length' --loc 'core_ide_cases.mbt:21:9'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
   builder.write_string(text)
@@ -221,7 +221,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'split' --loc 'core_ide_cases.mbt:21:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'split' --loc 'core_ide_cases.mbt:21:24'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
   builder.write_string(text)
@@ -245,7 +245,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'to_array' --loc 'core_ide_cases.mbt:21:35'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'to_array' --loc 'core_ide_cases.mbt:21:35'
 pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
   builder.write_string(text)
@@ -263,7 +263,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'abs' --loc 'core_ide_cases.mbt:26:5'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'abs' --loc 'core_ide_cases.mbt:26:5'
 ///|
 pub fn exercise_int_core(n : Int) -> String {
   n.abs().to_string(radix=16)
@@ -297,7 +297,7 @@ pub fn exercise_int_core(n : Int) -> String {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'to_string' --loc 'core_ide_cases.mbt:26:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'to_string' --loc 'core_ide_cases.mbt:26:11'
 ///|
 pub fn exercise_int_core(n : Int) -> String {
   n.abs().to_string(radix=16)
@@ -318,7 +318,7 @@ pub fn exercise_int_core(n : Int) -> String {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:31:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:31:9'
 ///|
 pub fn exercise_option_core(value : Int?) -> Int? {
 "  value.map(x => x + 1)" (escaped)
@@ -345,7 +345,7 @@ pub fn exercise_option_core(value : Int?) -> Int? {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:38:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:38:9'
 pub fn exercise_result_core(
   value : Result[Int, String],
 ) -> Result[String, String] {
@@ -372,7 +372,7 @@ pub fn exercise_result_core(
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:43:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:43:15'
 ///|
 pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
 "  nums.iter().map(x => x.abs().to_string()).to_array()" (escaped)
@@ -405,7 +405,7 @@ pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'to_array' --loc 'core_ide_cases.mbt:43:45'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'to_array' --loc 'core_ide_cases.mbt:43:45'
 ///|
 pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
 "  nums.iter().map(x => x.abs().to_string()).to_array()" (escaped)
@@ -422,7 +422,7 @@ pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:48:6'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:48:6'
 ///|
 pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
 "  xs.map(x => x.to_string())" (escaped)
@@ -449,7 +449,7 @@ pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'get' --loc 'core_ide_cases.mbt:53:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'get' --loc 'core_ide_cases.mbt:53:10'
 ///|
 pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
 "  scores.get(\"moon\").map(x => x + 1)" (escaped)
@@ -482,7 +482,7 @@ pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:53:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:53:22'
 ///|
 pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
 "  scores.get(\"moon\").map(x => x + 1)" (escaped)
@@ -509,7 +509,7 @@ pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:60:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:60:10'
 pub fn exercise_hashmap_map(
   scores : CoreScores,
 ) -> @hashmap.HashMap[String, String] {
@@ -529,7 +529,7 @@ pub fn exercise_hashmap_map(
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'map' --loc 'core_ide_cases.mbt:65:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'map' --loc 'core_ide_cases.mbt:65:13'
 ///|
 pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
 "  container.map(x => x.to_string())" (escaped)
@@ -545,7 +545,7 @@ pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'split' --loc 'core_ide_cases.mbt:71:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'split' --loc 'core_ide_cases.mbt:71:4'
 ///|
 pub fn exercise_chained_core(text : String) -> Array[Int] {
   text
@@ -569,7 +569,7 @@ pub fn exercise_chained_core(text : String) -> Array[Int] {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'filter' --loc 'core_ide_cases.mbt:73:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'filter' --loc 'core_ide_cases.mbt:73:4'
   text
   .split(",")
 "  .map(part => part.length())" (escaped)
@@ -602,7 +602,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' m
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide hover 'from_array' --loc 'core_ide_cases.mbt:79:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'from_array' --loc 'core_ide_cases.mbt:79:12'
 ///|
 pub fn build_core_scores() -> CoreScores {
   @hashmap.from_array([("moon", 1), ("core", 2)])
