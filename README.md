@@ -20,6 +20,7 @@ fixture set for local development.
 - `testgen/`: MoonBit CLI that generates fixture baselines from source files.
 - `scripts/run-moon-check.sh`: checks Unix fixtures and selects compatible
   baselines.
+- `scripts/run-moon-check.ps1`: performs the same selection for Windows.
 - `scripts/update-tests.sh`: regenerates fixture baselines from
   `fixtures/repos.yaml`.
 - `scripts/update-submodules.sh`: initializes and fast-forwards fixture
@@ -114,8 +115,16 @@ moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 `--existing` check keeps its selected paths and logs under
 `.daily-test/unix-existing-*`.
 
-On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
-regenerates compatible baselines, and refreshes only those snapshots. If no
+On Windows, use `-Existing` on the checker and refresher to refresh existing
+snapshots:
+
+```powershell
+.\scripts\run-moon-check.ps1 -Existing
+.\scripts\refresh-windows-snapshots.ps1 -Existing
+```
+
+To regenerate tests before refreshing, run `scripts/update-windows-tests.ps1`
+followed by `scripts/refresh-windows-snapshots.ps1`, both without flags. If no
 Windows fixture passes the check, snapshot refresh and test execution are skipped.
 Snapshots are not rewritten by compatibility postprocessors.
 
@@ -158,10 +167,10 @@ Skipped fixtures retain their checked-in tests and are excluded from generation,
 snapshot refresh, and cram execution. The handcrafted Unix suites (`core-project`
 and `core-standalone`) continue to run.
 
-Daily first refreshes existing Unix snapshots against the starting fixture
-revisions and commits any changes separately. After fixture updates, Daily
-regenerates the tests, refreshes snapshots, runs the selected suites, and reviews
-baseline changes.
+On each platform, Daily refreshes existing snapshots against the starting
+fixture revisions and commits any changes separately. Against the updated
+fixtures, Daily regenerates the tests, refreshes snapshots, and runs the selected
+suites. Daily Review then reviews baseline changes.
 The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 
