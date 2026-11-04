@@ -62,7 +62,7 @@ jobs:
           mkdir -p .daily-test
 
       - name: Update testgen dependencies
-        run: bash scripts/update-dependencies.sh
+        run: scripts/update-dependencies.sh
 
       - name: Commit dependency updates
         run: |
