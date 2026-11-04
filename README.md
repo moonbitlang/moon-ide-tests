@@ -91,14 +91,23 @@ scripts/update-tests.sh
 git diff -- tests/unix tests/windows
 ```
 
-Refresh expected Moon Cram output when the `moon ide` behavior changes:
+Refresh snapshots for existing Unix test commands after a `moon ide` change:
 
 ```sh
-scripts/update-tests.sh
+scripts/update-tests.sh --snapshots-only
+```
+
+To regenerate test commands and refresh their snapshots in one pass:
+
+```sh
+scripts/update-tests.sh --refresh-snapshots
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
+
+Both modes check fixtures before refreshing snapshots. The snapshots-only mode
+records its selected paths, fixture checks, and refresh log under
+`.daily-test/unix-existing-*`.
 
 On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
 regenerates compatible baselines, and refreshes only those snapshots. If no
@@ -125,9 +134,8 @@ To refresh fixture submodules to the branches configured in
 
 ```sh
 scripts/update-submodules.sh
-scripts/update-tests.sh
+scripts/update-tests.sh --refresh-snapshots
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
@@ -144,7 +152,10 @@ Skipped fixtures retain their checked-in tests and are excluded from generation,
 snapshot refresh, and cram execution. The handcrafted Unix suites (`core-project`
 and `core-standalone`) continue to run.
 
-Daily runs cram tests for selected suites and reviews changes to the snapshots.
+Daily first refreshes existing Unix snapshots against the starting fixture
+revisions and commits any changes separately. After fixture updates, Daily
+regenerates the tests, refreshes snapshots, runs the selected suites, and reviews
+baseline changes.
 The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 

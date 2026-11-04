@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+mode=${1-}
+case "$#:$mode" in
+  0:|1:--refresh-snapshots) log_prefix=unix ;;
+  1:--snapshots-only) log_prefix=unix-existing ;;
+  *)
+    echo "Usage: $0 [--refresh-snapshots | --snapshots-only]" >&2
+    exit 2
+    ;;
+esac
+
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 command -v moon > /dev/null
 mkdir -p "$ROOT/.daily-test"
-baseline_paths="$ROOT/.daily-test/unix-baseline-paths.txt"
+baseline_paths="$ROOT/.daily-test/$log_prefix-baseline-paths.txt"
 printf '%s\n' tests/unix/core-project tests/unix/core-standalone > "$baseline_paths"
 
 while IFS=$'\t' read -r slug path max_files max_per_file; do
@@ -17,22 +27,29 @@ while IFS=$'\t' read -r slug path max_files max_per_file; do
     exit 1
   fi
 
-  check_log="$ROOT/.daily-test/unix-check-$slug.log"
+  check_log="$ROOT/.daily-test/$log_prefix-check-$slug.log"
   if ! moon -C "$repo_path" check > "$check_log" 2>&1; then
     cat "$check_log"
     echo "::notice::Skipping $slug: moon check failed; keeping its Unix baselines unchanged."
     continue
   fi
 
-  mkdir -p "$unix_out_dir"
-  moon -C "$ROOT/testgen" run --target wasm cmd/main -- \
-    --repo "$repo_path" \
-    --output-dir "$unix_out_dir" \
-    --repo-slug "$slug" \
-    --test-repo "$path" \
-    --platform unix \
-    --max-files "$max_files" \
-    --max-per-file "$max_per_file"
+  if [[ "$mode" == --snapshots-only ]]; then
+    if [[ ! -d "$unix_out_dir" ]]; then
+      echo "::notice::Skipping $slug: no existing Unix baselines to refresh."
+      continue
+    fi
+  else
+    mkdir -p "$unix_out_dir"
+    moon -C "$ROOT/testgen" run --target wasm cmd/main -- \
+      --repo "$repo_path" \
+      --output-dir "$unix_out_dir" \
+      --repo-slug "$slug" \
+      --test-repo "$path" \
+      --platform unix \
+      --max-files "$max_files" \
+      --max-per-file "$max_per_file"
+  fi
   printf 'tests/unix/%s\n' "$slug" >> "$baseline_paths"
 done < <(
   awk '
@@ -52,3 +69,10 @@ done < <(
     END { flush() }
   ' "$ROOT/fixtures/repos.yaml"
 )
+
+if [[ -n "$mode" ]]; then
+  cd "$ROOT"
+  mapfile -t paths < "$baseline_paths"
+  moonx moonbit-community/mooncram@0.1.0 update "${paths[@]}" \
+    > ".daily-test/$log_prefix-cram-update.log" 2>&1
+fi
