@@ -18,6 +18,8 @@ fixture set for local development.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
 - `fixtures/repos/`: Git submodules for community project fixtures.
 - `testgen/`: MoonBit CLI that generates fixture baselines from source files.
+- `scripts/run-moon-check.sh`: checks Unix fixtures and selects compatible
+  baselines.
 - `scripts/update-tests.sh`: regenerates fixture baselines from
   `fixtures/repos.yaml`.
 - `scripts/update-submodules.sh`: initializes and fast-forwards fixture
@@ -106,19 +108,22 @@ git diff -- tests/unix tests/windows
 Refresh snapshots for existing Unix test commands after a `moon ide` change:
 
 ```sh
-scripts/update-tests.sh --snapshots-only
+scripts/run-moon-check.sh --existing
+mapfile -t baseline_paths < .daily-test/unix-existing-baseline-paths.txt
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 ```
 
-To regenerate test commands and refresh their snapshots in one pass:
+To regenerate test commands before refreshing their snapshots:
 
 ```sh
-scripts/update-tests.sh --refresh-snapshots
+scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
-Both modes check fixtures before refreshing snapshots. The snapshots-only mode
-records its selected paths, fixture checks, and refresh log under
+`update-tests.sh` uses the same fixture checks before generating tests. The
+`--existing` check keeps its selected paths and logs under
 `.daily-test/unix-existing-*`.
 
 On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
@@ -146,8 +151,9 @@ To refresh fixture submodules to the branches configured in
 
 ```sh
 scripts/update-submodules.sh
-scripts/update-tests.sh --refresh-snapshots
+scripts/update-tests.sh
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
