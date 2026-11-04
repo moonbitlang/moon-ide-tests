@@ -57,52 +57,52 @@ jobs:
           fi
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
           git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p .daily-test
 
       - name: Update testgen dependencies
         run: bash scripts/update-dependencies.sh
 
-      - name: Update fixture repos
-        run: scripts/update-submodules.sh
-
-      - name: Update MoonBit registry
+      - name: Commit dependency updates
         run: |
-          for attempt in 1 2 3; do
-            if moon update; then
-              break
-            fi
-            if [ "$attempt" -eq 3 ]; then
-              exit 1
-            fi
-            sleep $((attempt * 10))
-          done
-
-      - name: Commit dependency and submodule updates
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add --all -- testgen/moon.mod
           if ! git diff --cached --quiet -- testgen/moon.mod; then
             git commit -m "chore: update daily testgen dependencies"
           fi
 
+      - name: Update MoonBit registry for existing Unix tests
+        run: scripts/run-moon-update.sh
+
+      - name: Test generator
+        run: moon -C testgen test --target wasm
+
+      - name: Refresh and commit existing Unix snapshots
+        run: |
+          scripts/update-tests.sh --snapshots-only
+
+          git add --all -- tests/unix
+          git diff --cached --no-ext-diff --no-color -- tests/unix > .daily-test/unix-existing-snapshots.diff
+          if [ -s .daily-test/unix-existing-snapshots.diff ]; then
+            git diff --cached --stat -- tests/unix
+            git commit -m "chore: refresh existing Unix IDE snapshots"
+          fi
+
+      - name: Update fixture repos
+        run: scripts/update-submodules.sh
+
+      - name: Commit submodule updates
+        run: |
           git add --all -- fixtures/repos
           if ! git diff --cached --quiet -- fixtures/repos; then
             git commit -m "chore: update daily fixture submodules"
           fi
 
-      - name: Test generator
-        run: moon -C testgen test --target wasm
+      - name: Update MoonBit registry
+        run: scripts/run-moon-update.sh
 
-      - name: Update generated Unix tests
-        run: scripts/update-tests.sh
-
-      - name: Refresh Unix snapshots
-        run: |
-          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-          moonx moonbit-community/mooncram@latest update "${baseline_paths[@]}" \
-            > .daily-test/unix-cram-update.log 2>&1
+      - name: Regenerate Unix tests and refresh snapshots
+        run: scripts/update-tests.sh --refresh-snapshots
 
       - name: Run Unix cram tests
         run: |
