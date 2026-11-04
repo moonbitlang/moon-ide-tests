@@ -79,7 +79,10 @@ jobs:
 
       - name: Refresh and commit existing Unix snapshots
         run: |
-          scripts/update-tests.sh --snapshots-only
+          scripts/run-moon-check.sh --existing
+          mapfile -t baseline_paths < .daily-test/unix-existing-baseline-paths.txt
+          moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}" \
+            > .daily-test/unix-existing-cram-update.log 2>&1
 
           git add --all -- tests/unix
           git diff --cached --no-ext-diff --no-color -- tests/unix > .daily-test/unix-existing-snapshots.diff
@@ -102,7 +105,11 @@ jobs:
         run: scripts/run-moon-update.sh
 
       - name: Regenerate Unix tests and refresh snapshots
-        run: scripts/update-tests.sh --refresh-snapshots
+        run: |
+          scripts/update-tests.sh
+          mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
+          moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}" \
+            > .daily-test/unix-cram-update.log 2>&1
 
       - name: Run Unix cram tests
         run: |
