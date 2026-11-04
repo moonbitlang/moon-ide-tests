@@ -169,7 +169,9 @@ moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 The Daily Test workflow runs this flow on a schedule against `main`. To refresh
 a PR branch, choose that branch when manually running Daily Test. Its update PR
 targets the selected branch. Agent review receives baseline changes since the
-exact launch commit, fixture submodule revisions and diff, and execution logs.
+exact launch commit, with separate verdicts for the existing snapshot refresh
+and the regenerated baselines. The review uses each stage's diff and logs
+alongside the updated fixture submodule revisions and diff.
 Existing changes on the selected branch and testgen dependency updates are
 excluded from the review bundle.
 
