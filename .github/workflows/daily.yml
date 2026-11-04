@@ -153,6 +153,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
           submodules: recursive
 
@@ -163,8 +164,42 @@ jobs:
           irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Update MoonBit registry for existing Windows tests
+        shell: pwsh
+        run: .\scripts\run-moon-update.ps1
+
+      - name: Refresh and commit existing Windows snapshots
+        id: existing
+        shell: pwsh
+        run: |
+          .\scripts\run-moon-check.ps1 -Existing
+          .\scripts\refresh-windows-snapshots.ps1 -Existing
+
+          git config user.name "github-actions[bot]"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git -c core.safecrlf=false add --renormalize -- tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $diffPath = ".daily-test/windows-existing-snapshots.diff"
+          git diff --cached --no-ext-diff --no-color -- tests/windows > $diffPath
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ((Get-Item $diffPath).Length -gt 0) {
+            git commit -m "chore: refresh existing Windows IDE snapshots"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            $sha = git rev-parse HEAD
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            "sha=$sha" >> $env:GITHUB_OUTPUT
+          }
+
       - name: Prepare daily branch
         shell: pwsh
+        env:
+          EXISTING_WINDOWS_SHA: ${{ steps.existing.outputs.sha }}
         run: |
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
@@ -173,25 +208,21 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git submodule update --init --recursive
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
+
+          if ($env:EXISTING_WINDOWS_SHA) {
+            git cherry-pick $env:EXISTING_WINDOWS_SHA
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
 
       - name: Update MoonBit registry
         shell: pwsh
-        run: |
-          foreach ($attempt in 1, 2, 3) {
-            moon update
-            if ($LASTEXITCODE -eq 0) {
-              break
-            }
-            if ($attempt -eq 3) {
-              exit 1
-            }
-            Start-Sleep -Seconds ($attempt * 10)
-          }
+        run: .\scripts\run-moon-update.ps1
 
-      - name: Update Windows snapshots
+      - name: Regenerate Windows tests and refresh snapshots
         shell: pwsh
-        run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
+        run: |
+          .\scripts\update-windows-tests.ps1
+          .\scripts\refresh-windows-snapshots.ps1
 
       - name: Run Windows cram tests
         shell: pwsh
@@ -212,9 +243,6 @@ jobs:
       - name: Commit Windows daily changes
         shell: pwsh
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           # Add removals and new files before renormalizing the remaining index;
           # --renormalize alone tries to stat deleted tracked files and fails.
           git -c core.safecrlf=false add --all -- tests/windows
@@ -237,13 +265,14 @@ jobs:
             if ($LASTEXITCODE -ne 0) {
               exit $LASTEXITCODE
             }
-            git push --force-with-lease origin $env:DAILY_BRANCH
-            if ($LASTEXITCODE -ne 0) {
-              exit $LASTEXITCODE
-            }
           } elseif ($diffStatus -ne 0) {
             exit $diffStatus
           }
+          exit 0
+
+      - name: Push daily branch
+        shell: pwsh
+        run: git push origin $env:DAILY_BRANCH
 
       - name: Upload Windows review inputs
         if: always()
