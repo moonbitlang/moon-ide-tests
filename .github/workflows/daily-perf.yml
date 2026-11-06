@@ -38,7 +38,7 @@ jobs:
             sleep $((attempt * 10))
           done
       - name: Run Unix performance tests
-        run: bash scripts/run-ide-perf.sh
+        run: moonx scripts/run-ide-perf.mbtx
       - name: Upload Unix performance results
         if: always()
         uses: actions/upload-artifact@v7
@@ -82,7 +82,7 @@ jobs:
           }
 
       - name: Run Windows performance tests
-        run: ./scripts/run-ide-perf.ps1 -Action Test
+        run: moonx scripts/run-ide-perf.mbtx
 
       - name: Upload Windows performance results
         if: always()

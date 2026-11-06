@@ -150,14 +150,10 @@ their reproduction queries and exact failure output.
 
 ## OpenSeek IDE performance
 
-The Bash and PowerShell entry points both call the shared MoonBit runner:
+From the repository root, run the same MoonBit script on Unix and Windows:
 
 ```sh
-bash scripts/run-ide-perf.sh
-```
-
-```powershell
-pwsh -File scripts/run-ide-perf.ps1
+moonx scripts/run-ide-perf.mbtx
 ```
 
 The pinned OpenSeek snapshot uses experimental core async APIs and requires
@@ -192,18 +188,17 @@ The runner executes them directly and saves their merged output in run logs.
 
 Generate candidates when choosing new cases:
 
-```powershell
-pwsh -File scripts/run-ide-perf.ps1 -Action Generate
+```sh
+moonx scripts/run-ide-perf.mbtx --action generate
 ```
 
-The Bash equivalent is `bash scripts/run-ide-perf.sh --action generate`.
 `--platform unix|windows` selects the generation platform.
 
-`Generate` writes to `perf/data/<platform>/candidates-openseek`. Select commands
+`generate` writes to `perf/data/<platform>/candidates-openseek`. Select commands
 for the fixed workload and copy them into `perf/tests/<platform>/openseek`. These
 directories have the same depth, so their relative command paths also match.
-Use `-CaseFile` (Bash: `--case-file`) to select files, and pass `-Candidates`
-(Bash: `--candidates`) to run against the generated directory.
+Use `--case-file` to select files, and pass `--candidates` to run against the
+generated directory.
 
 Each invocation writes `result.json`, per-command samples, and execution logs
 under `perf/data/<platform>/<run-id>`. Repositories and collected data are

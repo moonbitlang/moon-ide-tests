@@ -45,7 +45,7 @@ moon -C testgen run --target wasm cmd/main -- \
   and a `prepare.json` listing checks to run before timing queries. The
   script resolves its fixture from the test directory. These files contain
   commands only; regeneration discards any previous expected output. Execute
-  them with `run-ide-perf.sh` or `run-ide-perf.ps1`, which collect measurements
+  them with `moonx scripts/run-ide-perf.mbtx`, which collects measurements
   and logs without snapshot comparisons.
 - `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
