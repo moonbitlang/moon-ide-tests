@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Daily Moon IDE query performance across Unix and Windows, with reproducible workloads and toolchain history.">
+  <title>Moon IDE Performance</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#query-list">Skip to queries</a>
+  <header class="masthead">
+    <div class="identity"><span class="moon-mark" aria-hidden="true"></span><div><h1>Moon IDE Performance</h1><p>Daily measurements of real project queries</p></div></div>
+    <a id="repository-link" href="https://github.com/moonbitlang/moon-ide-tests">View repository</a>
+  </header>
+  <main>
+    <p id="notice" class="notice" role="status" aria-live="polite">Loading performance history…</p>
+    <div id="dashboard" hidden>
+      <section class="run-controls" aria-label="Choose a performance run">
+        <label>Platform<select id="platform"><option value="unix">Unix</option><option value="windows">Windows</option></select></label>
+        <label>Branch<select id="branch"></select></label>
+        <label class="run-select">Run<select id="run"></select></label>
+        <label>History<select id="range"><option value="14">14 runs</option><option value="30" selected>30 runs</option><option value="90">90 runs</option><option value="365">365 runs</option></select></label>
+      </section>
+      <section class="run-summary" aria-label="Run overview">
+        <div><span class="field-label">Run status</span><strong id="run-status"></strong></div>
+        <div><span class="field-label">Measurements</span><strong id="run-counts"></strong></div>
+        <div class="toolchain-summary"><span class="field-label">Toolchain</span><strong id="run-toolchain"></strong></div>
+        <a id="workflow-link" href="https://github.com/moonbitlang/moon-ide-tests/actions">Open workflow</a>
+      </section>
+      <p id="run-error" class="run-error" hidden></p>
+      <div class="workspace">
+        <section class="query-panel" aria-labelledby="query-heading">
+          <div class="panel-heading"><h2 id="query-heading">Queries</h2><span id="query-count"></span></div>
+          <div class="query-controls">
+            <label>Project<select id="fixture"><option value="">All projects</option></select></label>
+            <label>Command<select id="operation"><option value="">All commands</option></select></label>
+            <label class="search-label">Search<input id="search" type="search" placeholder="Symbol or source path" autocomplete="off"></label>
+            <label>Sort<select id="sort"><option value="name">Command / name</option><option value="slowest">Slowest first</option><option value="change">Largest increase</option><option value="errors">Failures first</option></select></label>
+          </div>
+          <div class="query-scroll" id="query-list" tabindex="-1">
+            <table class="query-table"><thead><tr><th scope="col">Query</th><th scope="col" class="number">Time</th><th scope="col" class="number">Change</th><th scope="col">Status</th></tr></thead><tbody id="queries"></tbody></table>
+          </div>
+          <p id="query-empty" class="empty" hidden>No queries match these filters.</p>
+          <p class="panel-footnote">Change compares with the previous passing run under the same measurement conditions.</p>
+        </section>
+        <section class="detail-panel" aria-labelledby="detail-heading">
+          <div class="panel-heading"><h2 id="detail-heading">Select a query</h2><span id="query-target"></span></div>
+          <div id="query-detail" hidden>
+            <p id="query-location" class="source-path"></p>
+            <div class="reading"><strong id="query-time"></strong><span id="query-change"></span></div>
+            <p id="baseline-note" class="muted"></p>
+            <div id="chart" class="chart"></div>
+            <div class="legend"><span><i class="dot passed"></i>Passed</span><span><i class="dot failed"></i>Failed / partial</span><span><i class="dot changed"></i>Different configuration</span></div>
+            <p class="sampling-note">One observation per query per run. Small changes can reflect runner variation.</p>
+            <div class="command-block"><span class="field-label">Command</span><code id="query-command"></code></div>
+            <dl class="point-details" id="point-details"></dl>
+            <details class="versions"><summary>Full toolchain information</summary><pre id="full-toolchain"></pre></details>
+            <div class="history-heading"><h3>Query history</h3><span>Newest first</span></div>
+            <div class="history-scroll"><table class="history-table"><thead><tr><th scope="col">Run</th><th scope="col">Toolchain</th><th scope="col" class="number">Time</th><th scope="col">Status</th></tr></thead><tbody id="history"></tbody></table></div>
+          </div>
+        </section>
+      </div>
+      <footer><span id="updated-at"></span><span>Times include CLI execution and output collection after preparation.</span></footer>
+    </div>
+  </main>
+</body>
+</html>

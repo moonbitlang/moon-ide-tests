@@ -227,6 +227,7 @@ async fn main {
   @fs.mkdir(run_dir, recursive=true)
   let report : Map[String, Json] = {
     "schema_version": 2,
+    "measurement_profile": "prepared-cli-v1",
     "run_id": Json(run_id),
     "action": Json(action),
     "started_at": Json(date.to_string()),
@@ -250,6 +251,11 @@ async fn main {
     report["moon_version"] = Json(
       checked("moon", ["version", "--all"]).trim().to_owned(),
     )
+    report["runner"] = {
+      "image_os": Json(@env.get_env_var("ImageOS")),
+      "image_version": Json(@env.get_env_var("ImageVersion")),
+      "architecture": Json(@env.get_env_var("RUNNER_ARCH")),
+    }
     if action == "test" {
       let moon_home = @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
         let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {

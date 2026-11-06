@@ -230,6 +230,14 @@ responsible for checking output correctness.
 `daily-perf.yml` runs independent `Unix-Perf` and `Windows-Perf` jobs. Both
 upload their reports and logs even after a test failure.
 
+After both jobs finish, a collection job archives normalized JSON on the
+`perf-history` branch and builds the static dashboard in `perf/web/`. GitHub
+Pages publication runs automatically for the default branch; manual runs on
+other branches can opt in with the `publish` input. The page provides platform
+and branch filters, per-query timings, comparable baseline changes, and query
+history with links to workflow runs. Failed and missing measurements remain
+visible. See [dashboard setup and local preview](perf/web/README.md).
+
 ## CI
 
 The PR workflow (`.github/workflows/pr.yml`) uses the same per-platform checks

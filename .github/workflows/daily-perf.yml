@@ -5,6 +5,11 @@ on:
     - cron: "0 10 * * *"
       timezone: "Asia/Shanghai"
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the dashboard from this branch (default branch publishes automatically)
+        type: boolean
+        default: false
 
 concurrency:
   group: daily-perf-${{ github.ref }}
@@ -92,3 +97,98 @@ jobs:
           path: perf/data/windows/
           retention-days: 90
           if-no-files-found: warn
+
+  Collect-Perf:
+    name: Collect performance history
+    needs: [Unix-Perf, Windows-Perf]
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    concurrency:
+      group: ide-perf-history
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check history publisher
+        run: |
+          python3 -m unittest discover -s perf -p 'test_*.py'
+          node --test perf/web/model.test.mjs
+      - name: Download platform reports
+        id: reports
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ide-perf-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ide-perf-reports
+      - name: Archive results and build dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HISTORY_DIR: ${{ runner.temp }}/ide-perf-history
+          SITE_DIR: ${{ runner.temp }}/ide-perf-site
+          REPORTS_DIR: ${{ runner.temp }}/ide-perf-reports
+          PERF_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          UNIX_RESULT: ${{ needs.Unix-Perf.result }}
+          WINDOWS_RESULT: ${{ needs.Windows-Perf.result }}
+          DOWNLOAD_RESULT: ${{ steps.reports.outcome }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/ide-perf-ci.json"
+          remote_ref="$(git ls-remote --heads origin refs/heads/perf-history)"
+          if [ -n "$remote_ref" ]; then
+            git fetch --no-tags origin refs/heads/perf-history
+            git worktree add --detach "$HISTORY_DIR" FETCH_HEAD
+          else
+            git worktree add --detach "$HISTORY_DIR" HEAD
+            git -C "$HISTORY_DIR" switch --orphan perf-history
+          fi
+          args=(--artifacts "$REPORTS_DIR" --ci "$RUNNER_TEMP/ide-perf-ci.json"
+            --history "$HISTORY_DIR" --site "$SITE_DIR" --default-branch "$PERF_DEFAULT_BRANCH"
+            --unix-result "$UNIX_RESULT" --windows-result "$WINDOWS_RESULT")
+          if [ "$DOWNLOAD_RESULT" != success ]; then
+            args+=(--collection-error "Workflow artifacts could not be downloaded. See the collection job logs.")
+          fi
+          python3 perf/publish.py "${args[@]}"
+          git -C "$HISTORY_DIR" config user.name 'github-actions[bot]'
+          git -C "$HISTORY_DIR" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$HISTORY_DIR" add -- index.json runs
+          if ! git -C "$HISTORY_DIR" diff --cached --quiet; then
+            git -C "$HISTORY_DIR" commit -m "perf: record workflow $GITHUB_RUN_ID attempt $GITHUB_RUN_ATTEMPT"
+            git -C "$HISTORY_DIR" push origin HEAD:refs/heads/perf-history
+          fi
+      - name: Upload dashboard preview
+        uses: actions/upload-artifact@v7
+        with:
+          name: ide-perf-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ide-perf-site
+          retention-days: 14
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ide-perf-site
+
+  Deploy-Perf:
+    name: Publish performance dashboard
+    needs: Collect-Perf
+    if: ${{ always() && !cancelled() && needs.Collect-Perf.result == 'success' && (github.ref_name == github.event.repository.default_branch || inputs.publish == true) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: ide-perf-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Deploy dashboard
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
