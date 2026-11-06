@@ -1,6 +1,11 @@
 name: Daily IDE Performance
 
 on:
+  push:
+    branches:
+      - codex/openseek-ide-perf
+    paths:
+      - .github/workflows/daily-perf.yml
   schedule:
     - cron: "0 10 * * *"
       timezone: "Asia/Shanghai"
