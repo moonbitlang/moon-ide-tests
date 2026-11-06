@@ -43,7 +43,10 @@ moon -C testgen run --target wasm cmd/main -- \
 - `--performance`: emit the dedicated benchmark script followed by IDE
   arguments and `--no-check`. Performance mode emits one command per file
   and a `prepare.json` listing checks to run before timing queries. The
-  script resolves its fixture from the test directory.
+  script resolves its fixture from the test directory. These files contain
+  commands only; regeneration discards any previous expected output. Execute
+  them with `run-ide-perf.sh` or `run-ide-perf.ps1`, which collect measurements
+  and logs without snapshot comparisons.
 - `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)

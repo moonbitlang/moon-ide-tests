@@ -476,6 +476,10 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
 
 ///|
 fn preserve_expected_output(generated : String, existing : String) -> String {
+  // Performance files are command lists, not output snapshots.
+  if generated.contains("/scripts/bench-moon-ide.mbtx' ") {
+    return generated
+  }
   let blocks = parse_expected_blocks(existing)
   let sb = StringBuilder()
   let lines = split_lines(generated)

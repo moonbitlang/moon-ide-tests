@@ -1,6 +1,6 @@
 #requires -Version 7.4
 param(
-  [ValidateSet("Generate", "Update", "Test")]
+  [ValidateSet("Generate", "Test")]
   [string] $Action = "Test",
   [string[]] $CaseFile,
   [switch] $Candidates,

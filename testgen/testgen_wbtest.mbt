@@ -384,7 +384,7 @@ test "parser_report_lines formats parser diagnostics" {
 }
 
 ///|
-test "performance generation uses the dedicated runner and preserves its snapshot" {
+test "performance generation uses the dedicated runner and discards snapshots" {
   for test_root in ["../../../..", "../../../../.."] {
     let files = render_cram_files(
       CollectResult::{ source_files: ["src/a.mbt"], loc_cases: [], },
@@ -397,11 +397,7 @@ test "performance generation uses the dedicated runner and preserves its snapsho
     let command = "$ moonx '\{test_root}/scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
     assert_true(files[0].content.contains(command))
     let expected = "````mooncram\n\{command}\n1 |fn f() {\n````\n"
-    assert_true(
-      preserve_expected_output(files[0].content, expected).contains(
-        "1 |fn f() {",
-      ),
-    )
+    assert_eq(preserve_expected_output(files[0].content, expected), files[0].content)
   }
 }
 

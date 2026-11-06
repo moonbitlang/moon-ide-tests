@@ -187,8 +187,8 @@ definition lookup, references and rename. `prepare.json` records the workspace c
 those queries. Full workspace checks publish the IDE metadata, and OpenSeek's
 nested editor workspace is prepared separately.
 The preparation log and commands are saved with the measurements.
-The initial Unix expectations are seeded from normalized Windows output;
-validate and, where necessary, refresh them on the GitHub Unix runner.
+The `.mooncram.md` files contain fixed commands only, without expected output.
+The runner executes them directly and saves their merged output in run logs.
 
 Generate candidates when choosing new cases:
 
@@ -197,19 +197,19 @@ pwsh -File scripts/run-ide-perf.ps1 -Action Generate
 ```
 
 The Bash equivalent is `bash scripts/run-ide-perf.sh --action generate`.
-`--platform unix|windows` selects the generation platform. To refresh
-expectations, use `--action update` or PowerShell's `-Action Update`.
+`--platform unix|windows` selects the generation platform.
 
 `Generate` writes to `perf/data/<platform>/candidates-openseek`. Select commands
-with stable output and copy them into `perf/tests/<platform>/openseek`. These
+for the fixed workload and copy them into `perf/tests/<platform>/openseek`. These
 directories have the same depth, so their relative command paths also match.
-`Update` captures snapshots explicitly. Use `-CaseFile` with `Update` or
-`Test` to select files, and pass `-Candidates` to run against the generated
-directory.
+Use `-CaseFile` (Bash: `--case-file`) to select files, and pass `-Candidates`
+(Bash: `--candidates`) to run against the generated directory.
 
-Each invocation writes `result.json`, per-command samples, and Mooncram logs
+Each invocation writes `result.json`, per-command samples, and execution logs
 under `perf/data/<platform>/<run-id>`. Repositories and collected data are
 Git-ignored; configuration and fixed tests are version-controlled.
+Report schema version 2 records `command_results` with case filenames, argument
+vectors, exit codes and runner errors instead of a `mooncram_exit_code`.
 
 `run-id` has the format `yyyyMMddTHHmmssfffZ-xxxxxxxx`, for example
 `20261106T023045123Z-a1b2c3d4`. The timestamp is UTC with millisecond precision,
@@ -219,9 +219,11 @@ invocation gets a fresh ID, also stored in `result.json`.
 `elapsed_us` covers the subprocess invocation and output collection after
 workspace preparation. The fixed commands use explicit backends and
 `--no-check`, so workspace checks run outside the timed interval.
-Each command gets one sample and a 60-second timeout. Mooncram compares output
-and exit status separately from the measurements. Use successful `test`
-reports for comparisons.
+Each command gets one sample and a 60-second timeout. Output is logged without
+comparison; nonzero exits, timeouts and missing samples fail the run. The runner
+continues through the selected commands to collect the remaining measurements.
+Use successful `test` reports for comparisons. Ordinary IDE snapshot tests remain
+responsible for checking output correctness.
 
 `daily-perf.yml` runs independent `Unix-Perf` and `Windows-Perf` jobs. Both
 upload their reports and logs even after a test failure.
