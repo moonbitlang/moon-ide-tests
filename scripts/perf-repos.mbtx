@@ -1,0 +1,179 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/core/encoding/hex",
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+}
+----
+
+///|
+fn valid_slug(slug : String) -> Bool {
+  !slug.is_empty() &&
+  slug
+  .iter()
+  .all(c => {
+    (c >= 'a' && c <= 'z') ||
+    (c >= 'A' && c <= 'Z') ||
+    (c >= '0' && c <= '9') ||
+    c == '-' ||
+    c == '_'
+  })
+}
+
+///|
+async fn read_repos() -> Array[Json] {
+  // Match the plain-scalar YAML format used by fixtures/repos.yaml.
+  let text = @fs.read_file("perf/repos.yaml").text()
+  let records : Array[Map[String, String]] = []
+  let mut current : Map[String, String]? = None
+  for raw in text.split("\n") {
+    let line = raw.trim().to_owned()
+    if line == "" || line.has_prefix("#") || line == "repos:" {
+      continue
+    }
+    if line.has_prefix("- slug:") {
+      let fields = Map::from_array([
+        ("slug", line[7:].trim().to_owned()),
+        ("max_files", "0"),
+        ("max_per_file", "50"),
+      ])
+      records.push(fields)
+      current = Some(fields)
+    } else {
+      guard current is Some(fields) && line.find(":") is Some(colon) else {
+        fail("invalid repository configuration line: \{line}")
+      }
+      let key = line[:colon].to_owned()
+      guard ["path", "url", "branch", "commit", "max_files", "max_per_file"].contains(
+        key,
+      ) else {
+        fail("unknown repository field: \{key}")
+      }
+      fields[key] = line[colon + 1:].trim().to_owned()
+    }
+  }
+  guard !records.is_empty() else { fail("no repositories in perf/repos.yaml") }
+  let seen : Map[String, Bool] = Map([])
+  records.map(fields => {
+    let slug = fields.get("slug").unwrap_or("")
+    let path = fields.get("path").unwrap_or("")
+    let url = fields.get("url").unwrap_or("")
+    let commit = fields.get("commit").unwrap_or("")
+    guard valid_slug(slug) && !seen.contains(slug) else {
+      fail("invalid or duplicate repository slug: \{slug}")
+    }
+    guard path == "repos/\{slug}" &&
+      !url.is_empty() &&
+      commit.length() == 40 &&
+      commit.iter().all(c => (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) else {
+      fail("invalid path, URL or commit for \{slug}")
+    }
+    let max_files = @string.parse_int(fields.get("max_files").unwrap())
+    let max_per_file = @string.parse_int(fields.get("max_per_file").unwrap())
+    guard max_files >= 0 && max_per_file >= 0 else {
+      fail("negative sampling limit for \{slug}")
+    }
+    seen[slug] = true
+    {
+      "slug": Json(slug),
+      "path": Json(path),
+      "url": Json(url),
+      "commit": Json(commit),
+      "max_files": Json(max_files),
+      "max_per_file": Json(max_per_file),
+    }
+  })
+}
+
+///|
+async fn git(args : Array[String]) -> String {
+  let (code, output) = @async.with_timeout(180000, () => {
+    @process.collect_output_merged("git", args)
+  })
+  guard code == 0 else {
+    fail("git \{args.join(" ")} exited \{code}: \{output.text()}")
+  }
+  output.text().trim().to_owned()
+}
+
+///|
+async fn clean(path : String) -> Unit {
+  // Build rules may rewrite CRLF as LF without changing Git-normalized content.
+  let _ = git([
+    "-C", path, "-c", "core.safecrlf=false", "diff", "--quiet", "HEAD", "--",
+  ])
+  guard git(["-C", path, "ls-files", "--others", "--exclude-standard"]) == "" else {
+    fail("untracked files in performance fixture \{path}")
+  }
+}
+
+///|
+async fn prepare(repo : Json, check_only : Bool) -> Unit {
+  guard repo
+    is {
+      "slug": String(slug),
+      "path": String(relative),
+      "url": String(url),
+      "commit": String(commit),
+      ..
+    } else {
+    fail("invalid repository record")
+  }
+  let path = "perf/" + relative
+  if !@fs.exists(path) {
+    guard !check_only else { fail("missing fixture \{path}") }
+    @fs.mkdir("perf/repos", recursive=true, allow_exist=true)
+    // Publish the checkout only after both clone and checkout have succeeded.
+    let staging = "perf/repos/.clone-\{slug}-\{@hex.encode(@env.rand(8).unwrap())}"
+    let _ = git([
+      "clone", "--no-checkout", "--depth", "1", "--config", "core.autocrlf=false",
+      "--", url, staging,
+    ])
+    let _ = git(["-C", staging, "fetch", "--depth", "1", "origin", commit])
+    let _ = git(["-C", staging, "checkout", "--detach", commit])
+    @fs.rename(staging, path, replace=false)
+  }
+  guard @fs.exists(path + "/.git") else { fail("not a Git checkout: \{path}") }
+  clean(path)
+  let actual = git(["-C", path, "rev-parse", "HEAD"])
+  if actual != commit {
+    guard !check_only else {
+      fail("fixture \{slug} is at \{actual}, expected \{commit}")
+    }
+    let _ = git(["-C", path, "fetch", "--depth", "1", "origin", commit])
+    let _ = git(["-C", path, "checkout", "--detach", commit])
+  }
+  guard git(["-C", path, "rev-parse", "HEAD"]) == commit else {
+    fail("fixture revision verification failed for \{slug}")
+  }
+  println("Prepared \{slug} at \{commit}")
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  let action = args.get(1).unwrap_or("prepare")
+  guard ["list", "prepare", "check"].contains(action) && args.length() <= 3 else {
+    fail("usage: moonx scripts/perf-repos.mbtx [list|prepare|check] [slug]")
+  }
+  let repos = read_repos()
+  if action == "list" {
+    println(Json(repos).stringify())
+    return
+  }
+  let selected = repos.filter(repo => {
+    match repo {
+      { "slug": String(slug), .. } =>
+        args.get(2) is None || args.get(2) == Some(slug)
+      _ => false
+    }
+  })
+  guard !selected.is_empty() else { fail("repository slug not found") }
+  for repo in selected {
+    prepare(repo, action == "check")
+  }
+}

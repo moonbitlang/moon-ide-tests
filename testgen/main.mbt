@@ -4,10 +4,12 @@ priv struct Args {
   output_dir : String
   repo_slug : String
   test_repo_path : String
+  test_root : String
   platform : TestPlatform
   max_per_file : Int32
   max_files : Int32
   max_file_size : Int32
+  performance : Bool
 }
 
 ///|
@@ -108,7 +110,12 @@ fn split_suite_prefix_of(name : String) -> String? {
   if !name.has_suffix(".mooncram.md") {
     return None
   }
-  for prefix in split_suite_prefixes {
+  let prefixes = if current_performance.val {
+    ["outline", "hover", "peek-def", ..split_suite_prefixes]
+  } else {
+    split_suite_prefixes
+  }
+  for prefix in prefixes {
     if name.has_prefix("\{prefix}-") {
       return Some(prefix)
     }
@@ -121,7 +128,12 @@ fn is_split_suite_output(name : String) -> Bool {
   if split_suite_prefix_of(name) is Some(_) {
     return true
   }
-  for prefix in split_suite_prefixes {
+  let prefixes = if current_performance.val {
+    ["outline", "hover", "peek-def", ..split_suite_prefixes]
+  } else {
+    split_suite_prefixes
+  }
+  for prefix in prefixes {
     if name == legacy_suite_file_name(prefix) {
       return true
     }
@@ -203,6 +215,7 @@ fn parse_args(args : Array[String]) -> Args raise {
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
   let test_repo_path_raw : Ref[String] = Ref("")
+  let test_root_raw : Ref[String] = Ref("../../..")
   let platform_raw : Ref[String] = Ref("unix")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
@@ -219,6 +232,9 @@ fn parse_args(args : Array[String]) -> Args raise {
       "test-repo", 't', test_repo_path_raw, "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
+      "test-root", 'b', test_root_raw, "Path from generated tests to the test repository root (default: ../../..)",
+    ),
+    (
       "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
     ),
     (
@@ -233,6 +249,13 @@ fn parse_args(args : Array[String]) -> Args raise {
   ]
   let command = @argparse.Command(
     "testgen",
+    flags=[
+      @argparse.FlagArg(
+        "performance",
+        long="performance",
+        about="Generate commands for the dedicated IDE benchmark runner",
+      ),
+    ],
     options=spec.map(option => {
       let (name, short, _, about) = option
       @argparse.OptionArg(
@@ -298,10 +321,12 @@ fn parse_args(args : Array[String]) -> Args raise {
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
     test_repo_path,
+    test_root: test_root_raw.val,
     platform,
     max_per_file,
     max_files,
     max_file_size,
+    performance: matches.flags.get("performance").unwrap_or(false),
   }
 }
 
@@ -331,6 +356,8 @@ fn run(args : Array[String]) -> Unit {
     config.repo_slug,
     config.test_repo_path,
     config.platform,
+    performance=config.performance,
+    test_root=config.test_root,
   )
   write_cram_files(config.output_dir, files)
 }

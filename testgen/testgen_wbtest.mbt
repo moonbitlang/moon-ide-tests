@@ -384,6 +384,28 @@ test "parser_report_lines formats parser diagnostics" {
 }
 
 ///|
+test "performance generation uses the dedicated runner and preserves its snapshot" {
+  for test_root in ["../../../..", "../../../../.."] {
+    let files = render_cram_files(
+      CollectResult::{ source_files: ["src/a.mbt"], loc_cases: [], },
+      "openseek",
+      "perf/repos/openseek",
+      TestPlatform::Windows,
+      performance=true,
+      test_root~,
+    )
+    let command = "$ moonx '\{test_root}/scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
+    assert_true(files[0].content.contains(command))
+    let expected = "````mooncram\n\{command}\n1 |fn f() {\n````\n"
+    assert_true(
+      preserve_expected_output(files[0].content, expected).contains(
+        "1 |fn f() {",
+      ),
+    )
+  }
+}
+
+///|
 test "render_cram_files emits mooncram markdown commands" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
@@ -520,7 +542,7 @@ test "render_split_symbol_files emits one file per case" {
   ]
   let files = render_split_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
     )
   })
   debug_inspect(
@@ -1052,4 +1074,29 @@ test "dependency functions retain navigation without an invalid workspace rename
       assert_true(controls[4].name.has_prefix("rename-"))
     }
   }
+}
+///|
+test "performance preparation normalizes paths and checks the nested editor workspace" {
+  let files = render_cram_files(
+    CollectResult::{
+      source_files: [
+        "agent/agent.mbt",
+        "editor\\internal\\viewer\\browser\\view\\selections.mbt",
+        "desktop/frontend/markdown/code_copy.mbt",
+      ],
+      loc_cases: [],
+    },
+    "openseek",
+    "perf/repos/openseek",
+    TestPlatform::Windows,
+    performance=true,
+    test_root="../../../..",
+  )
+  let plan = files.iter().find_first(file => file.name == "prepare.json").unwrap().content
+  assert_true(plan.contains("\"editor\""))
+  assert_false(plan.contains("internal/viewer/browser/view"))
+  assert_false(plan.contains("editor/internal/viewer/browser/view"))
+  assert_false(plan.contains("\\"))
+  assert_true(plan.contains("\"native,js\""))
+  assert_true(plan.contains("\"js\""))
 }
