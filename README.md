@@ -159,6 +159,7 @@ moonx scripts/run-ide-perf.mbtx
 The pinned OpenSeek snapshot uses experimental core async APIs and requires
 the nightly toolchain. CI installs nightly on both platforms. For a local
 Moonup installation, use `moonup run nightly moonx scripts/run-ide-perf.mbtx`.
+Both installers explicitly select `MOONBIT_INSTALL_VERSION=nightly`.
 
 Repository preparation is handled by `scripts/perf-repos.mbtx`, separately
 from `testgen`. Run it directly with `moonx scripts/perf-repos.mbtx` to clone
@@ -184,6 +185,11 @@ command type. `prepare.json` records the workspace checks required by those
 queries. Full workspace checks publish the IDE metadata, and OpenSeek's
 nested editor workspace is prepared separately.
 The preparation log and commands are saved with the measurements.
+Before preparing fixtures, the runner also checks the installed standard library
+with all backends. `moon ide --no-check` still performs that check internally;
+preparing its cache keeps the first query from paying the cold-check cost.
+The command and success flag are recorded in `result.json`, with output in
+`core-prepare.log`. A failed standard-library check stops the run before sampling.
 The `.mooncram.md` files contain fixed commands only, without expected output.
 The runner executes them directly and saves their merged output in run logs.
 

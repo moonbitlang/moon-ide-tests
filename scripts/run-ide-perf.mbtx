@@ -250,6 +250,32 @@ async fn main {
     report["moon_version"] = Json(
       checked("moon", ["version", "--all"]).trim().to_owned(),
     )
+    if action == "test" {
+      let moon_home = @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
+        let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {
+          @env.get_env_var("HOME").unwrap_or_else(() => {
+            abort("MOON_HOME, USERPROFILE or HOME is required")
+          })
+        })
+        home + "/.moon"
+      })
+      // moon-ide checks core even with --no-check. Prepare its check artifacts
+      // once, outside every per-command timer; installer bundles are insufficient.
+      let core_command = [
+        "-C",
+        @fs.realpath(moon_home + "/lib/core"),
+        "check",
+        "--no-mbti",
+        "--target",
+        "all",
+        "--warn-list",
+        "-all",
+      ]
+      report["core_prepare_command"] = Json(core_command)
+      report["core_prepared"] = false
+      let _ = checked("moon", core_command, log=run_dir + "/core-prepare.log")
+      report["core_prepared"] = true
+    }
     let repos : Array[Json] = @json.from_json(
       @json.parse(checked("moonx", ["scripts/perf-repos.mbtx", "list"])),
     )
