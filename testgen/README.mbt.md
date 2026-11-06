@@ -2,7 +2,7 @@
 
 `testgen` generates Moon Cram markdown snapshots for `moon ide` from a MoonBit project.
 
-Generated suites:
+Generated snapshot suites:
 - `outline.mooncram.md`
 - `hover.mooncram.md`
 - `peek-def.mooncram.md`
@@ -41,7 +41,7 @@ moon -C testgen run --target wasm cmd/main -- \
 - `--test-root <path>`: relative path from generated files to this test
   repository's root (default: `../../..`).
 - `--performance`: emit the dedicated benchmark script followed by IDE
-  arguments and `--no-check`. Performance mode emits one command per file
+  arguments and `--no-check`. Performance mode emits one file per command type
   and a `prepare.json` listing checks to run before timing queries. The
   script resolves its fixture from the test directory. These files contain
   commands only; regeneration discards any previous expected output. Execute

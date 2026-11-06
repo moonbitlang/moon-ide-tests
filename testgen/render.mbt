@@ -234,11 +234,19 @@ fn split_case_file_name(
 }
 
 ///|
-fn render_split_symbol_files(
+fn render_symbol_files(
   prefix : String,
   loc_cases : Array[TestCase],
   to_command : (TestCase) -> String,
 ) -> Array[CramFile] {
+  if current_performance.val {
+    let files : Array[CramFile] = []
+    append_if_some(
+      files,
+      render_symbol_file("\{prefix}.mooncram.md", prefix, loc_cases, to_command),
+    )
+    return files
+  }
   let files = Array(capacity=0)
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -270,7 +278,7 @@ fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
   } else {
     cases
   }
-  render_split_symbol_files("find-references", cases, test_case => {
+  render_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
       "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
@@ -291,7 +299,7 @@ fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   let cases = cases.filter(test_case => {
     !should_skip_fixture_rename(current_repo_slug.val, test_case)
   })
-  render_split_symbol_files("rename", cases, test_case => {
+  render_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
       "rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
@@ -382,30 +390,7 @@ fn render_cram_files(
       content: Json({ "commands": Json(commands) }).stringify(indent=2) + "\n",
     })
   }
-  if performance {
-    let split_files : Array[CramFile] = []
-    for file in files {
-      if ["outline.mooncram.md", "hover.mooncram.md", "peek-def.mooncram.md"].contains(
-          file.name,
-        ) {
-        let prefix = file.name[:file.name.length() - 12].to_owned()
-        for index, block in parse_expected_blocks(file.content) {
-          let sb = StringBuilder()
-          append_markdown_header(sb, repo_slug, prefix)
-          append_mooncram_block(sb, block.command)
-          split_files.push(CramFile::{
-            name: "\{prefix}-\{index + 1}.mooncram.md",
-            content: sb.to_string(),
-          })
-        }
-      } else {
-        split_files.push(file)
-      }
-    }
-    split_files
-  } else {
-    files
-  }
+  files
 }
 
 ///|

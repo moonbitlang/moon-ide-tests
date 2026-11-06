@@ -97,7 +97,7 @@ fn read_existing_file(path : String) -> String? {
 }
 
 ///|
-/// Suites emitted as one file per test case; see render_split_symbol_files.
+/// Ordinary snapshot suites emitted as one file per test case.
 let split_suite_prefixes : Array[String] = ["find-references", "rename"]
 
 ///|
@@ -110,12 +110,7 @@ fn split_suite_prefix_of(name : String) -> String? {
   if !name.has_suffix(".mooncram.md") {
     return None
   }
-  let prefixes = if current_performance.val {
-    ["outline", "hover", "peek-def", ..split_suite_prefixes]
-  } else {
-    split_suite_prefixes
-  }
-  for prefix in prefixes {
+  for prefix in split_suite_prefixes {
     if name.has_prefix("\{prefix}-") {
       return Some(prefix)
     }
@@ -128,12 +123,7 @@ fn is_split_suite_output(name : String) -> Bool {
   if split_suite_prefix_of(name) is Some(_) {
     return true
   }
-  let prefixes = if current_performance.val {
-    ["outline", "hover", "peek-def", ..split_suite_prefixes]
-  } else {
-    split_suite_prefixes
-  }
-  for prefix in prefixes {
+  for prefix in split_suite_prefixes {
     if name == legacy_suite_file_name(prefix) {
       return true
     }
@@ -142,10 +132,9 @@ fn is_split_suite_output(name : String) -> Bool {
 }
 
 ///|
-/// Split-suite cases that disappear leave their per-case files behind, and
-/// the pre-split monolithic suite files would keep running stale commands,
-/// so drop every split-suite output we did not just generate.
-fn remove_stale_split_files(
+/// Drop obsolete generated files, including the former per-command performance
+/// files, so regeneration cannot leave duplicate commands in the output directory.
+fn remove_stale_suite_files(
   output_dir : String,
   files : Array[CramFile],
 ) -> Unit {
@@ -160,7 +149,14 @@ fn remove_stale_split_files(
   }
   entries.sort()
   for name in entries {
-    if generated.contains(name) || !is_split_suite_output(name) {
+    let obsolete = if current_performance.val {
+      name.has_suffix(".mooncram.md") &&
+      ["outline", "hover", "peek-def", "find-references", "rename"].any(prefix =>
+        name == "\{prefix}.mooncram.md" || name.has_prefix("\{prefix}-"))
+    } else {
+      is_split_suite_output(name)
+    }
+    if generated.contains(name) || !obsolete {
       continue
     }
     let path = @path.Path::join(output_dir, name).to_string()
@@ -200,7 +196,7 @@ fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
     }
     write_generated_file_or_exit(path, content)
   }
-  remove_stale_split_files(output_dir, files)
+  remove_stale_suite_files(output_dir, files)
 }
 
 ///|

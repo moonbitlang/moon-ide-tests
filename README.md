@@ -179,8 +179,9 @@ The script infers `perf/repos/<repo>` from its working directory,
 `perf/tests/<platform>/<repo>` or `perf/data/<platform>/candidates-<repo>`.
 
 Each platform's fixed suite contains 85 commands covering outline, hover,
-definition lookup, references and rename. `prepare.json` records the workspace checks required by
-those queries. Full workspace checks publish the IDE metadata, and OpenSeek's
+definition lookup, references and rename, with one `.mooncram.md` file per
+command type. `prepare.json` records the workspace checks required by those
+queries. Full workspace checks publish the IDE metadata, and OpenSeek's
 nested editor workspace is prepared separately.
 The preparation log and commands are saved with the measurements.
 The `.mooncram.md` files contain fixed commands only, without expected output.
