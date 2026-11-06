@@ -384,6 +384,57 @@ test "parser_report_lines formats parser diagnostics" {
 }
 
 ///|
+test "performance generation uses the dedicated runner and discards snapshots" {
+  for test_root in ["../../../..", "../../../../.."] {
+    let files = render_cram_files(
+      CollectResult::{ source_files: ["src/a.mbt"], loc_cases: [], },
+      "openseek",
+      "perf/repos/openseek",
+      TestPlatform::Windows,
+      performance=true,
+      test_root~,
+    )
+    let command = "$ moonx '\{test_root}/scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
+    assert_true(files[0].content.contains(command))
+    let expected = "````mooncram\n\{command}\n1 |fn f() {\n````\n"
+    assert_eq(preserve_expected_output(files[0].content, expected), files[0].content)
+  }
+}
+
+///|
+test "performance generation groups multiple commands into five suite files" {
+  for platform in [TestPlatform::Unix, TestPlatform::Windows] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: ["src/a.mbt", "src/b.mbt"],
+        loc_cases: [
+          TestCase::{ file: "src/a.mbt", line: 1, col: 4, sym: "f", },
+          TestCase::{ file: "src/b.mbt", line: 1, col: 4, sym: "g", },
+          TestCase::{ file: "src/a.mbt", line: 1, col: 4, sym: "f", },
+        ],
+      },
+      "openseek",
+      "perf/repos/openseek",
+      platform,
+      performance=true,
+      test_root="../../../..",
+    )
+    assert_eq(
+      files.map(file => file.name),
+      [
+        "outline.mooncram.md", "hover.mooncram.md", "peek-def.mooncram.md",
+        "find-references.mooncram.md", "rename.mooncram.md", "prepare.json",
+      ],
+    )
+    for file in files[:5] {
+      let blocks = parse_expected_blocks(file.content)
+      assert_eq(blocks.length(), 2)
+      assert_true(blocks.all(block => block.output.is_empty()))
+    }
+  }
+}
+
+///|
 test "render_cram_files emits mooncram markdown commands" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
@@ -508,19 +559,20 @@ test "command arguments quote apostrophes without shell syntax" {
 }
 
 ///|
-test "render_split_symbol_files emits one file per case" {
+test "ordinary symbol suites emit one file per case" {
   current_repo_slug.val = "example"
   current_repo_path.val = "fixtures/repos/example"
   current_platform.val = TestPlatform::Unix
+  current_performance.val = false
   let cases = [
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
     TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g", },
     // Duplicate case collapses into the first file.
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
   ]
-  let files = render_split_symbol_files("find-references", cases, test_case => {
+  let files = render_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
+      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
     )
   })
   debug_inspect(
@@ -1052,4 +1104,29 @@ test "dependency functions retain navigation without an invalid workspace rename
       assert_true(controls[4].name.has_prefix("rename-"))
     }
   }
+}
+///|
+test "performance preparation normalizes paths and checks the nested editor workspace" {
+  let files = render_cram_files(
+    CollectResult::{
+      source_files: [
+        "agent/agent.mbt",
+        "editor\\internal\\viewer\\browser\\view\\selections.mbt",
+        "desktop/frontend/markdown/code_copy.mbt",
+      ],
+      loc_cases: [],
+    },
+    "openseek",
+    "perf/repos/openseek",
+    TestPlatform::Windows,
+    performance=true,
+    test_root="../../../..",
+  )
+  let plan = files.iter().find_first(file => file.name == "prepare.json").unwrap().content
+  assert_true(plan.contains("\"editor\""))
+  assert_false(plan.contains("internal/viewer/browser/view"))
+  assert_false(plan.contains("editor/internal/viewer/browser/view"))
+  assert_false(plan.contains("\\"))
+  assert_true(plan.contains("\"native,js\""))
+  assert_true(plan.contains("\"js\""))
 }

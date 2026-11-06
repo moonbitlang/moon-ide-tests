@@ -1,0 +1,8 @@
+repos:
+  - slug: openseek
+    path: repos/openseek
+    url: https://github.com/moonbitlang/openseek
+    branch: main
+    commit: dbe35ecc82681e352604b41a2e9b0b9d9e3e94d0
+    max_files: 10
+    max_per_file: 2

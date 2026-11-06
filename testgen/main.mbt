@@ -4,10 +4,12 @@ priv struct Args {
   output_dir : String
   repo_slug : String
   test_repo_path : String
+  test_root : String
   platform : TestPlatform
   max_per_file : Int32
   max_files : Int32
   max_file_size : Int32
+  performance : Bool
 }
 
 ///|
@@ -95,7 +97,7 @@ fn read_existing_file(path : String) -> String? {
 }
 
 ///|
-/// Suites emitted as one file per test case; see render_split_symbol_files.
+/// Ordinary snapshot suites emitted as one file per test case.
 let split_suite_prefixes : Array[String] = ["find-references", "rename"]
 
 ///|
@@ -130,10 +132,9 @@ fn is_split_suite_output(name : String) -> Bool {
 }
 
 ///|
-/// Split-suite cases that disappear leave their per-case files behind, and
-/// the pre-split monolithic suite files would keep running stale commands,
-/// so drop every split-suite output we did not just generate.
-fn remove_stale_split_files(
+/// Drop obsolete generated files, including the former per-command performance
+/// files, so regeneration cannot leave duplicate commands in the output directory.
+fn remove_stale_suite_files(
   output_dir : String,
   files : Array[CramFile],
 ) -> Unit {
@@ -148,7 +149,14 @@ fn remove_stale_split_files(
   }
   entries.sort()
   for name in entries {
-    if generated.contains(name) || !is_split_suite_output(name) {
+    let obsolete = if current_performance.val {
+      name.has_suffix(".mooncram.md") &&
+      ["outline", "hover", "peek-def", "find-references", "rename"].any(prefix =>
+        name == "\{prefix}.mooncram.md" || name.has_prefix("\{prefix}-"))
+    } else {
+      is_split_suite_output(name)
+    }
+    if generated.contains(name) || !obsolete {
       continue
     }
     let path = @path.Path::join(output_dir, name).to_string()
@@ -188,7 +196,7 @@ fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
     }
     write_generated_file_or_exit(path, content)
   }
-  remove_stale_split_files(output_dir, files)
+  remove_stale_suite_files(output_dir, files)
 }
 
 ///|
@@ -203,6 +211,7 @@ fn parse_args(args : Array[String]) -> Args raise {
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
   let test_repo_path_raw : Ref[String] = Ref("")
+  let test_root_raw : Ref[String] = Ref("../../..")
   let platform_raw : Ref[String] = Ref("unix")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
@@ -219,6 +228,9 @@ fn parse_args(args : Array[String]) -> Args raise {
       "test-repo", 't', test_repo_path_raw, "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
+      "test-root", 'b', test_root_raw, "Path from generated tests to the test repository root (default: ../../..)",
+    ),
+    (
       "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
     ),
     (
@@ -233,6 +245,13 @@ fn parse_args(args : Array[String]) -> Args raise {
   ]
   let command = @argparse.Command(
     "testgen",
+    flags=[
+      @argparse.FlagArg(
+        "performance",
+        long="performance",
+        about="Generate commands for the dedicated IDE benchmark runner",
+      ),
+    ],
     options=spec.map(option => {
       let (name, short, _, about) = option
       @argparse.OptionArg(
@@ -298,10 +317,12 @@ fn parse_args(args : Array[String]) -> Args raise {
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
     test_repo_path,
+    test_root: test_root_raw.val,
     platform,
     max_per_file,
     max_files,
     max_file_size,
+    performance: matches.flags.get("performance").unwrap_or(false),
   }
 }
 
@@ -331,6 +352,8 @@ fn run(args : Array[String]) -> Unit {
     config.repo_slug,
     config.test_repo_path,
     config.platform,
+    performance=config.performance,
+    test_root=config.test_root,
   )
   write_cram_files(config.output_dir, files)
 }

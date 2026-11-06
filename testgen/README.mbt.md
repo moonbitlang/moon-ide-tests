@@ -2,7 +2,7 @@
 
 `testgen` generates Moon Cram markdown snapshots for `moon ide` from a MoonBit project.
 
-Generated suites:
+Generated snapshot suites:
 - `outline.mooncram.md`
 - `hover.mooncram.md`
 - `peek-def.mooncram.md`
@@ -38,6 +38,15 @@ moon -C testgen run --target wasm cmd/main -- \
 - `--repo <path>`: project root to scan
 - `--output-dir <path>`: directory for generated Moon Cram files
 - `--repo-slug <slug>`: stable name used in generated markdown titles
+- `--test-root <path>`: relative path from generated files to this test
+  repository's root (default: `../../..`).
+- `--performance`: emit the dedicated benchmark script followed by IDE
+  arguments and `--no-check`. Performance mode emits one file per command type
+  and a `prepare.json` listing checks to run before timing queries. The
+  script resolves its fixture from the test directory. These files contain
+  commands only; regeneration discards any previous expected output. Execute
+  them with `moonx scripts/run-ide-perf.mbtx`, which collects measurements
+  and logs without snapshot comparisons.
 - `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
@@ -99,6 +108,12 @@ moon -C testgen run --target wasm cmd/main -- \
   Their hover, definition, and reference queries remain; their rename commands
   are omitted because the IDE cannot rename symbols outside the workspace.
 - `outline` is generated per `.mbt` file and does not depend on parser output.
+- OpenSeek performance mode uses native for backend sources and JS for
+  `desktop/frontend/` and its nested `editor/` workspace. The preparation manifest
+  checks root backends together (`native,js`) so IDE metadata retains both, then
+  checks the nested workspace separately. Its unsupported extension-declaration
+  hover (`to_repr`) is excluded. Reference and rename queries for imported
+  `tmpdir` and `Command` are excluded to keep measurements within OpenSeek.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
 - Both platforms emit `moonx ../../../scripts/run-moon-ide.mbtx <fixture-dir> moon ide ...` in four-backtick Mooncram fences. Paths are relative to the Markdown document, with no shell state or expansion. The script launches the IDE directly, merges its output streams, normalizes repository/toolchain paths, and preserves the exit code.
 - Run selected Unix or Windows paths with `moonx moonbit-community/mooncram@0.1.0 test <paths...>`. Use `check` to validate without executing, and `update` to refresh expectations. Generation preserves existing output, including JSON-escaped lines, nonzero exit codes, and the updater's fence lengths, when the command is unchanged.

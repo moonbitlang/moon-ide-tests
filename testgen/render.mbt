@@ -45,6 +45,9 @@ fn windows_repo_path(repo_path : String) -> String {
 ///|
 fn platform_file_path(path : String) -> String {
   let normalized = normalize_separators(path)
+  if current_performance.val {
+    return normalized
+  }
   match current_platform.val {
     TestPlatform::Unix => normalized
     TestPlatform::Windows => windows_repo_path(normalized)
@@ -110,12 +113,18 @@ fn command_quote(arg : String) -> String {
 
 ///|
 fn test_repo_root_arg() -> String {
-  command_quote("../../../\{normalize_separators(current_repo_path.val)}")
+  command_quote(
+    "\{current_test_root.val}/\{normalize_separators(current_repo_path.val)}",
+  )
 }
 
 ///|
 fn run_moon_ide_command(invocation : String) -> String {
-  "$ moonx '../../../scripts/run-moon-ide.mbtx' \{test_repo_root_arg()} \{invocation}"
+  if current_performance.val {
+    "$ moonx '\{current_test_root.val}/scripts/bench-moon-ide.mbtx' \{invocation} --no-check"
+  } else {
+    "$ moonx '\{current_test_root.val}/scripts/run-moon-ide.mbtx' \{test_repo_root_arg()} moon ide \{invocation}"
+  }
 }
 
 ///|
@@ -129,7 +138,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
         sb,
         seen,
         run_moon_ide_command(
-          "moon ide outline \{command_quote(platform_file_path(file))}",
+          "outline \{command_quote(platform_file_path(file))}\{if current_performance.val { fixture_target_option(current_repo_slug.val, file) } else { "" }}",
         ),
       ) {
       has_command = true
@@ -168,9 +177,20 @@ fn render_symbol_file(
 
 ///|
 fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
+  let cases = if current_performance.val {
+    cases.filter(test_case => {
+      !(current_repo_slug.val == "openseek" &&
+      normalize_separators(test_case.file) ==
+      "editor/internal/viewer/contrib/hover/extends.mbt" &&
+      test_case.sym == "to_repr" &&
+      test_case.col == 40)
+    })
+  } else {
+    cases
+  }
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
     run_moon_ide_command(
-      "moon ide hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -179,7 +199,7 @@ fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
 fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
     run_moon_ide_command(
-      "moon ide peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -214,11 +234,19 @@ fn split_case_file_name(
 }
 
 ///|
-fn render_split_symbol_files(
+fn render_symbol_files(
   prefix : String,
   loc_cases : Array[TestCase],
   to_command : (TestCase) -> String,
 ) -> Array[CramFile] {
+  if current_performance.val {
+    let files : Array[CramFile] = []
+    append_if_some(
+      files,
+      render_symbol_file("\{prefix}.mooncram.md", prefix, loc_cases, to_command),
+    )
+    return files
+  }
   let files = Array(capacity=0)
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -245,9 +273,14 @@ fn render_split_symbol_files(
 
 ///|
 fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
-  render_split_symbol_files("find-references", cases, test_case => {
+  let cases = if current_performance.val && current_repo_slug.val == "openseek" {
+    cases.filter(test_case => !should_skip_fixture_rename("openseek", test_case))
+  } else {
+    cases
+  }
+  render_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
-      "moon ide find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -266,9 +299,9 @@ fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   let cases = cases.filter(test_case => {
     !should_skip_fixture_rename(current_repo_slug.val, test_case)
   })
-  render_split_symbol_files("rename", cases, test_case => {
+  render_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
-      "moon ide rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      "rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
     )
   })
 }
@@ -291,15 +324,25 @@ let current_repo_path : Ref[String] = Ref("")
 let current_platform : Ref[TestPlatform] = Ref(TestPlatform::Unix)
 
 ///|
+let current_performance : Ref[Bool] = Ref(false)
+
+///|
+let current_test_root : Ref[String] = Ref("../../..")
+
+///|
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
   repo_path : String,
   platform : TestPlatform,
+  performance~ : Bool = false,
+  test_root~ : String = "../../..",
 ) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
   current_repo_path.val = repo_path
   current_platform.val = platform
+  current_performance.val = performance
+  current_test_root.val = normalize_separators(test_root)
   let files = Array(capacity=0)
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
@@ -309,6 +352,43 @@ fn render_cram_files(
   }
   for file in render_rename_files(result.loc_cases) {
     files.push(file)
+  }
+  if performance {
+    let targets : Map[String, Bool] = Map([])
+    for source in result.source_files {
+      let source = normalize_separators(source)
+      let option = fixture_target_option(repo_slug, source)
+      let target = if option.has_prefix(" --target ") {
+        option[10:].to_owned()
+      } else {
+        "wasm-gc"
+      }
+      // The editor has its own nested workspace and IDE metadata directory.
+      let scope = if repo_slug == "openseek" && source.has_prefix("editor/") {
+        "editor"
+      } else {
+        "."
+      }
+      targets[scope + ":" + target] = true
+    }
+    let commands : Array[Array[String]] = []
+    if repo_slug == "openseek" {
+      // Compile its nested build tool once before parallel code-generation rules.
+      commands.push(["run", "scripts/md_to_mbt_string", "--", "--help"])
+    }
+    for scope in [".", "editor"] {
+      let backends = ["native", "js", "wasm", "wasm-gc", "llvm"].filter(target =>
+        targets.contains(scope + ":" + target))
+      if !backends.is_empty() {
+        let prefix = if scope == "." { [] } else { ["-C", scope] }
+        // One full check publishes metadata for every requested backend.
+        commands.push([..prefix, "check", "--no-mbti", "--target", backends.join(",")])
+      }
+    }
+    files.push(CramFile::{
+      name: "prepare.json",
+      content: Json({ "commands": Json(commands) }).stringify(indent=2) + "\n",
+    })
   }
   files
 }
@@ -328,7 +408,11 @@ fn split_lines(text : String) -> Array[String] {
 
 ///|
 fn is_generated_command(line : String) -> Bool {
-  line.has_prefix("$ moonx '../../../scripts/run-moon-ide.mbtx' ")
+  line.has_prefix("$ moonx '") &&
+  (
+    line.contains("/scripts/run-moon-ide.mbtx' ") ||
+    line.contains("/scripts/bench-moon-ide.mbtx' ")
+  )
 }
 
 ///|
@@ -377,6 +461,10 @@ fn parse_expected_blocks(existing : String) -> Array[ExpectedBlock] {
 
 ///|
 fn preserve_expected_output(generated : String, existing : String) -> String {
+  // Performance files are command lists, not output snapshots.
+  if generated.contains("/scripts/bench-moon-ide.mbtx' ") {
+    return generated
+  }
   let blocks = parse_expected_blocks(existing)
   let sb = StringBuilder()
   let lines = split_lines(generated)

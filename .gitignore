@@ -1,5 +1,7 @@
 _build/
 artifacts/
+/perf/repos/
+/perf/data/
 __pycache__/
 .daily-test/
 

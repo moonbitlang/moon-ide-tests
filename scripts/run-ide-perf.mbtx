@@ -1,0 +1,480 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/core/encoding/hex",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+  "moonbitlang/x@0.5.6/sys",
+  "moonbitlang/x@0.5.6/time",
+}
+----
+
+///|
+async fn execute(
+  command : String,
+  args : Array[String],
+  log? : String,
+  extra_env~ : Map[String, String] = Map([]),
+  cwd? : StringView,
+  timeout_ms~ : Int32 = 600000,
+) -> (Int32, String) {
+  let (code, output) = @async.with_timeout(timeout_ms, () => {
+    @process.collect_output_merged(command, args, extra_env~, cwd?)
+  })
+  let text = output.text()
+  if log is Some(path) {
+    @fs.write_file(path, text, append=true, create_mode=OpenOrCreate)
+  }
+  (code, text)
+}
+
+///|
+async fn checked(
+  command : String,
+  args : Array[String],
+  log? : String,
+) -> String {
+  let (code, output) = execute(command, args, log?)
+  guard code == 0 else {
+    fail("\{command} \{args.join(" ")} exited \{code}: \{output}")
+  }
+  output
+}
+
+///|
+fn pad(value : Int32, length : Int32) -> String {
+  let text = value.to_string()
+  "0".repeat((length - text.length()).max(0)) + text
+}
+
+///|
+// Read the argument format emitted by testgen without invoking a shell:
+// bare words, literal single-quoted strings, and JSON double-quoted strings.
+fn command_args(line : String) -> Array[String] raise {
+  guard line.has_prefix("$ ") else { fail("expected a command: \{line}") }
+  let args : Array[String] = []
+  let mut i = 2
+  while i < line.length() {
+    if line[i] == ' ' || line[i] == '\t' {
+      i += 1
+      continue
+    }
+    let start = i
+    if line[i] == '\'' || line[i] == '"' {
+      let quote = line[i]
+      i += 1
+      while i < line.length() && line[i] != quote {
+        if quote == '"' && line[i] == '\\' {
+          i += 1
+        }
+        i += 1
+      }
+      guard i < line.length() else { fail("unclosed quote in \{line}") }
+      i += 1
+      let value : String = if quote == '\'' {
+        line[start + 1:i - 1].to_owned()
+      } else {
+        @json.from_json(@json.parse(line[start:i]))
+      }
+      args.push(value)
+      guard i == line.length() || line[i] == ' ' || line[i] == '\t' else {
+        fail("expected a space after quoted argument in \{line}")
+      }
+    } else {
+      while i < line.length() && line[i] != ' ' && line[i] != '\t' {
+        guard line[i] != '\'' && line[i] != '"' else {
+          fail("quote inside an unquoted argument in \{line}")
+        }
+        i += 1
+      }
+      args.push(line[start:i].to_owned())
+    }
+  }
+  guard args is ["moonx", script, _, ..] &&
+    script.has_suffix("/scripts/bench-moon-ide.mbtx") else {
+    fail("expected a bench-moon-ide.mbtx command: \{line}")
+  }
+  args
+}
+
+///|
+fn performance_commands(content : String) -> Array[Array[String]] raise {
+  let commands : Array[Array[String]] = []
+  let mut fence = ""
+  for raw in content.split("\n") {
+    let line = raw.trim().to_owned()
+    if fence == "" {
+      if line.has_suffix("mooncram") {
+        let opening = line[:line.length() - 8]
+        if opening.length() >= 3 && opening.iter().all(c => c == '`') {
+          fence = opening.to_owned()
+        }
+      }
+    } else if line == fence {
+      fence = ""
+    } else if line != "" {
+      commands.push(command_args(line))
+    }
+  }
+  guard fence == "" && !commands.is_empty() else {
+    fail("expected closed mooncram fences containing performance commands")
+  }
+  commands
+}
+
+///|
+test "performance command arguments preserve quoting without shell expansion" {
+  let args = command_args(
+    "$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover \"O'Reilly\" --loc 'dir with space/a.mbt:1:2' --target js --no-check",
+  )
+  assert_eq(args[3], "O'Reilly")
+  assert_eq(args[5], "dir with space/a.mbt:1:2")
+  assert_eq(
+    command_args("$ moonx 'x/scripts/bench-moon-ide.mbtx' hover '$NAME' ")[3],
+    "$NAME",
+  )
+}
+
+///|
+test "performance files execute commands only inside mooncram fences" {
+  let command = "$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
+  let commands = performance_commands(
+    "# workload\r\n\r\n````mooncram\r\n\{command}\r\n\{command}\r\n````\r\n",
+  )
+  assert_eq(commands.length(), 2)
+  assert_eq(commands[0][2], "outline")
+}
+
+///|
+test "performance parser rejects snapshots and malformed command lists" {
+  for
+    content in [
+      "````mooncram\n$ moonx 'x/scripts/bench-moon-ide.mbtx' outline 'a.mbt'\nold output\n````\n",
+      "````mooncram\n$ moonx 'x/scripts/bench-moon-ide.mbtx' outline 'a.mbt'\n",
+      "````mooncram\n$ moonx 'x/scripts/bench-moon-ide.mbtx' outline 'a.mbt\n````\n",
+      "````mooncram\n$ other-command\n````\n", "# no commands\n",
+    ] {
+    let rejected = try {
+      let _ = performance_commands(content)
+      false
+    } catch {
+      _ => true
+    }
+    assert_true(rejected)
+  }
+}
+
+///|
+async fn main {
+  let root = @fs.realpath(".")
+  let args = @env.args()
+  let windows = @env.get_env_var("OS") == Some("Windows_NT")
+  let host_platform = if windows { "windows" } else { "unix" }
+  let mut platform = host_platform
+  let mut action = "test"
+  let mut candidates = false
+  let filenames : Array[String] = []
+  let mut index = 1
+  while index < args.length() {
+    match args[index] {
+      "--action" if index + 1 < args.length() => {
+        action = args[index + 1].to_lower()
+        index += 2
+      }
+      "--platform" if index + 1 < args.length() => {
+        platform = args[index + 1]
+        index += 2
+      }
+      "--case-file" if index + 1 < args.length() => {
+        filenames.push(args[index + 1])
+        index += 2
+      }
+      "--candidates" => {
+        candidates = true
+        index += 1
+      }
+      _ =>
+        fail(
+          "usage: run-ide-perf [--action test|generate] [--case-file filename] [--candidates] [--platform unix|windows]",
+        )
+    }
+  }
+  guard ["test", "generate"].contains(action) &&
+    ["unix", "windows"].contains(platform) &&
+    (action == "generate" || platform == host_platform) &&
+    (action != "generate" || filenames.is_empty()) else {
+    fail("invalid action/platform combination")
+  }
+  for name in filenames {
+    guard name.has_suffix(".mooncram.md") &&
+      !name.contains("/") &&
+      !name.contains("\\") else {
+      fail("expected a .mooncram.md filename, got \{name}")
+    }
+  }
+  let now = @env.now()
+  let date = @time.unix(
+    (now / 1000).reinterpret_as_int64(),
+    nanosecond=(now % 1000).to_int() * 1000000,
+  )
+  let stamp = "\{pad(date.year(), 4)}\{pad(date.month(), 2)}\{pad(date.day(), 2)}T\{pad(date.hour(), 2)}\{pad(date.minute(), 2)}\{pad(date.second(), 2)}\{pad((now % 1000).to_int(), 3)}Z"
+  let run_id = stamp + "-" + @hex.encode(@env.rand(4).unwrap())
+  let run_dir = "perf/data/\{platform}/\{run_id}"
+  @fs.mkdir(run_dir, recursive=true)
+  let report : Map[String, Json] = {
+    "schema_version": 2,
+    "run_id": Json(run_id),
+    "action": Json(action),
+    "started_at": Json(date.to_string()),
+  }
+  let fixtures : Array[Json] = []
+  let mut failed = false
+  try {
+    report["platform"] = Json(
+      if windows {
+        "Windows_NT"
+      } else {
+        checked("uname", ["-sr"]).trim().to_owned()
+      },
+    )
+    report["architecture"] = Json(
+      match @env.get_env_var("PROCESSOR_ARCHITECTURE") {
+        Some(architecture) => architecture
+        None => checked("uname", ["-m"]).trim().to_owned()
+      },
+    )
+    report["moon_version"] = Json(
+      checked("moon", ["version", "--all"]).trim().to_owned(),
+    )
+    if action == "test" {
+      let moon_home = @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
+        let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {
+          @env.get_env_var("HOME").unwrap_or_else(() => {
+            abort("MOON_HOME, USERPROFILE or HOME is required")
+          })
+        })
+        home + "/.moon"
+      })
+      // moon-ide checks core even with --no-check. Prepare its check artifacts
+      // once, outside every per-command timer; installer bundles are insufficient.
+      let core_command = [
+        "-C",
+        @fs.realpath(moon_home + "/lib/core"),
+        "check",
+        "--no-mbti",
+        "--target",
+        "all",
+        "--warn-list",
+        "-all",
+      ]
+      report["core_prepare_command"] = Json(core_command)
+      report["core_prepared"] = false
+      let _ = checked("moon", core_command, log=run_dir + "/core-prepare.log")
+      report["core_prepared"] = true
+    }
+    let repos : Array[Json] = @json.from_json(
+      @json.parse(checked("moonx", ["scripts/perf-repos.mbtx", "list"])),
+    )
+    for repo in repos {
+      guard repo
+        is {
+          "slug": String(slug),
+          "path": String(path),
+          "commit": String(commit),
+          "max_files": Number(max_files, ..),
+          "max_per_file": Number(max_per_file, ..),
+          ..
+        } else {
+        fail("invalid performance repository record")
+      }
+      let result : Map[String, Json] = {
+        "slug": Json(slug),
+        "commit": Json(commit),
+        "phase": "fixture",
+        "status": "failed",
+        "error": Json::null(),
+        "command_results": [],
+        "expected_samples": 0,
+        "samples": [],
+      }
+      let fixture_log = "\{run_dir}/\{slug}-prepare.log"
+      try {
+        let _ = checked(
+          "moonx",
+          ["scripts/perf-repos.mbtx", "prepare", slug],
+          log=fixture_log,
+        )
+        let out_dir = if action == "generate" || candidates {
+          "perf/data/\{platform}/candidates-\{slug}"
+        } else {
+          "perf/tests/\{platform}/\{slug}"
+        }
+        if action == "generate" {
+          result["phase"] = "generate"
+          let output = checked(
+            "moon",
+            [
+              "-C",
+              "testgen",
+              "run",
+              "--target",
+              "wasm",
+              "cmd/main",
+              "--",
+              "--performance",
+              "--repo",
+              root + "/perf/" + path,
+              "--repo-slug",
+              slug,
+              "--output-dir",
+              root + "/" + out_dir,
+              "--platform",
+              platform,
+              "--test-root",
+              "../../../..",
+              "--max-files",
+              max_files.to_int().to_string(),
+              "--max-per-file",
+              max_per_file.to_int().to_string(),
+            ],
+            log=fixture_log,
+          )
+          @stdio.stdout.write(output)
+        } else {
+          result["phase"] = "prepare"
+          let preparation : Map[String, Json] = @json.from_json(
+            @json.parse(@fs.read_file(out_dir + "/prepare.json").text()),
+          )
+          let commands : Array[Array[String]] = @json.from_json(
+            preparation.get("commands").unwrap(),
+          )
+          result["prepare_commands"] = Json(commands)
+          for command in commands {
+            let args = match command {
+              ["-C", relative, .. tail] =>
+                ["-C", "perf/" + path + "/" + relative, ..tail]
+              _ => ["-C", "perf/" + path, ..command]
+            }
+            let _ = checked("moon", args, log=fixture_log)
+          }
+          result["phase"] = "cases"
+          let names = if filenames.is_empty() {
+            @fs.readdir(out_dir, sort=true).filter(name => {
+              name.has_suffix(".mooncram.md")
+            })
+          } else {
+            filenames
+          }
+          let cases : Array[(String, Array[String])] = []
+          let mut expected = 0
+          for name in names {
+            for
+              argv in performance_commands(
+                @fs.read_file("\{out_dir}/\{name}").text(),
+              ) {
+              cases.push((name, argv))
+              expected += 1
+            }
+          }
+          guard expected > 0 else { fail("no performance cases in \{out_dir}") }
+          result["case_files"] = Json(names)
+          result["expected_samples"] = Json(expected)
+          let sample_dir = "\{run_dir}/\{slug}"
+          @fs.mkdir(sample_dir)
+          let absolute_samples = @fs.realpath(sample_dir)
+          result["phase"] = "commands"
+          let command_results : Array[Json] = []
+          result["command_results"] = Json(command_results)
+          let mut commands_failed = false
+          let case_cwd = @fs.realpath(out_dir)
+          let command_log = "\{run_dir}/\{slug}.log"
+          for (name, argv) in cases {
+            @fs.write_file(
+              command_log,
+              "\n=== \{name} ===\n\{Json(argv).stringify()}\n",
+              append=true,
+              create_mode=OpenOrCreate,
+            )
+            let (code, error) = try {
+              let (code, _) = execute(
+                argv[0],
+                argv[1:].to_owned(),
+                log=command_log,
+                extra_env={ "MOON_IDE_PERF_DIR": absolute_samples },
+                cwd=case_cwd,
+                timeout_ms=90000,
+              )
+              (code, Json::null())
+            } catch {
+              error => {
+                let text = error.to_string()
+                @fs.write_file(command_log, text + "\n", append=true)
+                (125, Json(text))
+              }
+            }
+            commands_failed = commands_failed || code != 0
+            command_results.push({
+              "case_file": Json(name),
+              "argv": Json(argv),
+              "exit_code": Json(code),
+              "error": error,
+            })
+          }
+          result["command_results"] = Json(command_results)
+          let samples : Array[Json] = []
+          for name in @fs.readdir(sample_dir, sort=true) {
+            if name.has_suffix(".json") {
+              samples.push(
+                @json.parse(@fs.read_file("\{sample_dir}/\{name}").text()),
+              )
+            }
+          }
+          result["samples"] = Json(samples)
+          guard !commands_failed else {
+            fail("performance command failed; see \{slug}.log")
+          }
+          guard samples.length() == expected else {
+            fail(
+              "expected \{expected} measurements, collected \{samples.length()}",
+            )
+          }
+          guard samples.iter().all(sample => sample is { "status": "ok", .. }) else {
+            fail("one or more moon ide commands failed")
+          }
+          result["phase"] = "fixture"
+          let _ = checked(
+            "moonx",
+            ["scripts/perf-repos.mbtx", "check", slug],
+            log=fixture_log,
+          )
+          result["phase"] = "commands"
+        }
+        result["status"] = "ok"
+      } catch {
+        error => {
+          failed = true
+          result["error"] = Json(error.to_string())
+          @stdio.stderr.write("\{slug}: \{error}\n")
+        }
+      }
+      fixtures.push(Json(result))
+    }
+  } catch {
+    error => {
+      failed = true
+      report["error"] = Json(error.to_string())
+      @stdio.stderr.write("\{error}\n")
+    }
+  }
+  report["fixtures"] = Json(fixtures)
+  @fs.write_file(
+    run_dir + "/result.json",
+    Json(report).stringify(indent=2) + "\n",
+  )
+  println("Performance report: \{run_dir}/result.json")
+  @sys.exit(if failed { 1 } else { 0 })
+}
