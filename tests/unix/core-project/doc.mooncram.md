@@ -275,7 +275,7 @@ pub fn[A] List::from_array(ArrayView[A]) -> Self[A]
    ```
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide doc @moonbitlang/core/list.List
 package "moonbitlang/core/list"
 enum List[A] {
@@ -358,12 +358,12 @@ enum List[A] {
   pub impl[A : Hash] Hash for List[A]
   #deprecated
   pub impl[A : Show] Show for List[A]
-  pub impl[A : ToJson] ToJson for List[A]
   pub impl[A : @debug.Debug] @debug.Debug for List[A]
   pub impl[A : @json.FromJson] @json.FromJson for List[A]
+  pub impl[A : @json.ToJson] @json.ToJson for List[A]
   pub impl[X : Arbitrary] Arbitrary for @list.List[X]
   pub impl[T : Shrink] Shrink for @list.List[T]
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide doc @moonbitlang/core/hashmap.HashMap::get
