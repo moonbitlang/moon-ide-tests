@@ -1,6 +1,6 @@
 # toml-parser rename tokens internal/tokenize/lexer_test.mbt:4:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'tokens' 'tokens_renamed' --loc 'internal/tokenize/lexer_test.mbt:4:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/internal/tokenize/lexer_test.mbt
@@ -22,4 +22,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parse
        #|  Identifier(
 *** End Patch
 "" (escaped)
-````
+```

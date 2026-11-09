@@ -1,6 +1,6 @@
 # rabbita rename Val e2e/apps/rui/fixture/fixture.mbt:2:33
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Val' 'ValRenamed' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/apps/rui/fixture/fixture.mbt
@@ -22,4 +22,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
        @rui.theme(
 *** End Patch
 "" (escaped)
-````
+```

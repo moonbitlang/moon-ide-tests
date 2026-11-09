@@ -1,6 +1,6 @@
 # json rename Decode src/lib/decode.mbt:8:11
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Decode' 'DecodeRenamed' --loc 'src/lib/decode.mbt:8:11'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
@@ -10,39 +10,39 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
  ///|
 -pub trait Decode {
 +pub trait DecodeRenamed {
-   array_start(Self, JsonArray) -> JsonArray
-   array_push(Self, Json, JsonArray) -> JsonArray
-   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+   fn array_start(Self, JsonArray) -> JsonArray
+   fn array_push(Self, Json, JsonArray) -> JsonArray
+   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
 @@
  }
  
  ///|
--impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
-+impl DecodeRenamed for Unit with array_start(_self, _old_acc) -> JsonArray {
+-impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
++impl DecodeRenamed for Unit with fn array_start(_self, _old_acc) -> JsonArray {
    []
  }
  
  ///|
--impl Decode for Unit with array_push(_self, elem, acc) {
-+impl DecodeRenamed for Unit with array_push(_self, elem, acc) {
+-impl Decode for Unit with fn array_push(_self, elem, acc) {
++impl DecodeRenamed for Unit with fn array_push(_self, elem, acc) {
    [elem, ..acc]
  }
  
  ///|
--impl Decode for Unit with array_finish(_self, acc, old_acc) {
-+impl DecodeRenamed for Unit with array_finish(_self, acc, old_acc) {
+-impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
++impl DecodeRenamed for Unit with fn array_finish(_self, acc, old_acc) {
    (acc.rev(), old_acc)
  }
  
  ///|
--impl Decode for Unit with object_start(_self, _old_acc) -> JsonObject {
-+impl DecodeRenamed for Unit with object_start(_self, _old_acc) -> JsonObject {
+-impl Decode for Unit with fn object_start(_self, _old_acc) -> JsonObject {
++impl DecodeRenamed for Unit with fn object_start(_self, _old_acc) -> JsonObject {
    Map([])
  }
  
  ///|
--impl Decode for Unit with object_push(_self, key, value, acc) {
-+impl DecodeRenamed for Unit with object_push(_self, key, value, acc) {
+-impl Decode for Unit with fn object_push(_self, key, value, acc) {
++impl DecodeRenamed for Unit with fn object_push(_self, key, value, acc) {
    if !acc.contains(key) {
      acc[key] = value
    }
@@ -50,26 +50,26 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
  }
  
  ///|
--impl Decode for Unit with object_finish(_self, acc, old_acc) {
-+impl DecodeRenamed for Unit with object_finish(_self, acc, old_acc) {
+-impl Decode for Unit with fn object_finish(_self, acc, old_acc) {
++impl DecodeRenamed for Unit with fn object_finish(_self, acc, old_acc) {
    (acc, old_acc)
  }
  
  ///|
--impl Decode for Unit with double(_self, view) -> Double raise {
-+impl DecodeRenamed for Unit with double(_self, view) -> Double raise {
+-impl Decode for Unit with fn double(_self, view) -> Double raise {
++impl DecodeRenamed for Unit with fn double(_self, view) -> Double raise {
    @string.parse_double(String::from_iter(view.iter()))
  }
  
  ///|
--impl Decode for Unit with integer(_self, view) -> Int raise {
-+impl DecodeRenamed for Unit with integer(_self, view) -> Int raise {
+-impl Decode for Unit with fn integer(_self, view) -> Int32 raise {
++impl DecodeRenamed for Unit with fn integer(_self, view) -> Int32 raise {
    @string.parse_int(String::from_iter(view.iter()))
  }
  
  ///|
--impl Decode for Unit with string(_self, s) {
-+impl DecodeRenamed for Unit with string(_self, s) {
+-impl Decode for Unit with fn string(_self, s) {
++impl DecodeRenamed for Unit with fn string(_self, s) {
    s
  }
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -90,8 +90,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 +pub fn decode(input : String, decode? : &DecodeRenamed) -> Json raise {
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
-"     Some(decode) => decode" (escaped)
-"     None => ()" (escaped)
+     Some(decode) => decode
+     None => ()
    }
 @@
  }
@@ -101,8 +101,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 +pub fn decode_start(input : String, decode? : &DecodeRenamed) -> Value raise {
 -  let decode : &Decode = match decode {
 +  let decode : &DecodeRenamed = match decode {
-"     Some(decode) => decode" (escaped)
-"     None => ()" (escaped)
+     Some(decode) => decode
+     None => ()
    }
 *** Update File: <WORKDIR>/src/lib/value.mbt
 @@
@@ -125,4 +125,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
    decode_continue,
 *** End Patch
 "" (escaped)
-````
+```

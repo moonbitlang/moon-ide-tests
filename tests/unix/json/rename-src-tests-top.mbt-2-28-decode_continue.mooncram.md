@@ -1,6 +1,6 @@
 # json rename decode_continue src/tests/top.mbt:2:28
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'decode_continue' 'decode_continue_renamed' --loc 'src/tests/top.mbt:2:28'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/incr.mbt
@@ -20,4 +20,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
 +using @json {decode_start, decode_continue_renamed, type Value}
 *** End Patch
 "" (escaped)
-````
+```

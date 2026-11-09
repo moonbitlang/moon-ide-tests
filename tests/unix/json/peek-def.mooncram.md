@@ -1,158 +1,158 @@
 # json peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Decode' --loc 'src/lib/decode.mbt:8:11'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | pub type JsonObject = Map[String, Json]" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"8 | pub trait Decode {" (escaped)
-"  | ^" (escaped)
-"  |   array_start(Self, JsonArray) -> JsonArray" (escaped)
-"  |   array_push(Self, Json, JsonArray) -> JsonArray" (escaped)
-"  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
-"  |   object_start(Self, JsonObject) -> JsonObject" (escaped)
-"  |   object_push(Self, String, Json, JsonObject) -> JsonObject" (escaped)
-"  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)" (escaped)
-"  |   double(Self, ArrayView[Char]) -> Double raise" (escaped)
-"  |   integer(Self, ArrayView[Char]) -> Int raise" (escaped)
-"  |   string(Self, String) -> String" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {" (escaped)
-"  |   []" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | impl Decode for Unit with array_push(_self, elem, acc) {" (escaped)
-"  |   [elem, ..acc]" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | impl Decode for Unit with array_finish(_self, acc, old_acc) {" (escaped)
-"  |   (acc.rev(), old_acc)" (escaped)
-````
+  | 
+  | ///|
+  | pub type JsonObject = Map[String, Json]
+  | 
+  | ///|
+8 | pub trait Decode {
+  | ^
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
+  | }
+  | 
+  | ///|
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
+  |   []
+  | }
+  | 
+  | ///|
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
+  |   [elem, ..acc]
+  | }
+  | 
+  | ///|
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
+  |   (acc.rev(), old_acc)
+```
 
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'array_start' --loc 'src/lib/decode.mbt:9:3'
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'array_start' --loc 'src/lib/decode.mbt:9:6'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
-"  | ///|" (escaped)
-"  | pub type JsonObject = Map[String, Json]" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | pub trait Decode {" (escaped)
-"9 |   array_start(Self, JsonArray) -> JsonArray" (escaped)
-"  |   ^^^^^^^^^^^" (escaped)
-"  |   array_push(Self, Json, JsonArray) -> JsonArray" (escaped)
-"  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
-"  |   object_start(Self, JsonObject) -> JsonObject" (escaped)
-"  |   object_push(Self, String, Json, JsonObject) -> JsonObject" (escaped)
-"  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)" (escaped)
-"  |   double(Self, ArrayView[Char]) -> Double raise" (escaped)
-"  |   integer(Self, ArrayView[Char]) -> Int raise" (escaped)
-"  |   string(Self, String) -> String" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {" (escaped)
-"  |   []" (escaped)
-"  | }" (escaped)
-````
+  | ///|
+  | pub type JsonObject = Map[String, Json]
+  | 
+  | ///|
+  | pub trait Decode {
+9 |   fn array_start(Self, JsonArray) -> JsonArray
+  |      ^^^^^^^^^^^
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
+  | }
+  | 
+  | ///|
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
+  |   []
+  | }
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Context' --loc 'src/lib/json.mbt:2:13'
 Definition found at file <WORKDIR>/src/lib/json.mbt
-"  | ///|" (escaped)
-"2 | priv struct Context {" (escaped)
-"  |             ^^^^^^^" (escaped)
-"  |   original : Array[Char]" (escaped)
-"  |   rest : ArrayView[Char]" (escaped)
-"  |   skip : Int" (escaped)
-"  |   arr_acc : Array[Json]" (escaped)
-"  |   obj_acc : Map[String, Json]" (escaped)
-"  |   stack : Array[Frame]" (escaped)
-"  |   decode : &Decode" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | enum Frame {" (escaped)
-"  |   Array(Array[Json])" (escaped)
-"  |   Map(Map[String, Json])" (escaped)
-"  |   Key(String)" (escaped)
-````
+  | ///|
+2 | priv struct Context {
+  |             ^^^^^^^
+  |   original : Array[Char]
+  |   rest : ArrayView[Char]
+  |   skip : Int32
+  |   arr_acc : Array[Json]
+  |   obj_acc : Map[String, Json]
+  |   stack : Array[Frame]
+  |   decode : &Decode
+  | }
+  | 
+  | ///|
+  | enum Frame {
+  |   Array(Array[Json])
+  |   Map(Map[String, Json])
+  |   Key(String)
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'original' --loc 'src/lib/json.mbt:3:3'
 Definition found at file <WORKDIR>/src/lib/json.mbt
-"  | ///|" (escaped)
-"  | priv struct Context {" (escaped)
-"3 |   original : Array[Char]" (escaped)
-"  |   ^^^^^^^^" (escaped)
-"  |   rest : ArrayView[Char]" (escaped)
-"  |   skip : Int" (escaped)
-"  |   arr_acc : Array[Json]" (escaped)
-"  |   obj_acc : Map[String, Json]" (escaped)
-"  |   stack : Array[Frame]" (escaped)
-"  |   decode : &Decode" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | enum Frame {" (escaped)
-"  |   Array(Array[Json])" (escaped)
-"  |   Map(Map[String, Json])" (escaped)
-"  |   Key(String)" (escaped)
-"  | } derive(Debug)" (escaped)
-````
+  | ///|
+  | priv struct Context {
+3 |   original : Array[Char]
+  |   ^^^^^^^^
+  |   rest : ArrayView[Char]
+  |   skip : Int32
+  |   arr_acc : Array[Json]
+  |   obj_acc : Map[String, Json]
+  |   stack : Array[Frame]
+  |   decode : &Decode
+  | }
+  | 
+  | ///|
+  | enum Frame {
+  |   Array(Array[Json])
+  |   Map(Map[String, Json])
+  |   Key(String)
+  | } derive(Debug)
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Value' --loc 'src/lib/value.mbt:2:10'
 Definition found at file <WORKDIR>/src/lib/value.mbt
-"  | ///|" (escaped)
-"2 | pub enum Value {" (escaped)
-"  |          ^^^^^" (escaped)
-"  |   Continue(ContinueValue)" (escaped)
-"  |   Finish(FinishValue)" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | pub struct ContinueValue {" (escaped)
-"  |   rest : ArrayView[Char]" (escaped)
-"  |   arr_acc : JsonArray" (escaped)
-"  |   obj_acc : JsonObject" (escaped)
-"  |   stack : Array[Frame]" (escaped)
-"  |   decode : &Decode" (escaped)
-"  |   checkpoint : Checkpoint" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-````
+  | ///|
+2 | pub enum Value {
+  |          ^^^^^
+  |   Continue(ContinueValue)
+  |   Finish(FinishValue)
+  | }
+  | 
+  | ///|
+  | pub struct ContinueValue {
+  |   rest : ArrayView[Char]
+  |   arr_acc : JsonArray
+  |   obj_acc : JsonObject
+  |   stack : Array[Frame]
+  |   decode : &Decode
+  |   checkpoint : Checkpoint
+  | }
+  | 
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Continue' --loc 'src/lib/value.mbt:3:3'
 Definition found at file <WORKDIR>/src/lib/value.mbt
-"  | ///|" (escaped)
-"  | pub enum Value {" (escaped)
-"3 |   Continue(ContinueValue)" (escaped)
-"  |   ^^^^^^^^" (escaped)
-"  |   Finish(FinishValue)" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | pub struct ContinueValue {" (escaped)
-"  |   rest : ArrayView[Char]" (escaped)
-"  |   arr_acc : JsonArray" (escaped)
-"  |   obj_acc : JsonObject" (escaped)
-"  |   stack : Array[Frame]" (escaped)
-"  |   decode : &Decode" (escaped)
-"  |   checkpoint : Checkpoint" (escaped)
-"  | }" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-````
+  | ///|
+  | pub enum Value {
+3 |   Continue(ContinueValue)
+  |   ^^^^^^^^
+  |   Finish(FinishValue)
+  | }
+  | 
+  | ///|
+  | pub struct ContinueValue {
+  |   rest : ArrayView[Char]
+  |   arr_acc : JsonArray
+  |   obj_acc : JsonObject
+  |   stack : Array[Frame]
+  |   decode : &Decode
+  |   checkpoint : Checkpoint
+  | }
+  | 
+  | ///|
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'incr_fail' --loc 'src/tests/incr.mbt:2:4'
 Definition found at file <WORKDIR>/src/tests/incr.mbt
   | ///|
@@ -172,9 +172,9 @@ Definition found at file <WORKDIR>/src/tests/incr.mbt
   |   }
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'message' --loc 'src/tests/incr.mbt:2:14'
 Definition found at file <WORKDIR>/src/tests/incr.mbt
   | ///|
@@ -194,9 +194,9 @@ Definition found at file <WORKDIR>/src/tests/incr.mbt
   |   }
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   | ///|
@@ -210,15 +210,15 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'message' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:24'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   | ///|
@@ -232,15 +232,15 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'input' --loc 'src/tests/json_testsuite_n_test.mbt:8:7'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_n_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
@@ -264,12 +264,12 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_n_test.mbt
   |   let input = "[\"\"],"
   |   expect_reject("n_array_comma_after_close.json", input)
   | }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'expect_reject' --loc 'src/tests/json_testsuite_n_test.mbt:9:3'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
-"   |     _ => ()" (escaped)
+   |     _ => ()
    |   }
    | }
    | 
@@ -277,7 +277,7 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
 16 | fn expect_reject(name : String, input : String) -> Unit raise {
    |    ^^^^^^^^^^^^^
    |   try @json.decode(input) catch {
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
    |       json_testsuite_fail(
    |         "expected JSONTestSuite parser rejection, got non-parser error: " + name,
@@ -290,9 +290,9 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
    |   }
    | }
    | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'input' --loc 'src/tests/json_testsuite_y_test.mbt:8:7'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_y_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
@@ -316,9 +316,9 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_y_test.mbt
   |   let input = "[]"
   |   expect_accept("y_array_empty.json", input)
   | }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'expect_accept' --loc 'src/tests/json_testsuite_y_test.mbt:9:3'
 Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   | fn json_testsuite_fail(message : String) -> Unit raise {
@@ -331,20 +331,20 @@ Definition found at file <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
   |   try @json.decode(input) catch {
-"  |     @lib.ParseError(_) => ()" (escaped)
+  |     @lib.ParseError(_) => ()
   |     _ =>
   |       json_testsuite_fail(
   |         "expected JSONTestSuite parser rejection, got non-parser error: " + name,
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'actual' --loc 'src/tests/json_value_semantics_test.mbt:3:7'
 Definition found at file <WORKDIR>/src/tests/json_value_semantics_test.mbt
   | ///|
@@ -365,9 +365,9 @@ Definition found at file <WORKDIR>/src/tests/json_value_semantics_test.mbt
   | test "json value semantics duplicate object key keeps first value" {
   |   let actual = @json.decode("{\"a\":\"b\",\"a\":\"c\"}")
   |   let expected = Json::object({ "a": Json::string("b") })
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode' --loc 'src/tests/json_value_semantics_test.mbt:3:22'
 Definition found at file <WORKDIR>/src/top.mbt
   | ///|
@@ -393,7 +393,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |        ^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -405,9 +405,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode_start' --loc 'src/tests/top.mbt:2:14'
 Definition found at file <WORKDIR>/src/top.mbt
   | ///|
@@ -429,11 +429,11 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    | }
    | 
    | ///|
-48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+46 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
    |        ^^^^^^^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -445,9 +445,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     decode,
    |   }
    |   value(ctx)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode_continue' --loc 'src/tests/top.mbt:2:28'
 Definition found at file <WORKDIR>/src/top.mbt
   | ///|
@@ -469,7 +469,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    | }
    | 
    | ///|
-66 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
+64 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
    |        ^^^^^^^^^^^^^^^
    |   let input = [..state.rest, ..cont.to_array()]
    |   let ctx = Context::{
@@ -485,9 +485,9 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     Value | NumberI(_) | NumberD(_) | FloatError(_, _) => value(ctx)
    |     ArrayPush(v) => array_push(ctx, v)
    |     ObjectKey => object_key(ctx)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Decode' --loc 'src/top.mbt:3:9'
 Definition found at file <WORKDIR>/src/lib/decode.mbt
   | 
@@ -497,33 +497,33 @@ Definition found at file <WORKDIR>/src/lib/decode.mbt
   | ///|
 8 | pub trait Decode {
   | ^
-  |   array_start(Self, JsonArray) -> JsonArray
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
-  |   object_start(Self, JsonObject) -> JsonObject
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject
-  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
-  |   double(Self, ArrayView[Char]) -> Double raise
-  |   integer(Self, ArrayView[Char]) -> Int raise
-  |   string(Self, String) -> String
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   []
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_push(_self, elem, acc) {
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
   |   [elem, ..acc]
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode' --loc 'src/top.mbt:4:3'
 Definition found at file <WORKDIR>/src/lib/json.mbt
    |   Map(Map[String, Json])
@@ -535,7 +535,7 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |        ^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -547,4 +547,4 @@ Definition found at file <WORKDIR>/src/lib/json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-````
+```

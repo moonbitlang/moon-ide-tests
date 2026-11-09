@@ -1207,6 +1207,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parse
      content=(
        #|TomlTable(
        #|  {
+*** Update File: <WORKDIR>/parse_bench_test.mbt
+@@
+   println(
+     "document: \{doc.length()} code units, \{doc.char_length()} characters",
+   )
+-  it.bench(() => it.keep(Ok(@toml.parse(doc)) catch { e => Err(e) }), count=20)
++  it.bench(() => it.keep(Ok(@toml.parse_renamed(doc)) catch { e => Err(e) }), count=20)
+ }
 *** Update File: <WORKDIR>/parser.mbt
 @@
  /// On any lexical or syntactic error, `parse` raises with a message

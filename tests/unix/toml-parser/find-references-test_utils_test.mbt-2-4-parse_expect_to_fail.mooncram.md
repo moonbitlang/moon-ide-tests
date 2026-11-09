@@ -1,8 +1,8 @@
 # toml-parser find-references parse_expect_to_fail test_utils_test.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
-Found 85 references for symbol 'parse_expect_to_fail':
+Found 84 references for symbol 'parse_expect_to_fail':
 <WORKDIR>/comprehensive_test.mbt:425:5-425:25:
     | 
     |   // Missing value
@@ -689,72 +689,63 @@ Found 85 references for symbol 'parse_expect_to_fail':
 
 <WORKDIR>/parser_test.mbt:162:5-162:25:
     | ///|
-    | test "test parser EOF handling in advance" {
-    |   inspect(
-162 |     parse_expect_to_fail("key ="),
-    |     ^^^^^^^^^^^^^^^^^^^^
-    |     content=(
-    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
-
-<WORKDIR>/parser_test.mbt:172:5-172:25:
-    | ///|
     | test "test parser rejects dash-starting identifier as value" {
     |   inspect(
-172 |     parse_expect_to_fail("key = -abc"),
+162 |     parse_expect_to_fail("key = -abc"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 11 } })
 
-<WORKDIR>/parser_test.mbt:196:5-196:25:
+<WORKDIR>/parser_test.mbt:186:5-186:25:
     | ///|
     | test "test inline table invalid syntax" {
     |   inspect(
-196 |     parse_expect_to_fail("table = {key value}"),
+186 |     parse_expect_to_fail("table = {key value}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Expected '=' at { start: { line: 1, column: 14 }, end: { line: 1, column: 19 } })
 
-<WORKDIR>/parser_test.mbt:206:5-206:25:
+<WORKDIR>/parser_test.mbt:196:5-196:25:
     | ///|
     | test "test inline table missing comma or closing brace" {
     |   inspect(
-206 |     parse_expect_to_fail("table = {key = \"value\" invalid}"),
+196 |     parse_expect_to_fail("table = {key = \"value\" invalid}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 24 }, end: { line: 1, column: 31 } })
 
-<WORKDIR>/parser_test.mbt:396:5-396:25:
+<WORKDIR>/parser_test.mbt:386:5-386:25:
     |   // 1e100000 overflows Double but should NOT silently become infinity.
     |   // TOML reserves inf/nan as the only valid non-finite spellings.
     |   inspect(
-396 |     parse_expect_to_fail("x = 1e100000\n"),
+386 |     parse_expect_to_fail("x = 1e100000\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Invalid float: 1e100000 at { start: { line: 1, column: 5 }, end: { line: 1, column: 13 } })
 
-<WORKDIR>/parser_test.mbt:402:5-402:25:
+<WORKDIR>/parser_test.mbt:392:5-392:25:
     |     ),
     |   )
     |   inspect(
-402 |     parse_expect_to_fail("x = -31e368\n"),
+392 |     parse_expect_to_fail("x = -31e368\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Invalid float: -31e368 at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } })
 
-<WORKDIR>/parser_test.mbt:495:5-495:25:
+<WORKDIR>/parser_test.mbt:485:5-485:25:
     |     #|key2 = "value2"
     |     #|
     |   inspect(
-495 |     parse_expect_to_fail(duplicate_table_toml),
+485 |     parse_expect_to_fail(duplicate_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|Duplicate table definition: [table] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
 
-<WORKDIR>/parser_test.mbt:510:5-510:25:
+<WORKDIR>/parser_test.mbt:500:5-500:25:
     |     #|key = "value"
     |     #|
     |   inspect(
-510 |     parse_expect_to_fail(conflicting_table_toml),
+500 |     parse_expect_to_fail(conflicting_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|ExpectedTable("table", "string
@@ -768,4 +759,4 @@ Found 85 references for symbol 'parse_expect_to_fail':
    |     content=(
    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # sqlparser find-references obj src/show.mbt:2:34
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'obj' --loc 'src/show.mbt:2:34'
 Found 1 references for symbol 'obj':
 <WORKDIR>/src/show.mbt:3:32-3:35:
@@ -11,4 +11,4 @@ Found 1 references for symbol 'obj':
   |   let buffer = StringBuilder()
   |   let mut in_string = false
 "" (escaped)
-````
+```

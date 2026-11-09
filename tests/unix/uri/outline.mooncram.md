@@ -1,6 +1,6 @@
 # uri outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri.mbt'
   54 |pub struct Uri {
      |...
@@ -115,9 +115,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
 1597 |fn int_to_hex(value : Int32) -> String {
      |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test.mbt'
   3 |test "basic_uri_parsing" {
     |...
@@ -162,9 +162,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
 335 |test "show_trait_implementation" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide outline 'uri_test_new_features.mbt'
   3 |test "url_encoding" {
     |...
@@ -191,4 +191,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
 291 |test "rfc3986_compliance" {
     |...
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # sqlparser rename Redshift src/redshift.mbt:3:17
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'Redshift' 'RedshiftRenamed' --loc 'src/redshift.mbt:3:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/redshift.mbt
@@ -91,4 +91,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
    supports_within_after_array_aggregation,
 *** End Patch
 "" (escaped)
-````
+```

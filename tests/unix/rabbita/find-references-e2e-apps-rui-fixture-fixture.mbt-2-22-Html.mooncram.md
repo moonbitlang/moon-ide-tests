@@ -1,6 +1,6 @@
 # rabbita find-references Html e2e/apps/rui/fixture/fixture.mbt:2:22
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'Html' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:22'
 Found 3 references for symbol 'Html':
 <WORKDIR>/e2e/apps/rui/fixture/fixture.mbt:5:58-5:62:
@@ -30,4 +30,4 @@ Found 3 references for symbol 'Html':
    |   @rabbita.new(() => {
    |     app().map(body => {
 "" (escaped)
-````
+```

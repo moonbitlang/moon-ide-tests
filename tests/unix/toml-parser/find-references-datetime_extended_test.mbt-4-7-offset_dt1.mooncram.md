@@ -1,6 +1,6 @@
 # toml-parser find-references offset_dt1 datetime_extended_test.mbt:4:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
 Found 3 references for symbol 'offset_dt1':
 <WORKDIR>/datetime_extended_test.mbt:7:17-7:27:
@@ -30,4 +30,4 @@ Found 3 references for symbol 'offset_dt1':
    |   debug_inspect(local_dt == local_date, content="false")
    |   debug_inspect(local_date == local_time, content="false")
 "" (escaped)
-````
+```

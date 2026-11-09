@@ -1,6 +1,6 @@
 # sqlparser rename UnterminatedString src/lexer.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'UnterminatedString' 'UnterminatedStringRenamed' --loc 'src/lexer.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lexer.mbt
@@ -41,4 +41,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
    (Identifier(result.to_string()), rest)
 *** End Patch
 "" (escaped)
-````
+```

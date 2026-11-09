@@ -1,6 +1,6 @@
 # toml-parser rename s toml_to_string.mbt:3:23
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 's' 's_renamed' --loc 'toml_to_string.mbt:3:23'
 *** Begin Patch
 *** Update File: <WORKDIR>/toml_to_string.mbt
@@ -17,4 +17,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parse
        '\t' => result <+ "\\t"
 *** End Patch
 "" (escaped)
-````
+```

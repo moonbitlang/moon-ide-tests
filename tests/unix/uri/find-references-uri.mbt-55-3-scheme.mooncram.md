@@ -1,6 +1,6 @@
 # uri find-references scheme uri.mbt:55:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'scheme' --loc 'uri.mbt:55:3'
 Found 14 references for symbol 'scheme':
 <WORKDIR>/uri.mbt:111:5-111:11:
@@ -23,75 +23,75 @@ Found 14 references for symbol 'scheme':
 
 <WORKDIR>/uri.mbt:248:14-248:20:
     |   let mut result = ""
-"    | " (escaped)
-"    |   // Add scheme" (escaped)
+    | 
+    |   // Add scheme
 248 |   match self.scheme {
-"    |              ^^^^^^" (escaped)
-"    |     Some(scheme) => {" (escaped)
-"    |       result = result + scheme" (escaped)
+    |              ^^^^^^
+    |     Some(scheme) => {
+    |       result = result + scheme
 
 <WORKDIR>/uri.mbt:330:8-330:14:
-"    | ///" (escaped)
-"    | /// The scheme as `Some(String)` if present, `None` for relative URIs." (escaped)
-"    | pub fn Uri::scheme(self : Uri) -> String? {" (escaped)
+    | ///
+    | /// The scheme as `Some(String)` if present, `None` for relative URIs.
+    | pub fn Uri::scheme(self : Uri) -> String? {
 330 |   self.scheme
-"    |        ^^^^^^" (escaped)
-"    | }" (escaped)
-"    | " (escaped)
+    |        ^^^^^^
+    | }
+    | 
 
 <WORKDIR>/uri.mbt:717:13-717:19:
-"    | ///" (escaped)
-"    | /// A new `Uri` with the specified scheme" (escaped)
-"    | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {" (escaped)
+    | ///
+    | /// A new `Uri` with the specified scheme
+    | pub fn Uri::with_scheme(self : Uri, new_scheme : String?) -> Uri {
 717 |   { ..self, scheme: new_scheme, }
-"    |             ^^^^^^" (escaped)
-"    | }" (escaped)
-"    | " (escaped)
+    |             ^^^^^^
+    | }
+    | 
 
 <WORKDIR>/uri.mbt:810:14-810:20:
-"    | ///|" (escaped)
-"    | /// Check if the URI is absolute (has a scheme)" (escaped)
-"    | pub fn Uri::is_absolute(self : Uri) -> Bool {" (escaped)
+    | ///|
+    | /// Check if the URI is absolute (has a scheme)
+    | pub fn Uri::is_absolute(self : Uri) -> Bool {
 810 |   match self.scheme {
-"    |              ^^^^^^" (escaped)
-"    |     Some(_) => true" (escaped)
-"    |     None => false" (escaped)
+    |              ^^^^^^
+    |     Some(_) => true
+    |     None => false
 
 <WORKDIR>/uri.mbt:850:22-850:28:
-"    |       match auth.port {" (escaped)
-"    |         Some(port) => Some(port)" (escaped)
-"    |         None =>" (escaped)
+    |       match auth.port {
+    |         Some(port) => Some(port)
+    |         None =>
 850 |           match self.scheme {
-"    |                      ^^^^^^" (escaped)
-"    |             Some(scheme) => default_port(scheme)" (escaped)
-"    |             None => None" (escaped)
+    |                      ^^^^^^
+    |             Some(scheme) => default_port(scheme)
+    |             None => None
 
 <WORKDIR>/uri.mbt:867:19-867:25:
-"    |   // Remove default port if present" (escaped)
-"    |   match self.authority {" (escaped)
-"    |     Some(auth) =>" (escaped)
+    |   // Remove default port if present
+    |   match self.authority {
+    |     Some(auth) =>
 867 |       match (self.scheme, auth.port) {
-"    |                   ^^^^^^" (escaped)
-"    |         (Some(scheme), Some(port)) =>" (escaped)
-"    |           match default_port(scheme) {" (escaped)
+    |                   ^^^^^^
+    |         (Some(scheme), Some(port)) =>
+    |           match default_port(scheme) {
 
 <WORKDIR>/uri.mbt:989:9-989:15:
-"    |   match relative.authority {" (escaped)
-"    |     Some(_) =>" (escaped)
-"    |       resolved = {" (escaped)
+    |   match relative.authority {
+    |     Some(_) =>
+    |       resolved = {
 989 |         scheme: base.scheme,
-"    |         ^^^^^^" (escaped)
-"    |         authority: relative.authority," (escaped)
-"    |         path: relative.path," (escaped)
+    |         ^^^^^^
+    |         authority: relative.authority,
+    |         path: relative.path,
 
 <WORKDIR>/uri.mbt:989:22-989:28:
-"    |   match relative.authority {" (escaped)
-"    |     Some(_) =>" (escaped)
-"    |       resolved = {" (escaped)
+    |   match relative.authority {
+    |     Some(_) =>
+    |       resolved = {
 989 |         scheme: base.scheme,
-"    |                      ^^^^^^" (escaped)
-"    |         authority: relative.authority," (escaped)
-"    |         path: relative.path," (escaped)
+    |                      ^^^^^^
+    |         authority: relative.authority,
+    |         path: relative.path,
 
 <WORKDIR>/uri.mbt:1000:11-1000:17:
      |       if relative.path == "" {
@@ -112,21 +112,21 @@ Found 14 references for symbol 'scheme':
      |           path: base.path,
 
 <WORKDIR>/uri.mbt:1020:11-1020:17:
-"     |         }" (escaped)
-"     | " (escaped)
-"     |         resolved = {" (escaped)
+     |         }
+     | 
+     |         resolved = {
 1020 |           scheme: base.scheme,
-"     |           ^^^^^^" (escaped)
-"     |           authority: base.authority," (escaped)
-"     |           path: resolved_path," (escaped)
+     |           ^^^^^^
+     |           authority: base.authority,
+     |           path: resolved_path,
 
 <WORKDIR>/uri.mbt:1020:24-1020:30:
-"     |         }" (escaped)
-"     | " (escaped)
-"     |         resolved = {" (escaped)
+     |         }
+     | 
+     |         resolved = {
 1020 |           scheme: base.scheme,
-"     |                        ^^^^^^" (escaped)
-"     |           authority: base.authority," (escaped)
-"     |           path: resolved_path," (escaped)
+     |                        ^^^^^^
+     |           authority: base.authority,
+     |           path: resolved_path,
 "" (escaped)
-````
+```

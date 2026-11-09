@@ -1,6 +1,6 @@
 # toml-parser rename start internal/tokenize/token.mbt:10:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'start' 'start_renamed' --loc 'internal/tokenize/token.mbt:10:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/internal/tokenize/token.mbt
@@ -43,4 +43,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parse
  ///|
 *** End Patch
 "" (escaped)
-````
+```

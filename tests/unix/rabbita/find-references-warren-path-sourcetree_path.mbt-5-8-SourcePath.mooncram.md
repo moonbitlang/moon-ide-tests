@@ -1,6 +1,6 @@
 # rabbita find-references SourcePath warren/path/sourcetree_path.mbt:5:8
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
 Found 16 references for symbol 'SourcePath':
 <WORKDIR>/warren/build.mbt:2:19-2:29:
@@ -142,4 +142,4 @@ Found 16 references for symbol 'SourcePath':
   | 
   | ///|
 "" (escaped)
-````
+```

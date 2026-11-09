@@ -1,6 +1,6 @@
 # async rename wait_read src/internal/event_loop/io_unix.mbt:17:24
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'wait_read' 'wait_read_renamed' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/watch_inotify.mbt
@@ -84,4 +84,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
            // there is a small window where `waitpid(.., WNOHANG)` may still return zero.
 *** End Patch
 "" (escaped)
-````
+```

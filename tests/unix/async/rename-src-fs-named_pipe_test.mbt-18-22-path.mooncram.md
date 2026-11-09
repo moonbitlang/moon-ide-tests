@@ -1,6 +1,6 @@
 # async rename path src/fs/named_pipe_test.mbt:18:22
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'path' 'path_renamed' --loc 'src/fs/named_pipe_test.mbt:18:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/named_pipe_test.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
  #cfg(not(platform="windows"))
 *** End Patch
 "" (escaped)
-````
+```

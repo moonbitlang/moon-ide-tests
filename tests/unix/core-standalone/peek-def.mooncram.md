@@ -105,7 +105,7 @@ Found 1 symbols matching 'Array::fold':
      | } (no-eol)
 ```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
@@ -132,7 +132,7 @@ Found 1 symbols matching 'String::length':
      | /// ```
      | #alias(charcode_length, deprecated)
      | pub fn String::length(self : String) -> Int32 = "%string_length" (no-eol)
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::split'
@@ -141,11 +141,11 @@ Found 1 symbols matching 'String::split':
 `pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1728-1739
 1728 | ///|
      | /// Splits the string into all substrings separated by the given separator.
-"     | /// " (escaped)
+     | /// 
      | /// If the string does not contain the separator and the separator is not empty,
      | /// the returned iterator will contain only one element, which is the original
      | /// string.
-"     | /// " (escaped)
+     | /// 
      | /// If the separator is empty, the returned iterator will contain all the
      | /// characters in the string as single elements.
      | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
@@ -153,7 +153,7 @@ Found 1 symbols matching 'String::split':
      | } (no-eol)
 ```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
@@ -177,9 +177,9 @@ Found 1 symbols matching 'StringBuilder::new':
    |   let data : UninitializedArray[UInt16] = UninitializedArray::make(size_hint)
    |   { data, len: 0, }
    | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::abs'
 Found 1 symbols matching 'Int32::abs':
 
@@ -211,9 +211,9 @@ Found 1 symbols matching 'Int32::abs':
     |     self
     |   }
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::to_string'
 Found 2 symbols matching 'Int32::to_string':
 
@@ -231,12 +231,12 @@ Found 2 symbols matching 'Int32::to_string':
     |   if radix < 2 || radix > 36 {
     |     abort("radix must be between 2 and 36")
     |   }
-"    | " (escaped)
+    | 
     |   // Special case for zero
     |   if self == 0 {
     |     return "0"
     |   }
-"    | " (escaped)
+    | 
     |   // Handle negative numbers
     |   let is_negative = self < 0
     |   let num : UInt32 = if is_negative {
@@ -247,7 +247,7 @@ Found 2 symbols matching 'Int32::to_string':
     |   } else {
     |     self.reinterpret_as_uint()
     |   }
-"    | " (escaped)
+    | 
     |   // Calculate length, allocate buffer, and write digits
     |   let digit_start = if is_negative { 1 } else { 0 }
     |   let buffer = match radix {
@@ -273,7 +273,7 @@ Found 2 symbols matching 'Int32::to_string':
     |       buffer
     |     }
     |   }
-"    | " (escaped)
+    | 
     |   // Write minus sign if negative
     |   if is_negative {
     |     buffer.unsafe_set(0, 0x002D)
@@ -288,9 +288,9 @@ Found 2 symbols matching 'Int32::to_string':
     | pub fn Int32::to_string(self : Int32, radix~ : Int32 = 10) -> String {
     |   int_to_string_js(self, radix)
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Option::map'
 Found 1 symbols matching 'Option::map':
 
@@ -314,9 +314,9 @@ Found 1 symbols matching 'Option::map':
     |     None => None
     |   }
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Result::map'
 Found 1 symbols matching 'Result::map':
 
@@ -342,7 +342,7 @@ Found 1 symbols matching 'Result::map':
    |     Err(err) => Err(err)
    |   }
    | } (no-eol)
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::map'
@@ -436,7 +436,7 @@ Found 1 symbols matching 'Iter::to_array':
     | } (no-eol)
 ```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List'
 Found 1 symbols matching '@moonbitlang/core/list.List':
 
@@ -448,9 +448,9 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
    |   Empty
    |   More(A, mut tail~ : List[A])
    | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
@@ -489,9 +489,9 @@ Found 1 symbols matching '@moonbitlang/core/list.List::map':
     |     }
     |   }
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::get'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 
@@ -541,7 +541,7 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
    |     Some(node) => node.get_with_path(key, @path.of(key))
    |   }
    | } (no-eol)
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
@@ -590,7 +590,7 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
     |       Branch(children) => Branch(children.map(go))
     |     }
     |   }
-"    | " (escaped)
+    | 
     |   {
     |     data: match self.data {
     |       None => None

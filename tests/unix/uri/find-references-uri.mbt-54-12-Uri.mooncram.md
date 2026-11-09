@@ -1,6 +1,6 @@
 # uri find-references Uri uri.mbt:54:12
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'Uri' --loc 'uri.mbt:54:12'
 Found 105 references for symbol 'Uri':
 <WORKDIR>/uri.mbt:65:12-65:15:
@@ -8,8 +8,8 @@ Found 105 references for symbol 'Uri':
    | /// Keep `uri.to_json()` available in dot form for existing users of this
    | /// published package (the implicit promotion of `impl ToJson` is deprecated).
 65 | pub extend Uri with ToJson::{to_json}
-"   |            ^^^" (escaped)
-"   | " (escaped)
+   |            ^^^
+   | 
    | ///|
 
 <WORKDIR>/uri.mbt:110:19-110:22:
@@ -797,155 +797,155 @@ Found 105 references for symbol 'Uri':
 
 <WORKDIR>/uri_test_new_features.mbt:10:28-10:31:
    | 
-"   |   // Test unreserved characters (should not be encoded)" (escaped)
-"   |   let unreserved = \"hello-world_123.test~\"" (escaped)
-"10 |   let encoded_unreserved = Uri::encode(unreserved)" (escaped)
-"   |                            ^^^" (escaped)
-"   |   json_inspect(encoded_unreserved, content=\"hello-world_123.test~\")" (escaped)
-"   | " (escaped)
+   |   // Test unreserved characters (should not be encoded)
+   |   let unreserved = "hello-world_123.test~"
+10 |   let encoded_unreserved = Uri::encode(unreserved)
+   |                            ^^^
+   |   json_inspect(encoded_unreserved, content="hello-world_123.test~")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:15:25-15:28:
-"   | " (escaped)
-"   |   // Test special characters" (escaped)
-"   |   let special = \"user@domain.com:password\"" (escaped)
-"15 |   let encoded_special = Uri::encode(special)" (escaped)
-"   |                         ^^^" (escaped)
-"   |   json_inspect(encoded_special, content=\"user%40domain.com%3Apassword\")" (escaped)
-"   | }" (escaped)
+   | 
+   |   // Test special characters
+   |   let special = "user@domain.com:password"
+15 |   let encoded_special = Uri::encode(special)
+   |                         ^^^
+   |   json_inspect(encoded_special, content="user%40domain.com%3Apassword")
+   | }
 
 <WORKDIR>/uri_test_new_features.mbt:23:17-23:20:
-"   | /// Test URL decoding functionality" (escaped)
-"   | test \"url_decoding\" {" (escaped)
-"   |   // Test basic decoding" (escaped)
-"23 |   let decoded = Uri::decode(\"hello%20world%21\")" (escaped)
-"   |                 ^^^" (escaped)
-"   |   json_inspect(decoded, content=\"hello world!\")" (escaped)
-"   | " (escaped)
+   | /// Test URL decoding functionality
+   | test "url_decoding" {
+   |   // Test basic decoding
+23 |   let decoded = Uri::decode("hello%20world%21")
+   |                 ^^^
+   |   json_inspect(decoded, content="hello world!")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:27:21-27:24:
-"   |   json_inspect(decoded, content=\"hello world!\")" (escaped)
-"   | " (escaped)
-"   |   // Test invalid hex sequences (should be left as-is)" (escaped)
-"27 |   let invalid_hex = Uri::decode(\"hello%ZZ\")" (escaped)
-"   |                     ^^^" (escaped)
-"   |   json_inspect(invalid_hex, content=\"hello%ZZ\")" (escaped)
-"   | " (escaped)
+   |   json_inspect(decoded, content="hello world!")
+   | 
+   |   // Test invalid hex sequences (should be left as-is)
+27 |   let invalid_hex = Uri::decode("hello%ZZ")
+   |                     ^^^
+   |   json_inspect(invalid_hex, content="hello%ZZ")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:31:20-31:23:
-"   |   json_inspect(invalid_hex, content=\"hello%ZZ\")" (escaped)
-"   | " (escaped)
-"   |   // Test incomplete percent encoding" (escaped)
-"31 |   let incomplete = Uri::decode(\"hello%2\")" (escaped)
-"   |                    ^^^" (escaped)
-"   |   json_inspect(incomplete, content=\"hello%2\")" (escaped)
-"   | " (escaped)
+   |   json_inspect(invalid_hex, content="hello%ZZ")
+   | 
+   |   // Test incomplete percent encoding
+31 |   let incomplete = Uri::decode("hello%2")
+   |                    ^^^
+   |   json_inspect(incomplete, content="hello%2")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:35:15-35:18:
-"   |   json_inspect(incomplete, content=\"hello%2\")" (escaped)
-"   | " (escaped)
-"   |   // Test mixed content" (escaped)
-"35 |   let mixed = Uri::decode(\"user%40domain.com%3Apass%20word\")" (escaped)
-"   |               ^^^" (escaped)
-"   |   json_inspect(mixed, content=\"user@domain.com:pass word\")" (escaped)
-"   | }" (escaped)
+   |   json_inspect(incomplete, content="hello%2")
+   | 
+   |   // Test mixed content
+35 |   let mixed = Uri::decode("user%40domain.com%3Apass%20word")
+   |               ^^^
+   |   json_inspect(mixed, content="user@domain.com:pass word")
+   | }
 
 <WORKDIR>/uri_test_new_features.mbt:43:17-43:20:
-"   | /// Test URL encoding/decoding round trip" (escaped)
-"   | test \"url_encoding_round_trip\" {" (escaped)
-"   |   let original = \"Hello World! @#$%^&*()\"" (escaped)
-"43 |   let encoded = Uri::encode(original)" (escaped)
-"   |                 ^^^" (escaped)
-"   |   let decoded = Uri::decode(encoded)" (escaped)
-"   |   json_inspect(decoded, content=\"Hello World! @#$%^&*()\")" (escaped)
+   | /// Test URL encoding/decoding round trip
+   | test "url_encoding_round_trip" {
+   |   let original = "Hello World! @#$%^&*()"
+43 |   let encoded = Uri::encode(original)
+   |                 ^^^
+   |   let decoded = Uri::decode(encoded)
+   |   json_inspect(decoded, content="Hello World! @#$%^&*()")
 
 <WORKDIR>/uri_test_new_features.mbt:44:17-44:20:
-"   | test \"url_encoding_round_trip\" {" (escaped)
-"   |   let original = \"Hello World! @#$%^&*()\"" (escaped)
-"   |   let encoded = Uri::encode(original)" (escaped)
-"44 |   let decoded = Uri::decode(encoded)" (escaped)
-"   |                 ^^^" (escaped)
-"   |   json_inspect(decoded, content=\"Hello World! @#$%^&*()\")" (escaped)
-"   | " (escaped)
+   | test "url_encoding_round_trip" {
+   |   let original = "Hello World! @#$%^&*()"
+   |   let encoded = Uri::encode(original)
+44 |   let decoded = Uri::decode(encoded)
+   |                 ^^^
+   |   json_inspect(decoded, content="Hello World! @#$%^&*()")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:49:25-49:28:
-"   | " (escaped)
-"   |   // Test with Unicode-like content" (escaped)
-"   |   let unicode_like = \"café naïve résumé\"" (escaped)
-"49 |   let encoded_unicode = Uri::encode(unicode_like)" (escaped)
-"   |                         ^^^" (escaped)
-"   |   let decoded_unicode = Uri::decode(encoded_unicode)" (escaped)
-"   |   json_inspect(decoded_unicode, content=\"café naïve résumé\")" (escaped)
+   | 
+   |   // Test with Unicode-like content
+   |   let unicode_like = "café naïve résumé"
+49 |   let encoded_unicode = Uri::encode(unicode_like)
+   |                         ^^^
+   |   let decoded_unicode = Uri::decode(encoded_unicode)
+   |   json_inspect(decoded_unicode, content="café naïve résumé")
 
 <WORKDIR>/uri_test_new_features.mbt:50:25-50:28:
-"   |   // Test with Unicode-like content" (escaped)
-"   |   let unicode_like = \"café naïve résumé\"" (escaped)
-"   |   let encoded_unicode = Uri::encode(unicode_like)" (escaped)
-"50 |   let decoded_unicode = Uri::decode(encoded_unicode)" (escaped)
-"   |                         ^^^" (escaped)
-"   |   json_inspect(decoded_unicode, content=\"café naïve résumé\")" (escaped)
-"   | }" (escaped)
+   |   // Test with Unicode-like content
+   |   let unicode_like = "café naïve résumé"
+   |   let encoded_unicode = Uri::encode(unicode_like)
+50 |   let decoded_unicode = Uri::decode(encoded_unicode)
+   |                         ^^^
+   |   json_inspect(decoded_unicode, content="café naïve résumé")
+   | }
 
 <WORKDIR>/uri_test_new_features.mbt:59:16-59:19:
-"   | test \"query_string_parsing\" {" (escaped)
-"   |   // Test basic query parsing" (escaped)
-"   |   let query = \"name=John&age=30&city=New%20York\"" (escaped)
-"59 |   let params = Uri::parse_query(query)" (escaped)
-"   |                ^^^" (escaped)
-"   |   json_inspect(params, content=[" (escaped)
-"   |     [\"name\", \"John\"]," (escaped)
+   | test "query_string_parsing" {
+   |   // Test basic query parsing
+   |   let query = "name=John&age=30&city=New%20York"
+59 |   let params = Uri::parse_query(query)
+   |                ^^^
+   |   json_inspect(params, content=[
+   |     ["name", "John"],
 
 <WORKDIR>/uri_test_new_features.mbt:67:22-67:25:
-"   |   ])" (escaped)
-"   | " (escaped)
-"   |   // Test empty query" (escaped)
-"67 |   let empty_params = Uri::parse_query(\"\")" (escaped)
-"   |                      ^^^" (escaped)
-"   |   json_inspect(empty_params.length(), content=0)" (escaped)
-"   | " (escaped)
+   |   ])
+   | 
+   |   // Test empty query
+67 |   let empty_params = Uri::parse_query("")
+   |                      ^^^
+   |   json_inspect(empty_params.length(), content=0)
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:72:28-72:31:
-"   | " (escaped)
-"   |   // Test query with empty values" (escaped)
-"   |   let empty_value_query = \"key1=&key2=value2&key3\"" (escaped)
-"72 |   let empty_value_params = Uri::parse_query(empty_value_query)" (escaped)
-"   |                            ^^^" (escaped)
-"   |   json_inspect(empty_value_params, content=[" (escaped)
-"   |     [\"key1\", \"\"]," (escaped)
+   | 
+   |   // Test query with empty values
+   |   let empty_value_query = "key1=&key2=value2&key3"
+72 |   let empty_value_params = Uri::parse_query(empty_value_query)
+   |                            ^^^
+   |   json_inspect(empty_value_params, content=[
+   |     ["key1", ""],
 
 <WORKDIR>/uri_test_new_features.mbt:85:15-85:18:
-"   | test \"query_string_building\" {" (escaped)
-"   |   // Test basic query building" (escaped)
-"   |   let params = [(\"name\", \"John Doe\"), (\"age\", \"30\"), (\"active\", \"\")]" (escaped)
-"85 |   let query = Uri::build_query(params)" (escaped)
-"   |               ^^^" (escaped)
-"   |   json_inspect(query, content=\"name=John%20Doe&age=30&active\")" (escaped)
-"   | " (escaped)
+   | test "query_string_building" {
+   |   // Test basic query building
+   |   let params = [("name", "John Doe"), ("age", "30"), ("active", "")]
+85 |   let query = Uri::build_query(params)
+   |               ^^^
+   |   json_inspect(query, content="name=John%20Doe&age=30&active")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:89:21-89:24:
-"   |   json_inspect(query, content=\"name=John%20Doe&age=30&active\")" (escaped)
-"   | " (escaped)
-"   |   // Test empty params" (escaped)
-"89 |   let empty_query = Uri::build_query([])" (escaped)
-"   |                     ^^^" (escaped)
-"   |   json_inspect(empty_query, content=\"\")" (escaped)
-"   | " (escaped)
+   |   json_inspect(query, content="name=John%20Doe&age=30&active")
+   | 
+   |   // Test empty params
+89 |   let empty_query = Uri::build_query([])
+   |                     ^^^
+   |   json_inspect(empty_query, content="")
+   | 
 
 <WORKDIR>/uri_test_new_features.mbt:97:23-97:26:
-"   |     (\"user@email\", \"test+value\")," (escaped)
-"   |     (\"key with spaces\", \"value&more\")," (escaped)
-"   |   ]" (escaped)
-"97 |   let special_query = Uri::build_query(special_params)" (escaped)
-"   |                       ^^^" (escaped)
-"   |   json_inspect(" (escaped)
-"   |     special_query," (escaped)
+   |     ("user@email", "test+value"),
+   |     ("key with spaces", "value&more"),
+   |   ]
+97 |   let special_query = Uri::build_query(special_params)
+   |                       ^^^
+   |   json_inspect(
+   |     special_query,
 
 <WORKDIR>/uri_test_new_features.mbt:298:22-298:25:
-"    |   )" (escaped)
-"    | " (escaped)
-"    |   // Query should be parsed correctly" (escaped)
-"298 |   let query_params = Uri::parse_query(uri.query().unwrap_or(\"\"))" (escaped)
-"    |                      ^^^" (escaped)
-"    |   json_inspect(query_params, content=[" (escaped)
-"    |     [\"query\", \"value=with&special\"]," (escaped)
+    |   )
+    | 
+    |   // Query should be parsed correctly
+298 |   let query_params = Uri::parse_query(uri.query().unwrap_or(""))
+    |                      ^^^
+    |   json_inspect(query_params, content=[
+    |     ["query", "value=with&special"],
 "" (escaped)
-````
+```

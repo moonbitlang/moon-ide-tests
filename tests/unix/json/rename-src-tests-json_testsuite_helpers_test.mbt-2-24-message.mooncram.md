@@ -1,6 +1,6 @@
 # json rename message src/tests/json_testsuite_helpers_test.mbt:2:24
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'message' 'message_renamed' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:24'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon
  ///|
 *** End Patch
 "" (escaped)
-````
+```

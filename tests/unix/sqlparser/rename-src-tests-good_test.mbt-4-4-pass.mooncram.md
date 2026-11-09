@@ -1,6 +1,6 @@
 # sqlparser rename pass src/tests/good_test.mbt:4:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'pass' 'pass_renamed' --loc 'src/tests/good_test.mbt:4:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/good_test.mbt
@@ -11,7 +11,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 -fn pass(input : String) -> Unit {
 +fn pass_renamed(input : String) -> Unit {
    (@sqlparser.parse_sql(input) catch {
-"     e => {" (escaped)
+     e => {
        println(e)
 @@
  
@@ -263,4 +263,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
  }
 *** End Patch
 "" (escaped)
-````
+```

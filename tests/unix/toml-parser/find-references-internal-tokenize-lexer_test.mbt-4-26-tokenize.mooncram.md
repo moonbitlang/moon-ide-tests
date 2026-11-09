@@ -1,8 +1,8 @@
 # toml-parser find-references tokenize internal/tokenize/lexer_test.mbt:4:26
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
-Found 160 references for symbol 'tokenize':
+Found 159 references for symbol 'tokenize':
 <WORKDIR>/coverage_improvement_test.mbt:72:26-72:34:
    | ///|
    | test "test tokenizer unreachable path coverage" {
@@ -1056,182 +1056,173 @@ Found 160 references for symbol 'tokenize':
      |     (
      |       #|key = '''hello world'''
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1405:26-1405:34:
-     | test "tokenize else branch coverage" {
-     |   // This tests the else branch in tokenize function that should never be reached
-     |   // The function returns inside the while loop, so the else is unreachable
-1405 |   let tokens = @tokenize.tokenize(
-     |                          ^^^^^^^^
-     |     (
-     |       #|key = "value"
-
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1433:26-1433:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1403:26-1403:34:
      | ///|
      | /// Test multiline basic string with single quote escape
      | test "multiline basic string single quote escape" {
-1433 |   let tokens = @tokenize.tokenize(
+1403 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|key = """line with \' quote"""
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1463:26-1463:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1433:26-1433:34:
      | test "multiline basic string CR only" {
      |   // CR: '\r' is hard to visualize in the multipline string
      |   // explicit escaping is better for testing
-1463 |   let tokens = @tokenize.tokenize("key = \"\"\"line1\\\rline2\"\"\"")
+1433 |   let tokens = @tokenize.tokenize("key = \"\"\"line1\\\rline2\"\"\"")
      |                          ^^^^^^^^
      |   debug_inspect(
      |     tokens,
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1489:15-1489:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1459:15-1459:23:
      | test "multiline basic string none peek" {
      |   // This creates a string that will reach None in the peek() during processing
      |   let maybe_tokens = try
-1489 |     @tokenize.tokenize(
+1459 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = """incomplete string
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1511:26-1511:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1481:26-1481:34:
      | /// Test Unicode escape sequence that results in None from to_char
      | test "unicode escape invalid conversion to char" {
      |   // This tests an edge case where to_char returns None
-1511 |   let tokens = @tokenize.tokenize(
+1481 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|key = "\uFFFF"
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1540:26-1540:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1510:26-1510:34:
      | ///|
      | /// Test hex number with underscore in the middle
      | test "hex number with underscores" {
-1540 |   let tokens = @tokenize.tokenize(
+1510 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|hex = 0xDE_AD_BE_EF
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1568:26-1568:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1538:26-1538:34:
      | ///|
      | /// Test CR followed by LF after multiline string opening
      | test "multiline string opening CRLF" {
-1568 |   let tokens = @tokenize.tokenize(
+1538 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|key = """
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1599:26-1599:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1569:26-1569:34:
      | test "very large invalid float" {
      |   // A huge number that overflows to infinity during parsing
      |   let huge_number = "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.9999"
-1599 |   let tokens = @tokenize.tokenize(
+1569 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|key =
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1623:17-1623:25:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1591:17-1591:25:
      | test "test hex overflow edge case" {
      |   debug_inspect(
      |     try
-1623 |       @tokenize.tokenize(
+1591 |       @tokenize.tokenize(
      |                 ^^^^^^^^
      |         (
      |           #|hex = 0xFFFFFFFFFFFFFFFF
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1645:15-1645:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1613:15-1613:23:
      |   // Try to find a Unicode code that's valid as int but invalid as char
      |   // Code point 0x110000 is too large for valid Unicode
      |   let maybe_tokens = try
-1645 |     @tokenize.tokenize(
+1613 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = "\U00110000"
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1667:15-1667:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1635:15-1635:23:
      | test "multiline string abrupt end" {
      |   // Create a multiline string that ends abruptly without proper closing
      |   let maybe_tokens = try
-1667 |     @tokenize.tokenize(
+1635 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = """content without closing
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1693:15-1693:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1657:15-1657:23:
      |   // Try an edge case that might trigger the None path in unicode 8 escape
      |   // Use a very large value that might fail conversion
      |   let maybe_tokens = try
-1693 |     @tokenize.tokenize(
+1657 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = "\U7FFFFFFF"
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1718:26-1718:34:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1678:26-1678:34:
      | test "attempt hex digit error path" {
      |   // This tests the theoretical hex digit error path, though it's likely unreachable
      |   // due to pattern matching filtering
-1718 |   let tokens = @tokenize.tokenize(
+1678 |   let tokens = @tokenize.tokenize(
      |                          ^^^^^^^^
      |     (
      |       #|hex = 0xABCDEF123456
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1748:15-1748:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1708:15-1708:23:
      | test "multiline string potential truncation" {
      |   // Try to create a scenario where multiline string processing might hit None
      |   let maybe_tokens = try
-1748 |     @tokenize.tokenize(
+1708 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = """partial
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1767:15-1767:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1727:15-1727:23:
      | ///|
      | test "trailing _ in binary number" {
      |   let maybe_tokens = try
-1767 |     @tokenize.tokenize(
+1727 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0b10_10_
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1788:15-1788:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1748:15-1748:23:
      | ///|
      | test "consequence _ in binary number" {
      |   let maybe_tokens = try
-1788 |     @tokenize.tokenize(
+1748 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0b10__10_10
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1810:15-1810:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1770:15-1770:23:
      | ///|
      | test "trailing _ in hex number" {
      |   let maybe_tokens = try
-1810 |     @tokenize.tokenize(
+1770 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0xAB_CD_
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1831:15-1831:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1791:15-1791:23:
      | ///|
      | test "consecutive _ in hex number" {
      |   let maybe_tokens = try
-1831 |     @tokenize.tokenize(
+1791 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0xAB__CD_EF
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1853:15-1853:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1813:15-1813:23:
      | ///|
      | test "trailing _ in octal number" {
      |   let maybe_tokens = try
-1853 |     @tokenize.tokenize(
+1813 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0o755_
 
-<WORKDIR>/internal/tokenize/lexer_test.mbt:1874:15-1874:23:
+<WORKDIR>/internal/tokenize/lexer_test.mbt:1834:15-1834:23:
      | ///|
      | test "consecutive _ in octal number" {
      |   let maybe_tokens = try
-1874 |     @tokenize.tokenize(
+1834 |     @tokenize.tokenize(
      |               ^^^^^^^^
      |       (
      |         #|key = 0o7__55_44
@@ -1245,11 +1236,11 @@ Found 160 references for symbol 'tokenize':
    |     error => unwrap_failure_message(error)
    |   } noraise {
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:1578:16-1578:24:
+<WORKDIR>/internal/tokenize/tokenize.mbt:1530:16-1530:24:
      | ///|
      | /// Test datetime tokenization
      | test "datetime tokenization" {
-1578 |   let tokens = tokenize("date = 1979-05-27T07:32:00Z")
+1530 |   let tokens = tokenize("date = 1979-05-27T07:32:00Z")
      |                ^^^^^^^^
      |   debug_inspect(
      |     tokens,
@@ -1263,38 +1254,38 @@ Found 160 references for symbol 'tokenize':
     |   let parser = Parser::Parser(tokens)
     |   let main_table = Map([])
 
-<WORKDIR>/parser_test.mbt:253:15-253:23:
+<WORKDIR>/parser_test.mbt:243:15-243:23:
     | test "tokenize exponent-like bare keys" {
     |   // Each line shows how the tokenizer sees an exponent-like key followed by `= "val"`
     |   debug_inspect(
-253 |     @tokenize.tokenize("10e-1 = \"a\""),
+243 |     @tokenize.tokenize("10e-1 = \"a\""),
     |               ^^^^^^^^
     |     content=(
     |       #|[
 
-<WORKDIR>/parser_test.mbt:272:15-272:23:
+<WORKDIR>/parser_test.mbt:262:15-262:23:
     |     ),
     |   )
     |   debug_inspect(
-272 |     @tokenize.tokenize("10e1 = \"b\""),
+262 |     @tokenize.tokenize("10e1 = \"b\""),
     |               ^^^^^^^^
     |     content=(
     |       #|[
 
-<WORKDIR>/parser_test.mbt:291:15-291:23:
+<WORKDIR>/parser_test.mbt:281:15-281:23:
     |     ),
     |   )
     |   debug_inspect(
-291 |     @tokenize.tokenize("-e-1 = \"c\""),
+281 |     @tokenize.tokenize("-e-1 = \"c\""),
     |               ^^^^^^^^
     |     content=(
     |       #|[
 
-<WORKDIR>/parser_test.mbt:309:15-309:23:
+<WORKDIR>/parser_test.mbt:299:15-299:23:
     |     ),
     |   )
     |   debug_inspect(
-309 |     @tokenize.tokenize("-10e-1 = \"d\""),
+299 |     @tokenize.tokenize("-10e-1 = \"d\""),
     |               ^^^^^^^^
     |     content=(
     |       #|[
@@ -1443,4 +1434,4 @@ Found 160 references for symbol 'tokenize':
     |   let parser = Parser::Parser(tokens)
     |   let result = parser.parse_dotted_key()
 "" (escaped)
-````
+```

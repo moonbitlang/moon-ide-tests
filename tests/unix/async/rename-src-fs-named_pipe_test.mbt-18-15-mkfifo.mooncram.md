@@ -1,6 +1,6 @@
 # async rename mkfifo src/fs/named_pipe_test.mbt:18:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'mkfifo' 'mkfifo_renamed' --loc 'src/fs/named_pipe_test.mbt:18:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/named_pipe_test.mbt
@@ -31,4 +31,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
      group.add_defer(() => @fs.remove(path))
 *** End Patch
 "" (escaped)
-````
+```

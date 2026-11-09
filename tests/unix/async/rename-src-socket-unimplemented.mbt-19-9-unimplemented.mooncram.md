@@ -1,6 +1,6 @@
 # async rename unimplemented src/socket/unimplemented.mbt:19:9
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'unimplemented' 'unimplemented_renamed' --loc 'src/socket/unimplemented.mbt:19:9' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src/external_loop_integration/unimplemented_test.mbt
@@ -51,7 +51,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moo
 +  ignore(@socket.unimplemented_renamed)
    ignore(@process.unimplemented)
    ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
- }
+   ignore((_ : @cond_var.Cond) => ())
 *** End Patch
 "" (escaped)
-````
+```

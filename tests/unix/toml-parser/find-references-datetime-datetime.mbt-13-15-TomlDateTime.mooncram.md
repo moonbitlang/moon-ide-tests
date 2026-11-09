@@ -1,6 +1,6 @@
 # toml-parser find-references TomlDateTime datetime/datetime.mbt:13:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 Found 18 references for symbol 'TomlDateTime':
 <WORKDIR>/datetime/datetime.mbt:22:12-22:24:
@@ -48,47 +48,47 @@ Found 18 references for symbol 'TomlDateTime':
    |   match self {
    |     OffsetDateTime(s) =>
 
-<WORKDIR>/internal/qc_model/generator.mbt:268:48-268:60:
+<WORKDIR>/internal/qc_model/generator.mbt:250:48-250:60:
     | }
     | 
     | ///|
-268 | fn local_date_gen() -> @qc.Generator[@datetime.TomlDateTime] {
+250 | fn local_date_gen() -> @qc.Generator[@datetime.TomlDateTime] {
     |                                                ^^^^^^^^^^^^
     |   date_string_gen().map(value => LocalDate(value))
     | }
 
-<WORKDIR>/internal/qc_model/generator.mbt:273:48-273:60:
+<WORKDIR>/internal/qc_model/generator.mbt:255:48-255:60:
     | }
     | 
     | ///|
-273 | fn local_time_gen() -> @qc.Generator[@datetime.TomlDateTime] {
+255 | fn local_time_gen() -> @qc.Generator[@datetime.TomlDateTime] {
     |                                                ^^^^^^^^^^^^
     |   time_string_gen().map(value => LocalTime(value))
     | }
 
-<WORKDIR>/internal/qc_model/generator.mbt:278:52-278:64:
+<WORKDIR>/internal/qc_model/generator.mbt:260:52-260:64:
     | }
     | 
     | ///|
-278 | fn local_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
+260 | fn local_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
     |                                                    ^^^^^^^^^^^^
     |   date_string_gen().zip_with(time_string_gen(), (date, time) => {
     |     LocalDateTime("\{date}T\{time}")
 
-<WORKDIR>/internal/qc_model/generator.mbt:285:53-285:65:
+<WORKDIR>/internal/qc_model/generator.mbt:267:53-267:65:
     | }
     | 
     | ///|
-285 | fn offset_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
+267 | fn offset_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
     |                                                     ^^^^^^^^^^^^
     |   date_string_gen().zip_with3(time_string_gen(), offset_suffix_gen(), (
     |     date,
 
-<WORKDIR>/internal/qc_model/generator.mbt:294:51-294:63:
+<WORKDIR>/internal/qc_model/generator.mbt:276:51-276:63:
     | }
     | 
     | ///|
-294 | fn toml_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
+276 | fn toml_datetime_gen() -> @qc.Generator[@datetime.TomlDateTime] {
     |                                                   ^^^^^^^^^^^^
     |   @qc.frequency([
     |     (2U, local_date_gen()),
@@ -165,4 +165,4 @@ Found 18 references for symbol 'TomlDateTime':
    | 
    | ///|
 "" (escaped)
-````
+```

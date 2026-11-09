@@ -1,6 +1,6 @@
 # toml-parser find-references escape_toml_string toml_to_string.mbt:3:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
 Found 2 references for symbol 'escape_toml_string':
 <WORKDIR>/toml_to_string.mbt:87:10-87:28:
@@ -21,4 +21,4 @@ Found 2 references for symbol 'escape_toml_string':
     |     TomlInteger(i) => output <+ "\{i}"
     |     TomlFloat(f) =>
 "" (escaped)
-````
+```

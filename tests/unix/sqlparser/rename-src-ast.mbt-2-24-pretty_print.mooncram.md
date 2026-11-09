@@ -1,6 +1,6 @@
 # sqlparser rename pretty_print src/ast.mbt:2:24
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'pretty_print' 'pretty_print_renamed' --loc 'src/ast.mbt:2:24'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ast.mbt
@@ -2677,4 +2677,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
      content=(
 *** End Patch
 "" (escaped)
-````
+```

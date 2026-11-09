@@ -1,6 +1,6 @@
 # rabbita rename Text rabbita/clipboard/clipboard.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Text' 'TextRenamed' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/clipboard/clipboard.mbt
@@ -110,4 +110,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
            ]),
 *** End Patch
 "" (escaped)
-````
+```

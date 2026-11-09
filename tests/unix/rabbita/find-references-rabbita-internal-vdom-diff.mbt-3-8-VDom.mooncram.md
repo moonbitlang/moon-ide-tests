@@ -1,6 +1,6 @@
 # rabbita find-references VDom rabbita/internal/vdom/diff.mbt:3:8
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'VDom' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
 Found 13 references for symbol 'VDom':
 <WORKDIR>/rabbita/internal/runtime/ambient.mbt:2:62-2:66:
@@ -118,4 +118,4 @@ Found 13 references for symbol 'VDom':
     |     }
     |     // VDom root invariant: the root must be either a `(Some(id), _)` or a 
 "" (escaped)
-````
+```

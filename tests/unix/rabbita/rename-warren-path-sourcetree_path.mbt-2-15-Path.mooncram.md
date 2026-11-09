@@ -1,6 +1,6 @@
 # rabbita rename Path warren/path/sourcetree_path.mbt:2:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Path' 'PathRenamed' --loc 'warren/path/sourcetree_path.mbt:2:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/warren/build.mbt
@@ -83,4 +83,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' m
      }
 *** End Patch
 "" (escaped)
-````
+```

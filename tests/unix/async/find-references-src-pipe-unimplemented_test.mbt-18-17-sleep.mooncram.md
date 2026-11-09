@@ -1,214 +1,115 @@
 # async find-references sleep src/pipe/unimplemented_test.mbt:18:17
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'sleep' --loc 'src/pipe/unimplemented_test.mbt:18:17' --target js
-Found 320 references for symbol 'sleep':
-<WORKDIR>/src/all_any_test.mbt:20:14-20:19:
-   |   let start = @async.now()
-   |   let results = @async.all([
-   |     () => {
-20 |       @async.sleep(400)
+Found 299 references for symbol 'sleep':
+<WORKDIR>/src/all_any_test.mbt:22:14-22:19:
+   |   @async.with_task_group <| group => {
+   |     let mut both_signaled = false
+   |     group.spawn_bg() <| () => {
+22 |       @async.sleep(200)
    |              ^^^^^
-   |       1
-   |     },
+   |       cond1.signal()
+   |       @async.sleep(200)
 
 <WORKDIR>/src/all_any_test.mbt:24:14-24:19:
-   |       1
-   |     },
-   |     () => {
+   |     group.spawn_bg() <| () => {
+   |       @async.sleep(200)
+   |       cond1.signal()
 24 |       @async.sleep(200)
    |              ^^^^^
-   |       2
-   |     },
+   |       cond2.signal()
+   |       both_signaled = true
 
-<WORKDIR>/src/all_any_test.mbt:39:14-39:19:
-   |   let log = []
-   |   let results = @async.all([
-   |     () => {
-39 |       @async.sleep(300)
-   |              ^^^^^
-   |       log.push("task 0")
-   |       0
-
-<WORKDIR>/src/all_any_test.mbt:44:14-44:19:
-   |       0
-   |     },
-   |     () => {
-44 |       @async.sleep(100)
-   |              ^^^^^
-   |       log.push("task 1")
-   |       1
-
-<WORKDIR>/src/all_any_test.mbt:65:16-65:21:
-   |       () => {
-   |         log.push("task #1 started")
-   |         defer log.push("task #1 completed")
-65 |         @async.sleep(200)
+<WORKDIR>/src/all_any_test.mbt:51:16-51:21:
+   |   @async.with_task_group <| group => {
+   |     group.spawn_bg() <| () => {
+   |       for i in [2, 1, 0] {
+51 |         @async.sleep(200)
    |                ^^^^^
-   |         0
-   |       },
+   |         conds[i].signal()
+   |       }
 
-<WORKDIR>/src/all_any_test.mbt:71:16-71:21:
-   |       () => {
-   |         log.push("task #2 started")
-   |         defer log.push("task #2 completed")
-71 |         @async.sleep(100)
+<WORKDIR>/src/all_any_test.mbt:78:16-78:21:
+   |   @async.with_task_group <| group => {
+   |     group.spawn_bg() <| () => {
+   |       for i in [1, 2, 0] {
+78 |         @async.sleep(200)
    |                ^^^^^
-   |         1
-   |       },
+   |         conds[i].signal()
+   |       }
 
-<WORKDIR>/src/all_any_test.mbt:77:16-77:21:
-   |       () => {
-   |         log.push("task #3 started")
-   |         defer log.push("task #3 completed")
-77 |         @async.sleep(200)
-   |                ^^^^^
-   |         2
-   |       },
-
-<WORKDIR>/src/all_any_test.mbt:108:16-108:21:
-    |   let result = @test_util.expect_error_async <| () => {
-    |     @async.all([
-    |       () => {
-108 |         @async.sleep(100)
+<WORKDIR>/src/all_any_test.mbt:122:16-122:21:
+    |   @async.with_task_group <| group => {
+    |     group.spawn_bg() <| () => {
+    |       for i in 0..<3 {
+122 |         @async.sleep(200)
     |                ^^^^^
-    |         log.push("task #1 completed")
-    |       },
+    |         conds[i].signal()
+    |       }
 
-<WORKDIR>/src/all_any_test.mbt:112:16-112:21:
-    |         log.push("task #1 completed")
-    |       },
-    |       () => {
-112 |         @async.sleep(200)
-    |                ^^^^^
-    |         log.push("task #2 failing")
-    |         raise Failure::Failure("Err")
-
-<WORKDIR>/src/all_any_test.mbt:117:55-117:60:
-    |         raise Failure::Failure("Err")
-    |       },
-    |       () => {
-117 |         match @async.handle_cancellation(() => @async.sleep(300)) {
-    |                                                       ^^^^^
-    |           None => log.push("task #3 cancelled")
-    |           Some(_) => log.push("task #3 completed")
-
-<WORKDIR>/src/all_any_test.mbt:139:51-139:56:
+<WORKDIR>/src/all_any_test.mbt:161:51-161:56:
     | async test "all cancelled" {
     |   let log = []
     |   async fn task(idx : Int32, sleep_time : Int32) -> Int32 {
-139 |     match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
+161 |     match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
     |                                                   ^^^^^
     |       None => log.push("task #\{idx} cancelled")
     |       Some(_) => log.push("task #\{idx} completed")
 
-<WORKDIR>/src/all_any_test.mbt:158:14-158:19:
-    |   let start = @async.now()
-    |   let result = @async.any([
-    |     () => {
-158 |       @async.sleep(600)
-    |              ^^^^^
-    |       1
-    |     },
+<WORKDIR>/src/all_any_test.mbt:181:16-181:21:
+    |   @async.with_task_group <| group => {
+    |     group.spawn_bg(no_wait=true) <| () => {
+    |       for i in [1, 0, 2] {
+181 |         @async.sleep(200)
+    |                ^^^^^
+    |         conds[i].signal()
+    |       }
 
-<WORKDIR>/src/all_any_test.mbt:162:14-162:19:
-    |       1
-    |     },
-    |     () => {
-162 |       @async.sleep(200)
-    |              ^^^^^
-    |       2
-    |     },
+<WORKDIR>/src/all_any_test.mbt:217:16-217:21:
+    |   @async.with_task_group <| group => {
+    |     group.spawn_bg(no_wait=true) <| () => {
+    |       for i in [1, 0, 2] {
+217 |         @async.sleep(200)
+    |                ^^^^^
+    |         conds[i].signal()
+    |       }
 
-<WORKDIR>/src/all_any_test.mbt:166:14-166:19:
-    |       2
-    |     },
-    |     () => {
-166 |       @async.sleep(400)
-    |              ^^^^^
-    |       3
-    |     },
-
-<WORKDIR>/src/all_any_test.mbt:179:51-179:56:
-    | async test "any returns first success" {
-    |   let log = []
-    |   async fn task(idx : Int32, sleep_time : Int32) -> Int32 {
-179 |     match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
-    |                                                   ^^^^^
-    |       None => {
-    |         log.push("task #\{idx} cancelled")
-
-<WORKDIR>/src/all_any_test.mbt:206:55-206:60:
+<WORKDIR>/src/all_any_test.mbt:235:55-235:60:
     |   let result = @test_util.expect_error_async <| () => {
     |     @async.any([
     |       () => {
-206 |         match @async.handle_cancellation(() => @async.sleep(300)) {
+235 |         match @async.handle_cancellation(() => @async.sleep(1000)) {
     |                                                       ^^^^^
     |           None => log.push("task #1 cancelled")
     |           Some(_) => log.push("task #1 completed")
 
-<WORKDIR>/src/all_any_test.mbt:212:16-212:21:
+<WORKDIR>/src/all_any_test.mbt:241:16-241:21:
     |         }
     |       },
     |       () => {
-212 |         @async.sleep(150)
+241 |         @async.sleep(200)
     |                ^^^^^
     |         raise Failure::Failure("Err")
     |       },
 
-<WORKDIR>/src/all_any_test.mbt:232:16-232:21:
-    |   let result = @async.any(
-    |     [
-    |       () => {
-232 |         @async.sleep(300)
+<WORKDIR>/src/all_any_test.mbt:267:16-267:21:
+    |   @async.with_task_group <| group => {
+    |     group.spawn_bg(no_wait=true) <| () => {
+    |       for i in [1, 0, 2] {
+267 |         @async.sleep(200)
     |                ^^^^^
-    |         log.push("task #1 failing")
-    |         raise Err
+    |         conds[i].signal()
+    |       }
 
-<WORKDIR>/src/all_any_test.mbt:237:16-237:21:
-    |         raise Err
-    |       },
-    |       () => {
-237 |         @async.sleep(150)
-    |                ^^^^^
-    |         log.push("task #2 failing")
-    |         raise Failure::Failure("fail")
-
-<WORKDIR>/src/all_any_test.mbt:242:16-242:21:
-    |         raise Failure::Failure("fail")
-    |       },
-    |       () => {
-242 |         @async.sleep(450)
-    |                ^^^^^
-    |         log.push("task #3 completed")
-    |         2
-
-<WORKDIR>/src/all_any_test.mbt:262:18-262:23:
-    |     @async.any(
-    |       [
-    |         () => {
-262 |           @async.sleep(300)
-    |                  ^^^^^
-    |           log.push("task #1 failing")
-    |           raise Err
-
-<WORKDIR>/src/all_any_test.mbt:267:18-267:23:
+<WORKDIR>/src/all_any_test.mbt:311:18-311:23:
     |           raise Err
     |         },
     |         () => {
-267 |           @async.sleep(150)
+311 |           @async.sleep(150)
     |                  ^^^^^
     |           log.push("task #2 failing")
-    |           raise Failure::Failure("fail")
-
-<WORKDIR>/src/all_any_test.mbt:299:51-299:56:
-    | async test "any cancelled" {
-    |   let log = []
-    |   async fn task(idx : Int32, sleep_time : Int32) -> Int32 {
-299 |     match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
-    |                                                   ^^^^^
-    |       None => log.push("task #\{idx} cancelled")
-    |       Some(_) => log.push("task #\{idx} completed")
+    |           cond.signal()
 
 <WORKDIR>/src/allow_failure_test.mbt:20:12-20:17:
    |   let buf = StringBuilder()
@@ -273,56 +174,56 @@ Found 320 references for symbol 'sleep':
     |       q.close()
     |     })
 
-<WORKDIR>/src/aqueue/README.mbt.md:397:16-397:21:
+<WORKDIR>/src/aqueue/README.mbt.md:398:16-398:21:
     |     group.spawn_bg() <| () => {
     |       for i in 0..<3 {
     |         q.put("A\{i}")
-397 |         @async.sleep(100)
+398 |         @async.sleep(100)
     |                ^^^^^
     |       }
     |     }
 
-<WORKDIR>/src/aqueue/README.mbt.md:402:14-402:19:
+<WORKDIR>/src/aqueue/README.mbt.md:403:14-403:19:
     |     }
     |     // Producer B puts items at 50, 150, 250 ms.
     |     group.spawn_bg() <| () => {
-402 |       @async.sleep(50)
+403 |       @async.sleep(50)
     |              ^^^^^
     |       for i in 0..<3 {
     |         q.put("B\{i}")
 
-<WORKDIR>/src/aqueue/README.mbt.md:405:16-405:21:
+<WORKDIR>/src/aqueue/README.mbt.md:406:16-406:21:
     |       @async.sleep(50)
     |       for i in 0..<3 {
     |         q.put("B\{i}")
-405 |         @async.sleep(100)
+406 |         @async.sleep(100)
     |                ^^^^^
     |       }
     |     }
 
-<WORKDIR>/src/aqueue/README.mbt.md:437:18-437:23:
+<WORKDIR>/src/aqueue/README.mbt.md:438:18-438:23:
     |         for ;; {
     |           let item = q.get()
     |           work_by_worker[w].push(item)
-437 |           @async.sleep(20) // simulate per-item processing cost
+438 |           @async.sleep(20) // simulate per-item processing cost
     |                  ^^^^^
     |         }
     |       }
 
-<WORKDIR>/src/aqueue/README.mbt.md:476:14-476:19:
+<WORKDIR>/src/aqueue/README.mbt.md:477:14-477:19:
     |     root.spawn_bg(() => log.push("r1 got \{q.get()}"))
     |     // Reader 2 starts waiting at ~50 ms.
     |     root.spawn_bg(() => {
-476 |       @async.sleep(50)
+477 |       @async.sleep(50)
     |              ^^^^^
     |       log.push("r2 got \{q.get()}")
     |     })
 
-<WORKDIR>/src/aqueue/README.mbt.md:480:12-480:17:
+<WORKDIR>/src/aqueue/README.mbt.md:481:12-481:17:
     |       log.push("r2 got \{q.get()}")
     |     })
     |     // Producer puts two items at 100 ms.
-480 |     @async.sleep(100)
+481 |     @async.sleep(100)
     |            ^^^^^
     |     q.put(1)
     |     q.put(2)
@@ -543,38 +444,38 @@ Found 320 references for symbol 'sleep':
     |       q.close()
     |     }
 
-<WORKDIR>/src/async.mbt:103:7-103:12:
+<WORKDIR>/src/async.mbt:104:7-104:12:
     | ) -> X {
     |   with_task_group() <| group => {
     |     group.spawn_bg(no_wait=true) <| () => {
-103 |       sleep(time)
+104 |       sleep(time)
     |       ^^^^^
     |       raise error
     |     }
 
-<WORKDIR>/src/async.mbt:123:7-123:12:
+<WORKDIR>/src/async.mbt:124:7-124:12:
     | pub async fn[X] with_timeout_opt(time : Int32, f : async () -> X) -> X? {
     |   with_task_group() <| group => {
     |     group.spawn_bg(no_wait=true) <| () => {
-123 |       sleep(time)
+124 |       sleep(time)
     |       ^^^^^
     |       group.return_immediately(None)
     |     }
 
-<WORKDIR>/src/async.mbt:245:16-245:21:
+<WORKDIR>/src/async.mbt:246:16-246:21:
     |           err if fatal_error is Some(f) && f(err) => raise err
     |           err if @coroutine.is_being_cancelled() => raise err
     |           err if max_retry is Some(max) && i >= max => raise err
-245 |           _ => sleep(t)
+246 |           _ => sleep(t)
     |                ^^^^^
     |         } noraise {
     |           result => return result
 
-<WORKDIR>/src/async.mbt:257:13-257:18:
+<WORKDIR>/src/async.mbt:258:13-258:18:
     |           err if @coroutine.is_being_cancelled() => raise err
     |           err if max_retry is Some(max) && i >= max => raise err
     |           _ => {
-257 |             sleep(timeout)
+258 |             sleep(timeout)
     |             ^^^^^
     |             continue i + 1,
     |               @cmp.minimum(maximum, (timeout.to_double() * factor).to_int())
@@ -606,164 +507,164 @@ Found 320 references for symbol 'sleep':
    |     buf <+ "main task exit\n"
    |   })
 
-<WORKDIR>/src/cancellation_test.mbt:49:16-49:21:
+<WORKDIR>/src/cancellation_test.mbt:50:16-50:21:
    |   let err = @test_util.expect_error_async <| () => {
    |     @async.with_task_group(root => {
    |       root.spawn_bg() <| () => {
-49 |         @async.sleep(300)
+50 |         @async.sleep(300)
    |                ^^^^^
    |         raise Err
    |       }
 
-<WORKDIR>/src/cancellation_test.mbt:54:18-54:23:
+<WORKDIR>/src/cancellation_test.mbt:55:18-55:23:
    |       }
    |       root.spawn_bg() <| () => {
    |         let result = @async.handle_cancellation() <| () => {
-54 |           @async.sleep(200)
+55 |           @async.sleep(200)
    |                  ^^^^^
    |           buf <+ "task 2, tick 1\n"
    |           @async.sleep(200)
 
-<WORKDIR>/src/cancellation_test.mbt:56:18-56:23:
+<WORKDIR>/src/cancellation_test.mbt:57:18-57:23:
    |         let result = @async.handle_cancellation() <| () => {
    |           @async.sleep(200)
    |           buf <+ "task 2, tick 1\n"
-56 |           @async.sleep(200)
+57 |           @async.sleep(200)
    |                  ^^^^^
    |           buf <+ "task 2, tick 2\n"
    |         }
 
-<WORKDIR>/src/cancellation_test.mbt:85:20-85:25:
+<WORKDIR>/src/cancellation_test.mbt:86:20-86:25:
    |       try
    |         @async.with_task_group() <| fn(ctx) {
    |           ctx.spawn_bg() <| () => {
-85 |             @async.sleep(200)
+86 |             @async.sleep(200)
    |                    ^^^^^
    |             raise Err
    |           }
 
-<WORKDIR>/src/cancellation_test.mbt:89:59-89:64:
+<WORKDIR>/src/cancellation_test.mbt:90:59-90:64:
    |             raise Err
    |           }
    |           ctx.spawn_bg() <| () => {
-89 |             match @async.handle_cancellation(() => @async.sleep(400)) {
+90 |             match @async.handle_cancellation(() => @async.sleep(400)) {
    |                                                           ^^^^^
    |               None => buf.write_string("ctx 1 task 2 cancelled\n")
    |               Some(_) => buf <+ "ctx 1 task 2 finished\n"
 
-<WORKDIR>/src/cancellation_test.mbt:109:20-109:25:
+<WORKDIR>/src/cancellation_test.mbt:110:20-110:25:
     |       try
     |         @async.with_task_group() <| fn(ctx) {
     |           ctx.spawn_bg() <| () => {
-109 |             @async.sleep(500)
+110 |             @async.sleep(500)
     |                    ^^^^^
     |             raise Err
     |           }
 
-<WORKDIR>/src/cancellation_test.mbt:113:59-113:64:
+<WORKDIR>/src/cancellation_test.mbt:114:59-114:64:
     |             raise Err
     |           }
     |           ctx.spawn_bg() <| () => {
-113 |             match @async.handle_cancellation(() => @async.sleep(300)) {
+114 |             match @async.handle_cancellation(() => @async.sleep(300)) {
     |                                                           ^^^^^
     |               None => buf.write_string("ctx 2 task 2 cancelled\n")
     |               Some(_) => buf <+ "ctx 2 task 2 finished\n"
 
-<WORKDIR>/src/cancellation_test.mbt:148:16-148:21:
+<WORKDIR>/src/cancellation_test.mbt:149:16-149:21:
     |   @async.with_task_group(root => {
     |     root.spawn_bg() <| () => {
     |       for _ in 0..<2 {
-148 |         @async.sleep(400)
+149 |         @async.sleep(400)
     |                ^^^^^
     |         buf <+ "tick\n"
     |       }
 
-<WORKDIR>/src/cancellation_test.mbt:153:50-153:55:
+<WORKDIR>/src/cancellation_test.mbt:154:50-154:55:
     |       }
     |     }
     |     let task = root.spawn(() => {
-153 |       if @async.handle_cancellation(() => @async.sleep(1000)) is None {
+154 |       if @async.handle_cancellation(() => @async.sleep(1000)) is None {
     |                                                  ^^^^^
     |         buf.write_string("first sleep cancelled\n")
     |       }
 
-<WORKDIR>/src/cancellation_test.mbt:156:50-156:55:
+<WORKDIR>/src/cancellation_test.mbt:157:50-157:55:
     |       if @async.handle_cancellation(() => @async.sleep(1000)) is None {
     |         buf.write_string("first sleep cancelled\n")
     |       }
-156 |       if @async.handle_cancellation(() => @async.sleep(1000)) is None {
+157 |       if @async.handle_cancellation(() => @async.sleep(1000)) is None {
     |                                                  ^^^^^
     |         buf.write_string("second sleep cancelled\n")
     |       }
 
-<WORKDIR>/src/cancellation_test.mbt:161:12-161:17:
+<WORKDIR>/src/cancellation_test.mbt:162:12-162:17:
     |       }
     |       buf <+ "task finished\n"
     |     })
-161 |     @async.sleep(600)
+162 |     @async.sleep(600)
     |            ^^^^^
     |     task.cancel()
     |     buf <+ "main task exit\n"
 
-<WORKDIR>/src/cancellation_test.mbt:186:18-186:23:
+<WORKDIR>/src/cancellation_test.mbt:187:18-187:23:
     |     @async.with_task_group(root => {
     |       root.spawn_bg() <| () => {
     |         @async.with_task_group() <| group => {
-186 |           @async.sleep(1)
+187 |           @async.sleep(1)
     |                  ^^^^^
     |           group.spawn_bg(() => raise Err)
     |           buf <+ "after spawn\n"
 
-<WORKDIR>/src/cancellation_test.mbt:189:18-189:23:
+<WORKDIR>/src/cancellation_test.mbt:190:18-190:23:
     |           @async.sleep(1)
     |           group.spawn_bg(() => raise Err)
     |           buf <+ "after spawn\n"
-189 |           @async.sleep(400)
+190 |           @async.sleep(400)
     |                  ^^^^^
     |           buf <+ "main task exit\n"
     |         }
 
-<WORKDIR>/src/cancellation_test.mbt:193:14-193:19:
+<WORKDIR>/src/cancellation_test.mbt:194:14-194:19:
     |           buf <+ "main task exit\n"
     |         }
     |       }
-193 |       @async.sleep(200)
+194 |       @async.sleep(200)
     |              ^^^^^
     |     })
     |   }
 
-<WORKDIR>/src/cancellation_test.mbt:212:55-212:60:
+<WORKDIR>/src/cancellation_test.mbt:213:55-213:60:
     |   let err = @test_util.expect_error_async <| () => {
     |     @async.with_task_group(root => {
     |       root.spawn_bg(no_wait=true) <| () => {
-212 |         match @async.handle_cancellation(() => @async.sleep(1000)) {
+213 |         match @async.handle_cancellation(() => @async.sleep(1000)) {
     |                                                       ^^^^^
     |           None => {
     |             log <+ "causing other error in cancellation handler\n"
 
-<WORKDIR>/src/cancellation_test.mbt:220:14-220:19:
-"    |           Some(_) => ()" (escaped)
+<WORKDIR>/src/cancellation_test.mbt:221:14-221:19:
+    |           Some(_) => ()
     |         }
     |       }
-220 |       @async.sleep(200)
+221 |       @async.sleep(200)
     |              ^^^^^
     |     })
     |   }
 
-<WORKDIR>/src/cancellation_test.mbt:240:14-240:19:
+<WORKDIR>/src/cancellation_test.mbt:241:14-241:19:
     |     let task = root.spawn(() => {
     |       defer log.write_string("task terminated\n")
     |       log <+ "task started\n"
-240 |       @async.sleep(100)
+241 |       @async.sleep(100)
     |              ^^^^^
     |       log <+ "task finished\n"
     |     })
 
-<WORKDIR>/src/cancellation_test.mbt:262:56-262:61:
+<WORKDIR>/src/cancellation_test.mbt:263:56-263:61:
     |   let result = @test_util.expect_error_async <| () => {
     |     @async.with_task_group(group => {
     |       group.spawn_bg(() => raise Failure::Failure("failure"))
-262 |       group.spawn_bg(() => group.spawn_bg(() => @async.sleep(100)))
+263 |       group.spawn_bg(() => group.spawn_bg(() => @async.sleep(100)))
     |                                                        ^^^^^
     |     })
     |   }
@@ -1076,7 +977,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src/http/client_test.mbt:72:14-72:19:
    |       log <+ "client sending PUT request\n"
-   |       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+   |       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
    |       defer client.close()
 72 |       @async.sleep(100)
    |              ^^^^^
@@ -1094,7 +995,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src/http/client_test.mbt:86:14-86:19:
    |       log <+ "client sending POST request\n"
-   |       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+   |       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
    |       defer client.close()
 86 |       @async.sleep(100)
    |              ^^^^^
@@ -1154,60 +1055,6 @@ Found 320 references for symbol 'sleep':
    |                 ^^^^^
    |   ignore(@fs.unimplemented)
    |   ignore(@utf8.encode(""))
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:41:43-41:48:
-   | ///|
-   | #cfg(target="js")
-   | async fn perform_sleep_job(t : Int32) -> Unit {
-41 |   @async.protect_from_cancel(() => @async.sleep(t))
-   |                                           ^^^^^
-   | }
-   | 
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:50:16-50:21:
-   |   @async.with_task_group() <| root => {
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<3 {
-50 |         @async.sleep(400)
-   |                ^^^^^
-   |         log <+ "tick\n"
-   |       }
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:87:16-87:21:
-   |   @async.with_task_group() <| root => {
-   |     root.spawn_bg() <| () => {
-   |       for _ in 0..<4 {
-87 |         @async.sleep(200)
-   |                ^^^^^
-   |         log <+ "tick\n"
-   |       }
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:97:12-97:17:
-   |         Some(_) => log <+ "done\n"
-   |       }
-   |     })
-97 |     @async.sleep(500)
-   |            ^^^^^
-   |     log <+ "trying to cancel\n"
-   |     task.cancel()
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:121:16-121:21:
-    |   @async.with_task_group() <| root => {
-    |     root.spawn_bg() <| () => {
-    |       for _ in 0..<3 {
-121 |         @async.sleep(400)
-    |                ^^^^^
-    |         log <+ "tick\n"
-    |       }
-
-<WORKDIR>/src/internal/event_loop/worker_wbtest.mbt:131:12-131:17:
-    |         Some(_) => log <+ "done\n"
-    |       }
-    |     }
-131 |     @async.sleep(600)
-    |            ^^^^^
-    |     log <+ "trying to terminate now\n"
-    |     root.return_immediately(())
 
 <WORKDIR>/src/internal/gzip_internal/gzip_internal_test.mbt:361:17-361:22:
     | ///|
@@ -1993,7 +1840,7 @@ Found 320 references for symbol 'sleep':
     |           }
 
 <WORKDIR>/src/protect_from_cancel_test.mbt:243:12-243:17:
-"    |         Some(_) => ()" (escaped)
+    |         Some(_) => ()
     |       }
     |     }
 243 |     @async.sleep(200)
@@ -2641,7 +2488,7 @@ Found 320 references for symbol 'sleep':
    |     })
 
 <WORKDIR>/src/wait_test.mbt:58:12-58:17:
-"   |         Some(_) => ()" (escaped)
+   |         Some(_) => ()
    |       }
    |     }
 58 |     @async.sleep(20)
@@ -2739,148 +2586,112 @@ Found 320 references for symbol 'sleep':
    |         None => log <+ "task cancelled\n"
    |         Some(_) => log <+ "task finished\n"
 
-<WORKDIR>/src/with_timeout_test.mbt:99:14-99:19:
-   |   let log = StringBuilder()
-   |   @async.with_task_group(root => {
-   |     root.spawn_bg() <| () => {
-99 |       @async.sleep(200)
-   |              ^^^^^
-   |       log <+ "200ms tick\n"
-   |       @async.sleep(200)
-
-<WORKDIR>/src/with_timeout_test.mbt:101:14-101:19:
-    |     root.spawn_bg() <| () => {
-    |       @async.sleep(200)
-    |       log <+ "200ms tick\n"
-101 |       @async.sleep(200)
-    |              ^^^^^
-    |       log <+ "400ms tick\n"
-    |     }
-
-<WORKDIR>/src/with_timeout_test.mbt:107:57-107:62:
-    |     @async.with_timeout(300, () => {
-    |       let result = @async.handle_cancellation() <| () => {
-    |         @async.with_timeout(500) <| () => {
-107 |           match @async.handle_cancellation(() => @async.sleep(2000)) {
-    |                                                         ^^^^^
-    |             None => log <+ "task cancelled\n"
-    |             Some(_) => log <+ "task finished after 2s\n"
-
-<WORKDIR>/src/with_timeout_test.mbt:141:14-141:19:
-    |   let log = StringBuilder()
-    |   @async.with_task_group(root => {
-    |     root.spawn_bg() <| () => {
-141 |       @async.sleep(300)
-    |              ^^^^^
-    |       log <+ "300ms tick\n"
-    |       @async.sleep(300)
-
-<WORKDIR>/src/with_timeout_test.mbt:143:14-143:19:
-    |     root.spawn_bg() <| () => {
-    |       @async.sleep(300)
-    |       log <+ "300ms tick\n"
-143 |       @async.sleep(300)
-    |              ^^^^^
-    |       log <+ "600ms tick\n"
-    |     }
-
-<WORKDIR>/src/with_timeout_test.mbt:148:55-148:60:
-    |     }
-    |     @async.with_timeout(750, () => {
-    |       @async.with_timeout(450, () => {
-148 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
+<WORKDIR>/src/with_timeout_test.mbt:100:55-100:60:
+    |   @async.with_timeout(300, () => {
+    |     let result = @async.handle_cancellation() <| () => {
+    |       @async.with_timeout(500) <| () => {
+100 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
     |                                                       ^^^^^
     |           None => log <+ "task cancelled\n"
     |           Some(_) => log <+ "task finished after 2s\n"
 
-<WORKDIR>/src/with_timeout_test.mbt:179:16-179:21:
+<WORKDIR>/src/with_timeout_test.mbt:129:53-129:58:
+    |   let log = StringBuilder()
+    |   @async.with_timeout(750) <| () => {
+    |     @async.with_timeout(450, () => {
+129 |       match @async.handle_cancellation(() => @async.sleep(2000)) {
+    |                                                     ^^^^^
+    |         None => log <+ "task cancelled\n"
+    |         Some(_) => log <+ "task finished after 2s\n"
+
+<WORKDIR>/src/with_timeout_test.mbt:153:16-153:21:
     |   let err = @test_util.expect_error_async <| () => {
     |     @async.with_task_group(root => {
     |       root.spawn_bg() <| () => {
-179 |         @async.sleep(200)
+153 |         @async.sleep(200)
     |                ^^^^^
     |         log <+ "200ms tick\n"
     |       }
 
-<WORKDIR>/src/with_timeout_test.mbt:183:55-183:60:
+<WORKDIR>/src/with_timeout_test.mbt:157:55-157:60:
     |         log <+ "200ms tick\n"
     |       }
     |       @async.with_timeout(100) <| () => {
-183 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
+157 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
     |                                                       ^^^^^
     |           None => {
     |             log <+ "causing other error on cancellation\n"
 
-<WORKDIR>/src/with_timeout_test.mbt:210:16-210:21:
+<WORKDIR>/src/with_timeout_test.mbt:184:16-184:21:
     |   let err = @test_util.expect_error_async <| () => {
     |     @async.with_task_group(root => {
     |       root.spawn_bg() <| () => {
-210 |         @async.sleep(200)
+184 |         @async.sleep(200)
     |                ^^^^^
     |         log <+ "200ms tick\n"
     |       }
 
-<WORKDIR>/src/with_timeout_test.mbt:215:55-215:60:
+<WORKDIR>/src/with_timeout_test.mbt:189:55-189:60:
     |       }
     |       defer log.write_string("main task terminates\n")
     |       @async.with_timeout(100, error=Err) <| () => {
-215 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
+189 |         match @async.handle_cancellation(() => @async.sleep(2000)) {
     |                                                       ^^^^^
     |           None => log <+ "task cancelled\n"
     |           Some(_) => log <+ "task finished after 2s\n"
 
-<WORKDIR>/src/with_timeout_test.mbt:238:14-238:19:
+<WORKDIR>/src/with_timeout_test.mbt:212:14-212:19:
     |   let log = []
     |   @async.with_task_group(root => {
     |     root.spawn_bg() <| () => {
-238 |       @async.sleep(200)
+212 |       @async.sleep(200)
     |              ^^^^^
     |       log.push("200ms tick")
     |     }
 
-<WORKDIR>/src/with_timeout_test.mbt:242:14-242:19:
+<WORKDIR>/src/with_timeout_test.mbt:216:14-216:19:
     |       log.push("200ms tick")
     |     }
     |     let result = @async.with_timeout_opt(1000, () => {
-242 |       @async.sleep(100)
+216 |       @async.sleep(100)
     |              ^^^^^
     |       log.push("task finished after 100ms")
     |       42
 
-<WORKDIR>/src/with_timeout_test.mbt:259:14-259:19:
+<WORKDIR>/src/with_timeout_test.mbt:233:14-233:19:
     |   let log = StringBuilder()
     |   @async.with_task_group(root => {
     |     root.spawn_bg() <| () => {
-259 |       @async.sleep(200)
+233 |       @async.sleep(200)
     |              ^^^^^
     |       log <+ "200ms tick\n"
     |     }
 
-<WORKDIR>/src/with_timeout_test.mbt:263:14-263:19:
+<WORKDIR>/src/with_timeout_test.mbt:237:14-237:19:
     |       log <+ "200ms tick\n"
     |     }
     |     @async.with_timeout(1000, () => {
-263 |       @async.sleep(100)
+237 |       @async.sleep(100)
     |              ^^^^^
     |       raise Err
     |     }) catch {
 
-<WORKDIR>/src/with_timeout_test.mbt:288:14-288:19:
+<WORKDIR>/src/with_timeout_test.mbt:262:14-262:19:
     |   let log = []
     |   @async.with_task_group() <| root => {
     |     root.spawn_bg() <| () => {
-288 |       @async.sleep(200)
+262 |       @async.sleep(200)
     |              ^^^^^
     |       log.push("200ms tick")
     |     }
 
-<WORKDIR>/src/with_timeout_test.mbt:292:53-292:58:
+<WORKDIR>/src/with_timeout_test.mbt:266:53-266:58:
     |       log.push("200ms tick")
     |     }
     |     let result = @async.with_timeout_opt(100, () => {
-292 |       match @async.handle_cancellation(() => @async.sleep(2000)) {
+266 |       match @async.handle_cancellation(() => @async.sleep(2000)) {
     |                                                     ^^^^^
     |         None => log.push("task cancelled")
     |         Some(_) => log.push("task finished after 2s")
 "" (escaped)
-````
+```

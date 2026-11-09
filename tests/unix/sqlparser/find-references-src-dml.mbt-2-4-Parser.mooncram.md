@@ -1,6 +1,6 @@
 # sqlparser find-references Parser src/dml.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'Parser' --loc 'src/dml.mbt:2:4'
 Found 199 references for symbol 'Parser':
 <WORKDIR>/src/ansi.mbt:45:13-45:19:
@@ -1788,4 +1788,4 @@ Found 199 references for symbol 'Parser':
     |   tokens : ArrayView[Token],
     | ) -> ParserResult[ReleaseSavepointStmt] raise ParserError {
 "" (escaped)
-````
+```

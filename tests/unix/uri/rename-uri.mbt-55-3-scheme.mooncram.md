@@ -1,6 +1,6 @@
 # uri rename scheme uri.mbt:55:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'scheme' 'scheme_renamed' --loc 'uri.mbt:55:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
@@ -37,7 +37,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
    // Add scheme
 -  match self.scheme {
 +  match self.scheme_renamed {
-"     Some(scheme) => {" (escaped)
+     Some(scheme) => {
        result = result + scheme
        match self.authority {
 @@
@@ -64,30 +64,30 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
  pub fn Uri::is_absolute(self : Uri) -> Bool {
 -  match self.scheme {
 +  match self.scheme_renamed {
-"     Some(_) => true" (escaped)
-"     None => false" (escaped)
+     Some(_) => true
+     None => false
    }
 @@
        match auth.port {
-"         Some(port) => Some(port)" (escaped)
-"         None =>" (escaped)
+         Some(port) => Some(port)
+         None =>
 -          match self.scheme {
 +          match self.scheme_renamed {
-"             Some(scheme) => default_port(scheme)" (escaped)
-"             None => None" (escaped)
+             Some(scheme) => default_port(scheme)
+             None => None
            }
 @@
    // Remove default port if present
    match self.authority {
-"     Some(auth) =>" (escaped)
+     Some(auth) =>
 -      match (self.scheme, auth.port) {
 +      match (self.scheme_renamed, auth.port) {
-"         (Some(scheme), Some(port)) =>" (escaped)
+         (Some(scheme), Some(port)) =>
            match default_port(scheme) {
-"             Some(default) =>" (escaped)
+             Some(default) =>
 @@
    match relative.authority {
-"     Some(_) =>" (escaped)
+     Some(_) =>
        resolved = {
 -        scheme: base.scheme,
 +        scheme_renamed: base.scheme_renamed,
@@ -114,4 +114,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon 
            query: relative.query,
 *** End Patch
 "" (escaped)
-````
+```

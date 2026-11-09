@@ -1,6 +1,6 @@
 # sqlparser rename obj src/ast.mbt:2:37
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'obj' 'obj_renamed' --loc 'src/ast.mbt:2:37'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ast.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
  ///|
 *** End Patch
 "" (escaped)
-````
+```

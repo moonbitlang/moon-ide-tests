@@ -1,6 +1,6 @@
 # toml-parser peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
 Definition found at file <WORKDIR>/additional_official_tests_test.mbt
   | ///| These provide additional coverage of edge cases and complex scenarios
@@ -24,9 +24,9 @@ Definition found at file <WORKDIR>/additional_official_tests_test.mbt
   |       #|  {
   |       #|    "bare_key": TomlString("value"),
   |       #|    "bare-key": TomlString("value"),
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'parse' --loc 'additional_official_tests_test.mbt:17:11'
 Definition found at file <WORKDIR>/parser.mbt
     | /// escapes, inline-table newlines) are accepted.
@@ -50,61 +50,9 @@ Definition found at file <WORKDIR>/parser.mbt
     |         parser.update_view(rest)
     |         let table_path = parser.parse_table_path()
     |         match parser.view() {
-````
+```
 
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
-Definition found at file <WORKDIR>/coverage_improvement_comprehensive_test.mbt
-  | 
-  | ///|
-  | /// Test EOF handling in parser - covered by creating empty token arrays
-  | test "parser_eof_handling" {
-  |   // Test empty parse input to exercise EOF conditions
-9 |   let result = @toml.parse(
-  |       ^^^^^^
-  |     (
-  |       #|
-  |     ),
-  |   )
-  |   debug_inspect(
-  |     result,
-  |     content=(
-  |       #|TomlTable({})
-  |     ),
-  |   )
-  | }
-  | 
-  | ///|
-  | /// Test integer keys in inline tables
-````
-
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
-Definition found at file <WORKDIR>/parser.mbt
-    | /// escapes, inline-table newlines) are accepted.
-    | ///
-    | /// On any lexical or syntactic error, `parse` raises with a message
-    | /// containing the source location. Wrap the call in `try?` to receive a
-    | /// `Result[TomlValue, Error]` instead.
-333 | pub fn parse(input : String) -> TomlValue raise {
-    |        ^^^^^
-    |   let tokens = @tokenize.tokenize(input)
-    |   let parser = Parser::Parser(tokens)
-    |   let main_table = Map([])
-    |   for current_table = main_table {
-    |     parser.skip_newlines()
-    |     match parser.view() {
-    |       [EOF, ..] => break
-    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
-    |         if !loc1.adjacent(loc2) {
-    |           parser.error("Invalid table header: space between '[' and '['")
-    |         }
-    |         parser.update_view(rest)
-    |         let table_path = parser.parse_table_path()
-    |         match parser.view() {
-````
-
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
    | /// - `LocalTime` — time only (e.g. `07:32:00`)
@@ -128,9 +76,9 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
    | pub extend TomlDateTime with Debug::{to_repr}
    | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
    | ///
@@ -154,9 +102,9 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | pub extend TomlDateTime with Debug::{to_repr}
    | 
    | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
 Definition found at file <WORKDIR>/datetime_extended_test.mbt
   | ///|
@@ -178,9 +126,9 @@ Definition found at file <WORKDIR>/datetime_extended_test.mbt
   | 
   | ///|
   | test "test datetime token debug representation" {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
    | ///
@@ -204,9 +152,9 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
    | pub extend TomlDateTime with Debug::{to_repr}
    | 
    | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'tokens' --loc 'internal/tokenize/lexer_test.mbt:4:7'
 Definition found at file <WORKDIR>/internal/tokenize/lexer_test.mbt
   | ///|
@@ -228,9 +176,9 @@ Definition found at file <WORKDIR>/internal/tokenize/lexer_test.mbt
   |       #|  ),
   |       #|  Equals(loc={ start: { line: 1, column: 5 }, end: { line: 1, column: 6 } }),
   |       #|  StringToken(
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
 Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      |   }
@@ -238,7 +186,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
+1369 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = []
@@ -254,9 +202,9 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      |       }
      |     }
      |   }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
 Definition found at file <WORKDIR>/internal/tokenize/token.mbt
   | /// `start` is the position of the first character of the lexeme and `end`
@@ -280,9 +228,9 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
   | 
   | ///|
   | /// Token types for the lexer
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'start' --loc 'internal/tokenize/token.mbt:10:3'
 Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | /// is the position immediately after its last character. Two locations are
@@ -306,9 +254,58 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | ///|
    | /// Token types for the lexer
    | pub(all) enum Token {
-````
+```
 
-````mooncram
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'bench_document' --loc 'parse_bench_test.mbt:4:4'
+Definition found at file <WORKDIR>/parse_bench_test.mbt
+  | ///|
+  | /// A document big enough (and with enough astral characters) to exercise the
+  | /// lexer's view handling end to end.
+4 | fn bench_document() -> String {
+  |    ^^^^^^^^^^^^^^
+  |   let sb = StringBuilder()
+  |   for i in 0..<800 {
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\"\n")
+  |     sb.write_string("num_\{i} = \{i}.5\n")
+  |     sb.write_string("flag_\{i} = true\n")
+  |     sb.write_string("[table_\{i}]\n")
+  |     sb.write_string("emoji = \"😈😈😈\"\n")
+  |     sb.write_string("arr = [1, 2, 3, 400, 5000]\n")
+  |   }
+  |   sb.to_string()
+  | }
+  | 
+  | ///|
+  | /// End-to-end parse cost, guarding how `Lexer::view` and `expect_string` build
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'sb' --loc 'parse_bench_test.mbt:5:7'
+Definition found at file <WORKDIR>/parse_bench_test.mbt
+  | ///|
+  | /// A document big enough (and with enough astral characters) to exercise the
+  | /// lexer's view handling end to end.
+  | fn bench_document() -> String {
+5 |   let sb = StringBuilder()
+  |       ^^
+  |   for i in 0..<800 {
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\"\n")
+  |     sb.write_string("num_\{i} = \{i}.5\n")
+  |     sb.write_string("flag_\{i} = true\n")
+  |     sb.write_string("[table_\{i}]\n")
+  |     sb.write_string("emoji = \"😈😈😈\"\n")
+  |     sb.write_string("arr = [1, 2, 3, 400, 5000]\n")
+  |   }
+  |   sb.to_string()
+  | }
+  | 
+  | ///|
+  | /// End-to-end parse cost, guarding how `Lexer::view` and `expect_string` build
+  | /// their subviews. On the ~90k-code-unit document below, `exact_view` parses
+```
+
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'Parser' --loc 'parser.mbt:3:4'
 Definition found at file <WORKDIR>/toml.mbt
    |   }
@@ -332,9 +329,9 @@ Definition found at file <WORKDIR>/toml.mbt
    | /// the consumed tail back through `update_view`.
    | fn Parser::view(
    |   self : Self,
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'skip_newlines' --loc 'parser.mbt:3:12'
 Definition found at file <WORKDIR>/parser.mbt
   | ///|
@@ -355,9 +352,9 @@ Definition found at file <WORKDIR>/parser.mbt
   | /// Handles identifiers, strings, integers, booleans (true/false),
   | /// and special float keywords (inf/nan) in key position.
   | ///
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'tokens' --loc 'parser_wbtest.mbt:7:7'
 Definition found at file <WORKDIR>/parser_wbtest.mbt
   | /// White-box tests for internal parser methods
@@ -381,9 +378,9 @@ Definition found at file <WORKDIR>/parser_wbtest.mbt
   | test "parse_dotted_key - dotted identifiers" {
   |   // Test parsing dotted identifier keys
   |   let tokens = @tokenize.tokenize("server.host.name")
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      |   }
@@ -391,7 +388,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
+1369 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = []
@@ -407,9 +404,9 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      |       }
      |     }
      |   }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
 Definition found at file <WORKDIR>/test_utils_test.mbt
   | ///|
@@ -429,9 +426,9 @@ Definition found at file <WORKDIR>/test_utils_test.mbt
   |           }
   |         None => s
   |       }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'input' --loc 'test_utils_test.mbt:2:25'
 Definition found at file <WORKDIR>/test_utils_test.mbt
   | ///|
@@ -451,9 +448,9 @@ Definition found at file <WORKDIR>/test_utils_test.mbt
   |           }
   |         None => s
   |       }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
 Definition found at file <WORKDIR>/toml_to_string.mbt
   | ///|
@@ -474,9 +471,9 @@ Definition found at file <WORKDIR>/toml_to_string.mbt
   |       c if c >= '\u0000' && c <= '\u001F' => {
   |         result <+ "\\u"
   |         let code = c.to_int()
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide peek-def 's' --loc 'toml_to_string.mbt:3:23'
 Definition found at file <WORKDIR>/toml_to_string.mbt
   | ///|
@@ -497,4 +494,4 @@ Definition found at file <WORKDIR>/toml_to_string.mbt
   |       c if c >= '\u0000' && c <= '\u001F' => {
   |         result <+ "\\u"
   |         let code = c.to_int()
-````
+```
