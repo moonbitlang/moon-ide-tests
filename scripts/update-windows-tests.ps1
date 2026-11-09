@@ -116,7 +116,7 @@ if ($RefreshSnapshots) {
     exit 0
   }
 
-  moonx moonbit-community/mooncram@0.1.0 update @baselinePaths *> $updateLog
+  moonx moonbit-community/mooncram@latest update @baselinePaths *> $updateLog
   $updateStatus = $LASTEXITCODE
 
   if ($updateStatus -ne 0) {
