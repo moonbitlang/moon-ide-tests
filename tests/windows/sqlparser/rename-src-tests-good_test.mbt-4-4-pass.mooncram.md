@@ -1,6 +1,6 @@
 # sqlparser rename pass src\tests\good_test.mbt:4:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'pass' 'pass_renamed' --loc 'src\tests\good_test.mbt:4:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\good_test.mbt
@@ -263,4 +263,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'pass' 'pass_renamed' --loc 
  }
 *** End Patch
 "" (escaped)
-````
+```

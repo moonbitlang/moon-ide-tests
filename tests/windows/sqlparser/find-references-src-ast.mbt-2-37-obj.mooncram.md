@@ -1,6 +1,6 @@
 # sqlparser find-references obj src\ast.mbt:2:37
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'obj' --loc 'src\ast.mbt:2:37'
 Found 1 references for symbol 'obj':
 <WORKDIR>/src\ast.mbt:3:14-3:17:
@@ -11,4 +11,4 @@ Found 1 references for symbol 'obj':
   | }
   | 
 "" (escaped)
-````
+```

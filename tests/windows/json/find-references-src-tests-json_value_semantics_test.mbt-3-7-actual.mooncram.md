@@ -1,6 +1,6 @@
 # json find-references actual src\tests\json_value_semantics_test.mbt:3:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'actual' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
 Found 1 references for symbol 'actual':
 <WORKDIR>/src\tests\json_value_semantics_test.mbt:11:20-11:26:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'actual':
    | }
    | 
 "" (escaped)
-````
+```

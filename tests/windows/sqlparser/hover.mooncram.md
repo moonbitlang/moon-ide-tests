@@ -1,6 +1,6 @@
 # sqlparser hover
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'pretty_print' --loc 'src\ast.mbt:2:24'
 ///|
 pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
@@ -10,9 +10,9 @@ pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
                        ```
   @pp.pretty(obj).to_string()
 }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'obj' --loc 'src\ast.mbt:2:37'
 ///|
 pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
@@ -22,9 +22,9 @@ pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
                                     ```
   @pp.pretty(obj).to_string()
 }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'BigQuery' --loc 'src\bigquery.mbt:3:17'
 ///|
 /// BigQuery dialect - supports Google BigQuery specific syntax
@@ -39,9 +39,9 @@ pub(all) struct BigQuery {}
                  BigQuery dialect - supports Google BigQuery specific syntax
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'BigQuery' --loc 'src\bigquery.mbt:6:22'
 pub(all) struct BigQuery {}
 
@@ -57,7 +57,7 @@ pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
                       BigQuery dialect - supports Google BigQuery specific syntax
   _self,
 ) {
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Parser' --loc 'src\dml.mbt:2:4'
@@ -73,7 +73,7 @@ fn Parser::parse_set_expr(
   tokens : ArrayView[Token],
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse_set_expr' --loc 'src\dml.mbt:2:12'
 ///|
 fn Parser::parse_set_expr(
@@ -83,9 +83,9 @@ fn Parser::parse_set_expr(
            ```
   self : Parser,
   tokens : ArrayView[Token],
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Generic' --loc 'src\generic.mbt:5:17'
 /// Generic SQL dialect that supports the union of all other dialects
 /// This is the most permissive dialect, useful for parsing various SQL statements
@@ -103,9 +103,9 @@ pub(all) struct Generic {}
                  from different sources without strict dialect requirements
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Generic' --loc 'src\generic.mbt:8:22'
 pub(all) struct Generic {}
 
@@ -123,7 +123,7 @@ pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
                       from different sources without strict dialect requirements
   _self,
 ) {
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'LexerError' --loc 'src\lexer.mbt:2:10'
@@ -154,7 +154,7 @@ suberror LexerError {
 } derive(Debug)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'sql' --loc 'src\prepare.mbt:6:7'
 ///|
 test "PREPARE simple SELECT" {
@@ -165,9 +165,9 @@ test "PREPARE simple SELECT" {
       ```
   let stmt = parse_sql(sql)[0] |> pretty_print
   inspect(
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'stmt' --loc 'src\prepare.mbt:7:7'
 ///|
 test "PREPARE simple SELECT" {
@@ -179,9 +179,9 @@ test "PREPARE simple SELECT" {
       ```
   inspect(
     stmt,
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Redshift' --loc 'src\redshift.mbt:3:17'
 ///|
 /// Redshift dialect - supports Amazon Redshift specific syntax
@@ -196,9 +196,9 @@ pub(all) struct Redshift {}
                  Redshift dialect - supports Amazon Redshift specific syntax
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Redshift' --loc 'src\redshift.mbt:6:22'
 pub(all) struct Redshift {}
 
@@ -214,9 +214,9 @@ pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
                       Redshift dialect - supports Amazon Redshift specific syntax
   _self,
 ) {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'show_compact_debug' --loc 'src\show.mbt:2:15'
 ///|
 fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
@@ -226,9 +226,9 @@ fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
               ```
   let input = @debug.to_string(obj)
   let buffer = StringBuilder()
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'obj' --loc 'src\show.mbt:2:34'
 ///|
 fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
@@ -238,7 +238,7 @@ fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
                                  ```
   let input = @debug.to_string(obj)
   let buffer = StringBuilder()
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'pass' --loc 'src\tests\good_test.mbt:4:4'
@@ -254,7 +254,7 @@ fn pass(input : String) -> Unit {
     e => {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'input' --loc 'src\tests\good_test.mbt:4:9'
 // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
 
@@ -266,7 +266,7 @@ fn pass(input : String) -> Unit {
         ```
   (@sqlparser.parse_sql(input) catch {
     e => {
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'read_and_parse' --loc 'src\tests\tpch_test.mbt:2:4'
@@ -280,7 +280,7 @@ fn read_and_parse(path : String) -> @sqlparser.Statements {
     e => {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'path' --loc 'src\tests\tpch_test.mbt:2:19'
 ///|
 fn read_and_parse(path : String) -> @sqlparser.Statements {
@@ -290,4 +290,4 @@ fn read_and_parse(path : String) -> @sqlparser.Statements {
                   ```
   let input = @fs.read_file_to_string(path) catch {
     e => {
-````
+```

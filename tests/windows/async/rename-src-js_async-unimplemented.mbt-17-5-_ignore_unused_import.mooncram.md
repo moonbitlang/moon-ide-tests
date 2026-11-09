@@ -1,6 +1,6 @@
 # async rename _ignore_unused_import src\js_async\unimplemented.mbt:17:5
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src\js_async\unimplemented.mbt:17:5'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\js_async\unimplemented.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename '_ignore_unused_import' '_ig
  }
 *** End Patch
 "" (escaped)
-````
+```

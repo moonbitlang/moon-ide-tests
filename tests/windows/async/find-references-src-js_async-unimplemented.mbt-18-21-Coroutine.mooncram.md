@@ -1,6 +1,6 @@
 # async find-references Coroutine src\js_async\unimplemented.mbt:18:21
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Coroutine' --loc 'src\js_async\unimplemented.mbt:18:21'
 Found 43 references for symbol 'Coroutine':
 <WORKDIR>/src\aqueue\aqueue.mbt:29:21-29:30:
@@ -21,11 +21,11 @@ Found 43 references for symbol 'Coroutine':
    |   /// For intrusive cancellable queue
    |   mut index : Int32
 
-<WORKDIR>/src\fs\watch.mbt:150:37-150:46:
+<WORKDIR>/src\fs\watch.mbt:151:37-151:46:
     |   pending_remove : Set[FileIdentity]
     |   ignored_paths : (String) -> Bool
     |   report_child_event : Bool
-150 |   mut synchronize_task : @coroutine.Coroutine?
+151 |   mut synchronize_task : @coroutine.Coroutine?
     |                                     ^^^^^^^^^
     | }
     | 
@@ -217,20 +217,20 @@ Found 43 references for symbol 'Coroutine':
    | }
    | 
 
-<WORKDIR>/src\internal\coroutine\scheduler.mbt:32:31-32:40:
-   | }
+<WORKDIR>/src\internal\coroutine\scheduler.mbt:48:31-48:40:
+   | )
    | 
    | ///|
-32 | pub fn current_coroutine() -> Coroutine {
+48 | pub fn current_coroutine() -> Coroutine {
    |                               ^^^^^^^^^
    |   scheduler.curr_coro.unwrap()
    | }
 
-<WORKDIR>/src\internal\coroutine\scheduler.mbt:66:32-66:41:
+<WORKDIR>/src\internal\coroutine\scheduler.mbt:82:32-82:41:
    | }
    | 
    | ///|
-66 | pub fn all_coroutines() -> Set[Coroutine] {
+82 | pub fn all_coroutines() -> Set[Coroutine] {
    |                                ^^^^^^^^^
    |   scheduler.all_coros
    | }
@@ -388,4 +388,4 @@ Found 43 references for symbol 'Coroutine':
     | }
     | 
 "" (escaped)
-````
+```

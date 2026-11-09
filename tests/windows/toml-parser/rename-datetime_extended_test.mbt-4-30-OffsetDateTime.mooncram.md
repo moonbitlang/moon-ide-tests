@@ -1,6 +1,6 @@
 # toml-parser rename OffsetDateTime datetime_extended_test.mbt:4:30
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDateTimeRenamed' --loc 'datetime_extended_test.mbt:4:30'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
@@ -135,15 +135,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
 -    OffsetDateTime("2023-06-15T09:00:00+00:00"),
 +    OffsetDateTimeRenamed("2023-06-15T09:00:00+00:00"),
    )
-   sessions.push(@toml.TomlTable(session1))
    let session2 : Map[String, @toml.TomlValue] = Map([])
    session2["title"] = TomlString("Technical Workshop")
    session2["scheduled_at"] = TomlDateTime(
 -    OffsetDateTime("2023-06-15T14:00:00+00:00"),
 +    OffsetDateTimeRenamed("2023-06-15T14:00:00+00:00"),
    )
-   sessions.push(TomlTable(session2))
-   event_table["sessions"] = TomlArray(sessions)
+   event_table["sessions"] = TomlArray([TomlTable(session1), TomlTable(session2)])
+   let event_value = @toml.TomlTable(event_table)
 @@
    )
  
@@ -315,6 +314,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
      TomlDateTime(LocalDateTime(s)) => Some(("LocalDateTime", s))
      TomlDateTime(LocalDate(s)) => Some(("LocalDate", s))
      TomlDateTime(LocalTime(s)) => Some(("LocalTime", s))
+*** Update File: <WORKDIR>/toml_cli\tojson.mbt
+@@
+       }
+     TomlBoolean(b) => Json::boolean(b)
+     TomlDateTime(
+-      OffsetDateTime(s)
++      OffsetDateTimeRenamed(s)
+       | LocalDateTime(s)
+       | LocalDate(s)
+       | LocalTime(s)
 *** Update File: <WORKDIR>/toml_test.mbt
 @@
  ///|
@@ -487,4 +496,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
      table,
 *** End Patch
 "" (escaped)
-````
+```

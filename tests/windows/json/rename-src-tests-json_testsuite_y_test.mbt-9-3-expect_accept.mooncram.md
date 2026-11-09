@@ -1,6 +1,6 @@
 # json rename expect_accept src\tests\json_testsuite_y_test.mbt:9:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_accept' 'expect_accept_renamed' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
@@ -685,4 +685,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_accept' 'expect_acce
  }
 *** End Patch
 "" (escaped)
-````
+```

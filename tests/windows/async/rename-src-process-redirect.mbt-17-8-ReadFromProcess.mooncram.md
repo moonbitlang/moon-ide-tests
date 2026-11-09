@@ -1,6 +1,6 @@
 # async rename ReadFromProcess src\process\redirect.mbt:17:8
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'ReadFromProcess' 'ReadFromProcessRenamed' --loc 'src\process\redirect.mbt:17:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\process\deprecated.mbt
@@ -80,4 +80,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'ReadFromProcess' 'ReadFromP
  ) -> Unit {
 *** End Patch
 "" (escaped)
-````
+```

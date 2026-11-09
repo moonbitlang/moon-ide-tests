@@ -1,6 +1,6 @@
 # sqlparser outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\ast.mbt'
    2 |pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
      |...
@@ -1124,9 +1124,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\ast.mbt'
 3962 |pub extend WindowSpec with Eq::{not_equal, equal}
      |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\bigquery.mbt'
   3 |pub(all) struct BigQuery {}
     |...
@@ -1189,9 +1189,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\bigquery.mbt'
 170 |}
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\dml.mbt'
    2 |fn Parser::parse_set_expr(
    3 |  self : Parser,
@@ -1565,9 +1565,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\dml.mbt'
 2926 |test "MERGE with DELETE action" {
      |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\generic.mbt'
  5 |pub(all) struct Generic {}
    |...
@@ -1618,9 +1618,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\generic.mbt'
 79 |}
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\lexer.mbt'
   2 |suberror LexerError {
     |...
@@ -1726,9 +1726,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\lexer.mbt'
 857 |pub extend Token with Eq::{not_equal, equal}
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\prepare.mbt'
   5 |test "PREPARE simple SELECT" {
     |...
@@ -1777,9 +1777,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\prepare.mbt'
 346 |test "PREPARE with multiple data types" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\redshift.mbt'
  3 |pub(all) struct Redshift {}
    |...
@@ -1830,9 +1830,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\redshift.mbt'
 77 |}
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\show.mbt'
   2 |fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
     |...
@@ -2285,9 +2285,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\show.mbt'
 932 |pub extend WindowSpec with Show::{to_string, output}
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\good_test.mbt'
   4 |fn pass(input : String) -> Unit {
     |...
@@ -2368,9 +2368,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\good_test.mbt'
 219 |test {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\tpch_test.mbt'
   2 |fn read_and_parse(path : String) -> @sqlparser.Statements {
     |...
@@ -2419,4 +2419,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\tpch_test.mbt'
 826 |test "TPCH 22" {
     |...
 "" (escaped)
-````
+```

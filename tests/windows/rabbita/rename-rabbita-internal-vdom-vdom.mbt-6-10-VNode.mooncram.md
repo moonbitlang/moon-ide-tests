@@ -1,6 +1,6 @@
 # rabbita rename VNode rabbita\internal\vdom\vdom.mbt:6:10
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc 'rabbita\internal\vdom\vdom.mbt:6:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita\html\html.mbt
@@ -452,4 +452,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc
  ///|
 *** End Patch
 "" (escaped)
-````
+```

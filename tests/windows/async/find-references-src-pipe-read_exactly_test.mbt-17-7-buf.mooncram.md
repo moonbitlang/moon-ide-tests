@@ -1,6 +1,6 @@
 # async find-references buf src\pipe\read_exactly_test.mbt:17:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'buf' --loc 'src\pipe\read_exactly_test.mbt:17:7'
 Found 2 references for symbol 'buf':
 <WORKDIR>/src\pipe\read_exactly_test.mbt:19:5-19:8:
@@ -21,4 +21,4 @@ Found 2 references for symbol 'buf':
    |     content=(
    |       #|first message sent
 "" (escaped)
-````
+```

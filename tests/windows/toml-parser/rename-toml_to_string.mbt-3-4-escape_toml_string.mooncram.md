@@ -1,6 +1,6 @@
 # toml-parser rename escape_toml_string toml_to_string.mbt:3:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'escape_toml_string' 'escape_toml_string_renamed' --loc 'toml_to_string.mbt:3:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/toml_to_string.mbt
@@ -32,4 +32,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'escape_toml_string' 'escape
        // Handle special float values
 *** End Patch
 "" (escaped)
-````
+```

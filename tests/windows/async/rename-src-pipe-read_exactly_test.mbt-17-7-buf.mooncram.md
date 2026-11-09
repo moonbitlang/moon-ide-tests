@@ -1,6 +1,6 @@
 # async rename buf src\pipe\read_exactly_test.mbt:17:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'buf' 'buf_renamed' --loc 'src\pipe\read_exactly_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\pipe\read_exactly_test.mbt
@@ -27,4 +27,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'buf' 'buf_renamed' --loc 's
        #|first message: abcd
 *** End Patch
 "" (escaped)
-````
+```
