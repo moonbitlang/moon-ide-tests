@@ -1,8 +1,11 @@
 # Performance dashboard
 
 The dashboard is a static HTML/CSS/JavaScript site with no build dependencies.
-It reads `data/index.json` and loads selected run records on demand. Source code
-lives here; published data lives on the independent `perf-history` branch.
+It reads `data/index.json` and the raw records for the selected branch/platform.
+Source code lives here; published data lives on the independent `perf-history`
+branch. The page shows one chart, with tabs for the five command types. Each
+selected fixed query is a separate line; the horizontal axis contains MoonBit
+versions, not workflow runs or dates.
 
 ## Publishing
 
@@ -33,19 +36,38 @@ read-only repository permissions.
   backend and location. Renaming a test file does not change its history.
 - Suite identity includes command execution order and fixture preparation
   commands. Project commit, suite identity, platform, architecture, runner image
-  family, branch and measurement profile must match for a baseline comparison. Nightly versions
-  may differ: tracking those versions is the purpose of the dashboard.
+  family, branch and measurement profile define a measurement group. The latest
+  group is selected initially; other groups are available under Measurement
+  conditions. Different groups never share a mean or a comparison.
 - The runner records `prepared-cli-v1` and available runner image metadata.
   Earlier reports without core preparation use a separate `legacy-cli-v0`
-  profile. Unknown/incomplete suites cannot supply comparable baselines.
-  Runner image revision changes are marked in query history.
-- Only passing runs supply baselines. Partial runs retain their observations,
-  but do not extend the trend line or create percentage comparisons. Timeouts
-  and missing samples are markers, never zero-duration points. Configuration
-  changes break the line and are marked separately.
-- The site displays single observations, not percentiles. Each query currently
-  runs once. Full logs remain in the original workflow artifacts with their
-  configured retention; normalized numeric history remains in Git.
+  profile. Unknown/incomplete suites remain in raw records but cannot contribute
+  to a measurement group. Runner patch revisions are retained in raw details;
+  different revisions within the same image family share a measurement group.
+- Exact toolchain identity includes all reported CLI, compiler and runtime
+  versions/revisions and feature flags. Executable installation paths and line
+  endings do not affect identity. A generic `nightly` label is never a version
+  key. SDKs with the same compiler and a different CLI retain separate points.
+- For each query and exact toolchain within the selected group, the point is the
+  arithmetic mean of **all successful observations**. A successful query in a
+  partial run contributes normally; errors in unrelated queries do not discard
+  it. Timeouts, errors and missing samples are counted separately, never treated
+  as zero. A version with no successful sample is a gap in that query's line.
+- Versions are equally spaced and ordered by the compiler's reported date,
+  falling back to first observation when no date is reported. Ties use first
+  observation. Hash labels identify versions rather than imply hash ordering.
+  Version channels and the latest N versions can be filtered. Limiting versions
+  never limits repetitions: all runs of each displayed version enter its mean.
+- Hover or focus a point to see its mean, counts and change against the
+  immediately preceding displayed version. Missing/zero baselines have no
+  percentage comparison. Clicking opens all contributing and failed raw samples
+  with workflow links. The expandable version table also exposes missing points.
+  Query selection, command tabs, platform, branch and measurement group are
+  shareable through the URL. A CSV export contains selected query means/counts.
+- Raw normalized observations stay immutable; means are derived in the browser,
+  not written back over measurements. There are no percentiles or inferred
+  significance thresholds. Full logs remain in the original workflow artifacts
+  with their configured retention; normalized numeric history remains in Git.
 - Rerunning the same archival input is idempotent. A different payload for an
   existing run identity is rejected; a new workflow attempt creates new records.
   Only this attempt's platform artifacts are ingested. Rerun all jobs to collect
@@ -63,6 +85,7 @@ gh api repos/moonbitlang/moon-ide-tests/actions/runs/RUN_ID > perf/data/ci.json
 python perf/publish.py --artifacts perf/data/incoming --ci perf/data/ci.json \
   --history perf/data/history --site perf/data/site
 python -m http.server 8787 --bind 127.0.0.1 --directory perf/data/site
+# python -m http.server 8787 --bind 127.0.0.1 --directory perf/data/web-checks/site
 ```
 
 The publisher expects the artifact directory names produced by the workflow.
