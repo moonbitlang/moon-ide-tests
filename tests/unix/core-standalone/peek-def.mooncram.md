@@ -1,78 +1,78 @@
 # core-standalone peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
-`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:619-640
-619 | ///|
-    | /// Maps a function over the elements of the array.
-    | ///
-    | /// # Example
-    | /// ```mbt check
-    | /// test {
-    | ///   let v = [3, 4, 5]
-    | ///   let v2 = v.map(x => x + 1)
-    | ///   @test.assert_eq(v2, [4, 5, 6])
-    | /// }
-    | /// ```
-    | #locals(f)
-    | pub fn[T, U] Array::map(
-    |   self : Array[T],
-    |   f : (T) -> U raise?,
-    | ) -> Array[U] raise? {
-    |   let arr = Array::unsafe_make_uninit(self.length())
-    |   for i, v in self {
-    |     arr.unsafe_set(i, f(v))
-    |   }
-    |   arr
-    | } (no-eol)
-````
+`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1454-1475
+1454 | ///|
+     | /// Maps a function over the elements of the array.
+     | ///
+     | /// # Example
+     | /// ```mbt check
+     | /// test {
+     | ///   let v = [3, 4, 5]
+     | ///   let v2 = v.map(x => x + 1)
+     | ///   @test.assert_eq(v2, [4, 5, 6])
+     | /// }
+     | /// ```
+     | #locals(f)
+     | pub fn[T, U] Array::map(
+     |   self : Array[T],
+     |   f : (T) -> U raise?,
+     | ) -> Array[U] raise? {
+     |   let arr = Array::unsafe_make_uninit(self.length())
+     |   for i, v in self {
+     |     arr.unsafe_set(i, f(v))
+     |   }
+     |   arr
+     | } (no-eol)
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
-`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:712-742
-712 | ///|
-    | /// Creates a new array containing all elements from the input array that satisfy
-    | /// the given predicate function.
-    | ///
-    | /// Parameters:
-    | ///
-    | /// * `array` : The array to filter.
-    | /// * `predicate` : A function that takes an element and returns a boolean
-    | /// indicating whether the element should be included in the result.
-    | ///
-    | /// Returns a new array containing only the elements for which the predicate
-    | /// function returns `true`. The relative order of the elements is preserved.
-    | ///
-    | /// Example:
-    | ///
-    | /// ```mbt check
-    | /// test {
-    | ///   let arr = [1, 2, 3, 4, 5]
-    | ///   let evens = arr.filter(x => x % 2 == 0)
-    | ///   debug_inspect(evens, content="[2, 4]")
-    | /// }
-    | /// ```
-    | #locals(f)
-    | pub fn[T] Array::filter(
-    |   self : Array[T],
-    |   f : (T) -> Bool raise?,
-    | ) -> Array[T] raise? {
-    |   [
-    |     for v in self if f(v) => v
-    |   ]
-    | } (no-eol)
-````
+`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1547-1577
+1547 | ///|
+     | /// Creates a new array containing all elements from the input array that satisfy
+     | /// the given predicate function.
+     | ///
+     | /// Parameters:
+     | ///
+     | /// * `array` : The array to filter.
+     | /// * `predicate` : A function that takes an element and returns a boolean
+     | /// indicating whether the element should be included in the result.
+     | ///
+     | /// Returns a new array containing only the elements for which the predicate
+     | /// function returns `true`. The relative order of the elements is preserved.
+     | ///
+     | /// Example:
+     | ///
+     | /// ```mbt check
+     | /// test {
+     | ///   let arr = [1, 2, 3, 4, 5]
+     | ///   let evens = arr.filter(x => x % 2 == 0)
+     | ///   debug_inspect(evens, content="[2, 4]")
+     | /// }
+     | /// ```
+     | #locals(f)
+     | pub fn[T] Array::filter(
+     |   self : Array[T],
+     |   f : (T) -> Bool raise?,
+     | ) -> Array[T] raise? {
+     |   [
+     |     for v in self if f(v) => v
+     |   ]
+     | } (no-eol)
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1360-1390
-1360 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:2195-2225
+2195 | ///|
      | /// Fold out values from an array according to certain rules.
      | /// This method traverses the array through `self.iter()`, so the traversal
      | /// bounds are fixed when folding starts.
@@ -103,7 +103,7 @@ Found 1 symbols matching 'Array::fold':
      |     acc
      |   }
      | } (no-eol)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::length'
@@ -134,12 +134,12 @@ Found 1 symbols matching 'String::length':
      | pub fn String::length(self : String) -> Int32 = "%string_length" (no-eol)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1727-1738
-1727 | ///|
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1728-1739
+1728 | ///|
      | /// Splits the string into all substrings separated by the given separator.
 "     | /// " (escaped)
      | /// If the string does not contain the separator and the separator is not empty,
@@ -151,7 +151,7 @@ Found 1 symbols matching 'String::split':
      | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |   self[:].split(sep)
      | } (no-eol)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'StringBuilder::new'
@@ -344,12 +344,12 @@ Found 1 symbols matching 'Result::map':
    | } (no-eol)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:346-373
-346 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:339-366
+339 | ///|
     | /// Transforms the elements of the iterator using a mapping function.
     | ///
     | /// # Type Parameters
@@ -377,14 +377,14 @@ Found 1 symbols matching 'Iter::map':
     |     size_hint: self.size_hint,
     |   }
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:316-344
-316 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:309-337
+309 | ///|
     | /// Filters the elements of the iterator based on a predicate function.
     | ///
     | /// # Type Parameters
@@ -413,14 +413,14 @@ Found 1 symbols matching 'Iter::filter':
     |     }
     |   })
     | } (no-eol)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:816-829
-816 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:809-822
+809 | ///|
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
@@ -434,7 +434,7 @@ Found 1 symbols matching 'Iter::to_array':
     |   }
     |   result
     | } (no-eol)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List'
@@ -543,12 +543,12 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
    | } (no-eol)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
-`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:853-877
-853 | ///|
+`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:862-886
+862 | ///|
     | /// Applies a function to each key-value pair in the map and
     | /// returns a new map with the results, using the original keys.
     | ///
@@ -598,4 +598,4 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
     |     },
     |   }
     | } (no-eol)
-````
+```

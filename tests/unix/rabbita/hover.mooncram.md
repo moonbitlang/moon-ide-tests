@@ -1,20 +1,21 @@
 # rabbita hover
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'Html' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:22'
 ///|
 using @rabbita {type Html, type Val}
                      ^^^^
                      ```moonbit
                      #alias(T)
-                     struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode) derive(Eq)
+                     #derive(Eq)
+                     struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode)
                      ```
                      ---
-                     
+"                     " (escaped)
                       An HTML value produced by the constructors in this package.
 
 ///|
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'Val' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
@@ -58,21 +59,22 @@ fn fixture_scroll_items(prefix : String) -> Array[Html] {
   for index in 1..<=18 {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'Html' --loc 'e2e/apps/rui/toast/main.mbt:2:22'
 ///|
 using @rabbita {type Html, type Val}
                      ^^^^
                      ```moonbit
                      #alias(T)
-                     struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode) derive(Eq)
+                     #derive(Eq)
+                     struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode)
                      ```
                      ---
-                     
+"                     " (escaped)
                       An HTML value produced by the constructors in this package.
 
 ///|
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'Val' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
@@ -206,26 +208,27 @@ pub enum VNode {
   Text(String)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'SheetSide' --loc 'rui/sheet.mbt:3:15'
 ///|
 /// Edge from which a [`sheet`] enters the viewport.
 pub(all) enum SheetSide {
               ^^^^^^^^^
               ```moonbit
+              #derive(@debug.Debug, Eq)
               enum SheetSide {
                 SheetTop
                 SheetRight
                 SheetBottom
                 SheetLeft
-              } derive(@debug.Debug, Eq)
+              }
               ```
               ---
-              
+"              " (escaped)
                Edge from which a [`sheet`] enters the viewport.
   SheetTop
   SheetRight
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'SheetTop' --loc 'rui/sheet.mbt:4:3'
@@ -256,7 +259,7 @@ pub type Path = @p.Path
 ///|
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide hover 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
 pub type Path = @p.Path
 
@@ -264,8 +267,9 @@ pub type Path = @p.Path
 struct SourcePath(String) derive(Eq, Compare, Hash)
        ^^^^^^^^^^
        ```moonbit
-       struct SourcePath(String) derive(Eq, Compare, Hash)
+       #derive(Eq, Compare, Hash)
+       struct SourcePath(String)
        ```
 
 ///|
-````
+```

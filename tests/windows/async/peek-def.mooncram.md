@@ -449,11 +449,11 @@ Definition found at file <WORKDIR>/src\socket\unimplemented.mbt
    | }
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def 'parse_int' --loc 'src\socket\unimplemented.mbt:20:24' --target js
 Definition found at file <MOON_HOME>/lib\core\string\strconv.mbt
    | // limitations under the License.
-   | 
+"   | " (escaped)
    | ///|
    | pub using @internal/strconv {
    |   parse_int64,
@@ -466,11 +466,11 @@ Definition found at file <MOON_HOME>/lib\core\string\strconv.mbt
    | }
 Definition found at file <MOON_HOME>/lib\core\internal\strconv\strconv_int.mbt
     | }
-    | 
+"    | " (escaped)
     | ///|
     | /// Parse a string in the given base (0, 2 to 36), return a Int number or an error.
     | /// If the `base` argument is 0, the base will be inferred by the prefix.
-148 | pub fn parse_int(str : StringView, base~ : Int32 = 0) -> Int32 raise {
+132 | pub fn parse_int(str : StringView, base~ : Int32 = 0) -> Int32 raise {
     |        ^^^^^^^^^
     |   let n = parse_int64(str, base~)
     |   if n < INT_MIN.to_int64() || n > INT_MAX.to_int64() {
@@ -478,15 +478,15 @@ Definition found at file <MOON_HOME>/lib\core\internal\strconv\strconv_int.mbt
     |   }
     |   n.to_int()
     | }
-    | 
+"    | " (escaped)
     | // Check whether the underscores are correct.
     | // Underscores must appear only between digits or between a base prefix and a digit.
-    | 
+"    | " (escaped)
     | ///|
     | fn check_underscore(str : StringView) -> Bool {
     |   // Fast path: underscores are rare in practice. Without any underscore the
     |   // per-character scan below can never reach a `break false` arm (those all
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide peek-def '_ignore_unused_import' --loc 'src\tls\unimplemented_test.mbt:17:5' --target js
