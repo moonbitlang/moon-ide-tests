@@ -80,7 +80,7 @@ test "parser_eof_handling" {
       #|
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime\datetime.mbt:13:15'
 /// Values are stored as their original string form. The parser preserves
 /// the spelling supplied in the TOML source; it does not normalize or
@@ -88,29 +88,30 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetim
 pub(all) enum TomlDateTime {
               ^^^^^^^^^^^^
               ```moonbit
+              #derive(Eq, @debug.Debug)
               enum TomlDateTime {
                 OffsetDateTime(String)
                 LocalDateTime(String)
                 LocalDate(String)
                 LocalTime(String)
-              } derive(Eq, @debug.Debug)
+              }
               ```
               ---
-              
+"              " (escaped)
                TOML datetime variants (RFC 3339 subset).
-              
+"              " (escaped)
                TOML distinguishes four kinds of datetime literals:
                - `OffsetDateTime` — full date + time + UTC offset (e.g. `1979-05-27T07:32:00Z`)
                - `LocalDateTime` — date + time, no offset (e.g. `1979-05-27T07:32:00`)
                - `LocalDate` — date only (e.g. `1979-05-27`)
                - `LocalTime` — time only (e.g. `07:32:00`)
-              
+"              " (escaped)
                Values are stored as their original string form. The parser preserves
                the spelling supplied in the TOML source; it does not normalize or
                validate the underlying calendar arithmetic.
   OffsetDateTime(String)
   LocalDateTime(String)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime\datetime.mbt:14:3'
@@ -185,7 +186,7 @@ test "tokenize simple key-value" {
       #|key = "value"
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal\tokenize\token.mbt:9:17'
 /// `adjacent` (no gap) when one's `end` equals the other's `start`, which
 /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
@@ -193,15 +194,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal\tokeniz
 pub(all) struct Loc {
                 ^^^
                 ```moonbit
+                #derive(Eq, @debug.Debug)
                 struct Loc {
                   start: @lexer.Position
                   end: @lexer.Position
-                } derive(Eq, @debug.Debug)
+                }
                 ```
                 ---
-                
+"                " (escaped)
                  Half-open source span `[start, end)` measured in lexer `Position`s.
-                
+"                " (escaped)
                  `start` is the position of the first character of the lexeme and `end`
                  is the position immediately after its last character. Two locations are
                  `adjacent` (no gap) when one's `end` equals the other's `start`, which
@@ -209,7 +211,7 @@ pub(all) struct Loc {
                  (a nested array literal opening a normal table header).
   start : @lexer.Position
   end : @lexer.Position
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'start' --loc 'internal\tokenize\token.mbt:10:3'

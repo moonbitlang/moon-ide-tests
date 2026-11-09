@@ -1,30 +1,30 @@
 # core-project peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Definition found at file <MOON_HOME>/lib/core/hashmap/types.mbt
    | ///   @test.assert_eq(map.get(3), Some("three"))
-"   | ///   map.set(3, \"updated\")" (escaped)
+   | ///   map.set(3, "updated")
    | ///   @test.assert_eq(map.get(3), Some("updated"))
-"   | /// }" (escaped)
-"   | /// ```" (escaped)
-43 | struct HashMap[K, V] {
-"   |        ^^^^^^^" (escaped)
-"   |   mut entries : FixedArray[Entry[K, V]?]" (escaped)
+   | /// }
+   | /// ```
+44 | struct HashMap[K, V] {
+   |        ^^^^^^^
+   |   mut entries : FixedArray[Entry[K, V]?]
    |   mut capacity : Int32
    |   mut capacity_mask : Int32 // capacity_mask = capacity - 1, used to find idx
-"   |   // size of field `entries`, it is redundant but useful for performance" (escaped)
-"   |   // so we don't need do `self.entries.length()` every time" (escaped)
+   |   // size of field `entries`, it is redundant but useful for performance
+   |   // so we don't need do `self.entries.length()` every time
    |   mut size : Int32 // active key-value pairs count
-"   |   // mut grow_at : Int // threshold that triggers grow" (escaped)
-"   | }" (escaped)
+   |   // mut grow_at : Int // threshold that triggers grow
+   | }
 "   | " (escaped)
-"   | ///|" (escaped)
+   | ///|
    | pub impl[K : Hash + Eq, V : Eq] Eq for HashMap[K, V] with fn equal(
-"   |   self : HashMap[K, V]," (escaped)
-"   |   that : HashMap[K, V]," (escaped)
-"   | ) -> Bool {" (escaped)
-````
+   |   self : HashMap[K, V],
+   |   that : HashMap[K, V],
+   | ) -> Bool {
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'List' --loc 'core_ide_cases.mbt:8:26'
@@ -41,59 +41,59 @@ Definition found at file <MOON_HOME>/lib/core/list/types.mbt
 "   | }" (escaped)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:12:22'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
-"    | ///   let v2 = v.map(x => x + 1)" (escaped)
-    | ///   @test.assert_eq(v2, [4, 5, 6])
-"    | /// }" (escaped)
-"    | /// ```" (escaped)
-"    | #locals(f)" (escaped)
-631 | pub fn[T, U] Array::map(
-"    |                     ^^^" (escaped)
-"    |   self : Array[T]," (escaped)
-"    |   f : (T) -> U raise?," (escaped)
-"    | ) -> Array[U] raise? {" (escaped)
-    |   let arr = Array::unsafe_make_uninit(self.length())
-"    |   for i, v in self {" (escaped)
-"    |     arr.unsafe_set(i, f(v))" (escaped)
-"    |   }" (escaped)
-"    |   arr" (escaped)
-"    | }" (escaped)
-"    | " (escaped)
-"    | ///|" (escaped)
-"    | /// Maps a function over the elements of the array in place." (escaped)
-"    | ///" (escaped)
-"    | /// # Example" (escaped)
-````
+     | ///   let v2 = v.map(x => x + 1)
+     | ///   @test.assert_eq(v2, [4, 5, 6])
+     | /// }
+     | /// ```
+     | #locals(f)
+1466 | pub fn[T, U] Array::map(
+     |                     ^^^
+     |   self : Array[T],
+     |   f : (T) -> U raise?,
+     | ) -> Array[U] raise? {
+     |   let arr = Array::unsafe_make_uninit(self.length())
+     |   for i, v in self {
+     |     arr.unsafe_set(i, f(v))
+     |   }
+     |   arr
+     | }
+"     | " (escaped)
+     | ///|
+     | /// Maps a function over the elements of the array in place.
+     | ///
+     | /// # Example
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'filter' --loc 'core_ide_cases.mbt:13:23'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
-    | ///   let evens = arr.filter(x => x % 2 == 0)
-    | ///   debug_inspect(evens, content="[2, 4]")
-    | /// }
-    | /// ```
-    | #locals(f)
-735 | pub fn[T] Array::filter(
-    |                  ^^^^^^
-    |   self : Array[T],
-    |   f : (T) -> Bool raise?,
-    | ) -> Array[T] raise? {
-    |   [
-    |     for v in self if f(v) => v
-    |   ]
-    | }
-"    | " (escaped)
-    | ///|
-    | /// Tests whether the array contains no elements.
-    | ///
-    | /// Parameters:
-    | ///
-    | /// * `array` : The array to check.
-````
+     | ///   let evens = arr.filter(x => x % 2 == 0)
+     | ///   debug_inspect(evens, content="[2, 4]")
+     | /// }
+     | /// ```
+     | #locals(f)
+1570 | pub fn[T] Array::filter(
+     |                  ^^^^^^
+     |   self : Array[T],
+     |   f : (T) -> Bool raise?,
+     | ) -> Array[T] raise? {
+     |   [
+     |     for v in self if f(v) => v
+     |   ]
+     | }
+"     | " (escaped)
+     | ///|
+     | /// Tests whether the array contains no elements.
+     | ///
+     | /// Parameters:
+     | ///
+     | /// * `array` : The array to check.
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'fold' --loc 'core_ide_cases.mbt:14:9'
 Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | ///   @test.assert_eq(sum, 15)
@@ -101,7 +101,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// ```
      | #locals(f)
      | #alias(fold_left, deprecated)
-1380 | pub fn[A, B] Array::fold(
+2215 | pub fn[A, B] Array::fold(
      |                     ^^^^
      |   self : Array[A],
      |   init~ : B,
@@ -117,9 +117,9 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | ///|
      | /// Fold out values from an array according to certain rules in reversed turn.
      | ///
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'StringBuilder' --loc 'core_ide_cases.mbt:19:17'
 Definition found at file <MOON_HOME>/lib/core/prelude/prelude.mbt
    |   type Iter2,
@@ -165,9 +165,9 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
    | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
    | ///
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'write_string' --loc 'core_ide_cases.mbt:20:11'
 Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | pub extend String with ToStringView::{to_string_view}
@@ -175,7 +175,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/extends.mbt
     | ///|
     | pub extend StringBuilder with Logger::{
     |   write_char,
-459 |   write_string,
+456 |   write_string,
     |   ^^^^^^^^^^^^
     |   write_substring,
     |   write_view,
@@ -197,7 +197,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
 "    | " (escaped)
     | ///|
     | /// Writes a string to the StringBuilder.
-166 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+167 | pub impl Logger for StringBuilder with fn write_string(self, str) {
     |                                           ^^^^^^^^^^^^
     |   let str_len = str.length()
     |   if str_len == 0 {
@@ -213,7 +213,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
 "    | " (escaped)
     | ///|
     | /// Writes a character to the StringBuilder.
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'length' --loc 'core_ide_cases.mbt:21:9'
@@ -241,33 +241,33 @@ Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
      | #internal(unsafe, "Undefined behavior if index is out of bounds.")
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'split' --loc 'core_ide_cases.mbt:21:24'
 Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
-"     | /// the returned iterator will contain only one element, which is the original" (escaped)
-"     | /// string." (escaped)
+     | /// the returned iterator will contain only one element, which is the original
+     | /// string.
 "     | /// " (escaped)
-"     | /// If the separator is empty, the returned iterator will contain all the" (escaped)
-"     | /// characters in the string as single elements." (escaped)
+     | /// If the separator is empty, the returned iterator will contain all the
+     | /// characters in the string as single elements.
 1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
-"     |                ^^^^^" (escaped)
-"     |   self[:].split(sep)" (escaped)
-"     | }" (escaped)
+     |                ^^^^^
+     |   self[:].split(sep)
+     | }
 "     | " (escaped)
-"     | ///|" (escaped)
-"     | /// Splits the string into a pair at the first occurrence of the separator." (escaped)
+     | ///|
+     | /// Splits the string into a pair at the first occurrence of the separator.
 "     | /// " (escaped)
-"     | /// Returns None if the separator is not found." (escaped)
+     | /// Returns None if the separator is not found.
 "     | /// " (escaped)
-"     | /// If the separator is empty, it splits at the start of the string, returning" (escaped)
-"     | /// an empty prefix and the full string as the suffix." (escaped)
-"     | pub fn StringView::split_once(" (escaped)
-"     |   self : StringView," (escaped)
-"     |   needle : StringView," (escaped)
-"     | ) -> (StringView, StringView)? {" (escaped)
-````
+     | /// If the separator is empty, it splits at the start of the string, returning
+     | /// an empty prefix and the full string as the suffix.
+     | pub fn StringView::split_once(
+     |   self : StringView,
+     |   needle : StringView,
+     | ) -> (StringView, StringView)? {
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_array' --loc 'core_ide_cases.mbt:21:35'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
@@ -275,7 +275,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
-820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+813 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^
     |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
@@ -291,7 +291,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Return this iterator itself.
     | /// Return an iterator via `iter`.
     | #alias(iterator, deprecated)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'abs' --loc 'core_ide_cases.mbt:26:5'
@@ -389,7 +389,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/result.mbt
    |   let z : Result[Int32, Int32] = Err(3)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:43:15'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
@@ -397,7 +397,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// # Note
     | /// The old iterator `self` must not be used again after calling `map`.
-365 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^
     |   {
     |     f: fn() {
@@ -413,9 +413,9 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// # Type Parameters
     | ///
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'to_array' --loc 'core_ide_cases.mbt:43:45'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
 "    | " (escaped)
@@ -423,7 +423,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
-820 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+813 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^
     |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
@@ -439,7 +439,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Return this iterator itself.
     | /// Return an iterator via `iter`.
     | #alias(iterator, deprecated)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:48:6'
@@ -519,31 +519,31 @@ Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
 "    | /// test {" (escaped)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:60:10'
 Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
-"    | ///|" (escaped)
+    | ///|
     | /// Applies a function to each key-value pair in the map and
-"    | /// returns a new map with the results, using the original keys." (escaped)
+    | /// returns a new map with the results, using the original keys.
     | ///
     | /// `f` may raise; the error propagates and `self` is left unchanged.
-858 | pub fn[K, V, V2] HashMap::map(
-"    |                           ^^^" (escaped)
-"    |   self : HashMap[K, V]," (escaped)
+867 | pub fn[K, V, V2] HashMap::map(
+    |                           ^^^
+    |   self : HashMap[K, V],
     |   f : (K, V) -> V2 raise?,
     | ) -> HashMap[K, V2] raise? {
-"    |   let other = {" (escaped)
-"    |     capacity: self.capacity," (escaped)
-"    |     entries: FixedArray::make(self.capacity, None)," (escaped)
-"    |     size: self.size," (escaped)
-"    |     capacity_mask: self.capacity_mask," (escaped)
-"    |   }" (escaped)
-"    |   if self.size == 0 {" (escaped)
-"    |     return other" (escaped)
-"    |   }" (escaped)
-"    |   for i in 0..<self.capacity {" (escaped)
+    |   let other = {
+    |     capacity: self.capacity,
+    |     entries: FixedArray::make(self.capacity, None),
+    |     size: self.size,
+    |     capacity_mask: self.capacity_mask,
+    |   }
+    |   if self.size == 0 {
+    |     return other
+    |   }
+    |   for i in 0..<self.capacity {
     |     if self.entries[i] is Some({ key, value, hash, psl, }) {
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:65:13'
@@ -571,33 +571,33 @@ Definition found at file <WORKDIR>/types.mbt
 "   | }" (escaped)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'split' --loc 'core_ide_cases.mbt:71:4'
 Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
-"     | /// the returned iterator will contain only one element, which is the original" (escaped)
-"     | /// string." (escaped)
+     | /// the returned iterator will contain only one element, which is the original
+     | /// string.
 "     | /// " (escaped)
-"     | /// If the separator is empty, the returned iterator will contain all the" (escaped)
-"     | /// characters in the string as single elements." (escaped)
+     | /// If the separator is empty, the returned iterator will contain all the
+     | /// characters in the string as single elements.
 1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
-"     |                ^^^^^" (escaped)
-"     |   self[:].split(sep)" (escaped)
-"     | }" (escaped)
+     |                ^^^^^
+     |   self[:].split(sep)
+     | }
 "     | " (escaped)
-"     | ///|" (escaped)
-"     | /// Splits the string into a pair at the first occurrence of the separator." (escaped)
+     | ///|
+     | /// Splits the string into a pair at the first occurrence of the separator.
 "     | /// " (escaped)
-"     | /// Returns None if the separator is not found." (escaped)
+     | /// Returns None if the separator is not found.
 "     | /// " (escaped)
-"     | /// If the separator is empty, it splits at the start of the string, returning" (escaped)
-"     | /// an empty prefix and the full string as the suffix." (escaped)
-"     | pub fn StringView::split_once(" (escaped)
-"     |   self : StringView," (escaped)
-"     |   needle : StringView," (escaped)
-"     | ) -> (StringView, StringView)? {" (escaped)
-````
+     | /// If the separator is empty, it splits at the start of the string, returning
+     | /// an empty prefix and the full string as the suffix.
+     | pub fn StringView::split_once(
+     |   self : StringView,
+     |   needle : StringView,
+     | ) -> (StringView, StringView)? {
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'filter' --loc 'core_ide_cases.mbt:73:4'
 Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
@@ -605,7 +605,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// # Note
     | /// The old iterator `self` must not be used again after calling `filter`.
-334 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+327 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
     |                 ^^^^^^
     |   Iter::new(fn() {
     |     for x in self {
@@ -621,7 +621,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///|
     | /// Transforms the elements of the iterator using a mapping function.
     | ///
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'from_array' --loc 'core_ide_cases.mbt:84:9'

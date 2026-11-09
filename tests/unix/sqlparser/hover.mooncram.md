@@ -125,20 +125,21 @@ pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
 ) {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'LexerError' --loc 'src/lexer.mbt:2:10'
 ///|
 suberror LexerError {
          ^^^^^^^^^^
          ```moonbit
+         #derive(@debug.Debug)
          suberror LexerError {
            UnterminatedString
            UnknownCharacter(Char)
-         } derive(@debug.Debug)
+         }
          ```
   UnterminatedString
   UnknownCharacter(Char)
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'UnterminatedString' --loc 'src/lexer.mbt:3:3'

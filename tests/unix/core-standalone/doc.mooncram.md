@@ -234,7 +234,7 @@ pub fn[X] Iter::to_array(Self[X]) -> Array[X]
    The old iterator `self` must not be used again.
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/list.List
 package "moonbitlang/core/list"
 enum List[A] {
@@ -317,12 +317,12 @@ enum List[A] {
   pub impl[A : Hash] Hash for List[A]
   #deprecated
   pub impl[A : Show] Show for List[A]
-  pub impl[A : ToJson] ToJson for List[A]
   pub impl[A : @debug.Debug] @debug.Debug for List[A]
   pub impl[A : @json.FromJson] @json.FromJson for List[A]
+  pub impl[A : @json.ToJson] @json.ToJson for List[A]
   pub impl[X : Arbitrary] Arbitrary for @list.List[X]
   pub impl[T : Shrink] Shrink for @list.List[T]
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/list.List::map
