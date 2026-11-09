@@ -193,7 +193,20 @@ The command and success flag are recorded in `result.json`, with output in
 The `.mooncram.md` files contain fixed commands only, without expected output.
 The runner executes them directly and saves their merged output in run logs.
 
-Generate candidates when choosing new cases:
+To regenerate the checked-in suites from the commits and sampling limits in
+`perf/repos.yaml`, point generation at each platform's directory:
+
+```sh
+moonx scripts/run-ide-perf.mbtx --action generate --platform unix --output-dir perf/tests/unix
+moonx scripts/run-ide-perf.mbtx --action generate --platform windows --output-dir perf/tests/windows
+git diff -- perf/tests
+```
+
+`--output-dir` is the platform directory. The generator writes each fixture
+into its slug subdirectory, such as `perf/tests/unix/openseek`. Start with a
+clean `perf/tests` tree so the diff shows exactly what regeneration changed.
+
+Generate candidates separately when choosing new cases:
 
 ```sh
 moonx scripts/run-ide-perf.mbtx --action generate

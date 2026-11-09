@@ -177,6 +177,7 @@ async fn main {
   let mut platform = host_platform
   let mut action = "test"
   let mut candidates = false
+  let mut output_dir : String? = None
   let filenames : Array[String] = []
   let mut index = 1
   while index < args.length() {
@@ -189,6 +190,10 @@ async fn main {
         platform = args[index + 1]
         index += 2
       }
+      "--output-dir" if index + 1 < args.length() && args[index + 1] != "" => {
+        output_dir = Some(args[index + 1])
+        index += 2
+      }
       "--case-file" if index + 1 < args.length() => {
         filenames.push(args[index + 1])
         index += 2
@@ -199,14 +204,15 @@ async fn main {
       }
       _ =>
         fail(
-          "usage: run-ide-perf [--action test|generate] [--case-file filename] [--candidates] [--platform unix|windows]",
+          "usage: run-ide-perf [--action test|generate] [--case-file filename] [--candidates] [--platform unix|windows] [--output-dir directory]",
         )
     }
   }
   guard ["test", "generate"].contains(action) &&
     ["unix", "windows"].contains(platform) &&
     (action == "generate" || platform == host_platform) &&
-    (action != "generate" || filenames.is_empty()) else {
+    (action != "generate" || filenames.is_empty()) &&
+    (action == "generate" || output_dir is None) else {
     fail("invalid action/platform combination")
   }
   for name in filenames {
@@ -321,6 +327,13 @@ async fn main {
         }
         if action == "generate" {
           result["phase"] = "generate"
+          let destination = match output_dir {
+            Some(dir) => {
+              @fs.mkdir(dir, recursive=true, allow_exist=true)
+              @fs.realpath(dir) + "/" + slug
+            }
+            None => root + "/" + out_dir
+          }
           let output = checked(
             "moon",
             [
@@ -337,7 +350,7 @@ async fn main {
               "--repo-slug",
               slug,
               "--output-dir",
-              root + "/" + out_dir,
+              destination,
               "--platform",
               platform,
               "--test-root",
