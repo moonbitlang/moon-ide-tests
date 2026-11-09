@@ -1,6 +1,6 @@
 # rabbita rename SheetTop rui/sheet.mbt:4:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SheetTop' 'SheetTopRenamed' --loc 'rui/sheet.mbt:4:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/apps/rui/dialogs/sheet.mbt
@@ -62,4 +62,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SheetTop' 'SheetTopRenamed'
    let sheet_right_view = ig_sheet_variant(
 *** End Patch
 "" (escaped)
-````
+```

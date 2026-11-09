@@ -1,6 +1,6 @@
 # toml-parser outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'additional_official_tests_test.mbt'
   7 |test "key name variations" {
     |...
@@ -23,72 +23,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'additional_official_tests_
 352 |test "validation comprehensive" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'coverage_improvement_comprehensive_test.mbt'
-  7 |test "parser_eof_handling" {
-    |...
- 24 |test "inline_table_with_integer_key" {
-    |...
- 37 |test "table_path_with_string_key" {
-    |...
- 50 |test "table_path_with_integer_key" {
-    |...
- 63 |test "array_of_tables_path_with_string_key" {
-    |...
- 76 |test "array_of_tables_path_with_integer_key" {
-    |...
- 89 |test "invalid_unicode_escapes" {
-    |...
-104 |test "invalid_8byte_unicode_escape" {
-    |...
-119 |test "unterminated_multiline_string" {
-    |...
-134 |test "homogeneous_array_with_floats" {
-    |...
-142 |test "homogeneous_array_with_tables" {
-    |...
-152 |test "homogeneous_array_type_check_boolean" {
-    |...
-160 |test "homogeneous_array_type_check_table_vs_other" {
-    |...
-169 |test "nested_validation_failure_in_array" {
-    |...
-181 |test "table_path_conflict_error" {
-    |...
-197 |test "array_of_tables_path_conflict_error" {
-    |...
-213 |test "empty_inline_table" {
-    |...
-226 |test "empty_array" {
-    |...
-239 |test "toml_value_to_string_coverage" {
-    |...
-282 |test "float_token_parsing" {
-    |...
-295 |test "array_with_trailing_comma" {
-    |...
-308 |test "main_function_components_coverage" {
-    |...
-362 |test "hex_number_parsing_coverage" {
-    |...
-375 |test "octal_number_parsing_coverage" {
-    |...
-388 |test "binary_number_parsing_coverage" {
-    |...
-401 |test "multiple_array_of_tables" {
-    |...
-423 |test "negative_number_parsing" {
-    |...
-436 |test "invalid_character_error" {
-    |...
-451 |test "multiline_string_line_ending_backslash" {
-    |...
-"" (escaped)
-````
-
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime/datetime.mbt'
 13 |pub(all) enum TomlDateTime {
    |...
@@ -106,9 +43,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime/datetime.mbt'
 38 |pub impl Show for TomlDateTime with fn output(self, logger) {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime_extended_test.mbt'
  3 |test "test TomlDateTime types and equality" {
    |...
@@ -119,9 +56,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime_extended_test.mbt
 57 |test "test datetime token creation and usage" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal/tokenize/lexer_test.mbt'
    3 |test "tokenize simple key-value" {
      |...
@@ -225,50 +162,48 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal/tokenize/lexer_te
      |...
 1374 |test "multiline literal string token" {
      |...
-1402 |test "tokenize else branch coverage" {
+1402 |test "multiline basic string single quote escape" {
      |...
-1432 |test "multiline basic string single quote escape" {
+1430 |test "multiline basic string CR only" {
      |...
-1460 |test "multiline basic string CR only" {
+1456 |test "multiline basic string none peek" {
      |...
-1486 |test "multiline basic string none peek" {
+1479 |test "unicode escape invalid conversion to char" {
      |...
-1509 |test "unicode escape invalid conversion to char" {
+1509 |test "hex number with underscores" {
      |...
-1539 |test "hex number with underscores" {
+1537 |test "multiline string opening CRLF" {
      |...
-1567 |test "multiline string opening CRLF" {
+1566 |test "very large invalid float" {
      |...
-1596 |test "very large invalid float" {
+1588 |test "test hex overflow edge case" {
      |...
-1620 |test "test hex overflow edge case" {
+1609 |test "unicode code point conversion failure" {
      |...
-1641 |test "unicode code point conversion failure" {
+1632 |test "multiline string abrupt end" {
      |...
-1664 |test "multiline string abrupt end" {
+1653 |test "unicode 8 digit none conversion attempt" {
      |...
-1689 |test "unicode 8 digit none conversion attempt" {
+1675 |test "attempt hex digit error path" {
      |...
-1715 |test "attempt hex digit error path" {
+1705 |test "multiline string potential truncation" {
      |...
-1745 |test "multiline string potential truncation" {
+1725 |test "trailing _ in binary number" {
      |...
-1765 |test "trailing _ in binary number" {
+1746 |test "consequence _ in binary number" {
      |...
-1786 |test "consequence _ in binary number" {
+1768 |test "trailing _ in hex number" {
      |...
-1808 |test "trailing _ in hex number" {
+1789 |test "consecutive _ in hex number" {
      |...
-1829 |test "consecutive _ in hex number" {
+1811 |test "trailing _ in octal number" {
      |...
-1851 |test "trailing _ in octal number" {
-     |...
-1872 |test "consecutive _ in octal number" {
+1832 |test "consecutive _ in octal number" {
      |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal/tokenize/token.mbt'
  9 |pub(all) struct Loc {
    |...
@@ -291,9 +226,18 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal/tokenize/token.mb
 69 |pub fn Token::loc(self : Self) -> Loc {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parse_bench_test.mbt'
+ 4 |fn bench_document() -> String {
+   |...
+22 |test "bench parse document" (it : @bench.T) {
+   |...
+"" (escaped)
+```
+
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser.mbt'
   3 |fn Parser::skip_newlines(self : Parser) -> Unit {
     |...
@@ -329,9 +273,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser.mbt'
 429 |fn cleanup_value_markers(value : TomlValue) -> Unit {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser_wbtest.mbt'
   5 |test "parse_dotted_key - simple identifier" {
     |...
@@ -366,18 +310,18 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser_wbtest.mbt'
 239 |test "parse_dotted_key - zero values" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'test_utils_test.mbt'
  2 |fn parse_expect_to_fail(input : String) -> String {
    |...
 24 |test "verify parse_expect_to_fail output" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'toml_to_string.mbt'
   3 |fn escape_toml_string(s : String) -> String {
     |...
@@ -412,12 +356,12 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'toml_to_string.mbt'
 205 |  path : Array[String],
 206 |) -> Unit {
     |...
-303 |fn write_inline_table(
-304 |  table : Map[String, TomlValue],
-305 |  output : StringBuilder,
-306 |) -> Unit {
+289 |fn write_inline_table(
+290 |  table : Map[String, TomlValue],
+291 |  output : StringBuilder,
+292 |) -> Unit {
     |...
-327 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
+313 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
     |...
 "" (escaped)
-````
+```

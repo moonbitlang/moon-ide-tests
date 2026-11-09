@@ -1,6 +1,6 @@
 # rabbita find-references host rabbita/internal/runtime/host_ssr_wbtest.mbt:4:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'host' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:7' --target native
 Found 2 references for symbol 'host':
 <WORKDIR>/rabbita/internal/runtime/host_ssr_wbtest.mbt:17:9-17:13:
@@ -21,4 +21,4 @@ Found 2 references for symbol 'host':
    |     "https://example.test/site/uml/index.html?lang=en",
    |   )
 "" (escaped)
-````
+```

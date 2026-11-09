@@ -1,6 +1,6 @@
 # sqlparser find-references UnterminatedString src/lexer.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
 Found 3 references for symbol 'UnterminatedString':
 <WORKDIR>/src/lexer.mbt:511:19-511:37:
@@ -30,4 +30,4 @@ Found 3 references for symbol 'UnterminatedString':
     |     }
     |   }
 "" (escaped)
-````
+```

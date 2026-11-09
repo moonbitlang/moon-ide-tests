@@ -11,13 +11,13 @@ using @rabbita {type Html, type Val}
                      struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode)
                      ```
                      ---
-"                     " (escaped)
+                     
                       An HTML value produced by the constructors in this package.
 
 ///|
 ```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Val' --loc 'e2e/apps/rui/fixture/fixture.mbt:2:33'
 ///|
 using @rabbita {type Html, type Val}
@@ -33,7 +33,7 @@ using @rabbita {type Html, type Val}
                                  changes.
 
 ///|
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fixture_scroll_items' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:4'
@@ -47,7 +47,7 @@ fn fixture_scroll_items(prefix : String) -> Array[Html] {
   for index in 1..<=18 {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'prefix' --loc 'e2e/apps/rui/message-scroller/message_scroller.mbt:2:25'
 ///|
 fn fixture_scroll_items(prefix : String) -> Array[Html] {
@@ -57,7 +57,7 @@ fn fixture_scroll_items(prefix : String) -> Array[Html] {
                         ```
   let items : Array[Html] = []
   for index in 1..<=18 {
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Html' --loc 'e2e/apps/rui/toast/main.mbt:2:22'
@@ -70,13 +70,13 @@ using @rabbita {type Html, type Val}
                      struct @html.Html(@moonbit-community/rabbita/internal/vdom.VNode)
                      ```
                      ---
-"                     " (escaped)
+                     
                       An HTML value produced by the constructors in this package.
 
 ///|
 ```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Val' --loc 'e2e/apps/rui/toast/main.mbt:2:33'
 ///|
 using @rabbita {type Html, type Val}
@@ -92,9 +92,9 @@ using @rabbita {type Html, type Val}
                                  changes.
 
 ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Item' --loc 'rabbita/clipboard/clipboard.mbt:2:15'
 ///|
 pub(all) enum Item {
@@ -106,7 +106,7 @@ pub(all) enum Item {
               ```
   Text(String)
 }
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
@@ -121,7 +121,7 @@ pub(all) enum Item {
 "" (escaped)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'host' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:7' --target native
 ///|
 #cfg(not(target="js"))
@@ -133,9 +133,9 @@ async test "SSR base URI combines the base and request path without reading base
       ```
     base_uri="https://example.test/site/",
     path="/uml/index.html?lang=en",
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SSRHost' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
 ///|
 #cfg(not(target="js"))
@@ -147,9 +147,9 @@ async test "SSR base URI combines the base and request path without reading base
              ```
     base_uri="https://example.test/site/",
     path="/uml/index.html?lang=en",
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'VDom' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
 ///|
 #cfg(target="js")
@@ -164,9 +164,9 @@ struct VDom {
        ```
   mut inode : INode
   target_element : @dom.Element?
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'inode' --loc 'rabbita/internal/vdom/diff.mbt:4:7'
 ///|
 #cfg(target="js")
@@ -178,18 +178,18 @@ struct VDom {
       ```
   target_element : @dom.Element?
   captured_link_listener : @dom.Listener
-````
+```
 
 Known IDE limitation: hover on the trait imported by using reports no information; its declaration hover and imported-name peek-def work.
 
 <!-- known-ide-limitation: using-trait-hover -->
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Scheduler' --loc 'rabbita/internal/vdom/vdom.mbt:2:19'
 No hover information found for symbol 'Scheduler' at rabbita/internal/vdom/vdom.mbt:2:19
 [1]
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'VNode' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
 ///|
 #warnings("-unused_constructor")
@@ -206,7 +206,7 @@ pub enum VNode {
          ```
   Elem(String, Props, Children[VNode], namespace_uri~ : String?)
   Text(String)
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SheetSide' --loc 'rui/sheet.mbt:3:15'
@@ -224,7 +224,7 @@ pub(all) enum SheetSide {
               }
               ```
               ---
-"              " (escaped)
+              
                Edge from which a [`sheet`] enters the viewport.
   SheetTop
   SheetRight
@@ -244,7 +244,7 @@ pub(all) enum SheetSide {
   SheetBottom
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
 ///|
 pub type Path = @p.Path
@@ -257,7 +257,7 @@ pub type Path = @p.Path
           A newtype wrapper provide path operation methods.
 
 ///|
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'

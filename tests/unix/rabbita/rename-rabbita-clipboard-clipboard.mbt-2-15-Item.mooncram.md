@@ -1,6 +1,6 @@
 # rabbita rename Item rabbita/clipboard/clipboard.mbt:2:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Item' 'ItemRenamed' --loc 'rabbita/clipboard/clipboard.mbt:2:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/clipboard/clipboard.mbt
@@ -41,4 +41,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Item' 'ItemRenamed' --loc '
  ///|
 *** End Patch
 "" (escaped)
-````
+```

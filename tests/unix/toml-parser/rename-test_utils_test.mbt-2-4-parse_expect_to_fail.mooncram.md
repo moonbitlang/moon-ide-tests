@@ -1,6 +1,6 @@
 # toml-parser rename parse_expect_to_fail test_utils_test.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_expect_to_fail' 'parse_expect_to_fail_renamed' --loc 'test_utils_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/comprehensive_test.mbt
@@ -648,15 +648,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_expect_to_fail' 'pars
      ),
 @@
  ///|
- test "test parser EOF handling in advance" {
-   inspect(
--    parse_expect_to_fail("key ="),
-+    parse_expect_to_fail_renamed("key ="),
-     content=(
-       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
-     ),
-@@
- ///|
  test "test parser rejects dash-starting identifier as value" {
    inspect(
 -    parse_expect_to_fail("key = -abc"),
@@ -735,4 +726,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_expect_to_fail' 'pars
      ),
 *** End Patch
 "" (escaped)
-````
+```

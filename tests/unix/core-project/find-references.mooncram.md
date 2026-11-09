@@ -1,6 +1,6 @@
 # core-project find-references
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:12:22'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:12:22-12:25:
@@ -20,9 +20,9 @@ Found 2 references for symbol 'map':
   | 
   |   // `inspect` is used to check the output of the function
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'filter' --loc 'core_ide_cases.mbt:13:23'
 Found 1 references for symbol 'filter':
 <WORKDIR>/core_ide_cases.mbt:13:23-13:29:
@@ -34,9 +34,9 @@ Found 1 references for symbol 'filter':
    |   large.fold(init=0, (sum, x) => sum + x)
    | }
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 1 references for symbol 'fold':
 <WORKDIR>/core_ide_cases.mbt:14:9-14:13:
@@ -48,9 +48,9 @@ Found 1 references for symbol 'fold':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'length' --loc 'core_ide_cases.mbt:21:9'
 Found 1 references for symbol 'length':
 <WORKDIR>/core_ide_cases.mbt:21:9-21:15:
@@ -62,9 +62,9 @@ Found 1 references for symbol 'length':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'split' --loc 'core_ide_cases.mbt:21:24'
 Found 2 references for symbol 'split':
 <WORKDIR>/core_ide_cases.mbt:21:24-21:29:
@@ -77,17 +77,17 @@ Found 2 references for symbol 'split':
    | 
 
 <WORKDIR>/core_ide_cases.mbt:71:4-71:9:
-"   | ///|" (escaped)
-"   | pub fn exercise_chained_core(text : String) -> Array[Int] {" (escaped)
-"   |   text" (escaped)
-"71 |   .split(\",\")" (escaped)
-"   |    ^^^^^" (escaped)
-"   |   .map(part => part.length())" (escaped)
-"   |   .filter(length => length > 0)" (escaped)
+   | ///|
+   | pub fn exercise_chained_core(text : String) -> Array[Int] {
+   |   text
+71 |   .split(",")
+   |    ^^^^^
+   |   .map(part => part.length())
+   |   .filter(length => length > 0)
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'abs' --loc 'core_ide_cases.mbt:26:5'
 Found 4 references for symbol 'abs':
 <WORKDIR>/core_ide_cases.mbt:26:5-26:8:
@@ -100,35 +100,35 @@ Found 4 references for symbol 'abs':
    | 
 
 <WORKDIR>/core_ide_cases.mbt:43:26-43:29:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {" (escaped)
-"43 |   nums.iter().map(x => x.abs().to_string()).to_array()" (escaped)
-"   |                          ^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
+43 |   nums.iter().map(x => x.abs().to_string()).to_array()
+   |                          ^^^
+   | }
+   | 
 
 <WORKDIR>/types.mbt:23:10-23:13:
-"   | ///|" (escaped)
-"   | /// Calculates the Manhattan distance from origin" (escaped)
-"   | pub fn Point::distance_from_origin(self : Point) -> Int {" (escaped)
-"23 |   self.x.abs() + self.y.abs()" (escaped)
-"   |          ^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | ///|
+   | /// Calculates the Manhattan distance from origin
+   | pub fn Point::distance_from_origin(self : Point) -> Int {
+23 |   self.x.abs() + self.y.abs()
+   |          ^^^
+   | }
+   | 
 
 <WORKDIR>/types.mbt:23:25-23:28:
-"   | ///|" (escaped)
-"   | /// Calculates the Manhattan distance from origin" (escaped)
-"   | pub fn Point::distance_from_origin(self : Point) -> Int {" (escaped)
-"23 |   self.x.abs() + self.y.abs()" (escaped)
-"   |                         ^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | ///|
+   | /// Calculates the Manhattan distance from origin
+   | pub fn Point::distance_from_origin(self : Point) -> Int {
+23 |   self.x.abs() + self.y.abs()
+   |                         ^^^
+   | }
+   | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'to_string' --loc 'core_ide_cases.mbt:26:11'
 Found 6 references for symbol 'to_string':
 <WORKDIR>/core_ide_cases.mbt:26:11-26:20:
@@ -141,53 +141,53 @@ Found 6 references for symbol 'to_string':
    | 
 
 <WORKDIR>/core_ide_cases.mbt:38:20-38:29:
-"   | pub fn exercise_result_core(" (escaped)
-"   |   value : Result[Int, String]," (escaped)
-"   | ) -> Result[String, String] {" (escaped)
-"38 |   value.map(x => x.to_string())" (escaped)
-"   |                    ^^^^^^^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | pub fn exercise_result_core(
+   |   value : Result[Int, String],
+   | ) -> Result[String, String] {
+38 |   value.map(x => x.to_string())
+   |                    ^^^^^^^^^
+   | }
+   | 
 
 <WORKDIR>/core_ide_cases.mbt:43:32-43:41:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {" (escaped)
-"43 |   nums.iter().map(x => x.abs().to_string()).to_array()" (escaped)
-"   |                                ^^^^^^^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_iter_core(nums : Array[Int]) -> Array[String] {
+43 |   nums.iter().map(x => x.abs().to_string()).to_array()
+   |                                ^^^^^^^^^
+   | }
+   | 
 
 <WORKDIR>/core_ide_cases.mbt:48:17-48:26:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {" (escaped)
-"48 |   xs.map(x => x.to_string())" (escaped)
-"   |                 ^^^^^^^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
+48 |   xs.map(x => x.to_string())
+   |                 ^^^^^^^^^
+   | }
+   | 
 
 <WORKDIR>/core_ide_cases.mbt:60:48-60:57:
-"   | pub fn exercise_hashmap_map(" (escaped)
-"   |   scores : CoreScores," (escaped)
-"   | ) -> @hashmap.HashMap[String, String] {" (escaped)
-"60 |   scores.map((key, value) => key + \":\" + value.to_string())" (escaped)
-"   |                                                ^^^^^^^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | pub fn exercise_hashmap_map(
+   |   scores : CoreScores,
+   | ) -> @hashmap.HashMap[String, String] {
+60 |   scores.map((key, value) => key + ":" + value.to_string())
+   |                                                ^^^^^^^^^
+   | }
+   | 
 
 <WORKDIR>/core_ide_cases.mbt:65:24-65:33:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_local_map(container : Container[Int]) -> Container[String] {" (escaped)
-"65 |   container.map(x => x.to_string())" (escaped)
-"   |                        ^^^^^^^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
+65 |   container.map(x => x.to_string())
+   |                        ^^^^^^^^^
+   | }
+   | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:31:9'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:31:9-31:12:
@@ -200,17 +200,17 @@ Found 2 references for symbol 'map':
    | 
 
 <WORKDIR>/core_ide_cases.mbt:53:22-53:25:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {" (escaped)
-"53 |   scores.get(\"moon\").map(x => x + 1)" (escaped)
-"   |                      ^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_hashmap_lookup(scores : CoreScores) -> Int? {
+53 |   scores.get("moon").map(x => x + 1)
+   |                      ^^^
+   | }
+   | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:38:9'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:38:9-38:12:
@@ -222,9 +222,9 @@ Found 1 references for symbol 'map':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:43:15-43:18:
@@ -237,17 +237,17 @@ Found 2 references for symbol 'map':
    | 
 
 <WORKDIR>/core_ide_cases.mbt:72:4-72:7:
-"   | pub fn exercise_chained_core(text : String) -> Array[Int] {" (escaped)
-"   |   text" (escaped)
-"   |   .split(\",\")" (escaped)
-"72 |   .map(part => part.length())" (escaped)
-"   |    ^^^" (escaped)
-"   |   .filter(length => length > 0)" (escaped)
-"   |   .to_array()" (escaped)
+   | pub fn exercise_chained_core(text : String) -> Array[Int] {
+   |   text
+   |   .split(",")
+72 |   .map(part => part.length())
+   |    ^^^
+   |   .filter(length => length > 0)
+   |   .to_array()
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:48:6'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:48:6-48:9:
@@ -259,9 +259,9 @@ Found 1 references for symbol 'map':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'get' --loc 'core_ide_cases.mbt:53:10'
 Found 1 references for symbol 'get':
 <WORKDIR>/core_ide_cases.mbt:53:10-53:13:
@@ -273,9 +273,9 @@ Found 1 references for symbol 'get':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:60:10'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:60:10-60:13:
@@ -287,77 +287,77 @@ Found 1 references for symbol 'map':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:65:13'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:65:13-65:16:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn exercise_local_map(container : Container[Int]) -> Container[String] {" (escaped)
-"65 |   container.map(x => x.to_string())" (escaped)
-"   |             ^^^" (escaped)
-"   | }" (escaped)
-"   | " (escaped)
+   | 
+   | ///|
+   | pub fn exercise_local_map(container : Container[Int]) -> Container[String] {
+65 |   container.map(x => x.to_string())
+   |             ^^^
+   | }
+   | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'List' --loc 'tuple_type_bug.mbt:3:19'
 Found 3 references for symbol 'List':
 <WORKDIR>/core_ide_cases.mbt:8:26-8:30:
-"  | type CoreScores = @hashmap.HashMap[String, Int]" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"8 | type CoreIntList = @list.List[Int]" (escaped)
-"  |                          ^^^^" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
+  | type CoreScores = @hashmap.HashMap[String, Int]
+  | 
+  | ///|
+8 | type CoreIntList = @list.List[Int]
+  |                          ^^^^
+  | 
+  | ///|
 
 <WORKDIR>/core_ide_cases.mbt:47:54-47:58:
-"   | }" (escaped)
-"   | " (escaped)
-"   | ///|" (escaped)
-"47 | pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {" (escaped)
-"   |                                                      ^^^^" (escaped)
-"   |   xs.map(x => x.to_string())" (escaped)
-"   | }" (escaped)
+   | }
+   | 
+   | ///|
+47 | pub fn exercise_list_core(xs : CoreIntList) -> @list.List[String] {
+   |                                                      ^^^^
+   |   xs.map(x => x.to_string())
+   | }
 
 <WORKDIR>/tuple_type_bug.mbt:3:19-3:23:
-"  | type Hello = (Int, String)" (escaped)
-"  | " (escaped)
-"3 | type Heyx = @list.List[Int]" (escaped)
-"  |                   ^^^^" (escaped)
-"  | " (escaped)
-"  | fn hello(x : Hello, y : Heyx ) -> Int {" (escaped)
+  | type Hello = (Int, String)
+  | 
+3 | type Heyx = @list.List[Int]
+  |                   ^^^^
+  | 
+  | fn hello(x : Hello, y : Heyx ) -> Int {
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Found 2 references for symbol 'HashMap':
 <WORKDIR>/core_ide_cases.mbt:5:28-5:35:
-"  | type CoreIntArray = Array[Int]" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
-"5 | type CoreScores = @hashmap.HashMap[String, Int]" (escaped)
-"  |                            ^^^^^^^" (escaped)
-"  | " (escaped)
-"  | ///|" (escaped)
+  | type CoreIntArray = Array[Int]
+  | 
+  | ///|
+5 | type CoreScores = @hashmap.HashMap[String, Int]
+  |                            ^^^^^^^
+  | 
+  | ///|
 
 <WORKDIR>/core_ide_cases.mbt:59:15-59:22:
-"   | ///|" (escaped)
-"   | pub fn exercise_hashmap_map(" (escaped)
-"   |   scores : CoreScores," (escaped)
-"59 | ) -> @hashmap.HashMap[String, String] {" (escaped)
-"   |               ^^^^^^^" (escaped)
-"   |   scores.map((key, value) => key + \":\" + value.to_string())" (escaped)
-"   | }" (escaped)
+   | ///|
+   | pub fn exercise_hashmap_map(
+   |   scores : CoreScores,
+59 | ) -> @hashmap.HashMap[String, String] {
+   |               ^^^^^^^
+   |   scores.map((key, value) => key + ":" + value.to_string())
+   | }
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'from_array' --loc 'core_ide_cases.mbt:79:12'
 Found 1 references for symbol 'from_array':
 <WORKDIR>/core_ide_cases.mbt:79:12-79:22:
@@ -369,9 +369,9 @@ Found 1 references for symbol 'from_array':
    | }
    | 
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Found 1 references for symbol 'from_array':
 <WORKDIR>/core_ide_cases.mbt:84:9-84:19:
@@ -382,4 +382,4 @@ Found 1 references for symbol 'from_array':
    |         ^^^^^^^^^^
    | }
 "" (escaped)
-````
+```

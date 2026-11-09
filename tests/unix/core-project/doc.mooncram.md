@@ -9,7 +9,7 @@ pub fn[T, U] Array::map(Self[T], (T) -> U raise?) -> Self[U] raise?
    ```mbt check
    test {
      let v = [3, 4, 5]
-"     let v2 = v.map(x => x + 1)" (escaped)
+     let v2 = v.map(x => x + 1)
      @test.assert_eq(v2, [4, 5, 6])
    }
    ```
@@ -31,7 +31,7 @@ pub fn[T] Array::filter(Self[T], (T) -> Bool raise?) -> Self[T] raise?
    ```mbt check
    test {
      let arr = [1, 2, 3, 4, 5]
-"     let evens = arr.filter(x => x % 2 == 0)" (escaped)
+     let evens = arr.filter(x => x % 2 == 0)
      debug_inspect(evens, content="[2, 4]")
    }
    ```
@@ -52,7 +52,7 @@ pub fn[A, B] Array::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
    Example:
    ```mbt check
    test {
-"     let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem)" (escaped)
+     let sum = [1, 2, 3, 4, 5].fold(init=0, (sum, elem) => sum + elem)
      @test.assert_eq(sum, 15)
    }
    ```
@@ -79,7 +79,7 @@ pub fn String::length(String) -> Int32
    ```
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc String::split
 package "moonbitlang/core/string"
 pub fn String::split(String, StringView) -> Iter[StringView]
@@ -91,9 +91,9 @@ pub fn String::split(String, StringView) -> Iter[StringView]
    
    If the separator is empty, the returned iterator will contain all the
    characters in the string as single elements.
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::new
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
@@ -117,9 +117,9 @@ pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
    buffer. `size_hint` may be ignored on some platforms, JS for example.
    Returns a new `StringBuilder` instance.
    Aborts if `size_hint` is negative.
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::write_string
 package "moonbitlang/core/builtin"
 pub fn StringBuilder::write_string(Self, String) -> Unit
@@ -127,14 +127,14 @@ pub fn StringBuilder::write_string(Self, String) -> Unit
 
 package "moonbitlang/core/builtin"
 pub fn &Logger::write_string(Self, String) -> Unit
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::to_string
 package "moonbitlang/core/builtin"
 pub fn StringBuilder::to_string(Self) -> String
   Returns the current content of the StringBuilder as a string.
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc Int::abs
@@ -199,7 +199,7 @@ pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
    ```
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::map
 package "moonbitlang/core/builtin"
 pub fn[X, Y] Iter::map(Self[X], (X) -> Y) -> Self[Y]
@@ -214,9 +214,9 @@ pub fn[X, Y] Iter::map(Self[X], (X) -> Y) -> Self[Y]
    A new iterator that contains the transformed elements.
    # Note
    The old iterator `self` must not be used again after calling `map`.
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::filter
 package "moonbitlang/core/builtin"
 pub fn[X] Iter::filter(Self[X], (X) -> Bool) -> Self[X]
@@ -230,16 +230,16 @@ pub fn[X] Iter::filter(Self[X], (X) -> Bool) -> Self[X]
    A new iterator that only contains the elements for which the predicate function returns `true`.
    # Note
    The old iterator `self` must not be used again after calling `filter`.
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::to_array
 package "moonbitlang/core/builtin"
 #alias(collect)
 pub fn[X] Iter::to_array(Self[X]) -> Array[X]
   Collects the elements of the iterator into an array.
    The old iterator `self` must not be used again.
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc List::map
@@ -384,11 +384,11 @@ pub fn[K : Hash + Eq, V] HashMap::get(Self[K, V], K) -> V?
    ```
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/hashmap.HashMap::map
 package "moonbitlang/core/hashmap"
 pub fn[K, V, V2] HashMap::map(Self[K, V], (K, V) -> V2 raise?) -> Self[K, V2] raise?
   Applies a function to each key-value pair in the map and
    returns a new map with the results, using the original keys.
    `f` may raise; the error propagates and `self` is left unchanged.
-````
+```

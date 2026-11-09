@@ -1,6 +1,6 @@
 # indexmap rename m src/IndexMap_test.mbt:17:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'm' 'm_renamed' --loc 'src/IndexMap_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap_test.mbt
@@ -8,8 +8,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'm' 'm_renamed' --loc 'src/I
  
  ///|
  test "new" {
--  let m : @IndexMap.T[Int, Int] = @IndexMap.new()
-+  let m_renamed : @IndexMap.T[Int, Int] = @IndexMap.new()
+-  let m : @IndexMap.T[Int32, Int32] = @IndexMap.new()
++  let m_renamed : @IndexMap.T[Int32, Int32] = @IndexMap.new()
 -  inspect(m.capacity(), content="8")
 +  inspect(m_renamed.capacity(), content="8")
 -  @debug.assert_eq(m.size(), 0)
@@ -19,4 +19,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'm' 'm_renamed' --loc 'src/I
  ///|
 *** End Patch
 "" (escaped)
-````
+```

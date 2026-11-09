@@ -1,6 +1,6 @@
 # rabbita find-references Scheduler rabbita/internal/vdom/vdom.mbt:2:19
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Scheduler' --loc 'rabbita/internal/vdom/vdom.mbt:2:19'
 Found 21 references for symbol 'Scheduler':
 <WORKDIR>/rabbita/internal/vdom/diff.mbt:19:41-19:50:
@@ -192,4 +192,4 @@ Found 21 references for symbol 'Scheduler':
     | ) -> Props {
     |   { handlers, attrs, styles, props, }
 "" (escaped)
-````
+```

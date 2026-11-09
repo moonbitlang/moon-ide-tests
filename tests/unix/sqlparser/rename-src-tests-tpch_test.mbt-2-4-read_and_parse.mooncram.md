@@ -1,6 +1,6 @@
 # sqlparser rename read_and_parse src/tests/tpch_test.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'read_and_parse' 'read_and_parse_renamed' --loc 'src/tests/tpch_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/tpch_test.mbt
@@ -9,7 +9,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'read_and_parse' 'read_and_p
 -fn read_and_parse(path : String) -> @sqlparser.Statements {
 +fn read_and_parse_renamed(path : String) -> @sqlparser.Statements {
    let input = @fs.read_file_to_string(path) catch {
-"     e => {" (escaped)
+     e => {
        println("Read file error: \{Repr(e)}")
 @@
  
@@ -211,4 +211,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'read_and_parse' 'read_and_p
      content=(
 *** End Patch
 "" (escaped)
-````
+```
