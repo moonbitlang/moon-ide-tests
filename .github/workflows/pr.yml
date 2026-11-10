@@ -7,6 +7,16 @@ on:
       - main
 
 jobs:
+  perf-web:
+    name: Performance dashboard checks
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 -m unittest discover -s perf -p 'test_*.py'
+      - run: node --test perf/web/model.test.mjs
+
   baseline:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="按 MoonBit 版本聚合固定查询的平均耗时，观察 Moon IDE 性能变化。">
+  <title>版本性能趋势 · Moon IDE</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#chart-section">跳至性能图表</a>
+  <header class="masthead">
+    <a class="identity" href="./" aria-label="Moon IDE 性能首页"><span class="moon-mark" aria-hidden="true"></span><strong>Moon IDE</strong><span class="brand-divider"></span><span class="brand-caption">Performance</span></a>
+    <nav aria-label="主导航"><span class="nav-current" aria-current="page">版本趋势</span><button id="open-records" class="text-button" type="button">原始记录 <span id="record-count"></span></button><a id="repository-link" href="https://github.com/moonbitlang/moon-ide-tests">GitHub ↗</a></nav>
+  </header>
+  <main>
+    <p id="notice" class="notice" role="status" aria-live="polite">正在加载性能数据…</p>
+    <div id="dashboard" hidden>
+      <section class="page-heading" aria-labelledby="page-title">
+        <div><h1 id="page-title">版本性能趋势</h1><p>同版本取平均，观察每次升级的性能变化。</p></div>
+        <div class="environment-controls">
+          <label class="sr-only" for="fixture">项目</label><select id="fixture" aria-label="项目"></select>
+          <div class="segmented" role="group" aria-label="平台"><button data-platform="unix" aria-pressed="true" type="button">Unix</button><button data-platform="windows" aria-pressed="false" type="button">Windows</button></div>
+          <button id="open-conditions" class="button" type="button"><span aria-hidden="true">☷</span> 测量条件</button>
+        </div>
+        <p id="context" class="context"></p><p id="dataset-note" class="dataset-note"></p>
+      </section>
+      <section id="chart-section" class="chart-panel" aria-labelledby="chart-heading" aria-busy="false">
+        <div class="chart-toolbar"><div id="commands" class="command-tabs" role="tablist" aria-label="IDE 命令"></div><div class="view-controls"><label class="sr-only" for="channel">版本通道</label><select id="channel"><option value="all">全部通道</option><option value="nightly">nightly</option><option value="dev">dev</option><option value="stable">stable</option></select><label class="sr-only" for="range">版本范围</label><select id="range"><option value="12">最近 12 个版本</option><option value="24">最近 24 个版本</option><option value="60">最近 60 个版本</option><option value="all">全部版本</option></select><button id="export" class="icon-button" type="button" title="导出选中查询的版本均值 CSV" aria-label="导出 CSV">↓</button></div></div>
+        <div id="command-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-hover">
+          <div class="chart-heading"><div><h2 id="chart-heading">hover</h2><span id="query-count" class="muted"></span></div><div><span id="version-count"></span><span class="lower-is-better">越低越好</span></div></div>
+          <div class="axis-caption">平均耗时 / ms</div>
+          <div class="plot-wrap"><div id="chart" class="chart"></div><div id="tooltip" class="chart-tooltip" role="tooltip" hidden></div></div>
+          <p class="x-caption">MoonBit 版本<span>按工具链日期及首次观测顺序排列</span><span id="scroll-hint" hidden>横向滚动查看更多版本</span></p>
+          <div class="legend-row"><div id="legend" class="legend" aria-label="已选查询"></div><button id="open-queries" class="button add-query" type="button">＋ 选择查询</button><span id="selection-count" class="selection-count"></span></div>
+          <div class="chart-footnote"><p>每个点为该版本下同一查询的成功样本均值；错误和缺失单独计数。</p><button id="open-version-data" class="text-button" type="button" aria-expanded="false" aria-controls="version-data">版本数据 <span aria-hidden="true">⌄</span></button></div>
+        </div>
+      </section>
+      <section id="version-data" class="data-panel" hidden aria-labelledby="version-data-heading"><div class="section-heading"><h2 id="version-data-heading">版本数据</h2><p>选中查询的均值与采样情况</p></div><div class="table-scroll"><table><thead><tr><th scope="col">MoonBit 版本</th><th scope="col">查询</th><th scope="col" class="number">平均耗时</th><th scope="col" class="number">有效</th><th scope="col" class="number">错误 / 缺失</th><th scope="col" class="number">较前版</th></tr></thead><tbody id="version-rows"></tbody></table></div></section>
+      <section id="point-detail" class="data-panel" hidden aria-labelledby="point-heading"><div class="section-heading"><div><h2 id="point-heading"></h2><p id="point-caption"></p></div><button id="close-point" class="icon-button" type="button" aria-label="关闭采样详情">×</button></div><div id="point-summary" class="point-summary"></div><div class="table-scroll"><table><thead><tr><th scope="col">原始测量</th><th scope="col" class="number">耗时</th><th scope="col">状态</th><th scope="col">采样信息</th></tr></thead><tbody id="point-rows"></tbody></table></div><details class="technical"><summary>完整命令与工具链</summary><pre id="point-command"></pre><pre id="point-toolchain"></pre></details></section>
+      <footer><span id="updated-at"></span><span>固定查询 · 按版本聚合 · 原始测量持续保留</span></footer>
+    </div>
+  </main>
+  <dialog id="query-dialog" aria-labelledby="query-dialog-heading"><div class="dialog-heading"><div><h2 id="query-dialog-heading">选择查询</h2><p id="picker-caption"></p></div><button class="icon-button" type="button" data-close="query-dialog" aria-label="关闭查询选择">×</button></div><label class="search-label"><span class="sr-only">搜索查询</span><input id="search" type="search" placeholder="搜索符号、源文件或目标平台" autocomplete="off"></label><div id="query-options" class="query-options"></div><div class="dialog-footer"><button id="reset-queries" class="text-button" type="button">恢复默认</button><span id="picker-count" class="muted" aria-live="polite"></span><button class="button primary" type="button" data-close="query-dialog">完成</button></div></dialog>
+  <dialog id="conditions-dialog" aria-labelledby="conditions-heading"><div class="dialog-heading"><div><h2 id="conditions-heading">测量条件</h2><p>不同条件分别聚合，避免将环境变化混入版本比较。</p></div><button class="icon-button" type="button" data-close="conditions-dialog" aria-label="关闭测量条件">×</button></div><div class="condition-controls"><label>测试分支<select id="branch"></select></label><label>测量组<select id="conditions"></select></label></div><dl id="condition-details" class="condition-details"></dl><p class="condition-help">按精确工具链版本分组，保留 CLI、编译器和运行器版本。Runner 镜像修订号保留在原始测量中；同一镜像系列下的修订共享测量组。</p><div class="dialog-footer"><button class="button primary" type="button" data-close="conditions-dialog">完成</button></div></dialog>
+  <dialog id="records-dialog" class="records-dialog" aria-labelledby="records-heading"><div class="dialog-heading"><div><h2 id="records-heading">原始记录</h2><p id="records-caption"></p></div><button class="icon-button" type="button" data-close="records-dialog" aria-label="关闭原始记录">×</button></div><div class="table-scroll"><table><thead><tr><th scope="col">版本</th><th scope="col">运行</th><th scope="col" class="number">成功 / 错误 / 缺失</th><th scope="col">状态及详情</th></tr></thead><tbody id="record-rows"></tbody></table></div></dialog>
+</body>
+</html>
