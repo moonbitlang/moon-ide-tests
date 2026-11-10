@@ -1076,7 +1076,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src\http\client_test.mbt:72:14-72:19:
    |       log <+ "client sending PUT request\n"
-   |       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+   |       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
    |       defer client.close()
 72 |       @async.sleep(100)
    |              ^^^^^
@@ -1094,7 +1094,7 @@ Found 320 references for symbol 'sleep':
 
 <WORKDIR>/src\http\client_test.mbt:86:14-86:19:
    |       log <+ "client sending POST request\n"
-   |       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+   |       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
    |       defer client.close()
 86 |       @async.sleep(100)
    |              ^^^^^

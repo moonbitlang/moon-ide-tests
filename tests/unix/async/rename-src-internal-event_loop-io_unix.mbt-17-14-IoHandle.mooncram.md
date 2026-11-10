@@ -126,7 +126,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
 @@
          )
        }
-       let kind = @fd_util.FileKind::unsafe_from_int(kind.to_int())
+       let kind = @fd_util.FileKind::from_int(kind.to_int())
 -      let io = IoHandle::from_fd(
 +      let io = IoHandleRenamed::from_fd(
          fd,
@@ -235,7 +235,7 @@ $ run_moon_ide moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/
    offset~ : Int32,
    len~ : Int32,
 @@
- const IS_NATIVE_WINDOWS : Bool = false
+ }
  
  ///|
 -async fn IoHandle::read_console(

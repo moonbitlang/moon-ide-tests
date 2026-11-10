@@ -18,7 +18,7 @@ $ run_moon_ide() { status_file="${TMPDIR:-/tmp}/moon-ide-status.$$"; ( cd "$TEST
 
 ```mooncram
 $ run_moon_ide moon ide find-references 'platform' --loc 'src/socket/reuse_port_test.mbt:21:20'
-Found 45 references for symbol 'platform':
+Found 48 references for symbol 'platform':
 <WORKDIR>/src/fs/access_test.mbt:45:18-45:26:
    | async test "can_execute" {
    |   // POSIX execute-bit checks do not match Windows access semantics. Wasm learns
@@ -190,29 +190,47 @@ Found 45 references for symbol 'platform':
     |   )
     | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:313:17-313:25:
+<WORKDIR>/src/internal/event_loop/io.mbt:263:14-263:22:
+    |   context~ : String,
+    | ) -> Int32 {
+    |   @coroutine.check_cancellation()
+263 |   let n = if platform is Windows && handle.kind is Console {
+    |              ^^^^^^^^
+    |     handle.read_console(buf, offset~, len~, context~)
+    |   } else if handle.is_async {
+
+<WORKDIR>/src/internal/event_loop/io.mbt:304:17-304:25:
     |   perform_job_in_worker(
     |     job,
     |     context~,
-313 |     cancellable=platform is Windows || handle.kind.can_poll(),
+304 |     cancellable=platform is Windows || handle.kind.can_poll(),
     |                 ^^^^^^^^
     |   )
     | }
 
-<WORKDIR>/src/internal/event_loop/io.mbt:495:52-495:60:
+<WORKDIR>/src/internal/event_loop/io.mbt:455:14-455:22:
+    |   context~ : String,
+    | ) -> Int32 {
+    |   @coroutine.check_cancellation()
+455 |   let n = if platform is Windows && handle.kind is Console {
+    |              ^^^^^^^^
+    |     handle.write_console(buf, offset~, len~, context~)
+    |   } else if handle.is_async {
+
+<WORKDIR>/src/internal/event_loop/io.mbt:486:52-486:60:
     |   guard! !handle.is_async
     |   let job = Job::read(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-495 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
+486 |   perform_job_in_worker(job, context~, cancellable=platform is Windows)
     |                                                    ^^^^^^^^
     | }
     | 
 
-<WORKDIR>/src/internal/event_loop/io.mbt:519:59-519:67:
+<WORKDIR>/src/internal/event_loop/io.mbt:510:59-510:67:
     |   }
     |   let job = Job::write(handle.fd, buf, offset, len, position~)
     |   defer job.free()
-519 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
+510 |   ignore(perform_job_in_worker(job, context~, cancellable=platform is Windows))
     |                                                           ^^^^^^^^
     | }
 
@@ -242,6 +260,15 @@ Found 45 references for symbol 'platform':
    |             ^^^^^^^^
    |     // MacOS/BSD, use `kqueue` with `EVFILT_PROC`
    |     if evloop.bus.register_pid(self.pid) {
+
+<WORKDIR>/src/internal/event_loop/windows_console.mbt:50:25-50:33:
+   | fn WindowsConsoleBuffer::WindowsConsoleBuffer(
+   |   kind : @fd_util.FileKind,
+   | ) -> WindowsConsoleBuffer {
+50 |   if kind is Console && platform is Windows {
+   |                         ^^^^^^^^
+   |     {
+   |       buffer: FixedArray::make(WINDOWS_CONSOLE_BUFFER_SIZE, 0),
 
 <WORKDIR>/src/process/cancellation.mbt:39:54-39:62:
    | pub(all) struct CancellationHandler(async (Int32) -> Unit)

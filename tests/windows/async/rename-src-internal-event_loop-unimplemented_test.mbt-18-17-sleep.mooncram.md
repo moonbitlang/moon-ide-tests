@@ -881,7 +881,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
 *** Update File: <WORKDIR>/src\http\client_test.mbt
 @@
        log <+ "client sending PUT request\n"
-       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)
@@ -894,7 +894,7 @@ $ run_moon_ide '..\..\..\fixtures\repos\async' moon ide rename 'sleep' 'sleep_re
        let response = client.end_request()
 @@
        log <+ "client sending POST request\n"
-       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)

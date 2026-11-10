@@ -207,6 +207,15 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
  }
  
 @@
+   context~ : String,
+ ) -> Int32 {
+   @coroutine.check_cancellation()
+-  let n = if platform is Windows && handle.kind is Console {
++  let n = if platform_renamed is Windows && handle.kind is Console {
+     handle.read_console(buf, offset~, len~, context~)
+   } else if handle.is_async {
+     /// The implementation of `read_via_event_bus` is platform dependent,
+@@
    perform_job_in_worker(
      job,
      context~,
@@ -215,6 +224,15 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
    )
  }
  
+@@
+   context~ : String,
+ ) -> Int32 {
+   @coroutine.check_cancellation()
+-  let n = if platform is Windows && handle.kind is Console {
++  let n = if platform_renamed is Windows && handle.kind is Console {
+     handle.write_console(buf, offset~, len~, context~)
+   } else if handle.is_async {
+     /// The implementation of `write_via_event_bus` is platform dependent,
 @@
    guard! !handle.is_async
    let job = Job::read(handle.fd, buf, offset, len, position~)
@@ -260,6 +278,16 @@ $ run_moon_ide moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/r
      // MacOS/BSD, use `kqueue` with `EVFILT_PROC`
      if evloop.bus.register_pid(self.pid) {
        evloop.extra.wait_pid(evloop, self.pid)
+*** Update File: <WORKDIR>/src/internal/event_loop/windows_console.mbt
+@@
+ fn WindowsConsoleBuffer::WindowsConsoleBuffer(
+   kind : @fd_util.FileKind,
+ ) -> WindowsConsoleBuffer {
+-  if kind is Console && platform is Windows {
++  if kind is Console && platform_renamed is Windows {
+     {
+       buffer: FixedArray::make(WINDOWS_CONSOLE_BUFFER_SIZE, 0),
+       unpaired_surrogate: 0,
 *** Update File: <WORKDIR>/src/process/cancellation.mbt
 @@
  pub(all) struct CancellationHandler(async (Int32) -> Unit)
