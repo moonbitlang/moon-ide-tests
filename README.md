@@ -212,27 +212,29 @@ To regenerate the checked-in suites from the commits and sampling limits in
 `perf/repos.yaml`, point generation at each platform's directory:
 
 ```sh
-moonx scripts/run-ide-perf.mbtx --action generate --platform unix --output-dir perf/tests/unix
-moonx scripts/run-ide-perf.mbtx --action generate --platform windows --output-dir perf/tests/windows
+moonx scripts/generate-perf-tests.mbtx --platform unix --output-dir perf/tests/unix
+moonx scripts/generate-perf-tests.mbtx --platform windows --output-dir perf/tests/windows
 git diff -- perf/tests
 ```
 
-`--output-dir` is the platform directory. The generator writes each fixture
+The generator prepares every fixture first: `perf-repos` clones missing
+repositories and checks out the pinned commits, then `testgen` renders each
+fixture. `--output-dir` is the platform directory, and each fixture is written
 into its slug subdirectory, such as `perf/tests/unix/openseek`. Start with a
 clean `perf/tests` tree so the diff shows exactly what regeneration changed.
 
 Generate candidates separately when choosing new cases:
 
 ```sh
-moonx scripts/run-ide-perf.mbtx --action generate
+moonx scripts/generate-perf-tests.mbtx
 ```
 
-`--platform unix|windows` selects the generation platform.
-
-`generate` writes to `perf/data/<platform>/candidates-openseek`. Select commands
-for the fixed workload and copy them into `perf/tests/<platform>/openseek`. These
-directories have the same depth, so their relative command paths also match.
-Use `--case-file` to select files, and pass `--candidates` to run against the
+`--platform unix|windows` selects the generation platform and defaults to the
+host platform. Without `--output-dir`, candidates go to
+`perf/data/<platform>/candidates-openseek`. Select commands for the fixed
+workload and copy them into `perf/tests/<platform>/openseek`. These directories
+have the same depth, so their relative command paths also match. Use
+`--case-file` to select files, and pass `--candidates` to run against the
 generated directory. Regenerate or update `workload.json` together with its
 Mooncram documents; mismatches are rejected before execution.
 

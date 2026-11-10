@@ -48,8 +48,11 @@ moon -C testgen run --target wasm cmd/main -- \
   script resolves its fixture from the test directory. Mooncram ignores output
   but checks exit codes; `workload.json` records ordered query arguments and
   document contents for sample reconciliation. Regeneration replaces both the
-  commands and manifest. Execute them with `moonx scripts/run-ide-perf.mbtx`,
-  which invokes Mooncram and collects the measurements and logs.
+  commands and manifest; regenerate with
+  `moonx scripts/generate-perf-tests.mbtx`, which prepares the pinned fixture
+  repositories before rendering. Execute the suites with
+  `moonx scripts/run-ide-perf.mbtx`, which invokes Mooncram and collects the
+  measurements and logs.
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max sampled `.mbt` files; `0` means no cap (default: `0`)
