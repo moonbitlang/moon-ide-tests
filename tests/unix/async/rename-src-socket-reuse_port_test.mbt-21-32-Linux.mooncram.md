@@ -1,7 +1,7 @@
 # async rename Linux src/socket/reuse_port_test.mbt:21:32
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_port_test.mbt:21:32'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_port_test.mbt:21:32'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/dir.mbt
 @@

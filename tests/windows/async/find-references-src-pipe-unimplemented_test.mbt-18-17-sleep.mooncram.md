@@ -1,7 +1,7 @@
 # async find-references sleep src\pipe\unimplemented_test.mbt:18:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
 Found 320 references for symbol 'sleep':
 <WORKDIR>/src\all_any_test.mbt:20:14-20:19:
    |   let start = @async.now()

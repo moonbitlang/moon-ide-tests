@@ -1,7 +1,7 @@
 # uri find-references Uri uri_test_new_features.mbt:5:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'Uri' --loc 'uri_test_new_features.mbt:5:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Found 105 references for symbol 'Uri':
 <WORKDIR>/uri.mbt:65:12-65:15:
    | ///|

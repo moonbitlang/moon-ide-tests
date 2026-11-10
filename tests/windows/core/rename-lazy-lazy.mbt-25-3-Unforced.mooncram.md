@@ -1,7 +1,7 @@
 # core rename Unforced lazy\lazy.mbt:25:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'Unforced' 'UnforcedRenamed' --loc 'lazy\lazy.mbt:25:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Unforced' 'UnforcedRenamed' --loc 'lazy\lazy.mbt:25:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/lazy\debug.mbt
 @@

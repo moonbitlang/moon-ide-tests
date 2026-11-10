@@ -1,7 +1,7 @@
 # json find-references json_testsuite_fail src/tests/json_testsuite_helpers_test.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
 Found 4 references for symbol 'json_testsuite_fail':
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:9:10-9:29:
   | ///|

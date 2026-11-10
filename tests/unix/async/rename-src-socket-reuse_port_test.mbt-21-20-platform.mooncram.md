@@ -1,7 +1,7 @@
 # async rename platform src/socket/reuse_port_test.mbt:21:20
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'platform' 'platform_renamed' --loc 'src/socket/reuse_port_test.mbt:21:20'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'platform' 'platform_renamed' --loc 'src/socket/reuse_port_test.mbt:21:20'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/access_test.mbt
 @@

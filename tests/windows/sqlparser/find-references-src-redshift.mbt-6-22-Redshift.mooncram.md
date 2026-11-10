@@ -1,7 +1,7 @@
 # sqlparser find-references Redshift src\redshift.mbt:6:22
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'Redshift' --loc 'src\redshift.mbt:6:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Redshift' --loc 'src\redshift.mbt:6:22'
 Found 12 references for symbol 'Redshift':
 <WORKDIR>/src\redshift.mbt:6:22-6:30:
   | pub(all) struct Redshift {}

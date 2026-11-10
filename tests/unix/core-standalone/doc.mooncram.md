@@ -1,7 +1,7 @@
 # core-standalone doc
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Array::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Array::map
 package "moonbitlang/core/array"
 pub fn[T, U] Array::map(Self[T], (T) -> U raise?) -> Self[U] raise?
   Maps a function over the elements of the array.
@@ -16,7 +16,7 @@ pub fn[T, U] Array::map(Self[T], (T) -> U raise?) -> Self[U] raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Array::filter
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Array::filter
 package "moonbitlang/core/array"
 pub fn[T] Array::filter(Self[T], (T) -> Bool raise?) -> Self[T] raise?
   Creates a new array containing all elements from the input array that satisfy
@@ -38,7 +38,7 @@ pub fn[T] Array::filter(Self[T], (T) -> Bool raise?) -> Self[T] raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Array::fold
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Array::fold
 package "moonbitlang/core/array"
 #alias(fold_left, deprecated)
 pub fn[A, B] Array::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
@@ -59,7 +59,7 @@ pub fn[A, B] Array::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc String::length
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc String::length
 package "moonbitlang/core/string"
 #alias(charcode_length, deprecated)
 pub fn String::length(String) -> Int32
@@ -80,7 +80,7 @@ pub fn String::length(String) -> Int32
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc String::split
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc String::split
 package "moonbitlang/core/string"
 pub fn String::split(String, StringView) -> Iter[StringView]
   Splits the string into all substrings separated by the given separator.
@@ -94,7 +94,7 @@ pub fn String::split(String, StringView) -> Iter[StringView]
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc StringBuilder::new
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::new
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
 pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
@@ -120,7 +120,7 @@ pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc StringBuilder::write_string
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::write_string
 package "moonbitlang/core/builtin"
 pub fn StringBuilder::write_string(Self, String) -> Unit
 // target is:
@@ -130,7 +130,7 @@ pub fn &Logger::write_string(Self, String) -> Unit
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Int::abs
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Int::abs
 package "moonbitlang/core/int"
 pub fn Int32::abs(Int32) -> Int32
   Computes the absolute value of an integer.
@@ -150,7 +150,7 @@ pub fn Int32::abs(Int32) -> Int32
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Int::to_string
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Int::to_string
 package "moonbitlang/core/int"
 pub fn Int32::to_string(Int32, radix? : Int32) -> String
   Converts an integer to its string representation in the specified radix (base).
@@ -162,7 +162,7 @@ pub fn Int32::to_string(Int32, radix? : Int32) -> String
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Option::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Option::map
 package "moonbitlang/core/option"
 pub fn[T, U] Option::map(T?, (T) -> U raise?) -> U? raise?
   Maps the value of an `Option` using a provided function.
@@ -178,7 +178,7 @@ pub fn[T, U] Option::map(T?, (T) -> U raise?) -> U? raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Result::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Result::map
 package "moonbitlang/core/builtin"
 pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
   Maps the value of a Result if it is `Ok` into another, otherwise returns the `Err` value unchanged.
@@ -193,7 +193,7 @@ pub fn[T, E, U] Result::map(Self[T, E], (T) -> U raise?) -> Self[U, E] raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Iter::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::map
 package "moonbitlang/core/builtin"
 pub fn[X, Y] Iter::map(Self[X], (X) -> Y) -> Self[Y]
   Transforms the elements of the iterator using a mapping function.
@@ -210,7 +210,7 @@ pub fn[X, Y] Iter::map(Self[X], (X) -> Y) -> Self[Y]
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Iter::filter
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::filter
 package "moonbitlang/core/builtin"
 pub fn[X] Iter::filter(Self[X], (X) -> Bool) -> Self[X]
   Filters the elements of the iterator based on a predicate function.
@@ -226,7 +226,7 @@ pub fn[X] Iter::filter(Self[X], (X) -> Bool) -> Self[X]
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc Iter::to_array
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc Iter::to_array
 package "moonbitlang/core/builtin"
 #alias(collect)
 pub fn[X] Iter::to_array(Self[X]) -> Array[X]
@@ -235,7 +235,7 @@ pub fn[X] Iter::to_array(Self[X]) -> Array[X]
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc @moonbitlang/core/list.List
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/list.List
 package "moonbitlang/core/list"
 enum List[A] {
   Empty
@@ -325,7 +325,7 @@ enum List[A] {
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc @moonbitlang/core/list.List::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/list.List::map
 package "moonbitlang/core/list"
 pub fn[A, B] List::map(Self[A], (A) -> B raise?) -> Self[B] raise?
   Maps the list.
@@ -341,7 +341,7 @@ pub fn[A, B] List::map(Self[A], (A) -> B raise?) -> Self[B] raise?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc @moonbitlang/core/hashmap.HashMap::get
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/hashmap.HashMap::get
 package "moonbitlang/core/hashmap"
 pub fn[K : Hash + Eq, V] HashMap::get(Self[K, V], K) -> V?
   Retrieves the value associated with a given key in the hash map.
@@ -360,7 +360,7 @@ pub fn[K : Hash + Eq, V] HashMap::get(Self[K, V], K) -> V?
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide doc @moonbitlang/core/hashmap.HashMap::map
+$ moonx '../../../scripts/run-moon-ide.mbtx' doc @moonbitlang/core/hashmap.HashMap::map
 package "moonbitlang/core/hashmap"
 pub fn[K, V, V2] HashMap::map(Self[K, V], (K, V) -> V2 raise?) -> Self[K, V2] raise?
   Applies a function to each key-value pair in the map and

@@ -3,7 +3,6 @@ priv struct Args {
   repo_path : String
   output_dir : String
   repo_slug : String
-  test_repo_path : String
   platform : TestPlatform
   max_per_file : Int32
   max_files : Int32
@@ -202,7 +201,6 @@ fn parse_args(args : Array[String]) -> Args raise {
   let repo_path_raw : Ref[String] = Ref("")
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
-  let test_repo_path_raw : Ref[String] = Ref("")
   let platform_raw : Ref[String] = Ref("unix")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
@@ -214,9 +212,6 @@ fn parse_args(args : Array[String]) -> Args raise {
     ),
     (
       "repo-slug", 's', repo_slug_raw, "Stable repository slug used in generated markdown titles",
-    ),
-    (
-      "test-repo", 't', test_repo_path_raw, "Repository path embedded in generated tests; defaults to --repo",
     ),
     (
       "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
@@ -288,16 +283,10 @@ fn parse_args(args : Array[String]) -> Args raise {
         "invalid --platform value: \{other}; expected unix or windows",
       )
   }
-  let test_repo_path = if test_repo_path_raw.val == "" {
-    repo_path_raw.val
-  } else {
-    test_repo_path_raw.val
-  }
   Args::{
     repo_path: repo_path_raw.val,
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
-    test_repo_path,
     platform,
     max_per_file,
     max_files,
@@ -326,12 +315,7 @@ fn run(args : Array[String]) -> Unit {
     config.max_file_size,
     platform=config.platform,
   )
-  let files = render_cram_files(
-    result,
-    config.repo_slug,
-    config.test_repo_path,
-    config.platform,
-  )
+  let files = render_cram_files(result, config.repo_slug, config.platform)
   write_cram_files(config.output_dir, files)
 }
 

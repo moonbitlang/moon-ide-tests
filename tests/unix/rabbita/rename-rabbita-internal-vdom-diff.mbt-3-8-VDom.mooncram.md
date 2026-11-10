@@ -1,7 +1,7 @@
 # rabbita rename VDom rabbita/internal/vdom/diff.mbt:3:8
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'VDom' 'VDomRenamed' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VDom' 'VDomRenamed' --loc 'rabbita/internal/vdom/diff.mbt:3:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/internal/runtime/ambient.mbt
 @@

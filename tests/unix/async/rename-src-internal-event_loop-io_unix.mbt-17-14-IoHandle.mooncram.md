@@ -1,7 +1,7 @@
 # async rename IoHandle src/internal/event_loop/io_unix.mbt:17:14
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'IoHandle' 'IoHandleRenamed' --loc 'src/internal/event_loop/io_unix.mbt:17:14'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/dir.mbt
 @@

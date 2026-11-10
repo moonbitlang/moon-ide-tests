@@ -1,7 +1,7 @@
 # indexmap find-references Bucket src/types.mbt:17:13
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide find-references 'Bucket' --loc 'src/types.mbt:17:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Bucket' --loc 'src/types.mbt:17:13'
 Found 1 references for symbol 'Bucket':
 <WORKDIR>/src/types.mbt:29:23-29:29:
    | /// IndexMap核心结构，包含所有数据组织功能

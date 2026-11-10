@@ -1,7 +1,7 @@
 # uri find-references parse uri_test.mbt:5:18
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide find-references 'parse' --loc 'uri_test.mbt:5:18'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse' --loc 'uri_test.mbt:5:18'
 Found 46 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:36:18-36:23:
    | ///|

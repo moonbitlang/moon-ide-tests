@@ -1,7 +1,7 @@
 # rabbita find-references Scheduler rabbita\internal\vdom\vdom.mbt:2:19
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'Scheduler' --loc 'rabbita\internal\vdom\vdom.mbt:2:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Scheduler' --loc 'rabbita\internal\vdom\vdom.mbt:2:19'
 Found 21 references for symbol 'Scheduler':
 <WORKDIR>/rabbita\internal\vdom\diff.mbt:19:41-19:50:
    | #cfg(target="js")

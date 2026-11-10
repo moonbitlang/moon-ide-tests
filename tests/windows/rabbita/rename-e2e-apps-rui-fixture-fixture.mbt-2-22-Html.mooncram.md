@@ -1,7 +1,7 @@
 # rabbita rename Html e2e\apps\rui\fixture\fixture.mbt:2:22
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'Html' 'HtmlRenamed' --loc 'e2e\apps\rui\fixture\fixture.mbt:2:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Html' 'HtmlRenamed' --loc 'e2e\apps\rui\fixture\fixture.mbt:2:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e\apps\rui\fixture\fixture.mbt
 @@

@@ -1,7 +1,7 @@
 # uri rename scheme uri.mbt:55:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'scheme' 'scheme_renamed' --loc 'uri.mbt:55:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'scheme' 'scheme_renamed' --loc 'uri.mbt:55:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
 @@

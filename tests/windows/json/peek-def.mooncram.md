@@ -1,7 +1,7 @@
 # json peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Decode' --loc 'src\lib\decode.mbt:8:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Decode' --loc 'src\lib\decode.mbt:8:11'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | 
   | ///|
@@ -37,7 +37,7 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'array_start' --loc 'src\lib\decode.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'array_start' --loc 'src\lib\decode.mbt:9:3'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | ///|
   | pub type JsonObject = Map[String, Json]
@@ -63,7 +63,7 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Context' --loc 'src\lib\json.mbt:2:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Context' --loc 'src\lib\json.mbt:2:13'
 Definition found at file <WORKDIR>/src\lib\json.mbt
   | ///|
 2 | priv struct Context {
@@ -85,7 +85,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'original' --loc 'src\lib\json.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'original' --loc 'src\lib\json.mbt:3:3'
 Definition found at file <WORKDIR>/src\lib\json.mbt
   | ///|
   | priv struct Context {
@@ -108,7 +108,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Value' --loc 'src\lib\value.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Value' --loc 'src\lib\value.mbt:2:10'
 Definition found at file <WORKDIR>/src\lib\value.mbt
   | ///|
 2 | pub enum Value {
@@ -130,7 +130,7 @@ Definition found at file <WORKDIR>/src\lib\value.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Continue' --loc 'src\lib\value.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Continue' --loc 'src\lib\value.mbt:3:3'
 Definition found at file <WORKDIR>/src\lib\value.mbt
   | ///|
   | pub enum Value {
@@ -153,7 +153,7 @@ Definition found at file <WORKDIR>/src\lib\value.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'incr_fail' --loc 'src\tests\incr.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'incr_fail' --loc 'src\tests\incr.mbt:2:4'
 Definition found at file <WORKDIR>/src\tests\incr.mbt
   | ///|
 2 | fn incr_fail(message : String) -> Unit raise {
@@ -175,7 +175,7 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'message' --loc 'src\tests\incr.mbt:2:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'message' --loc 'src\tests\incr.mbt:2:14'
 Definition found at file <WORKDIR>/src\tests\incr.mbt
   | ///|
 2 | fn incr_fail(message : String) -> Unit raise {
@@ -197,7 +197,7 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'json_testsuite_fail' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'json_testsuite_fail' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | ///|
 2 | fn json_testsuite_fail(message : String) -> Unit raise {
@@ -219,7 +219,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | ///|
 2 | fn json_testsuite_fail(message : String) -> Unit raise {
@@ -241,7 +241,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'input' --loc 'src\tests\json_testsuite_n_test.mbt:8:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src\tests\json_testsuite_n_test.mbt:8:7'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_n_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
   | // File: json_testsuite_n_test.mbt
@@ -267,7 +267,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_n_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'expect_reject' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'expect_reject' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 "   |     _ => ()" (escaped)
    |   }
@@ -293,7 +293,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_y_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
   | // File: json_testsuite_y_test.mbt
@@ -319,7 +319,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_y_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | fn json_testsuite_fail(message : String) -> Unit raise {
   |   raise InspectError::InspectError(message)
@@ -345,7 +345,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'actual' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'actual' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
 Definition found at file <WORKDIR>/src\tests\json_value_semantics_test.mbt
   | ///|
   | test "json value semantics basics" {
@@ -368,7 +368,7 @@ Definition found at file <WORKDIR>/src\tests\json_value_semantics_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
   | pub using @lib {
@@ -408,7 +408,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode_start' --loc 'src\tests\top.mbt:2:14'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode_start' --loc 'src\tests\top.mbt:2:14'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
   | pub using @lib {
@@ -448,7 +448,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode_continue' --loc 'src\tests\top.mbt:2:28'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode_continue' --loc 'src\tests\top.mbt:2:28'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
   | pub using @lib {
@@ -488,7 +488,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'Decode' --loc 'src\top.mbt:3:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Decode' --loc 'src\top.mbt:3:9'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | 
   | ///|
@@ -524,7 +524,7 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide peek-def 'decode' --loc 'src\top.mbt:4:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode' --loc 'src\top.mbt:4:3'
 Definition found at file <WORKDIR>/src\lib\json.mbt
    |   Map(Map[String, Json])
    |   Key(String)

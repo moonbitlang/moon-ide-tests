@@ -97,7 +97,6 @@ foreach ($repo in $repos) {
     "--repo", $repoPath,
     "--output-dir", $windowsOutDir,
     "--repo-slug", $repo.Slug,
-    "--test-repo", $repo.Path,
     "--platform", "windows",
     "--max-files", $repo.MaxFiles,
     "--max-per-file", $repo.MaxPerFile

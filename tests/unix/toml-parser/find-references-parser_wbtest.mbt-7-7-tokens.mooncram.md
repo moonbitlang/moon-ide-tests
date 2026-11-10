@@ -1,7 +1,7 @@
 # toml-parser find-references tokens parser_wbtest.mbt:7:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'tokens' --loc 'parser_wbtest.mbt:7:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'tokens' --loc 'parser_wbtest.mbt:7:7'
 Found 1 references for symbol 'tokens':
 <WORKDIR>/parser_wbtest.mbt:8:31-8:37:
   | test "parse_dotted_key - simple identifier" {

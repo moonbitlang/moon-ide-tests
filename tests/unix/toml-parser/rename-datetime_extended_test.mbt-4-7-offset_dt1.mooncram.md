@@ -1,7 +1,7 @@
 # toml-parser rename offset_dt1 datetime_extended_test.mbt:4:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'offset_dt1' 'offset_dt1_renamed' --loc 'datetime_extended_test.mbt:4:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'offset_dt1' 'offset_dt1_renamed' --loc 'datetime_extended_test.mbt:4:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/datetime_extended_test.mbt
 @@

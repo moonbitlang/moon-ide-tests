@@ -1,7 +1,7 @@
 # async rename _ignore_unused_import src/pipe/unimplemented_test.mbt:17:5
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src/pipe/unimplemented_test.mbt:17:5' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src/pipe/unimplemented_test.mbt
 @@

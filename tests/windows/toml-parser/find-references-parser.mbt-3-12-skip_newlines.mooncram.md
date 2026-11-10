@@ -1,7 +1,7 @@
 # toml-parser find-references skip_newlines parser.mbt:3:12
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'skip_newlines' --loc 'parser.mbt:3:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'skip_newlines' --loc 'parser.mbt:3:12'
 Found 5 references for symbol 'skip_newlines':
 <WORKDIR>/parser.mbt:166:8-166:21:
     | /// No trailing comma allowed unlike Array

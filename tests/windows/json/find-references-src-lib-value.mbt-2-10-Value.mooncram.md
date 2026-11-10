@@ -1,7 +1,7 @@
 # json find-references Value src\lib\value.mbt:2:10
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide find-references 'Value' --loc 'src\lib\value.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Value' --loc 'src\lib\value.mbt:2:10'
 Found 32 references for symbol 'Value':
 <WORKDIR>/src\lib\json.mbt:48:59-48:64:
    | }

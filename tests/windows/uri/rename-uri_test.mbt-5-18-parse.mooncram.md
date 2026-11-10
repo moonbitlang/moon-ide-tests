@@ -1,7 +1,7 @@
 # uri rename parse uri_test.mbt:5:18
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide rename 'parse' 'parse_renamed' --loc 'uri_test.mbt:5:18'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --loc 'uri_test.mbt:5:18'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@

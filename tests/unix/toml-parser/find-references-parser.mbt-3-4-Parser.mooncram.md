@@ -1,7 +1,7 @@
 # toml-parser find-references Parser parser.mbt:3:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide find-references 'Parser' --loc 'parser.mbt:3:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Parser' --loc 'parser.mbt:3:4'
 Found 58 references for symbol 'Parser':
 <WORKDIR>/parser.mbt:3:4-3:10:
   | ///|

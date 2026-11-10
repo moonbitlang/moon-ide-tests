@@ -1,7 +1,7 @@
 # core-project find-references
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:12:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:12:22'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:12:22-12:25:
    | 
@@ -23,7 +23,7 @@ Found 2 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'filter' --loc 'core_ide_cases.mbt:13:23'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'filter' --loc 'core_ide_cases.mbt:13:23'
 Found 1 references for symbol 'filter':
 <WORKDIR>/core_ide_cases.mbt:13:23-13:29:
    | ///|
@@ -37,7 +37,7 @@ Found 1 references for symbol 'filter':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'fold' --loc 'core_ide_cases.mbt:14:9'
 Found 1 references for symbol 'fold':
 <WORKDIR>/core_ide_cases.mbt:14:9-14:13:
    | pub fn exercise_array_core(nums : CoreIntArray) -> Int {
@@ -51,7 +51,7 @@ Found 1 references for symbol 'fold':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'length' --loc 'core_ide_cases.mbt:21:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'length' --loc 'core_ide_cases.mbt:21:9'
 Found 1 references for symbol 'length':
 <WORKDIR>/core_ide_cases.mbt:21:9-21:15:
    | pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
@@ -65,7 +65,7 @@ Found 1 references for symbol 'length':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'split' --loc 'core_ide_cases.mbt:21:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'split' --loc 'core_ide_cases.mbt:21:24'
 Found 2 references for symbol 'split':
 <WORKDIR>/core_ide_cases.mbt:21:24-21:29:
    | pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
@@ -88,7 +88,7 @@ Found 2 references for symbol 'split':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'abs' --loc 'core_ide_cases.mbt:26:5'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'abs' --loc 'core_ide_cases.mbt:26:5'
 Found 4 references for symbol 'abs':
 <WORKDIR>/core_ide_cases.mbt:26:5-26:8:
    | 
@@ -129,7 +129,7 @@ Found 4 references for symbol 'abs':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'to_string' --loc 'core_ide_cases.mbt:26:11'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'to_string' --loc 'core_ide_cases.mbt:26:11'
 Found 6 references for symbol 'to_string':
 <WORKDIR>/core_ide_cases.mbt:26:11-26:20:
    | 
@@ -188,7 +188,7 @@ Found 6 references for symbol 'to_string':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:31:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:31:9'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:31:9-31:12:
    | 
@@ -211,7 +211,7 @@ Found 2 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:38:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:38:9'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:38:9-38:12:
    | pub fn exercise_result_core(
@@ -225,7 +225,7 @@ Found 1 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:43:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:43:15'
 Found 2 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:43:15-43:18:
    | 
@@ -248,7 +248,7 @@ Found 2 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:48:6'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:48:6'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:48:6-48:9:
    | 
@@ -262,7 +262,7 @@ Found 1 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'get' --loc 'core_ide_cases.mbt:53:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'get' --loc 'core_ide_cases.mbt:53:10'
 Found 1 references for symbol 'get':
 <WORKDIR>/core_ide_cases.mbt:53:10-53:13:
    | 
@@ -276,7 +276,7 @@ Found 1 references for symbol 'get':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:60:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:60:10'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:60:10-60:13:
    | pub fn exercise_hashmap_map(
@@ -290,7 +290,7 @@ Found 1 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'map' --loc 'core_ide_cases.mbt:65:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'map' --loc 'core_ide_cases.mbt:65:13'
 Found 1 references for symbol 'map':
 <WORKDIR>/core_ide_cases.mbt:65:13-65:16:
 "   | " (escaped)
@@ -304,7 +304,7 @@ Found 1 references for symbol 'map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'List' --loc 'tuple_type_bug.mbt:3:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'List' --loc 'tuple_type_bug.mbt:3:19'
 Found 3 references for symbol 'List':
 <WORKDIR>/core_ide_cases.mbt:8:26-8:30:
 "  | type CoreScores = @hashmap.HashMap[String, Int]" (escaped)
@@ -335,7 +335,7 @@ Found 3 references for symbol 'List':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'HashMap' --loc 'core_ide_cases.mbt:5:28'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'HashMap' --loc 'core_ide_cases.mbt:5:28'
 Found 2 references for symbol 'HashMap':
 <WORKDIR>/core_ide_cases.mbt:5:28-5:35:
 "  | type CoreIntArray = Array[Int]" (escaped)
@@ -358,7 +358,7 @@ Found 2 references for symbol 'HashMap':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:79:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'from_array' --loc 'core_ide_cases.mbt:79:12'
 Found 1 references for symbol 'from_array':
 <WORKDIR>/core_ide_cases.mbt:79:12-79:22:
    | 
@@ -372,7 +372,7 @@ Found 1 references for symbol 'from_array':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test/test_project' moon ide find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'from_array' --loc 'core_ide_cases.mbt:84:9'
 Found 1 references for symbol 'from_array':
 <WORKDIR>/core_ide_cases.mbt:84:9-84:19:
    | 

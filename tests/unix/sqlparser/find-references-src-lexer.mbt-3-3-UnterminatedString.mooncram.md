@@ -1,7 +1,7 @@
 # sqlparser find-references UnterminatedString src/lexer.mbt:3:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
 Found 3 references for symbol 'UnterminatedString':
 <WORKDIR>/src/lexer.mbt:511:19-511:37:
     |         result.write_char(c)

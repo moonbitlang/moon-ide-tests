@@ -1,7 +1,7 @@
 # sqlparser outline
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\ast.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\ast.mbt'
    2 |pub fn[T : @pp.Pretty] pretty_print(obj : T) -> String {
      |...
    7 |pub fn[T : Show] structural_print(obj : T) -> String {
@@ -1127,7 +1127,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\bigquery.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\bigquery.mbt'
   3 |pub(all) struct BigQuery {}
     |...
   6 |pub impl Dialect for BigQuery with fn supports_string_literal_backslash_escape(
@@ -1192,7 +1192,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\dml.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\dml.mbt'
    2 |fn Parser::parse_set_expr(
    3 |  self : Parser,
    4 |  tokens : ArrayView[Token],
@@ -1568,7 +1568,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\generic.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\generic.mbt'
  5 |pub(all) struct Generic {}
    |...
  8 |pub impl Dialect for Generic with fn supports_string_literal_backslash_escape(
@@ -1621,7 +1621,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\lexer.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\lexer.mbt'
   2 |suberror LexerError {
     |...
   8 |pub(all) enum Token {
@@ -1729,7 +1729,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\prepare.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\prepare.mbt'
   5 |test "PREPARE simple SELECT" {
     |...
  22 |test "PREPARE with data types" {
@@ -1780,7 +1780,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\redshift.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\redshift.mbt'
  3 |pub(all) struct Redshift {}
    |...
  6 |pub impl Dialect for Redshift with fn supports_string_literal_backslash_escape(
@@ -1833,7 +1833,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\show.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\show.mbt'
   2 |fn[T : Debug] show_compact_debug(obj : T, logger : &Logger) -> Unit {
     |...
  39 |pub impl Show for Statements with fn output(self, logger) {
@@ -2288,7 +2288,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\tests\good_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\good_test.mbt'
   4 |fn pass(input : String) -> Unit {
     |...
  15 |test {
@@ -2371,7 +2371,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser'
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide outline 'src\tests\tpch_test.mbt'
+$ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tests\tpch_test.mbt'
   2 |fn read_and_parse(path : String) -> @sqlparser.Statements {
     |...
  22 |test "TPCH 1" {

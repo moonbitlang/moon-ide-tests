@@ -1,7 +1,7 @@
 # indexmap rename T src/IndexMap_test.mbt:17:19
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'T' 'TRenamed' --loc 'src/IndexMap_test.mbt:17:19'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
 @@
