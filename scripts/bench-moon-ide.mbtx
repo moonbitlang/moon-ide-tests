@@ -1,0 +1,126 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/core/bench",
+  "moonbitlang/core/encoding/hex",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+fn replace_path(text : String, path : String, marker : String) -> String {
+  let slash_path = path.replace_all(old="\\", new="/")
+  let output = text
+    .replace_all(old=path, new=marker)
+    .replace_all(old=slash_path, new=marker)
+  if path.length() > 1 && path[1] == ':' {
+    output
+    .replace_all(old=path.to_lower(), new=marker)
+    .replace_all(old=slash_path.to_lower(), new=marker)
+    .replace_all(old=marker + "\\", new=marker + "/")
+  } else {
+    output
+  }
+}
+
+///|
+async fn fixture_dir() -> (String, String) {
+  let cwd = @fs.realpath(".")
+  let parts = cwd
+    .replace_all(old="\\", new="/")
+    .split("/")
+    .map(s => s.to_owned())
+    .to_array()
+  let slug = match parts {
+    [.., "perf", "tests", "unix" | "windows", slug] => slug
+    [.., "perf", "data", "unix" | "windows", directory] if directory.has_prefix(
+        "candidates-",
+      ) &&
+      directory.length() > 11 => directory[11:].to_owned()
+    _ =>
+      abort(
+        "bench-moon-ide.mbtx must run from perf/tests/<unix|windows>/<repo> or perf/data/<unix|windows>/candidates-<repo>; got: \{cwd}",
+      )
+  }
+  guard slug != "." && slug != ".." else {
+    abort("invalid performance fixture name: \{slug}")
+  }
+  let perf_root = @fs.realpath("../../..")
+  ("perf/repos/\{slug}", @fs.realpath(perf_root + "/repos/" + slug))
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  guard args.length() >= 2 else {
+    abort("usage: bench-moon-ide.mbtx <ide-subcommand> [args...]")
+  }
+  guard @env.get_env_var("MOON_IDE_PERF_DIR") is Some(result_dir) else {
+    abort("MOON_IDE_PERF_DIR must point to an existing results directory")
+  }
+  let results = @fs.realpath(result_dir)
+  let (fixture, repo) = fixture_dir()
+  let moon_home = @fs.realpath(
+    @env.get_env_var("MOON_HOME").unwrap_or_else(() => {
+      let home = @env.get_env_var("USERPROFILE").unwrap_or_else(() => {
+        @env.get_env_var("HOME").unwrap_or_else(() => {
+          abort("MOON_HOME, USERPROFILE or HOME is required")
+        })
+      })
+      home + "/.moon"
+    }),
+  )
+  let argv = ["ide", ..args[1:]]
+  let start = @bench.monotonic_clock_start()
+  let result = Ok(
+    @async.with_timeout_opt(60000, () => {
+      @process.collect_output_merged("moon", argv, cwd=repo, extra_env={
+        "MOON_HOME": moon_home,
+      })
+    }),
+  ) catch {
+    error => Err(error)
+  }
+  let elapsed_us = @bench.monotonic_clock_end(start)
+  let (status, exit_code, runner_exit_code, text) = match result {
+    Ok(Some((0, output))) => ("ok", Some(0), 0, output.text())
+    Ok(Some((code, output))) =>
+      ("nonzero_exit", Some(code), code, output.text())
+    Ok(None) => ("timeout", None, 124, "moon ide timed out after 60 seconds\n")
+    Err(error) => ("process_error", None, 125, "\{error}\n")
+  }
+  let output = replace_path(
+    replace_path(text, repo, "<WORKDIR>"),
+    moon_home,
+    "<MOON_HOME>",
+  )
+  let sample : Json = {
+    "fixture": Json(fixture),
+    "argv": Json(argv),
+    "elapsed_us": Json(elapsed_us),
+    "exit_code": match exit_code {
+      Some(code) => Json(code)
+      None => Json::null()
+    },
+    "status": Json(status),
+    "output": Json(output),
+    "error_output": if status == "ok" {
+      Json::null()
+    } else {
+      Json(output)
+    },
+  }
+  let nonce = @hex.encode(@env.rand(16).unwrap())
+  @fs.write_file(
+    "\{results}/\{nonce}.json",
+    sample.stringify() + "\n",
+    create_mode=CreateNew,
+  )
+  @stdio.stdout.write(output)
+  @sys.exit(runner_exit_code)
+}

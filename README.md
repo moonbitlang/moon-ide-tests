@@ -160,6 +160,108 @@ Daily runs cram tests for selected suites and reviews changes to the snapshots.
 The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 
+## OpenSeek IDE performance
+
+From the repository root, run the same MoonBit script on Unix and Windows:
+
+```sh
+moonx scripts/run-ide-perf.mbtx
+```
+
+The pinned OpenSeek snapshot uses experimental core async APIs and requires
+the nightly toolchain. CI installs nightly on both platforms; both installers
+explicitly select `MOONBIT_INSTALL_VERSION=nightly`.
+
+Repository preparation is handled by `scripts/perf-repos.mbtx`, separately
+from `testgen`. Run it directly with `moonx scripts/perf-repos.mbtx` to clone
+missing repositories and check out each configured commit. Existing checkouts
+must be clean before switching revisions. New checkouts are moved into place
+after checkout succeeds. Paths in `perf/repos.yaml` are relative to `perf/`, so
+OpenSeek lives in `perf/repos/openseek`. Fixed suites are under
+`perf/tests/windows/openseek` and `perf/tests/unix/openseek`. The runner
+automatically selects the current platform.
+
+Performance commands pass only the IDE subcommand and its arguments:
+
+```text
+$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'agent_tool/job_output/job_output.mbt' --target native --no-check
+```
+
+The script infers `perf/repos/<repo>` from its working directory,
+`perf/tests/<platform>/<repo>` or `perf/data/<platform>/candidates-<repo>`.
+
+Each platform's fixed suite contains 85 commands covering outline, hover,
+definition lookup, references and rename, with one `.mooncram.md` file per
+command type. `prepare.json` records the workspace checks required by those
+queries. Full workspace checks publish the IDE metadata, and OpenSeek's
+nested editor workspace is prepared separately.
+The preparation log and commands are saved with the measurements.
+Before preparing fixtures, the runner also checks the installed standard library
+with all backends. `moon ide --no-check` still performs that check internally;
+preparing its cache keeps the first query from paying the cold-check cost.
+The command and success flag are recorded in `result.json`, with output in
+`core-prepare.log`. A failed standard-library check stops the run before sampling.
+The `.mooncram.md` files contain fixed commands with output ignored and a
+zero-exit expectation. The runner invokes `moonbit-community/mooncram@latest`;
+the benchmark writes each timed invocation's output and status to its sample.
+`workload.json` records the ordered queries and document contents, so the runner
+can detect edits that were not accompanied by a manifest update and identify
+missing samples without parsing Mooncram syntax itself.
+
+To regenerate the checked-in suites from the commits and sampling limits in
+`perf/repos.yaml`, point generation at each platform's directory:
+
+```sh
+moonx scripts/run-ide-perf.mbtx --action generate --platform unix --output-dir perf/tests/unix
+moonx scripts/run-ide-perf.mbtx --action generate --platform windows --output-dir perf/tests/windows
+git diff -- perf/tests
+```
+
+`--output-dir` is the platform directory. The generator writes each fixture
+into its slug subdirectory, such as `perf/tests/unix/openseek`. Start with a
+clean `perf/tests` tree so the diff shows exactly what regeneration changed.
+
+Generate candidates separately when choosing new cases:
+
+```sh
+moonx scripts/run-ide-perf.mbtx --action generate
+```
+
+`--platform unix|windows` selects the generation platform.
+
+`generate` writes to `perf/data/<platform>/candidates-openseek`. Select commands
+for the fixed workload and copy them into `perf/tests/<platform>/openseek`. These
+directories have the same depth, so their relative command paths also match.
+Use `--case-file` to select files, and pass `--candidates` to run against the
+generated directory. Regenerate or update `workload.json` together with its
+Mooncram documents; mismatches are rejected before execution.
+
+Each invocation writes `result.json`, per-command samples, and execution logs
+under `perf/data/<platform>/<run-id>`. Repositories and collected data are
+Git-ignored; configuration and fixed tests are version-controlled.
+Report schema version 3 records ordered `command_results`, per-document
+`mooncram_results`, and the Mooncram version. Its measurement profile includes
+the Mooncram version and is separate from earlier direct-execution reports.
+
+`run-id` has the format `yyyyMMddTHHmmssfffZ-xxxxxxxx`, for example
+`20261106T023045123Z-a1b2c3d4`. The timestamp is UTC with millisecond precision,
+and the suffix is eight random lowercase hexadecimal characters. Each
+invocation gets a fresh ID, also stored in `result.json`.
+
+`elapsed_us` covers the subprocess invocation and output collection after
+workspace preparation. The fixed commands use explicit backends and
+`--no-check`, so workspace checks run outside the timed interval.
+Each command gets one sample and a 60-second IDE timeout; Mooncram's per-case
+timeout is 120 seconds to include startup. Mooncram ignores output but checks
+exit codes; nonzero exits, timeouts and missing samples fail the run. Normalized
+output is retained in each sample, and Mooncram diagnostics are in the run log.
+Mooncram continues through the selected cases to collect remaining measurements.
+Use successful `test` reports for comparisons. Ordinary IDE snapshot tests remain
+responsible for checking output correctness.
+
+`daily-perf.yml` runs independent `Unix-Perf` and `Windows-Perf` jobs. Both
+upload their reports and logs even after a test failure.
+
 ## CI
 
 The PR workflow (`.github/workflows/pr.yml`) uses the same per-platform checks

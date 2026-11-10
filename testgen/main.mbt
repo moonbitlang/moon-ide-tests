@@ -3,10 +3,12 @@ priv struct Args {
   repo_path : String
   output_dir : String
   repo_slug : String
+  test_root : String
   platform : TestPlatform
   max_per_file : Int32
   max_files : Int32
   max_file_size : Int32
+  performance : Bool
 }
 
 ///|
@@ -94,7 +96,7 @@ fn read_existing_file(path : String) -> String? {
 }
 
 ///|
-/// Suites emitted as one file per test case; see render_split_symbol_files.
+/// Ordinary snapshot suites emitted as one file per test case.
 let split_suite_prefixes : Array[String] = ["find-references", "rename"]
 
 ///|
@@ -129,12 +131,12 @@ fn is_split_suite_output(name : String) -> Bool {
 }
 
 ///|
-/// Split-suite cases that disappear leave their per-case files behind, and
-/// the pre-split monolithic suite files would keep running stale commands,
-/// so drop every split-suite output we did not just generate.
-fn remove_stale_split_files(
+/// Remove generated files that this run did not produce. Each render mode
+/// supplies the set of names it owns.
+fn remove_obsolete_files(
   output_dir : String,
   files : Array[CramFile],
+  obsolete : (String) -> Bool,
 ) -> Unit {
   let generated : @hashset.HashSet[String] = @hashset.HashSet([])
   for file in files {
@@ -147,7 +149,7 @@ fn remove_stale_split_files(
   }
   entries.sort()
   for name in entries {
-    if generated.contains(name) || !is_split_suite_output(name) {
+    if generated.contains(name) || !obsolete(name) {
       continue
     }
     let path = @path.Path::join(output_dir, name).to_string()
@@ -177,7 +179,17 @@ fn existing_output_source(output_dir : String, name : String) -> String? {
 }
 
 ///|
-fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
+fn write_performance_files(output_dir : String, files : Array[CramFile]) -> Unit {
+  ensure_dir_tree(output_dir)
+  for file in files {
+    let path = @path.Path::join(output_dir, file.name).to_string()
+    write_generated_file_or_exit(path, file.content)
+  }
+  remove_obsolete_files(output_dir, files, is_performance_output)
+}
+
+///|
+fn write_snapshot_files(output_dir : String, files : Array[CramFile]) -> Unit {
   ensure_dir_tree(output_dir)
   for file in files {
     let path = @path.Path::join(output_dir, file.name).to_string()
@@ -187,7 +199,7 @@ fn write_cram_files(output_dir : String, files : Array[CramFile]) -> Unit {
     }
     write_generated_file_or_exit(path, content)
   }
-  remove_stale_split_files(output_dir, files)
+  remove_obsolete_files(output_dir, files, is_split_suite_output)
 }
 
 ///|
@@ -201,6 +213,7 @@ fn parse_args(args : Array[String]) -> Args raise {
   let repo_path_raw : Ref[String] = Ref("")
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
+  let test_root_raw : Ref[String] = Ref("../../..")
   let platform_raw : Ref[String] = Ref("unix")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
@@ -212,6 +225,9 @@ fn parse_args(args : Array[String]) -> Args raise {
     ),
     (
       "repo-slug", 's', repo_slug_raw, "Stable repository slug used in generated markdown titles",
+    ),
+    (
+      "test-root", 'b', test_root_raw, "Path from generated tests to the test repository root (default: ../../..)",
     ),
     (
       "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
@@ -228,6 +244,13 @@ fn parse_args(args : Array[String]) -> Args raise {
   ]
   let command = @argparse.Command(
     "testgen",
+    flags=[
+      @argparse.FlagArg(
+        "performance",
+        long="performance",
+        about="Generate commands for the dedicated IDE benchmark runner",
+      ),
+    ],
     options=spec.map(option => {
       let (name, short, _, about) = option
       @argparse.OptionArg(
@@ -287,10 +310,12 @@ fn parse_args(args : Array[String]) -> Args raise {
     repo_path: repo_path_raw.val,
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
+    test_root: test_root_raw.val,
     platform,
     max_per_file,
     max_files,
     max_file_size,
+    performance: matches.flags.get("performance").unwrap_or(false),
   }
 }
 
@@ -315,8 +340,18 @@ fn run(args : Array[String]) -> Unit {
     config.max_file_size,
     platform=config.platform,
   )
-  let files = render_cram_files(result, config.repo_slug, config.platform)
-  write_cram_files(config.output_dir, files)
+  let files = render_cram_files(
+    result,
+    config.repo_slug,
+    config.platform,
+    performance=config.performance,
+    test_root=config.test_root,
+  )
+  if config.performance {
+    write_performance_files(config.output_dir, files)
+  } else {
+    write_snapshot_files(config.output_dir, files)
+  }
 }
 
 ///|
