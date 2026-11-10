@@ -25,6 +25,10 @@ fn append_mooncram_block(
   }
   append_line(sb, "````mooncram")
   append_line(sb, command)
+  if current_performance.val {
+    append_line(sb, "@STDOUT (ignore)")
+    append_line(sb, "@STDERR (ignore)")
+  }
   append_line(sb, "````")
 }
 
@@ -76,6 +80,12 @@ fn append_unique_command(
   } else {
     seen.add(command)
     append_mooncram_block(sb, command, annotation~)
+    if current_performance.val {
+      current_perf_cases.val.push({
+        "case_file": Json(current_perf_file.val),
+        "argv": Json(current_perf_args.val),
+      })
+    }
     true
   }
 }
@@ -112,8 +122,9 @@ fn command_quote(arg : String) -> String {
 }
 
 ///|
-fn run_moon_ide_command(invocation : String) -> String {
+fn run_moon_ide_command(invocation : String, perf_args~ : Array[String] = []) -> String {
   if current_performance.val {
+    current_perf_args.val = ["ide", ..perf_args, "--no-check"]
     "$ moonx '\{current_test_root.val}/scripts/bench-moon-ide.mbtx' \{invocation} --no-check"
   } else {
     "$ moonx '\{current_test_root.val}/scripts/run-moon-ide.mbtx' \{invocation}"
@@ -121,7 +132,30 @@ fn run_moon_ide_command(invocation : String) -> String {
 }
 
 ///|
+fn performance_target(file : String) -> Array[String] {
+  let option = fixture_target_option(current_repo_slug.val, file)
+  if option.has_prefix(" --target ") {
+    ["--target", option[10:].to_owned()]
+  } else {
+    []
+  }
+}
+
+///|
+fn performance_symbol_args(operation : String, test_case : TestCase) -> Array[String] {
+  let args = [operation, test_case.sym]
+  if operation == "rename" {
+    args.push(rename_target(test_case.sym))
+  }
+  args.push("--loc")
+  args.push(location(test_case))
+  args.append(performance_target(test_case.file))
+  args
+}
+
+///|
 fn render_outline_file(source_files : Array[String]) -> CramFile? {
+  current_perf_file.val = "outline.mooncram.md"
   let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, "outline")
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -132,6 +166,7 @@ fn render_outline_file(source_files : Array[String]) -> CramFile? {
         seen,
         run_moon_ide_command(
           "outline \{command_quote(platform_file_path(file))}\{if current_performance.val { fixture_target_option(current_repo_slug.val, file) } else { "" }}",
+          perf_args=["outline", platform_file_path(file), ..performance_target(file)],
         ),
       ) {
       has_command = true
@@ -151,6 +186,7 @@ fn render_symbol_file(
   loc_cases : Array[TestCase],
   to_command : (TestCase) -> String,
 ) -> CramFile? {
+  current_perf_file.val = name
   let sb = StringBuilder()
   append_markdown_header(sb, current_repo_slug.val, suite)
   let seen : @hashset.HashSet[String] = @hashset.HashSet([])
@@ -184,6 +220,7 @@ fn render_hover_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("hover.mooncram.md", "hover", cases, test_case => {
     run_moon_ide_command(
       "hover \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      perf_args=performance_symbol_args("hover", test_case),
     )
   })
 }
@@ -193,6 +230,7 @@ fn render_peek_file(cases : Array[TestCase]) -> CramFile? {
   render_symbol_file("peek-def.mooncram.md", "peek-def", cases, test_case => {
     run_moon_ide_command(
       "peek-def \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      perf_args=performance_symbol_args("peek-def", test_case),
     )
   })
 }
@@ -274,6 +312,7 @@ fn render_refs_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_symbol_files("find-references", cases, test_case => {
     run_moon_ide_command(
       "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      perf_args=performance_symbol_args("find-references", test_case),
     )
   })
 }
@@ -295,6 +334,7 @@ fn render_rename_files(cases : Array[TestCase]) -> Array[CramFile] {
   render_symbol_files("rename", cases, test_case => {
     run_moon_ide_command(
       "rename \{command_quote(test_case.sym)} \{command_quote(rename_target(test_case.sym))} --loc \{quoted_location(test_case)}\{fixture_target_option(current_repo_slug.val, test_case.file)}",
+      perf_args=performance_symbol_args("rename", test_case),
     )
   })
 }
@@ -320,6 +360,15 @@ let current_performance : Ref[Bool] = Ref(false)
 let current_test_root : Ref[String] = Ref("../../..")
 
 ///|
+let current_perf_file : Ref[String] = Ref("")
+
+///|
+let current_perf_args : Ref[Array[String]] = Ref([])
+
+///|
+let current_perf_cases : Ref[Array[Json]] = Ref([])
+
+///|
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
@@ -331,6 +380,7 @@ fn render_cram_files(
   current_platform.val = platform
   current_performance.val = performance
   current_test_root.val = normalize_separators(test_root)
+  current_perf_cases.val = []
   let files = Array(capacity=0)
   append_if_some(files, render_outline_file(result.source_files))
   append_if_some(files, render_hover_file(result.loc_cases))
@@ -373,6 +423,14 @@ fn render_cram_files(
         commands.push([..prefix, "check", "--no-mbti", "--target", backends.join(",")])
       }
     }
+    let documents : Map[String, Json] = Map([])
+    for file in files {
+      documents[file.name] = Json(file.content)
+    }
+    files.push(CramFile::{
+      name: "workload.json",
+      content: Json({ "documents": Json(documents), "cases": Json(current_perf_cases.val) }).stringify(indent=2) + "\n",
+    })
     files.push(CramFile::{
       name: "prepare.json",
       content: Json({ "commands": Json(commands) }).stringify(indent=2) + "\n",

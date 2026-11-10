@@ -25,7 +25,9 @@ const element = (tag, text, className) => {
 const fullDate = value => new Date(value).toLocaleString(undefined, {dateStyle: 'medium', timeStyle: 'short'});
 const percentage = value => value === null ? '—' : `${value > 0 ? '+' : ''}${value.toFixed(1)}%`;
 const changeClass = value => value > 0 ? 'increased' : value < 0 ? 'decreased' : 'muted';
-const profileLabel = value => ({'prepared-cli-v1': '标准库预检', 'legacy-cli-v0': '旧计时方式'})[value] || value;
+const profileLabel = value => value?.startsWith('prepared-mooncram-v1/')
+  ? `Mooncram ${value.slice('prepared-mooncram-v1/'.length)} / 标准库预检`
+  : ({'prepared-cli-v1': '标准库预检', 'legacy-cli-v0': '旧计时方式'})[value] || value;
 const selectionKey = () => `${state.fixture}/${state.operation}`;
 const selectedIds = () => selections.get(selectionKey()) || [];
 const selectedSeries = () => data.series.filter(series => selectedIds().includes(series.info.id));

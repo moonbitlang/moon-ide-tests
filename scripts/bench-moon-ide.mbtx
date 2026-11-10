@@ -108,6 +108,7 @@ async fn main {
       None => Json::null()
     },
     "status": Json(status),
+    "output": Json(output),
     "error_output": if status == "ok" {
       Json::null()
     } else {

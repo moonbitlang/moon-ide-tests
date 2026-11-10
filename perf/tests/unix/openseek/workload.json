@@ -1,0 +1,1114 @@
+{
+  "documents": {
+    "outline.mooncram.md": "# openseek outline\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'agent_tool/job_output/job_output.mbt' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'desktop/backend/host/host_wbtest.mbt' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'desktop/backend/internal/console_proxy/main/main.mbt' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'desktop/frontend/fileeditor/loading_wbtest.mbt' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'desktop/frontend/markdown/code_copy.mbt' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'desktop/protocol/session_import_test.mbt' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'editor/internal/shell/examples/embedded_viewer/main.mbt' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'editor/internal/viewer/browser/view/selections.mbt' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'editor/internal/viewer/contrib/hover/extends.mbt' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' outline 'protocol/emit/emit_test.mbt' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n",
+    "hover.mooncram.md": "# openseek hover\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'definition' --loc 'agent_tool/job_output/job_output.mbt:9:8' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'bg_runtime' --loc 'agent_tool/job_output/job_output.mbt:10:3' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'dir' --loc 'desktop/backend/host/host_wbtest.mbt:9:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'tmpdir' --loc 'desktop/backend/host/host_wbtest.mbt:9:17' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'command' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'Command' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:27' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'test_file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:14' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'code_copy_button' --loc 'desktop/frontend/markdown/code_copy.mbt:2:4' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'locale' --loc 'desktop/frontend/markdown/code_copy.mbt:3:3' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'worktree_of' --loc 'desktop/protocol/session_import_test.mbt:3:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'source' --loc 'desktop/protocol/session_import_test.mbt:5:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'memory_root' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:8:5' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'StartupSubscription' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:11:15' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'SelectionsOverlay' --loc 'editor/internal/viewer/browser/view/selections.mbt:10:13' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'render_result' --loc 'editor/internal/viewer/browser/view/selections.mbt:11:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'HoverDebouncer' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:12' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'wire' --loc 'protocol/emit/emit_test.mbt:6:4' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' hover 'event' --loc 'protocol/emit/emit_test.mbt:6:9' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n",
+    "peek-def.mooncram.md": "# openseek peek-def\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'definition' --loc 'agent_tool/job_output/job_output.mbt:9:8' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'bg_runtime' --loc 'agent_tool/job_output/job_output.mbt:10:3' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'dir' --loc 'desktop/backend/host/host_wbtest.mbt:9:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'tmpdir' --loc 'desktop/backend/host/host_wbtest.mbt:9:17' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'command' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'Command' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:27' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'test_file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:14' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'code_copy_button' --loc 'desktop/frontend/markdown/code_copy.mbt:2:4' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'locale' --loc 'desktop/frontend/markdown/code_copy.mbt:3:3' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'worktree_of' --loc 'desktop/protocol/session_import_test.mbt:3:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'source' --loc 'desktop/protocol/session_import_test.mbt:5:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'memory_root' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:8:5' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'StartupSubscription' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:11:15' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'SelectionsOverlay' --loc 'editor/internal/viewer/browser/view/selections.mbt:10:13' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'render_result' --loc 'editor/internal/viewer/browser/view/selections.mbt:11:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'HoverDebouncer' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:12' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'to_repr' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:40' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'wire' --loc 'protocol/emit/emit_test.mbt:6:4' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' peek-def 'event' --loc 'protocol/emit/emit_test.mbt:6:9' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n",
+    "find-references.mooncram.md": "# openseek find-references\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'definition' --loc 'agent_tool/job_output/job_output.mbt:9:8' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'bg_runtime' --loc 'agent_tool/job_output/job_output.mbt:10:3' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'dir' --loc 'desktop/backend/host/host_wbtest.mbt:9:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'command' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'test_file' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:14' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'code_copy_button' --loc 'desktop/frontend/markdown/code_copy.mbt:2:4' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'locale' --loc 'desktop/frontend/markdown/code_copy.mbt:3:3' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'worktree_of' --loc 'desktop/protocol/session_import_test.mbt:3:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'source' --loc 'desktop/protocol/session_import_test.mbt:5:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'memory_root' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:8:5' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'StartupSubscription' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:11:15' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'SelectionsOverlay' --loc 'editor/internal/viewer/browser/view/selections.mbt:10:13' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'render_result' --loc 'editor/internal/viewer/browser/view/selections.mbt:11:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'HoverDebouncer' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:12' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'to_repr' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:40' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'wire' --loc 'protocol/emit/emit_test.mbt:6:4' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' find-references 'event' --loc 'protocol/emit/emit_test.mbt:6:9' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n",
+    "rename.mooncram.md": "# openseek rename\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'definition' 'definition_renamed' --loc 'agent_tool/job_output/job_output.mbt:9:8' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'bg_runtime' 'bg_runtime_renamed' --loc 'agent_tool/job_output/job_output.mbt:10:3' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'dir' 'dir_renamed' --loc 'desktop/backend/host/host_wbtest.mbt:9:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'command' 'command_renamed' --loc 'desktop/backend/internal/console_proxy/main/main.mbt:4:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'file' 'file_renamed' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'test_file' 'test_file_renamed' --loc 'desktop/frontend/fileeditor/loading_wbtest.mbt:3:14' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'code_copy_button' 'code_copy_button_renamed' --loc 'desktop/frontend/markdown/code_copy.mbt:2:4' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'locale' 'locale_renamed' --loc 'desktop/frontend/markdown/code_copy.mbt:3:3' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'worktree_of' 'worktree_of_renamed' --loc 'desktop/protocol/session_import_test.mbt:3:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'source' 'source_renamed' --loc 'desktop/protocol/session_import_test.mbt:5:7' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'memory_root' 'memory_root_renamed' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:8:5' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'StartupSubscription' 'StartupSubscriptionRenamed' --loc 'editor/internal/shell/examples/embedded_viewer/main.mbt:11:15' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'SelectionsOverlay' 'SelectionsOverlayRenamed' --loc 'editor/internal/viewer/browser/view/selections.mbt:10:13' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'render_result' 'render_result_renamed' --loc 'editor/internal/viewer/browser/view/selections.mbt:11:7' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'HoverDebouncer' 'HoverDebouncerRenamed' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:12' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'to_repr' 'to_repr_renamed' --loc 'editor/internal/viewer/contrib/hover/extends.mbt:4:40' --target js --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'wire' 'wire_renamed' --loc 'protocol/emit/emit_test.mbt:6:4' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n\n````mooncram\n$ moonx '../../../../scripts/bench-moon-ide.mbtx' rename 'event' 'event_renamed' --loc 'protocol/emit/emit_test.mbt:6:9' --target native --no-check\n@STDOUT (ignore)\n@STDERR (ignore)\n````\n"
+  },
+  "cases": [
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "agent_tool/job_output/job_output.mbt",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "desktop/backend/host/host_wbtest.mbt",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "desktop/backend/internal/console_proxy/main/main.mbt",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "desktop/frontend/markdown/code_copy.mbt",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "desktop/protocol/session_import_test.mbt",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "editor/internal/viewer/browser/view/selections.mbt",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "editor/internal/viewer/contrib/hover/extends.mbt",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "outline.mooncram.md",
+      "argv": [
+        "ide",
+        "outline",
+        "protocol/emit/emit_test.mbt",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "definition",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:9:8",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "bg_runtime",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:10:3",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "dir",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "tmpdir",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:17",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "command",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "Command",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:27",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "test_file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:14",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "code_copy_button",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:2:4",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "locale",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:3:3",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "worktree_of",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:3:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "source",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:5:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "memory_root",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:8:5",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "StartupSubscription",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:11:15",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "SelectionsOverlay",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:10:13",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "render_result",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:11:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "HoverDebouncer",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:12",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "wire",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:4",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "hover.mooncram.md",
+      "argv": [
+        "ide",
+        "hover",
+        "event",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:9",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "definition",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:9:8",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "bg_runtime",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:10:3",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "dir",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "tmpdir",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:17",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "command",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "Command",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:27",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "test_file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:14",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "code_copy_button",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:2:4",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "locale",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:3:3",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "worktree_of",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:3:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "source",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:5:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "memory_root",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:8:5",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "StartupSubscription",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:11:15",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "SelectionsOverlay",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:10:13",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "render_result",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:11:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "HoverDebouncer",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:12",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "to_repr",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:40",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "wire",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:4",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "peek-def.mooncram.md",
+      "argv": [
+        "ide",
+        "peek-def",
+        "event",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:9",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "definition",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:9:8",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "bg_runtime",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:10:3",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "dir",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "command",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "test_file",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:14",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "code_copy_button",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:2:4",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "locale",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:3:3",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "worktree_of",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:3:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "source",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:5:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "memory_root",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:8:5",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "StartupSubscription",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:11:15",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "SelectionsOverlay",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:10:13",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "render_result",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:11:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "HoverDebouncer",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:12",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "to_repr",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:40",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "wire",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:4",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "find-references.mooncram.md",
+      "argv": [
+        "ide",
+        "find-references",
+        "event",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:9",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "definition",
+        "definition_renamed",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:9:8",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "bg_runtime",
+        "bg_runtime_renamed",
+        "--loc",
+        "agent_tool/job_output/job_output.mbt:10:3",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "dir",
+        "dir_renamed",
+        "--loc",
+        "desktop/backend/host/host_wbtest.mbt:9:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "command",
+        "command_renamed",
+        "--loc",
+        "desktop/backend/internal/console_proxy/main/main.mbt:4:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "file",
+        "file_renamed",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "test_file",
+        "test_file_renamed",
+        "--loc",
+        "desktop/frontend/fileeditor/loading_wbtest.mbt:3:14",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "code_copy_button",
+        "code_copy_button_renamed",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:2:4",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "locale",
+        "locale_renamed",
+        "--loc",
+        "desktop/frontend/markdown/code_copy.mbt:3:3",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "worktree_of",
+        "worktree_of_renamed",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:3:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "source",
+        "source_renamed",
+        "--loc",
+        "desktop/protocol/session_import_test.mbt:5:7",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "memory_root",
+        "memory_root_renamed",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:8:5",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "StartupSubscription",
+        "StartupSubscriptionRenamed",
+        "--loc",
+        "editor/internal/shell/examples/embedded_viewer/main.mbt:11:15",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "SelectionsOverlay",
+        "SelectionsOverlayRenamed",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:10:13",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "render_result",
+        "render_result_renamed",
+        "--loc",
+        "editor/internal/viewer/browser/view/selections.mbt:11:7",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "HoverDebouncer",
+        "HoverDebouncerRenamed",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:12",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "to_repr",
+        "to_repr_renamed",
+        "--loc",
+        "editor/internal/viewer/contrib/hover/extends.mbt:4:40",
+        "--target",
+        "js",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "wire",
+        "wire_renamed",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:4",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    },
+    {
+      "case_file": "rename.mooncram.md",
+      "argv": [
+        "ide",
+        "rename",
+        "event",
+        "event_renamed",
+        "--loc",
+        "protocol/emit/emit_test.mbt:6:9",
+        "--target",
+        "native",
+        "--no-check"
+      ]
+    }
+  ]
+}

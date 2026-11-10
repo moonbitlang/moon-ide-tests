@@ -40,8 +40,10 @@ read-only repository permissions.
   family, branch and measurement profile define a measurement group. The latest
   group is selected initially; other groups are available under Measurement
   conditions. Different groups never share a mean or a comparison.
-- The runner records `prepared-cli-v1` and available runner image metadata.
-  Earlier reports without core preparation use a separate `legacy-cli-v0`
+- The runner records `prepared-mooncram-v1/<version>` and available runner image
+  metadata. Each Mooncram version is grouped separately from other versions and
+  from earlier `prepared-cli-v1` direct-execution runs. Reports without core
+  preparation use a separate `legacy-cli-v0`
   profile. Unknown/incomplete suites remain in raw records but cannot contribute
   to a measurement group. Runner patch revisions are retained in raw details;
   different revisions within the same image family share a measurement group.

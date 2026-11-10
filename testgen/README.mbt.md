@@ -45,10 +45,11 @@ moon -C testgen run --target wasm cmd/main -- \
 - `--performance`: emit the dedicated benchmark script followed by IDE
   arguments and `--no-check`. Performance mode emits one file per command type
   and a `prepare.json` listing checks to run before timing queries. The
-  script resolves its fixture from the test directory. These files contain
-  commands only; regeneration discards any previous expected output. Execute
-  them with `moonx scripts/run-ide-perf.mbtx`, which collects measurements
-  and logs without snapshot comparisons.
+  script resolves its fixture from the test directory. Mooncram ignores output
+  but checks exit codes; `workload.json` records ordered query arguments and
+  document contents for sample reconciliation. Regeneration replaces both the
+  commands and manifest. Execute them with `moonx scripts/run-ide-perf.mbtx`,
+  which invokes Mooncram and collects the measurements and logs.
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max sampled `.mbt` files; `0` means no cap (default: `0`)

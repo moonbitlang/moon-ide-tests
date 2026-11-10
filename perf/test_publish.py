@@ -80,6 +80,20 @@ class HistoryTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.normalize(data)
 
+    def test_new_report_rejects_samples_outside_the_manifest(self):
+        data = report()
+        data["schema_version"] = 3
+        data["fixtures"][0]["samples"][0]["argv"][2] = "unexpected"
+        with self.assertRaisesRegex(ValueError, "unexpected sample"):
+            self.normalize(data)
+
+    def test_new_profile_remains_separate(self):
+        data = report()
+        data["schema_version"] = 3
+        data["measurement_profile"] = "prepared-mooncram-v1/0.1.2"
+        run, _ = self.normalize(data)
+        self.assertEqual(run["measurement_profile"], "prepared-mooncram-v1/0.1.2")
+
     def test_legacy_measurement_profile_is_separate(self):
         data = report()
         del data["core_prepared"]

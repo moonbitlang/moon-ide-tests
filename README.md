@@ -201,8 +201,12 @@ with all backends. `moon ide --no-check` still performs that check internally;
 preparing its cache keeps the first query from paying the cold-check cost.
 The command and success flag are recorded in `result.json`, with output in
 `core-prepare.log`. A failed standard-library check stops the run before sampling.
-The `.mooncram.md` files contain fixed commands only, without expected output.
-The runner executes them directly and saves their merged output in run logs.
+The `.mooncram.md` files contain fixed commands with output ignored and a
+zero-exit expectation. The runner invokes `moonbit-community/mooncram@latest`;
+the benchmark writes each timed invocation's output and status to its sample.
+`workload.json` records the ordered queries and document contents, so the runner
+can detect edits that were not accompanied by a manifest update and identify
+missing samples without parsing Mooncram syntax itself.
 
 To regenerate the checked-in suites from the commits and sampling limits in
 `perf/repos.yaml`, point generation at each platform's directory:
@@ -229,13 +233,15 @@ moonx scripts/run-ide-perf.mbtx --action generate
 for the fixed workload and copy them into `perf/tests/<platform>/openseek`. These
 directories have the same depth, so their relative command paths also match.
 Use `--case-file` to select files, and pass `--candidates` to run against the
-generated directory.
+generated directory. Regenerate or update `workload.json` together with its
+Mooncram documents; mismatches are rejected before execution.
 
 Each invocation writes `result.json`, per-command samples, and execution logs
 under `perf/data/<platform>/<run-id>`. Repositories and collected data are
 Git-ignored; configuration and fixed tests are version-controlled.
-Report schema version 2 records `command_results` with case filenames, argument
-vectors, exit codes and runner errors instead of a `mooncram_exit_code`.
+Report schema version 3 records ordered `command_results`, per-document
+`mooncram_results`, and the Mooncram version. Its measurement profile includes
+the Mooncram version and is separate from earlier direct-execution reports.
 
 `run-id` has the format `yyyyMMddTHHmmssfffZ-xxxxxxxx`, for example
 `20261106T023045123Z-a1b2c3d4`. The timestamp is UTC with millisecond precision,
@@ -245,9 +251,11 @@ invocation gets a fresh ID, also stored in `result.json`.
 `elapsed_us` covers the subprocess invocation and output collection after
 workspace preparation. The fixed commands use explicit backends and
 `--no-check`, so workspace checks run outside the timed interval.
-Each command gets one sample and a 60-second timeout. Output is logged without
-comparison; nonzero exits, timeouts and missing samples fail the run. The runner
-continues through the selected commands to collect the remaining measurements.
+Each command gets one sample and a 60-second IDE timeout; Mooncram's per-case
+timeout is 120 seconds to include startup. Mooncram ignores output but checks
+exit codes; nonzero exits, timeouts and missing samples fail the run. Normalized
+output is retained in each sample, and Mooncram diagnostics are in the run log.
+Mooncram continues through the selected cases to collect remaining measurements.
 Use successful `test` reports for comparisons. Ordinary IDE snapshot tests remain
 responsible for checking output correctness.
 

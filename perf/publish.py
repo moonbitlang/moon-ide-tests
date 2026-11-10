@@ -134,6 +134,8 @@ def normalize(report, platform, ci, job_result):
                 raise ValueError("successful sample must have exit code zero")
             if info["id"] in samples:
                 raise ValueError("duplicate sample")
+            if report.get("schema_version") == 3 and info["id"] not in cases:
+                raise ValueError("unexpected sample outside workload manifest")
             cases.setdefault(info["id"], info)
             samples[info["id"]] = {
                 "case_id": info["id"],

@@ -417,15 +417,36 @@ test "performance generation groups multiple commands into five suite files" {
       files.map(file => file.name),
       [
         "outline.mooncram.md", "hover.mooncram.md", "peek-def.mooncram.md",
-        "find-references.mooncram.md", "rename.mooncram.md", "prepare.json",
+        "find-references.mooncram.md", "rename.mooncram.md", "workload.json", "prepare.json",
       ],
     )
     for file in files[:5] {
       let blocks = parse_expected_blocks(file.content)
       assert_eq(blocks.length(), 2)
-      assert_true(blocks.all(block => block.output.is_empty()))
+      assert_true(blocks.all(block => block.output == ["@STDOUT (ignore)", "@STDERR (ignore)"]))
     }
+    assert_true(files[5].content.contains("outline.mooncram.md"))
+    assert_true(files[5].content.contains("src/a.mbt"))
   }
+}
+
+///|
+test "performance manifest records escaped symbols without parsing commands" {
+  let files = render_cram_files(
+    CollectResult::{
+      source_files: ["src/a.mbt"],
+      loc_cases: [TestCase::{ file: "src/a.mbt", line: 1, col: 2, sym: "O'Reilly", }],
+    },
+    "openseek",
+    TestPlatform::Unix,
+    performance=true,
+    test_root="../../../..",
+  )
+  let manifest = files.iter().find_first(file => file.name == "workload.json").unwrap()
+  assert_true(manifest.content.contains("O'Reilly"))
+  let hover = files.iter().find_first(file => file.name == "hover.mooncram.md").unwrap()
+  assert_true(hover.content.contains("\"O'Reilly\""))
+  assert_true(hover.content.contains("@STDOUT (ignore)"))
 }
 
 ///|
