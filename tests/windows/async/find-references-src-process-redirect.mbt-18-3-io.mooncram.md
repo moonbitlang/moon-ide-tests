@@ -1,7 +1,7 @@
 # async find-references io src\process\redirect.mbt:18:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'io' --loc 'src\process\redirect.mbt:18:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'io' --loc 'src\process\redirect.mbt:18:3'
 Found 3 references for symbol 'io':
 <WORKDIR>/src\process\redirect.mbt:60:7-60:9:
    |   let r = @event_loop.IoHandle::from_fd(r, kind=Pipe)

@@ -1,7 +1,7 @@
 # sqlparser find-references read_and_parse src/tests/tpch_test.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'read_and_parse' --loc 'src/tests/tpch_test.mbt:2:4'
 Found 22 references for symbol 'read_and_parse':
 <WORKDIR>/src/tests/tpch_test.mbt:23:14-23:28:
    | 

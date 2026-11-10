@@ -112,18 +112,11 @@ fn command_quote(arg : String) -> String {
 }
 
 ///|
-fn test_repo_root_arg() -> String {
-  command_quote(
-    "\{current_test_root.val}/\{normalize_separators(current_repo_path.val)}",
-  )
-}
-
-///|
 fn run_moon_ide_command(invocation : String) -> String {
   if current_performance.val {
     "$ moonx '\{current_test_root.val}/scripts/bench-moon-ide.mbtx' \{invocation} --no-check"
   } else {
-    "$ moonx '\{current_test_root.val}/scripts/run-moon-ide.mbtx' \{test_repo_root_arg()} moon ide \{invocation}"
+    "$ moonx '\{current_test_root.val}/scripts/run-moon-ide.mbtx' \{invocation}"
   }
 }
 
@@ -318,9 +311,6 @@ fn append_if_some(files : Array[CramFile], maybe_file : CramFile?) -> Unit {
 let current_repo_slug : Ref[String] = Ref("")
 
 ///|
-let current_repo_path : Ref[String] = Ref("")
-
-///|
 let current_platform : Ref[TestPlatform] = Ref(TestPlatform::Unix)
 
 ///|
@@ -333,13 +323,11 @@ let current_test_root : Ref[String] = Ref("../../..")
 fn render_cram_files(
   result : CollectResult,
   repo_slug : String,
-  repo_path : String,
   platform : TestPlatform,
   performance~ : Bool = false,
   test_root~ : String = "../../..",
 ) -> Array[CramFile] {
   current_repo_slug.val = repo_slug
-  current_repo_path.val = repo_path
   current_platform.val = platform
   current_performance.val = performance
   current_test_root.val = normalize_separators(test_root)

@@ -1,7 +1,7 @@
 # async find-references wait_read src/internal/event_loop/io_unix.mbt:17:24
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
 Found 8 references for symbol 'wait_read':
 <WORKDIR>/src/fs/watch_inotify.mbt:289:20-289:29:
     |       if self.waiter is Some(coro) {

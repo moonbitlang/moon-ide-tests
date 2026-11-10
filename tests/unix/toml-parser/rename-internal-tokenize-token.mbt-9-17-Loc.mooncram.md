@@ -1,7 +1,7 @@
 # toml-parser rename Loc internal/tokenize/token.mbt:9:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'Loc' 'LocRenamed' --loc 'internal/tokenize/token.mbt:9:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Loc' 'LocRenamed' --loc 'internal/tokenize/token.mbt:9:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/internal/tokenize/token.mbt
 @@

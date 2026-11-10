@@ -1,7 +1,7 @@
 # core rename from_int builtin/int64.mbt:44:15
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'from_int' 'from_int_renamed' --loc 'builtin/int64.mbt:44:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'from_int' 'from_int_renamed' --loc 'builtin/int64.mbt:44:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/builtin/int64.mbt
 @@

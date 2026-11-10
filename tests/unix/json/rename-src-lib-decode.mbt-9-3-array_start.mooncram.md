@@ -1,7 +1,7 @@
 # json rename array_start src/lib/decode.mbt:9:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'array_start' 'array_start_renamed' --loc 'src/lib/decode.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'array_start' 'array_start_renamed' --loc 'src/lib/decode.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/decode.mbt
 @@

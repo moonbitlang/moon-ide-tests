@@ -1,7 +1,7 @@
 # async find-references parse_int src/socket/unimplemented.mbt:20:24
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/async' moon ide find-references 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse_int' --loc 'src/socket/unimplemented.mbt:20:24' --target js
 Found 3 references for symbol 'parse_int':
 <WORKDIR>/src/http/unimplemented.mbt:22:24-22:33:
    | pub let unimplemented : Unit = {

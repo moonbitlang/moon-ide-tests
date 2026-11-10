@@ -1,7 +1,7 @@
 # sqlparser rename LexerError src/lexer.mbt:2:10
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'LexerError' 'LexerErrorRenamed' --loc 'src/lexer.mbt:2:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/export.mbt
 @@

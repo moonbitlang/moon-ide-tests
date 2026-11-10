@@ -66,8 +66,20 @@ if ($baselinePaths.Count -gt 0) {
 ```
 
 Cases on both platforms run through `moonx ../../../scripts/run-moon-ide.mbtx`.
-The script directly starts `moon ide` in the fixture directory, combines stdout
-and stderr, replaces repository/toolchain paths with `<WORKDIR>`/`<MOON_HOME>`,
+Only the IDE subcommand and its arguments are passed, for example:
+
+```text
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'name' --loc 'src/main.mbt:10:3'
+```
+
+Mooncram runs each command in its Markdown file's directory. The script maps
+`tests/<unix|windows>/<slug>` to `fixtures/repos/<slug>`; `core-project` maps to
+`core_test/test_project` and `core-standalone` maps to `core_test`. Other directory
+layouts are rejected. The script path stays relative to the Markdown file;
+`scripts/run-moon-ide.mbtx` would be resolved inside the test directory.
+
+The script directly starts `moon ide` in the inferred fixture directory, combines
+stdout and stderr, replaces repository/toolchain paths with `<WORKDIR>`/`<MOON_HOME>`,
 and returns the IDE exit code. Test cases do not invoke Bash or PowerShell.
 The executor pins `moonbitlang/async@0.22.5` and `moonbitlang/x@0.5.6`, so
 registry updates do not silently change its build dependencies.

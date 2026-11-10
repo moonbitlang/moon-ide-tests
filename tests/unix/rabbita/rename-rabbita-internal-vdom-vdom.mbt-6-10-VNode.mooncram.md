@@ -1,7 +1,7 @@
 # rabbita rename VNode rabbita/internal/vdom/vdom.mbt:6:10
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'VNode' 'VNodeRenamed' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc 'rabbita/internal/vdom/vdom.mbt:6:10'
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/html/html.mbt
 @@

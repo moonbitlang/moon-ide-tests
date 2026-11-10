@@ -1,7 +1,7 @@
 # rabbita find-references SheetSide rui/sheet.mbt:3:15
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'SheetSide' --loc 'rui/sheet.mbt:3:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'SheetSide' --loc 'rui/sheet.mbt:3:15'
 Found 8 references for symbol 'SheetSide':
 <WORKDIR>/e2e/apps/rui/dialogs/sheet.mbt:40:50-40:59:
    | }

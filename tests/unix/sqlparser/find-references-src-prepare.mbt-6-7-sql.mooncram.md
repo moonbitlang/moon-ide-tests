@@ -1,7 +1,7 @@
 # sqlparser find-references sql src/prepare.mbt:6:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'sql' --loc 'src/prepare.mbt:6:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'sql' --loc 'src/prepare.mbt:6:7'
 Found 1 references for symbol 'sql':
 <WORKDIR>/src/prepare.mbt:7:24-7:27:
   | ///|

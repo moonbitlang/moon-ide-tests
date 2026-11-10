@@ -1,7 +1,7 @@
 # core-standalone peek-def
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
 `pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1454-1475
@@ -30,7 +30,7 @@ Found 1 symbols matching 'Array::map':
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::filter'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
 `pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1547-1577
@@ -68,7 +68,7 @@ Found 1 symbols matching 'Array::filter':
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Array::fold'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
 `pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:2195-2225
@@ -106,7 +106,7 @@ Found 1 symbols matching 'Array::fold':
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::length'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
 `pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1812-1833
@@ -135,7 +135,7 @@ Found 1 symbols matching 'String::length':
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'String::split'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
 `pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1728-1739
@@ -154,7 +154,7 @@ Found 1 symbols matching 'String::split':
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'StringBuilder::new'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
 `pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:22-40
@@ -180,7 +180,7 @@ Found 1 symbols matching 'StringBuilder::new':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::abs'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Int32::abs'
 Found 1 symbols matching 'Int32::abs':
 
 `pub fn Int32::abs` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/int.mbt:172-198
@@ -214,7 +214,7 @@ Found 1 symbols matching 'Int32::abs':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Int32::to_string'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Int32::to_string'
 Found 2 symbols matching 'Int32::to_string':
 
 `pub fn Int32::to_string` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/to_string.mbt:202-263
@@ -291,7 +291,7 @@ Found 2 symbols matching 'Int32::to_string':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Option::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Option::map'
 Found 1 symbols matching 'Option::map':
 
 `pub fn Option::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/option.mbt:115-133
@@ -317,7 +317,7 @@ Found 1 symbols matching 'Option::map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Result::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Result::map'
 Found 1 symbols matching 'Result::map':
 
 `pub fn Result::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/result.mbt:15-35
@@ -345,7 +345,7 @@ Found 1 symbols matching 'Result::map':
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
 `pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:339-366
@@ -380,7 +380,7 @@ Found 1 symbols matching 'Iter::map':
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::filter'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
 `pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:309-337
@@ -416,7 +416,7 @@ Found 1 symbols matching 'Iter::filter':
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def 'Iter::to_array'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
 `pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:809-822
@@ -437,7 +437,7 @@ Found 1 symbols matching 'Iter::to_array':
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/list.List'
 Found 1 symbols matching '@moonbitlang/core/list.List':
 
 `pub enum List` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/types.mbt:15-21
@@ -451,7 +451,7 @@ Found 1 symbols matching '@moonbitlang/core/list.List':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/list.List::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/list.List::map'
 Found 1 symbols matching '@moonbitlang/core/list.List::map':
 
 `pub fn List::map` in package moonbitlang/core/list at <MOON_HOME>/lib/core/list/list.mbt:222-255
@@ -492,7 +492,7 @@ Found 1 symbols matching '@moonbitlang/core/list.List::map':
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::get'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/hashmap.HashMap::get'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 
 `pub fn HashMap::get` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:208-241
@@ -544,7 +544,7 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../core_test' moon ide peek-def '@moonbitlang/core/hashmap.HashMap::map'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
 `pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:862-886

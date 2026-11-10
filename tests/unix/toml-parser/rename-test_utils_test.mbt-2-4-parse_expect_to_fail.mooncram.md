@@ -1,7 +1,7 @@
 # toml-parser rename parse_expect_to_fail test_utils_test.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'parse_expect_to_fail' 'parse_expect_to_fail_renamed' --loc 'test_utils_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_expect_to_fail' 'parse_expect_to_fail_renamed' --loc 'test_utils_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/comprehensive_test.mbt
 @@

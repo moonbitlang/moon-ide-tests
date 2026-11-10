@@ -1,7 +1,7 @@
 # toml-parser rename escape_toml_string toml_to_string.mbt:3:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'escape_toml_string' 'escape_toml_string_renamed' --loc 'toml_to_string.mbt:3:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'escape_toml_string' 'escape_toml_string_renamed' --loc 'toml_to_string.mbt:3:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/toml_to_string.mbt
 @@

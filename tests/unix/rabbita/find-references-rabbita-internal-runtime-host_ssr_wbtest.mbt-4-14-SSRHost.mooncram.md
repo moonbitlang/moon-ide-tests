@@ -1,7 +1,7 @@
 # rabbita find-references SSRHost rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide find-references 'SSRHost' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'SSRHost' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
 Found 2 references for symbol 'SSRHost':
 <WORKDIR>/rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14-4:21:
   | ///|

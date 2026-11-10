@@ -1,7 +1,7 @@
 # indexmap peek-def
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'Default_init_capacity' --loc 'src/IndexMap.mbt:2:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Default_init_capacity' --loc 'src/IndexMap.mbt:2:7'
 Definition found at file <WORKDIR>/src/IndexMap.mbt
 "  | ///|" (escaped)
 "2 | const Default_init_capacity = 8" (escaped)
@@ -23,7 +23,7 @@ Definition found at file <WORKDIR>/src/IndexMap.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'calc_grow_threshold' --loc 'src/IndexMap.mbt:5:4'
 Definition found at file <WORKDIR>/src/IndexMap.mbt
 "  | ///|" (escaped)
 "  | const Default_init_capacity = 8" (escaped)
@@ -48,7 +48,7 @@ Definition found at file <WORKDIR>/src/IndexMap.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'm' --loc 'src/IndexMap_test.mbt:17:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'm' --loc 'src/IndexMap_test.mbt:17:7'
 Definition found at file <WORKDIR>/src/IndexMap_test.mbt
 "   | // See the License for the specific language governing permissions and" (escaped)
 "   | // limitations under the License." (escaped)
@@ -74,7 +74,7 @@ Definition found at file <WORKDIR>/src/IndexMap_test.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'T' --loc 'src/IndexMap_test.mbt:17:19'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'T' --loc 'src/IndexMap_test.mbt:17:19'
 Definition found at file <WORKDIR>/src/types.mbt
 "   | /// assert_eq(map.get(2), None)" (escaped)
 "   | /// assert_eq(map.get(3), Some(\"three\"))" (escaped)
@@ -92,7 +92,7 @@ Definition found at file <WORKDIR>/src/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'Bucket' --loc 'src/types.mbt:17:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Bucket' --loc 'src/types.mbt:17:13'
 Definition found at file <WORKDIR>/src/types.mbt
 "   | // See the License for the specific language governing permissions and" (escaped)
 "   | // limitations under the License." (escaped)
@@ -118,7 +118,7 @@ Definition found at file <WORKDIR>/src/types.mbt
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide peek-def 'hash' --loc 'src/types.mbt:18:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'hash' --loc 'src/types.mbt:18:3'
 Definition found at file <WORKDIR>/src/types.mbt
 "   | // limitations under the License." (escaped)
 "   | " (escaped)

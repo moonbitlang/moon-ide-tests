@@ -1,7 +1,7 @@
 # sqlparser find-references Parser src/dml.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide find-references 'Parser' --loc 'src/dml.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Parser' --loc 'src/dml.mbt:2:4'
 Found 199 references for symbol 'Parser':
 <WORKDIR>/src/ansi.mbt:45:13-45:19:
    | ///|

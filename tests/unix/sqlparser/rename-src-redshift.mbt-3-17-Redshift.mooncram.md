@@ -1,7 +1,7 @@
 # sqlparser rename Redshift src/redshift.mbt:3:17
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/sqlparser' moon ide rename 'Redshift' 'RedshiftRenamed' --loc 'src/redshift.mbt:3:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Redshift' 'RedshiftRenamed' --loc 'src/redshift.mbt:3:17'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/redshift.mbt
 @@

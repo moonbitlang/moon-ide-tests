@@ -1,7 +1,7 @@
 # json rename Context src/lib/json.mbt:2:13
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
 @@

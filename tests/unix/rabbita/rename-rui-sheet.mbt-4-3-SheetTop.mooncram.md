@@ -1,7 +1,7 @@
 # rabbita rename SheetTop rui/sheet.mbt:4:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/rabbita' moon ide rename 'SheetTop' 'SheetTopRenamed' --loc 'rui/sheet.mbt:4:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SheetTop' 'SheetTopRenamed' --loc 'rui/sheet.mbt:4:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e/apps/rui/dialogs/sheet.mbt
 @@

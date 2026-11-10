@@ -1,7 +1,7 @@
 # indexmap rename hash src/types.mbt:18:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'hash' 'hash_renamed' --loc 'src/types.mbt:18:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
 @@

@@ -1,7 +1,7 @@
 # json rename expect_reject src/tests/json_testsuite_n_test.mbt:9:3
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'expect_reject' 'expect_reject_renamed' --loc 'src/tests/json_testsuite_n_test.mbt:9:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_reject' 'expect_reject_renamed' --loc 'src/tests/json_testsuite_n_test.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt
 @@

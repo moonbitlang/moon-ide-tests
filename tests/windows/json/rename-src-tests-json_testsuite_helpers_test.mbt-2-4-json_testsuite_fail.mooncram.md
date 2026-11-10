@@ -1,7 +1,7 @@
 # json rename json_testsuite_fail src\tests\json_testsuite_helpers_test.mbt:2:4
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/json' moon ide rename 'json_testsuite_fail' 'json_testsuite_fail_renamed' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'json_testsuite_fail' 'json_testsuite_fail_renamed' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 @@

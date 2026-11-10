@@ -1,7 +1,7 @@
 # uri hover
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'Uri' --loc 'uri.mbt:54:12'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Uri' --loc 'uri.mbt:54:12'
 /// - path: hierarchical path to resource
 /// - query: additional parameters
 /// - fragment: reference to a secondary resource
@@ -76,7 +76,7 @@ pub struct Uri {
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'scheme' --loc 'uri.mbt:55:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'scheme' --loc 'uri.mbt:55:3'
 /// - query: additional parameters
 /// - fragment: reference to a secondary resource
 pub struct Uri {
@@ -90,7 +90,7 @@ pub struct Uri {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'uri' --loc 'uri_test.mbt:5:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'uri' --loc 'uri_test.mbt:5:7'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
   // Test simple HTTP URI
@@ -104,7 +104,7 @@ test "basic_uri_parsing" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'parse' --loc 'uri_test.mbt:5:18'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'uri_test.mbt:5:18'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
   // Test simple HTTP URI
@@ -145,7 +145,7 @@ test "basic_uri_parsing" {
 ````
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 /// Test URL encoding functionality
 test "url_encoding" {
   // Test basic encoding
@@ -159,7 +159,7 @@ test "url_encoding" {
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/uri' moon ide hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 /// Test URL encoding functionality
 test "url_encoding" {
   // Test basic encoding

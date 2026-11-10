@@ -10,6 +10,9 @@ Generated snapshot suites:
 - `rename-<file>-<line>-<col>-<sym>.mooncram.md` (one file per test case)
 
 Generated files are written to the configured output directory.
+Runnable fixture tests belong in `tests/<unix|windows>/<repo-slug>` and resolve
+their fixture as `fixtures/repos/<repo-slug>`. The `--repo` path selects the
+source to scan and is not embedded in commands.
 
 `find-references` and `rename` output can list every reference in the
 repository, so a monolithic suite file grows past what Moon Cram's markdown
@@ -29,7 +32,6 @@ moon -C testgen run --target wasm cmd/main -- \
   --repo "$PWD/fixtures/repos/argparser" \
   --output-dir "$PWD/tests/unix/argparser" \
   --repo-slug argparser \
-  --test-repo fixtures/repos/argparser \
   --platform unix
 ```
 
@@ -47,7 +49,6 @@ moon -C testgen run --target wasm cmd/main -- \
   commands only; regeneration discards any previous expected output. Execute
   them with `moonx scripts/run-ide-perf.mbtx`, which collects measurements
   and logs without snapshot comparisons.
-- `--test-repo <path>`: repository path embedded in generated Moon Cram files; defaults to `--repo`
 - `--platform <unix|windows>`: generated test shell platform (default: `unix`)
 - `--max-per-file <n>`: max collected AST locations with `--loc` per source file (default: `50`)
 - `--max-files <n>`: max sampled `.mbt` files; `0` means no cap (default: `0`)
@@ -115,5 +116,10 @@ moon -C testgen run --target wasm cmd/main -- \
   hover (`to_repr`) is excluded. Reference and rename queries for imported
   `tmpdir` and `Command` are excluded to keep measurements within OpenSeek.
 - Every generated file normalizes `MOON_HOME` and the test repository root in `moon ide` output.
-- Both platforms emit `moonx ../../../scripts/run-moon-ide.mbtx <fixture-dir> moon ide ...` in four-backtick Mooncram fences. Paths are relative to the Markdown document, with no shell state or expansion. The script launches the IDE directly, merges its output streams, normalizes repository/toolchain paths, and preserves the exit code.
+- Both platforms emit `moonx ../../../scripts/run-moon-ide.mbtx <ide-subcommand> [args...]`
+  in four-backtick Mooncram fences. Paths are relative to the Markdown document,
+  with no shell state or expansion. The script infers `fixtures/repos/<slug>`
+  from `tests/<unix|windows>/<slug>` and rejects other directory layouts. It
+  launches `moon ide` directly, merges its output streams, normalizes
+  repository/toolchain paths, and preserves the exit code.
 - Run selected Unix or Windows paths with `moonx moonbit-community/mooncram@0.1.0 test <paths...>`. Use `check` to validate without executing, and `update` to refresh expectations. Generation preserves existing output, including JSON-escaped lines, nonzero exit codes, and the updater's fence lengths, when the command is unchanged.

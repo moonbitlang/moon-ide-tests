@@ -1,7 +1,7 @@
 # toml-parser rename parse coverage_improvement_comprehensive_test.mbt:9:22
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'parse' 'parse_renamed' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/README.mbt.md
 @@

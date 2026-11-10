@@ -1,7 +1,7 @@
 # indexmap rename Default_init_capacity src\IndexMap.mbt:2:7
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/indexmap' moon ide rename 'Default_init_capacity' 'Default_init_capacityRenamed' --loc 'src\IndexMap.mbt:2:7'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Default_init_capacity' 'Default_init_capacityRenamed' --loc 'src\IndexMap.mbt:2:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\IndexMap.mbt
 @@

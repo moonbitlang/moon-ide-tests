@@ -1,7 +1,7 @@
 # toml-parser rename tokenize parser_wbtest.mbt:7:26
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/toml-parser' moon ide rename 'tokenize' 'tokenize_renamed' --loc 'parser_wbtest.mbt:7:26'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed' --loc 'parser_wbtest.mbt:7:26'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_test.mbt
 @@

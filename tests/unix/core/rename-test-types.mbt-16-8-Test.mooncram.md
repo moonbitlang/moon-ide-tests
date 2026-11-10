@@ -1,7 +1,7 @@
 # core rename Test test/types.mbt:16:8
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' '../../../fixtures/repos/core' moon ide rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Test' 'TestRenamed' --loc 'test/types.mbt:16:8'
 *** Begin Patch
 *** Update File: <WORKDIR>/diff/diff_html_test.mbt
 @@
