@@ -380,7 +380,7 @@ test "parser_report_lines formats parser diagnostics" {
 }
 
 ///|
-test "performance generation uses the dedicated runner and discards snapshots" {
+test "performance generation uses the dedicated runner with Mooncram assertions" {
   for test_root in ["../../../..", "../../../../.."] {
     let files = render_cram_files(
       CollectResult::{ source_files: ["src/a.mbt"], loc_cases: [], },
@@ -391,8 +391,8 @@ test "performance generation uses the dedicated runner and discards snapshots" {
     )
     let command = "$ moonx '\{test_root}/scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
     assert_true(files[0].content.contains(command))
-    let expected = "````mooncram\n\{command}\n1 |fn f() {\n````\n"
-    assert_eq(preserve_expected_output(files[0].content, expected), files[0].content)
+    assert_true(files[0].content.contains("@STDOUT (ignore)"))
+    assert_true(files[0].content.contains("@STDERR (ignore)"))
   }
 }
 
@@ -568,20 +568,24 @@ test "command arguments quote apostrophes without shell syntax" {
 
 ///|
 test "ordinary symbol suites emit one file per case" {
-  current_repo_slug.val = "example"
-  current_platform.val = TestPlatform::Unix
-  current_performance.val = false
   let cases = [
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
     TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g", },
     // Duplicate case collapses into the first file.
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
   ]
-  let files = render_symbol_files("find-references", cases, test_case => {
-    run_moon_ide_command(
-      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
-    )
-  })
+  let files = render_snapshot_symbol_files(
+    "example",
+    TestPlatform::Unix,
+    "find-references",
+    cases,
+    test_case => {
+      snapshot_command(
+        "../../..",
+        "find-references \{command_quote(test_case.sym)} --loc \{snapshot_quoted_location(TestPlatform::Unix, test_case)}",
+      )
+    },
+  )
   debug_inspect(
     files.map(file => file.name),
     content=(
@@ -604,16 +608,8 @@ test "ordinary symbol suites emit one file per case" {
 ///|
 test "split_case_file_name disambiguates sanitization collisions" {
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
-  let first = split_case_file_name(
-    "rename",
-    TestCase::{ file: "a/b.mbt", line: 1, col: 2, sym: "f", },
-    used,
-  )
-  let second = split_case_file_name(
-    "rename",
-    TestCase::{ file: "a-b.mbt", line: 1, col: 2, sym: "f", },
-    used,
-  )
+  let first = split_case_file_name("rename", "a/b.mbt:1:2", "f", used)
+  let second = split_case_file_name("rename", "a-b.mbt:1:2", "f", used)
   inspect(first, content="rename-a-b.mbt-1-2-f.mooncram.md")
   inspect(second, content="rename-a-b.mbt-1-2-f-2.mooncram.md")
 }

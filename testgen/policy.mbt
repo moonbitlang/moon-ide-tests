@@ -75,6 +75,23 @@ fn should_skip_fixture_rename(repo_slug : String, test_case : TestCase) -> Bool 
 }
 
 ///|
+/// Performance workloads measure successful IDE queries. Skip queries whose
+/// output is unsupported or outside the fixture, without changing the snapshot
+/// suites that keep them as coverage.
+fn should_skip_performance_hover(repo_slug : String, test_case : TestCase) -> Bool {
+  repo_slug == "openseek" &&
+  normalize_separators(test_case.file) ==
+  "editor/internal/viewer/contrib/hover/extends.mbt" &&
+  test_case.sym == "to_repr" &&
+  test_case.col == 40
+}
+
+///|
+fn should_skip_performance_refs(repo_slug : String, test_case : TestCase) -> Bool {
+  repo_slug == "openseek" && should_skip_fixture_rename("openseek", test_case)
+}
+
+///|
 /// Preserve these failing IDE queries as reproductions, with the marker outside
 /// the command block. Matching includes the column to avoid marking successful
 /// call sites or ordinary parameters with the same spelling. Lines may move.
