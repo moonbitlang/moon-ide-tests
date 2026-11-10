@@ -15,8 +15,9 @@ versions, not workflow runs or dates.
 2. Normalize reports with `perf/publish.py`. Missing artifacts, preparation
    errors and invalid reports become visible failure records.
 3. Append immutable `runs/<workflow-run-id>/<attempt>/<platform>.json` records
-   and update `index.json` on `perf-history`. A serialized writer prevents
-   simultaneous runs from losing history. No force push is used.
+   and update `index.json` on `perf-history`. A serialized writer uses
+   `queue: max` to retain up to 100 waiting collection jobs instead of replacing
+   the previous pending job when another run arrives. No force push is used.
 4. Build a complete site with the historical data, and upload a preview artifact.
 
 `Deploy-Perf` publishes to GitHub Pages for the default branch. A manual run on

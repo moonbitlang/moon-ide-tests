@@ -157,9 +157,8 @@ moonx scripts/run-ide-perf.mbtx
 ```
 
 The pinned OpenSeek snapshot uses experimental core async APIs and requires
-the nightly toolchain. CI installs nightly on both platforms. For a local
-Moonup installation, use `moonup run nightly moonx scripts/run-ide-perf.mbtx`.
-Both installers explicitly select `MOONBIT_INSTALL_VERSION=nightly`.
+the nightly toolchain. CI installs nightly on both platforms; both installers
+explicitly select `MOONBIT_INSTALL_VERSION=nightly`.
 
 Repository preparation is handled by `scripts/perf-repos.mbtx`, separately
 from `testgen`. Run it directly with `moonx scripts/perf-repos.mbtx` to clone
