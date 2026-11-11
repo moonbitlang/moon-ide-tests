@@ -17,7 +17,7 @@ jobs:
   Unix-Perf:
     name: Unix-Perf
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
       - name: Install MoonBit nightly
@@ -51,7 +51,7 @@ jobs:
   Windows-Perf:
     name: Windows-Perf
     runs-on: windows-2025
-    timeout-minutes: 30
+    timeout-minutes: 40
     defaults:
       run:
         shell: pwsh

@@ -152,14 +152,17 @@ fn performance_prepare_commands(
 fn performance_workload_json(
   documents : Map[String, Json],
   cases : Array[PerformanceCase],
+  repo_commit : String,
 ) -> String {
   let case_json : Array[Json] = []
   for case in cases {
     case_json.push({ "case_file": Json(case.case_file), "argv": Json(case.argv) })
   }
-  Json({ "documents": Json(documents), "cases": Json(case_json) }).stringify(
-    indent=2,
-  ) + "\n"
+  Json({
+    "repo_commit": Json(repo_commit),
+    "documents": Json(documents),
+    "cases": Json(case_json),
+  }).stringify(indent=2) + "\n"
 }
 
 ///|
@@ -167,6 +170,7 @@ fn render_performance_cram_files(
   result : CollectResult,
   repo_slug : String,
   test_root : String,
+  repo_commit~ : String,
 ) -> Array[CramFile] {
   let files = Array(capacity=0)
   let cases : Array[PerformanceCase] = []
@@ -222,7 +226,7 @@ fn render_performance_cram_files(
   }
   files.push(CramFile::{
     name: "workload.json",
-    content: performance_workload_json(documents, cases),
+    content: performance_workload_json(documents, cases, repo_commit),
   })
   files.push(CramFile::{
     name: "prepare.json",

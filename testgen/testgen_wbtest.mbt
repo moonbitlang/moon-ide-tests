@@ -412,6 +412,7 @@ test "performance generation groups multiple commands into five suite files" {
       platform,
       performance=true,
       test_root="../../../..",
+      repo_commit="dbe35ecc82681e352604b41a2e9b0b9d9e3e94d0",
     )
     assert_eq(
       files.map(file => file.name),
@@ -427,6 +428,11 @@ test "performance generation groups multiple commands into five suite files" {
     }
     assert_true(files[5].content.contains("outline.mooncram.md"))
     assert_true(files[5].content.contains("src/a.mbt"))
+    assert_true(
+      files[5].content.contains(
+        "\"repo_commit\": \"dbe35ecc82681e352604b41a2e9b0b9d9e3e94d0\"",
+      ),
+    )
   }
 }
 

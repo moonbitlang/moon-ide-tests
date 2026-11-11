@@ -4,6 +4,7 @@ priv struct Args {
   output_dir : String
   repo_slug : String
   test_root : String
+  repo_commit : String
   platform : TestPlatform
   max_per_file : Int32
   max_files : Int32
@@ -214,6 +215,7 @@ fn parse_args(args : Array[String]) -> Args raise {
   let output_dir_raw : Ref[String] = Ref("")
   let repo_slug_raw : Ref[String] = Ref("")
   let test_root_raw : Ref[String] = Ref("../../..")
+  let repo_commit_raw : Ref[String] = Ref("")
   let platform_raw : Ref[String] = Ref("unix")
   let max_per_file_raw : Ref[String] = Ref("50")
   let max_files_raw : Ref[String] = Ref("0")
@@ -228,6 +230,9 @@ fn parse_args(args : Array[String]) -> Args raise {
     ),
     (
       "test-root", 'b', test_root_raw, "Path from generated tests to the test repository root (default: ../../..)",
+    ),
+    (
+      "repo-commit", 'c', repo_commit_raw, "Revision the scanned repository is checked out at; required with --performance",
     ),
     (
       "platform", 'p', platform_raw, "Generated test platform: unix or windows (default: unix)",
@@ -306,16 +311,23 @@ fn parse_args(args : Array[String]) -> Args raise {
         "invalid --platform value: \{other}; expected unix or windows",
       )
   }
+  let performance = matches.flags.get("performance").unwrap_or(false)
+  // Performance suites record the revision they were generated against, so the
+  // runner can reject a workload measured on a different checkout.
+  if performance && repo_commit_raw.val == "" {
+    raise ArgsError("--repo-commit is required with --performance")
+  }
   Args::{
     repo_path: repo_path_raw.val,
     output_dir: output_dir_raw.val,
     repo_slug: repo_slug_raw.val,
     test_root: test_root_raw.val,
+    repo_commit: repo_commit_raw.val,
     platform,
     max_per_file,
     max_files,
     max_file_size,
-    performance: matches.flags.get("performance").unwrap_or(false),
+    performance,
   }
 }
 
@@ -346,6 +358,7 @@ fn run(args : Array[String]) -> Unit {
     config.platform,
     performance=config.performance,
     test_root=config.test_root,
+    repo_commit=config.repo_commit,
   )
   if config.performance {
     write_performance_files(config.output_dir, files)

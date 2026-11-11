@@ -52,6 +52,30 @@ fn pad(value : Int32, length : Int32) -> String {
 }
 
 ///|
+// Sampling stops inside the CI job's wall-clock limit, so a slow run still
+// writes result.json instead of being killed with the measurements in memory.
+let sampling_budget_ms : UInt64 = 20 * 60 * 1000
+
+///|
+// Mirrors the per-invocation timeout in bench-moon-ide.mbtx.
+let command_timeout_ms : Int = 60000
+
+///|
+// Rewrite the report after every fixture; a killed job keeps the fixtures that
+// already finished instead of losing the whole run.
+async fn write_report(
+  run_dir : String,
+  report : Map[String, Json],
+  fixtures : Array[Json],
+) -> Unit raise {
+  report["fixtures"] = Json(fixtures)
+  @fs.write_file(
+    run_dir + "/result.json",
+    Json(report).stringify(indent=2) + "\n",
+  )
+}
+
+///|
 // Mooncram owns parsing and execution; workload.json records the same ordered
 // cases and exact documents emitted by testgen for sample reconciliation.
 ///|
@@ -214,6 +238,8 @@ async fn main {
     report["core_prepared"] = false
     let _ = checked("moon", core_command, log=run_dir + "/core-prepare.log")
     report["core_prepared"] = true
+    // Fixture preparation and sampling share one deadline below the job limit.
+    let sampling_deadline = @env.now() + sampling_budget_ms
     let repos : Array[Json] = @json.from_json(
       @json.parse(checked("moonx", ["scripts/perf-repos.mbtx", "list"])),
     )
@@ -276,6 +302,18 @@ async fn main {
         let workload : Map[String, Json] = @json.from_json(
           @json.parse(@fs.read_file(out_dir + "/workload.json").text()),
         )
+        // perf-repos verified the fixture HEAD against this commit, so a suite
+        // generated for another revision would silently measure other code.
+        let suite_commit : String = @json.from_json(
+          workload.get("repo_commit").unwrap_or_else(() => {
+            fail("workload manifest has no repository commit; regenerate the suite")
+          }),
+        )
+        guard suite_commit == commit else {
+          fail(
+            "suite was generated for \{suite_commit}, but the pinned commit is \{commit}; regenerate the suite",
+          )
+        }
         let documents : Map[String, String] = @json.from_json(workload.get("documents").unwrap())
         let workload_cases : Array[Json] = @json.from_json(workload.get("cases").unwrap())
         let cases : Array[(String, Array[String])] = []
@@ -314,6 +352,18 @@ async fn main {
         let command_log = "\{run_dir}/\{slug}.log"
         let file_results : Array[Json] = []
         for name in names {
+          let now = @env.now()
+          let remaining_ms = if now < sampling_deadline {
+            (sampling_deadline - now).to_int()
+          } else {
+            0
+          }
+          // Start a file only when it still has room for at least one command.
+          guard remaining_ms >= command_timeout_ms else {
+            fail(
+              "sampling budget of \{sampling_budget_ms / 1000} seconds exhausted before \{name}",
+            )
+          }
           let file = @fs.realpath("\{out_dir}/\{name}")
           @fs.write_file(command_log, "\n=== \{name} ===\n", append=true, create_mode=OpenOrCreate)
           let file_case_count = cases.iter().filter(case => case.0 == name).count()
@@ -323,7 +373,7 @@ async fn main {
               ["moonbit-community/mooncram@latest", "test", file, "--timeout-ms", "120000", "--color", "never"],
               log=command_log,
               extra_env={ "MOON_IDE_PERF_DIR": absolute_samples },
-              timeout_ms=(file_case_count + 1) * 120000,
+              timeout_ms=((file_case_count + 1) * command_timeout_ms).min(remaining_ms),
             )
             (code, Json::null())
           } catch {
@@ -370,6 +420,7 @@ async fn main {
         }
       }
       fixtures.push(Json(result))
+      write_report(run_dir, report, fixtures)
     }
   } catch {
     error => {
@@ -378,11 +429,7 @@ async fn main {
       @stdio.stderr.write("\{error}\n")
     }
   }
-  report["fixtures"] = Json(fixtures)
-  @fs.write_file(
-    run_dir + "/result.json",
-    Json(report).stringify(indent=2) + "\n",
-  )
+  write_report(run_dir, report, fixtures)
   println("Performance report: \{run_dir}/result.json")
   @sys.exit(if failed { 1 } else { 0 })
 }

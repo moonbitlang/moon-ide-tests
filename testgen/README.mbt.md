@@ -42,13 +42,16 @@ moon -C testgen run --target wasm cmd/main -- \
 - `--repo-slug <slug>`: stable name used in generated markdown titles
 - `--test-root <path>`: relative path from generated files to this test
   repository's root (default: `../../..`).
+- `--repo-commit <sha>`: revision the scanned repository is checked out at.
+  Required with `--performance`; `workload.json` records it so the runner can
+  reject a suite generated for a different commit.
 - `--performance`: emit the dedicated benchmark script followed by IDE
   arguments and `--no-check`. Performance mode emits one file per command type
   and a `prepare.json` listing checks to run before timing queries. The
   script resolves its fixture from the test directory. Mooncram ignores output
-  but checks exit codes; `workload.json` records ordered query arguments and
-  document contents for sample reconciliation. Regeneration replaces both the
-  commands and manifest; regenerate with
+  but checks exit codes; `workload.json` records the repository commit, ordered
+  query arguments and document contents for sample reconciliation. Regeneration
+  replaces both the commands and manifest; regenerate with
   `moonx scripts/generate-perf-tests.mbtx`, which prepares the pinned fixture
   repositories before rendering. Execute the suites with
   `moonx scripts/run-ide-perf.mbtx`, which invokes Mooncram and collects the

@@ -206,7 +206,10 @@ zero-exit expectation. The runner invokes `moonbit-community/mooncram@latest`;
 the benchmark writes each timed invocation's output and status to its sample.
 `workload.json` records the ordered queries and document contents, so the runner
 can detect edits that were not accompanied by a manifest update and identify
-missing samples without parsing Mooncram syntax itself.
+missing samples without parsing Mooncram syntax itself. It also records the
+repository commit it was generated from; the runner rejects a suite whose commit
+differs from the one pinned in `perf/repos.yaml`, so a revision bump without
+regeneration cannot silently measure different code.
 
 To regenerate the checked-in suites from the commits and sampling limits in
 `perf/repos.yaml`, point generation at each platform's directory:
@@ -262,7 +265,11 @@ Use successful `test` reports for comparisons. Ordinary IDE snapshot tests remai
 responsible for checking output correctness.
 
 `daily-perf.yml` runs independent `Unix-Perf` and `Windows-Perf` jobs. Both
-upload their reports and logs even after a test failure.
+upload their reports and logs even after a test failure. Fixture preparation and
+sampling share a 20-minute budget; the runner stops starting new case files once
+it is spent, so its 40-minute job limit is never reached mid-sample. `result.json`
+is rewritten after every fixture, so a killed job still uploads the measurements
+that finished.
 
 ## CI
 
