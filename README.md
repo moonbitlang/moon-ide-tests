@@ -271,6 +271,16 @@ it is spent, so its 40-minute job limit is never reached mid-sample. `result.jso
 is rewritten after every fixture, so a killed job still uploads the measurements
 that finished.
 
+After both jobs finish, a collection job archives normalized JSON on the
+`perf-history` branch and builds the static dashboard in `perf/web/`. GitHub
+Pages publication runs automatically for the default branch; manual runs on
+other branches can opt in with the `publish` input. The page provides platform
+and branch filters and a single chart with command tabs. Each line is a fixed
+query, and each point is its mean successful duration for one exact MoonBit
+toolchain version under matching measurement conditions. Sample counts, errors,
+missing observations and raw workflow records remain accessible in details.
+See [dashboard setup and local preview](perf/web/README.md).
+
 ## CI
 
 The PR workflow (`.github/workflows/pr.yml`) uses the same per-platform checks
