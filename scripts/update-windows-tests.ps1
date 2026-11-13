@@ -24,7 +24,6 @@ foreach ($repo in $repos) {
   if ($LASTEXITCODE -ne 0) {
     throw "testgen exited with status $LASTEXITCODE"
   }
-  }
 }
 
 exit 0
