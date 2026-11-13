@@ -1,6 +1,6 @@
 # async rename fd src\internal\event_loop\stdio.mbt:19:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'fd' 'fd_renamed' --loc 'src\internal\event_loop\stdio.mbt:19:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\internal\event_loop\stdio.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'fd' 'fd_renamed' --loc 'src
    buf_len : Int32,
 *** End Patch
 "" (escaped)
-````
+```

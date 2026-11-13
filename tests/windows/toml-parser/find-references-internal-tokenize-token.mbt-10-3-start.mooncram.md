@@ -1,6 +1,6 @@
 # toml-parser find-references start internal\tokenize\token.mbt:10:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'start' --loc 'internal\tokenize\token.mbt:10:3'
 Found 3 references for symbol 'start':
 <WORKDIR>/internal\tokenize\token.mbt:60:21-60:26:
@@ -30,4 +30,4 @@ Found 3 references for symbol 'start':
    | }
    | 
 "" (escaped)
-````
+```

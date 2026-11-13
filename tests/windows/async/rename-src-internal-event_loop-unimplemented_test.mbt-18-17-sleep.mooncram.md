@@ -1,6 +1,6 @@
 # async rename sleep src\internal\event_loop\unimplemented_test.mbt:18:17
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --loc 'src\internal\event_loop\unimplemented_test.mbt:18:17' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src\all_any_test.mbt
@@ -619,7 +619,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
              log <+ "causing other error in cancellation handler\n"
              raise Err
 @@
-"           Some(_) => ()" (escaped)
+           Some(_) => ()
          }
        }
 -      @async.sleep(200)
@@ -1636,7 +1636,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
            }
          }
 @@
-"         Some(_) => ()" (escaped)
+         Some(_) => ()
        }
      }
 -    @async.sleep(200)
@@ -2166,7 +2166,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
      })
      root.spawn_bg() <| () => {
 @@
-"         Some(_) => ()" (escaped)
+         Some(_) => ()
        }
      }
 -    @async.sleep(20)
@@ -2354,4 +2354,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
        }
 *** End Patch
 "" (escaped)
-````
+```

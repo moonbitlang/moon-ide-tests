@@ -1,6 +1,6 @@
 # uri find-references uri uri_test.mbt:5:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'uri' --loc 'uri_test.mbt:5:7'
 Found 1 references for symbol 'uri':
 <WORKDIR>/uri_test.mbt:6:16-6:19:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'uri':
   |     "scheme": "https",
   |     "authority": { "host": "example.com" },
 "" (escaped)
-````
+```

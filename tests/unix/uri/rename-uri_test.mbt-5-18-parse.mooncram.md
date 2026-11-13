@@ -79,7 +79,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +  let uri = @uri.parse_renamed("https://search.example.com/?q=moonbit&lang=en&safe=on")
  
    match uri.query() {
-"     Some(query_str) => {" (escaped)
+     Some(query_str) => {
 @@
  ```moonbit check
  ///|
@@ -144,7 +144,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("")
      fail("Expected EmptyUri error")
    } catch {
-"     @uri.UriError::EmptyUri => () // Expected" (escaped)
+     @uri.UriError::EmptyUri => () // Expected
 @@
  /// Test invalid scheme
  test "invalid_scheme" {
@@ -153,7 +153,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("123invalid://example.com")
      fail("Expected InvalidScheme error")
    } catch {
-"     @uri.UriError::InvalidScheme(scheme) =>" (escaped)
+     @uri.UriError::InvalidScheme(scheme) =>
 @@
  /// Test invalid port
  test "invalid_port" {
@@ -162,7 +162,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("http://example.com:abc/path")
      fail("Expected InvalidPort error")
    } catch {
-"     @uri.UriError::InvalidPort(port) =>" (escaped)
+     @uri.UriError::InvalidPort(port) =>
 @@
  /// Test port out of range
  test "port_out_of_range" {
@@ -171,7 +171,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("http://example.com:99999/path")
      fail("Expected error for port out of range")
    } catch {
-"     @uri.UriError::InvalidPort(_) => () // Expected" (escaped)
+     @uri.UriError::InvalidPort(_) => () // Expected
 @@
  /// Test invalid path with spaces
  test "invalid_path_spaces" {
@@ -180,7 +180,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("http://example.com/path with spaces")
      fail("Expected error for path with unescaped spaces")
    } catch {
-"     @uri.UriError::InvalidPath(_) => () // Expected" (escaped)
+     @uri.UriError::InvalidPath(_) => () // Expected
 @@
  /// Test invalid query with spaces
  test "invalid_query_spaces" {
@@ -189,7 +189,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("http://example.com/path?query with spaces")
      fail("Expected error for query with unescaped spaces")
    } catch {
-"     @uri.UriError::InvalidQuery(_) => () // Expected" (escaped)
+     @uri.UriError::InvalidQuery(_) => () // Expected
 @@
  /// Test invalid fragment with spaces
  test "invalid_fragment_spaces" {
@@ -198,7 +198,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 +    let _ = @uri.parse_renamed("http://example.com/path#fragment with spaces")
      fail("Expected error for fragment with unescaped spaces")
    } catch {
-"     @uri.UriError::InvalidFragment(_) => () // Expected" (escaped)
+     @uri.UriError::InvalidFragment(_) => () // Expected
 @@
  /// Test URI normalization
  test "uri_normalization" {
@@ -280,7 +280,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri1 = @uri.parse("https://example.com:8080/path")
 +  let uri1 = @uri.parse_renamed("https://example.com:8080/path")
    match uri1.effective_port() {
-"     Some(port_val) =>" (escaped)
+     Some(port_val) =>
        if port_val != 8080 {
 @@
    }
@@ -289,7 +289,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri2 = @uri.parse("https://example.com/path")
 +  let uri2 = @uri.parse_renamed("https://example.com/path")
    match uri2.effective_port() {
-"     Some(port_val) =>" (escaped)
+     Some(port_val) =>
        if port_val != 443 {
 @@
    }
@@ -298,8 +298,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri3 = @uri.parse("/path")
 +  let uri3 = @uri.parse_renamed("/path")
    match uri3.effective_port() {
-"     Some(_) => fail(\"Expected no port for URI without authority\")" (escaped)
-"     None => () // Expected" (escaped)
+     Some(_) => fail("Expected no port for URI without authority")
+     None => () // Expected
 @@
  ///|
  /// Test Show trait implementation
@@ -341,7 +341,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri_with_pass = parse("https://user:pass@example.com")
 +  let uri_with_pass = parse_renamed("https://user:pass@example.com")
    match uri_with_pass.userinfo_components() {
-"     Some((user, Some(pass))) => {" (escaped)
+     Some((user, Some(pass))) => {
        json_inspect(user, content="user")
 @@
    }
@@ -350,8 +350,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri_user_only = parse("https://user@example.com")
 +  let uri_user_only = parse_renamed("https://user@example.com")
    match uri_user_only.userinfo_components() {
-"     Some((user, None)) => json_inspect(user, content=\"user\")" (escaped)
-"     _ => fail(\"Expected username only\")" (escaped)
+     Some((user, None)) => json_inspect(user, content="user")
+     _ => fail("Expected username only")
 @@
    }
  
@@ -359,8 +359,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri_no_user = parse("https://example.com")
 +  let uri_no_user = parse_renamed("https://example.com")
    match uri_no_user.userinfo_components() {
-"     None => () // Expected" (escaped)
-"     _ => fail(\"Expected no userinfo\")" (escaped)
+     None => () // Expected
+     _ => fail("Expected no userinfo")
 @@
    }
  
@@ -368,7 +368,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse' 'parse_renamed' --lo
 -  let uri_encoded = parse("https://user%40domain:pass%20word@example.com")
 +  let uri_encoded = parse_renamed("https://user%40domain:pass%20word@example.com")
    match uri_encoded.userinfo_components() {
-"     Some((user, Some(pass))) => {" (escaped)
+     Some((user, Some(pass))) => {
        json_inspect(user, content="user@domain")
 @@
  /// Test edge cases and error conditions

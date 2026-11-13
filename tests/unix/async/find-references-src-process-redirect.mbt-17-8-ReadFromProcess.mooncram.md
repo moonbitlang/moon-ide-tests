@@ -1,6 +1,6 @@
 # async find-references ReadFromProcess src/process/redirect.mbt:17:8
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'ReadFromProcess' --loc 'src/process/redirect.mbt:17:8'
 Found 9 references for symbol 'ReadFromProcess':
 <WORKDIR>/src/process/deprecated.mbt:18:12-18:27:
@@ -82,4 +82,4 @@ Found 9 references for symbol 'ReadFromProcess':
     |   on_line : async (String) -> Unit,
     |   limit : Int32,
 "" (escaped)
-````
+```

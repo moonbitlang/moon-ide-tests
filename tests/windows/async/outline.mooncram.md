@@ -1,6 +1,6 @@
 # async outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\aqueue\blocking_test.mbt'
  16 |async test "blocking unbuffered" {
     |...
@@ -31,9 +31,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\aqueue\blocking_test.m
 335 |async test "blocked zero buffered discard latest try_put" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\internal\event_loop\stdio.mbt'
  16 |#cfg(target="native")
  17 |#borrow(buf)
@@ -78,9 +78,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\internal\event_loop\st
 138 |pub let stderr : Result[IoHandle, Error] = try
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\internal\event_loop\unimplemented_test.mbt'
 16 |#cfg(not(any(target="native", target="wasm")))
    |...
@@ -89,9 +89,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\internal\event_loop\un
 29 |#cfg(not(any(target="native", target="wasm")))
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\js_async\unimplemented.mbt'
  16 |#coverage.skip
     |...
@@ -192,25 +192,25 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\js_async\unimplemented
 244 |pub fn JsReadableStream::new_pipe() -> (JsReadableStream, @io.PipeWrite) {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\pipe\read_exactly_test.mbt'
 16 |async test "read_exactly" {
    |...
 58 |async test "read_exactly failure" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\pipe\unimplemented_test.mbt'
 16 |#cfg(not(target="native"))
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\process\redirect.mbt'
  17 |struct ReadFromProcess {
     |...
@@ -328,23 +328,23 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\process\redirect.mbt'
 393 |impl ProcessInput for RedirectToFile with fn after_spawn(self) {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\socket\reuse_port_test.mbt'
 16 |async test "reuse port lb" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\socket\unimplemented.mbt'
 17 |#cfg(not(any(target="native", target="wasm")))
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tls\unimplemented_test.mbt'
 16 |#cfg(not(any(target="native", target="wasm")))
    |...
@@ -353,4 +353,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src\tls\unimplemented_test
 29 |#cfg(not(any(target="native", target="wasm")))
    |...
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # sqlparser find-references stmt src\prepare.mbt:7:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'stmt' --loc 'src\prepare.mbt:7:7'
 Found 1 references for symbol 'stmt':
 <WORKDIR>/src\prepare.mbt:9:5-9:9:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'stmt':
   |     content=(
   |       #|PREPARE stmt AS SELECT
 "" (escaped)
-````
+```

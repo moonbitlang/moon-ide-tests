@@ -1,6 +1,6 @@
 # async find-references wait_read src/internal/event_loop/io_unix.mbt:17:24
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'wait_read' --loc 'src/internal/event_loop/io_unix.mbt:17:24'
 Found 8 references for symbol 'wait_read':
 <WORKDIR>/src/fs/watch_inotify.mbt:289:20-289:29:
@@ -75,4 +75,4 @@ Found 8 references for symbol 'wait_read':
    |         MacOS =>
    |           // On MacOS, when `kevent` report `ESRCH`,
 "" (escaped)
-````
+```

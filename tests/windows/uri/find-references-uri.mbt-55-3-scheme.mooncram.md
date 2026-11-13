@@ -1,6 +1,6 @@
 # uri find-references scheme uri.mbt:55:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'scheme' --loc 'uri.mbt:55:3'
 Found 14 references for symbol 'scheme':
 <WORKDIR>/uri.mbt:111:5-111:11:
@@ -50,7 +50,7 @@ Found 14 references for symbol 'scheme':
 
 <WORKDIR>/uri.mbt:810:14-810:20:
     | ///|
-"    | /// Check if the URI is absolute (has a scheme)" (escaped)
+    | /// Check if the URI is absolute (has a scheme)
     | pub fn Uri::is_absolute(self : Uri) -> Bool {
 810 |   match self.scheme {
     |              ^^^^^^
@@ -129,4 +129,4 @@ Found 14 references for symbol 'scheme':
      |           authority: base.authority,
      |           path: resolved_path,
 "" (escaped)
-````
+```

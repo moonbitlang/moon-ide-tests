@@ -1,6 +1,6 @@
 # sqlparser find-references pass src\tests\good_test.mbt:4:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'pass' --loc 'src\tests\good_test.mbt:4:4'
 Found 38 references for symbol 'pass':
 <WORKDIR>/src\tests\good_test.mbt:16:30-16:34:
@@ -344,4 +344,4 @@ Found 38 references for symbol 'pass':
     |                                                                      ^^^^
     | }
 "" (escaped)
-````
+```

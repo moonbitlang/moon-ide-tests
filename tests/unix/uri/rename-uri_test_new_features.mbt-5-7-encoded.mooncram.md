@@ -1,6 +1,6 @@
 # uri rename encoded uri_test_new_features.mbt:5:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'encoded' 'encoded_renamed' --loc 'uri_test_new_features.mbt:5:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri_test_new_features.mbt
@@ -17,4 +17,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'encoded' 'encoded_renamed' 
    let unreserved = "hello-world_123.test~"
 *** End Patch
 "" (escaped)
-````
+```

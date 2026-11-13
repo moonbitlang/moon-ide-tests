@@ -1,6 +1,6 @@
 # toml-parser find-references parse coverage_improvement_comprehensive_test.mbt:9:22
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
 Found 191 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:112:22-112:27:
@@ -1721,4 +1721,4 @@ Found 191 references for symbol 'parse':
     |   assert_eq(value, roundtripped)
     | }
 "" (escaped)
-````
+```

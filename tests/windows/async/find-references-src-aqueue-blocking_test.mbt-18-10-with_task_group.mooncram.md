@@ -1,6 +1,6 @@
 # async find-references with_task_group src\aqueue\blocking_test.mbt:18:10
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'with_task_group' --loc 'src\aqueue\blocking_test.mbt:18:10'
 Found 375 references for symbol 'with_task_group':
 <WORKDIR>/examples\dead_lock\main.mbt:19:10-19:25:
@@ -3378,4 +3378,4 @@ Found 375 references for symbol 'with_task_group':
     |     root.spawn_bg() <| () => {
     |       @async.sleep(200)
 "" (escaped)
-````
+```

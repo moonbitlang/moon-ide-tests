@@ -1,6 +1,6 @@
 # async find-references Coroutine src\js_async\unimplemented.mbt:18:21
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Coroutine' --loc 'src\js_async\unimplemented.mbt:18:21'
 Found 43 references for symbol 'Coroutine':
 <WORKDIR>/src\aqueue\aqueue.mbt:29:21-29:30:
@@ -388,4 +388,4 @@ Found 43 references for symbol 'Coroutine':
     | }
     | 
 "" (escaped)
-````
+```

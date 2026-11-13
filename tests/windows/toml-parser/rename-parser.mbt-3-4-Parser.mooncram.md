@@ -1,6 +1,6 @@
 # toml-parser rename Parser parser.mbt:3:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Parser' 'ParserRenamed' --loc 'parser.mbt:3:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/parser.mbt
@@ -285,4 +285,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Parser' 'ParserRenamed' --l
  }
 *** End Patch
 "" (escaped)
-````
+```
