@@ -1,0 +1,124 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+}
+----
+
+///|
+async fn execute(
+  command : String,
+  args : Array[String],
+  timeout_ms~ : Int32 = 600000,
+) -> (Int32, String) {
+  let (code, output) = @async.with_timeout(timeout_ms, () => {
+    @process.collect_output_merged(command, args)
+  })
+  (code, output.text())
+}
+
+///|
+async fn checked(command : String, args : Array[String]) -> String {
+  let (code, output) = execute(command, args)
+  guard code == 0 else {
+    fail("\{command} \{args.join(" ")} exited \{code}: \{output}")
+  }
+  output
+}
+
+///|
+async fn print_output(output : String) -> Unit {
+  if output != "" {
+    @stdio.stdout.write(output)
+  }
+}
+
+///|
+async fn main {
+  let root = @fs.realpath(".")
+  let args = @env.args()
+  let windows = @env.get_env_var("OS") == Some("Windows_NT")
+  let host_platform = if windows { "windows" } else { "unix" }
+  let mut platform = host_platform
+  let mut output_dir : String? = None
+  let mut index = 1
+  while index < args.length() {
+    match args[index] {
+      "--platform" if index + 1 < args.length() => {
+        platform = args[index + 1]
+        index += 2
+      }
+      "--output-dir" if index + 1 < args.length() && args[index + 1] != "" => {
+        output_dir = Some(args[index + 1])
+        index += 2
+      }
+      _ =>
+        fail(
+          "usage: generate-perf-tests [--platform unix|windows] [--output-dir directory]",
+        )
+    }
+  }
+  guard ["unix", "windows"].contains(platform) else {
+    fail("invalid platform: \{platform}")
+  }
+  // Cloning and checking out the pinned revisions is a prerequisite for
+  // rendering; perf-repos owns that work.
+  print_output(checked("moonx", ["scripts/perf-repos.mbtx", "prepare"]))
+  let repos : Array[Json] = @json.from_json(
+    @json.parse(checked("moonx", ["scripts/perf-repos.mbtx", "list"])),
+  )
+  for repo in repos {
+    guard repo
+      is {
+        "slug": String(slug),
+        "path": String(path),
+        "commit": String(commit),
+        "max_files": Number(max_files, ..),
+        "max_per_file": Number(max_per_file, ..),
+        ..
+      } else {
+      fail("invalid performance repository record")
+    }
+    let destination = match output_dir {
+      Some(dir) => {
+        @fs.mkdir(dir, recursive=true, allow_exist=true)
+        @fs.realpath(dir) + "/" + slug
+      }
+      None => root + "/perf/data/\{platform}/candidates-\{slug}"
+    }
+    print_output(
+      checked("moon", [
+        "-C",
+        "testgen",
+        "run",
+        "--target",
+        "wasm",
+        "cmd/main",
+        "--",
+        "--performance",
+        "--repo",
+        root + "/perf/" + path,
+        "--repo-slug",
+        slug,
+        "--output-dir",
+        destination,
+        "--platform",
+        platform,
+        "--repo-commit",
+        commit,
+        "--test-root",
+        "../../../..",
+        "--max-files",
+        max_files.to_int().to_string(),
+        "--max-per-file",
+        max_per_file.to_int().to_string(),
+      ]),
+    )
+    println("Generated \{slug} at \{commit} into \{destination}")
+  }
+}

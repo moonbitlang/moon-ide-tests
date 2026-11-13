@@ -29,6 +29,9 @@ fn should_skip_fixture_file(
 ///|
 fn fixture_target_option(repo_slug : String, file : String) -> String {
   match (repo_slug, normalize_separators(file)) {
+    ("openseek", file) if file.has_prefix("editor/") ||
+      file.has_prefix("desktop/frontend/") => " --target js"
+    ("openseek", _) => " --target native"
     // This SSR test is #cfg(not(target="js")); Rabbita defaults to JS.
     ("rabbita", "rabbita/internal/runtime/host_ssr_wbtest.mbt") =>
       " --target native"
@@ -60,8 +63,32 @@ fn should_skip_fixture_rename(repo_slug : String, test_case : TestCase) -> Bool 
     ) {
     ("async", "src/socket/unimplemented.mbt", "parse_int", 24)
     | ("async", "src/tls/unimplemented_test.mbt", "encode", 16) => true
+    ("openseek", "desktop/backend/host/host_wbtest.mbt", "tmpdir", 17)
+    | (
+      "openseek",
+      "desktop/backend/internal/console_proxy/main/main.mbt",
+      "Command",
+      27,
+    ) => true
     _ => false
   }
+}
+
+///|
+/// Performance workloads measure successful IDE queries. Skip queries whose
+/// output is unsupported or outside the fixture, without changing the snapshot
+/// suites that keep them as coverage.
+fn should_skip_performance_hover(repo_slug : String, test_case : TestCase) -> Bool {
+  repo_slug == "openseek" &&
+  normalize_separators(test_case.file) ==
+  "editor/internal/viewer/contrib/hover/extends.mbt" &&
+  test_case.sym == "to_repr" &&
+  test_case.col == 40
+}
+
+///|
+fn should_skip_performance_refs(repo_slug : String, test_case : TestCase) -> Bool {
+  repo_slug == "openseek" && should_skip_fixture_rename("openseek", test_case)
 }
 
 ///|

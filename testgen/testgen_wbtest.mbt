@@ -380,6 +380,82 @@ test "parser_report_lines formats parser diagnostics" {
 }
 
 ///|
+test "performance generation uses the dedicated runner with Mooncram assertions" {
+  for test_root in ["../../../..", "../../../../.."] {
+    let files = render_cram_files(
+      CollectResult::{ source_files: ["src/a.mbt"], loc_cases: [], },
+      "openseek",
+      TestPlatform::Windows,
+      performance=true,
+      test_root~,
+    )
+    let command = "$ moonx '\{test_root}/scripts/bench-moon-ide.mbtx' outline 'src/a.mbt' --target native --no-check"
+    assert_true(files[0].content.contains(command))
+    assert_true(files[0].content.contains("@STDOUT (ignore)"))
+    assert_true(files[0].content.contains("@STDERR (ignore)"))
+  }
+}
+
+///|
+test "performance generation groups multiple commands into five suite files" {
+  for platform in [TestPlatform::Unix, TestPlatform::Windows] {
+    let files = render_cram_files(
+      CollectResult::{
+        source_files: ["src/a.mbt", "src/b.mbt"],
+        loc_cases: [
+          TestCase::{ file: "src/a.mbt", line: 1, col: 4, sym: "f", },
+          TestCase::{ file: "src/b.mbt", line: 1, col: 4, sym: "g", },
+          TestCase::{ file: "src/a.mbt", line: 1, col: 4, sym: "f", },
+        ],
+      },
+      "openseek",
+      platform,
+      performance=true,
+      test_root="../../../..",
+      repo_commit="dbe35ecc82681e352604b41a2e9b0b9d9e3e94d0",
+    )
+    assert_eq(
+      files.map(file => file.name),
+      [
+        "outline.mooncram.md", "hover.mooncram.md", "peek-def.mooncram.md",
+        "find-references.mooncram.md", "rename.mooncram.md", "workload.json", "prepare.json",
+      ],
+    )
+    for file in files[:5] {
+      let blocks = parse_expected_blocks(file.content)
+      assert_eq(blocks.length(), 2)
+      assert_true(blocks.all(block => block.output == ["@STDOUT (ignore)", "@STDERR (ignore)"]))
+    }
+    assert_true(files[5].content.contains("outline.mooncram.md"))
+    assert_true(files[5].content.contains("src/a.mbt"))
+    assert_true(
+      files[5].content.contains(
+        "\"repo_commit\": \"dbe35ecc82681e352604b41a2e9b0b9d9e3e94d0\"",
+      ),
+    )
+  }
+}
+
+///|
+test "performance manifest records escaped symbols without parsing commands" {
+  let files = render_cram_files(
+    CollectResult::{
+      source_files: ["src/a.mbt"],
+      loc_cases: [TestCase::{ file: "src/a.mbt", line: 1, col: 2, sym: "O'Reilly", }],
+    },
+    "openseek",
+    TestPlatform::Unix,
+    performance=true,
+    test_root="../../../..",
+  )
+  let manifest = files.iter().find_first(file => file.name == "workload.json").unwrap()
+  assert_true(manifest.content.contains("O'Reilly"))
+  let hover = files.iter().find_first(file => file.name == "hover.mooncram.md").unwrap()
+  assert_true(hover.content.contains("\"O'Reilly\""))
+  assert_true(hover.content.contains("@STDOUT (ignore)"))
+}
+
+///|
 test "render_cram_files emits mooncram markdown commands" {
   let result = CollectResult::{
     source_files: ["a.mbt"],
@@ -497,20 +573,25 @@ test "command arguments quote apostrophes without shell syntax" {
 }
 
 ///|
-test "render_split_symbol_files emits one file per case" {
-  current_repo_slug.val = "example"
-  current_platform.val = TestPlatform::Unix
+test "ordinary symbol suites emit one file per case" {
   let cases = [
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
     TestCase::{ file: "src/deep/a.mbt", line: 9, col: 1, sym: "g", },
     // Duplicate case collapses into the first file.
     TestCase::{ file: "src/deep/a.mbt", line: 3, col: 5, sym: "f", },
   ]
-  let files = render_split_symbol_files("find-references", cases, test_case => {
-    run_moon_ide_command(
-      "find-references \{command_quote(test_case.sym)} --loc \{quoted_location(test_case)}",
-    )
-  })
+  let files = render_snapshot_symbol_files(
+    "example",
+    TestPlatform::Unix,
+    "find-references",
+    cases,
+    test_case => {
+      snapshot_command(
+        "../../..",
+        "find-references \{command_quote(test_case.sym)} --loc \{snapshot_quoted_location(TestPlatform::Unix, test_case)}",
+      )
+    },
+  )
   debug_inspect(
     files.map(file => file.name),
     content=(
@@ -533,16 +614,8 @@ test "render_split_symbol_files emits one file per case" {
 ///|
 test "split_case_file_name disambiguates sanitization collisions" {
   let used : @hashset.HashSet[String] = @hashset.HashSet([])
-  let first = split_case_file_name(
-    "rename",
-    TestCase::{ file: "a/b.mbt", line: 1, col: 2, sym: "f", },
-    used,
-  )
-  let second = split_case_file_name(
-    "rename",
-    TestCase::{ file: "a-b.mbt", line: 1, col: 2, sym: "f", },
-    used,
-  )
+  let first = split_case_file_name("rename", "a/b.mbt:1:2", "f", used)
+  let second = split_case_file_name("rename", "a-b.mbt:1:2", "f", used)
   inspect(first, content="rename-a-b.mbt-1-2-f.mooncram.md")
   inspect(second, content="rename-a-b.mbt-1-2-f-2.mooncram.md")
 }
@@ -1020,4 +1093,28 @@ test "dependency functions retain navigation without an invalid workspace rename
       assert_true(controls[4].name.has_prefix("rename-"))
     }
   }
+}
+///|
+test "performance preparation normalizes paths and checks the nested editor workspace" {
+  let files = render_cram_files(
+    CollectResult::{
+      source_files: [
+        "agent/agent.mbt",
+        "editor\\internal\\viewer\\browser\\view\\selections.mbt",
+        "desktop/frontend/markdown/code_copy.mbt",
+      ],
+      loc_cases: [],
+    },
+    "openseek",
+    TestPlatform::Windows,
+    performance=true,
+    test_root="../../../..",
+  )
+  let plan = files.iter().find_first(file => file.name == "prepare.json").unwrap().content
+  assert_true(plan.contains("\"editor\""))
+  assert_false(plan.contains("internal/viewer/browser/view"))
+  assert_false(plan.contains("editor/internal/viewer/browser/view"))
+  assert_false(plan.contains("\\"))
+  assert_true(plan.contains("\"native,js\""))
+  assert_true(plan.contains("\"js\""))
 }
