@@ -451,7 +451,7 @@ Definition found at file <WORKDIR>/src\socket\unimplemented.mbt
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse_int' --loc 'src\socket\unimplemented.mbt:20:24' --target js
-Definition found at file <MOON_HOME>-local\lib\core\string\strconv.mbt
+Definition found at file <MOON_HOME>/lib\core\string\strconv.mbt
    | // limitations under the License.
    | 
    | ///|
@@ -464,7 +464,7 @@ Definition found at file <MOON_HOME>-local\lib\core\string\strconv.mbt
    |   parse_bool,
    |   parse_double,
    | }
-Definition found at file <MOON_HOME>-local\lib\core\internal\strconv\strconv_int.mbt
+Definition found at file <MOON_HOME>/lib\core\internal\strconv\strconv_int.mbt
     | }
     | 
     | ///|
@@ -515,7 +515,7 @@ Definition found at file <WORKDIR>/src\tls\unimplemented_test.mbt
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'encode' --loc 'src\tls\unimplemented_test.mbt:18:16' --target js
-Definition found at file <MOON_HOME>-local\lib\core\encoding\utf8\encode_js.mbt
+Definition found at file <MOON_HOME>/lib\core\encoding\utf8\encode_js.mbt
    | ///|
    | /// Encodes a string into a UTF-8 byte array.
    | ///
