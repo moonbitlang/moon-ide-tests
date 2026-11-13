@@ -1,6 +1,6 @@
 # toml-parser rename skip_newlines parser.mbt:3:12
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'skip_newlines' 'skip_newlines_renamed' --loc 'parser.mbt:3:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/parser.mbt
@@ -55,4 +55,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'skip_newlines' 'skip_newlin
        [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
 *** End Patch
 "" (escaped)
-````
+```

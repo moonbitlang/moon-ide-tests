@@ -18,15 +18,15 @@ pub struct Uri {
            }
            ```
            ---
-"           " (escaped)
+           
             # MoonBit URI Library
-"           " (escaped)
+           
             A comprehensive RFC3986-compliant URI parsing and manipulation library for MoonBit.
             This library provides robust URI parsing, validation, and manipulation capabilities
             with full support for all URI components and operations.
-"           " (escaped)
+           
             ## Features
-"           " (escaped)
+           
             - **RFC3986 Compliant**: Full compliance with URI specification
             - **Immutable Operations**: All URI modifications return new instances
             - **Comprehensive Parsing**: Support for all URI components
@@ -35,36 +35,36 @@ pub struct Uri {
             - **Path Segment Operations**: Convenient path manipulation
             - **URI Resolution**: Resolve relative URIs against base URIs
             - **Validation**: Robust error handling and validation
-"           " (escaped)
+           
             ## Quick Start
-"           " (escaped)
+           
             ```moonbit nocheck
             // Parse a URI
             let uri = @uri.parse("https://user:pass@example.com:8080/path?query=value#fragment")
-"           " (escaped)
+           
             // Access components
             inspect(uri.scheme(), content="Some(\"https\")")
             inspect(uri.host(), content="Some(\"example.com\")")
             inspect(uri.port(), content="Some(8080)")
             inspect(uri.path(), content="/path")
-"           " (escaped)
+           
             // Modify URI (immutable)
             let new_uri = uri.with_host(Some("newhost.com")).with_port(Some(9000))
             inspect(new_uri.to_string(), content="https://user:pass@newhost.com:9000/path?query=value#fragment")
-"           " (escaped)
+           
             // Query parameter helpers
             let search_uri = @uri.parse("https://example.com/search")
             let with_params = search_uri.with_query_param("q", "moonbit").with_query_param("lang", "en")
             inspect(with_params.to_string(), content="https://example.com/search?q=moonbit&lang=en")
             ```
-"           " (escaped)
+           
             ## URI Structure
-"           " (escaped)
+           
             URI data structure representing a parsed URI according to RFC3986
-"            " (escaped)
+            
             A URI has the general form:
             scheme://authority/path?query#fragment
-"            " (escaped)
+            
             Where:
             - scheme: identifies the protocol (e.g., "http", "https", "ftp")
             - authority: contains user info, host, and port
@@ -89,7 +89,7 @@ pub struct Uri {
   path : String
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'uri' --loc 'uri_test.mbt:5:7'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
@@ -101,9 +101,9 @@ test "basic_uri_parsing" {
       ```
   json_inspect(uri, content={
     "scheme": "https",
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'uri_test.mbt:5:18'
 /// Test basic URI parsing functionality
 test "basic_uri_parsing" {
@@ -142,9 +142,9 @@ test "basic_uri_parsing" {
              - Other `UriError` variants for various parsing failures
   json_inspect(uri, content={
     "scheme": "https",
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 /// Test URL encoding functionality
 test "url_encoding" {
@@ -156,7 +156,7 @@ test "url_encoding" {
       ```
   json_inspect(encoded, content="hello%20world%21")
 "" (escaped)
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Uri' --loc 'uri_test_new_features.mbt:5:17'
@@ -176,15 +176,15 @@ test "url_encoding" {
                 }
                 ```
                 ---
-"                " (escaped)
+                
                  # MoonBit URI Library
-"                " (escaped)
+                
                  A comprehensive RFC3986-compliant URI parsing and manipulation library for MoonBit.
                  This library provides robust URI parsing, validation, and manipulation capabilities
                  with full support for all URI components and operations.
-"                " (escaped)
+                
                  ## Features
-"                " (escaped)
+                
                  - **RFC3986 Compliant**: Full compliance with URI specification
                  - **Immutable Operations**: All URI modifications return new instances
                  - **Comprehensive Parsing**: Support for all URI components
@@ -193,36 +193,36 @@ test "url_encoding" {
                  - **Path Segment Operations**: Convenient path manipulation
                  - **URI Resolution**: Resolve relative URIs against base URIs
                  - **Validation**: Robust error handling and validation
-"                " (escaped)
+                
                  ## Quick Start
-"                " (escaped)
+                
                  ```moonbit nocheck
                  // Parse a URI
                  let uri = @uri.parse("https://user:pass@example.com:8080/path?query=value#fragment")
-"                " (escaped)
+                
                  // Access components
                  inspect(uri.scheme(), content="Some(\"https\")")
                  inspect(uri.host(), content="Some(\"example.com\")")
                  inspect(uri.port(), content="Some(8080)")
                  inspect(uri.path(), content="/path")
-"                " (escaped)
+                
                  // Modify URI (immutable)
                  let new_uri = uri.with_host(Some("newhost.com")).with_port(Some(9000))
                  inspect(new_uri.to_string(), content="https://user:pass@newhost.com:9000/path?query=value#fragment")
-"                " (escaped)
+                
                  // Query parameter helpers
                  let search_uri = @uri.parse("https://example.com/search")
                  let with_params = search_uri.with_query_param("q", "moonbit").with_query_param("lang", "en")
                  inspect(with_params.to_string(), content="https://example.com/search?q=moonbit&lang=en")
                  ```
-"                " (escaped)
+                
                  ## URI Structure
-"                " (escaped)
+                
                  URI data structure representing a parsed URI according to RFC3986
-"                 " (escaped)
+                 
                  A URI has the general form:
                  scheme://authority/path?query#fragment
-"                 " (escaped)
+                 
                  Where:
                  - scheme: identifies the protocol (e.g., "http", "https", "ftp")
                  - authority: contains user info, host, and port

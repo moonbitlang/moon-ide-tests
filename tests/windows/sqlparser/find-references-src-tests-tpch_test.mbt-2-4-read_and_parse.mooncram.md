@@ -1,6 +1,6 @@
 # sqlparser find-references read_and_parse src\tests\tpch_test.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'read_and_parse' --loc 'src\tests\tpch_test.mbt:2:4'
 Found 22 references for symbol 'read_and_parse':
 <WORKDIR>/src\tests\tpch_test.mbt:23:14-23:28:
@@ -201,4 +201,4 @@ Found 22 references for symbol 'read_and_parse':
     |   inspect(
     |     stmt,
 "" (escaped)
-````
+```

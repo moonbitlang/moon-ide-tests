@@ -1,6 +1,6 @@
 # toml-parser rename result coverage_improvement_comprehensive_test.mbt:9:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'result' 'result_renamed' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_comprehensive_test.mbt
@@ -22,4 +22,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'result' 'result_renamed' --
      ),
 *** End Patch
 "" (escaped)
-````
+```

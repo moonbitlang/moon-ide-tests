@@ -1,6 +1,6 @@
 # toml-parser outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'additional_official_tests_test.mbt'
   7 |test "key name variations" {
     |...
@@ -23,9 +23,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'additional_official_tests_
 352 |test "validation comprehensive" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'coverage_improvement_comprehensive_test.mbt'
   7 |test "parser_eof_handling" {
     |...
@@ -86,9 +86,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'coverage_improvement_compr
 451 |test "multiline_string_line_ending_backslash" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime\datetime.mbt'
 13 |pub(all) enum TomlDateTime {
    |...
@@ -106,9 +106,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime\datetime.mbt'
 38 |pub impl Show for TomlDateTime with fn output(self, logger) {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime_extended_test.mbt'
  3 |test "test TomlDateTime types and equality" {
    |...
@@ -119,9 +119,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'datetime_extended_test.mbt
 57 |test "test datetime token creation and usage" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal\tokenize\lexer_test.mbt'
    3 |test "tokenize simple key-value" {
      |...
@@ -266,9 +266,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal\tokenize\lexer_te
 1872 |test "consecutive _ in octal number" {
      |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal\tokenize\token.mbt'
  9 |pub(all) struct Loc {
    |...
@@ -291,9 +291,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'internal\tokenize\token.mb
 69 |pub fn Token::loc(self : Self) -> Loc {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser.mbt'
   3 |fn Parser::skip_newlines(self : Parser) -> Unit {
     |...
@@ -329,9 +329,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser.mbt'
 429 |fn cleanup_value_markers(value : TomlValue) -> Unit {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser_wbtest.mbt'
   5 |test "parse_dotted_key - simple identifier" {
     |...
@@ -366,18 +366,18 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'parser_wbtest.mbt'
 239 |test "parse_dotted_key - zero values" {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'test_utils_test.mbt'
  2 |fn parse_expect_to_fail(input : String) -> String {
    |...
 24 |test "verify parse_expect_to_fail output" {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'toml_to_string.mbt'
   3 |fn escape_toml_string(s : String) -> String {
     |...
@@ -420,4 +420,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'toml_to_string.mbt'
 327 |fn write_table_path(path : Array[String], output : StringBuilder) -> Unit {
     |...
 "" (escaped)
-````
+```

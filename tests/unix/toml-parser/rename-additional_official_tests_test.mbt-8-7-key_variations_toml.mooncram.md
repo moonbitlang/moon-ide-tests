@@ -1,6 +1,6 @@
 # toml-parser rename key_variations_toml additional_official_tests_test.mbt:8:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'key_variations_toml' 'key_variations_toml_renamed' --loc 'additional_official_tests_test.mbt:8:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/additional_official_tests_test.mbt
@@ -24,4 +24,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'key_variations_toml' 'key_v
        #|  {
 *** End Patch
 "" (escaped)
-````
+```

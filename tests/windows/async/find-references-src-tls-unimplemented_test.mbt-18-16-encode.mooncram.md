@@ -1,6 +1,6 @@
 # async find-references encode src\tls\unimplemented_test.mbt:18:16
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'encode' --loc 'src\tls\unimplemented_test.mbt:18:16' --target js
 Found 19 references for symbol 'encode':
 <WORKDIR>/src\external_loop_integration\unimplemented_test.mbt:34:16-34:22:
@@ -173,4 +173,4 @@ Found 19 references for symbol 'encode':
    |                ^^^^^^
    | }
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # sqlparser rename show_compact_debug src\show.mbt:2:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'show_compact_debug' 'show_compact_debug_renamed' --loc 'src\show.mbt:2:15'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\show.mbt
@@ -688,4 +688,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'show_compact_debug' 'show_c
  ///|
 *** End Patch
 "" (escaped)
-````
+```

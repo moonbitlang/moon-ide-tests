@@ -1,6 +1,6 @@
 # rabbita find-references Path warren/path/sourcetree_path.mbt:2:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
 Found 8 references for symbol 'Path':
 <WORKDIR>/warren/build.mbt:2:36-2:40:
@@ -72,4 +72,4 @@ Found 8 references for symbol 'Path':
    |     if parent != "" && parent != "." && !@fs.exists(parent) {
    |       @fs.mkdir(parent, permission=0o755, recursive=true)
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # toml-parser hover
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'key_variations_toml' --loc 'additional_official_tests_test.mbt:8:7'
 ///|
 /// Test key names with various characters
@@ -12,9 +12,9 @@ test "key name variations" {
       ```
     #|bare_key = "value"
     #|bare-key = "value"
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'additional_official_tests_test.mbt:17:11'
     #|"ʎǝʞ" = "value"
     #|
@@ -38,9 +38,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'additional_off
      `Result[TomlValue, Error]` instead.
     content=(
       #|TomlTable(
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
 /// Test EOF handling in parser - covered by creating empty token arrays
 test "parser_eof_handling" {
@@ -52,9 +52,9 @@ test "parser_eof_handling" {
       ```
     (
       #|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
 /// Test EOF handling in parser - covered by creating empty token arrays
 test "parser_eof_handling" {
@@ -78,7 +78,7 @@ test "parser_eof_handling" {
                 `Result[TomlValue, Error]` instead.
     (
       #|
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
@@ -97,15 +97,15 @@ pub(all) enum TomlDateTime {
               }
               ```
               ---
-"              " (escaped)
+              
                TOML datetime variants (RFC 3339 subset).
-"              " (escaped)
+              
                TOML distinguishes four kinds of datetime literals:
                - `OffsetDateTime` — full date + time + UTC offset (e.g. `1979-05-27T07:32:00Z`)
                - `LocalDateTime` — date + time, no offset (e.g. `1979-05-27T07:32:00`)
                - `LocalDate` — date only (e.g. `1979-05-27`)
                - `LocalTime` — time only (e.g. `07:32:00`)
-"              " (escaped)
+              
                Values are stored as their original string form. The parser preserves
                the spelling supplied in the TOML source; it does not normalize or
                validate the underlying calendar arithmetic.
@@ -127,7 +127,7 @@ pub(all) enum TomlDateTime {
   LocalDate(String)
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'offset_dt1' --loc 'datetime_extended_test.mbt:4:7'
 ///|
 /// Extended datetime tests for improved coverage
@@ -139,9 +139,9 @@ test "test TomlDateTime types and equality" {
       ```
   let offset_dt2 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
   let offset_dt3 = @datetime.OffsetDateTime("1980-05-27T07:32:00Z")
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
 ///|
 /// Extended datetime tests for improved coverage
@@ -153,9 +153,9 @@ test "test TomlDateTime types and equality" {
                              ```
   let offset_dt2 = @datetime.OffsetDateTime("1979-05-27T07:32:00Z")
   let offset_dt3 = @datetime.OffsetDateTime("1980-05-27T07:32:00Z")
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokens' --loc 'internal/tokenize/lexer_test.mbt:4:7'
 ///|
 /// Tests for the TOML lexer
@@ -167,9 +167,9 @@ test "tokenize simple key-value" {
       ```
     (
       #|key = "value"
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
 ///|
 /// Tests for the TOML lexer
@@ -184,7 +184,7 @@ test "tokenize simple key-value" {
                 Tokenize entire input
     (
       #|key = "value"
-````
+```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
@@ -201,9 +201,9 @@ pub(all) struct Loc {
                 }
                 ```
                 ---
-"                " (escaped)
+                
                  Half-open source span `[start, end)` measured in lexer `Position`s.
-"                " (escaped)
+                
                  `start` is the position of the first character of the lexeme and `end`
                  is the position immediately after its last character. Two locations are
                  `adjacent` (no gap) when one's `end` equals the other's `start`, which
@@ -246,7 +246,7 @@ fn Parser::skip_newlines(self : Parser) -> Unit {
     match view {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'skip_newlines' --loc 'parser.mbt:3:12'
 ///|
 /// Skip newline tokens
@@ -260,9 +260,9 @@ fn Parser::skip_newlines(self : Parser) -> Unit {
             Skip newline tokens
   let next_view = for view = self.view() {
     match view {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokens' --loc 'parser_wbtest.mbt:7:7'
 ///|
 test "parse_dotted_key - simple identifier" {
@@ -274,9 +274,9 @@ test "parse_dotted_key - simple identifier" {
       ```
   let parser = Parser::Parser(tokens)
   let result = parser.parse_dotted_key()
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 ///|
 test "parse_dotted_key - simple identifier" {
@@ -291,7 +291,7 @@ test "parse_dotted_key - simple identifier" {
                 Tokenize entire input
   let parser = Parser::Parser(tokens)
   let result = parser.parse_dotted_key()
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
@@ -305,7 +305,7 @@ fn parse_expect_to_fail(input : String) -> String {
     e => {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'input' --loc 'test_utils_test.mbt:2:25'
 ///|
 fn parse_expect_to_fail(input : String) -> String {
@@ -315,7 +315,7 @@ fn parse_expect_to_fail(input : String) -> String {
                         ```
   try @toml.parse(input) catch {
     e => {
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'escape_toml_string' --loc 'toml_to_string.mbt:3:4'
@@ -333,7 +333,7 @@ fn escape_toml_string(s : String) -> String {
   for char in s {
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 's' --loc 'toml_to_string.mbt:3:23'
 ///|
 /// Helper function to escape strings according to TOML spec
@@ -344,4 +344,4 @@ fn escape_toml_string(s : String) -> String {
                       ```
   let result = StringBuilder()
   for char in s {
-````
+```

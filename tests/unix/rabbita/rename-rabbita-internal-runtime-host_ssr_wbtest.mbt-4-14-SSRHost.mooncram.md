@@ -1,6 +1,6 @@
 # rabbita rename SSRHost rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SSRHost' 'SSRHostRenamed' --loc 'rabbita/internal/runtime/host_ssr_wbtest.mbt:4:14' --target native
 *** Begin Patch
 *** Update File: <WORKDIR>/rabbita/internal/runtime/host_ssr.mbt
@@ -35,4 +35,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'SSRHost' 'SSRHostRenamed' -
      })
 *** End Patch
 "" (escaped)
-````
+```

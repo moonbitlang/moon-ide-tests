@@ -1,6 +1,6 @@
 # toml-parser find-references TomlDateTime datetime\datetime.mbt:13:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'TomlDateTime' --loc 'datetime\datetime.mbt:13:15'
 Found 18 references for symbol 'TomlDateTime':
 <WORKDIR>/datetime\datetime.mbt:22:12-22:24:
@@ -165,4 +165,4 @@ Found 18 references for symbol 'TomlDateTime':
    | 
    | ///|
 "" (escaped)
-````
+```

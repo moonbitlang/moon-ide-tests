@@ -1,6 +1,6 @@
 # toml-parser find-references input test_utils_test.mbt:2:25
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'input' --loc 'test_utils_test.mbt:2:25'
 Found 1 references for symbol 'input':
 <WORKDIR>/test_utils_test.mbt:3:19-3:24:
@@ -11,4 +11,4 @@ Found 1 references for symbol 'input':
   |     e => {
   |       let s = e.to_string()
 "" (escaped)
-````
+```

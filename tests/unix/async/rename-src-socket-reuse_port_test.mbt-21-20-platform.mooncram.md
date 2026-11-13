@@ -1,6 +1,6 @@
 # async rename platform src/socket/reuse_port_test.mbt:21:20
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'platform' 'platform_renamed' --loc 'src/socket/reuse_port_test.mbt:21:20'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/access_test.mbt
@@ -430,4 +430,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'platform' 'platform_renamed
  fn decode_pem_certificates(pem : String) -> Array[Bytes] raise TlsError {
 *** End Patch
 "" (escaped)
-````
+```

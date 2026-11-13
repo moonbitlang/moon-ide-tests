@@ -1,6 +1,6 @@
 # rabbita rename Html e2e\apps\rui\toast\main.mbt:2:22
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Html' 'HtmlRenamed' --loc 'e2e\apps\rui\toast\main.mbt:2:22'
 *** Begin Patch
 *** Update File: <WORKDIR>/e2e\apps\rui\toast\main.mbt
@@ -21,4 +21,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Html' 'HtmlRenamed' --loc '
        @rui.button(
 *** End Patch
 "" (escaped)
-````
+```

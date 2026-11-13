@@ -1,9 +1,9 @@
 # uri peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Uri' --loc 'uri.mbt:54:12'
 Definition found at file <WORKDIR>/uri.mbt
-"   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
+   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp")
    | /// - authority: contains user info, host, and port
    | /// - path: hierarchical path to resource
    | /// - query: additional parameters
@@ -24,9 +24,9 @@ Definition found at file <WORKDIR>/uri.mbt
    | 
    | ///|
    | /// Authority component of a URI
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'scheme' --loc 'uri.mbt:55:3'
 Definition found at file <WORKDIR>/uri.mbt
    | /// - authority: contains user info, host, and port
@@ -50,9 +50,9 @@ Definition found at file <WORKDIR>/uri.mbt
    | ///|
    | /// Authority component of a URI
    | /// Contains optional user info, required host, and optional port
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'uri' --loc 'uri_test.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test.mbt
   | ///|
@@ -75,9 +75,9 @@ Definition found at file <WORKDIR>/uri_test.mbt
   |   json_inspect(empty_uri, content={ "path": "" })
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse' --loc 'uri_test.mbt:5:18'
 Definition found at file <WORKDIR>/uri.mbt
     | ///
@@ -101,9 +101,9 @@ Definition found at file <WORKDIR>/uri.mbt
     |   // Check for scheme
     |   if remaining.contains("://") {
     |     let parts = remaining.split("://").collect()
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'encoded' --loc 'uri_test_new_features.mbt:5:7'
 Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | ///|
@@ -114,7 +114,7 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
   |       ^^^^^^^
   |   json_inspect(encoded, content="hello%20world%21")
   | 
-"  |   // Test unreserved characters (should not be encoded)" (escaped)
+  |   // Test unreserved characters (should not be encoded)
   |   let unreserved = "hello-world_123.test~"
   |   let encoded_unreserved = Uri::encode(unreserved)
   |   json_inspect(encoded_unreserved, content="hello-world_123.test~")
@@ -126,12 +126,12 @@ Definition found at file <WORKDIR>/uri_test_new_features.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Definition found at file <WORKDIR>/uri.mbt
-"   | /// - scheme: identifies the protocol (e.g., \"http\", \"https\", \"ftp\")" (escaped)
+   | /// - scheme: identifies the protocol (e.g., "http", "https", "ftp")
    | /// - authority: contains user info, host, and port
    | /// - path: hierarchical path to resource
    | /// - query: additional parameters
@@ -152,4 +152,4 @@ Definition found at file <WORKDIR>/uri.mbt
    | 
    | ///|
    | /// Authority component of a URI
-````
+```

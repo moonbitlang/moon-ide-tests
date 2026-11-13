@@ -1,6 +1,6 @@
 # sqlparser peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'pretty_print' --loc 'src\ast.mbt:2:24'
 Definition found at file <WORKDIR>/src\ast.mbt
   | ///|
@@ -20,9 +20,9 @@ Definition found at file <WORKDIR>/src\ast.mbt
   |   stmts : Array[Statement]
   | } derive(Eq, Debug)
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'obj' --loc 'src\ast.mbt:2:37'
 Definition found at file <WORKDIR>/src\ast.mbt
   | ///|
@@ -42,9 +42,9 @@ Definition found at file <WORKDIR>/src\ast.mbt
   |   stmts : Array[Statement]
   | } derive(Eq, Debug)
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'BigQuery' --loc 'src\bigquery.mbt:3:17'
 Definition found at file <WORKDIR>/src\bigquery.mbt
   | ///|
@@ -65,9 +65,9 @@ Definition found at file <WORKDIR>/src\bigquery.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'BigQuery' --loc 'src\bigquery.mbt:6:22'
 Definition found at file <WORKDIR>/src\bigquery.mbt
   | ///|
@@ -88,9 +88,9 @@ Definition found at file <WORKDIR>/src\bigquery.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Parser' --loc 'src\dml.mbt:2:4'
 Definition found at file <WORKDIR>/src\parser.mbt
    | 
@@ -114,9 +114,9 @@ Definition found at file <WORKDIR>/src\parser.mbt
    | }
    | 
    | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse_set_expr' --loc 'src\dml.mbt:2:12'
 Definition found at file <WORKDIR>/src\dml.mbt
   | ///|
@@ -136,9 +136,9 @@ Definition found at file <WORKDIR>/src\dml.mbt
   |       let (select_stmt, tokens) = self.parse_select(tokens)
   |       (Select(select_stmt), tokens)
   |     }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Generic' --loc 'src\generic.mbt:5:17'
 Definition found at file <WORKDIR>/src\generic.mbt
   | ///|
@@ -161,9 +161,9 @@ Definition found at file <WORKDIR>/src\generic.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Generic' --loc 'src\generic.mbt:8:22'
 Definition found at file <WORKDIR>/src\generic.mbt
   | ///|
@@ -186,9 +186,9 @@ Definition found at file <WORKDIR>/src\generic.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'LexerError' --loc 'src\lexer.mbt:2:10'
 Definition found at file <WORKDIR>/src\lexer.mbt
   | ///|
@@ -208,9 +208,9 @@ Definition found at file <WORKDIR>/src\lexer.mbt
   |   Comma
   |   Semicolon
   |   Colon
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'UnterminatedString' --loc 'src\lexer.mbt:3:3'
 Definition found at file <WORKDIR>/src\lexer.mbt
   | ///|
@@ -231,9 +231,9 @@ Definition found at file <WORKDIR>/src\lexer.mbt
   |   Semicolon
   |   Colon
   |   Eq
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'sql' --loc 'src\prepare.mbt:6:7'
 Definition found at file <WORKDIR>/src\prepare.mbt
   | ///|
@@ -257,9 +257,9 @@ Definition found at file <WORKDIR>/src\prepare.mbt
   |   )
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'stmt' --loc 'src\prepare.mbt:7:7'
 Definition found at file <WORKDIR>/src\prepare.mbt
   | /// Test cases for PREPARE/EXECUTE/DEALLOCATE statements
@@ -283,9 +283,9 @@ Definition found at file <WORKDIR>/src\prepare.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Redshift' --loc 'src\redshift.mbt:3:17'
 Definition found at file <WORKDIR>/src\redshift.mbt
   | ///|
@@ -306,9 +306,9 @@ Definition found at file <WORKDIR>/src\redshift.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Redshift' --loc 'src\redshift.mbt:6:22'
 Definition found at file <WORKDIR>/src\redshift.mbt
   | ///|
@@ -329,9 +329,9 @@ Definition found at file <WORKDIR>/src\redshift.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'show_compact_debug' --loc 'src\show.mbt:2:15'
 Definition found at file <WORKDIR>/src\show.mbt
   | ///|
@@ -351,9 +351,9 @@ Definition found at file <WORKDIR>/src\show.mbt
   |       [' ', '}', .. next] if !in_string => {
   |         buffer.write_char('}')
   |         continue next
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'obj' --loc 'src\show.mbt:2:34'
 Definition found at file <WORKDIR>/src\show.mbt
   | ///|
@@ -373,9 +373,9 @@ Definition found at file <WORKDIR>/src\show.mbt
   |       [' ', '}', .. next] if !in_string => {
   |         buffer.write_char('}')
   |         continue next
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'pass' --loc 'src\tests\good_test.mbt:4:4'
 Definition found at file <WORKDIR>/src\tests\good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
@@ -397,9 +397,9 @@ Definition found at file <WORKDIR>/src\tests\good_test.mbt
   |   "SELECT * FROM orders;" |> pass
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src\tests\good_test.mbt:4:9'
 Definition found at file <WORKDIR>/src\tests\good_test.mbt
   | // These tests are copied from https://github.com/hyrise/sql-parser/blob/main/test/queries/queries-good.sql
@@ -421,9 +421,9 @@ Definition found at file <WORKDIR>/src\tests\good_test.mbt
   |   "SELECT * FROM orders;" |> pass
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'read_and_parse' --loc 'src\tests\tpch_test.mbt:2:4'
 Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   | ///|
@@ -443,9 +443,9 @@ Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   |     ParserError(e) => {
   |       println(e)
   |       panic()
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'path' --loc 'src\tests\tpch_test.mbt:2:19'
 Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   | ///|
@@ -465,4 +465,4 @@ Definition found at file <WORKDIR>/src\tests\tpch_test.mbt
   |     ParserError(e) => {
   |       println(e)
   |       panic()
-````
+```

@@ -1,6 +1,6 @@
 # async find-references mkfifo src/fs/named_pipe_test.mbt:18:15
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'mkfifo' --loc 'src/fs/named_pipe_test.mbt:18:15'
 Found 2 references for symbol 'mkfifo':
 <WORKDIR>/src/fs/named_pipe_test.mbt:24:6-24:12:
@@ -21,4 +21,4 @@ Found 2 references for symbol 'mkfifo':
    |       @os_error.check_errno("mkfifo")
    |     }
 "" (escaped)
-````
+```
