@@ -57,42 +57,59 @@ jobs:
           fi
           git fetch --no-tags origin "+refs/heads/$DAILY_BRANCH:refs/remotes/origin/$DAILY_BRANCH" || true
           git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p .daily-test
 
       - name: Update testgen dependencies
-        run: bash scripts/update-dependencies.sh
+        run: scripts/update-dependencies.sh
 
-      - name: Update fixture repos
-        run: scripts/update-submodules.sh
-
-      - name: Update MoonBit registry
-        run: scripts/run-moon-update.sh
-
-      - name: Commit dependency and submodule updates
+      - name: Commit dependency updates
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add --all -- testgen/moon.mod
           if ! git diff --cached --quiet -- testgen/moon.mod; then
             git commit -m "chore: update daily testgen dependencies"
           fi
 
+      - name: Update MoonBit registry for existing Unix tests
+        run: scripts/run-moon-update.sh
+
+      - name: Test generator
+        run: moon -C testgen test --target wasm
+
+      - name: Refresh and commit existing Unix snapshots
+        run: |
+          scripts/run-moon-check.sh --existing
+          mapfile -t baseline_paths < .daily-test/unix-existing-baseline-paths.txt
+          moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}" \
+            > .daily-test/unix-existing-cram-update.log 2>&1
+
+          git add --all -- tests/unix
+          git diff --cached --no-ext-diff --no-color -- tests/unix > .daily-test/unix-existing-snapshots.diff
+          if [ -s .daily-test/unix-existing-snapshots.diff ]; then
+            git diff --cached --stat -- tests/unix
+            git commit -m "chore: refresh existing Unix IDE snapshots"
+          fi
+          git rev-parse HEAD > .daily-test/unix-existing-head.txt
+
+      - name: Update fixture repos
+        run: scripts/update-submodules.sh
+
+      - name: Commit submodule updates
+        run: |
           git add --all -- fixtures/repos
           if ! git diff --cached --quiet -- fixtures/repos; then
             git commit -m "chore: update daily fixture submodules"
           fi
 
-      - name: Test generator
-        run: moon -C testgen test --target wasm
+      - name: Update MoonBit registry
+        run: scripts/run-moon-update.sh
 
-      - name: Update generated Unix tests
-        run: scripts/update-tests.sh
-
-      - name: Refresh Unix snapshots
+      - name: Regenerate Unix tests and refresh snapshots
         run: |
+          scripts/update-tests.sh
           mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
-          moonx moonbit-community/mooncram@latest update "${baseline_paths[@]}" \
+          moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}" \
             > .daily-test/unix-cram-update.log 2>&1
 
       - name: Run Unix cram tests
@@ -137,6 +154,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ github.sha }}
           fetch-depth: 0
           submodules: recursive
 
@@ -147,8 +165,42 @@ jobs:
           irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Update MoonBit registry for existing Windows tests
+        shell: pwsh
+        run: .\scripts\run-moon-update.ps1
+
+      - name: Refresh and commit existing Windows snapshots
+        id: existing
+        shell: pwsh
+        run: |
+          .\scripts\run-moon-check.ps1 -Existing
+          .\scripts\refresh-windows-snapshots.ps1 -Existing
+
+          git config user.name "github-actions[bot]"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          git -c core.safecrlf=false add --all -- tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git -c core.safecrlf=false add --renormalize -- tests/windows
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $diffPath = ".daily-test/windows-existing-snapshots.diff"
+          git diff --cached --no-ext-diff --no-color -- tests/windows > $diffPath
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ((Get-Item $diffPath).Length -gt 0) {
+            git commit -m "chore: refresh existing Windows IDE snapshots"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            $sha = git rev-parse HEAD
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            "sha=$sha" >> $env:GITHUB_OUTPUT
+          }
+
       - name: Prepare daily branch
         shell: pwsh
+        env:
+          EXISTING_WINDOWS_SHA: ${{ steps.existing.outputs.sha }}
         run: |
           $refspec = "+refs/heads/$env:DAILY_BRANCH" + ":refs/remotes/origin/$env:DAILY_BRANCH"
           git fetch --no-tags origin $refspec
@@ -157,15 +209,24 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git submodule update --init --recursive
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          New-Item -ItemType Directory -Force -Path .daily-test | Out-Null
+
+          if ($env:EXISTING_WINDOWS_SHA) {
+            git cherry-pick $env:EXISTING_WINDOWS_SHA
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          $sha = git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Set-Content .daily-test/windows-existing-head.txt -Value $sha -Encoding ascii -NoNewline
 
       - name: Update MoonBit registry
         shell: pwsh
         run: .\scripts\run-moon-update.ps1
 
-      - name: Update Windows snapshots
+      - name: Regenerate Windows tests and refresh snapshots
         shell: pwsh
-        run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
+        run: |
+          .\scripts\update-windows-tests.ps1
+          .\scripts\refresh-windows-snapshots.ps1
 
       - name: Run Windows cram tests
         shell: pwsh
@@ -186,9 +247,6 @@ jobs:
       - name: Commit Windows daily changes
         shell: pwsh
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           # Add removals and new files before renormalizing the remaining index;
           # --renormalize alone tries to stat deleted tracked files and fails.
           git -c core.safecrlf=false add --all -- tests/windows
@@ -211,13 +269,14 @@ jobs:
             if ($LASTEXITCODE -ne 0) {
               exit $LASTEXITCODE
             }
-            git push --force-with-lease origin $env:DAILY_BRANCH
-            if ($LASTEXITCODE -ne 0) {
-              exit $LASTEXITCODE
-            }
           } elseif ($diffStatus -ne 0) {
             exit $diffStatus
           }
+          exit 0
+
+      - name: Push daily branch
+        shell: pwsh
+        run: git push origin $env:DAILY_BRANCH
 
       - name: Upload Windows review inputs
         if: always()
@@ -268,36 +327,46 @@ jobs:
           name: daily-windows-review-inputs
           path: .daily-test
 
-      - name: Detect daily diff
+      - name: Prepare staged review inputs
         id: diff
         run: |
+          git merge-base --is-ancestor "$BASE_SHA" HEAD
           if git diff --quiet "$BASE_SHA"...HEAD -- testgen/moon.mod fixtures/repos tests/unix tests/windows; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
 
-          if git diff --quiet "$BASE_SHA"...HEAD -- tests/unix tests/windows; then
-            echo "has_baseline_changes=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_baseline_changes=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Prepare scoped review inputs
-        if: steps.diff.outputs.has_baseline_changes == 'true'
-        run: |
           review_dir="$RUNNER_TEMP/daily-test-review"
-          mkdir -p "$review_dir"
-          git diff --no-ext-diff --no-color "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests.diff"
-          git diff --stat "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-stat.txt"
-          git diff --name-status "$BASE_SHA"...HEAD -- tests/unix tests/windows > "$review_dir/tests-status.txt"
-          git diff --no-ext-diff --no-color --submodule=log "$BASE_SHA"...HEAD -- fixtures/repos > "$review_dir/submodules.diff"
-          # Both platforms write native UTF-8 logs; status files are ASCII.
-          cp .daily-test/submodules.txt \
-            .daily-test/{unix,windows}-cram-{test-status.txt,test.log,update.log} \
-            .daily-test/{unix,windows}-baseline-paths.txt \
-            .daily-test/{unix,windows}-check-*.log \
-            "$review_dir/"
+          mkdir -p "$review_dir"/{existing,regenerated}
+          git diff --no-ext-diff --no-color --submodule=log "$BASE_SHA"...HEAD -- fixtures/repos > "$review_dir/regenerated/submodules.diff"
+          cp .daily-test/submodules.txt "$review_dir/regenerated/"
+
+          needs_review=false
+          shopt -s nullglob
+          for platform in unix windows; do
+            existing="$review_dir/existing"
+            regenerated="$review_dir/regenerated"
+            start="$(cat ".daily-test/$platform-existing-head.txt")"
+            git merge-base --is-ancestor "$BASE_SHA" "$start"
+            git merge-base --is-ancestor "$start" HEAD
+
+            cp ".daily-test/$platform-existing-snapshots.diff" "$existing/$platform.diff"
+            git diff --no-ext-diff --no-color "$start" HEAD -- "tests/$platform" > "$regenerated/$platform.diff"
+            git apply --stat --allow-empty "$existing/$platform.diff" > "$existing/$platform-stat.txt"
+            git diff --stat "$start" HEAD -- "tests/$platform" > "$regenerated/$platform-stat.txt"
+
+            cp .daily-test/"$platform"-existing-{baseline-paths.txt,cram-update.log} \
+              .daily-test/"$platform"-existing-check-*.log "$existing/"
+            cp .daily-test/"$platform"-{baseline-paths.txt,cram-test-status.txt,cram-test.log,cram-update.log} \
+              .daily-test/"$platform"-check-*.log "$regenerated/"
+
+            if [ -s "$existing/$platform.diff" ] || [ -s "$regenerated/$platform.diff" ] || \
+               [ "$(cat "$regenerated/$platform-cram-test-status.txt")" != "0" ]; then
+              needs_review=true
+            fi
+          done
+          echo "needs_review=$needs_review" >> "$GITHUB_OUTPUT"
 
       - name: Create or update pull request
         id: pr
@@ -317,7 +386,7 @@ jobs:
             "This PR was generated by the Daily Test workflow from $BASE_BRANCH ($BASE_SHA)." \
             "It upgrades testgen dependencies, refreshes fixture submodules, regenerates IDE baseline tests with testgen," \
             "and promotes Unix and Windows snapshots only for fixtures that pass moon check on that platform." \
-            "Agent review covers baseline changes since that starting commit, with fixture submodule context and execution logs." > "$body_file"
+            "Agent review covers the existing snapshot refresh and regenerated baselines separately, with fixture context and execution logs." > "$body_file"
 
           if [ -z "$pr_number" ]; then
             pr_url="$(gh pr create \
@@ -336,7 +405,7 @@ jobs:
 
       - name: Review daily output with OpenSeek
         id: openseek
-        if: steps.diff.outputs.has_baseline_changes == 'true'
+        if: steps.diff.outputs.needs_review == 'true'
         env:
           DEEPSEEK: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
@@ -358,12 +427,18 @@ jobs:
 
       - name: Parse OpenSeek review
         id: openseek-result
-        if: steps.diff.outputs.has_baseline_changes == 'true'
+        if: steps.diff.outputs.needs_review == 'true'
         run: |
           moon run --target native "$RUNNER_TEMP/parse-openseek-result.mbtx"
 
+      - name: Summarize staged review
+        if: steps.diff.outputs.needs_review == 'true'
+        env:
+          REVIEW_BODY: ${{ steps.openseek-result.outputs.comment_body }}
+        run: printf '## Daily baseline review\n\n%s\n' "$REVIEW_BODY" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload OpenSeek result
-        if: always() && steps.diff.outputs.has_baseline_changes == 'true'
+        if: always() && steps.diff.outputs.needs_review == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: daily-openseek-result
@@ -372,7 +447,7 @@ jobs:
           include-hidden-files: true
 
       - name: Comment on pull request
-        if: steps.diff.outputs.has_baseline_changes == 'true' && steps.openseek-result.outputs.has_problem == 'true'
+        if: steps.pr.outputs.pr_number != '' && steps.openseek-result.outputs.has_problem == 'true'
         uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr.outputs.pr_number }}
@@ -398,7 +473,7 @@ jobs:
             });
 
       - name: Upload scoped review inputs
-        if: always() && steps.diff.outputs.has_baseline_changes == 'true'
+        if: always() && steps.diff.outputs.needs_review == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: daily-tests-review

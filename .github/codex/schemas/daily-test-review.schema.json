@@ -2,12 +2,19 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "has_problem": {
-      "type": "boolean"
-    },
-    "comment_body": {
-      "type": "string"
-    }
+    "existing": { "$ref": "#/$defs/stage" },
+    "regenerated": { "$ref": "#/$defs/stage" }
   },
-  "required": ["has_problem", "comment_body"]
+  "required": ["existing", "regenerated"],
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "has_problem": { "type": "boolean" },
+        "summary": { "type": "string", "minLength": 1 }
+      },
+      "required": ["has_problem", "summary"]
+    }
+  }
 }
