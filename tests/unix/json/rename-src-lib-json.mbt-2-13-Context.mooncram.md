@@ -1,6 +1,6 @@
 # json rename Context src/lib/json.mbt:2:13
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' --loc 'src/lib/json.mbt:2:13'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -10,10 +10,10 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +priv struct ContextRenamed {
    original : Array[Char]
    rest : ArrayView[Char]
-   skip : Int
+   skip : Int32
 @@
-"     Some(decode) => decode" (escaped)
-"     None => ()" (escaped)
+     Some(decode) => decode
+     None => ()
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -21,8 +21,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
      original: input.to_array(),
      skip: 0,
 @@
-"     Some(decode) => decode" (escaped)
-"     None => ()" (escaped)
+     Some(decode) => decode
+     None => ()
    }
 -  let ctx = Context::{
 +  let ctx = ContextRenamed::{
@@ -46,79 +46,79 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +fn value(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // number {{{
  
  ///|
--fn number_zero(ctx : Context, len : Int) -> Value raise {
-+fn number_zero(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_zero(ctx : Context, len : Int32) -> Value raise {
++fn number_zero(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-"     [] => {" (escaped)
+     [] => {
 @@
  }
  
  ///|
--fn number(ctx : Context, len : Int) -> Value raise {
-+fn number(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number(ctx : Context, len : Int32) -> Value raise {
++fn number(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number({ ..ctx, rest, }, len + 1)
 @@
  }
  
  ///|
--fn number_frac(ctx : Context, len : Int) -> Value raise {
-+fn number_frac(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_frac(ctx : Context, len : Int32) -> Value raise {
++fn number_frac(ctx : ContextRenamed, len : Int32) -> Value raise {
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
-"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
+     _ => unexpected(ctx, len, 0, Checkpoint::Value)
 @@
  }
  
  ///|
--fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
-+fn number_frac_cont(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
++fn number_frac_cont(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
 @@
  
  ///|
  fn float_decode(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   len : Int,
+   len : Int32,
    token : ArrayView[Char],
  ) -> Value raise {
 @@
  }
  
  ///|
--fn number_exp(ctx : Context, len : Int) -> Value raise {
-+fn number_exp(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_exp(ctx : Context, len : Int32) -> Value raise {
++fn number_exp(ctx : ContextRenamed, len : Int32) -> Value raise {
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
-"     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     ['+' | '-', .. rest] => number_exp_sign({ ..ctx, rest, }, len + 1)
 @@
  }
  
  ///|
--fn number_exp_sign(ctx : Context, len : Int) -> Value raise {
-+fn number_exp_sign(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_exp_sign(ctx : Context, len : Int32) -> Value raise {
++fn number_exp_sign(ctx : ContextRenamed, len : Int32) -> Value raise {
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
-"     _ => unexpected(ctx, len, 0, Checkpoint::Value)" (escaped)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     _ => unexpected(ctx, len, 0, Checkpoint::Value)
 @@
  }
  
  ///|
--fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
-+fn number_exp_cont(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
++fn number_exp_cont(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
 @@
  }
  
@@ -126,16 +126,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 -fn number_minus(ctx : Context) -> Value raise {
 +fn number_minus(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-"     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2)" (escaped)
-"     ['1'..='9', .. rest] => number({ ..ctx, rest, }, 2)" (escaped)
+     ['0', .. rest] => number_zero({ ..ctx, rest, }, 2)
+     ['1'..<='9', .. rest] => number({ ..ctx, rest, }, 2)
 @@
  }
  
  ///|
--fn integer_decode(ctx : Context, token : ArrayView[Char]) -> Int raise {
-+fn integer_decode(ctx : ContextRenamed, token : ArrayView[Char]) -> Int raise {
+-fn integer_decode(ctx : Context, token : ArrayView[Char]) -> Int32 raise {
++fn integer_decode(ctx : ContextRenamed, token : ArrayView[Char]) -> Int32 raise {
    try ctx.decode.integer(token) catch {
-"     _ => raise ParseError(UnexpectedSequence(token.to_owned(), ctx.skip))" (escaped)
+     _ => raise ParseError(UnexpectedSequence(token.to_owned(), ctx.skip))
    } noraise {
 @@
  // constants {{{
@@ -144,8 +144,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 -fn true_(ctx : Context) -> Value raise {
 +fn true_(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-"     ['r', 'u', 'e', .. rest] =>" (escaped)
-       continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::boolean(true))
+     ['r', 'u', 'e', .. rest] =>
+       continue_({ ..ctx, rest, skip: ctx.skip + 4, }, Json::boolean(true))
 @@
  }
  
@@ -153,8 +153,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 -fn false_(ctx : Context) -> Value raise {
 +fn false_(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-"     ['a', 'l', 's', 'e', .. rest] =>" (escaped)
-       continue_({ ..ctx, rest, skip: ctx.skip + 5 }, Json::boolean(false))
+     ['a', 'l', 's', 'e', .. rest] =>
+       continue_({ ..ctx, rest, skip: ctx.skip + 5, }, Json::boolean(false))
 @@
  }
  
@@ -162,15 +162,15 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 -fn null(ctx : Context) -> Value raise {
 +fn null(ctx : ContextRenamed) -> Value raise {
    match ctx.rest {
-"     ['u', 'l', 'l', .. rest] =>" (escaped)
-       continue_({ ..ctx, rest, skip: ctx.skip + 4 }, Json::null())
+     ['u', 'l', 'l', .. rest] =>
+       continue_({ ..ctx, rest, skip: ctx.skip + 4, }, Json::null())
 @@
  // string {{{
  
  ///|
--fn string(ctx : Context, len : Int) -> Value raise {
-+fn string(ctx : ContextRenamed, len : Int) -> Value raise {
-   let builder = StringBuilder::new(size_hint=len)
+-fn string(ctx : Context, len : Int32) -> Value raise {
++fn string(ctx : ContextRenamed, len : Int32) -> Value raise {
+   let builder = StringBuilder(size_hint=len)
    string_scan(ctx, len, builder)
  }
 @@
@@ -179,7 +179,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
  fn string_scan(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   len : Int,
+   len : Int32,
    builder : StringBuilder,
  ) -> Value raise {
 @@
@@ -188,7 +188,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
  fn string_escape(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   len : Int,
+   len : Int32,
    builder : StringBuilder,
  ) -> Value raise {
 @@
@@ -197,8 +197,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
  fn string_unicode(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   len : Int,
-   code_unit : Int,
+   len : Int32,
+   code_unit : Int32,
    rest : ArrayView[Char],
 @@
  
@@ -206,36 +206,36 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
  fn unicode_escape_value(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   len : Int,
+   len : Int32,
    a : Char,
    b : Char,
 @@
  }
  
  ///|
--fn hex_value(ctx : Context, index : Int, c : Char) -> Int raise {
-+fn hex_value(ctx : ContextRenamed, index : Int, c : Char) -> Int raise {
+-fn hex_value(ctx : Context, index : Int32, c : Char) -> Int32 raise {
++fn hex_value(ctx : ContextRenamed, index : Int32, c : Char) -> Int32 raise {
    match c {
-"     '0'..='9' => c.to_int() - '0'.to_int()" (escaped)
-"     'a'..='f' => c.to_int() - 'a'.to_int() + 10" (escaped)
+     '0'..<='9' => c.to_int() - '0'.to_int()
+     'a'..<='f' => c.to_int() - 'a'.to_int() + 10
 @@
  
  ///|
  fn write_codepoint(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   index : Int,
-   codepoint : Int,
+   index : Int32,
+   codepoint : Int32,
    builder : StringBuilder,
 @@
  // array {{{
  
  ///|
--fn array_start(ctx : Context, len : Int) -> Value raise {
-+fn array_start(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn array_start(ctx : Context, len : Int32) -> Value raise {
++fn array_start(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { decode, skip, arr_acc, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -244,16 +244,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +fn array_push(ctx : ContextRenamed, value0 : Json) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // object {{{
  
  ///|
--fn object_start(ctx : Context, len : Int) -> Value raise {
-+fn object_start(ctx : ContextRenamed, len : Int) -> Value raise {
+-fn object_start(ctx : Context, len : Int32) -> Value raise {
++fn object_start(ctx : ContextRenamed, len : Int32) -> Value raise {
    let { obj_acc, skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -262,7 +262,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +fn object_value(ctx : ContextRenamed, key : String) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -271,7 +271,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +fn object_push(ctx : ContextRenamed, value0 : Json, key : String) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  }
  
@@ -280,7 +280,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 +fn object_key(ctx : ContextRenamed) -> Value raise {
    let { skip, .. } = ctx
    match ctx.rest {
-     [' '  | '\n' | '\r' | '\t', .. rest] =>
+     [' ' | '\n' | '\r' | '\t', .. rest] =>
 @@
  // }}}
  
@@ -288,8 +288,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
 -fn continue_(ctx : Context, value : Json) -> Value raise {
 +fn continue_(ctx : ContextRenamed, value : Json) -> Value raise {
    match ctx.stack.last() {
-"     None => terminate(ctx, value)" (escaped)
-"     Some(Frame::Array(_)) => array_push(ctx, value)" (escaped)
+     None => terminate(ctx, value)
+     Some(Frame::Array(_)) => array_push(ctx, value)
 @@
  }
  
@@ -305,9 +305,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Context' 'ContextRenamed' -
  fn unexpected(
 -  ctx : Context,
 +  ctx : ContextRenamed,
-   pos : Int,
-   len : Int,
+   pos : Int32,
+   len : Int32,
    func_data : Checkpoint,
 *** End Patch
 "" (escaped)
-````
+```

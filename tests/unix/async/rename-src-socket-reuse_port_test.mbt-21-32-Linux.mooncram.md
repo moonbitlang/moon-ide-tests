@@ -1,9 +1,27 @@
 # async rename Linux src/socket/reuse_port_test.mbt:21:32
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Linux' 'LinuxRenamed' --loc 'src/socket/reuse_port_test.mbt:21:32'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/fs/dir.mbt
+@@
+   context~ : String,
+ ) -> String raise {
+   match @event_loop.platform {
+-    Linux | MacOS =>
++    LinuxRenamed | MacOS =>
+       if path is ['/', ..] {
+         raise Failure(
+           "\{context}: relative open does not support absolute path",
+@@
+   }
+   let result = StringBuilder()
+   let sep = match @event_loop.platform {
+-    Linux | MacOS => '/'
++    LinuxRenamed | MacOS => '/'
+     Windows => '\\'
+   }
+   fn check_component(component : StringView) -> Unit raise {
 @@
    dir.offset += entry_len
    dir.count += 1
@@ -13,6 +31,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Linux' 'LinuxRenamed' --loc
      MacOS => dir.count >= dir.job_ret
      Windows => entry_len is 0
    }
+*** Update File: <WORKDIR>/src/fs/relative_open_wbtest.mbt
+@@
+     )
+   }
+   match @event_loop.platform {
+-    Linux | MacOS => {
++    LinuxRenamed | MacOS => {
+       inspect(check("file"), content="file")
+       inspect(check("a/b//c/"), content="a/b/c")
+       inspect(check("./a/b/./c"), content="a/b/c")
 *** Update File: <WORKDIR>/src/fs/watch.mbt
 @@
    ignore(root_id)
@@ -172,10 +200,29 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Linux' 'LinuxRenamed' --loc
      return
    }
    let mut accepted1 = 0
+@@
+ 
+ ///|
+ async test "udp reuse port lb" {
+-  if !(@event_loop.platform is Linux) {
++  if !(@event_loop.platform is LinuxRenamed) {
+     return
+   }
+   let mut received1 = 0
 *** Update File: <WORKDIR>/src/socket/tcp.mbt
 @@
    if !(@event_loop.platform is Windows) && reuse_addr {
      guard allow_reuse_addr(sock) >= 0 else { @os_error.check_errno(context) }
+   }
+-  if @event_loop.platform is Linux && reuse_port_lb {
++  if @event_loop.platform is LinuxRenamed && reuse_port_lb {
+     guard allow_reuse_port(sock) >= 0 else { @os_error.check_errno(context) }
+   }
+   io.bind(addr.0, context~)
+*** Update File: <WORKDIR>/src/socket/udp.mbt
+@@
+       @os_error.check_errno(context)
+     }
    }
 -  if @event_loop.platform is Linux && reuse_port_lb {
 +  if @event_loop.platform is LinuxRenamed && reuse_port_lb {
@@ -194,4 +241,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Linux' 'LinuxRenamed' --loc
  }
 *** End Patch
 "" (escaped)
-````
+```

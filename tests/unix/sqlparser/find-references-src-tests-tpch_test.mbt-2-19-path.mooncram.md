@@ -1,14 +1,14 @@
 # sqlparser find-references path src/tests/tpch_test.mbt:2:19
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'path' --loc 'src/tests/tpch_test.mbt:2:19'
 Found 1 references for symbol 'path':
 <WORKDIR>/src/tests/tpch_test.mbt:3:39-3:43:
-"  | ///|" (escaped)
-"  | fn read_and_parse(path : String) -> @sqlparser.Statements {" (escaped)
-"3 |   let input = @fs.read_file_to_string(path) catch {" (escaped)
-"  |                                       ^^^^" (escaped)
-"  |     e => {" (escaped)
+  | ///|
+  | fn read_and_parse(path : String) -> @sqlparser.Statements {
+3 |   let input = @fs.read_file_to_string(path) catch {
+  |                                       ^^^^
+  |     e => {
   |       println("Read file error: \{Repr(e)}")
 "" (escaped)
-````
+```

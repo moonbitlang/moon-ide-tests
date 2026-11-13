@@ -1,6 +1,6 @@
 # rabbita outline
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e/apps/rui/fixture/fixture.mbt'
  2 |using @rabbita {type Html, type Val}
    |...
@@ -9,18 +9,18 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e/apps/rui/fixture/fixtu
 24 |pub fn mount(name : String, app : () -> Val[Html]) -> Unit {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e/apps/rui/message-scroller/message_scroller.mbt'
  2 |fn fixture_scroll_items(prefix : String) -> Array[Html] {
    |...
 17 |fn message_scroller_fixture() -> Val[Html] {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e/apps/rui/toast/main.mbt'
 2 |using @rabbita {type Html, type Val}
   |...
@@ -29,9 +29,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'e2e/apps/rui/toast/main.mb
 8 |fn main {
   |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/clipboard/clipboard.mbt'
  2 |pub(all) enum Item {
    |...
@@ -40,25 +40,25 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/clipboard/clipboar
 23 |pub fn paste(pasted~ : (Item) -> Cmd, failed? : (String) -> Cmd) -> Cmd {
    |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/dom/gpu_canvas_context.mbt'
 2 |#cfg(target="js")
 3 |#external
 4 |type GPUCanvasContext
   |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/internal/runtime/host_ssr_wbtest.mbt'
 2 |#cfg(not(target="js"))
   |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/internal/vdom/diff.mbt'
   2 |#cfg(target="js")
   3 |struct VDom {
@@ -217,9 +217,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/internal/vdom/diff
 781 |fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/internal/vdom/vdom.mbt'
   2 |using @cmd {trait Scheduler}
     |...
@@ -286,9 +286,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita/internal/vdom/vdom
 149 |pub fn Props::copy(self : Props) -> Props {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rui/sheet.mbt'
   3 |pub(all) enum SheetSide {
     |...
@@ -358,9 +358,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rui/sheet.mbt'
 199 |) -> @html.Html {
     |...
 "" (escaped)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'warren/path/sourcetree_path.mbt'
  2 |pub type Path = @p.Path
    |...
@@ -387,4 +387,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'warren/path/sourcetree_pat
 43 |pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
    |...
 "" (escaped)
-````
+```

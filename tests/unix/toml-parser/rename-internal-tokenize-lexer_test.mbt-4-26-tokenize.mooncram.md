@@ -1,6 +1,6 @@
 # toml-parser rename tokenize internal/tokenize/lexer_test.mbt:4:26
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed' --loc 'internal/tokenize/lexer_test.mbt:4:26'
 *** Begin Patch
 *** Update File: <WORKDIR>/coverage_improvement_test.mbt
@@ -1061,15 +1061,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
        #|key = '''hello world'''
      ),
 @@
- test "tokenize else branch coverage" {
-   // This tests the else branch in tokenize function that should never be reached
-   // The function returns inside the while loop, so the else is unreachable
--  let tokens = @tokenize.tokenize(
-+  let tokens = @tokenize.tokenize_renamed(
-     (
-       #|key = "value"
-     ),
-@@
  ///|
  /// Test multiline basic string with single quote escape
  test "multiline basic string single quote escape" {
@@ -1463,4 +1454,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
    debug_inspect(
 *** End Patch
 "" (escaped)
-````
+```

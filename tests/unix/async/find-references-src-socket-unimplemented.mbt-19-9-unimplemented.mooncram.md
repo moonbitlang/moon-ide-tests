@@ -1,6 +1,6 @@
 # async find-references unimplemented src/socket/unimplemented.mbt:19:9
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'unimplemented' --loc 'src/socket/unimplemented.mbt:19:9' --target js
 Found 4 references for symbol 'unimplemented':
 <WORKDIR>/src/external_loop_integration/unimplemented_test.mbt:35:18-35:31:
@@ -39,4 +39,4 @@ Found 4 references for symbol 'unimplemented':
    |   ignore(@process.unimplemented)
    |   ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # rabbita find-references Text rabbita/clipboard/clipboard.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Text' --loc 'rabbita/clipboard/clipboard.mbt:3:3'
 Found 10 references for symbol 'Text':
 <WORKDIR>/rabbita/clipboard/op.mbt:12:21-12:25:
@@ -93,4 +93,4 @@ Found 10 references for symbol 'Text':
     |             set_copied(_ => true),
     |             @rabbita.delay(set_copied(_ => false), 1500),
 "" (escaped)
-````
+```

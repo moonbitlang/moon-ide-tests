@@ -1,15 +1,15 @@
 # sqlparser find-references input src/tests/good_test.mbt:4:9
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'input' --loc 'src/tests/good_test.mbt:4:9'
 Found 1 references for symbol 'input':
 <WORKDIR>/src/tests/good_test.mbt:5:25-5:30:
-"  | " (escaped)
-"  | ///|" (escaped)
-"  | fn pass(input : String) -> Unit {" (escaped)
-"5 |   (@sqlparser.parse_sql(input) catch {" (escaped)
-"  |                         ^^^^^" (escaped)
-"  |     e => {" (escaped)
-"  |       println(e)" (escaped)
+  | 
+  | ///|
+  | fn pass(input : String) -> Unit {
+5 |   (@sqlparser.parse_sql(input) catch {
+  |                         ^^^^^
+  |     e => {
+  |       println(e)
 "" (escaped)
-````
+```

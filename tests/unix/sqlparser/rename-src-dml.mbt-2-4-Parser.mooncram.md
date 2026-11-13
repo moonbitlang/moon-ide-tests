@@ -1,6 +1,6 @@
 # sqlparser rename Parser src/dml.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Parser' 'ParserRenamed' --loc 'src/dml.mbt:2:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/ansi.mbt
@@ -1166,4 +1166,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Parser' 'ParserRenamed' --l
    let tokens = self.expect_token(tokens, Keyword(Release))
 *** End Patch
 "" (escaped)
-````
+```

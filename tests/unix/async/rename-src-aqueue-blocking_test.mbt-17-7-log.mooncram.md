@@ -1,6 +1,6 @@
 # async rename log src/aqueue/blocking_test.mbt:17:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'log' 'log_renamed' --loc 'src/aqueue/blocking_test.mbt:17:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/aqueue/blocking_test.mbt
@@ -35,4 +35,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'log' 'log_renamed' --loc 's
  }
 *** End Patch
 "" (escaped)
-````
+```

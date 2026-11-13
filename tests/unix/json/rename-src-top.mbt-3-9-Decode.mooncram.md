@@ -1,6 +1,6 @@
 # json rename Decode src/top.mbt:3:9
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Decode' 'DecodeRenamed' --loc 'src/top.mbt:3:9'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/top.mbt
@@ -14,4 +14,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Decode' 'DecodeRenamed' --l
    decode_continue,
 *** End Patch
 "" (escaped)
-````
+```
