@@ -1,6 +1,6 @@
 # async find-references log src\pipe\read_exactly_test.mbt:18:6
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'log' --loc 'src\pipe\read_exactly_test.mbt:18:6'
 Found 5 references for symbol 'log':
 <WORKDIR>/src\pipe\read_exactly_test.mbt:28:7-28:10:
@@ -48,4 +48,4 @@ Found 5 references for symbol 'log':
    |       w.write("ghijkl")
    |     }
 "" (escaped)
-````
+```

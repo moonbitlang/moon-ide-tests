@@ -1,6 +1,6 @@
 # uri find-references Uri uri_test_new_features.mbt:5:17
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Uri' --loc 'uri_test_new_features.mbt:5:17'
 Found 105 references for symbol 'Uri':
 <WORKDIR>/uri.mbt:65:12-65:15:
@@ -797,7 +797,7 @@ Found 105 references for symbol 'Uri':
 
 <WORKDIR>/uri_test_new_features.mbt:10:28-10:31:
    | 
-"   |   // Test unreserved characters (should not be encoded)" (escaped)
+   |   // Test unreserved characters (should not be encoded)
    |   let unreserved = "hello-world_123.test~"
 10 |   let encoded_unreserved = Uri::encode(unreserved)
    |                            ^^^
@@ -825,7 +825,7 @@ Found 105 references for symbol 'Uri':
 <WORKDIR>/uri_test_new_features.mbt:27:21-27:24:
    |   json_inspect(decoded, content="hello world!")
    | 
-"   |   // Test invalid hex sequences (should be left as-is)" (escaped)
+   |   // Test invalid hex sequences (should be left as-is)
 27 |   let invalid_hex = Uri::decode("hello%ZZ")
    |                     ^^^
    |   json_inspect(invalid_hex, content="hello%ZZ")
@@ -948,4 +948,4 @@ Found 105 references for symbol 'Uri':
     |   json_inspect(query_params, content=[
     |     ["query", "value=with&special"],
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # async rename io src\process\redirect.mbt:18:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'io' 'io_renamed' --loc 'src\process\redirect.mbt:18:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\process\redirect.mbt
@@ -42,4 +42,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'io' 'io_renamed' --loc 'src
      len=max_len,
 *** End Patch
 "" (escaped)
-````
+```

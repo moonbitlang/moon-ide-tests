@@ -1,6 +1,6 @@
 # async rename _ignore_unused_import src\tls\unimplemented_test.mbt:17:5
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename '_ignore_unused_import' '_ignore_unused_import_renamed' --loc 'src\tls\unimplemented_test.mbt:17:5' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tls\unimplemented_test.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename '_ignore_unused_import' '_ig
    ignore(@socket.unimplemented)
 *** End Patch
 "" (escaped)
-````
+```

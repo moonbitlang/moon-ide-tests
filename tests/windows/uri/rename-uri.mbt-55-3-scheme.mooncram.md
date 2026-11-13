@@ -1,6 +1,6 @@
 # uri rename scheme uri.mbt:55:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'scheme' 'scheme_renamed' --loc 'uri.mbt:55:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/uri.mbt
@@ -60,7 +60,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'scheme' 'scheme_renamed' --
  ///|
 @@
  ///|
-" /// Check if the URI is absolute (has a scheme)" (escaped)
+ /// Check if the URI is absolute (has a scheme)
  pub fn Uri::is_absolute(self : Uri) -> Bool {
 -  match self.scheme {
 +  match self.scheme_renamed {
@@ -114,4 +114,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'scheme' 'scheme_renamed' --
            query: relative.query,
 *** End Patch
 "" (escaped)
-````
+```

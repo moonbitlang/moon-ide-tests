@@ -1,6 +1,6 @@
 # async hover
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'log' --loc 'src\aqueue\blocking_test.mbt:17:7'
 ///|
 async test "blocking unbuffered" {
@@ -11,7 +11,7 @@ async test "blocking unbuffered" {
       ```
   @async.with_task_group() <| group => {
     let q = @async.Queue(kind=Blocking(1))
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'with_task_group' --loc 'src\aqueue\blocking_test.mbt:18:10'
@@ -36,25 +36,19 @@ async test "blocking unbuffered" {
     group.spawn_bg() <| () => {
 ````
 
-Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-function-hover -->
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
-No hover information found for symbol 'fstatx_sync' at src\internal\event_loop\stdio.mbt:18:15
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'from_core_stdio' --loc 'src\internal\event_loop\stdio.mbt:17:4'
+No hover information found for symbol 'from_core_stdio' at src\internal\event_loop\stdio.mbt:17:4
 [1]
-````
+```
 
-Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-parameter-hover -->
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fd' --loc 'src\internal\event_loop\stdio.mbt:19:3'
-No hover information found for symbol 'fd' at src\internal\event_loop\stdio.mbt:19:3
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'x' --loc 'src\internal\event_loop\stdio.mbt:18:3'
+No hover information found for symbol 'x' at src\internal\event_loop\stdio.mbt:18:3
 [1]
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover '_ignore_unused_import' --loc 'src\internal\event_loop\unimplemented_test.mbt:17:5' --target js
 ///|
 #cfg(not(any(target="native", target="wasm")))
@@ -67,9 +61,9 @@ let _ignore_unused_import : Unit = {
     
   ignore(@async.sleep)
   ignore(@fs.unimplemented)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'sleep' --loc 'src\internal\event_loop\unimplemented_test.mbt:18:17' --target js
 ///|
 #cfg(not(any(target="native", target="wasm")))
@@ -81,9 +75,9 @@ let _ignore_unused_import : Unit = {
          ```
   ignore(@fs.unimplemented)
   ignore(@utf8.encode(""))
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover '_ignore_unused_import' --loc 'src\js_async\unimplemented.mbt:17:5'
 ///|
 #coverage.skip
@@ -96,9 +90,9 @@ let _ignore_unused_import : Unit = {
     
   ignore(@coroutine.Coroutine::wake)
   ignore(@event_loop.Timer::new)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Coroutine' --loc 'src\js_async\unimplemented.mbt:18:21'
 ///|
 #coverage.skip
@@ -113,9 +107,9 @@ let _ignore_unused_import : Unit = {
          ```
   ignore(@event_loop.Timer::new)
 }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'buf' --loc 'src\pipe\read_exactly_test.mbt:17:7'
 ///|
 async test "read_exactly" {
@@ -126,9 +120,9 @@ async test "read_exactly" {
       ```
   fn log(msg) {
     buf..write_string(msg).write_char('\n')
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'log' --loc 'src\pipe\read_exactly_test.mbt:18:6'
 ///|
 async test "read_exactly" {
@@ -140,9 +134,9 @@ async test "read_exactly" {
      ```
     buf..write_string(msg).write_char('\n')
   }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover '_ignore_unused_import' --loc 'src\pipe\unimplemented_test.mbt:17:5' --target js
 ///|
 #cfg(not(target="native"))
@@ -155,9 +149,9 @@ let _ignore_unused_import : Unit = {
     
   ignore(@async.sleep)
   ignore(@utf8.encode(""))
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'sleep' --loc 'src\pipe\unimplemented_test.mbt:18:17' --target js
 ///|
 #cfg(not(target="native"))
@@ -169,9 +163,9 @@ let _ignore_unused_import : Unit = {
          ```
   ignore(@utf8.encode(""))
   ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'ReadFromProcess' --loc 'src\process\redirect.mbt:17:8'
 ///|
 /// A temporary pipe used to read output from a spawned process
@@ -188,7 +182,7 @@ struct ReadFromProcess {
         A temporary pipe used to read output from a spawned process
   io : @event_loop.IoHandle
   read_buf : @io.ReaderBuffer
-````
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'io' --loc 'src\process\redirect.mbt:18:3'
@@ -204,7 +198,7 @@ struct ReadFromProcess {
 }
 ````
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'platform' --loc 'src\socket\reuse_port_test.mbt:21:20'
   // and MacOS too, but there which socket accepts a given connection is
   // unspecified, so there is nothing to observe. `#cfg(platform=..)` cannot
@@ -216,9 +210,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'platform' --loc 'src\socket\
        ```
     return
   }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Linux' --loc 'src\socket\reuse_port_test.mbt:21:32'
   // and MacOS too, but there which socket accepts a given connection is
   // unspecified, so there is nothing to observe. `#cfg(platform=..)` cannot
@@ -230,9 +224,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Linux' --loc 'src\socket\reu
                                ```
     return
   }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'unimplemented' --loc 'src\socket\unimplemented.mbt:19:9' --target js
 /// This package currently does not support JavaScript backend
 #cfg(not(any(target="native", target="wasm")))
@@ -247,9 +241,9 @@ pub let unimplemented : Unit = {
          This package currently does not support JavaScript backend
   ignore(() => @string.parse_int("0"))
   ignore(@io.pipe)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse_int' --loc 'src\socket\unimplemented.mbt:20:24' --target js
 #cfg(not(any(target="native", target="wasm")))
 #coverage.skip
@@ -265,9 +259,9 @@ pub let unimplemented : Unit = {
                 If the `base` argument is 0, the base will be inferred by the prefix.
   ignore(@io.pipe)
   ignore(@event_loop.Timer::new)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover '_ignore_unused_import' --loc 'src\tls\unimplemented_test.mbt:17:5' --target js
 ///|
 #cfg(not(any(target="native", target="wasm")))
@@ -280,9 +274,9 @@ let _ignore_unused_import : Unit = {
     
   ignore(@utf8.encode(""))
   ignore(@async.sleep)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'encode' --loc 'src\tls\unimplemented_test.mbt:18:16' --target js
 ///|
 #cfg(not(any(target="native", target="wasm")))
@@ -300,4 +294,4 @@ let _ignore_unused_import : Unit = {
           The other backends panic on them instead.
   ignore(@async.sleep)
   ignore(@socket.unimplemented)
-````
+```

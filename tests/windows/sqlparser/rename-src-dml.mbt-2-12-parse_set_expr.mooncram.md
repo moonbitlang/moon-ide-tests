@@ -1,6 +1,6 @@
 # sqlparser rename parse_set_expr src\dml.mbt:2:12
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_set_expr' 'parse_set_expr_renamed' --loc 'src\dml.mbt:2:12'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\dml.mbt
@@ -31,4 +31,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'parse_set_expr' 'parse_set_
      _ => ([], tokens)
 *** End Patch
 "" (escaped)
-````
+```

@@ -1,6 +1,6 @@
 # sqlparser find-references input src\tests\good_test.mbt:4:9
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'input' --loc 'src\tests\good_test.mbt:4:9'
 Found 1 references for symbol 'input':
 <WORKDIR>/src\tests\good_test.mbt:5:25-5:30:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'input':
   |     e => {
   |       println(e)
 "" (escaped)
-````
+```

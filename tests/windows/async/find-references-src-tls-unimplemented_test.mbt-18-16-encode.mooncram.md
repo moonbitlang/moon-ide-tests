@@ -1,6 +1,6 @@
 # async find-references encode src\tls\unimplemented_test.mbt:18:16
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'encode' --loc 'src\tls\unimplemented_test.mbt:18:16' --target js
 Found 19 references for symbol 'encode':
 <WORKDIR>/src\external_loop_integration\unimplemented_test.mbt:34:16-34:22:
@@ -45,8 +45,8 @@ Found 19 references for symbol 'encode':
    |   ignore((_ : @env_util.Platform) => ())
 27 |   ignore(@utf8.encode(""))
    |                ^^^^^^
+   |   ignore(@runtime_internal.get_current_scheduler())
    | }
-   | 
 
 <WORKDIR>/src\internal\event_loop\unimplemented_test.mbt:20:16-20:22:
    | let _ignore_unused_import : Unit = {
@@ -93,11 +93,11 @@ Found 19 references for symbol 'encode':
    | }
    | 
 
-<WORKDIR>/src\io\reader.mbt:220:19-220:25:
+<WORKDIR>/src\io\reader.mbt:221:19-221:25:
     | /// The segment of input from start of reader to start of `sep` or EOF is returned.
     | /// `sep` will be conusmed from the input, but is not included in the return value.
     | impl Reader with fn read_until(self, sep) {
-220 |   let sep = @utf8.encode(sep)
+221 |   let sep = @utf8.encode(sep)
     |                   ^^^^^^
     |   let buf = self._get_internal_buffer()
     |   match buf.find_opt(sep, reader=self) {
@@ -173,4 +173,4 @@ Found 19 references for symbol 'encode':
    |                ^^^^^^
    | }
 "" (escaped)
-````
+```

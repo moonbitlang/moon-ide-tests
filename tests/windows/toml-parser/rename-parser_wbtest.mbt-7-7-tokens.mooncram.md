@@ -1,6 +1,6 @@
 # toml-parser rename tokens parser_wbtest.mbt:7:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokens' 'tokens_renamed' --loc 'parser_wbtest.mbt:7:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/parser_wbtest.mbt
@@ -17,4 +17,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokens' 'tokens_renamed' --
      result,
 *** End Patch
 "" (escaped)
-````
+```
