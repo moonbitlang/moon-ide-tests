@@ -154,7 +154,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Coroutine' 'CoroutineRename
  
  ///|
 @@
- }
+ )
  
  ///|
 -pub fn current_coroutine() -> Coroutine {

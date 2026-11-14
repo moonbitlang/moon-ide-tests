@@ -1,6 +1,6 @@
 # json find-references expect_reject src\tests\json_testsuite_n_test.mbt:9:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'expect_reject' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
 Found 180 references for symbol 'expect_reject':
 <WORKDIR>/src\tests\json_testsuite_n_test.mbt:9:3-9:16:
@@ -1621,4 +1621,4 @@ Found 180 references for symbol 'expect_reject':
    |   ^^^^^^^^^^^^^
    | }
 "" (escaped)
-````
+```

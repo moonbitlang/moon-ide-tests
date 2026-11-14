@@ -1,0 +1,24 @@
+# core find-references TlsTrustMode async\tls\tls.wasm.mbt:20:11
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'TlsTrustMode' --loc 'async\tls\tls.wasm.mbt:20:11'
+Found 2 references for symbol 'TlsTrustMode':
+<WORKDIR>/async\tls\tls.wasm.mbt:52:45-52:57:
+   | const TLS_RENEGOTIATION = -4
+   | 
+   | ///|
+52 | fn TrustedRoot::mode(self : TrustedRoot) -> TlsTrustMode {
+   |                                             ^^^^^^^^^^^^
+   |   match self {
+   |     NoVerification => TrustNoVerification
+
+<WORKDIR>/async\tls\tls.wasm.mbt:79:11-79:23:
+   |   host : @os_string.OsString,
+   |   host_len~ : Int32 = host.to_string().length(),
+   |   sni~ : Bool,
+79 |   trust : TlsTrustMode,
+   |           ^^^^^^^^^^^^
+   | ) -> Int32 = "moonbitlang/async" "tls/connection/set_client"
+   | 
+"" (escaped)
+```
