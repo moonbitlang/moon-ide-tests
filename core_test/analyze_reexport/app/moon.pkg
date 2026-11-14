@@ -1,0 +1,5 @@
+import {
+  "demo/reexport/mid",
+}
+
+pkgtype(kind: "executable")
