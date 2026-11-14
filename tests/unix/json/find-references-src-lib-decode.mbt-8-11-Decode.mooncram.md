@@ -1,13 +1,13 @@
 # json find-references Decode src/lib/decode.mbt:8:11
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Decode' --loc 'src/lib/decode.mbt:8:11'
 Found 16 references for symbol 'Decode':
 <WORKDIR>/src/lib/decode.mbt:21:6-21:12:
    | }
    | 
    | ///|
-21 | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+21 | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
    |      ^^^^^^
    |   []
    | }
@@ -16,7 +16,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-26 | impl Decode for Unit with array_push(_self, elem, acc) {
+26 | impl Decode for Unit with fn array_push(_self, elem, acc) {
    |      ^^^^^^
    |   [elem, ..acc]
    | }
@@ -25,7 +25,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-31 | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+31 | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
    |      ^^^^^^
    |   (acc.rev(), old_acc)
    | }
@@ -34,7 +34,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-36 | impl Decode for Unit with object_start(_self, _old_acc) -> JsonObject {
+36 | impl Decode for Unit with fn object_start(_self, _old_acc) -> JsonObject {
    |      ^^^^^^
    |   Map([])
    | }
@@ -43,7 +43,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-41 | impl Decode for Unit with object_push(_self, key, value, acc) {
+41 | impl Decode for Unit with fn object_push(_self, key, value, acc) {
    |      ^^^^^^
    |   if !acc.contains(key) {
    |     acc[key] = value
@@ -52,7 +52,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-49 | impl Decode for Unit with object_finish(_self, acc, old_acc) {
+49 | impl Decode for Unit with fn object_finish(_self, acc, old_acc) {
    |      ^^^^^^
    |   (acc, old_acc)
    | }
@@ -61,7 +61,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-54 | impl Decode for Unit with double(_self, view) -> Double raise {
+54 | impl Decode for Unit with fn double(_self, view) -> Double raise {
    |      ^^^^^^
    |   @string.parse_double(String::from_iter(view.iter()))
    | }
@@ -70,7 +70,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-59 | impl Decode for Unit with integer(_self, view) -> Int raise {
+59 | impl Decode for Unit with fn integer(_self, view) -> Int32 raise {
    |      ^^^^^^
    |   @string.parse_int(String::from_iter(view.iter()))
    | }
@@ -79,7 +79,7 @@ Found 16 references for symbol 'Decode':
    | }
    | 
    | ///|
-64 | impl Decode for Unit with string(_self, s) {
+64 | impl Decode for Unit with fn string(_self, s) {
    |      ^^^^^^
    |   s
    | }
@@ -91,52 +91,52 @@ Found 16 references for symbol 'Decode':
 9 |   decode : &Decode
   |             ^^^^^^
   | }
-"  | " (escaped)
+  | 
 
 <WORKDIR>/src/lib/json.mbt:20:42-20:48:
-"   | } derive(Debug)" (escaped)
-"   | " (escaped)
-"   | ///|" (escaped)
-"20 | pub fn decode(input : String, decode? : &Decode) -> Json raise {" (escaped)
-"   |                                          ^^^^^^" (escaped)
-"   |   let decode : &Decode = match decode {" (escaped)
-"   |     Some(decode) => decode" (escaped)
+   | } derive(Debug)
+   | 
+   | ///|
+20 | pub fn decode(input : String, decode? : &Decode) -> Json raise {
+   |                                          ^^^^^^
+   |   let decode : &Decode = match decode {
+   |     Some(decode) => decode
 
 <WORKDIR>/src/lib/json.mbt:21:17-21:23:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn decode(input : String, decode? : &Decode) -> Json raise {" (escaped)
-"21 |   let decode : &Decode = match decode {" (escaped)
-"   |                 ^^^^^^" (escaped)
-"   |     Some(decode) => decode" (escaped)
-"   |     None => ()" (escaped)
+   | 
+   | ///|
+   | pub fn decode(input : String, decode? : &Decode) -> Json raise {
+21 |   let decode : &Decode = match decode {
+   |                 ^^^^^^
+   |     Some(decode) => decode
+   |     None => ()
 
-<WORKDIR>/src/lib/json.mbt:48:48-48:54:
-"   | }" (escaped)
-"   | " (escaped)
-"   | ///|" (escaped)
-"48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {" (escaped)
-"   |                                                ^^^^^^" (escaped)
-"   |   let decode : &Decode = match decode {" (escaped)
-"   |     Some(decode) => decode" (escaped)
+<WORKDIR>/src/lib/json.mbt:46:48-46:54:
+   | }
+   | 
+   | ///|
+46 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+   |                                                ^^^^^^
+   |   let decode : &Decode = match decode {
+   |     Some(decode) => decode
 
-<WORKDIR>/src/lib/json.mbt:49:17-49:23:
-"   | " (escaped)
-"   | ///|" (escaped)
-"   | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {" (escaped)
-"49 |   let decode : &Decode = match decode {" (escaped)
-"   |                 ^^^^^^" (escaped)
-"   |     Some(decode) => decode" (escaped)
-"   |     None => ()" (escaped)
+<WORKDIR>/src/lib/json.mbt:47:17-47:23:
+   | 
+   | ///|
+   | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+47 |   let decode : &Decode = match decode {
+   |                 ^^^^^^
+   |     Some(decode) => decode
+   |     None => ()
 
 <WORKDIR>/src/lib/value.mbt:13:13-13:19:
-"   |   arr_acc : JsonArray" (escaped)
-"   |   obj_acc : JsonObject" (escaped)
-"   |   stack : Array[Frame]" (escaped)
-"13 |   decode : &Decode" (escaped)
-"   |             ^^^^^^" (escaped)
-"   |   checkpoint : Checkpoint" (escaped)
-"   | }" (escaped)
+   |   arr_acc : JsonArray
+   |   obj_acc : JsonObject
+   |   stack : Array[Frame]
+13 |   decode : &Decode
+   |             ^^^^^^
+   |   checkpoint : Checkpoint
+   | }
 
 <WORKDIR>/src/top.mbt:3:9-3:15:
   | ///|
@@ -146,4 +146,4 @@ Found 16 references for symbol 'Decode':
   |   decode,
   |   decode_start,
 "" (escaped)
-````
+```

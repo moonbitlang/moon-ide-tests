@@ -442,25 +442,7 @@ Definition found at file <WORKDIR>/rui\sheet.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Path' --loc 'warren\path\sourcetree_path.mbt:2:15'
-Definition found at file <WORKDIR>/warren\path\sourcetree_path.mbt
-  | ///|
-2 | pub type Path = @p.Path
-  | ^^^^^^^^^^^^^^^^^^^^^^^
-  | 
-  | ///|
-  | struct SourcePath(String) derive(Eq, Compare, Hash)
-  | 
-  | ///|
-  | pub extend SourcePath with Eq::{equal, not_equal}
-  | 
-  | ///|
-  | pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
-  | 
-  | ///|
-  | pub extend SourcePath with Hash::{hash, hash_combine}
-  | 
-  | ///|
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Path' --loc 'warren\path\sourcetree_path.mbt:2:20'
 Definition found at file <WORKDIR>/.mooncakes\moonbitlang\x\path\path.mbt
    | ///|
    | let is_windows : Bool = @ffi.is_windows()

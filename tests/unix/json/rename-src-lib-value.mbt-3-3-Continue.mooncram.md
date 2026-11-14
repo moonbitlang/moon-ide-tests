@@ -1,24 +1,22 @@
 # json rename Continue src/lib/value.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Continue' 'ContinueRenamed' --loc 'src/lib/value.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
 @@
    match value(ctx) {
-"     Finish({ value, rest: [], .. }) => value" (escaped)
-"     Finish({ rest, .. }) => raise invalid_byte([..rest], 0)" (escaped)
-"-    Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) =>" (escaped)
-"+    ContinueRenamed({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) =>" (escaped)
-       n.to_json()
-"-    Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) =>" (escaped)
-"+    ContinueRenamed({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) =>" (escaped)
-       n.to_json()
-"-    Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>" (escaped)
-"+    ContinueRenamed({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>" (escaped)
+     Finish({ value, rest: [], .. }) => value
+     Finish({ rest, .. }) => raise invalid_byte([..rest], 0)
+-    Continue({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => Json(n)
++    ContinueRenamed({ stack: [], checkpoint: Checkpoint::NumberI(n), .. }) => Json(n)
+-    Continue({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
++    ContinueRenamed({ stack: [], checkpoint: Checkpoint::NumberD(n), .. }) => Json(n)
+-    Continue({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>
++    ContinueRenamed({ checkpoint: Checkpoint::FloatError(token, skip), .. }) =>
        raise ParseError(UnexpectedSequence(token.to_owned(), skip))
-"-    Continue({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp))" (escaped)
-"+    ContinueRenamed({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp))" (escaped)
+-    Continue({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp))
++    ContinueRenamed({ checkpoint: cp, .. }) => raise ParseError(UnexpectedEnd(cp))
    }
  }
  
@@ -79,4 +77,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'Continue' 'ContinueRenamed'
  }
 *** End Patch
 "" (escaped)
-````
+```

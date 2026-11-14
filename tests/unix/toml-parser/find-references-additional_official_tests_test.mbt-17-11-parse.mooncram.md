@@ -2,7 +2,7 @@
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse' --loc 'additional_official_tests_test.mbt:17:11'
-Found 191 references for symbol 'parse':
+Found 192 references for symbol 'parse':
 <WORKDIR>/README.mbt.md:112:22-112:27:
     | ///|
     | test {
@@ -1236,6 +1236,14 @@ Found 191 references for symbol 'parse':
     |     content=(
     |       #|TomlTable(
 
+<WORKDIR>/parse_bench_test.mbt:27:35-27:40:
+   |   println(
+   |     "document: \{doc.length()} code units, \{doc.char_length()} characters",
+   |   )
+27 |   it.bench(() => it.keep(Ok(@toml.parse(doc)) catch { e => Err(e) }), count=20)
+   |                                   ^^^^^
+   | }
+
 <WORKDIR>/parser_test.mbt:4:22-4:27:
   | ///|
   | /// Tests for the TOML parser
@@ -1317,65 +1325,74 @@ Found 191 references for symbol 'parse':
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:182:15-182:20:
+<WORKDIR>/parser_test.mbt:172:15-172:20:
     | ///|
     | test "test inline table with string keys" {
     |   debug_inspect(
-182 |     try @toml.parse("table = {\"string key\" = \"value\"}") catch {
+172 |     try @toml.parse("table = {\"string key\" = \"value\"}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:220:15-220:20:
+<WORKDIR>/parser_test.mbt:210:15-210:20:
     |     #|key = "value"
     |     #|
     |   debug_inspect(
-220 |     try @toml.parse(string_table_name_toml) catch {
+210 |     try @toml.parse(string_table_name_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:238:15-238:20:
+<WORKDIR>/parser_test.mbt:228:15-228:20:
     |     #|key = "value"
     |     #|
     |   debug_inspect(
-238 |     try @toml.parse(numeric_table_name_toml) catch {
+228 |     try @toml.parse(numeric_table_name_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:338:15-338:20:
+<WORKDIR>/parser_test.mbt:328:15-328:20:
     |     #|-10e-1 = "d"
     |     #|
     |   debug_inspect(
-338 |     try @toml.parse(exponent_like_keys_toml) catch {
+328 |     try @toml.parse(exponent_like_keys_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:371:15-371:20:
+<WORKDIR>/parser_test.mbt:361:15-361:20:
     |     #|value = "d"
     |     #|
     |   debug_inspect(
-371 |     try @toml.parse(exponent_like_table_names_toml) catch {
+361 |     try @toml.parse(exponent_like_table_names_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:413:15-413:20:
+<WORKDIR>/parser_test.mbt:403:15-403:20:
     | test "overflow float accepted as bare key" {
     |   // The same overflow token is valid as a bare key (all chars are A-Za-z0-9_-)
     |   debug_inspect(
-413 |     try @toml.parse("-31e368 = \"ok\"\n") catch {
+403 |     try @toml.parse("-31e368 = \"ok\"\n") catch {
+    |               ^^^^^
+    |       err => Err(err)
+    |     } noraise {
+
+<WORKDIR>/parser_test.mbt:419:15-419:20:
+    |   // inf, nan, -inf, etc. are valid bare keys in TOML, but +inf is not:
+    |   // '+' is not a bare-key character, so `+inf = 1` must be rejected.
+    |   debug_inspect(
+419 |     try @toml.parse("+inf = 1\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
 <WORKDIR>/parser_test.mbt:429:15-429:20:
-    |   // inf, nan, -inf, etc. are valid bare keys in TOML, but +inf is not:
-    |   // '+' is not a bare-key character, so `+inf = 1` must be rejected.
+    |     ),
+    |   )
     |   debug_inspect(
-429 |     try @toml.parse("+inf = 1\n") catch {
+429 |     try @toml.parse("-inf = 2\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
@@ -1384,142 +1401,133 @@ Found 191 references for symbol 'parse':
     |     ),
     |   )
     |   debug_inspect(
-439 |     try @toml.parse("-inf = 2\n") catch {
+439 |     try @toml.parse("nan = 3\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:449:15-449:20:
-    |     ),
-    |   )
-    |   debug_inspect(
-449 |     try @toml.parse("nan = 3\n") catch {
-    |               ^^^^^
-    |       err => Err(err)
-    |     } noraise {
-
-<WORKDIR>/parser_test.mbt:464:15-464:20:
+<WORKDIR>/parser_test.mbt:454:15-454:20:
     | test "dotted key with float-like segments" {
     |   // Float token with dot in raw string should split into dotted keys
     |   debug_inspect(
-464 |     try @toml.parse("1.2 = \"a\"\n") catch {
+454 |     try @toml.parse("1.2 = \"a\"\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:475:15-475:20:
+<WORKDIR>/parser_test.mbt:465:15-465:20:
     |   )
     |   // Float-like key followed by dotted sub-key
     |   debug_inspect(
-475 |     try @toml.parse("[-80e-2.sub]\nval = 1\n") catch {
+465 |     try @toml.parse("[-80e-2.sub]\nval = 1\n") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:521:15-521:20:
+<WORKDIR>/parser_test.mbt:511:15-511:20:
     | /// Tests for inline table edge cases  
     | test "test empty inline table" {
     |   debug_inspect(
-521 |     try @toml.parse("empty = {}") catch {
+511 |     try @toml.parse("empty = {}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:535:15-535:20:
+<WORKDIR>/parser_test.mbt:525:15-525:20:
     | ///|
     | test "test nested inline tables" {
     |   debug_inspect(
-535 |     try @toml.parse("table = {inner = {key = \"value\"}}") catch {
+525 |     try @toml.parse("table = {inner = {key = \"value\"}}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:549:15-549:20:
+<WORKDIR>/parser_test.mbt:539:15-539:20:
     | ///|
     | test "test inline table with multiple key types" {
     |   debug_inspect(
-549 |     try @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
+539 |     try @toml.parse("mixed = {\"quoted\" = 1, unquoted = 2}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:563:15-563:20:
+<WORKDIR>/parser_test.mbt:553:15-553:20:
     | ///|
     | test "test inline table with array values" {
     |   debug_inspect(
-563 |     try @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}") catch {
+553 |     try @toml.parse("table = {arr = [1, 2, 3], str = \"test\"}") catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:588:22-588:27:
+<WORKDIR>/parser_test.mbt:578:22-578:27:
     | ///|
     | /// Test dotted key notation - simple case
     | test "dotted key notation simple" {
-588 |   let result = @toml.parse(
+578 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|a.b.c = "value"
 
-<WORKDIR>/parser_test.mbt:611:11-611:16:
+<WORKDIR>/parser_test.mbt:601:11-601:16:
     |     #|f = "value4"
     |     #|
     |   debug_inspect(
-611 |     @toml.parse(dotted_multiple_toml),
+601 |     @toml.parse(dotted_multiple_toml),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/parser_test.mbt:639:11-639:16:
+<WORKDIR>/parser_test.mbt:629:11-629:16:
     |     #|server.tags = ["web", "api"]
     |     #|
     |   debug_inspect(
-639 |     @toml.parse(dotted_types_toml),
+629 |     @toml.parse(dotted_types_toml),
     |           ^^^^^
     |     content=(
     |       #|TomlTable(
 
-<WORKDIR>/parser_test.mbt:661:22-661:27:
+<WORKDIR>/parser_test.mbt:651:22-651:27:
     | ///|
     | /// Test dotted key notation - quoted keys
     | test "dotted key notation quoted keys" {
-661 |   let result = @toml.parse(
+651 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|"first.part"."second.part" = "value"
 
-<WORKDIR>/parser_test.mbt:677:22-677:27:
+<WORKDIR>/parser_test.mbt:667:22-667:27:
     | ///|
     | /// Test dotted key notation - integer keys
     | test "dotted key notation integer keys" {
-677 |   let result = @toml.parse(
+667 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|1.2.3 = "numeric path"
 
-<WORKDIR>/parser_test.mbt:701:15-701:20:
+<WORKDIR>/parser_test.mbt:691:15-691:20:
     |     #|c = "table"
     |     #|
     |   debug_inspect(
-701 |     try @toml.parse(conflict_toml) catch {
+691 |     try @toml.parse(conflict_toml) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
 
-<WORKDIR>/parser_test.mbt:715:22-715:27:
+<WORKDIR>/parser_test.mbt:705:22-705:27:
     | ///|
     | /// Test dotted key notation - deep nesting
     | test "dotted key notation deep nesting" {
-715 |   let result = @toml.parse(
+705 |   let result = @toml.parse(
     |                      ^^^^^
     |     (
     |       #|a.b.c.d.e.f = "deep"
 
-<WORKDIR>/parser_test.mbt:739:15-739:20:
+<WORKDIR>/parser_test.mbt:729:15-729:20:
     |     #|
     |   // TODO: fix
     |   debug_inspect(
-739 |     try @toml.parse(data) catch {
+729 |     try @toml.parse(data) catch {
     |               ^^^^^
     |       err => Err(err)
     |     } noraise {
@@ -1550,11 +1558,11 @@ Found 191 references for symbol 'parse':
     |     err => {
     |       println("error: failed to parse \{path}: \{err}")
 
-<WORKDIR>/toml_cli/tojson.mbt:38:25-38:30:
+<WORKDIR>/toml_cli/tojson.mbt:40:25-40:30:
    |       return 1
    |     }
    |   }
-38 |   let value = @toml_lib.parse(source) catch {
+40 |   let value = @toml_lib.parse(source) catch {
    |                         ^^^^^
    |     err => {
    |       println("error: failed to parse \{path}: \{err}")

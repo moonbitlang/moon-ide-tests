@@ -1,6 +1,6 @@
 # json rename expect_reject src\tests\json_testsuite_n_test.mbt:9:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_reject' 'expect_reject_renamed' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
@@ -11,7 +11,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_reject' 'expect_reje
 -fn expect_reject(name : String, input : String) -> Unit raise {
 +fn expect_reject_renamed(name : String, input : String) -> Unit raise {
    try @json.decode(input) catch {
-"     @lib.ParseError(_) => ()" (escaped)
+     @lib.ParseError(_) => ()
      _ =>
 *** Update File: <WORKDIR>/src\tests\json_testsuite_n_test.mbt
 @@
@@ -1252,4 +1252,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'expect_reject' 'expect_reje
  }
 *** End Patch
 "" (escaped)
-````
+```

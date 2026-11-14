@@ -1061,15 +1061,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
        #|key = '''hello world'''
      ),
 @@
- test "tokenize else branch coverage" {
-   // This tests the else branch in tokenize function that should never be reached
-   // The function returns inside the while loop, so the else is unreachable
--  let tokens = @tokenize.tokenize(
-+  let tokens = @tokenize.tokenize_renamed(
-     (
-       #|key = "value"
-     ),
-@@
  ///|
  /// Test multiline basic string with single quote escape
  test "multiline basic string single quote escape" {
