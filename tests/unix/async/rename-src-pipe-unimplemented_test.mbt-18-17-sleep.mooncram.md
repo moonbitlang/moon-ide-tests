@@ -5,77 +5,44 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
 *** Begin Patch
 *** Update File: <WORKDIR>/src/all_any_test.mbt
 @@
-   let start = @async.now()
-   let results = @async.all([
-     () => {
--      @async.sleep(400)
-+      @async.sleep_renamed(400)
-       1
-     },
-     () => {
+   @async.with_task_group <| group => {
+     let mut both_signaled = false
+     group.spawn_bg() <| () => {
 -      @async.sleep(200)
 +      @async.sleep_renamed(200)
-       2
-     },
-     () => 3,
+       cond1.signal()
+-      @async.sleep(200)
++      @async.sleep_renamed(200)
+       cond2.signal()
+       both_signaled = true
+     }
 @@
-   let log = []
-   let results = @async.all([
-     () => {
--      @async.sleep(300)
-+      @async.sleep_renamed(300)
-       log.push("task 0")
-       0
-     },
-     () => {
--      @async.sleep(100)
-+      @async.sleep_renamed(100)
-       log.push("task 1")
-       1
-     },
-@@
-       () => {
-         log.push("task #1 started")
-         defer log.push("task #1 completed")
+   @async.with_task_group <| group => {
+     group.spawn_bg() <| () => {
+       for i in [2, 1, 0] {
 -        @async.sleep(200)
 +        @async.sleep_renamed(200)
-         0
-       },
-       () => {
-         log.push("task #2 started")
-         defer log.push("task #2 completed")
--        @async.sleep(100)
-+        @async.sleep_renamed(100)
-         1
-       },
-       () => {
-         log.push("task #3 started")
-         defer log.push("task #3 completed")
--        @async.sleep(200)
-+        @async.sleep_renamed(200)
-         2
-       },
-     ],
+         conds[i].signal()
+       }
+     }
 @@
-   let result = @test_util.expect_error_async <| () => {
-     @async.all([
-       () => {
--        @async.sleep(100)
-+        @async.sleep_renamed(100)
-         log.push("task #1 completed")
-       },
-       () => {
+   @async.with_task_group <| group => {
+     group.spawn_bg() <| () => {
+       for i in [1, 2, 0] {
 -        @async.sleep(200)
 +        @async.sleep_renamed(200)
-         log.push("task #2 failing")
-         raise Failure::Failure("Err")
-       },
-       () => {
--        match @async.handle_cancellation(() => @async.sleep(300)) {
-+        match @async.handle_cancellation(() => @async.sleep_renamed(300)) {
-           None => log.push("task #3 cancelled")
-           Some(_) => log.push("task #3 completed")
-         }
+         conds[i].signal()
+       }
+     }
+@@
+   @async.with_task_group <| group => {
+     group.spawn_bg() <| () => {
+       for i in 0..<3 {
+-        @async.sleep(200)
++        @async.sleep_renamed(200)
+         conds[i].signal()
+       }
+     }
 @@
  async test "all cancelled" {
    let log = []
@@ -86,94 +53,57 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
        Some(_) => log.push("task #\{idx} completed")
      }
 @@
-   let start = @async.now()
-   let result = @async.any([
-     () => {
--      @async.sleep(600)
-+      @async.sleep_renamed(600)
-       1
-     },
-     () => {
--      @async.sleep(200)
-+      @async.sleep_renamed(200)
-       2
-     },
-     () => {
--      @async.sleep(400)
-+      @async.sleep_renamed(400)
-       3
-     },
-   ])
+   @async.with_task_group <| group => {
+     group.spawn_bg(no_wait=true) <| () => {
+       for i in [1, 0, 2] {
+-        @async.sleep(200)
++        @async.sleep_renamed(200)
+         conds[i].signal()
+       }
+     }
 @@
- async test "any returns first success" {
-   let log = []
-   async fn task(idx : Int32, sleep_time : Int32) -> Int32 {
--    match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
-+    match @async.handle_cancellation(() => @async.sleep_renamed(sleep_time)) {
-       None => {
-         log.push("task #\{idx} cancelled")
-         @coroutine.check_cancellation()
+   @async.with_task_group <| group => {
+     group.spawn_bg(no_wait=true) <| () => {
+       for i in [1, 0, 2] {
+-        @async.sleep(200)
++        @async.sleep_renamed(200)
+         conds[i].signal()
+       }
+     }
 @@
    let result = @test_util.expect_error_async <| () => {
      @async.any([
        () => {
--        match @async.handle_cancellation(() => @async.sleep(300)) {
-+        match @async.handle_cancellation(() => @async.sleep_renamed(300)) {
+-        match @async.handle_cancellation(() => @async.sleep(1000)) {
++        match @async.handle_cancellation(() => @async.sleep_renamed(1000)) {
            None => log.push("task #1 cancelled")
            Some(_) => log.push("task #1 completed")
          }
        },
        () => {
--        @async.sleep(150)
-+        @async.sleep_renamed(150)
+-        @async.sleep(200)
++        @async.sleep_renamed(200)
          raise Failure::Failure("Err")
        },
      ])
 @@
-   let result = @async.any(
-     [
-       () => {
--        @async.sleep(300)
-+        @async.sleep_renamed(300)
-         log.push("task #1 failing")
-         raise Err
-       },
-       () => {
--        @async.sleep(150)
-+        @async.sleep_renamed(150)
-         log.push("task #2 failing")
-         raise Failure::Failure("fail")
-       },
-       () => {
--        @async.sleep(450)
-+        @async.sleep_renamed(450)
-         log.push("task #3 completed")
-         2
-       },
+   @async.with_task_group <| group => {
+     group.spawn_bg(no_wait=true) <| () => {
+       for i in [1, 0, 2] {
+-        @async.sleep(200)
++        @async.sleep_renamed(200)
+         conds[i].signal()
+       }
+     }
 @@
-     @async.any(
-       [
-         () => {
--          @async.sleep(300)
-+          @async.sleep_renamed(300)
-           log.push("task #1 failing")
            raise Err
          },
          () => {
 -          @async.sleep(150)
 +          @async.sleep_renamed(150)
            log.push("task #2 failing")
+           cond.signal()
            raise Failure::Failure("fail")
-         },
-@@
- async test "any cancelled" {
-   let log = []
-   async fn task(idx : Int32, sleep_time : Int32) -> Int32 {
--    match @async.handle_cancellation(() => @async.sleep(sleep_time)) {
-+    match @async.handle_cancellation(() => @async.sleep_renamed(sleep_time)) {
-       None => log.push("task #\{idx} cancelled")
-       Some(_) => log.push("task #\{idx} completed")
-     }
 *** Update File: <WORKDIR>/src/allow_failure_test.mbt
 @@
    let buf = StringBuilder()
@@ -881,7 +811,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
 *** Update File: <WORKDIR>/src/http/client_test.mbt
 @@
        log <+ "client sending PUT request\n"
-       let client = @http.put_stream("http://localhost:\{port}/put-streaming")
+       let client = @http.put_stream("http://127.0.0.1:\{port}/put-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)
@@ -894,7 +824,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
        let response = client.end_request()
 @@
        log <+ "client sending POST request\n"
-       let client = @http.post_stream("http://localhost:\{port}/post-streaming")
+       let client = @http.post_stream("http://127.0.0.1:\{port}/post-streaming")
        defer client.close()
 -      @async.sleep(100)
 +      @async.sleep_renamed(100)
@@ -954,61 +884,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
    ignore(@fs.unimplemented)
    ignore(@utf8.encode(""))
    ignore(@io.Encoding::UTF8)
-*** Update File: <WORKDIR>/src/internal/event_loop/worker_wbtest.mbt
-@@
- ///|
- #cfg(target="js")
- async fn perform_sleep_job(t : Int32) -> Unit {
--  @async.protect_from_cancel(() => @async.sleep(t))
-+  @async.protect_from_cancel(() => @async.sleep_renamed(t))
- }
- 
- ///|
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
--        @async.sleep(400)
-+        @async.sleep_renamed(400)
-         log <+ "tick\n"
-       }
-     }
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<4 {
--        @async.sleep(200)
-+        @async.sleep_renamed(200)
-         log <+ "tick\n"
-       }
-     }
-@@
-         Some(_) => log <+ "done\n"
-       }
-     })
--    @async.sleep(500)
-+    @async.sleep_renamed(500)
-     log <+ "trying to cancel\n"
-     task.cancel()
-   }
-@@
-   @async.with_task_group() <| root => {
-     root.spawn_bg() <| () => {
-       for _ in 0..<3 {
--        @async.sleep(400)
-+        @async.sleep_renamed(400)
-         log <+ "tick\n"
-       }
-     }
-@@
-         Some(_) => log <+ "done\n"
-       }
-     }
--    @async.sleep(600)
-+    @async.sleep_renamed(600)
-     log <+ "trying to terminate now\n"
-     root.return_immediately(())
-   }
 *** Update File: <WORKDIR>/src/internal/gzip_internal/gzip_internal_test.mbt
 @@
  ///|
@@ -1199,7 +1074,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
 -  @async.sleep(self.base_timeout)
 +  @async.sleep_renamed(self.base_timeout)
    let logger = self.logger
-   logger <+ "writing byte \{buf[offset]}\n"
+   logger <+ "writing byte \{buf[offset].to_int()}\n"
    1
 *** Update File: <WORKDIR>/src/js_async/js_async_test.mbt
 @@
@@ -1762,11 +1637,15 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
        log.push("100ms tick")
      }
      @async.with_task_group <| group => {
--      defer @async.sleep(200)
-+      defer @async.sleep_renamed(200)
-       group.return_immediately(())
+@@
+         @async.handle_cancellation(() => group.return_immediately(())) is None,
+       )
+       // Handling cancellation must not allow the next async operation to run.
+-      assert_true(@async.handle_cancellation(() => @async.sleep(200)) is None)
++      assert_true(@async.handle_cancellation(() => @async.sleep_renamed(200)) is None)
      }
      log.push("inner group finished")
+   }
 @@
    let log = []
    @async.with_task_group() <| outer => {
@@ -2245,42 +2124,23 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'sleep' 'sleep_renamed' --lo
          Some(_) => log <+ "task finished\n"
        }
 @@
-   let log = StringBuilder()
-   @async.with_task_group(root => {
-     root.spawn_bg() <| () => {
--      @async.sleep(200)
-+      @async.sleep_renamed(200)
-       log <+ "200ms tick\n"
--      @async.sleep(200)
-+      @async.sleep_renamed(200)
-       log <+ "400ms tick\n"
-     }
-     @async.with_timeout(300, () => {
-       let result = @async.handle_cancellation() <| () => {
-         @async.with_timeout(500) <| () => {
--          match @async.handle_cancellation(() => @async.sleep(2000)) {
-+          match @async.handle_cancellation(() => @async.sleep_renamed(2000)) {
-             None => log <+ "task cancelled\n"
-             Some(_) => log <+ "task finished after 2s\n"
-           }
-@@
-   let log = StringBuilder()
-   @async.with_task_group(root => {
-     root.spawn_bg() <| () => {
--      @async.sleep(300)
-+      @async.sleep_renamed(300)
-       log <+ "300ms tick\n"
--      @async.sleep(300)
-+      @async.sleep_renamed(300)
-       log <+ "600ms tick\n"
-     }
-     @async.with_timeout(750, () => {
-       @async.with_timeout(450, () => {
+   @async.with_timeout(300, () => {
+     let result = @async.handle_cancellation() <| () => {
+       @async.with_timeout(500) <| () => {
 -        match @async.handle_cancellation(() => @async.sleep(2000)) {
 +        match @async.handle_cancellation(() => @async.sleep_renamed(2000)) {
            None => log <+ "task cancelled\n"
            Some(_) => log <+ "task finished after 2s\n"
          }
+@@
+   let log = StringBuilder()
+   @async.with_timeout(750) <| () => {
+     @async.with_timeout(450, () => {
+-      match @async.handle_cancellation(() => @async.sleep(2000)) {
++      match @async.handle_cancellation(() => @async.sleep_renamed(2000)) {
+         None => log <+ "task cancelled\n"
+         Some(_) => log <+ "task finished after 2s\n"
+       }
 @@
    let err = @test_util.expect_error_async <| () => {
      @async.with_task_group(root => {

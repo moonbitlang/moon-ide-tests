@@ -245,16 +245,17 @@ pub(all) enum SheetSide {
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Path' --loc 'warren/path/sourcetree_path.mbt:2:20'
 ///|
 pub type Path = @p.Path
-         ^^^^
-         ```moonbit
-         type Path = @p.Path
-         ```
-         ---
-         
-          A newtype wrapper provide path operation methods.
+                ^^^^^^^
+                ```moonbit
+                #derive(Eq, @debug.Debug)
+                struct @p.Path(String)
+                ```
+                ---
+                
+                 A newtype wrapper provide path operation methods.
 
 ///|
 ```

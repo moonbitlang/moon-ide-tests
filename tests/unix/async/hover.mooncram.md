@@ -94,21 +94,15 @@ pub async fn IoHandle::wait_read(handle : IoHandle) -> Unit {
   guard @fd_util.fd_is_valid(handle.fd) else {
 ```
 
-Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fstatx_sync' --loc 'src/internal/event_loop/stdio.mbt:18:15'
-No hover information found for symbol 'fstatx_sync' at src/internal/event_loop/stdio.mbt:18:15
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'from_core_stdio' --loc 'src/internal/event_loop/stdio.mbt:17:4'
+No hover information found for symbol 'from_core_stdio' at src/internal/event_loop/stdio.mbt:17:4
 [1]
 ```
 
-Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fd' --loc 'src/internal/event_loop/stdio.mbt:19:3'
-No hover information found for symbol 'fd' at src/internal/event_loop/stdio.mbt:19:3
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'x' --loc 'src/internal/event_loop/stdio.mbt:18:3'
+No hover information found for symbol 'x' at src/internal/event_loop/stdio.mbt:18:3
 [1]
 ```
 

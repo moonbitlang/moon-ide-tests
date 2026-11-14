@@ -1,6 +1,6 @@
 # core find-references Unforced lazy/lazy.mbt:25:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'Unforced' --loc 'lazy/lazy.mbt:25:3'
 Found 3 references for symbol 'Unforced':
 <WORKDIR>/lazy/debug.mbt:30:5-30:13:
@@ -30,4 +30,4 @@ Found 3 references for symbol 'Unforced':
     |       self.state = Forcing
     |       let v = thunk()
 "" (escaped)
-````
+```

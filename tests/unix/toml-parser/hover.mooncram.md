@@ -41,46 +41,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'additional_off
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
-/// Test EOF handling in parser - covered by creating empty token arrays
-test "parser_eof_handling" {
-  // Test empty parse input to exercise EOF conditions
-  let result = @toml.parse(
-      ^^^^^^
-      ```moonbit
-      @toml.TomlValue
-      ```
-    (
-      #|
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
-/// Test EOF handling in parser - covered by creating empty token arrays
-test "parser_eof_handling" {
-  // Test empty parse input to exercise EOF conditions
-  let result = @toml.parse(
-               ^^^^^^^^^^^
-               ```moonbit
-               fn @moonbit-community/toml.parse(input : String) -> @toml.TomlValue raise
-               ```
-               ---
-               
-                Parse a TOML document and return its root table as a `TomlValue`.
-               
-                On success the result is always a `TomlTable` whose contents reflect the
-                document's top-level keys, `[section]` headers, and `[[array]]` of
-                tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
-                escapes, inline-table newlines) are accepted.
-               
-                On any lexical or syntactic error, `parse` raises with a message
-                containing the source location. Wrap the call in `try?` to receive a
-                `Result[TomlValue, Error]` instead.
-    (
-      #|
-```
-
-```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 /// Values are stored as their original string form. The parser preserves
 /// the spelling supplied in the TOML source; it does not normalize or
@@ -226,6 +186,38 @@ pub(all) struct Loc {
   end : @lexer.Position
 } derive(Eq, Debug)
 ````
+
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'bench_document' --loc 'parse_bench_test.mbt:4:4'
+///|
+/// A document big enough (and with enough astral characters) to exercise the
+/// lexer's view handling end to end.
+fn bench_document() -> String {
+   ^^^^^^^^^^^^^^
+   ```moonbit
+   fn bench_document() -> String
+   ```
+   ---
+   
+    A document big enough (and with enough astral characters) to exercise the
+    lexer's view handling end to end.
+  let sb = StringBuilder()
+  for i in 0..<800 {
+````
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'sb' --loc 'parse_bench_test.mbt:5:7'
+/// A document big enough (and with enough astral characters) to exercise the
+/// lexer's view handling end to end.
+fn bench_document() -> String {
+  let sb = StringBuilder()
+      ^^
+      ```moonbit
+      StringBuilder
+      ```
+  for i in 0..<800 {
+    sb.write_string("key_\{i} = \"value 😈 \{i}\"\n")
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Parser' --loc 'parser.mbt:3:4'

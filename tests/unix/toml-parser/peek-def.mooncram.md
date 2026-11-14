@@ -53,58 +53,6 @@ Definition found at file <WORKDIR>/parser.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
-Definition found at file <WORKDIR>/coverage_improvement_comprehensive_test.mbt
-  | 
-  | ///|
-  | /// Test EOF handling in parser - covered by creating empty token arrays
-  | test "parser_eof_handling" {
-  |   // Test empty parse input to exercise EOF conditions
-9 |   let result = @toml.parse(
-  |       ^^^^^^
-  |     (
-  |       #|
-  |     ),
-  |   )
-  |   debug_inspect(
-  |     result,
-  |     content=(
-  |       #|TomlTable({})
-  |     ),
-  |   )
-  | }
-  | 
-  | ///|
-  | /// Test integer keys in inline tables
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
-Definition found at file <WORKDIR>/parser.mbt
-    | /// escapes, inline-table newlines) are accepted.
-    | ///
-    | /// On any lexical or syntactic error, `parse` raises with a message
-    | /// containing the source location. Wrap the call in `try?` to receive a
-    | /// `Result[TomlValue, Error]` instead.
-333 | pub fn parse(input : String) -> TomlValue raise {
-    |        ^^^^^
-    |   let tokens = @tokenize.tokenize(input)
-    |   let parser = Parser::Parser(tokens)
-    |   let main_table = Map([])
-    |   for current_table = main_table {
-    |     parser.skip_newlines()
-    |     match parser.view() {
-    |       [EOF, ..] => break
-    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
-    |         if !loc1.adjacent(loc2) {
-    |           parser.error("Invalid table header: space between '[' and '['")
-    |         }
-    |         parser.update_view(rest)
-    |         let table_path = parser.parse_table_path()
-    |         match parser.view() {
-```
-
-```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
    | /// - `LocalTime` — time only (e.g. `07:32:00`)
@@ -238,7 +186,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
+1369 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = []
@@ -306,6 +254,55 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | ///|
    | /// Token types for the lexer
    | pub(all) enum Token {
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'bench_document' --loc 'parse_bench_test.mbt:4:4'
+Definition found at file <WORKDIR>/parse_bench_test.mbt
+  | ///|
+  | /// A document big enough (and with enough astral characters) to exercise the
+  | /// lexer's view handling end to end.
+4 | fn bench_document() -> String {
+  |    ^^^^^^^^^^^^^^
+  |   let sb = StringBuilder()
+  |   for i in 0..<800 {
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\"\n")
+  |     sb.write_string("num_\{i} = \{i}.5\n")
+  |     sb.write_string("flag_\{i} = true\n")
+  |     sb.write_string("[table_\{i}]\n")
+  |     sb.write_string("emoji = \"😈😈😈\"\n")
+  |     sb.write_string("arr = [1, 2, 3, 400, 5000]\n")
+  |   }
+  |   sb.to_string()
+  | }
+  | 
+  | ///|
+  | /// End-to-end parse cost, guarding how `Lexer::view` and `expect_string` build
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'sb' --loc 'parse_bench_test.mbt:5:7'
+Definition found at file <WORKDIR>/parse_bench_test.mbt
+  | ///|
+  | /// A document big enough (and with enough astral characters) to exercise the
+  | /// lexer's view handling end to end.
+  | fn bench_document() -> String {
+5 |   let sb = StringBuilder()
+  |       ^^
+  |   for i in 0..<800 {
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\"\n")
+  |     sb.write_string("num_\{i} = \{i}.5\n")
+  |     sb.write_string("flag_\{i} = true\n")
+  |     sb.write_string("[table_\{i}]\n")
+  |     sb.write_string("emoji = \"😈😈😈\"\n")
+  |     sb.write_string("arr = [1, 2, 3, 400, 5000]\n")
+  |   }
+  |   sb.to_string()
+  | }
+  | 
+  | ///|
+  | /// End-to-end parse cost, guarding how `Lexer::view` and `expect_string` build
+  | /// their subviews. On the ~90k-code-unit document below, `exact_view` parses
 ```
 
 ```mooncram
@@ -391,7 +388,7 @@ Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
      | 
      | ///|
      | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
+1369 | pub fn tokenize(input : String) -> Array[Token] raise {
      |        ^^^^^^^^
      |   let lexer = @lexer.Lexer::Lexer(input)
      |   let tokens = []

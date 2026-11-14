@@ -51,7 +51,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'unimplemented' 'unimplement
 +  ignore(@socket.unimplemented_renamed)
    ignore(@process.unimplemented)
    ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
- }
+   ignore((_ : @cond_var.Cond) => ())
 *** End Patch
 "" (escaped)
 ```
