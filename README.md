@@ -18,6 +18,9 @@ fixture set for local development.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
 - `fixtures/repos/`: Git submodules for community project fixtures.
 - `testgen/`: MoonBit CLI that generates fixture baselines from source files.
+- `scripts/run-moon-check.sh`: checks Unix fixtures and selects compatible
+  baselines.
+- `scripts/run-moon-check.ps1`: performs the same selection for Windows.
 - `scripts/update-tests.sh`: regenerates fixture baselines from
   `fixtures/repos.yaml`.
 - `scripts/update-submodules.sh`: initializes and fast-forwards fixture
@@ -103,7 +106,15 @@ scripts/update-tests.sh
 git diff -- tests/unix tests/windows
 ```
 
-Refresh expected Moon Cram output when the `moon ide` behavior changes:
+Refresh snapshots for existing Unix test commands after a `moon ide` change:
+
+```sh
+scripts/run-moon-check.sh --existing
+mapfile -t baseline_paths < .daily-test/unix-existing-baseline-paths.txt
+moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
+```
+
+To regenerate test commands before refreshing their snapshots:
 
 ```sh
 scripts/update-tests.sh
@@ -112,8 +123,20 @@ moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
-On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
-regenerates compatible baselines, and refreshes only those snapshots. If no
+`update-tests.sh` uses the same fixture checks before generating tests. The
+`--existing` check keeps its selected paths and logs under
+`.daily-test/unix-existing-*`.
+
+On Windows, use `-Existing` on the checker and refresher to refresh existing
+snapshots:
+
+```powershell
+.\scripts\run-moon-check.ps1 -Existing
+.\scripts\refresh-windows-snapshots.ps1 -Existing
+```
+
+To regenerate tests before refreshing, run `scripts/update-windows-tests.ps1`
+followed by `scripts/refresh-windows-snapshots.ps1`, both without flags. If no
 Windows fixture passes the check, snapshot refresh and test execution are skipped.
 Snapshots are not rewritten by compatibility postprocessors.
 
@@ -146,7 +169,9 @@ moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 The Daily Test workflow runs this flow on a schedule against `main`. To refresh
 a PR branch, choose that branch when manually running Daily Test. Its update PR
 targets the selected branch. Agent review receives baseline changes since the
-exact launch commit, fixture submodule revisions and diff, and execution logs.
+exact launch commit, with separate verdicts for the existing snapshot refresh
+and the regenerated baselines. The review uses each stage's diff and logs
+alongside the updated fixture submodule revisions and diff.
 Existing changes on the selected branch and testgen dependency updates are
 excluded from the review bundle.
 
@@ -156,7 +181,10 @@ Skipped fixtures retain their checked-in tests and are excluded from generation,
 snapshot refresh, and cram execution. The handcrafted Unix suites (`core-project`
 and `core-standalone`) continue to run.
 
-Daily runs cram tests for selected suites and reviews changes to the snapshots.
+On each platform, Daily refreshes existing snapshots against the starting
+fixture revisions and commits any changes separately. Against the updated
+fixtures, Daily regenerates the tests, refreshes snapshots, and runs the selected
+suites. Daily Review then reviews baseline changes.
 The narrowly marked [known IDE limitations](testgen/README.mbt.md#notes) retain
 their reproduction queries and exact failure output.
 

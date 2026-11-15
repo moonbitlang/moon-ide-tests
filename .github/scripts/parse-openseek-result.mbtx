@@ -159,12 +159,12 @@ fn completed_answer(result : Json) -> String {
 }
 
 ///|
-fn validate_review(value : Json) -> (Bool, String) {
-  guard value is Object(fields) else {
-    abort("OpenSeek answer is not a JSON object")
+fn validate_stage_review(stage : String, value : Json?) -> (Bool, String) {
+  guard value is Some(Object(fields)) else {
+    abort("OpenSeek answer is missing a review object for " + stage)
   }
   for key in fields.keys() {
-    if key != "has_problem" && key != "comment_body" {
+    if key != "has_problem" && key != "summary" {
       abort("OpenSeek answer has properties outside the daily review schema")
     }
   }
@@ -174,12 +174,41 @@ fn validate_review(value : Json) -> (Bool, String) {
     Some(_) => abort("OpenSeek answer has invalid type for has_problem")
     None => abort("OpenSeek answer is missing required property: has_problem")
   }
-  let comment_body = match fields.get("comment_body") {
+  let summary = match fields.get("summary") {
     Some(String(body)) => body.trim().to_owned()
-    Some(_) => abort("OpenSeek answer has invalid type for comment_body")
-    None => abort("OpenSeek answer is missing required property: comment_body")
+    Some(_) => abort("OpenSeek answer has invalid type for summary")
+    None => abort("OpenSeek answer is missing required property: summary")
   }
-  (has_problem, comment_body)
+  if summary.is_empty() {
+    abort("OpenSeek answer has an empty summary for " + stage)
+  }
+  let verdict = if has_problem { "Needs attention" } else { "No issue found" }
+  (has_problem, "**" + verdict + "**\n\n" + summary)
+}
+
+///|
+fn validate_review(value : Json) -> (Bool, String) {
+  guard value is Object(fields) else {
+    abort("OpenSeek answer is not a JSON object")
+  }
+  for key in fields.keys() {
+    if key != "existing" && key != "regenerated" {
+      abort("OpenSeek answer has properties outside the daily review schema")
+    }
+  }
+  let (existing_problem, existing_summary) = validate_stage_review(
+    "existing",
+    fields.get("existing"),
+  )
+  let (regenerated_problem, regenerated_summary) = validate_stage_review(
+    "regenerated",
+    fields.get("regenerated"),
+  )
+  (
+    existing_problem || regenerated_problem,
+    "### Existing snapshots\n\n" + existing_summary +
+    "\n\n### Regenerated baselines\n\n" + regenerated_summary,
+  )
 }
 
 ///|
