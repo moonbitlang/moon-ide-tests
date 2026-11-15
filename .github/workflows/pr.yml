@@ -20,16 +20,7 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Update MoonBit registry
-        run: |
-          for attempt in 1 2 3; do
-            if moon update; then
-              break
-            fi
-            if [ "$attempt" -eq 3 ]; then
-              exit 1
-            fi
-            sleep $((attempt * 10))
-          done
+        run: scripts/run-moon-update.sh
 
       - name: Test generator
         run: moon -C testgen test --target wasm
@@ -61,17 +52,7 @@ jobs:
 
       - name: Update MoonBit registry
         shell: pwsh
-        run: |
-          foreach ($attempt in 1, 2, 3) {
-            moon update
-            if ($LASTEXITCODE -eq 0) {
-              break
-            }
-            if ($attempt -eq 3) {
-              exit 1
-            }
-            Start-Sleep -Seconds ($attempt * 10)
-          }
+        run: .\scripts\run-moon-update.ps1
 
       - name: Verify generated Windows baselines
         shell: pwsh
