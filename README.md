@@ -13,15 +13,15 @@ fixture set for local development.
 - `tests/unix/`: checked-in Mooncram baselines for Unix fixture selection.
 - `tests/windows/`: checked-in Mooncram baselines for Windows fixture selection.
 - `scripts/run-moon-ide.mbtx`: shared shell-free IDE executor and output normalizer.
+- `scripts/run-moon-check.mbtx`: checks fixture compatibility for each platform.
+- `scripts/update-tests.mbtx`: regenerates compatible fixture baselines.
+- `scripts/update-dependencies.mbtx`: upgrades test generator dependencies.
+- `scripts/update-submodules.mbtx`: refreshes fixture submodules.
 - `core_test/test_project/`: handcrafted project fixture for core-library IDE
   cases.
 - `fixtures/repos.yaml`: fixture repository list and scan limits.
 - `fixtures/repos/`: Git submodules for community project fixtures.
 - `testgen/`: MoonBit CLI that generates fixture baselines from source files.
-- `scripts/update-tests.sh`: regenerates fixture baselines from
-  `fixtures/repos.yaml`.
-- `scripts/update-submodules.sh`: initializes and fast-forwards fixture
-  submodules to their configured branches.
 
 See `testgen/README.mbt.md` for the generator CLI options and implementation
 notes.
@@ -35,6 +35,9 @@ git submodule update --init --recursive
 moon update
 ```
 
+The shared maintenance scripts use MoonBit dependencies. Run `moon update`
+before invoking them in a fresh environment.
+
 Fixtures are used as checked out. Generation runs `moon check` in each fixture
 first; incompatible fixtures are skipped without changing their manifests,
 sources, or existing baselines. Check logs and the selected baseline paths are
@@ -44,7 +47,7 @@ Run the generator tests and compatible baselines:
 
 ```sh
 moon -C testgen test --target wasm
-scripts/update-tests.sh
+moon run scripts/update-tests.mbtx unix
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
@@ -58,7 +61,7 @@ moonx moonbit-community/mooncram@0.1.0 test tests/unix/core-project/doc.mooncram
 On Windows, use PowerShell 7.4 or later to generate and select the baselines:
 
 ```powershell
-.\scripts\update-windows-tests.ps1
+moon run scripts/update-tests.mbtx windows
 $baselinePaths = @(Get-Content .daily-test/windows-baseline-paths.txt)
 if ($baselinePaths.Count -gt 0) {
   moonx moonbit-community/mooncram@0.1.0 test @baselinePaths
@@ -99,20 +102,20 @@ Regenerate generated fixture files after changing `testgen`, fixture selection,
 or fixture source locations:
 
 ```sh
-scripts/update-tests.sh
+moon run scripts/update-tests.mbtx unix
 git diff -- tests/unix tests/windows
 ```
 
 Refresh expected Moon Cram output when the `moon ide` behavior changes:
 
 ```sh
-scripts/update-tests.sh
+moon run scripts/update-tests.mbtx unix
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
-On Windows, `scripts/update-windows-tests.ps1 -RefreshSnapshots` checks fixtures,
+On Windows, `moon run scripts/update-tests.mbtx windows --refresh-snapshots` checks fixtures,
 regenerates compatible baselines, and refreshes only those snapshots. If no
 Windows fixture passes the check, snapshot refresh and test execution are skipped.
 Snapshots are not rewritten by compatibility postprocessors.
@@ -136,8 +139,8 @@ To refresh fixture submodules to the branches configured in
 `fixtures/repos.yaml`:
 
 ```sh
-scripts/update-submodules.sh
-scripts/update-tests.sh
+moon run scripts/update-submodules.mbtx
+moon run scripts/update-tests.mbtx unix
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 moonx moonbit-community/mooncram@0.1.0 update "${baseline_paths[@]}"
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
@@ -167,13 +170,13 @@ and selection as Daily Test. On Unix:
 
 ```sh
 moon -C testgen test --target wasm
-scripts/update-tests.sh
+moon run scripts/update-tests.mbtx unix
 mapfile -t baseline_paths < .daily-test/unix-baseline-paths.txt
 git add --all -- tests/unix
 git diff --cached --exit-code HEAD -- tests/unix
 moonx moonbit-community/mooncram@0.1.0 test "${baseline_paths[@]}"
 ```
 
-Windows performs equivalent checks using `update-windows-tests.ps1` and
+Windows performs equivalent checks using `scripts/update-tests.mbtx` and
 `.daily-test/windows-baseline-paths.txt`. A successful fixture check does not
 suppress subsequent generator, snapshot, or IDE test failures.

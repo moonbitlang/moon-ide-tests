@@ -1,0 +1,28 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+async fn main {
+  if @env.args().length() != 1 {
+    @stdio.stderr.write("usage: update-dependencies.mbtx\n")
+    @sys.exit(2)
+  }
+  let (git_status, output) = @process.collect_output_merged("git", ["rev-parse", "--show-toplevel"], cwd=".")
+  let root = if git_status == 0 { output.text().trim().to_owned() } else { @fs.realpath(".") }
+  for dep in ["moonbitlang/lexer", "moonbitlang/parser", "moonbitlang/x"] {
+    let status = @process.run("moon", ["add", "--upgrade", dep], cwd=root + "/testgen")
+    if status != 0 {
+      @stdio.stderr.write("moon exited with status \{status}\n")
+      @sys.exit(status)
+    }
+  }
+}

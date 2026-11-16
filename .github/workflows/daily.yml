@@ -59,14 +59,14 @@ jobs:
           git checkout -B "$DAILY_BRANCH" "$BASE_SHA"
           mkdir -p .daily-test
 
-      - name: Update testgen dependencies
-        run: scripts/update-dependencies.sh
-
-      - name: Update fixture repos
-        run: scripts/update-submodules.sh
-
       - name: Update MoonBit registry
         run: scripts/run-moon-update.sh
+
+      - name: Update testgen dependencies
+        run: moon run scripts/update-dependencies.mbtx
+
+      - name: Update fixture repos
+        run: moon run scripts/update-submodules.mbtx
 
       - name: Commit dependency and submodule updates
         run: |
@@ -87,7 +87,7 @@ jobs:
         run: moon -C testgen test --target wasm
 
       - name: Update generated Unix tests
-        run: scripts/update-tests.sh
+        run: moon run scripts/update-tests.mbtx unix
 
       - name: Refresh Unix snapshots
         run: |
@@ -165,7 +165,7 @@ jobs:
 
       - name: Update Windows snapshots
         shell: pwsh
-        run: .\scripts\update-windows-tests.ps1 -RefreshSnapshots
+        run: moon run scripts/update-tests.mbtx windows --refresh-snapshots
 
       - name: Run Windows cram tests
         shell: pwsh

@@ -27,7 +27,7 @@ jobs:
 
       - name: Verify generated baselines
         run: |
-          scripts/update-tests.sh
+          moon run scripts/update-tests.mbtx unix
           git add --all -- tests/unix
           git diff --cached --exit-code HEAD -- tests/unix
 
@@ -57,7 +57,7 @@ jobs:
       - name: Verify generated Windows baselines
         shell: pwsh
         run: |
-          .\scripts\update-windows-tests.ps1
+          moon run scripts/update-tests.mbtx windows
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           git -c core.safecrlf=false add --all -- tests/windows
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -1,0 +1,67 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+async fn root_dir() -> String {
+  let (status, output) = @process.collect_output_merged("git", ["rev-parse", "--show-toplevel"], cwd=".")
+  if status == 0 { output.text().trim().to_owned() } else { @fs.realpath(".") }
+}
+
+///|
+async fn run_checked(command : String, args : Array[String], cwd : String, windows_failure? : Bool = false) -> Unit {
+  let status = @process.run(command, args, cwd=cwd)
+  if status != 0 {
+    @stdio.stderr.write("\{command} exited with status \{status}\n")
+    @sys.exit(if windows_failure { 1 } else { status })
+  }
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  if args.length() < 2 || args.length() > 3 || (args[1] != "unix" && args[1] != "windows") || (args.length() == 3 && (args[1] != "windows" || args[2] != "--refresh-snapshots")) {
+    @stdio.stderr.write("usage: update-tests.mbtx <unix|windows> [--refresh-snapshots]\n")
+    @sys.exit(2)
+  }
+  let platform = args[1]
+  let refresh = args.length() == 3
+  let root = root_dir()
+  run_checked("moon", ["run", "scripts/run-moon-check.mbtx", platform], root, windows_failure=(platform == "windows"))
+  let text = @fs.read_file(root + "/.daily-test/\{platform}-compatible-fixtures.tsv").text()
+  let paths : Array[String] = []
+  for line in text.split("\n") {
+    if line == "" { continue }
+    let fields = line.trim().split("\t").to_array()
+    let slug = fields[0].to_owned()
+    let path = fields[1].to_owned()
+    let max_files = fields[2].to_owned()
+    let max_per_file = fields[3].to_owned()
+    run_checked("moon", ["-C", root + "/testgen", "run", "--target", "wasm", "cmd/main", "--", "--repo", root + "/" + path, "--output-dir", root + "/tests/\{platform}/" + slug, "--repo-slug", slug, "--platform", platform, "--max-files", max_files, "--max-per-file", max_per_file], root, windows_failure=(platform == "windows"))
+    paths.push("tests/windows/" + slug)
+  }
+  if refresh {
+    let log = root + "/.daily-test/windows-cram-update.log"
+    if paths.length() == 0 {
+      @fs.write_file(log, "No compatible Windows fixture baselines.\n")
+      return
+    }
+    let command_args = ["moonbit-community/mooncram@latest", "update"]
+    for path in paths { command_args.push(path) }
+    let (status, output) = @process.collect_output_merged("moonx", command_args, cwd=root)
+    @fs.write_file(log, output)
+    if status != 0 {
+      @stdio.stdout.write(output)
+      @stdio.stderr.write("mooncram update exited with status \{status}\n")
+      @sys.exit(1)
+    }
+  }
+}
