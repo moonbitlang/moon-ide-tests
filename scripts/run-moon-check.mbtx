@@ -1,0 +1,109 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+struct Repo {
+  mut slug : String
+  mut path : String
+  mut max_files : String
+  mut max_per_file : String
+}
+
+///|
+fn new_repo() -> Repo {
+  { slug: "", path: "", max_files: "0", max_per_file: "50" }
+}
+
+///|
+async fn root_dir() -> String {
+  let (status, output) = @process.collect_output_merged("git", ["rev-parse", "--show-toplevel"], cwd=".")
+  if status == 0 { output.text().trim().to_owned() } else { @fs.realpath(".") }
+}
+
+///|
+async fn repos(root : String) -> Array[Repo] {
+  let text = @fs.read_file(root + "/fixtures/repos.yaml").text()
+  let result : Array[Repo] = []
+  let mut current = new_repo()
+  for line in text.split("\n") {
+    let line = line.trim()
+    if line.has_prefix("- ") {
+      if current.slug != "" { result.push(current) }
+      current = new_repo()
+      let item = line[2:].trim()
+      if item.has_prefix("slug:") { current.slug = item[5:].trim().to_owned() }
+    } else if line.has_prefix("path:") {
+      current.path = line[5:].trim().to_owned()
+    } else if line.has_prefix("max_files:") {
+      current.max_files = line[10:].trim().to_owned()
+    } else if line.has_prefix("max_per_file:") {
+      current.max_per_file = line[13:].trim().to_owned()
+    }
+  }
+  if current.slug != "" { result.push(current) }
+  result
+}
+
+///|
+async fn require_dir(path : String, message : String) -> Unit {
+  if !@fs.exists(path) || @fs.kind(path) != @fs.Directory {
+    @stdio.stderr.write(message + "\n")
+    @sys.exit(1)
+  }
+}
+
+///|
+async fn main {
+  let args = @env.args()
+  if args.length() != 2 || (args[1] != "unix" && args[1] != "windows") {
+    @stdio.stderr.write("usage: run-moon-check.mbtx <unix|windows>\n")
+    @sys.exit(2)
+  }
+  let platform = args[1]
+  let root = root_dir()
+  let entries = repos(root)
+  let daily = root + "/.daily-test"
+  @fs.mkdir(daily, recursive=true, allow_exist=true)
+  let paths_file = daily + "/\{platform}-baseline-paths.txt"
+  let tsv_file = daily + "/\{platform}-compatible-fixtures.tsv"
+  let paths : Array[String] = []
+  if platform == "unix" {
+    for suite in ["core-project", "core-standalone"] {
+      let path = "tests/unix/\{suite}"
+      require_dir(root + "/" + path, "missing Unix baseline directory for \{suite} at \{path}")
+      paths.push(path)
+    }
+  }
+  @fs.write_file(tsv_file, "")
+  @fs.write_file(paths_file, if platform == "unix" { paths.join("\n") + "\n" } else { "" })
+  let label = if platform == "unix" { "Unix" } else { "Windows" }
+  for repo in entries {
+    if repo.path == "" {
+      @stdio.stderr.write("missing fixture path for \{repo.slug}\n")
+      @sys.exit(1)
+    }
+    let repo_path = root + "/" + repo.path
+    require_dir(repo_path, "missing fixture repo for \{repo.slug} at \{repo.path}; run moon run scripts/update-submodules.mbtx")
+    let baseline = "tests/\{platform}/\{repo.slug}"
+    require_dir(root + "/" + baseline, "missing \{label} baseline directory for \{repo.slug} at \{baseline}")
+    let (status, output) = @process.collect_output_merged("moon", ["-C", repo_path, "check"], cwd=root)
+    @fs.write_file(daily + "/\{platform}-check-\{repo.slug}.log", output)
+    if status != 0 {
+      @stdio.stdout.write(output)
+      @stdio.stdout.write("::notice::Skipping \{repo.slug}: moon check failed; keeping its \{label} baselines unchanged.\n")
+      continue
+    }
+    paths.push(baseline)
+    @fs.write_file(paths_file, paths.join("\n") + "\n")
+    @fs.write_file(tsv_file, "\{repo.slug}\t\{repo.path}\t\{repo.max_files}\t\{repo.max_per_file}\n", append=true)
+  }
+}

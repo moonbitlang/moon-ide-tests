@@ -1,0 +1,72 @@
+----
+import {
+  "moonbitlang/async@0.22.5",
+  "moonbitlang/async@0.22.5/fs",
+  "moonbitlang/async@0.22.5/process",
+  "moonbitlang/async@0.22.5/stdio",
+  "moonbitlang/async@0.22.5/io",
+  "moonbitlang/core/env",
+  "moonbitlang/x@0.5.6/sys",
+}
+----
+
+///|
+struct Repo {
+  mut slug : String
+  mut path : String
+  mut branch : String
+}
+
+///|
+fn new_repo() -> Repo {
+  { slug: "", path: "", branch: "" }
+}
+
+///|
+async fn repos(root : String) -> Array[Repo] {
+  let text = @fs.read_file(root + "/fixtures/repos.yaml").text()
+  let result : Array[Repo] = []
+  let mut current = new_repo()
+  for line in text.split("\n") {
+    let line = line.trim()
+    if line.has_prefix("- ") {
+      if current.slug != "" { result.push(current) }
+      current = new_repo()
+      let item = line[2:].trim()
+      if item.has_prefix("slug:") { current.slug = item[5:].trim().to_owned() }
+    } else if line.has_prefix("path:") {
+      current.path = line[5:].trim().to_owned()
+    } else if line.has_prefix("branch:") {
+      current.branch = line[7:].trim().to_owned()
+    }
+  }
+  if current.slug != "" { result.push(current) }
+  result
+}
+
+///|
+async fn run_checked(args : Array[String], cwd : String) -> Unit {
+  let status = @process.run("git", args, cwd=cwd)
+  if status != 0 {
+    @stdio.stderr.write("git exited with status \{status}\n")
+    @sys.exit(status)
+  }
+}
+
+///|
+async fn main {
+  if @env.args().length() != 1 {
+    @stdio.stderr.write("usage: update-submodules.mbtx\n")
+    @sys.exit(2)
+  }
+  let (git_status, output) = @process.collect_output_merged("git", ["rev-parse", "--show-toplevel"], cwd=".")
+  let root = if git_status == 0 { output.text().trim().to_owned() } else { @fs.realpath(".") }
+  run_checked(["-C", root, "submodule", "update", "--init", "--recursive"], root)
+  for repo in repos(root) {
+    @stdio.stdout.write("updating \{repo.slug} (\{repo.branch})\n")
+    let path = root + "/" + repo.path
+    run_checked(["-C", path, "fetch", "origin", repo.branch], root)
+    run_checked(["-C", path, "checkout", repo.branch], root)
+    run_checked(["-C", path, "pull", "--ff-only", "origin", repo.branch], root)
+  }
+}
