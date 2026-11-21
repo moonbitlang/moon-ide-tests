@@ -1,6 +1,6 @@
 # core rename bytes encoding/utf8/decode_js.mbt:17:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'bytes' 'bytes_renamed' --loc 'encoding/utf8/decode_js.mbt:17:3' --target js
 *** Begin Patch
 *** Update File: <WORKDIR>/encoding/utf8/decode_js.mbt
@@ -15,4 +15,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'bytes' 'bytes_renamed' --lo
    preserve_bom : Bool,
 *** End Patch
 "" (escaped)
-````
+```

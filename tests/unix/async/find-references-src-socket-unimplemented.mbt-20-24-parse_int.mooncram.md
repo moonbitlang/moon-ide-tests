@@ -10,7 +10,7 @@ Found 3 references for symbol 'parse_int':
 22 |   ignore(() => @string.parse_int("0"))
    |                        ^^^^^^^^^
    |   ignore(@cmp.minimum(0, 0))
-   |   ignore(@io.pipe)
+   |   ignore(@utf8.encode(""))
 
 <WORKDIR>/src/process/unimplemented_test.mbt:19:24-19:33:
    | #cfg(not(any(target="native", target="wasm")))

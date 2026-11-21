@@ -209,9 +209,10 @@ pub enum VNode {
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SheetSide' --loc 'rui/sheet.mbt:3:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SheetSide' --loc 'rui/sheet.mbt:4:15'
 ///|
 /// Edge from which a [`sheet`] enters the viewport.
+#derive(Debug, Eq)
 pub(all) enum SheetSide {
               ^^^^^^^^^
               ```moonbit
@@ -231,9 +232,9 @@ pub(all) enum SheetSide {
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SheetTop' --loc 'rui/sheet.mbt:4:3'
-///|
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SheetTop' --loc 'rui/sheet.mbt:5:3'
 /// Edge from which a [`sheet`] enters the viewport.
+#derive(Debug, Eq)
 pub(all) enum SheetSide {
   SheetTop
   ^^^^^^^^
@@ -245,26 +246,26 @@ pub(all) enum SheetSide {
 ````
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Path' --loc 'warren/path/sourcetree_path.mbt:2:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Path' --loc 'warren/path/sourcetree_path.mbt:2:20'
 ///|
 pub type Path = @p.Path
-         ^^^^
-         ```moonbit
-         type Path = @p.Path
-         ```
-         ---
-         
-          A newtype wrapper provide path operation methods.
+                ^^^^^^^
+                ```moonbit
+                #derive(Eq, @debug.Debug)
+                struct @p.Path(String)
+                ```
+                ---
+                
+                 A newtype wrapper provide path operation methods.
 
 ///|
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:5:8'
-pub type Path = @p.Path
-
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'SourcePath' --loc 'warren/path/sourcetree_path.mbt:6:8'
 ///|
-struct SourcePath(String) derive(Eq, Compare, Hash)
+#derive(Eq, Compare, Hash)
+struct SourcePath(String)
        ^^^^^^^^^^
        ```moonbit
        #derive(Eq, Compare, Hash)

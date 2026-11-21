@@ -49,7 +49,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// }
      | /// ```
      | #locals(f)
-1466 | pub fn[T, U] Array::map(
+1468 | pub fn[T, U] Array::map(
      |                     ^^^
      |   self : Array[T],
      |   f : (T) -> U raise?,
@@ -75,7 +75,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// }
      | /// ```
      | #locals(f)
-1570 | pub fn[T] Array::filter(
+1572 | pub fn[T] Array::filter(
      |                  ^^^^^^
      |   self : Array[T],
      |   f : (T) -> Bool raise?,
@@ -101,7 +101,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/array.mbt
      | /// ```
      | #locals(f)
      | #alias(fold_left, deprecated)
-2215 | pub fn[A, B] Array::fold(
+2217 | pub fn[A, B] Array::fold(
      |                     ^^^^
      |   self : Array[A],
      |   init~ : B,
@@ -161,10 +161,10 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
    | ///
    | /// Parameters:
    | ///
-   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// * `capacity` : The initial capacity of the internal buffer,
    | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
-   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
-   | ///
+   | /// buffer; its first write still reserves at least 8 code units. `capacity`
+   | /// may be ignored on some platforms, JS for example.
 ```
 
 ```mooncram
@@ -197,7 +197,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt
     | 
     | ///|
     | /// Writes a string to the StringBuilder.
-167 | pub impl Logger for StringBuilder with fn write_string(self, str) {
+170 | pub impl Logger for StringBuilder with fn write_string(self, str) {
     |                                           ^^^^^^^^^^^^
     |   let str_len = str.length()
     |   if str_len == 0 {
@@ -223,7 +223,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/intrinsics.mbt
      | /// }
      | /// ```
      | #alias(charcode_length, deprecated)
-1833 | pub fn String::length(self : String) -> Int32 = "%string_length"
+1785 | pub fn String::length(self : String) -> Int32 = "%string_length"
      |                ^^^^^^
      | 
      | ///|
@@ -249,7 +249,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | /// 
      | /// If the separator is empty, the returned iterator will contain all the
      | /// characters in the string as single elements.
-1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1892 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^
      |   self[:].split(sep)
      | }
@@ -275,7 +275,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
-813 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+814 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^
     |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
@@ -397,7 +397,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// # Note
     | /// The old iterator `self` must not be used again after calling `map`.
-358 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
+359 | pub fn[X, Y] Iter::map(self : Iter[X], f : (X) -> Y) -> Iter[Y] {
     |                    ^^^
     |   {
     |     f: fn() {
@@ -423,7 +423,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
-813 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
+814 | pub fn[X] Iter::to_array(self : Iter[X]) -> Array[X] {
     |                 ^^^^^^^^
     |   let result = match self.size_hint {
     |     Some(n) => Array::Array(capacity=n)
@@ -475,7 +475,7 @@ Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
     | ///   debug_inspect(map.get("nonexistent"), content="None")
     | /// }
     | /// ```
-227 | pub fn[K : Hash + Eq, V] HashMap::get(self : HashMap[K, V], key : K) -> V? {
+238 | pub fn[K : Hash + Eq, V] HashMap::get(self : HashMap[K, V], key : K) -> V? {
     |                                   ^^^
     |   // self.get_with_hash(key, key.hash())
     |   let hash = Hash::hash(key)
@@ -522,27 +522,27 @@ Definition found at file <MOON_HOME>/lib/core/builtin/option.mbt
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'map' --loc 'core_ide_cases.mbt:60:10'
 Definition found at file <MOON_HOME>/lib/core/hashmap/hashmap.mbt
-    | ///|
-    | /// Applies a function to each key-value pair in the map and
-    | /// returns a new map with the results, using the original keys.
     | ///
     | /// `f` may raise; the error propagates and `self` is left unchanged.
-867 | pub fn[K, V, V2] HashMap::map(
+    | ///
+    | /// `f` must not modify `self`: the result is then unspecified (it may, for
+    | /// example, hold a key twice), though memory-safe.
+881 | pub fn[K, V, V2] HashMap::map(
     |                           ^^^
     |   self : HashMap[K, V],
     |   f : (K, V) -> V2 raise?,
     | ) -> HashMap[K, V2] raise? {
-    |   let other = {
-    |     capacity: self.capacity,
-    |     entries: FixedArray::make(self.capacity, None),
-    |     size: self.size,
-    |     capacity_mask: self.capacity_mask,
-    |   }
-    |   if self.size == 0 {
-    |     return other
-    |   }
-    |   for i in 0..<self.capacity {
-    |     if self.entries[i] is Some({ key, value, hash, psl, }) {
+    |   // `f` may modify `self`, so read the table captured here (a grow replaces
+    |   // `self.entries` but leaves this one intact) and count the entries actually
+    |   // written rather than trusting `self.size`.
+    |   let { entries, capacity, capacity_mask, .. } = self
+    |   let other_entries = FixedArray::make(capacity, None)
+    |   let mut size = 0
+    |   for i in 0..<capacity {
+    |     if entries[i] is Some({ key, value, hash, .. }) {
+    |       // Derive `psl` from the slot: a grow reuses entries and updates their
+    |       // stored `psl` for the new table.
+    |       let psl = (i - hash) & capacity_mask
 ```
 
 ```mooncram
@@ -579,7 +579,7 @@ Definition found at file <MOON_HOME>/lib/core/builtin/string_methods.mbt
      | /// 
      | /// If the separator is empty, the returned iterator will contain all the
      | /// characters in the string as single elements.
-1737 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
+1892 | pub fn String::split(self : String, sep : StringView) -> Iter[StringView] {
      |                ^^^^^
      |   self[:].split(sep)
      | }
@@ -605,9 +605,9 @@ Definition found at file <MOON_HOME>/lib/core/builtin/iterator.mbt
     | ///
     | /// # Note
     | /// The old iterator `self` must not be used again after calling `filter`.
-327 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
+328 | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
     |                 ^^^^^^
-    |   Iter::new(fn() {
+    |   Iter(fn() {
     |     for x in self {
     |       if f(x) {
     |         break Some(x)

@@ -1,6 +1,6 @@
 # json find-references json_testsuite_fail src/tests/json_testsuite_helpers_test.mbt:2:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'json_testsuite_fail' --loc 'src/tests/json_testsuite_helpers_test.mbt:2:4'
 Found 4 references for symbol 'json_testsuite_fail':
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:9:10-9:29:
@@ -10,11 +10,11 @@ Found 4 references for symbol 'json_testsuite_fail':
 9 |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |          ^^^^^^^^^^^^^^^^^^^
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
 
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:20:7-20:26:
    |   try @json.decode(input) catch {
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
 20 |       json_testsuite_fail(
    |       ^^^^^^^^^^^^^^^^^^^
@@ -32,11 +32,11 @@ Found 4 references for symbol 'json_testsuite_fail':
 
 <WORKDIR>/src/tests/json_testsuite_helpers_test.mbt:36:7-36:26:
    |   try @json.decode(input) catch {
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
 36 |       json_testsuite_fail(
    |       ^^^^^^^^^^^^^^^^^^^
    |         "expected JSONTestSuite accept or parser rejection, got non-parser error: " +
    |         name,
 "" (escaped)
-````
+```
