@@ -1,6 +1,6 @@
 # core find-references LazyState lazy\lazy.mbt:24:11
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'LazyState' --loc 'lazy\lazy.mbt:24:11'
 Found 1 references for symbol 'LazyState':
 <WORKDIR>/lazy\lazy.mbt:69:15-69:24:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'LazyState':
    | }
    | 
 "" (escaped)
-````
+```

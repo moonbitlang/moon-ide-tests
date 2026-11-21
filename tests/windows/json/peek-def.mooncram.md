@@ -1,6 +1,6 @@
 # json peek-def
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Decode' --loc 'src\lib\decode.mbt:8:11'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | 
@@ -10,59 +10,59 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
   | ///|
 8 | pub trait Decode {
   | ^
-  |   array_start(Self, JsonArray) -> JsonArray
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-"  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
-  |   object_start(Self, JsonObject) -> JsonObject
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject
-"  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)" (escaped)
-  |   double(Self, ArrayView[Char]) -> Double raise
-  |   integer(Self, ArrayView[Char]) -> Int raise
-  |   string(Self, String) -> String
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   []
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_push(_self, elem, acc) {
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
   |   [elem, ..acc]
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc)
-````
+```
 
-````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'array_start' --loc 'src\lib\decode.mbt:9:3'
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'array_start' --loc 'src\lib\decode.mbt:9:6'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | ///|
   | pub type JsonObject = Map[String, Json]
   | 
   | ///|
   | pub trait Decode {
-9 |   array_start(Self, JsonArray) -> JsonArray
-  |   ^^^^^^^^^^^
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-"  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)" (escaped)
-  |   object_start(Self, JsonObject) -> JsonObject
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject
-"  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)" (escaped)
-  |   double(Self, ArrayView[Char]) -> Double raise
-  |   integer(Self, ArrayView[Char]) -> Int raise
-  |   string(Self, String) -> String
+9 |   fn array_start(Self, JsonArray) -> JsonArray
+  |      ^^^^^^^^^^^
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   []
   | }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Context' --loc 'src\lib\json.mbt:2:13'
 Definition found at file <WORKDIR>/src\lib\json.mbt
   | ///|
@@ -70,7 +70,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
   |             ^^^^^^^
   |   original : Array[Char]
   |   rest : ArrayView[Char]
-  |   skip : Int
+  |   skip : Int32
   |   arr_acc : Array[Json]
   |   obj_acc : Map[String, Json]
   |   stack : Array[Frame]
@@ -82,9 +82,9 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
   |   Array(Array[Json])
   |   Map(Map[String, Json])
   |   Key(String)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'original' --loc 'src\lib\json.mbt:3:3'
 Definition found at file <WORKDIR>/src\lib\json.mbt
   | ///|
@@ -92,7 +92,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
 3 |   original : Array[Char]
   |   ^^^^^^^^
   |   rest : ArrayView[Char]
-  |   skip : Int
+  |   skip : Int32
   |   arr_acc : Array[Json]
   |   obj_acc : Map[String, Json]
   |   stack : Array[Frame]
@@ -105,9 +105,9 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
   |   Map(Map[String, Json])
   |   Key(String)
   | } derive(Debug)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Value' --loc 'src\lib\value.mbt:2:10'
 Definition found at file <WORKDIR>/src\lib\value.mbt
   | ///|
@@ -127,9 +127,9 @@ Definition found at file <WORKDIR>/src\lib\value.mbt
   |   checkpoint : Checkpoint
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Continue' --loc 'src\lib\value.mbt:3:3'
 Definition found at file <WORKDIR>/src\lib\value.mbt
   | ///|
@@ -150,9 +150,9 @@ Definition found at file <WORKDIR>/src\lib\value.mbt
   | }
   | 
   | ///|
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'incr_fail' --loc 'src\tests\incr.mbt:2:4'
 Definition found at file <WORKDIR>/src\tests\incr.mbt
   | ///|
@@ -172,9 +172,9 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
   |   }
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'message' --loc 'src\tests\incr.mbt:2:14'
 Definition found at file <WORKDIR>/src\tests\incr.mbt
   | ///|
@@ -194,9 +194,9 @@ Definition found at file <WORKDIR>/src\tests\incr.mbt
   |   }
   | }
   | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'json_testsuite_fail' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:4'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | ///|
@@ -210,15 +210,15 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'message' --loc 'src\tests\json_testsuite_helpers_test.mbt:2:24'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | ///|
@@ -232,15 +232,15 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src\tests\json_testsuite_n_test.mbt:8:7'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_n_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
@@ -264,12 +264,12 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_n_test.mbt
   |   let input = "[\"\"],"
   |   expect_reject("n_array_comma_after_close.json", input)
   | }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'expect_reject' --loc 'src\tests\json_testsuite_n_test.mbt:9:3'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
-"   |     _ => ()" (escaped)
+   |     _ => ()
    |   }
    | }
    | 
@@ -277,7 +277,7 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
 16 | fn expect_reject(name : String, input : String) -> Unit raise {
    |    ^^^^^^^^^^^^^
    |   try @json.decode(input) catch {
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
    |       json_testsuite_fail(
    |         "expected JSONTestSuite parser rejection, got non-parser error: " + name,
@@ -290,9 +290,9 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
    |   }
    | }
    | 
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'input' --loc 'src\tests\json_testsuite_y_test.mbt:8:7'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_y_test.mbt
   | // Upstream license: MIT License, Copyright (c) 2016 Nicolas Seriot.
@@ -316,9 +316,9 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_y_test.mbt
   |   let input = "[]"
   |   expect_accept("y_array_empty.json", input)
   | }
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'expect_accept' --loc 'src\tests\json_testsuite_y_test.mbt:9:3'
 Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   | fn json_testsuite_fail(message : String) -> Unit raise {
@@ -331,20 +331,20 @@ Definition found at file <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt
   |   try @json.decode(input) catch {
   |     _ => json_testsuite_fail("expected JSONTestSuite accept: " + name)
   |   } noraise {
-"  |     _ => ()" (escaped)
+  |     _ => ()
   |   }
   | }
   | 
   | ///|
   | fn expect_reject(name : String, input : String) -> Unit raise {
   |   try @json.decode(input) catch {
-"  |     @lib.ParseError(_) => ()" (escaped)
+  |     @lib.ParseError(_) => ()
   |     _ =>
   |       json_testsuite_fail(
   |         "expected JSONTestSuite parser rejection, got non-parser error: " + name,
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'actual' --loc 'src\tests\json_value_semantics_test.mbt:3:7'
 Definition found at file <WORKDIR>/src\tests\json_value_semantics_test.mbt
   | ///|
@@ -365,9 +365,9 @@ Definition found at file <WORKDIR>/src\tests\json_value_semantics_test.mbt
   | test "json value semantics duplicate object key keeps first value" {
   |   let actual = @json.decode("{\"a\":\"b\",\"a\":\"c\"}")
   |   let expected = Json::object({ "a": Json::string("b") })
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode' --loc 'src\tests\json_value_semantics_test.mbt:3:22'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
@@ -393,7 +393,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |        ^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -405,9 +405,9 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode_start' --loc 'src\tests\top.mbt:2:14'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
@@ -429,11 +429,11 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    | }
    | 
    | ///|
-48 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
+46 | pub fn decode_start(input : String, decode? : &Decode) -> Value raise {
    |        ^^^^^^^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -445,9 +445,9 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   value(ctx)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode_continue' --loc 'src\tests\top.mbt:2:28'
 Definition found at file <WORKDIR>/src\top.mbt
   | ///|
@@ -469,7 +469,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    | }
    | 
    | ///|
-66 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
+64 | pub fn decode_continue(cont : String, state : ContinueValue) -> Value raise {
    |        ^^^^^^^^^^^^^^^
    |   let input = [..state.rest, ..cont.to_array()]
    |   let ctx = Context::{
@@ -485,9 +485,9 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     Value | NumberI(_) | NumberD(_) | FloatError(_, _) => value(ctx)
    |     ArrayPush(v) => array_push(ctx, v)
    |     ObjectKey => object_key(ctx)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Decode' --loc 'src\top.mbt:3:9'
 Definition found at file <WORKDIR>/src\lib\decode.mbt
   | 
@@ -497,33 +497,33 @@ Definition found at file <WORKDIR>/src\lib\decode.mbt
   | ///|
 8 | pub trait Decode {
   | ^
-  |   array_start(Self, JsonArray) -> JsonArray
-  |   array_push(Self, Json, JsonArray) -> JsonArray
-  |   array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
-  |   object_start(Self, JsonObject) -> JsonObject
-  |   object_push(Self, String, Json, JsonObject) -> JsonObject
-  |   object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
-  |   double(Self, ArrayView[Char]) -> Double raise
-  |   integer(Self, ArrayView[Char]) -> Int raise
-  |   string(Self, String) -> String
+  |   fn array_start(Self, JsonArray) -> JsonArray
+  |   fn array_push(Self, Json, JsonArray) -> JsonArray
+  |   fn array_finish(Self, JsonArray, JsonArray) -> (JsonArray, JsonArray)
+  |   fn object_start(Self, JsonObject) -> JsonObject
+  |   fn object_push(Self, String, Json, JsonObject) -> JsonObject
+  |   fn object_finish(Self, JsonObject, JsonObject) -> (JsonObject, JsonObject)
+  |   fn double(Self, ArrayView[Char]) -> Double raise
+  |   fn integer(Self, ArrayView[Char]) -> Int32 raise
+  |   fn string(Self, String) -> String
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_start(_self, _old_acc) -> JsonArray {
+  | impl Decode for Unit with fn array_start(_self, _old_acc) -> JsonArray {
   |   []
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_push(_self, elem, acc) {
+  | impl Decode for Unit with fn array_push(_self, elem, acc) {
   |   [elem, ..acc]
   | }
   | 
   | ///|
-  | impl Decode for Unit with array_finish(_self, acc, old_acc) {
+  | impl Decode for Unit with fn array_finish(_self, acc, old_acc) {
   |   (acc.rev(), old_acc)
-````
+```
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'decode' --loc 'src\top.mbt:4:3'
 Definition found at file <WORKDIR>/src\lib\json.mbt
    |   Map(Map[String, Json])
@@ -535,7 +535,7 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |        ^^^^^^
    |   let decode : &Decode = match decode {
    |     Some(decode) => decode
-"   |     None => ()" (escaped)
+   |     None => ()
    |   }
    |   let ctx = Context::{
    |     rest: input.to_array()[:],
@@ -547,4 +547,4 @@ Definition found at file <WORKDIR>/src\lib\json.mbt
    |     decode,
    |   }
    |   match value(ctx) {
-````
+```

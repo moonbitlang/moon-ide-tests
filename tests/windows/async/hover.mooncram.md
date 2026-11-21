@@ -36,21 +36,15 @@ async test "blocking unbuffered" {
     group.spawn_bg() <| () => {
 ````
 
-Known IDE limitation: extern function declaration hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-function-hover -->
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fstatx_sync' --loc 'src\internal\event_loop\stdio.mbt:18:15'
-No hover information found for symbol 'fstatx_sync' at src\internal\event_loop\stdio.mbt:18:15
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'from_core_stdio' --loc 'src\internal\event_loop\stdio.mbt:17:4'
+No hover information found for symbol 'from_core_stdio' at src\internal\event_loop\stdio.mbt:17:4
 [1]
 ```
 
-Known IDE limitation: extern function parameter hover reports no information; declaration navigation and rename work.
-
-<!-- known-ide-limitation: extern-parameter-hover -->
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'fd' --loc 'src\internal\event_loop\stdio.mbt:19:3'
-No hover information found for symbol 'fd' at src\internal\event_loop\stdio.mbt:19:3
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'x' --loc 'src\internal\event_loop\stdio.mbt:18:3'
+No hover information found for symbol 'x' at src\internal\event_loop\stdio.mbt:18:3
 [1]
 ```
 
@@ -257,12 +251,12 @@ pub let unimplemented : Unit = {
   ignore(() => @string.parse_int("0"))
                ^^^^^^^^^^^^^^^^^
                ```moonbit
-               fn @moonbitlang/core/string.parse_int(str : StringView, base? : Int) -> Int raise
+               fn @moonbitlang/core/string.parse_int(str : StringView, radix? : Int) -> Int raise
                ```
                ---
                
                 Parse a string in the given base (0, 2 to 36), return a Int number or an error.
-                If the `base` argument is 0, the base will be inferred by the prefix.
+                If the `radix` argument is 0, the base will be inferred by the prefix.
   ignore(@io.pipe)
   ignore(@event_loop.Timer::new)
 ```

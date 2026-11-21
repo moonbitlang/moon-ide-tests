@@ -1,6 +1,6 @@
 # json rename input src/tests/json_testsuite_y_test.mbt:8:7
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'input' 'input_renamed' --loc 'src/tests/json_testsuite_y_test.mbt:8:7'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/tests/json_testsuite_y_test.mbt
@@ -17,4 +17,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'input' 'input_renamed' --lo
  ///|
 *** End Patch
 "" (escaped)
-````
+```

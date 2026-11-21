@@ -1,6 +1,6 @@
 # json rename original src/lib/json.mbt:3:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed' --loc 'src/lib/json.mbt:3:3'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/lib/json.mbt
@@ -10,7 +10,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
 -  original : Array[Char]
 +  original_renamed : Array[Char]
    rest : ArrayView[Char]
-   skip : Int
+   skip : Int32
    arr_acc : Array[Json]
 @@
    }
@@ -42,42 +42,42 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
 @@
  
  ///|
- fn number_zero(ctx : Context, len : Int) -> Value raise {
+ fn number_zero(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-"     [] => {" (escaped)
+     [] => {
        let token = original[skip:skip + len]
 @@
  
  ///|
- fn number(ctx : Context, len : Int) -> Value raise {
+ fn number(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number({ ..ctx, rest, }, len + 1)" (escaped)
-"     ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number({ ..ctx, rest, }, len + 1)
+     ['.', .. rest] => number_frac({ ..ctx, rest, }, len + 1)
 @@
  
  ///|
- fn number_frac_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_frac_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)" (escaped)
-"     ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1)" (escaped)
+     ['0'..<='9', .. rest] => number_frac_cont({ ..ctx, rest, }, len + 1)
+     ['e' | 'E', .. rest] => number_exp({ ..ctx, rest, }, len + 1)
 @@
  
  ///|
- fn number_exp_cont(ctx : Context, len : Int) -> Value raise {
+ fn number_exp_cont(ctx : Context, len : Int32) -> Value raise {
 -  let { original, skip, .. } = ctx
 +  let { original_renamed: original, skip, .. } = ctx
    match ctx.rest {
-"     ['0'..='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)" (escaped)
-"     _ => {" (escaped)
+     ['0'..<='9', .. rest] => number_exp_cont({ ..ctx, rest, }, len + 1)
+     _ => {
 @@
-"     ['\\\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder)" (escaped)
-"     [c, .. rest] =>" (escaped)
+     ['\\', .. rest] => string_escape({ ..ctx, rest, }, len, builder)
+     [c, .. rest] =>
        if c.to_int() < 0x20 {
 -        raise invalid_byte(ctx.original, skip + len)
 +        raise invalid_byte(ctx.original_renamed, skip + len)
@@ -86,12 +86,12 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
          string_scan({ ..ctx, rest, }, len + 1, builder)
 @@
      }
-"     ['u', ..] =>" (escaped)
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 6, 0, Checkpoint::Value)
-"-    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1)" (escaped)
-"+    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1)" (escaped)
-"     [] =>" (escaped)
-       unexpected({ ..ctx, skip: ctx.skip - 1 }, len + 2, 0, Checkpoint::Value)
+     ['u', ..] =>
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 6, 0, Checkpoint::Value)
+-    [_, ..] => raise invalid_byte(ctx.original, ctx.skip + len + 1)
++    [_, ..] => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 1)
+     [] =>
+       unexpected({ ..ctx, skip: ctx.skip - 1, }, len + 2, 0, Checkpoint::Value)
    }
 @@
            write_codepoint(ctx, ctx.skip + len, codepoint, builder)
@@ -101,13 +101,13 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
 +          raise invalid_byte(ctx.original_renamed, ctx.skip + len + 8)
          }
        }
-"       ['\\\\', 'u', ..] =>" (escaped)
+       ['\\', 'u', ..] =>
 @@
            0,
            Checkpoint::Value,
          )
-"-      _ => raise invalid_byte(ctx.original, ctx.skip + len + 6)" (escaped)
-"+      _ => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 6)" (escaped)
+-      _ => raise invalid_byte(ctx.original, ctx.skip + len + 6)
++      _ => raise invalid_byte(ctx.original_renamed, ctx.skip + len + 6)
      }
    } else if code_unit.is_trailing_surrogate() {
 -    raise invalid_byte(ctx.original, ctx.skip + len + 2)
@@ -116,20 +116,20 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
      write_codepoint(ctx, ctx.skip + len + 2, code_unit, builder)
      string_scan({ ..ctx, rest, }, len + 6, builder)
 @@
-"     '0'..='9' => c.to_int() - '0'.to_int()" (escaped)
-"     'a'..='f' => c.to_int() - 'a'.to_int() + 10" (escaped)
-"     'A'..='F' => c.to_int() - 'A'.to_int() + 10" (escaped)
-"-    _ => raise invalid_byte(ctx.original, index)" (escaped)
-"+    _ => raise invalid_byte(ctx.original_renamed, index)" (escaped)
+     '0'..<='9' => c.to_int() - '0'.to_int()
+     'a'..<='f' => c.to_int() - 'a'.to_int() + 10
+     'A'..<='F' => c.to_int() - 'A'.to_int() + 10
+-    _ => raise invalid_byte(ctx.original, index)
++    _ => raise invalid_byte(ctx.original_renamed, index)
    }
  }
  
 @@
  ) -> Unit raise {
    match codepoint.to_char() {
-"     Some(c) => builder.write_char(c)" (escaped)
-"-    None => raise invalid_byte(ctx.original, index)" (escaped)
-"+    None => raise invalid_byte(ctx.original_renamed, index)" (escaped)
+     Some(c) => builder.write_char(c)
+-    None => raise invalid_byte(ctx.original, index)
++    None => raise invalid_byte(ctx.original_renamed, index)
    }
  }
  
@@ -141,9 +141,9 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
 +  let { rest, original_renamed: original, skip, arr_acc, obj_acc, .. } = ctx
    match rest {
      // skip whitespace
-     [' '  | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
+     [' ' | '\n' | '\r' | '\t', .. rest] => terminate({ ..ctx, rest, }, value)
 @@
-   len : Int,
+   len : Int32,
    func_data : Checkpoint,
  ) -> Value raise {
 -  let { original, arr_acc, obj_acc, skip, stack, decode, .. } = ctx
@@ -162,4 +162,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'original' 'original_renamed
  
 *** End Patch
 "" (escaped)
-````
+```

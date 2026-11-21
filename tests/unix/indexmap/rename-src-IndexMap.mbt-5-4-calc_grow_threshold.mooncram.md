@@ -1,6 +1,6 @@
 # indexmap rename calc_grow_threshold src/IndexMap.mbt:5:4
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'calc_grow_threshold' 'calc_grow_threshold_renamed' --loc 'src/IndexMap.mbt:5:4'
 *** Begin Patch
 *** Update File: <WORKDIR>/src/IndexMap.mbt
@@ -8,8 +8,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'calc_grow_threshold' 'calc_
  const Default_init_capacity = 8
  
  ///|
--fn calc_grow_threshold(capacity : Int) -> Int {
-+fn calc_grow_threshold_renamed(capacity : Int) -> Int {
+-fn calc_grow_threshold(capacity : Int32) -> Int32 {
++fn calc_grow_threshold_renamed(capacity : Int32) -> Int32 {
    capacity * 3 / 4 // 75% 负载因子
  }
  
@@ -19,7 +19,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'calc_grow_threshold' 'calc_
      capacity,
 -    growAt: calc_grow_threshold(capacity),
 +    growAt: calc_grow_threshold_renamed(capacity),
-     key_to_idx: @hashmap.HashMap::default(),
+     key_to_idx: Default::default(),
    }
  }
 @@
@@ -33,4 +33,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'calc_grow_threshold' 'calc_
    self.core.head = -1
 *** End Patch
 "" (escaped)
-````
+```

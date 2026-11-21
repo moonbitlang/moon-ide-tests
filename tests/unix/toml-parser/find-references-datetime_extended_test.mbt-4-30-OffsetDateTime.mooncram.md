@@ -2,7 +2,7 @@
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
-Found 61 references for symbol 'OffsetDateTime':
+Found 62 references for symbol 'OffsetDateTime':
 <WORKDIR>/coverage_improvement_comprehensive_test.mbt:246:38-246:52:
     |   debug_inspect(float_str.contains("3.14"), content="true")
     | 
@@ -12,11 +12,11 @@ Found 61 references for symbol 'OffsetDateTime':
     |   let offset_str = offset_dt.to_string()
     |   debug_inspect(
 
-<WORKDIR>/datetime/datetime.mbt:40:5-40:19:
+<WORKDIR>/datetime/datetime.mbt:41:5-41:19:
    | /// `OffsetDateTime("1979-05-27T07:32:00Z")` etc.
    | pub impl Show for TomlDateTime with fn output(self, logger) {
    |   match self {
-40 |     OffsetDateTime(s) =>
+41 |     OffsetDateTime(s) =>
    |     ^^^^^^^^^^^^^^
    |       logger <+
    |         $|OffsetDateTime("\{s}")
@@ -156,182 +156,182 @@ Found 61 references for symbol 'OffsetDateTime':
     |   ]
     |   let offset_arr_value = @toml.TomlArray(offset_array)
 
-<WORKDIR>/datetime_test.mbt:138:5-138:19:
+<WORKDIR>/datetime_test.mbt:137:5-137:19:
     |   let session1 : Map[String, @toml.TomlValue] = Map([])
     |   session1["title"] = TomlString("Opening Keynote")
     |   session1["scheduled_at"] = TomlDateTime(
-138 |     OffsetDateTime("2023-06-15T09:00:00+00:00"),
+137 |     OffsetDateTime("2023-06-15T09:00:00+00:00"),
     |     ^^^^^^^^^^^^^^
     |   )
-    |   sessions.push(@toml.TomlTable(session1))
+    |   let session2 : Map[String, @toml.TomlValue] = Map([])
 
-<WORKDIR>/datetime_test.mbt:144:5-144:19:
+<WORKDIR>/datetime_test.mbt:142:5-142:19:
     |   let session2 : Map[String, @toml.TomlValue] = Map([])
     |   session2["title"] = TomlString("Technical Workshop")
     |   session2["scheduled_at"] = TomlDateTime(
-144 |     OffsetDateTime("2023-06-15T14:00:00+00:00"),
+142 |     OffsetDateTime("2023-06-15T14:00:00+00:00"),
     |     ^^^^^^^^^^^^^^
     |   )
-    |   sessions.push(TomlTable(session2))
+    |   event_table["sessions"] = TomlArray([TomlTable(session1), TomlTable(session2)])
 
-<WORKDIR>/datetime_test.mbt:181:42-181:56:
+<WORKDIR>/datetime_test.mbt:178:42-178:56:
     |   )
     | 
     |   // Start of year  
-181 |   let new_years_day = @toml.TomlDateTime(OffsetDateTime("2024-01-01T00:00:00Z"))
+178 |   let new_years_day = @toml.TomlDateTime(OffsetDateTime("2024-01-01T00:00:00Z"))
     |                                          ^^^^^^^^^^^^^^
     |   debug_inspect(
     |     new_years_day.to_string(),
 
-<WORKDIR>/datetime_test.mbt:202:5-202:19:
+<WORKDIR>/datetime_test.mbt:199:5-199:19:
     | 
     |   // Various timezone offsets
     |   let tz_positive = @toml.TomlDateTime(
-202 |     OffsetDateTime("2023-01-01T12:00:00+14:00"),
+199 |     OffsetDateTime("2023-01-01T12:00:00+14:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
 
-<WORKDIR>/datetime_test.mbt:211:5-211:19:
+<WORKDIR>/datetime_test.mbt:208:5-208:19:
     |     ),
     |   )
     |   let tz_negative = @toml.TomlDateTime(
-211 |     OffsetDateTime("2023-01-01T12:00:00-12:00"),
+208 |     OffsetDateTime("2023-01-01T12:00:00-12:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
 
-<WORKDIR>/datetime_test.mbt:220:5-220:19:
+<WORKDIR>/datetime_test.mbt:217:5-217:19:
     |     ),
     |   )
     |   let tz_half_hour = @toml.TomlDateTime(
-220 |     OffsetDateTime("2023-01-01T12:00:00+05:30"),
+217 |     OffsetDateTime("2023-01-01T12:00:00+05:30"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
 
-<WORKDIR>/datetime_test.mbt:233:46-233:60:
+<WORKDIR>/datetime_test.mbt:230:46-230:60:
     | ///|
     | /// Test datetime serialization and deserialization consistency
     | test "datetime serialization consistency" {
-233 |   let original_offset : @toml.TomlDateTime = OffsetDateTime(
+230 |   let original_offset : @toml.TomlDateTime = OffsetDateTime(
     |                                              ^^^^^^^^^^^^^^
     |     "1979-05-27T07:32:00Z",
     |   )
 
-<WORKDIR>/datetime_test.mbt:260:32-260:46:
+<WORKDIR>/datetime_test.mbt:257:32-257:46:
     | /// Test datetime comparison and equality  
     | test "datetime comparison" {
     |   // Same datetime different representations should be equal
-260 |   let dt1 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
+257 |   let dt1 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |                                ^^^^^^^^^^^^^^
     |   let dt2 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |   debug_inspect(dt1 == dt2, content="true")
 
-<WORKDIR>/datetime_test.mbt:261:32-261:46:
+<WORKDIR>/datetime_test.mbt:258:32-258:46:
     | test "datetime comparison" {
     |   // Same datetime different representations should be equal
     |   let dt1 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
-261 |   let dt2 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
+258 |   let dt2 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |                                ^^^^^^^^^^^^^^
     |   debug_inspect(dt1 == dt2, content="true")
     | 
 
-<WORKDIR>/datetime_test.mbt:265:32-265:46:
+<WORKDIR>/datetime_test.mbt:262:32-262:46:
     |   debug_inspect(dt1 == dt2, content="true")
     | 
     |   // Different datetimes should not be equal
-265 |   let dt3 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:01Z"))
+262 |   let dt3 = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:01Z"))
     |                                ^^^^^^^^^^^^^^
     |   debug_inspect(dt1 == dt3, content="false")
     | 
 
-<WORKDIR>/datetime_test.mbt:270:38-270:52:
+<WORKDIR>/datetime_test.mbt:267:38-267:52:
     | 
     |   // Different datetime types should not be equal even with same time
     |   let local_dt = @toml.TomlDateTime(LocalDateTime("2023-01-01T12:00:00"))
-270 |   let offset_dt = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
+267 |   let offset_dt = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |                                      ^^^^^^^^^^^^^^
     |   debug_inspect(local_dt == offset_dt, content="false")
     | }
 
-<WORKDIR>/datetime_test.mbt:278:39-278:53:
+<WORKDIR>/datetime_test.mbt:275:39-275:53:
     | /// Test historical and future dates
     | test "datetime historical and future dates" {
     |   // Historical dates
-278 |   let unix_epoch = @toml.TomlDateTime(OffsetDateTime("1970-01-01T00:00:00Z"))
+275 |   let unix_epoch = @toml.TomlDateTime(OffsetDateTime("1970-01-01T00:00:00Z"))
     |                                       ^^^^^^^^^^^^^^
     |   debug_inspect(
     |     unix_epoch.to_string(),
 
-<WORKDIR>/datetime_test.mbt:316:34-316:48:
+<WORKDIR>/datetime_test.mbt:313:34-313:48:
     | /// Test timezone boundary cases
     | test "timezone boundary cases" {
     |   // UTC variants
-316 |   let utc_z = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
+313 |   let utc_z = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |                                  ^^^^^^^^^^^^^^
     |   let utc_plus = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00+00:00"))
     |   let utc_minus = @toml.TomlDateTime(
 
-<WORKDIR>/datetime_test.mbt:317:37-317:51:
+<WORKDIR>/datetime_test.mbt:314:37-314:51:
     | test "timezone boundary cases" {
     |   // UTC variants
     |   let utc_z = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
-317 |   let utc_plus = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00+00:00"))
+314 |   let utc_plus = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00+00:00"))
     |                                     ^^^^^^^^^^^^^^
     |   let utc_minus = @toml.TomlDateTime(
     |     OffsetDateTime("2023-01-01T12:00:00-00:00"),
 
-<WORKDIR>/datetime_test.mbt:319:5-319:19:
+<WORKDIR>/datetime_test.mbt:316:5-316:19:
     |   let utc_z = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00Z"))
     |   let utc_plus = @toml.TomlDateTime(OffsetDateTime("2023-01-01T12:00:00+00:00"))
     |   let utc_minus = @toml.TomlDateTime(
-319 |     OffsetDateTime("2023-01-01T12:00:00-00:00"),
+316 |     OffsetDateTime("2023-01-01T12:00:00-00:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
 
-<WORKDIR>/datetime_test.mbt:342:5-342:19:
+<WORKDIR>/datetime_test.mbt:339:5-339:19:
     | 
     |   // Extreme timezone offsets (valid in spec)
     |   let max_positive = @toml.TomlDateTime(
-342 |     OffsetDateTime("2023-01-01T12:00:00+14:00"),
+339 |     OffsetDateTime("2023-01-01T12:00:00+14:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   let max_negative = @toml.TomlDateTime(
 
-<WORKDIR>/datetime_test.mbt:345:5-345:19:
+<WORKDIR>/datetime_test.mbt:342:5-342:19:
     |     OffsetDateTime("2023-01-01T12:00:00+14:00"),
     |   )
     |   let max_negative = @toml.TomlDateTime(
-345 |     OffsetDateTime("2023-01-01T12:00:00-12:00"),
+342 |     OffsetDateTime("2023-01-01T12:00:00-12:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(
 
-<WORKDIR>/datetime_test.mbt:369:5-369:19:
+<WORKDIR>/datetime_test.mbt:366:5-366:19:
     | 
     |   // Deployment timestamp (offset datetime)
     |   config["deployed_at"] = TomlDateTime(
-369 |     OffsetDateTime("2023-06-15T14:30:00+00:00"),
+366 |     OffsetDateTime("2023-06-15T14:30:00+00:00"),
     |     ^^^^^^^^^^^^^^
     |   )
     | 
 
-<WORKDIR>/internal/qc_model/generator.mbt:290:8-290:22:
+<WORKDIR>/internal/qc_model/generator.mbt:272:8-272:22:
     |     date,
     |     time,
     |     offset,
-290 |   ) => OffsetDateTime("\{date}T\{time}\{offset}"))
+272 |   ) => OffsetDateTime("\{date}T\{time}\{offset}"))
     |        ^^^^^^^^^^^^^^
     | }
     | 
 
-<WORKDIR>/internal/qc_model/model.mbt:244:5-244:19:
+<WORKDIR>/internal/qc_model/model.mbt:246:5-246:19:
     | ///|
     | fn datetime_has_fractional_seconds(datetime : @datetime.TomlDateTime) -> Bool {
     |   match datetime {
-244 |     OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
+246 |     OffsetDateTime(text) | LocalDateTime(text) | LocalTime(text) =>
     |     ^^^^^^^^^^^^^^
     |       text.contains(".")
     |     LocalDate(_) => false
@@ -345,32 +345,41 @@ Found 61 references for symbol 'OffsetDateTime':
     |   let token = @tokenize.DateTimeToken(dt, loc=@tokenize.default_loc())
     |   debug_inspect(
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:764:13-764:27:
-    |           self.update_view(rest3)
-    |           let end_pos = self.get_loc()
-    |           DateTimeToken(
-764 |             OffsetDateTime("\{datetime_str}Z"),
-    |             ^^^^^^^^^^^^^^
-    |             loc=make_loc(start_pos, end_pos),
-    |           )
+<WORKDIR>/internal/tokenize/tokenize.mbt:247:5-247:19:
+    |   let value : @datetime.TomlDateTime = if offset_start == len {
+    |     LocalDateTime(datetime.to_owned())
+    |   } else if text[offset_start] is ('Z' | 'z') {
+247 |     OffsetDateTime("\{datetime}Z")
+    |     ^^^^^^^^^^^^^^
+    |   } else {
+    |     let offset = text.unsafe_view(start=offset_start, end=len)
 
-<WORKDIR>/internal/tokenize/tokenize.mbt:775:13-775:27:
-    |           validate_timezone_offset(offset)
-    |           let end_pos = self.get_loc()
-    |           DateTimeToken(
-775 |             OffsetDateTime("\{datetime_str}\{offset}"),
-    |             ^^^^^^^^^^^^^^
-    |             loc=make_loc(start_pos, end_pos),
-    |           )
+<WORKDIR>/internal/tokenize/tokenize.mbt:251:5-251:19:
+    |   } else {
+    |     let offset = text.unsafe_view(start=offset_start, end=len)
+    |     validate_timezone_offset(offset)
+251 |     OffsetDateTime("\{datetime}\{offset}")
+    |     ^^^^^^^^^^^^^^
+    |   }
+    |   DateTimeToken(value, loc=self.span(start))
 
-<WORKDIR>/toml.mbt:32:18-32:32:
+<WORKDIR>/toml.mbt:33:18-33:32:
    | /// "OffsetDateTime", "LocalDateTime", "LocalDate", "LocalTime"
    | pub fn TomlValue::datetime_info(self : TomlValue) -> (String, String)? {
    |   match self {
-32 |     TomlDateTime(OffsetDateTime(s)) => Some(("OffsetDateTime", s))
+33 |     TomlDateTime(OffsetDateTime(s)) => Some(("OffsetDateTime", s))
    |                  ^^^^^^^^^^^^^^
    |     TomlDateTime(LocalDateTime(s)) => Some(("LocalDateTime", s))
    |     TomlDateTime(LocalDate(s)) => Some(("LocalDate", s))
+
+<WORKDIR>/toml_cli/tojson.mbt:21:7-21:21:
+   |       }
+   |     TomlBoolean(b) => Json::boolean(b)
+   |     TomlDateTime(
+21 |       OffsetDateTime(s)
+   |       ^^^^^^^^^^^^^^
+   |       | LocalDateTime(s)
+   |       | LocalDate(s)
 
 <WORKDIR>/toml_test.mbt:83:38-83:52:
    | ///|
@@ -543,11 +552,11 @@ Found 61 references for symbol 'OffsetDateTime':
     |         ]),
     |       ),
 
-<WORKDIR>/toml_utils.mbt:654:18-654:32:
+<WORKDIR>/toml_utils.mbt:649:18-649:32:
     |   set_dotted_key_value(
     |     table,
     |     ["root", "nested", "datetime"],
-654 |     TomlDateTime(OffsetDateTime("2024-01-01T12:00:00Z")),
+649 |     TomlDateTime(OffsetDateTime("2024-01-01T12:00:00Z")),
     |                  ^^^^^^^^^^^^^^
     |   )
     |   debug_inspect(

@@ -15,8 +15,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
      offset_str,
 *** Update File: <WORKDIR>/datetime/datetime.mbt
 @@
- /// the spelling supplied in the TOML source; it does not normalize or
  /// validate the underlying calendar arithmetic.
+ #derive(Eq, Debug)
  pub(all) enum TomlDateTime {
 -  OffsetDateTime(String)
 +  OffsetDateTimeRenamed(String)
@@ -135,15 +135,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
 -    OffsetDateTime("2023-06-15T09:00:00+00:00"),
 +    OffsetDateTimeRenamed("2023-06-15T09:00:00+00:00"),
    )
-   sessions.push(@toml.TomlTable(session1))
    let session2 : Map[String, @toml.TomlValue] = Map([])
    session2["title"] = TomlString("Technical Workshop")
    session2["scheduled_at"] = TomlDateTime(
 -    OffsetDateTime("2023-06-15T14:00:00+00:00"),
 +    OffsetDateTimeRenamed("2023-06-15T14:00:00+00:00"),
    )
-   sessions.push(TomlTable(session2))
-   event_table["sessions"] = TomlArray(sessions)
+   event_table["sessions"] = TomlArray([TomlTable(session1), TomlTable(session2)])
+   let event_value = @toml.TomlTable(event_table)
 @@
    )
  
@@ -288,23 +287,19 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
      token,
 *** Update File: <WORKDIR>/internal/tokenize/tokenize.mbt
 @@
-           self.update_view(rest3)
-           let end_pos = self.get_loc()
-           DateTimeToken(
--            OffsetDateTime("\{datetime_str}Z"),
-+            OffsetDateTimeRenamed("\{datetime_str}Z"),
-             loc=make_loc(start_pos, end_pos),
-           )
-         } else if self.view() =~ (
-@@
-           validate_timezone_offset(offset)
-           let end_pos = self.get_loc()
-           DateTimeToken(
--            OffsetDateTime("\{datetime_str}\{offset}"),
-+            OffsetDateTimeRenamed("\{datetime_str}\{offset}"),
-             loc=make_loc(start_pos, end_pos),
-           )
-         } else {
+   let value : @datetime.TomlDateTime = if offset_start == len {
+     LocalDateTime(datetime.to_owned())
+   } else if text[offset_start] is ('Z' | 'z') {
+-    OffsetDateTime("\{datetime}Z")
++    OffsetDateTimeRenamed("\{datetime}Z")
+   } else {
+     let offset = text.unsafe_view(start=offset_start, end=len)
+     validate_timezone_offset(offset)
+-    OffsetDateTime("\{datetime}\{offset}")
++    OffsetDateTimeRenamed("\{datetime}\{offset}")
+   }
+   DateTimeToken(value, loc=self.span(start))
+ }
 *** Update File: <WORKDIR>/toml.mbt
 @@
  /// "OffsetDateTime", "LocalDateTime", "LocalDate", "LocalTime"
@@ -315,6 +310,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'OffsetDateTime' 'OffsetDate
      TomlDateTime(LocalDateTime(s)) => Some(("LocalDateTime", s))
      TomlDateTime(LocalDate(s)) => Some(("LocalDate", s))
      TomlDateTime(LocalTime(s)) => Some(("LocalTime", s))
+*** Update File: <WORKDIR>/toml_cli/tojson.mbt
+@@
+       }
+     TomlBoolean(b) => Json::boolean(b)
+     TomlDateTime(
+-      OffsetDateTime(s)
++      OffsetDateTimeRenamed(s)
+       | LocalDateTime(s)
+       | LocalDate(s)
+       | LocalTime(s),
 *** Update File: <WORKDIR>/toml_test.mbt
 @@
  ///|

@@ -152,7 +152,7 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
   let builder = StringBuilder::new()
                                ^^^
                                ```moonbit
-                               fn StringBuilder::new(size_hint? : Int) -> StringBuilder
+                               fn StringBuilder::new(capacity? : Int) -> StringBuilder
                                ```
                                ---
                                
@@ -160,13 +160,14 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
                                
                                 Parameters:
                                
-                                * `size_hint` : An optional initial capacity hint for the internal buffer,
+                                * `capacity` : The initial capacity of the internal buffer,
                                 in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
-                                buffer. `size_hint` may be ignored on some platforms, JS for example.
+                                buffer; its first write still reserves at least 8 code units. `capacity`
+                                may be ignored on some platforms, JS for example.
                                
                                 Returns a new `StringBuilder` instance.
                                
-                                Aborts if `size_hint` is negative.
+                                Aborts if `capacity` is negative.
   builder.write_string(text)
   (text.length(), text.split(" ").to_array(), builder.to_string())
 ```
@@ -181,6 +182,9 @@ pub fn exercise_string_core(text : String) -> (Int, Array[StringView], String) {
           ```moonbit
           fn StringBuilder::write_string(self : StringBuilder, str : String) -> Unit
           ```
+          ---
+          
+           Writes a string to the StringBuilder.
   (text.length(), text.split(" ").to_array(), builder.to_string())
 }
 ```
@@ -524,6 +528,9 @@ pub fn exercise_hashmap_map(
           returns a new map with the results, using the original keys.
          
           `f` may raise; the error propagates and `self` is left unchanged.
+         
+          `f` must not modify `self`: the result is then unspecified (it may, for
+          example, hold a key twice), though memory-safe.
 }
 "" (escaped)
 ```
@@ -614,8 +621,11 @@ pub fn build_core_scores() -> CoreScores {
   
    Creates a new hash map from an array of key-value pairs. Pairs with duplicate
    keys will keep the latest value, overwriting the previous ones.
-   The optional `capacity` is treated as a minimum initial capacity and will be
-   rounded up to the smallest power of 2 that can hold the requested capacity.
+   The optional `capacity` reserves room for at least that many total entries
+   without growing, including the entries in `arr`. A hint smaller than
+   `arr.length()` is ignored. Without a hint, an empty map uses a small default
+   size. Aborts if `capacity` is negative or if the requested entry count
+   exceeds the supported table size.
   
    Parameters:
   

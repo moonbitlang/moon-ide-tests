@@ -41,50 +41,10 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'additional_off
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
-/// Test EOF handling in parser - covered by creating empty token arrays
-test "parser_eof_handling" {
-  // Test empty parse input to exercise EOF conditions
-  let result = @toml.parse(
-      ^^^^^^
-      ```moonbit
-      @toml.TomlValue
-      ```
-    (
-      #|
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
-/// Test EOF handling in parser - covered by creating empty token arrays
-test "parser_eof_handling" {
-  // Test empty parse input to exercise EOF conditions
-  let result = @toml.parse(
-               ^^^^^^^^^^^
-               ```moonbit
-               fn @moonbit-community/toml.parse(input : String) -> @toml.TomlValue raise
-               ```
-               ---
-               
-                Parse a TOML document and return its root table as a `TomlValue`.
-               
-                On success the result is always a `TomlTable` whose contents reflect the
-                document's top-level keys, `[section]` headers, and `[[array]]` of
-                tables. Standard TOML 1.0 plus 1.1 features (optional seconds, `\xHH`
-                escapes, inline-table newlines) are accepted.
-               
-                On any lexical or syntactic error, `parse` raises with a message
-                containing the source location. Wrap the call in `try?` to receive a
-                `Result[TomlValue, Error]` instead.
-    (
-      #|
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
-/// Values are stored as their original string form. The parser preserves
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'TomlDateTime' --loc 'datetime/datetime.mbt:14:15'
 /// the spelling supplied in the TOML source; it does not normalize or
 /// validate the underlying calendar arithmetic.
+#derive(Eq, Debug)
 pub(all) enum TomlDateTime {
               ^^^^^^^^^^^^
               ```moonbit
@@ -114,9 +74,9 @@ pub(all) enum TomlDateTime {
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
-/// the spelling supplied in the TOML source; it does not normalize or
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'OffsetDateTime' --loc 'datetime/datetime.mbt:15:3'
 /// validate the underlying calendar arithmetic.
+#derive(Eq, Debug)
 pub(all) enum TomlDateTime {
   OffsetDateTime(String)
   ^^^^^^^^^^^^^^
@@ -187,17 +147,17 @@ test "tokenize simple key-value" {
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
-/// `adjacent` (no gap) when one's `end` equals the other's `start`, which
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Loc' --loc 'internal/tokenize/token.mbt:10:17'
 /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
 /// (a nested array literal opening a normal table header).
+#derive(Eq, Debug)
 pub(all) struct Loc {
                 ^^^
                 ```moonbit
                 #derive(Eq, @debug.Debug)
                 struct Loc {
-                  start: @lexer.Position
-                  end: @lexer.Position
+                  start: Position
+                  end: Position
                 }
                 ```
                 ---
@@ -209,23 +169,56 @@ pub(all) struct Loc {
                  `adjacent` (no gap) when one's `end` equals the other's `start`, which
                  the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
                  (a nested array literal opening a normal table header).
-  start : @lexer.Position
-  end : @lexer.Position
+  start : Position
+  end : Position
 ```
 
 ````mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'start' --loc 'internal/tokenize/token.mbt:10:3'
-/// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'start' --loc 'internal/tokenize/token.mbt:11:3'
 /// (a nested array literal opening a normal table header).
+#derive(Eq, Debug)
 pub(all) struct Loc {
-  start : @lexer.Position
+  start : Position
   ^^^^^
   ```moonbit
-  @lexer.Position
+  Position
   ```
-  end : @lexer.Position
-} derive(Eq, Debug)
+  end : Position
+}
 ````
+
+````mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'bench_document' --loc 'internal/tokenize/tokenize_bench_test.mbt:5:4'
+/// A document that exercises every kind of token: bare and quoted keys,
+/// strings with and without escapes, multi-line strings, numbers in each
+/// radix, floats, booleans, datetimes, comments, tables and arrays.
+fn bench_document() -> String {
+   ^^^^^^^^^^^^^^
+   ```moonbit
+   fn bench_document() -> String
+   ```
+   ---
+   
+    A document that exercises every kind of token: bare and quoted keys,
+    strings with and without escapes, multi-line strings, numbers in each
+    radix, floats, booleans, datetimes, comments, tables and arrays.
+  let sb = StringBuilder()
+  for i in 0..<500 {
+````
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' hover 'sb' --loc 'internal/tokenize/tokenize_bench_test.mbt:6:7'
+/// strings with and without escapes, multi-line strings, numbers in each
+/// radix, floats, booleans, datetimes, comments, tables and arrays.
+fn bench_document() -> String {
+  let sb = StringBuilder()
+      ^^
+      ```moonbit
+      StringBuilder
+      ```
+  for i in 0..<500 {
+    sb.write_string("# section \{i}: a comment 😈\n")
+```
 
 ````mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' hover 'Parser' --loc 'parser.mbt:3:4'

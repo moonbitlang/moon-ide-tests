@@ -1,6 +1,6 @@
 # json rename decode_start src\tests\top.mbt:2:14
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'decode_start' 'decode_start_renamed' --loc 'src\tests\top.mbt:2:14'
 *** Begin Patch
 *** Update File: <WORKDIR>/src\tests\incr.mbt
@@ -14,11 +14,11 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'decode_start' 'decode_start
    }
  }
 @@
-   guard compelet_json.to_array().chunks(6).map(String::from_array)
+   guard! compelet_json.to_array().chunks(6).map(String::from_array)
      is [first_chunk, .. chunks]
    // start parsing from `first_chunk`
--  guard continue_chunks(chunks, decode_start(first_chunk))
-+  guard continue_chunks(chunks, decode_start_renamed(first_chunk))
+-  guard! continue_chunks(chunks, decode_start(first_chunk))
++  guard! continue_chunks(chunks, decode_start_renamed(first_chunk))
      is Finish({ value, .. })
    let expected = Json::object({
      "foo": Json::object({ "bar": Json::number(1200.0) }),
@@ -29,4 +29,4 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'decode_start' 'decode_start
 +using @json {decode_start_renamed, decode_continue, type Value}
 *** End Patch
 "" (escaped)
-````
+```
