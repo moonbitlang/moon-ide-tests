@@ -12,11 +12,11 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc
  ///|
  using @cmd {type Cmd, type Emit}
 @@
- ///|
  /// An HTML value produced by the constructors in this package.
+ #derive(Eq)
  #alias(T)
--pub(all) struct Html(@vdom.VNode) derive(Eq)
-+pub(all) struct Html(@vdom.VNodeRenamed) derive(Eq)
+-pub(all) struct Html(@vdom.VNode)
++pub(all) struct Html(@vdom.VNodeRenamed)
  
  ///|
  pub extend Html with Eq::{equal, not_equal}

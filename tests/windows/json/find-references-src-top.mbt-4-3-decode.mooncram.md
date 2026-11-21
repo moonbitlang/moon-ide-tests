@@ -1,6 +1,6 @@
 # json find-references decode src\top.mbt:4:3
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'decode' --loc 'src\top.mbt:4:3'
 Found 8 references for symbol 'decode':
 <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt:8:13-8:19:
@@ -18,7 +18,7 @@ Found 8 references for symbol 'decode':
    | fn expect_reject(name : String, input : String) -> Unit raise {
 17 |   try @json.decode(input) catch {
    |             ^^^^^^
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
 
 <WORKDIR>/src\tests\json_testsuite_helpers_test.mbt:33:13-33:19:
@@ -27,7 +27,7 @@ Found 8 references for symbol 'decode':
    | fn expect_accept_or_reject(name : String, input : String) -> Unit raise {
 33 |   try @json.decode(input) catch {
    |             ^^^^^^
-"   |     @lib.ParseError(_) => ()" (escaped)
+   |     @lib.ParseError(_) => ()
    |     _ =>
 
 <WORKDIR>/src\tests\json_value_semantics_test.mbt:3:22-3:28:
@@ -74,4 +74,4 @@ Found 8 references for symbol 'decode':
    |   @debug.assert_eq(actual, Json::string("\u{1d11e}"))
    | }
 "" (escaped)
-````
+```

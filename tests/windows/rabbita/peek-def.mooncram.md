@@ -25,12 +25,12 @@ Definition found at file <WORKDIR>/rabbita\top.mbt
   | /// express subsequent changes, then call `App::mount` to start the app.
   | pub fn new(builder : () -> Val[Html]) -> App {
 Definition found at file <WORKDIR>/rabbita\html\html.mbt
-   | using @cmd {type Cmd, type Emit}
    | 
    | ///|
    | /// An HTML value produced by the constructors in this package.
+   | #derive(Eq)
    | #alias(T)
-10 | pub(all) struct Html(@vdom.VNode) derive(Eq)
+11 | pub(all) struct Html(@vdom.VNode)
    |                 ^^^^
    | 
    | ///|
@@ -143,12 +143,12 @@ Definition found at file <WORKDIR>/rabbita\top.mbt
   | /// express subsequent changes, then call `App::mount` to start the app.
   | pub fn new(builder : () -> Val[Html]) -> App {
 Definition found at file <WORKDIR>/rabbita\html\html.mbt
-   | using @cmd {type Cmd, type Emit}
    | 
    | ///|
    | /// An HTML value produced by the constructors in this package.
+   | #derive(Eq)
    | #alias(T)
-10 | pub(all) struct Html(@vdom.VNode) derive(Eq)
+11 | pub(all) struct Html(@vdom.VNode)
    |                 ^^^^
    | 
    | ///|
@@ -395,17 +395,18 @@ Definition found at file <WORKDIR>/rabbita\internal\vdom\vdom.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetSide' --loc 'rui\sheet.mbt:3:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetSide' --loc 'rui\sheet.mbt:4:15'
 Definition found at file <WORKDIR>/rui\sheet.mbt
   | ///|
   | /// Edge from which a [`sheet`] enters the viewport.
-3 | pub(all) enum SheetSide {
+  | #derive(Debug, Eq)
+4 | pub(all) enum SheetSide {
   |               ^^^^^^^^^
   |   SheetTop
   |   SheetRight
   |   SheetBottom
   |   SheetLeft
-  | } derive(Debug, Eq)
+  | }
   | 
   | ///|
   | pub extend SheetSide with Debug::{to_repr}
@@ -418,17 +419,18 @@ Definition found at file <WORKDIR>/rui\sheet.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetTop' --loc 'rui\sheet.mbt:4:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SheetTop' --loc 'rui\sheet.mbt:5:3'
 Definition found at file <WORKDIR>/rui\sheet.mbt
   | ///|
   | /// Edge from which a [`sheet`] enters the viewport.
+  | #derive(Debug, Eq)
   | pub(all) enum SheetSide {
-4 |   SheetTop
+5 |   SheetTop
   |   ^^^^^^^^
   |   SheetRight
   |   SheetBottom
   |   SheetLeft
-  | } derive(Debug, Eq)
+  | }
   | 
   | ///|
   | pub extend SheetSide with Debug::{to_repr}
@@ -442,25 +444,7 @@ Definition found at file <WORKDIR>/rui\sheet.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Path' --loc 'warren\path\sourcetree_path.mbt:2:15'
-Definition found at file <WORKDIR>/warren\path\sourcetree_path.mbt
-  | ///|
-2 | pub type Path = @p.Path
-  | ^^^^^^^^^^^^^^^^^^^^^^^
-  | 
-  | ///|
-  | struct SourcePath(String) derive(Eq, Compare, Hash)
-  | 
-  | ///|
-  | pub extend SourcePath with Eq::{equal, not_equal}
-  | 
-  | ///|
-  | pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
-  | 
-  | ///|
-  | pub extend SourcePath with Hash::{hash, hash_combine}
-  | 
-  | ///|
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Path' --loc 'warren\path\sourcetree_path.mbt:2:20'
 Definition found at file <WORKDIR>/.mooncakes\moonbitlang\x\path\path.mbt
    | ///|
    | let is_windows : Bool = @ffi.is_windows()
@@ -486,13 +470,14 @@ Definition found at file <WORKDIR>/.mooncakes\moonbitlang\x\path\path.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SourcePath' --loc 'warren\path\sourcetree_path.mbt:5:8'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'SourcePath' --loc 'warren\path\sourcetree_path.mbt:6:8'
 Definition found at file <WORKDIR>/warren\path\sourcetree_path.mbt
   | ///|
   | pub type Path = @p.Path
   | 
   | ///|
-5 | struct SourcePath(String) derive(Eq, Compare, Hash)
+  | #derive(Eq, Compare, Hash)
+6 | struct SourcePath(String)
   |        ^^^^^^^^^^
   | 
   | ///|
