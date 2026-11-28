@@ -10,47 +10,47 @@ Found 70 references for symbol 'VNode':
   | 
   | ///|
 
-<WORKDIR>/rabbita\html\html.mbt:10:28-10:33:
-   | ///|
+<WORKDIR>/rabbita\html\html.mbt:11:28-11:33:
    | /// An HTML value produced by the constructors in this package.
+   | #derive(Eq)
    | #alias(T)
-10 | pub(all) struct Html(@vdom.VNode) derive(Eq)
+11 | pub(all) struct Html(@vdom.VNode)
    |                            ^^^^^
    | 
    | ///|
 
-<WORKDIR>/rabbita\html\html.mbt:16:51-16:56:
+<WORKDIR>/rabbita\html\html.mbt:17:51-17:56:
    | pub extend Html with Eq::{equal, not_equal}
    | 
    | ///|
-16 | pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
+17 | pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
    |                                                   ^^^^^
    |   self.0
    | }
 
-<WORKDIR>/rabbita\html\html.mbt:21:38-21:43:
+<WORKDIR>/rabbita\html\html.mbt:22:38-22:43:
    | }
    | 
    | ///|
-21 | pub fn Html::from_vnode(vdom : @vdom.VNode) -> Html {
+22 | pub fn Html::from_vnode(vdom : @vdom.VNode) -> Html {
    |                                      ^^^^^
    |   Html(vdom)
    | }
 
-<WORKDIR>/rabbita\html\html.mbt:61:9-61:14:
+<WORKDIR>/rabbita\html\html.mbt:62:9-62:14:
    | 
    | ///|
    | pub fn fragment(children : Array[Html]) -> Html {
-61 |   @vdom.VNode::fragment(children.map(x => x.0))
+62 |   @vdom.VNode::fragment(children.map(x => x.0))
    |         ^^^^^
    | }
    | 
 
-<WORKDIR>/rabbita\html\html.mbt:881:9-881:14:
+<WORKDIR>/rabbita\html\html.mbt:882:9-882:14:
     |   push_style(style, attrs)
     |   push_class(class, attrs)
     |   push_id(id, attrs)
-881 |   @vdom.VNode::link(attrs.to_props(), children, escape~)
+882 |   @vdom.VNode::link(attrs.to_props(), children, escape~)
     |         ^^^^^
     | }
     | 
@@ -251,14 +251,14 @@ Found 70 references for symbol 'VNode':
     |   in_raw_text_element : Bool,
     | ) -> Unit {
 
-<WORKDIR>/rabbita\internal\vdom\ssr.mbt:226:42-226:47:
-    | }
+<WORKDIR>/rabbita\internal\vdom\ssr.mbt:227:18-227:23:
     | 
     | ///|
-226 | pub fn server_side_render(render : () -> VNode) -> String {
-    |                                          ^^^^^
-    |   let vnode = render()
-    |   let buf = StringBuilder()
+    | pub fn server_side_render(
+227 |   render : () -> VNode,
+    |                  ^^^^^
+    |   include_doctype~ : Bool = true,
+    | ) -> String {
 
 <WORKDIR>/rabbita\internal\vdom\ssr_wbtest.mbt:4:16-4:21:
   | ///|

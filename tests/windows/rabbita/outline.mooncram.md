@@ -290,72 +290,73 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rabbita\internal\vdom\vdom
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rui\sheet.mbt'
-  3 |pub(all) enum SheetSide {
+  3 |#derive(Debug, Eq)
+  4 |pub(all) enum SheetSide {
     |...
- 11 |pub extend SheetSide with Debug::{to_repr}
+ 12 |pub extend SheetSide with Debug::{to_repr}
     |...
- 14 |pub extend SheetSide with Eq::{equal, not_equal}
+ 15 |pub extend SheetSide with Eq::{equal, not_equal}
     |...
- 17 |const SheetStyle : String = "min-width:0;min-height:0;max-height:100dvh;margin:0;border:0;border-radius:0;box-shadow:0 16px 48px rgb(0 0 0 / 0.2)"
+ 18 |const SheetStyle : String = "min-width:0;min-height:0;max-height:100dvh;margin:0;border:0;border-radius:0;box-shadow:0 16px 48px rgb(0 0 0 / 0.2)"
     |...
- 20 |fn sheet_side_value(side : SheetSide) -> String {
+ 21 |fn sheet_side_value(side : SheetSide) -> String {
     |...
- 30 |fn sheet_side_style(side : SheetSide) -> String {
+ 31 |fn sheet_side_style(side : SheetSide) -> String {
     |...
- 44 |fn sheet_closed_transform(side : SheetSide) -> String {
+ 45 |fn sheet_closed_transform(side : SheetSide) -> String {
     |...
- 58 |pub fn[C : @html.IsChildren] sheet(
- 59 |  id? : String,
- 60 |  class? : String,
- 61 |  title? : String,
- 62 |  hidden? : Bool,
- 63 |  side~ : SheetSide = SheetRight,
- 64 |  open? : Bool,
- 65 |  closedby~ : String = "any",
- 66 |  show_close~ : Bool = true,
- 67 |  close_label~ : String = "Close",
- 68 |  on_close? : @cmd.Emit[String],
- 69 |  on_cancel? : @cmd.Cmd,
- 70 |  attrs? : @html.Attrs,
- 71 |  style~ : Array[String] = [],
- 72 |  children : C,
- 73 |) -> @html.Html {
+ 59 |pub fn[C : @html.IsChildren] sheet(
+ 60 |  id? : String,
+ 61 |  class? : String,
+ 62 |  title? : String,
+ 63 |  hidden? : Bool,
+ 64 |  side~ : SheetSide = SheetRight,
+ 65 |  open? : Bool,
+ 66 |  closedby~ : String = "any",
+ 67 |  show_close~ : Bool = true,
+ 68 |  close_label~ : String = "Close",
+ 69 |  on_close? : @cmd.Emit[String],
+ 70 |  on_cancel? : @cmd.Cmd,
+ 71 |  attrs? : @html.Attrs,
+ 72 |  style~ : Array[String] = [],
+ 73 |  children : C,
+ 74 |) -> @html.Html {
     |...
-126 |pub fn[C : @html.IsChildren] sheet_header(
-127 |  id? : String,
-128 |  class? : String,
-129 |  title? : String,
-130 |  attrs? : @html.Attrs,
-131 |  style~ : Array[String] = [],
-132 |  children : C,
-133 |) -> @html.Html {
+128 |pub fn[C : @html.IsChildren] sheet_header(
+129 |  id? : String,
+130 |  class? : String,
+131 |  title? : String,
+132 |  attrs? : @html.Attrs,
+133 |  style~ : Array[String] = [],
+134 |  children : C,
+135 |) -> @html.Html {
     |...
-148 |pub fn[C : @html.IsChildren] sheet_footer(
-149 |  id? : String,
-150 |  class? : String,
-151 |  title? : String,
-152 |  attrs? : @html.Attrs,
-153 |  style~ : Array[String] = [],
-154 |  children : C,
-155 |) -> @html.Html {
+150 |pub fn[C : @html.IsChildren] sheet_footer(
+151 |  id? : String,
+152 |  class? : String,
+153 |  title? : String,
+154 |  attrs? : @html.Attrs,
+155 |  style~ : Array[String] = [],
+156 |  children : C,
+157 |) -> @html.Html {
     |...
-173 |pub fn[C : @html.IsChildren] sheet_title(
-174 |  id? : String,
-175 |  class? : String,
-176 |  title? : String,
-177 |  attrs? : @html.Attrs,
-178 |  style~ : Array[String] = [],
-179 |  children : C,
-180 |) -> @html.Html {
+175 |pub fn[C : @html.IsChildren] sheet_title(
+176 |  id? : String,
+177 |  class? : String,
+178 |  title? : String,
+179 |  attrs? : @html.Attrs,
+180 |  style~ : Array[String] = [],
+181 |  children : C,
+182 |) -> @html.Html {
     |...
-192 |pub fn[C : @html.IsChildren] sheet_description(
-193 |  id? : String,
-194 |  class? : String,
-195 |  title? : String,
-196 |  attrs? : @html.Attrs,
-197 |  style~ : Array[String] = [],
-198 |  children : C,
-199 |) -> @html.Html {
+194 |pub fn[C : @html.IsChildren] sheet_description(
+195 |  id? : String,
+196 |  class? : String,
+197 |  title? : String,
+198 |  attrs? : @html.Attrs,
+199 |  style~ : Array[String] = [],
+200 |  children : C,
+201 |) -> @html.Html {
     |...
 "" (escaped)
 ```
@@ -364,27 +365,28 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'rui\sheet.mbt'
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'warren\path\sourcetree_path.mbt'
  2 |pub type Path = @p.Path
    |...
- 5 |struct SourcePath(String) derive(Eq, Compare, Hash)
+ 5 |#derive(Eq, Compare, Hash)
+ 6 |struct SourcePath(String)
    |...
- 8 |pub extend SourcePath with Eq::{equal, not_equal}
+ 9 |pub extend SourcePath with Eq::{equal, not_equal}
    |...
-11 |pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
+12 |pub extend SourcePath with Compare::{compare, op_ge, op_gt, op_le, op_lt}
    |...
-14 |pub extend SourcePath with Hash::{hash, hash_combine}
+15 |pub extend SourcePath with Hash::{hash, hash_combine}
    |...
-17 |pub impl Debug for SourcePath with fn to_repr(self) {
+18 |pub impl Debug for SourcePath with fn to_repr(self) {
    |...
-22 |pub extend SourcePath with Debug::{to_repr}
+23 |pub extend SourcePath with Debug::{to_repr}
    |...
-25 |pub fn SourcePath::new(s : String) -> Self {
+26 |pub fn SourcePath::new(s : String) -> Self {
    |...
-30 |pub impl Show for SourcePath with fn output(self, buf) {
+31 |pub impl Show for SourcePath with fn output(self, buf) {
    |...
-35 |pub extend SourcePath with Show::{output, to_string}
+36 |pub extend SourcePath with Show::{output, to_string}
    |...
-38 |pub fn SourcePath::join(a : Self, b : String) -> Self {
+39 |pub fn SourcePath::join(a : Self, b : String) -> Self {
    |...
-43 |pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
+44 |pub fn SourcePath::relative(a : Self, base : SourcePath) -> String {
    |...
 "" (escaped)
 ```

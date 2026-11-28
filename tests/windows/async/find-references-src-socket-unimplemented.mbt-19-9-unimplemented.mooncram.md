@@ -12,11 +12,11 @@ Found 4 references for symbol 'unimplemented':
    |   ignore(@pipe.unimplemented)
    | }
 
-<WORKDIR>/src\http\unimplemented.mbt:25:18-25:31:
-   |   ignore(() => @string.parse_int("0"))
+<WORKDIR>/src\http\unimplemented.mbt:26:18-26:31:
    |   ignore(@cmp.minimum(0, 0))
+   |   ignore(@utf8.encode(""))
    |   ignore(@io.pipe)
-25 |   ignore(@socket.unimplemented)
+26 |   ignore(@socket.unimplemented)
    |                  ^^^^^^^^^^^^^
    |   ignore(@tls.unimplemented)
    |   ignore(@io_buffer.new)
