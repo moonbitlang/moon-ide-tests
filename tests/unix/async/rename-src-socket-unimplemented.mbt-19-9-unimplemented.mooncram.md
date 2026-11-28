@@ -14,8 +14,8 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'unimplemented' 'unimplement
  }
 *** Update File: <WORKDIR>/src/http/unimplemented.mbt
 @@
-   ignore(() => @string.parse_int("0"))
    ignore(@cmp.minimum(0, 0))
+   ignore(@utf8.encode(""))
    ignore(@io.pipe)
 -  ignore(@socket.unimplemented)
 +  ignore(@socket.unimplemented_renamed)
@@ -51,7 +51,7 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'unimplemented' 'unimplement
 +  ignore(@socket.unimplemented_renamed)
    ignore(@process.unimplemented)
    ignore((f : async () -> Unit) => @test_util.assert_raise_async(f))
- }
+   ignore((_ : @cond_var.Cond) => ())
 *** End Patch
 "" (escaped)
 ```

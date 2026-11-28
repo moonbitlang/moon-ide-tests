@@ -2,7 +2,7 @@
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'parse_expect_to_fail' --loc 'test_utils_test.mbt:2:4'
-Found 85 references for symbol 'parse_expect_to_fail':
+Found 84 references for symbol 'parse_expect_to_fail':
 <WORKDIR>/comprehensive_test.mbt:425:5-425:25:
     | 
     |   // Missing value
@@ -10,7 +10,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 425 |     parse_expect_to_fail("key ="),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
+    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } }
 
 <WORKDIR>/comprehensive_test.mbt:432:5-432:25:
     |   )
@@ -19,7 +19,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 432 |     parse_expect_to_fail("= \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 2 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 2 } }
 
 <WORKDIR>/comprehensive_test.mbt:440:5-440:25:
     | 
@@ -28,7 +28,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 440 |     parse_expect_to_fail("key = \"unterminated"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Unterminated string at line 1, column 8)
+    |       #|Unterminated string at line 1, column 8
 
 <WORKDIR>/comprehensive_test.mbt:448:5-448:25:
     | 
@@ -37,7 +37,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 448 |     parse_expect_to_fail("key = [1, 2"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 12 }, end: { line: 1, column: 12 } })
+    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 12 }, end: { line: 1, column: 12 } }
 
 <WORKDIR>/comprehensive_test.mbt:456:5-456:25:
     | 
@@ -46,7 +46,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 456 |     parse_expect_to_fail(" = \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 3 } })
+    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 3 } }
 
 <WORKDIR>/comprehensive_test.mbt:469:5-469:25:
     | 
@@ -55,7 +55,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 469 |     parse_expect_to_fail("=missing_key"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 2 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 2 } }
 
 <WORKDIR>/comprehensive_test.mbt:477:5-477:25:
     | 
@@ -64,7 +64,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 477 |     parse_expect_to_fail("valid_key = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 13 }, end: { line: 1, column: 13 } })
+    |       #|Expected value at { start: { line: 1, column: 13 }, end: { line: 1, column: 13 } }
 
 <WORKDIR>/comprehensive_test.mbt:485:5-485:25:
     | 
@@ -73,7 +73,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 485 |     parse_expect_to_fail("   key = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 10 }, end: { line: 1, column: 10 } })
+    |       #|Expected value at { start: { line: 1, column: 10 }, end: { line: 1, column: 10 } }
 
 <WORKDIR>/comprehensive_test.mbt:493:5-493:25:
     | 
@@ -82,7 +82,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 493 |     parse_expect_to_fail("key \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected '=' at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } })
+    |       #|Expected '=' at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } }
 
 <WORKDIR>/comprehensive_test.mbt:501:5-501:25:
     | 
@@ -91,7 +91,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 501 |     parse_expect_to_fail("key = invalid_unquoted"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 23 } })
+    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 23 } }
 
 <WORKDIR>/comprehensive_test.mbt:518:5-518:25:
     |     #|key2 =
@@ -100,7 +100,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 518 |     parse_expect_to_fail(multiline_test1),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 2, column: 7 }, end: { line: 3, column: 1 } })
+    |       #|Expected value at { start: { line: 2, column: 7 }, end: { line: 3, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:531:5-531:25:
     |     #|= missing_key
@@ -109,7 +109,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 531 |     parse_expect_to_fail(multiline_test2),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 3, column: 1 }, end: { line: 3, column: 2 } })
+    |       #|Expected key at { start: { line: 3, column: 1 }, end: { line: 3, column: 2 } }
 
 <WORKDIR>/comprehensive_test.mbt:543:5-543:25:
     |     #|key2 = [1, 2,
@@ -118,7 +118,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 543 |     parse_expect_to_fail(multiline_test3),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 2, column: 14 }, end: { line: 3, column: 1 } })
+    |       #|Expected value at { start: { line: 2, column: 14 }, end: { line: 3, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:558:5-558:25:
     |     #|= error_here
@@ -127,7 +127,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 558 |     parse_expect_to_fail(multiline_test4),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 5, column: 1 }, end: { line: 5, column: 2 } })
+    |       #|Expected key at { start: { line: 5, column: 1 }, end: { line: 5, column: 2 } }
 
 <WORKDIR>/comprehensive_test.mbt:571:5-571:25:
     | 
@@ -136,7 +136,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 571 |     parse_expect_to_fail("arr = [1, 2, 3"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 15 }, end: { line: 1, column: 15 } })
+    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 15 }, end: { line: 1, column: 15 } }
 
 <WORKDIR>/comprehensive_test.mbt:579:5-579:25:
     | 
@@ -145,7 +145,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 579 |     parse_expect_to_fail("arr = [1 2]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 10 }, end: { line: 1, column: 11 } })
+    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 10 }, end: { line: 1, column: 11 } }
 
 <WORKDIR>/comprehensive_test.mbt:587:5-587:25:
     | 
@@ -154,7 +154,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 587 |     parse_expect_to_fail("arr = [1, invalid, 3]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 11 }, end: { line: 1, column: 18 } })
+    |       #|Expected value at { start: { line: 1, column: 11 }, end: { line: 1, column: 18 } }
 
 <WORKDIR>/comprehensive_test.mbt:595:5-595:25:
     | 
@@ -163,7 +163,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 595 |     parse_expect_to_fail("arr = [[1, 2], [3, ]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 21 }, end: { line: 1, column: 21 } })
+    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 21 }, end: { line: 1, column: 21 } }
 
 <WORKDIR>/comprehensive_test.mbt:610:5-610:25:
     |     #|]
@@ -172,7 +172,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 610 |     parse_expect_to_fail(array_multiline),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 3, column: 5 }, end: { line: 4, column: 1 } })
+    |       #|Expected value at { start: { line: 3, column: 5 }, end: { line: 4, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:623:5-623:25:
     | 
@@ -181,7 +181,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 623 |     parse_expect_to_fail("table = {key = \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 23 }, end: { line: 1, column: 23 } })
+    |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 23 }, end: { line: 1, column: 23 } }
 
 <WORKDIR>/comprehensive_test.mbt:631:5-631:25:
     | 
@@ -190,7 +190,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 631 |     parse_expect_to_fail("table = {= \"value\"}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 10 }, end: { line: 1, column: 11 } })
+    |       #|Expected key at { start: { line: 1, column: 10 }, end: { line: 1, column: 11 } }
 
 <WORKDIR>/comprehensive_test.mbt:639:5-639:25:
     | 
@@ -199,7 +199,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 639 |     parse_expect_to_fail("table = {key = }"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 16 }, end: { line: 1, column: 17 } })
+    |       #|Expected value at { start: { line: 1, column: 16 }, end: { line: 1, column: 17 } }
 
 <WORKDIR>/comprehensive_test.mbt:647:5-647:25:
     | 
@@ -208,7 +208,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 647 |     parse_expect_to_fail("table = {key \"value\"}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected '=' at { start: { line: 1, column: 14 }, end: { line: 1, column: 21 } })
+    |       #|Expected '=' at { start: { line: 1, column: 14 }, end: { line: 1, column: 21 } }
 
 <WORKDIR>/comprehensive_test.mbt:672:5-672:25:
     | 
@@ -217,7 +217,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 672 |     parse_expect_to_fail("[table_name"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ']' at { start: { line: 1, column: 12 }, end: { line: 1, column: 12 } })
+    |       #|Expected ']' at { start: { line: 1, column: 12 }, end: { line: 1, column: 12 } }
 
 <WORKDIR>/comprehensive_test.mbt:680:5-680:25:
     | 
@@ -226,7 +226,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 680 |     parse_expect_to_fail("[]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 3 } })
+    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 3 } }
 
 <WORKDIR>/comprehensive_test.mbt:688:5-688:25:
     | 
@@ -235,7 +235,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 688 |     parse_expect_to_fail("[[table_name]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ']]' at { start: { line: 1, column: 13 }, end: { line: 1, column: 14 } })
+    |       #|Expected ']]' at { start: { line: 1, column: 13 }, end: { line: 1, column: 14 } }
 
 <WORKDIR>/comprehensive_test.mbt:696:5-696:25:
     | 
@@ -244,7 +244,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 696 |     parse_expect_to_fail("[[]]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 3 }, end: { line: 1, column: 4 } })
+    |       #|Expected key at { start: { line: 1, column: 3 }, end: { line: 1, column: 4 } }
 
 <WORKDIR>/comprehensive_test.mbt:704:5-704:25:
     | 
@@ -253,7 +253,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 704 |     parse_expect_to_fail("[#invalid]"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 11 }, end: { line: 1, column: 11 } })
+    |       #|Expected key at { start: { line: 1, column: 11 }, end: { line: 1, column: 11 } }
 
 <WORKDIR>/comprehensive_test.mbt:717:5-717:25:
     | 
@@ -262,7 +262,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 717 |     parse_expect_to_fail("\tkey ="),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 7 } })
+    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 7 } }
 
 <WORKDIR>/comprehensive_test.mbt:725:5-725:25:
     | 
@@ -271,7 +271,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 725 |     parse_expect_to_fail("  key1 = \"val\"  key2 = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 17 }, end: { line: 1, column: 21 } })
+    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 17 }, end: { line: 1, column: 21 } }
 
 <WORKDIR>/comprehensive_test.mbt:733:5-733:25:
     | 
@@ -280,7 +280,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 733 |     parse_expect_to_fail("very_long_key_name_here = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 27 }, end: { line: 1, column: 27 } })
+    |       #|Expected value at { start: { line: 1, column: 27 }, end: { line: 1, column: 27 } }
 
 <WORKDIR>/comprehensive_test.mbt:741:5-741:25:
     | 
@@ -289,7 +289,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 741 |     parse_expect_to_fail("café = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Unexpected character: 'é')
+    |       #|Unexpected character: 'é'
 
 <WORKDIR>/comprehensive_test.mbt:749:5-749:25:
     | 
@@ -298,7 +298,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 749 |     parse_expect_to_fail("key = = \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 8 } })
+    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 8 } }
 
 <WORKDIR>/comprehensive_test.mbt:771:5-771:25:
     |     #|}
@@ -307,7 +307,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 771 |     parse_expect_to_fail(deep_nested),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 4, column: 12 }, end: { line: 5, column: 1 } })
+    |       #|Expected value at { start: { line: 4, column: 12 }, end: { line: 5, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:779:5-779:25:
     | 
@@ -316,7 +316,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 779 |     parse_expect_to_fail("key = [1, 2, 3"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 15 }, end: { line: 1, column: 15 } })
+    |       #|Expected ',' or ']' in array at { start: { line: 1, column: 15 }, end: { line: 1, column: 15 } }
 
 <WORKDIR>/comprehensive_test.mbt:787:5-787:25:
     | 
@@ -325,7 +325,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 787 |     parse_expect_to_fail("key = 'unterminated"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Unterminated string at line 1, column 8)
+    |       #|Unterminated string at line 1, column 8
 
 <WORKDIR>/comprehensive_test.mbt:802:5-802:25:
     |     #|name =
@@ -334,7 +334,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 802 |     parse_expect_to_fail(aot_error),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 5, column: 7 }, end: { line: 6, column: 1 } })
+    |       #|Expected value at { start: { line: 5, column: 7 }, end: { line: 6, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:815:5-815:25:
     |     #|
@@ -343,7 +343,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 815 |     parse_expect_to_fail(trailing_ws),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 2, column: 7 }, end: { line: 3, column: 1 } })
+    |       #|Expected value at { start: { line: 2, column: 7 }, end: { line: 3, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:828:5-828:25:
     | 
@@ -352,7 +352,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 828 |     parse_expect_to_fail("key = # comment"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 16 }, end: { line: 1, column: 16 } })
+    |       #|Expected value at { start: { line: 1, column: 16 }, end: { line: 1, column: 16 } }
 
 <WORKDIR>/comprehensive_test.mbt:836:5-836:25:
     | 
@@ -361,7 +361,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 836 |     parse_expect_to_fail("key1 = \"value\"\r\nkey2 = "),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 2, column: 8 }, end: { line: 2, column: 8 } })
+    |       #|Expected value at { start: { line: 2, column: 8 }, end: { line: 2, column: 8 } }
 
 <WORKDIR>/comprehensive_test.mbt:844:5-844:25:
     | 
@@ -370,7 +370,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 844 |     parse_expect_to_fail("   = \"value\""),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 4 }, end: { line: 1, column: 5 } })
+    |       #|Expected key at { start: { line: 1, column: 4 }, end: { line: 1, column: 5 } }
 
 <WORKDIR>/comprehensive_test.mbt:859:5-859:25:
     |     #|]
@@ -379,7 +379,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 859 |     parse_expect_to_fail(complex_array),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 4, column: 17 }, end: { line: 4, column: 30 } })
+    |       #|Expected value at { start: { line: 4, column: 17 }, end: { line: 4, column: 30 } }
 
 <WORKDIR>/comprehensive_test.mbt:868:5-868:25:
     |   // Test 5: Very long line with error at the end
@@ -388,7 +388,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 868 |     parse_expect_to_fail(long_line),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 63 }, end: { line: 1, column: 63 } })
+    |       #|Expected value at { start: { line: 1, column: 63 }, end: { line: 1, column: 63 } }
 
 <WORKDIR>/comprehensive_test.mbt:953:5-953:25:
     |     #|key1 =
@@ -397,7 +397,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 953 |     parse_expect_to_fail(data),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 2, column: 1 } })
+    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 2, column: 1 } }
 
 <WORKDIR>/comprehensive_test.mbt:964:5-964:25:
     |     #|   "localhost"
@@ -406,7 +406,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 964 |     parse_expect_to_fail(data2),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 18 }, end: { line: 2, column: 1 } })
+    |       #|Expected value at { start: { line: 1, column: 18 }, end: { line: 2, column: 1 } }
 
 <WORKDIR>/coverage_improvement_comprehensive_test.mbt:91:5-91:25:
    | /// Test invalid Unicode escape sequences to trigger error paths
@@ -478,7 +478,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 116 |     parse_expect_to_fail("+5 = 3\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:122:5-122:25:
     |     ),
@@ -487,7 +487,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 122 |     parse_expect_to_fail("+5.5 = 3\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:128:5-128:25:
     |     ),
@@ -496,7 +496,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 128 |     parse_expect_to_fail("+5e3 = 3\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:134:5-134:25:
     |     ),
@@ -505,7 +505,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 134 |     parse_expect_to_fail("+5y = 3\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 3 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:140:5-140:25:
     |     ),
@@ -514,7 +514,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 140 |     parse_expect_to_fail("[+5]\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 4 } })
+    |       #|Expected key at { start: { line: 1, column: 2 }, end: { line: 1, column: 4 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:146:5-146:25:
     |     ),
@@ -523,7 +523,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 146 |     parse_expect_to_fail("+inf = 1\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } })
+    |       #|Expected key at { start: { line: 1, column: 1 }, end: { line: 1, column: 5 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:174:5-174:25:
     |   // These used to silently wrap around (0xFFFFFFFFFFFFFFFF parsed as -1)
@@ -532,7 +532,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 174 |     parse_expect_to_fail("x = 0xFFFFFFFFFFFFFFFF\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid hex number: value out of Int64 range at line 1, column 5)
+    |       #|Invalid hex number: value out of Int64 range at line 1, column 5
 
 <WORKDIR>/key_value_disambiguation_test.mbt:180:5-180:25:
     |     ),
@@ -550,7 +550,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 188 |     parse_expect_to_fail("x = 0o2000000000000000000000\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid octal number: value out of Int64 range at line 1, column 5)
+    |       #|Invalid octal number: value out of Int64 range at line 1, column 5
 
 <WORKDIR>/key_value_disambiguation_test.mbt:213:5-213:25:
     |   // TOML 1.0: dotted keys define the tables for each key part, and such
@@ -559,7 +559,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 213 |     parse_expect_to_fail("fruit.apple = 1\n\n[fruit]\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Duplicate table definition: [fruit] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
+    |       #|Duplicate table definition: [fruit] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:219:5-219:25:
     |     ),
@@ -568,7 +568,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 219 |     parse_expect_to_fail("a.b.c = 1\n[a]\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Duplicate table definition: [a] at { start: { line: 2, column: 4 }, end: { line: 3, column: 1 } })
+    |       #|Duplicate table definition: [a] at { start: { line: 2, column: 4 }, end: { line: 3, column: 1 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:225:5-225:25:
     |     ),
@@ -577,7 +577,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 225 |     parse_expect_to_fail("a.b.c = 1\n[a.b]\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Duplicate table definition: [a.b] at { start: { line: 2, column: 6 }, end: { line: 3, column: 1 } })
+    |       #|Duplicate table definition: [a.b] at { start: { line: 2, column: 6 }, end: { line: 3, column: 1 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:231:5-231:25:
     |     ),
@@ -586,7 +586,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 231 |     parse_expect_to_fail("[[a]]\nb.c = 1\n[a.b]\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Duplicate table definition: [a.b] at { start: { line: 3, column: 6 }, end: { line: 4, column: 1 } })
+    |       #|Duplicate table definition: [a.b] at { start: { line: 3, column: 6 }, end: { line: 4, column: 1 } }
 
 <WORKDIR>/key_value_disambiguation_test.mbt:265:17-265:37:
     |     input in [
@@ -649,7 +649,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 548 |     parse_expect_to_fail(inf_failure_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid character 'x' after special value at line 1, column 11)
+    |       #|Invalid character 'x' after special value at line 1, column 11
 
 <WORKDIR>/official_toml_test_suite_test.mbt:557:5-557:25:
     |     #|inf = -infx=2
@@ -658,7 +658,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 557 |     parse_expect_to_fail(inf_failure_toml2),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid character 'x' after special value at line 1, column 11)
+    |       #|Invalid character 'x' after special value at line 1, column 11
 
 <WORKDIR>/official_toml_test_suite_test.mbt:566:5-566:25:
     |     #|inf = -inf x=2
@@ -667,7 +667,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 566 |     parse_expect_to_fail(inf_failure_toml2),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 12 }, end: { line: 1, column: 13 } })
+    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 12 }, end: { line: 1, column: 13 } }
 
 <WORKDIR>/official_toml_test_suite_test.mbt:575:5-575:25:
     |     #|a = 3 b = 2
@@ -676,7 +676,7 @@ Found 85 references for symbol 'parse_expect_to_fail':
 575 |     parse_expect_to_fail(table_failure),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 7 }, end: { line: 1, column: 8 } })
+    |       #|Expected newline or end of file after key-value pair at { start: { line: 1, column: 7 }, end: { line: 1, column: 8 } }
 
 <WORKDIR>/parser_test.mbt:138:5-138:25:
     | /// Tests for uncovered parser error conditions
@@ -685,76 +685,67 @@ Found 85 references for symbol 'parse_expect_to_fail':
 138 |     parse_expect_to_fail("key = [missing_bracket"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 8 }, end: { line: 1, column: 23 } })
+    |       #|Expected value at { start: { line: 1, column: 8 }, end: { line: 1, column: 23 } }
 
 <WORKDIR>/parser_test.mbt:162:5-162:25:
     | ///|
-    | test "test parser EOF handling in advance" {
-    |   inspect(
-162 |     parse_expect_to_fail("key ="),
-    |     ^^^^^^^^^^^^^^^^^^^^
-    |     content=(
-    |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
-
-<WORKDIR>/parser_test.mbt:172:5-172:25:
-    | ///|
     | test "test parser rejects dash-starting identifier as value" {
     |   inspect(
-172 |     parse_expect_to_fail("key = -abc"),
+162 |     parse_expect_to_fail("key = -abc"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 11 } })
+    |       #|Expected value at { start: { line: 1, column: 7 }, end: { line: 1, column: 11 } }
 
-<WORKDIR>/parser_test.mbt:196:5-196:25:
+<WORKDIR>/parser_test.mbt:186:5-186:25:
     | ///|
     | test "test inline table invalid syntax" {
     |   inspect(
-196 |     parse_expect_to_fail("table = {key value}"),
+186 |     parse_expect_to_fail("table = {key value}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected '=' at { start: { line: 1, column: 14 }, end: { line: 1, column: 19 } })
+    |       #|Expected '=' at { start: { line: 1, column: 14 }, end: { line: 1, column: 19 } }
 
-<WORKDIR>/parser_test.mbt:206:5-206:25:
+<WORKDIR>/parser_test.mbt:196:5-196:25:
     | ///|
     | test "test inline table missing comma or closing brace" {
     |   inspect(
-206 |     parse_expect_to_fail("table = {key = \"value\" invalid}"),
+196 |     parse_expect_to_fail("table = {key = \"value\" invalid}"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 24 }, end: { line: 1, column: 31 } })
+    |       #|Expected ',' or '}' in inline table at { start: { line: 1, column: 24 }, end: { line: 1, column: 31 } }
 
-<WORKDIR>/parser_test.mbt:396:5-396:25:
+<WORKDIR>/parser_test.mbt:386:5-386:25:
     |   // 1e100000 overflows Double but should NOT silently become infinity.
     |   // TOML reserves inf/nan as the only valid non-finite spellings.
     |   inspect(
-396 |     parse_expect_to_fail("x = 1e100000\n"),
+386 |     parse_expect_to_fail("x = 1e100000\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid float: 1e100000 at { start: { line: 1, column: 5 }, end: { line: 1, column: 13 } })
+    |       #|Invalid float: 1e100000 at { start: { line: 1, column: 5 }, end: { line: 1, column: 13 } }
 
-<WORKDIR>/parser_test.mbt:402:5-402:25:
+<WORKDIR>/parser_test.mbt:392:5-392:25:
     |     ),
     |   )
     |   inspect(
-402 |     parse_expect_to_fail("x = -31e368\n"),
+392 |     parse_expect_to_fail("x = -31e368\n"),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Invalid float: -31e368 at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } })
+    |       #|Invalid float: -31e368 at { start: { line: 1, column: 5 }, end: { line: 1, column: 12 } }
 
-<WORKDIR>/parser_test.mbt:495:5-495:25:
+<WORKDIR>/parser_test.mbt:485:5-485:25:
     |     #|key2 = "value2"
     |     #|
     |   inspect(
-495 |     parse_expect_to_fail(duplicate_table_toml),
+485 |     parse_expect_to_fail(duplicate_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
-    |       #|Duplicate table definition: [table] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } })
+    |       #|Duplicate table definition: [table] at { start: { line: 3, column: 8 }, end: { line: 4, column: 1 } }
 
-<WORKDIR>/parser_test.mbt:510:5-510:25:
+<WORKDIR>/parser_test.mbt:500:5-500:25:
     |     #|key = "value"
     |     #|
     |   inspect(
-510 |     parse_expect_to_fail(conflicting_table_toml),
+500 |     parse_expect_to_fail(conflicting_table_toml),
     |     ^^^^^^^^^^^^^^^^^^^^
     |     content=(
     |       #|ExpectedTable("table", "string
@@ -766,6 +757,6 @@ Found 85 references for symbol 'parse_expect_to_fail':
 26 |     parse_expect_to_fail("key ="),
    |     ^^^^^^^^^^^^^^^^^^^^
    |     content=(
-   |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } })
+   |       #|Expected value at { start: { line: 1, column: 6 }, end: { line: 1, column: 6 } }
 "" (escaped)
 ```

@@ -1,6 +1,6 @@
 # json find-references decode_continue src/tests/top.mbt:2:28
 
-````mooncram
+```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' find-references 'decode_continue' --loc 'src/tests/top.mbt:2:28'
 Found 1 references for symbol 'decode_continue':
 <WORKDIR>/src/tests/incr.mbt:11:29-11:44:
@@ -12,4 +12,4 @@ Found 1 references for symbol 'decode_continue':
    |     ([_, ..], Finish(_)) =>
    |       raise InspectError::InspectError("parser finished before all chunks")
 "" (escaped)
-````
+```

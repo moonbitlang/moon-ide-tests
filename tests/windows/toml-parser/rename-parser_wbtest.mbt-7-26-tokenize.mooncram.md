@@ -1061,15 +1061,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
        #|key = '''hello world'''
      ),
 @@
- test "tokenize else branch coverage" {
-   // This tests the else branch in tokenize function that should never be reached
-   // The function returns inside the while loop, so the else is unreachable
--  let tokens = @tokenize.tokenize(
-+  let tokens = @tokenize.tokenize_renamed(
-     (
-       #|key = "value"
-     ),
-@@
  ///|
  /// Test multiline basic string with single quote escape
  test "multiline basic string single quote escape" {
@@ -1132,15 +1123,6 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
      (
        #|key =
      ) +
-@@
- test "test hex overflow edge case" {
-   debug_inspect(
-     try
--      @tokenize.tokenize(
-+      @tokenize.tokenize_renamed(
-         (
-           #|hex = 0xFFFFFFFFFFFFFFFF
-         ),
 @@
    // Try to find a Unicode code that's valid as int but invalid as char
    // Code point 0x110000 is too large for valid Unicode
@@ -1257,9 +1239,27 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
  /// Tokenize entire input
 -pub fn tokenize(input : String) -> Array[Token] raise {
 +pub fn tokenize_renamed(input : String) -> Array[Token] raise {
-   let lexer = @lexer.Lexer::Lexer(input)
+   let lexer = Lexer::new(input)
    let tokens = []
-   for current_token = lexer.next_token() {
+   while true {
+@@
+ ///|
+ /// The value of the only string token in `input`.
+ fn string_value(input : String) -> String raise {
+-  match tokenize(input) {
++  match tokenize_renamed(input) {
+     [StringToken(value, ..), EOF(_)] => value
+     tokens => fail("not a single string: \{tokens.length()} tokens")
+   }
+@@
+ ///|
+ test "numbers and identifiers" {
+   debug_inspect(
+-    tokenize("123 hello-world_123 0xDEADBEEF 0o755 0b1010"),
++    tokenize_renamed("123 hello-world_123 0xDEADBEEF 0o755 0b1010"),
+     content=(
+       #|[
+       #|  IntegerToken(
 @@
  ///|
  /// Test datetime tokenization
@@ -1269,6 +1269,16 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'tokenize' 'tokenize_renamed
    debug_inspect(
      tokens,
      content=(
+*** Update File: <WORKDIR>/internal\tokenize\tokenize_bench_test.mbt
+@@
+ test "bench tokenize document" (it : @bench.T) {
+   let doc = bench_document()
+   it.bench(
+-    () => it.keep(Ok(@tokenize.tokenize(doc)) catch { e => Err(e) }),
++    () => it.keep(Ok(@tokenize.tokenize_renamed(doc)) catch { e => Err(e) }),
+     count=20,
+   )
+ }
 *** Update File: <WORKDIR>/parser.mbt
 @@
  /// containing the source location. Wrap the call in `try?` to receive a

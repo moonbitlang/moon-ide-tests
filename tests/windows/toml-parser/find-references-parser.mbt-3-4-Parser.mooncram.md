@@ -451,74 +451,74 @@ Found 58 references for symbol 'Parser':
     |   let result = parser.parse_dotted_key()
     |   debug_inspect(
 
-<WORKDIR>/toml.mbt:55:4-55:10:
+<WORKDIR>/toml.mbt:56:4-56:10:
    | /// breaks are insignificant (e.g. between top-level statements). The
    | /// parser's position is not advanced — callers commit progress by passing
    | /// the consumed tail back through `update_view`.
-55 | fn Parser::view(
+56 | fn Parser::view(
    |    ^^^^^^
    |   self : Self,
    |   skip_newlines~ : Bool = false,
 
-<WORKDIR>/toml.mbt:83:4-83:10:
+<WORKDIR>/toml.mbt:84:4-84:10:
    | /// from that point. The new position is read from the view's start offset
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
-83 | fn Parser::update_view(
+84 | fn Parser::update_view(
    |    ^^^^^^
    |   self : Parser,
    |   view : ArrayView[@tokenize.Token],
 
-<WORKDIR>/toml.mbt:84:10-84:16:
+<WORKDIR>/toml.mbt:85:10-85:16:
    | /// in the underlying token array, so the input must be a slice of
    | /// `self.tokens`.
    | fn Parser::update_view(
-84 |   self : Parser,
+85 |   self : Parser,
    |          ^^^^^^
    |   view : ArrayView[@tokenize.Token],
    | ) -> Unit {
 
-<WORKDIR>/toml.mbt:93:4-93:10:
+<WORKDIR>/toml.mbt:94:4-94:10:
    | 
    | ///|
    | /// Create a new parser
-93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+94 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |    ^^^^^^
    |   { tokens, position: 0, }
    | }
 
-<WORKDIR>/toml.mbt:93:12-93:18:
+<WORKDIR>/toml.mbt:94:12-94:18:
    | 
    | ///|
    | /// Create a new parser
-93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+94 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |            ^^^^^^
    |   { tokens, position: 0, }
    | }
 
-<WORKDIR>/toml.mbt:93:55-93:61:
+<WORKDIR>/toml.mbt:94:55-94:61:
    | 
    | ///|
    | /// Create a new parser
-93 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
+94 | fn Parser::Parser(tokens : Array[@tokenize.Token]) -> Parser {
    |                                                       ^^^^^^
    |   { tokens, position: 0, }
    | }
 
-<WORKDIR>/toml.mbt:106:16-106:22:
+<WORKDIR>/toml.mbt:107:16-107:22:
     |     Equals(loc~),
     |     StringToken("value", loc~, multiline=false),
     |   ]
-106 |   let parser = Parser::Parser(tokens)
+107 |   let parser = Parser::Parser(tokens)
     |                ^^^^^^
     |   debug_inspect(parser.position, content="0")
     |   debug_inspect(parser.tokens.length(), content="3")
 
-<WORKDIR>/toml.mbt:106:24-106:30:
+<WORKDIR>/toml.mbt:107:24-107:30:
     |     Equals(loc~),
     |     StringToken("value", loc~, multiline=false),
     |   ]
-106 |   let parser = Parser::Parser(tokens)
+107 |   let parser = Parser::Parser(tokens)
     |                        ^^^^^^
     |   debug_inspect(parser.position, content="0")
     |   debug_inspect(parser.tokens.length(), content="3")

@@ -53,72 +53,20 @@ Definition found at file <WORKDIR>/parser.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'result' --loc 'coverage_improvement_comprehensive_test.mbt:9:7'
-Definition found at file <WORKDIR>/coverage_improvement_comprehensive_test.mbt
-  | 
-  | ///|
-  | /// Test EOF handling in parser - covered by creating empty token arrays
-  | test "parser_eof_handling" {
-  |   // Test empty parse input to exercise EOF conditions
-9 |   let result = @toml.parse(
-  |       ^^^^^^
-  |     (
-  |       #|
-  |     ),
-  |   )
-  |   debug_inspect(
-  |     result,
-  |     content=(
-  |       #|TomlTable({})
-  |     ),
-  |   )
-  | }
-  | 
-  | ///|
-  | /// Test integer keys in inline tables
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'parse' --loc 'coverage_improvement_comprehensive_test.mbt:9:22'
-Definition found at file <WORKDIR>/parser.mbt
-    | /// escapes, inline-table newlines) are accepted.
-    | ///
-    | /// On any lexical or syntactic error, `parse` raises with a message
-    | /// containing the source location. Wrap the call in `try?` to receive a
-    | /// `Result[TomlValue, Error]` instead.
-333 | pub fn parse(input : String) -> TomlValue raise {
-    |        ^^^^^
-    |   let tokens = @tokenize.tokenize(input)
-    |   let parser = Parser::Parser(tokens)
-    |   let main_table = Map([])
-    |   for current_table = main_table {
-    |     parser.skip_newlines()
-    |     match parser.view() {
-    |       [EOF, ..] => break
-    |       [LeftBracket(loc=loc1), LeftBracket(loc=loc2), .. rest] => {
-    |         if !loc1.adjacent(loc2) {
-    |           parser.error("Invalid table header: space between '[' and '['")
-    |         }
-    |         parser.update_view(rest)
-    |         let table_path = parser.parse_table_path()
-    |         match parser.view() {
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'TomlDateTime' --loc 'datetime/datetime.mbt:13:15'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'TomlDateTime' --loc 'datetime/datetime.mbt:14:15'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
-   | /// - `LocalTime` — time only (e.g. `07:32:00`)
    | ///
    | /// Values are stored as their original string form. The parser preserves
    | /// the spelling supplied in the TOML source; it does not normalize or
    | /// validate the underlying calendar arithmetic.
-13 | pub(all) enum TomlDateTime {
+   | #derive(Eq, Debug)
+14 | pub(all) enum TomlDateTime {
    |               ^^^^^^^^^^^^
    |   OffsetDateTime(String)
    |   LocalDateTime(String)
    |   LocalDate(String)
    |   LocalTime(String)
-   | } derive(Eq, Debug)
+   | }
    | 
    | ///|
    | #deprecated("compare with `==`; the Eq impl is unaffected")
@@ -131,19 +79,19 @@ Definition found at file <WORKDIR>/datetime/datetime.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'OffsetDateTime' --loc 'datetime/datetime.mbt:14:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'OffsetDateTime' --loc 'datetime/datetime.mbt:15:3'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
-   | ///
    | /// Values are stored as their original string form. The parser preserves
    | /// the spelling supplied in the TOML source; it does not normalize or
    | /// validate the underlying calendar arithmetic.
+   | #derive(Eq, Debug)
    | pub(all) enum TomlDateTime {
-14 |   OffsetDateTime(String)
+15 |   OffsetDateTime(String)
    |   ^^^^^^^^^^^^^^
    |   LocalDateTime(String)
    |   LocalDate(String)
    |   LocalTime(String)
-   | } derive(Eq, Debug)
+   | }
    | 
    | ///|
    | #deprecated("compare with `==`; the Eq impl is unaffected")
@@ -183,17 +131,17 @@ Definition found at file <WORKDIR>/datetime_extended_test.mbt
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'OffsetDateTime' --loc 'datetime_extended_test.mbt:4:30'
 Definition found at file <WORKDIR>/datetime/datetime.mbt
-   | ///
    | /// Values are stored as their original string form. The parser preserves
    | /// the spelling supplied in the TOML source; it does not normalize or
    | /// validate the underlying calendar arithmetic.
+   | #derive(Eq, Debug)
    | pub(all) enum TomlDateTime {
-14 |   OffsetDateTime(String)
+15 |   OffsetDateTime(String)
    |   ^^^^^^^^^^^^^^
    |   LocalDateTime(String)
    |   LocalDate(String)
    |   LocalTime(String)
-   | } derive(Eq, Debug)
+   | }
    | 
    | ///|
    | #deprecated("compare with `==`; the Eq impl is unaffected")
@@ -233,67 +181,42 @@ Definition found at file <WORKDIR>/internal/tokenize/lexer_test.mbt
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'tokenize' --loc 'internal/tokenize/lexer_test.mbt:4:26'
 Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
-     |   }
-     | }
-     | 
-     | ///|
-     | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
-     |        ^^^^^^^^
-     |   let lexer = @lexer.Lexer::Lexer(input)
-     |   let tokens = []
-     |   for current_token = lexer.next_token() {
-     |     match current_token {
-     |       EOF(_) as t => {
-     |         tokens.push(t)
-     |         break tokens
-     |       }
-     |       _ as t => {
-     |         tokens.push(t)
-     |         continue lexer.next_token()
-     |       }
-     |     }
-     |   }
+    |   }
+    | }
+    | 
+    | ///|
+    | /// Tokenize entire input
+369 | pub fn tokenize(input : String) -> Array[Token] raise {
+    |        ^^^^^^^^
+    |   let lexer = Lexer::new(input)
+    |   let tokens = []
+    |   while true {
+    |     let token = lexer.next_token()
+    |     tokens.push(token)
+    |     if token is EOF(_) {
+    |       break
+    |     }
+    |   }
+    |   tokens
+    | }
+    | 
+    | ///|
+    | /// The value of the only string token in `input`.
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Loc' --loc 'internal/tokenize/token.mbt:9:17'
-Definition found at file <WORKDIR>/internal/tokenize/token.mbt
-  | /// `start` is the position of the first character of the lexeme and `end`
-  | /// is the position immediately after its last character. Two locations are
-  | /// `adjacent` (no gap) when one's `end` equals the other's `start`, which
-  | /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
-  | /// (a nested array literal opening a normal table header).
-9 | pub(all) struct Loc {
-  |                 ^^^
-  |   start : @lexer.Position
-  |   end : @lexer.Position
-  | } derive(Eq, Debug)
-  | 
-  | ///|
-  | #deprecated("compare with `==`; the Eq impl is unaffected")
-  | pub extend Loc with Eq::{not_equal, equal}
-  | 
-  | ///|
-  | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
-  | pub extend Loc with Debug::{to_repr}
-  | 
-  | ///|
-  | /// Token types for the lexer
-```
-
-```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'start' --loc 'internal/tokenize/token.mbt:10:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Loc' --loc 'internal/tokenize/token.mbt:10:17'
 Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | /// is the position immediately after its last character. Two locations are
    | /// `adjacent` (no gap) when one's `end` equals the other's `start`, which
    | /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
    | /// (a nested array literal opening a normal table header).
-   | pub(all) struct Loc {
-10 |   start : @lexer.Position
-   |   ^^^^^
-   |   end : @lexer.Position
-   | } derive(Eq, Debug)
+   | #derive(Eq, Debug)
+10 | pub(all) struct Loc {
+   |                 ^^^
+   |   start : Position
+   |   end : Position
+   | }
    | 
    | ///|
    | #deprecated("compare with `==`; the Eq impl is unaffected")
@@ -305,7 +228,83 @@ Definition found at file <WORKDIR>/internal/tokenize/token.mbt
    | 
    | ///|
    | /// Token types for the lexer
-   | pub(all) enum Token {
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'start' --loc 'internal/tokenize/token.mbt:11:3'
+Definition found at file <WORKDIR>/internal/tokenize/token.mbt
+   | /// `adjacent` (no gap) when one's `end` equals the other's `start`, which
+   | /// the parser uses to distinguish e.g. `[[` (array-of-tables) from `[ [`
+   | /// (a nested array literal opening a normal table header).
+   | #derive(Eq, Debug)
+   | pub(all) struct Loc {
+11 |   start : Position
+   |   ^^^^^
+   |   end : Position
+   | }
+   | 
+   | ///|
+   | #deprecated("compare with `==`; the Eq impl is unaffected")
+   | pub extend Loc with Eq::{not_equal, equal}
+   | 
+   | ///|
+   | #deprecated("render via the Debug trait, e.g. `debug_inspect`")
+   | pub extend Loc with Debug::{to_repr}
+   | 
+   | ///|
+   | /// Token types for the lexer
+   | #derive(Eq, Debug)
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'bench_document' --loc 'internal/tokenize/tokenize_bench_test.mbt:5:4'
+Definition found at file <WORKDIR>/internal/tokenize/tokenize_bench_test.mbt
+  | ///|
+  | /// A document that exercises every kind of token: bare and quoted keys,
+  | /// strings with and without escapes, multi-line strings, numbers in each
+  | /// radix, floats, booleans, datetimes, comments, tables and arrays.
+5 | fn bench_document() -> String {
+  |    ^^^^^^^^^^^^^^
+  |   let sb = StringBuilder()
+  |   for i in 0..<500 {
+  |     sb.write_string("# section \{i}: a comment 😈\n")
+  |     sb.write_string("[table_\{i}.\"quoted key\"]\n")
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\" # trailing comment\n")
+  |     sb.write_string("escaped = \"tab\\there \\u00e9 \\\"quoted\\\"\"\n")
+  |     sb.write_string("literal = 'C:\\Users\\nodejs\\templates'\n")
+  |     sb.write_string(
+  |       "multi = \"\"\"\nline one\nline two \\\n  continued\"\"\"\n",
+  |     )
+  |     sb.write_string("raw = '''\nfirst\nsecond'''\n")
+  |     sb.write_string("int = 1_000_\{i}\nhex = 0xDEAD_BEEF\nneg = -\{i}\n")
+  |     sb.write_string("float = 6.626e-34\nflag = true\n")
+  |     sb.write_string("when = 1979-05-27T07:32:00.999-07:00\nday = 1979-05-27\n")
+```
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'sb' --loc 'internal/tokenize/tokenize_bench_test.mbt:6:7'
+Definition found at file <WORKDIR>/internal/tokenize/tokenize_bench_test.mbt
+  | ///|
+  | /// A document that exercises every kind of token: bare and quoted keys,
+  | /// strings with and without escapes, multi-line strings, numbers in each
+  | /// radix, floats, booleans, datetimes, comments, tables and arrays.
+  | fn bench_document() -> String {
+6 |   let sb = StringBuilder()
+  |       ^^
+  |   for i in 0..<500 {
+  |     sb.write_string("# section \{i}: a comment 😈\n")
+  |     sb.write_string("[table_\{i}.\"quoted key\"]\n")
+  |     sb.write_string("key_\{i} = \"value 😈 \{i}\" # trailing comment\n")
+  |     sb.write_string("escaped = \"tab\\there \\u00e9 \\\"quoted\\\"\"\n")
+  |     sb.write_string("literal = 'C:\\Users\\nodejs\\templates'\n")
+  |     sb.write_string(
+  |       "multi = \"\"\"\nline one\nline two \\\n  continued\"\"\"\n",
+  |     )
+  |     sb.write_string("raw = '''\nfirst\nsecond'''\n")
+  |     sb.write_string("int = 1_000_\{i}\nhex = 0xDEAD_BEEF\nneg = -\{i}\n")
+  |     sb.write_string("float = 6.626e-34\nflag = true\n")
+  |     sb.write_string("when = 1979-05-27T07:32:00.999-07:00\nday = 1979-05-27\n")
+  |     sb.write_string("arr = [ 1, 2, 3, \"four\", { x = 5, y = 6 } ]\n")
 ```
 
 ```mooncram
@@ -316,7 +315,7 @@ Definition found at file <WORKDIR>/toml.mbt
    | 
    | ///|
    | /// Parser state (will implement methods later)
-42 | priv struct Parser {
+43 | priv struct Parser {
    |             ^^^^^^
    |   tokens : Array[@tokenize.Token]
    |   mut position : Int32
@@ -386,27 +385,27 @@ Definition found at file <WORKDIR>/parser_wbtest.mbt
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'tokenize' --loc 'parser_wbtest.mbt:7:26'
 Definition found at file <WORKDIR>/internal/tokenize/tokenize.mbt
-     |   }
-     | }
-     | 
-     | ///|
-     | /// Tokenize entire input
-1401 | pub fn tokenize(input : String) -> Array[Token] raise {
-     |        ^^^^^^^^
-     |   let lexer = @lexer.Lexer::Lexer(input)
-     |   let tokens = []
-     |   for current_token = lexer.next_token() {
-     |     match current_token {
-     |       EOF(_) as t => {
-     |         tokens.push(t)
-     |         break tokens
-     |       }
-     |       _ as t => {
-     |         tokens.push(t)
-     |         continue lexer.next_token()
-     |       }
-     |     }
-     |   }
+    |   }
+    | }
+    | 
+    | ///|
+    | /// Tokenize entire input
+369 | pub fn tokenize(input : String) -> Array[Token] raise {
+    |        ^^^^^^^^
+    |   let lexer = Lexer::new(input)
+    |   let tokens = []
+    |   while true {
+    |     let token = lexer.next_token()
+    |     tokens.push(token)
+    |     if token is EOF(_) {
+    |       break
+    |     }
+    |   }
+    |   tokens
+    | }
+    | 
+    | ///|
+    | /// The value of the only string token in `input`.
 ```
 
 ```mooncram

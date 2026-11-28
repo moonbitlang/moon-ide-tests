@@ -84,11 +84,11 @@ Found 10 references for symbol 'Text':
     |       showcase_copy_icon(),
     |     ),
 
-<WORKDIR>/website\homepage\main\main.mbt:898:29-898:33:
+<WORKDIR>/website\homepage\main\main.mbt:905:29-905:33:
     |             "qs-copy-btn"
     |           },
     |           on_click=batch([
-898 |             @clipboard.copy(Text(cmd)),
+905 |             @clipboard.copy(Text(cmd)),
     |                             ^^^^
     |             set_copied(_ => true),
     |             @rabbita.delay(set_copied(_ => false), 1500),

@@ -1848,83 +1848,83 @@ Found 297 references for symbol 'pretty_print':
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src/parser.mbt:741:34-741:46:
+<WORKDIR>/src/parser.mbt:742:34-742:46:
     | ///|
     | test "Parse simple select statement" {
     |   let tokens = [Keyword(Select), Mul, Keyword(From), Identifier("t"), Semicolon]
-741 |   let stmt = parse(tokens)[0] |> pretty_print
+742 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src/parser.mbt:756:34-756:46:
+<WORKDIR>/src/parser.mbt:757:34-757:46:
     | ///|
     | test "Parse USE database statement" {
     |   let tokens = [Keyword(Use), Identifier("mydb"), Semicolon]
-756 |   let stmt = parse(tokens)[0] |> pretty_print
+757 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(stmt, content="USE mydb;")
     | }
 
-<WORKDIR>/src/parser.mbt:769:34-769:46:
+<WORKDIR>/src/parser.mbt:770:34-770:46:
     |     Identifier("production"),
     |     Semicolon,
     |   ]
-769 |   let stmt = parse(tokens)[0] |> pretty_print
+770 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(stmt, content="USE company.production;")
     | }
 
-<WORKDIR>/src/parser.mbt:776:34-776:46:
+<WORKDIR>/src/parser.mbt:777:34-777:46:
     | ///|
     | test "Parse USE database statement with backtick quoted name" {
     |   let tokens = [Keyword(Use), Identifier("my database"), Semicolon]
-776 |   let stmt = parse(tokens)[0] |> pretty_print
+777 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(stmt, content="USE `my database`;")
     | }
 
-<WORKDIR>/src/parser.mbt:789:34-789:46:
+<WORKDIR>/src/parser.mbt:790:34-790:46:
     |     StringLiteral("/tmp/users.csv"),
     |     Semicolon,
     |   ]
-789 |   let stmt = parse(tokens)[0] |> pretty_print
+790 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(stmt, content="COPY users TO '/tmp/users.csv';")
     | }
 
-<WORKDIR>/src/parser.mbt:808:34-808:46:
+<WORKDIR>/src/parser.mbt:809:34-809:46:
     |     RParen,
     |     Semicolon,
     |   ]
-808 |   let stmt = parse(tokens)[0] |> pretty_print
+809 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src/parser.mbt:829:34-829:46:
+<WORKDIR>/src/parser.mbt:830:34-830:46:
     |     Keyword(Stdout),
     |     Semicolon,
     |   ]
-829 |   let stmt = parse(tokens)[0] |> pretty_print
+830 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(stmt, content="COPY orders (id, amount) TO STDOUT;")
     | }
 
-<WORKDIR>/src/parser.mbt:857:34-857:46:
+<WORKDIR>/src/parser.mbt:858:34-858:46:
     |     RParen,
     |     Semicolon,
     |   ]
-857 |   let stmt = parse(tokens)[0] |> pretty_print
+858 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(
     |     stmt,
 
-<WORKDIR>/src/parser.mbt:886:34-886:46:
+<WORKDIR>/src/parser.mbt:887:34-887:46:
     |     RParen,
     |     Semicolon,
     |   ]
-886 |   let stmt = parse(tokens)[0] |> pretty_print
+887 |   let stmt = parse(tokens)[0] |> pretty_print
     |                                  ^^^^^^^^^^^^
     |   inspect(
     |     stmt,

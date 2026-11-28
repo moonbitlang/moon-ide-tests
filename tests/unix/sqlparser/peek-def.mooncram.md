@@ -15,11 +15,11 @@ Definition found at file <WORKDIR>/src/ast.mbt
   | }
   | 
   | ///|
+  | #derive(Eq, Debug)
   | pub(all) struct Statements {
   |   /// The list of SQL statements parsed from the input.
   |   stmts : Array[Statement]
-  | } derive(Eq, Debug)
-  | 
+  | }
 ```
 
 ```mooncram
@@ -37,11 +37,11 @@ Definition found at file <WORKDIR>/src/ast.mbt
   | }
   | 
   | ///|
+  | #derive(Eq, Debug)
   | pub(all) struct Statements {
   |   /// The list of SQL statements parsed from the input.
   |   stmts : Array[Statement]
-  | } derive(Eq, Debug)
-  | 
+  | }
 ```
 
 ```mooncram
@@ -98,7 +98,7 @@ Definition found at file <WORKDIR>/src/parser.mbt
    | type ParserResult[T] = (T, ArrayView[Token])
    | 
    | ///|
-15 | pub struct Parser {
+16 | pub struct Parser {
    |            ^^^^^^
    |   dialect : &Dialect
    |   // recursion counter
@@ -189,16 +189,18 @@ Definition found at file <WORKDIR>/src/generic.mbt
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'LexerError' --loc 'src/lexer.mbt:2:10'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'LexerError' --loc 'src/lexer.mbt:3:10'
 Definition found at file <WORKDIR>/src/lexer.mbt
   | ///|
-2 | suberror LexerError {
+  | #derive(Debug)
+3 | suberror LexerError {
   |          ^^^^^^^^^^
   |   UnterminatedString
   |   UnknownCharacter(Char)
-  | } derive(Debug)
+  | }
   | 
   | ///|
+  | #derive(Eq, Debug)
   | pub(all) enum Token {
   |   Keyword(Keyword)
   |   Identifier(String)
@@ -207,20 +209,21 @@ Definition found at file <WORKDIR>/src/lexer.mbt
   |   Boolean(Bool)
   |   Comma
   |   Semicolon
-  |   Colon
 ```
 
 ```mooncram
-$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'UnterminatedString' --loc 'src/lexer.mbt:3:3'
+$ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'UnterminatedString' --loc 'src/lexer.mbt:4:3'
 Definition found at file <WORKDIR>/src/lexer.mbt
   | ///|
+  | #derive(Debug)
   | suberror LexerError {
-3 |   UnterminatedString
+4 |   UnterminatedString
   |   ^^^^^^^^^^^^^^^^^^
   |   UnknownCharacter(Char)
-  | } derive(Debug)
+  | }
   | 
   | ///|
+  | #derive(Eq, Debug)
   | pub(all) enum Token {
   |   Keyword(Keyword)
   |   Identifier(String)
@@ -230,7 +233,6 @@ Definition found at file <WORKDIR>/src/lexer.mbt
   |   Comma
   |   Semicolon
   |   Colon
-  |   Eq
 ```
 
 ```mooncram

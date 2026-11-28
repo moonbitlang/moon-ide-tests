@@ -1,0 +1,100 @@
+# sqlparser rename LexerError src\lexer.mbt:3:10
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'LexerError' 'LexerErrorRenamed' --loc 'src\lexer.mbt:3:10'
+*** Begin Patch
+*** Update File: <WORKDIR>/src\export.mbt
+@@
+ ///|
+ #derive(Debug)
+ pub suberror SqlParserError {
+-  LexerError(LexerError)
++  LexerError(LexerErrorRenamed)
+   ParserError(ParserError)
+ }
+ 
+*** Update File: <WORKDIR>/src\lexer.mbt
+@@
+ ///|
+ #derive(Debug)
+-suberror LexerError {
++suberror LexerErrorRenamed {
+   UnterminatedString
+   UnknownCharacter(Char)
+ }
+@@
+ pub fn tokenize(
+   dialect~ : &Dialect = MySQL::{ },
+   input : String,
+-) -> Array[Token] raise LexerError {
++) -> Array[Token] raise LexerErrorRenamed {
+   let lexer = Lexer::{ dialect, }
+   let tokens = []
+   for input = input[:] {
+@@
+ fn Lexer::next_token(
+   self : Lexer,
+   input : StringView,
+-) -> (Token, StringView) raise LexerError {
++) -> (Token, StringView) raise LexerErrorRenamed {
+   match skip_whitespace(input) {
+     [',', .. rest] => (Comma, rest)
+     // : followed by identifier is a named parameter, otherwise it's just Colon
+@@
+ fn Lexer::read_single_quoted_string(
+   self : Lexer,
+   input : StringView,
+-) -> (Token, StringView) raise LexerError {
++) -> (Token, StringView) raise LexerErrorRenamed {
+   let result = StringBuilder()
+   let rest = for rest = input {
+     match rest {
+@@
+ fn Lexer::read_double_quoted_string(
+   self : Lexer,
+   input : StringView,
+-) -> (Token, StringView) raise LexerError {
++) -> (Token, StringView) raise LexerErrorRenamed {
+   let result = StringBuilder()
+   let rest = for rest = input {
+     match rest {
+@@
+ fn Lexer::read_backtick_quoted_identifier(
+   self : Lexer,
+   input : StringView,
+-) -> (Token, StringView) raise LexerError {
++) -> (Token, StringView) raise LexerErrorRenamed {
+   let result = StringBuilder()
+   let rest = for rest = input {
+     match rest {
+@@
+ }
+ 
+ ///|
+-pub extend LexerError with Debug::{to_repr}
++pub extend LexerErrorRenamed with Debug::{to_repr}
+ 
+ ///|
+ pub extend Token with Debug::{to_repr}
+*** Update File: <WORKDIR>/src\show.mbt
+@@
+ }
+ 
+ ///|
+-pub impl Show for LexerError with fn output(self, logger) {
++pub impl Show for LexerErrorRenamed with fn output(self, logger) {
+   show_compact_debug(self, logger)
+ }
+ 
+@@
+ pub extend Keyword with Show::{to_string, output}
+ 
+ ///|
+-pub extend LexerError with Show::{to_string, output}
++pub extend LexerErrorRenamed with Show::{to_string, output}
+ 
+ ///|
+ pub extend Literal with Show::{to_string, output}
+*** End Patch
+"" (escaped)
+```

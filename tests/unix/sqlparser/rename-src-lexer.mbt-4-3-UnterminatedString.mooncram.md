@@ -1,0 +1,45 @@
+# sqlparser rename UnterminatedString src/lexer.mbt:4:3
+
+```mooncram
+$ moonx '../../../scripts/run-moon-ide.mbtx' rename 'UnterminatedString' 'UnterminatedStringRenamed' --loc 'src/lexer.mbt:4:3'
+*** Begin Patch
+*** Update File: <WORKDIR>/src/lexer.mbt
+@@
+ ///|
+ #derive(Debug)
+ suberror LexerError {
+-  UnterminatedString
++  UnterminatedStringRenamed
+   UnknownCharacter(Char)
+ }
+ 
+@@
+         result.write_char(c)
+         continue rest
+       }
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
+     }
+   }
+   (StringLiteral(result.to_string()), rest)
+@@
+         result.write_char(c)
+         continue rest
+       }
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
+     }
+   }
+   (StringLiteral(result.to_string()), rest)
+@@
+         result.write_char(c)
+         continue rest
+       }
+-      [] => raise UnterminatedString
++      [] => raise UnterminatedStringRenamed
+     }
+   }
+   (Identifier(result.to_string()), rest)
+*** End Patch
+"" (escaped)
+```

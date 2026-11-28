@@ -12,11 +12,11 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc
  ///|
  using @cmd {type Cmd, type Emit}
 @@
- ///|
  /// An HTML value produced by the constructors in this package.
+ #derive(Eq)
  #alias(T)
--pub(all) struct Html(@vdom.VNode) derive(Eq)
-+pub(all) struct Html(@vdom.VNodeRenamed) derive(Eq)
+-pub(all) struct Html(@vdom.VNode)
++pub(all) struct Html(@vdom.VNodeRenamed)
  
  ///|
  pub extend Html with Eq::{equal, not_equal}
@@ -252,14 +252,14 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' rename 'VNode' 'VNodeRenamed' --loc
  ) -> Unit {
    match children {
 @@
- }
  
  ///|
--pub fn server_side_render(render : () -> VNode) -> String {
-+pub fn server_side_render(render : () -> VNodeRenamed) -> String {
+ pub fn server_side_render(
+-  render : () -> VNode,
++  render : () -> VNodeRenamed,
+   include_doctype~ : Bool = true,
+ ) -> String {
    let vnode = render()
-   let buf = StringBuilder()
-   buf.write_string("<!DOCTYPE html>")
 *** Update File: <WORKDIR>/rabbita/internal/vdom/ssr_wbtest.mbt
 @@
  ///|

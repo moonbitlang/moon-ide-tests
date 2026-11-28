@@ -6,1122 +6,1229 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/ast.mbt'
      |...
    7 |pub fn[T : Show] structural_print(obj : T) -> String {
      |...
-  12 |pub(all) struct Statements {
+  12 |#derive(Eq, Debug)
+  13 |pub(all) struct Statements {
      |...
-  18 |pub impl @pp.Pretty for Statements with fn pretty(self) {
+  19 |pub impl @pp.Pretty for Statements with fn pretty(self) {
      |...
-  23 |#alias("_[_]")
-  24 |pub fn Statements::get(self : Self, index : Int32) -> Statement {
+  24 |#alias("_[_]")
+  25 |pub fn Statements::get(self : Self, index : Int32) -> Statement {
      |...
-  29 |pub(all) enum Statement {
+  30 |#derive(Eq, Debug)
+  31 |pub(all) enum Statement {
      |...
-  74 |pub impl @pp.Pretty for Statement with fn pretty(self) {
+  76 |pub impl @pp.Pretty for Statement with fn pretty(self) {
      |...
- 127 |pub(all) struct QueryStmt {
+ 129 |#derive(Eq, Debug)
+ 130 |pub(all) struct QueryStmt {
      |...
- 141 |pub impl @pp.Pretty for QueryStmt with fn pretty(self) {
+ 144 |pub impl @pp.Pretty for QueryStmt with fn pretty(self) {
      |...
- 173 |enum SetExpr {
+ 176 |#derive(Eq, Debug)
+ 177 |enum SetExpr {
      |...
- 183 |impl @pp.Pretty for SetExpr with fn pretty(self) {
+ 187 |impl @pp.Pretty for SetExpr with fn pretty(self) {
      |...
- 198 |struct SelectStmt {
+ 202 |#derive(Eq, Debug)
+ 203 |struct SelectStmt {
      |...
- 216 |pub impl @pp.Pretty for SelectStmt with fn pretty(self) {
+ 221 |pub impl @pp.Pretty for SelectStmt with fn pretty(self) {
      |...
- 262 |enum SetOperator {
+ 267 |#derive(Eq, Debug)
+ 268 |enum SetOperator {
      |...
- 269 |pub impl @pp.Pretty for SetOperator with fn pretty(self) {
+ 275 |pub impl @pp.Pretty for SetOperator with fn pretty(self) {
      |...
- 278 |pub(all) enum Projection {
+ 284 |#derive(Eq, Debug)
+ 285 |pub(all) enum Projection {
      |...
- 285 |pub impl @pp.Pretty for Projection with fn pretty(self) {
+ 292 |pub impl @pp.Pretty for Projection with fn pretty(self) {
      |...
- 295 |pub(all) enum Expr {
+ 302 |#derive(Eq, Debug)
+ 303 |pub(all) enum Expr {
      |...
- 351 |fn wrap_parens(expr : Expr, current_op : BinaryOperator) -> @pp.Document {
+ 359 |fn wrap_parens(expr : Expr, current_op : BinaryOperator) -> @pp.Document {
      |...
- 363 |pub impl @pp.Pretty for Expr with fn pretty(self) {
+ 371 |pub impl @pp.Pretty for Expr with fn pretty(self) {
      |...
- 462 |pub(all) enum Literal {
+ 470 |#derive(Eq, Debug)
+ 471 |pub(all) enum Literal {
      |...
- 471 |pub impl @pp.Pretty for Literal with fn pretty(self) {
+ 480 |pub impl @pp.Pretty for Literal with fn pretty(self) {
      |...
- 483 |pub(all) struct ArrayExpr {
+ 492 |#derive(Eq, Debug)
+ 493 |pub(all) struct ArrayExpr {
      |...
- 489 |pub impl @pp.Pretty for ArrayExpr with fn pretty(self) {
+ 499 |pub impl @pp.Pretty for ArrayExpr with fn pretty(self) {
      |...
- 498 |pub(all) enum AccessExpr {
+ 508 |#derive(Eq, Debug)
+ 509 |pub(all) enum AccessExpr {
      |...
- 504 |pub impl @pp.Pretty for AccessExpr with fn pretty(self) {
+ 515 |pub impl @pp.Pretty for AccessExpr with fn pretty(self) {
      |...
- 513 |pub(all) enum Subscript {
+ 524 |#derive(Eq, Debug)
+ 525 |pub(all) enum Subscript {
      |...
- 519 |pub impl @pp.Pretty for Subscript with fn pretty(self) {
+ 531 |pub impl @pp.Pretty for Subscript with fn pretty(self) {
      |...
- 543 |pub(all) struct Cte {
+ 555 |#derive(Eq, Debug)
+ 556 |pub(all) struct Cte {
      |...
- 550 |pub impl @pp.Pretty for Cte with fn pretty(self) {
+ 563 |pub impl @pp.Pretty for Cte with fn pretty(self) {
      |...
- 566 |pub(all) enum BinaryOperator {
+ 579 |#derive(Eq, Debug)
+ 580 |pub(all) enum BinaryOperator {
      |...
- 592 |pub impl @pp.Pretty for BinaryOperator with fn pretty(self) {
+ 606 |pub impl @pp.Pretty for BinaryOperator with fn pretty(self) {
      |...
- 620 |pub(all) enum UnaryOperator {
+ 634 |#derive(Eq, Debug)
+ 635 |pub(all) enum UnaryOperator {
      |...
- 627 |pub impl @pp.Pretty for UnaryOperator with fn pretty(self) {
+ 642 |pub impl @pp.Pretty for UnaryOperator with fn pretty(self) {
      |...
- 636 |pub(all) struct OrderByExpr {
+ 651 |#derive(Eq, Debug)
+ 652 |pub(all) struct OrderByExpr {
      |...
- 646 |pub impl @pp.Pretty for OrderByExpr with fn pretty(self) {
+ 662 |pub impl @pp.Pretty for OrderByExpr with fn pretty(self) {
      |...
- 661 |pub(all) struct TableRef {
+ 677 |#derive(Eq, Debug)
+ 678 |pub(all) struct TableRef {
      |...
- 667 |pub impl @pp.Pretty for TableRef with fn pretty(self) {
+ 684 |pub impl @pp.Pretty for TableRef with fn pretty(self) {
      |...
- 673 |pub(all) enum TableFactor {
+ 690 |#derive(Eq, Debug)
+ 691 |pub(all) enum TableFactor {
      |...
- 681 |pub impl @pp.Pretty for TableFactor with fn pretty(self) {
+ 699 |pub impl @pp.Pretty for TableFactor with fn pretty(self) {
      |...
- 699 |pub(all) struct TableAlias {
+ 717 |#derive(Eq, Debug)
+ 718 |pub(all) struct TableAlias {
      |...
- 707 |pub impl @pp.Pretty for TableAlias with fn pretty(self) {
+ 726 |pub impl @pp.Pretty for TableAlias with fn pretty(self) {
      |...
- 719 |pub(all) struct Join {
+ 738 |#derive(Eq, Debug)
+ 739 |pub(all) struct Join {
      |...
- 727 |pub impl @pp.Pretty for Join with fn pretty(self) {
+ 747 |pub impl @pp.Pretty for Join with fn pretty(self) {
      |...
- 746 |pub(all) enum JoinOperator {
+ 766 |#derive(Eq, Debug)
+ 767 |pub(all) enum JoinOperator {
      |...
- 759 |pub impl @pp.Pretty for JoinOperator with fn pretty(self) {
+ 780 |pub impl @pp.Pretty for JoinOperator with fn pretty(self) {
      |...
- 774 |pub(all) enum JoinConstraint {
+ 795 |#derive(Eq, Debug)
+ 796 |pub(all) enum JoinConstraint {
      |...
- 783 |pub impl @pp.Pretty for JoinConstraint with fn pretty(self) {
+ 805 |pub impl @pp.Pretty for JoinConstraint with fn pretty(self) {
      |...
- 798 |pub(all) enum IntervalQualifier {
+ 820 |#derive(Eq, Debug)
+ 821 |pub(all) enum IntervalQualifier {
      |...
- 806 |pub impl @pp.Pretty for IntervalQualifier with fn pretty(self) {
+ 829 |pub impl @pp.Pretty for IntervalQualifier with fn pretty(self) {
      |...
- 814 |struct PrimaryDatetimeField {
+ 837 |#derive(Eq, Debug)
+ 838 |struct PrimaryDatetimeField {
      |...
- 822 |pub impl @pp.Pretty for PrimaryDatetimeField with fn pretty(self) {
+ 846 |pub impl @pp.Pretty for PrimaryDatetimeField with fn pretty(self) {
      |...
- 834 |pub(all) enum DatetimeUnit {
+ 858 |#derive(Eq, Debug)
+ 859 |pub(all) enum DatetimeUnit {
      |...
- 844 |pub impl @pp.Pretty for DatetimeUnit with fn pretty(self) {
+ 869 |pub impl @pp.Pretty for DatetimeUnit with fn pretty(self) {
      |...
- 857 |pub(all) struct CaseExpr {
+ 882 |#derive(Eq, Debug)
+ 883 |pub(all) struct CaseExpr {
      |...
- 867 |pub impl @pp.Pretty for CaseExpr with fn pretty(self) {
+ 893 |pub impl @pp.Pretty for CaseExpr with fn pretty(self) {
      |...
- 897 |pub(all) struct WindowSpec {
+ 923 |#derive(Eq, Debug)
+ 924 |pub(all) struct WindowSpec {
      |...
- 908 |pub(all) struct WindowFrameClause {
+ 935 |#derive(Eq, Debug)
+ 936 |pub(all) struct WindowFrameClause {
      |...
- 918 |pub(all) enum WindowFrameUnits {
+ 946 |#derive(Eq, Debug)
+ 947 |pub(all) enum WindowFrameUnits {
      |...
- 925 |pub(all) enum WindowFrameBound {
+ 954 |#derive(Eq, Debug)
+ 955 |pub(all) enum WindowFrameBound {
      |...
- 934 |pub impl @pp.Pretty for WindowSpec with fn pretty(self) {
+ 964 |pub impl @pp.Pretty for WindowSpec with fn pretty(self) {
      |...
- 962 |pub impl @pp.Pretty for WindowFrameClause with fn pretty(self) {
+ 992 |pub impl @pp.Pretty for WindowFrameClause with fn pretty(self) {
      |...
- 979 |pub impl @pp.Pretty for WindowFrameBound with fn pretty(self) {
+1009 |pub impl @pp.Pretty for WindowFrameBound with fn pretty(self) {
      |...
- 990 |pub(all) struct CreateTableStmt {
+1020 |#derive(Eq, Debug)
+1021 |pub(all) struct CreateTableStmt {
      |...
-1000 |pub(all) enum CreateTableDefinition {
+1031 |#derive(Eq, Debug)
+1032 |pub(all) enum CreateTableDefinition {
      |...
-1008 |pub impl @pp.Pretty for CreateTableStmt with fn pretty(self) {
+1040 |pub impl @pp.Pretty for CreateTableStmt with fn pretty(self) {
      |...
-1017 |pub impl @pp.Pretty for CreateTableDefinition with fn pretty(self) {
+1049 |pub impl @pp.Pretty for CreateTableDefinition with fn pretty(self) {
      |...
-1042 |pub(all) struct ColumnDef {
+1074 |#derive(Eq, Debug)
+1075 |pub(all) struct ColumnDef {
      |...
-1049 |pub impl @pp.Pretty for ColumnDef with fn pretty(self) {
+1082 |pub impl @pp.Pretty for ColumnDef with fn pretty(self) {
      |...
-1057 |pub(all) enum DataType {
+1090 |#derive(Eq, Debug)
+1091 |pub(all) enum DataType {
      |...
-1074 |pub impl @pp.Pretty for DataType with fn pretty(self) {
+1108 |pub impl @pp.Pretty for DataType with fn pretty(self) {
      |...
-1093 |pub(all) enum ColumnDefOption {
+1127 |#derive(Eq, Debug)
+1128 |pub(all) enum ColumnDefOption {
      |...
-1101 |pub impl @pp.Pretty for ColumnDefOption with fn pretty(self) {
+1136 |pub impl @pp.Pretty for ColumnDefOption with fn pretty(self) {
      |...
-1111 |struct CreateViewStmt {
+1146 |#derive(Eq, Debug)
+1147 |struct CreateViewStmt {
      |...
-1121 |pub impl @pp.Pretty for CreateViewStmt with fn pretty(self) {
+1157 |pub impl @pp.Pretty for CreateViewStmt with fn pretty(self) {
      |...
-1138 |pub(all) struct ViewColumnDef {
+1174 |#derive(Eq, Debug)
+1175 |pub(all) struct ViewColumnDef {
      |...
-1144 |pub(all) struct CreateIndexStmt {
+1181 |#derive(Eq, Debug)
+1182 |pub(all) struct CreateIndexStmt {
      |...
-1162 |pub(all) enum IndexMethod {
+1200 |#derive(Eq, Debug)
+1201 |pub(all) enum IndexMethod {
      |...
-1173 |pub(all) struct IndexColumn {
+1212 |#derive(Eq, Debug)
+1213 |pub(all) struct IndexColumn {
      |...
-1180 |pub impl @pp.Pretty for CreateIndexStmt with fn pretty(self) {
+1220 |pub impl @pp.Pretty for CreateIndexStmt with fn pretty(self) {
      |...
-1204 |pub impl @pp.Pretty for IndexMethod with fn pretty(self) {
+1244 |pub impl @pp.Pretty for IndexMethod with fn pretty(self) {
      |...
-1216 |pub impl @pp.Pretty for IndexColumn with fn pretty(self) {
+1256 |pub impl @pp.Pretty for IndexColumn with fn pretty(self) {
      |...
-1231 |pub impl @pp.Pretty for ViewColumnDef with fn pretty(self) {
+1271 |pub impl @pp.Pretty for ViewColumnDef with fn pretty(self) {
      |...
-1237 |pub(all) struct CreateDatabaseStmt {
+1277 |#derive(Eq, Debug)
+1278 |pub(all) struct CreateDatabaseStmt {
      |...
-1249 |pub impl @pp.Pretty for CreateDatabaseStmt with fn pretty(self) {
+1290 |pub impl @pp.Pretty for CreateDatabaseStmt with fn pretty(self) {
      |...
-1265 |pub(all) struct CreateSchemaStmt {
+1306 |#derive(Eq, Debug)
+1307 |pub(all) struct CreateSchemaStmt {
      |...
-1275 |pub impl @pp.Pretty for CreateSchemaStmt with fn pretty(self) {
+1317 |pub impl @pp.Pretty for CreateSchemaStmt with fn pretty(self) {
      |...
-1287 |pub(all) struct CreateFunctionStmt {
+1329 |#derive(Eq, Debug)
+1330 |pub(all) struct CreateFunctionStmt {
      |...
-1306 |pub(all) struct FunctionParameter {
+1349 |#derive(Eq, Debug)
+1350 |pub(all) struct FunctionParameter {
      |...
-1317 |pub(all) enum ParameterMode {
+1361 |#derive(Eq, Debug)
+1362 |pub(all) enum ParameterMode {
      |...
-1325 |pub(all) struct CreateProcedureStmt {
+1370 |#derive(Eq, Debug)
+1371 |pub(all) struct CreateProcedureStmt {
      |...
-1339 |pub impl @pp.Pretty for CreateFunctionStmt with fn pretty(self) {
+1385 |pub impl @pp.Pretty for CreateFunctionStmt with fn pretty(self) {
      |...
-1361 |pub impl @pp.Pretty for CreateProcedureStmt with fn pretty(self) {
+1407 |pub impl @pp.Pretty for CreateProcedureStmt with fn pretty(self) {
      |...
-1379 |pub(all) struct CreateSequenceStmt {
+1425 |#derive(Eq, Debug)
+1426 |pub(all) struct CreateSequenceStmt {
      |...
-1404 |pub(all) enum SequenceLimit {
+1451 |#derive(Eq, Debug)
+1452 |pub(all) enum SequenceLimit {
      |...
-1413 |pub(all) enum SequenceOwnedBy {
+1461 |#derive(Eq, Debug)
+1462 |pub(all) enum SequenceOwnedBy {
      |...
-1421 |pub impl @pp.Pretty for CreateSequenceStmt with fn pretty(self) {
+1470 |pub impl @pp.Pretty for CreateSequenceStmt with fn pretty(self) {
      |...
-1463 |pub impl @pp.Pretty for SequenceLimit with fn pretty(self) {
+1512 |pub impl @pp.Pretty for SequenceLimit with fn pretty(self) {
      |...
-1471 |pub impl @pp.Pretty for SequenceOwnedBy with fn pretty(self) {
+1520 |pub impl @pp.Pretty for SequenceOwnedBy with fn pretty(self) {
      |...
-1479 |pub impl @pp.Pretty for FunctionParameter with fn pretty(self) {
+1528 |pub impl @pp.Pretty for FunctionParameter with fn pretty(self) {
      |...
-1492 |pub impl @pp.Pretty for ParameterMode with fn pretty(self) {
+1541 |pub impl @pp.Pretty for ParameterMode with fn pretty(self) {
      |...
-1501 |pub(all) struct DropViewStmt {
+1550 |#derive(Eq, Debug)
+1551 |pub(all) struct DropViewStmt {
      |...
-1507 |pub impl @pp.Pretty for DropViewStmt with fn pretty(self) {
+1557 |pub impl @pp.Pretty for DropViewStmt with fn pretty(self) {
      |...
-1512 |pub(all) enum DuplicateTreatment {
+1562 |#derive(Eq, Debug)
+1563 |pub(all) enum DuplicateTreatment {
      |...
-1520 |pub impl @pp.Pretty for DuplicateTreatment with fn pretty(self) {
+1571 |pub impl @pp.Pretty for DuplicateTreatment with fn pretty(self) {
      |...
-1528 |pub(all) enum TableConstraint {
+1579 |#derive(Eq, Debug)
+1580 |pub(all) enum TableConstraint {
      |...
-1540 |pub impl @pp.Pretty for TableConstraint with fn pretty(self) {
+1592 |pub impl @pp.Pretty for TableConstraint with fn pretty(self) {
      |...
-1564 |pub(all) struct ObjectName {
+1616 |#derive(Eq, Debug)
+1617 |pub(all) struct ObjectName {
      |...
-1570 |pub impl @pp.Pretty for ObjectName with fn pretty(self) {
+1623 |pub impl @pp.Pretty for ObjectName with fn pretty(self) {
      |...
-1585 |pub(all) enum Top {
+1638 |#derive(Eq, Debug)
+1639 |pub(all) enum Top {
      |...
-1591 |pub impl @pp.Pretty for Top with fn pretty(self) {
+1645 |pub impl @pp.Pretty for Top with fn pretty(self) {
      |...
-1599 |pub(all) struct InsertStmt {
+1653 |#derive(Eq, Debug)
+1654 |pub(all) struct InsertStmt {
      |...
-1613 |pub impl @pp.Pretty for InsertStmt with fn pretty(self) {
+1668 |pub impl @pp.Pretty for InsertStmt with fn pretty(self) {
      |...
-1637 |pub(all) enum InsertSource {
+1692 |#derive(Eq, Debug)
+1693 |pub(all) enum InsertSource {
      |...
-1645 |pub impl @pp.Pretty for InsertSource with fn pretty(self) {
+1701 |pub impl @pp.Pretty for InsertSource with fn pretty(self) {
      |...
-1660 |pub(all) struct DeleteStmt {
+1716 |#derive(Eq, Debug)
+1717 |pub(all) struct DeleteStmt {
      |...
-1668 |pub impl @pp.Pretty for DeleteStmt with fn pretty(self) {
+1725 |pub impl @pp.Pretty for DeleteStmt with fn pretty(self) {
      |...
-1678 |pub(all) struct UpdateStmt {
+1735 |#derive(Eq, Debug)
+1736 |pub(all) struct UpdateStmt {
      |...
-1688 |pub(all) struct Assignment {
+1746 |#derive(Eq, Debug)
+1747 |pub(all) struct Assignment {
      |...
-1696 |pub impl @pp.Pretty for UpdateStmt with fn pretty(self) {
+1755 |pub impl @pp.Pretty for UpdateStmt with fn pretty(self) {
      |...
-1709 |pub impl @pp.Pretty for Assignment with fn pretty(self) {
+1768 |pub impl @pp.Pretty for Assignment with fn pretty(self) {
      |...
-1715 |pub(all) struct MergeStmt {
+1774 |#derive(Eq, Debug)
+1775 |pub(all) struct MergeStmt {
      |...
-1732 |pub(all) enum MergeSource {
+1792 |#derive(Eq, Debug)
+1793 |pub(all) enum MergeSource {
      |...
-1741 |pub(all) struct MergeWhenClause {
+1802 |#derive(Eq, Debug)
+1803 |pub(all) struct MergeWhenClause {
      |...
-1752 |pub(all) enum MergeMatchType {
+1814 |#derive(Eq, Debug)
+1815 |pub(all) enum MergeMatchType {
      |...
-1761 |pub(all) enum MergeAction {
+1824 |#derive(Eq, Debug)
+1825 |pub(all) enum MergeAction {
      |...
-1771 |pub impl @pp.Pretty for MergeStmt with fn pretty(self) {
+1835 |pub impl @pp.Pretty for MergeStmt with fn pretty(self) {
      |...
-1800 |pub impl @pp.Pretty for MergeSource with fn pretty(self) {
+1864 |pub impl @pp.Pretty for MergeSource with fn pretty(self) {
      |...
-1809 |pub impl @pp.Pretty for MergeWhenClause with fn pretty(self) {
+1873 |pub impl @pp.Pretty for MergeWhenClause with fn pretty(self) {
      |...
-1821 |pub impl @pp.Pretty for MergeMatchType with fn pretty(self) {
+1885 |pub impl @pp.Pretty for MergeMatchType with fn pretty(self) {
      |...
-1829 |pub impl @pp.Pretty for MergeAction with fn pretty(self) {
+1893 |pub impl @pp.Pretty for MergeAction with fn pretty(self) {
      |...
-1849 |pub(all) struct TruncateStmt {
+1913 |#derive(Eq, Debug)
+1914 |pub(all) struct TruncateStmt {
      |...
-1855 |pub impl @pp.Pretty for TruncateStmt with fn pretty(self) {
+1920 |pub impl @pp.Pretty for TruncateStmt with fn pretty(self) {
      |...
-1860 |pub(all) struct DropTableStmt {
+1925 |#derive(Eq, Debug)
+1926 |pub(all) struct DropTableStmt {
      |...
-1868 |pub impl @pp.Pretty for DropTableStmt with fn pretty(self) {
+1934 |pub impl @pp.Pretty for DropTableStmt with fn pretty(self) {
      |...
-1875 |pub(all) struct DropIndexStmt {
+1941 |#derive(Eq, Debug)
+1942 |pub(all) struct DropIndexStmt {
      |...
-1887 |pub impl @pp.Pretty for DropIndexStmt with fn pretty(self) {
+1954 |pub impl @pp.Pretty for DropIndexStmt with fn pretty(self) {
      |...
-1899 |pub(all) struct AlterTableStmt {
+1966 |#derive(Eq, Debug)
+1967 |pub(all) struct AlterTableStmt {
      |...
-1909 |pub(all) enum AlterTableOperation {
+1977 |#derive(Eq, Debug)
+1978 |pub(all) enum AlterTableOperation {
      |...
-1915 |pub impl @pp.Pretty for AlterTableStmt with fn pretty(self) {
+1984 |pub impl @pp.Pretty for AlterTableStmt with fn pretty(self) {
      |...
-1924 |pub impl @pp.Pretty for AlterTableOperation with fn pretty(self) {
+1993 |pub impl @pp.Pretty for AlterTableOperation with fn pretty(self) {
      |...
-1935 |pub(all) struct AlterIndexStmt {
+2004 |#derive(Eq, Debug)
+2005 |pub(all) struct AlterIndexStmt {
      |...
-1946 |pub(all) enum AlterIndexOperation {
+2016 |#derive(Eq, Debug)
+2017 |pub(all) enum AlterIndexOperation {
      |...
-1959 |pub(all) struct IndexParameter {
+2030 |#derive(Eq, Debug)
+2031 |pub(all) struct IndexParameter {
      |...
-1965 |pub impl @pp.Pretty for AlterIndexStmt with fn pretty(self) {
+2037 |pub impl @pp.Pretty for AlterIndexStmt with fn pretty(self) {
      |...
-1974 |pub impl @pp.Pretty for AlterIndexOperation with fn pretty(self) {
+2046 |pub impl @pp.Pretty for AlterIndexOperation with fn pretty(self) {
      |...
-1991 |pub impl @pp.Pretty for IndexParameter with fn pretty(self) {
+2063 |pub impl @pp.Pretty for IndexParameter with fn pretty(self) {
      |...
-1997 |pub(all) struct ShowStmt {
+2069 |#derive(Eq, Debug)
+2070 |pub(all) struct ShowStmt {
      |...
-2011 |pub(all) enum ShowType {
+2084 |#derive(Eq, Debug)
+2085 |pub(all) enum ShowType {
      |...
-2030 |pub(all) enum ShowFilter {
+2104 |#derive(Eq, Debug)
+2105 |pub(all) enum ShowFilter {
      |...
-2036 |pub impl @pp.Pretty for ShowStmt with fn pretty(self) {
+2111 |pub impl @pp.Pretty for ShowStmt with fn pretty(self) {
      |...
-2063 |pub impl @pp.Pretty for ShowType with fn pretty(self) {
+2138 |pub impl @pp.Pretty for ShowType with fn pretty(self) {
      |...
-2084 |pub impl @pp.Pretty for ShowFilter with fn pretty(self) {
+2159 |pub impl @pp.Pretty for ShowFilter with fn pretty(self) {
      |...
-2092 |pub(all) struct SetStmt {
+2167 |#derive(Eq, Debug)
+2168 |pub(all) struct SetStmt {
      |...
-2100 |pub(all) enum SetScope {
+2176 |#derive(Eq, Debug)
+2177 |pub(all) enum SetScope {
      |...
-2108 |pub(all) struct SetAssignment {
+2185 |#derive(Eq, Debug)
+2186 |pub(all) struct SetAssignment {
      |...
-2116 |pub impl @pp.Pretty for SetStmt with fn pretty(self) {
+2194 |pub impl @pp.Pretty for SetStmt with fn pretty(self) {
      |...
-2128 |pub impl @pp.Pretty for SetAssignment with fn pretty(self) {
+2206 |pub impl @pp.Pretty for SetAssignment with fn pretty(self) {
      |...
-2139 |pub(all) struct UseStmt {
+2217 |#derive(Eq, Debug)
+2218 |pub(all) struct UseStmt {
      |...
-2145 |pub impl @pp.Pretty for UseStmt with fn pretty(self) {
+2224 |pub impl @pp.Pretty for UseStmt with fn pretty(self) {
      |...
-2151 |pub(all) struct CopyStmt {
+2230 |#derive(Eq, Debug)
+2231 |pub(all) struct CopyStmt {
      |...
-2164 |pub(all) enum CopySource {
+2244 |#derive(Eq, Debug)
+2245 |pub(all) enum CopySource {
      |...
-2173 |pub(all) enum CopyDirection {
+2254 |#derive(Eq, Debug)
+2255 |pub(all) enum CopyDirection {
      |...
-2182 |pub(all) enum CopyTarget {
+2264 |#derive(Eq, Debug)
+2265 |pub(all) enum CopyTarget {
      |...
-2195 |pub(all) enum CopyOption {
+2278 |#derive(Eq, Debug)
+2279 |pub(all) enum CopyOption {
      |...
-2220 |pub(all) enum CopyFormat {
+2304 |#derive(Eq, Debug)
+2305 |pub(all) enum CopyFormat {
      |...
-2228 |pub(all) enum CopyForceQuote {
+2313 |#derive(Eq, Debug)
+2314 |pub(all) enum CopyForceQuote {
      |...
-2236 |pub impl @pp.Pretty for CopyStmt with fn pretty(self) {
+2322 |pub impl @pp.Pretty for CopyStmt with fn pretty(self) {
      |...
-2254 |pub impl @pp.Pretty for CopySource with fn pretty(self) {
+2340 |pub impl @pp.Pretty for CopySource with fn pretty(self) {
      |...
-2270 |pub impl @pp.Pretty for CopyDirection with fn pretty(self) {
+2356 |pub impl @pp.Pretty for CopyDirection with fn pretty(self) {
      |...
-2278 |pub impl @pp.Pretty for CopyTarget with fn pretty(self) {
+2364 |pub impl @pp.Pretty for CopyTarget with fn pretty(self) {
      |...
-2289 |pub impl @pp.Pretty for CopyOption with fn pretty(self) {
+2375 |pub impl @pp.Pretty for CopyOption with fn pretty(self) {
      |...
-2317 |pub impl @pp.Pretty for CopyFormat with fn pretty(self) {
+2403 |pub impl @pp.Pretty for CopyFormat with fn pretty(self) {
      |...
-2326 |pub impl @pp.Pretty for CopyForceQuote with fn pretty(self) {
+2412 |pub impl @pp.Pretty for CopyForceQuote with fn pretty(self) {
      |...
-2336 |pub(all) enum OnInsert {
+2422 |#derive(Eq, Debug)
+2423 |pub(all) enum OnInsert {
      |...
-2344 |pub impl @pp.Pretty for OnInsert with fn pretty(self) {
+2431 |pub impl @pp.Pretty for OnInsert with fn pretty(self) {
      |...
-2357 |pub(all) struct OnConflictClause {
+2444 |#derive(Eq, Debug)
+2445 |pub(all) struct OnConflictClause {
      |...
-2366 |pub(all) enum ConflictTarget {
+2454 |#derive(Eq, Debug)
+2455 |pub(all) enum ConflictTarget {
      |...
-2377 |pub(all) enum ConflictAction {
+2466 |#derive(Eq, Debug)
+2467 |pub(all) enum ConflictAction {
      |...
-2385 |pub impl @pp.Pretty for OnConflictClause with fn pretty(self) {
+2475 |pub impl @pp.Pretty for OnConflictClause with fn pretty(self) {
      |...
-2394 |pub impl @pp.Pretty for ConflictTarget with fn pretty(self) {
+2484 |pub impl @pp.Pretty for ConflictTarget with fn pretty(self) {
      |...
-2410 |pub impl @pp.Pretty for ConflictAction with fn pretty(self) {
+2500 |pub impl @pp.Pretty for ConflictAction with fn pretty(self) {
      |...
-2426 |pub(all) enum SqliteOnConflict {
+2516 |#derive(Eq, Debug)
+2517 |pub(all) enum SqliteOnConflict {
      |...
-2435 |pub impl @pp.Pretty for SqliteOnConflict with fn pretty(self) {
+2526 |pub impl @pp.Pretty for SqliteOnConflict with fn pretty(self) {
      |...
-2448 |pub(all) struct BeginStmt {
+2539 |#derive(Eq, Debug)
+2540 |pub(all) struct BeginStmt {
      |...
-2455 |pub impl @pp.Pretty for BeginStmt with fn pretty(self) {
+2547 |pub impl @pp.Pretty for BeginStmt with fn pretty(self) {
      |...
-2462 |pub(all) struct CommitStmt {
+2554 |#derive(Eq, Debug)
+2555 |pub(all) struct CommitStmt {
      |...
-2469 |pub impl @pp.Pretty for CommitStmt with fn pretty(self) {
+2562 |pub impl @pp.Pretty for CommitStmt with fn pretty(self) {
      |...
-2476 |pub(all) struct RollbackStmt {
+2569 |#derive(Eq, Debug)
+2570 |pub(all) struct RollbackStmt {
      |...
-2484 |pub impl @pp.Pretty for RollbackStmt with fn pretty(self) {
+2578 |pub impl @pp.Pretty for RollbackStmt with fn pretty(self) {
      |...
-2495 |pub(all) struct SavepointStmt {
+2589 |#derive(Eq, Debug)
+2590 |pub(all) struct SavepointStmt {
      |...
-2501 |pub impl @pp.Pretty for SavepointStmt with fn pretty(self) {
+2596 |pub impl @pp.Pretty for SavepointStmt with fn pretty(self) {
      |...
-2506 |pub(all) struct ReleaseSavepointStmt {
+2601 |#derive(Eq, Debug)
+2602 |pub(all) struct ReleaseSavepointStmt {
      |...
-2513 |pub impl @pp.Pretty for ReleaseSavepointStmt with fn pretty(self) {
+2609 |pub impl @pp.Pretty for ReleaseSavepointStmt with fn pretty(self) {
      |...
-2522 |pub(all) struct GrantStmt {
+2618 |#derive(Eq, Debug)
+2619 |pub(all) struct GrantStmt {
      |...
-2531 |pub(all) enum Privilege {
+2628 |#derive(Eq, Debug)
+2629 |pub(all) enum Privilege {
      |...
-2552 |pub impl @pp.Pretty for GrantStmt with fn pretty(self) {
+2650 |pub impl @pp.Pretty for GrantStmt with fn pretty(self) {
      |...
-2567 |pub impl @pp.Pretty for Privilege with fn pretty(self) {
+2665 |pub impl @pp.Pretty for Privilege with fn pretty(self) {
      |...
-2611 |pub(all) struct RevokeStmt {
+2709 |#derive(Eq, Debug)
+2710 |pub(all) struct RevokeStmt {
      |...
-2621 |pub(all) enum RevokeOption {
+2720 |#derive(Eq, Debug)
+2721 |pub(all) enum RevokeOption {
      |...
-2627 |pub impl @pp.Pretty for RevokeStmt with fn pretty(self) {
+2727 |pub impl @pp.Pretty for RevokeStmt with fn pretty(self) {
      |...
-2647 |pub impl @pp.Pretty for RevokeOption with fn pretty(self) {
+2747 |pub impl @pp.Pretty for RevokeOption with fn pretty(self) {
      |...
-2656 |pub(all) struct LoadDataStmt {
+2756 |#derive(Eq, Debug)
+2757 |pub(all) struct LoadDataStmt {
      |...
-2680 |pub(all) enum LoadDataDuplicateHandling {
+2781 |#derive(Eq, Debug)
+2782 |pub(all) enum LoadDataDuplicateHandling {
      |...
-2687 |pub(all) struct LoadDataFieldsOptions {
+2789 |#derive(Eq, Debug)
+2790 |pub(all) struct LoadDataFieldsOptions {
      |...
-2699 |pub(all) struct LoadDataLinesOptions {
+2802 |#derive(Eq, Debug)
+2803 |pub(all) struct LoadDataLinesOptions {
      |...
-2707 |pub impl @pp.Pretty for LoadDataStmt with fn pretty(self) {
+2811 |pub impl @pp.Pretty for LoadDataStmt with fn pretty(self) {
      |...
-2759 |pub impl @pp.Pretty for LoadDataDuplicateHandling with fn pretty(self) {
+2863 |pub impl @pp.Pretty for LoadDataDuplicateHandling with fn pretty(self) {
      |...
-2767 |pub impl @pp.Pretty for LoadDataFieldsOptions with fn pretty(self) {
+2871 |pub impl @pp.Pretty for LoadDataFieldsOptions with fn pretty(self) {
      |...
-2798 |pub impl @pp.Pretty for LoadDataLinesOptions with fn pretty(self) {
+2902 |pub impl @pp.Pretty for LoadDataLinesOptions with fn pretty(self) {
      |...
-2820 |pub(all) struct PrepareStmt {
+2924 |#derive(Eq, Debug)
+2925 |pub(all) struct PrepareStmt {
      |...
-2830 |pub impl @pp.Pretty for PrepareStmt with fn pretty(self) {
+2935 |pub impl @pp.Pretty for PrepareStmt with fn pretty(self) {
      |...
-2897 |pub(all) struct ExecuteStmt {
+3002 |#derive(Eq, Debug)
+3003 |pub(all) struct ExecuteStmt {
      |...
-2911 |pub impl @pp.Pretty for ExecuteStmt with fn pretty(self) {
+3017 |pub impl @pp.Pretty for ExecuteStmt with fn pretty(self) {
      |...
-2944 |pub(all) struct DeallocateStmt {
+3050 |#derive(Eq, Debug)
+3051 |pub(all) struct DeallocateStmt {
      |...
-2952 |pub impl @pp.Pretty for DeallocateStmt with fn pretty(self) {
+3059 |pub impl @pp.Pretty for DeallocateStmt with fn pretty(self) {
      |...
-2959 |pub extend AccessExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
+3066 |pub extend AccessExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-2962 |pub extend AccessExpr with Debug::{to_repr}
+3069 |pub extend AccessExpr with Debug::{to_repr}
      |...
-2965 |pub extend AccessExpr with Eq::{not_equal, equal}
+3072 |pub extend AccessExpr with Eq::{not_equal, equal}
      |...
-2968 |pub extend AlterIndexOperation with @moonbit-community/prettyprinter.Pretty::{
-2969 |  pretty,
-2970 |}
+3075 |pub extend AlterIndexOperation with @moonbit-community/prettyprinter.Pretty::{
+3076 |  pretty,
+3077 |}
      |...
-2973 |pub extend AlterIndexOperation with Debug::{to_repr}
+3080 |pub extend AlterIndexOperation with Debug::{to_repr}
      |...
-2976 |pub extend AlterIndexOperation with Eq::{not_equal, equal}
+3083 |pub extend AlterIndexOperation with Eq::{not_equal, equal}
      |...
-2979 |pub extend AlterIndexStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3086 |pub extend AlterIndexStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-2982 |pub extend AlterIndexStmt with Debug::{to_repr}
+3089 |pub extend AlterIndexStmt with Debug::{to_repr}
      |...
-2985 |pub extend AlterIndexStmt with Eq::{not_equal, equal}
+3092 |pub extend AlterIndexStmt with Eq::{not_equal, equal}
      |...
-2988 |pub extend AlterTableOperation with @moonbit-community/prettyprinter.Pretty::{
-2989 |  pretty,
-2990 |}
+3095 |pub extend AlterTableOperation with @moonbit-community/prettyprinter.Pretty::{
+3096 |  pretty,
+3097 |}
      |...
-2993 |pub extend AlterTableOperation with Debug::{to_repr}
+3100 |pub extend AlterTableOperation with Debug::{to_repr}
      |...
-2996 |pub extend AlterTableOperation with Eq::{not_equal, equal}
+3103 |pub extend AlterTableOperation with Eq::{not_equal, equal}
      |...
-2999 |pub extend AlterTableStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3106 |pub extend AlterTableStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3002 |pub extend AlterTableStmt with Debug::{to_repr}
+3109 |pub extend AlterTableStmt with Debug::{to_repr}
      |...
-3005 |pub extend AlterTableStmt with Eq::{not_equal, equal}
+3112 |pub extend AlterTableStmt with Eq::{not_equal, equal}
      |...
-3008 |pub extend ArrayExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
+3115 |pub extend ArrayExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3011 |pub extend ArrayExpr with Debug::{to_repr}
+3118 |pub extend ArrayExpr with Debug::{to_repr}
      |...
-3014 |pub extend ArrayExpr with Eq::{not_equal, equal}
+3121 |pub extend ArrayExpr with Eq::{not_equal, equal}
      |...
-3017 |pub extend Assignment with @moonbit-community/prettyprinter.Pretty::{pretty}
+3124 |pub extend Assignment with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3020 |pub extend Assignment with Debug::{to_repr}
+3127 |pub extend Assignment with Debug::{to_repr}
      |...
-3023 |pub extend Assignment with Eq::{not_equal, equal}
+3130 |pub extend Assignment with Eq::{not_equal, equal}
      |...
-3026 |pub extend BeginStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3133 |pub extend BeginStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3029 |pub extend BeginStmt with Debug::{to_repr}
+3136 |pub extend BeginStmt with Debug::{to_repr}
      |...
-3032 |pub extend BeginStmt with Eq::{not_equal, equal}
+3139 |pub extend BeginStmt with Eq::{not_equal, equal}
      |...
-3035 |pub extend BinaryOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
+3142 |pub extend BinaryOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3038 |pub extend BinaryOperator with Debug::{to_repr}
+3145 |pub extend BinaryOperator with Debug::{to_repr}
      |...
-3041 |pub extend BinaryOperator with Eq::{not_equal, equal}
+3148 |pub extend BinaryOperator with Eq::{not_equal, equal}
      |...
-3044 |pub extend CaseExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
+3151 |pub extend CaseExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3047 |pub extend CaseExpr with Debug::{to_repr}
+3154 |pub extend CaseExpr with Debug::{to_repr}
      |...
-3050 |pub extend CaseExpr with Eq::{not_equal, equal}
+3157 |pub extend CaseExpr with Eq::{not_equal, equal}
      |...
-3053 |pub extend ColumnDef with @moonbit-community/prettyprinter.Pretty::{pretty}
+3160 |pub extend ColumnDef with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3056 |pub extend ColumnDef with Debug::{to_repr}
+3163 |pub extend ColumnDef with Debug::{to_repr}
      |...
-3059 |pub extend ColumnDef with Eq::{not_equal, equal}
+3166 |pub extend ColumnDef with Eq::{not_equal, equal}
      |...
-3062 |pub extend ColumnDefOption with @moonbit-community/prettyprinter.Pretty::{
-3063 |  pretty,
-3064 |}
+3169 |pub extend ColumnDefOption with @moonbit-community/prettyprinter.Pretty::{
+3170 |  pretty,
+3171 |}
      |...
-3067 |pub extend ColumnDefOption with Debug::{to_repr}
+3174 |pub extend ColumnDefOption with Debug::{to_repr}
      |...
-3070 |pub extend ColumnDefOption with Eq::{not_equal, equal}
+3177 |pub extend ColumnDefOption with Eq::{not_equal, equal}
      |...
-3073 |pub extend CommitStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3180 |pub extend CommitStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3076 |pub extend CommitStmt with Debug::{to_repr}
+3183 |pub extend CommitStmt with Debug::{to_repr}
      |...
-3079 |pub extend CommitStmt with Eq::{not_equal, equal}
+3186 |pub extend CommitStmt with Eq::{not_equal, equal}
      |...
-3082 |pub extend ConflictAction with @moonbit-community/prettyprinter.Pretty::{pretty}
+3189 |pub extend ConflictAction with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3085 |pub extend ConflictAction with Debug::{to_repr}
+3192 |pub extend ConflictAction with Debug::{to_repr}
      |...
-3088 |pub extend ConflictAction with Eq::{not_equal, equal}
+3195 |pub extend ConflictAction with Eq::{not_equal, equal}
      |...
-3091 |pub extend ConflictTarget with @moonbit-community/prettyprinter.Pretty::{pretty}
+3198 |pub extend ConflictTarget with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3094 |pub extend ConflictTarget with Debug::{to_repr}
+3201 |pub extend ConflictTarget with Debug::{to_repr}
      |...
-3097 |pub extend ConflictTarget with Eq::{not_equal, equal}
+3204 |pub extend ConflictTarget with Eq::{not_equal, equal}
      |...
-3100 |pub extend CopyDirection with @moonbit-community/prettyprinter.Pretty::{pretty}
+3207 |pub extend CopyDirection with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3103 |pub extend CopyDirection with Debug::{to_repr}
+3210 |pub extend CopyDirection with Debug::{to_repr}
      |...
-3106 |pub extend CopyDirection with Eq::{not_equal, equal}
+3213 |pub extend CopyDirection with Eq::{not_equal, equal}
      |...
-3109 |pub extend CopyForceQuote with @moonbit-community/prettyprinter.Pretty::{pretty}
+3216 |pub extend CopyForceQuote with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3112 |pub extend CopyForceQuote with Debug::{to_repr}
+3219 |pub extend CopyForceQuote with Debug::{to_repr}
      |...
-3115 |pub extend CopyForceQuote with Eq::{not_equal, equal}
+3222 |pub extend CopyForceQuote with Eq::{not_equal, equal}
      |...
-3118 |pub extend CopyFormat with @moonbit-community/prettyprinter.Pretty::{pretty}
+3225 |pub extend CopyFormat with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3121 |pub extend CopyFormat with Debug::{to_repr}
+3228 |pub extend CopyFormat with Debug::{to_repr}
      |...
-3124 |pub extend CopyFormat with Eq::{not_equal, equal}
+3231 |pub extend CopyFormat with Eq::{not_equal, equal}
      |...
-3127 |pub extend CopyOption with @moonbit-community/prettyprinter.Pretty::{pretty}
+3234 |pub extend CopyOption with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3130 |pub extend CopyOption with Debug::{to_repr}
+3237 |pub extend CopyOption with Debug::{to_repr}
      |...
-3133 |pub extend CopyOption with Eq::{not_equal, equal}
+3240 |pub extend CopyOption with Eq::{not_equal, equal}
      |...
-3136 |pub extend CopySource with @moonbit-community/prettyprinter.Pretty::{pretty}
+3243 |pub extend CopySource with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3139 |pub extend CopySource with Debug::{to_repr}
+3246 |pub extend CopySource with Debug::{to_repr}
      |...
-3142 |pub extend CopySource with Eq::{not_equal, equal}
+3249 |pub extend CopySource with Eq::{not_equal, equal}
      |...
-3145 |pub extend CopyStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3252 |pub extend CopyStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3148 |pub extend CopyStmt with Debug::{to_repr}
+3255 |pub extend CopyStmt with Debug::{to_repr}
      |...
-3151 |pub extend CopyStmt with Eq::{not_equal, equal}
+3258 |pub extend CopyStmt with Eq::{not_equal, equal}
      |...
-3154 |pub extend CopyTarget with @moonbit-community/prettyprinter.Pretty::{pretty}
+3261 |pub extend CopyTarget with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3157 |pub extend CopyTarget with Debug::{to_repr}
+3264 |pub extend CopyTarget with Debug::{to_repr}
      |...
-3160 |pub extend CopyTarget with Eq::{not_equal, equal}
+3267 |pub extend CopyTarget with Eq::{not_equal, equal}
      |...
-3163 |pub extend CreateDatabaseStmt with @moonbit-community/prettyprinter.Pretty::{
-3164 |  pretty,
-3165 |}
+3270 |pub extend CreateDatabaseStmt with @moonbit-community/prettyprinter.Pretty::{
+3271 |  pretty,
+3272 |}
      |...
-3168 |pub extend CreateDatabaseStmt with Debug::{to_repr}
+3275 |pub extend CreateDatabaseStmt with Debug::{to_repr}
      |...
-3171 |pub extend CreateDatabaseStmt with Eq::{not_equal, equal}
+3278 |pub extend CreateDatabaseStmt with Eq::{not_equal, equal}
      |...
-3174 |pub extend CreateFunctionStmt with @moonbit-community/prettyprinter.Pretty::{
-3175 |  pretty,
-3176 |}
+3281 |pub extend CreateFunctionStmt with @moonbit-community/prettyprinter.Pretty::{
+3282 |  pretty,
+3283 |}
      |...
-3179 |pub extend CreateFunctionStmt with Debug::{to_repr}
+3286 |pub extend CreateFunctionStmt with Debug::{to_repr}
      |...
-3182 |pub extend CreateFunctionStmt with Eq::{not_equal, equal}
+3289 |pub extend CreateFunctionStmt with Eq::{not_equal, equal}
      |...
-3185 |pub extend CreateIndexStmt with @moonbit-community/prettyprinter.Pretty::{
-3186 |  pretty,
-3187 |}
+3292 |pub extend CreateIndexStmt with @moonbit-community/prettyprinter.Pretty::{
+3293 |  pretty,
+3294 |}
      |...
-3190 |pub extend CreateIndexStmt with Debug::{to_repr}
+3297 |pub extend CreateIndexStmt with Debug::{to_repr}
      |...
-3193 |pub extend CreateIndexStmt with Eq::{not_equal, equal}
+3300 |pub extend CreateIndexStmt with Eq::{not_equal, equal}
      |...
-3196 |pub extend CreateProcedureStmt with @moonbit-community/prettyprinter.Pretty::{
-3197 |  pretty,
-3198 |}
+3303 |pub extend CreateProcedureStmt with @moonbit-community/prettyprinter.Pretty::{
+3304 |  pretty,
+3305 |}
      |...
-3201 |pub extend CreateProcedureStmt with Debug::{to_repr}
+3308 |pub extend CreateProcedureStmt with Debug::{to_repr}
      |...
-3204 |pub extend CreateProcedureStmt with Eq::{not_equal, equal}
+3311 |pub extend CreateProcedureStmt with Eq::{not_equal, equal}
      |...
-3207 |pub extend CreateSchemaStmt with @moonbit-community/prettyprinter.Pretty::{
-3208 |  pretty,
-3209 |}
+3314 |pub extend CreateSchemaStmt with @moonbit-community/prettyprinter.Pretty::{
+3315 |  pretty,
+3316 |}
      |...
-3212 |pub extend CreateSchemaStmt with Debug::{to_repr}
+3319 |pub extend CreateSchemaStmt with Debug::{to_repr}
      |...
-3215 |pub extend CreateSchemaStmt with Eq::{not_equal, equal}
+3322 |pub extend CreateSchemaStmt with Eq::{not_equal, equal}
      |...
-3218 |pub extend CreateSequenceStmt with @moonbit-community/prettyprinter.Pretty::{
-3219 |  pretty,
-3220 |}
+3325 |pub extend CreateSequenceStmt with @moonbit-community/prettyprinter.Pretty::{
+3326 |  pretty,
+3327 |}
      |...
-3223 |pub extend CreateSequenceStmt with Debug::{to_repr}
+3330 |pub extend CreateSequenceStmt with Debug::{to_repr}
      |...
-3226 |pub extend CreateSequenceStmt with Eq::{not_equal, equal}
+3333 |pub extend CreateSequenceStmt with Eq::{not_equal, equal}
      |...
-3229 |pub extend CreateTableDefinition with @moonbit-community/prettyprinter.Pretty::{
-3230 |  pretty,
-3231 |}
+3336 |pub extend CreateTableDefinition with @moonbit-community/prettyprinter.Pretty::{
+3337 |  pretty,
+3338 |}
      |...
-3234 |pub extend CreateTableDefinition with Debug::{to_repr}
+3341 |pub extend CreateTableDefinition with Debug::{to_repr}
      |...
-3237 |pub extend CreateTableDefinition with Eq::{not_equal, equal}
+3344 |pub extend CreateTableDefinition with Eq::{not_equal, equal}
      |...
-3240 |pub extend CreateTableStmt with @moonbit-community/prettyprinter.Pretty::{
-3241 |  pretty,
-3242 |}
+3347 |pub extend CreateTableStmt with @moonbit-community/prettyprinter.Pretty::{
+3348 |  pretty,
+3349 |}
      |...
-3245 |pub extend CreateTableStmt with Debug::{to_repr}
+3352 |pub extend CreateTableStmt with Debug::{to_repr}
      |...
-3248 |pub extend CreateTableStmt with Eq::{not_equal, equal}
+3355 |pub extend CreateTableStmt with Eq::{not_equal, equal}
      |...
-3251 |pub extend CreateViewStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3358 |pub extend CreateViewStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3254 |pub extend CreateViewStmt with Debug::{to_repr}
+3361 |pub extend CreateViewStmt with Debug::{to_repr}
      |...
-3257 |pub extend CreateViewStmt with Eq::{not_equal, equal}
+3364 |pub extend CreateViewStmt with Eq::{not_equal, equal}
      |...
-3260 |pub extend Cte with @moonbit-community/prettyprinter.Pretty::{pretty}
+3367 |pub extend Cte with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3263 |pub extend Cte with Debug::{to_repr}
+3370 |pub extend Cte with Debug::{to_repr}
      |...
-3266 |pub extend Cte with Eq::{not_equal, equal}
+3373 |pub extend Cte with Eq::{not_equal, equal}
      |...
-3269 |pub extend DataType with @moonbit-community/prettyprinter.Pretty::{pretty}
+3376 |pub extend DataType with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3272 |pub extend DataType with Debug::{to_repr}
+3379 |pub extend DataType with Debug::{to_repr}
      |...
-3275 |pub extend DataType with Eq::{not_equal, equal}
+3382 |pub extend DataType with Eq::{not_equal, equal}
      |...
-3278 |pub extend DatetimeUnit with @moonbit-community/prettyprinter.Pretty::{pretty}
+3385 |pub extend DatetimeUnit with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3281 |pub extend DatetimeUnit with Debug::{to_repr}
+3388 |pub extend DatetimeUnit with Debug::{to_repr}
      |...
-3284 |pub extend DatetimeUnit with Eq::{not_equal, equal}
+3391 |pub extend DatetimeUnit with Eq::{not_equal, equal}
      |...
-3287 |pub extend DeallocateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3394 |pub extend DeallocateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3290 |pub extend DeallocateStmt with Debug::{to_repr}
+3397 |pub extend DeallocateStmt with Debug::{to_repr}
      |...
-3293 |pub extend DeallocateStmt with Eq::{not_equal, equal}
+3400 |pub extend DeallocateStmt with Eq::{not_equal, equal}
      |...
-3296 |pub extend DeleteStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3403 |pub extend DeleteStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3299 |pub extend DeleteStmt with Debug::{to_repr}
+3406 |pub extend DeleteStmt with Debug::{to_repr}
      |...
-3302 |pub extend DeleteStmt with Eq::{not_equal, equal}
+3409 |pub extend DeleteStmt with Eq::{not_equal, equal}
      |...
-3305 |pub extend DropIndexStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3412 |pub extend DropIndexStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3308 |pub extend DropIndexStmt with Debug::{to_repr}
+3415 |pub extend DropIndexStmt with Debug::{to_repr}
      |...
-3311 |pub extend DropIndexStmt with Eq::{not_equal, equal}
+3418 |pub extend DropIndexStmt with Eq::{not_equal, equal}
      |...
-3314 |pub extend DropTableStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3421 |pub extend DropTableStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3317 |pub extend DropTableStmt with Debug::{to_repr}
+3424 |pub extend DropTableStmt with Debug::{to_repr}
      |...
-3320 |pub extend DropTableStmt with Eq::{not_equal, equal}
+3427 |pub extend DropTableStmt with Eq::{not_equal, equal}
      |...
-3323 |pub extend DropViewStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3430 |pub extend DropViewStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3326 |pub extend DropViewStmt with Debug::{to_repr}
+3433 |pub extend DropViewStmt with Debug::{to_repr}
      |...
-3329 |pub extend DropViewStmt with Eq::{not_equal, equal}
+3436 |pub extend DropViewStmt with Eq::{not_equal, equal}
      |...
-3332 |pub extend DuplicateTreatment with @moonbit-community/prettyprinter.Pretty::{
-3333 |  pretty,
-3334 |}
+3439 |pub extend DuplicateTreatment with @moonbit-community/prettyprinter.Pretty::{
+3440 |  pretty,
+3441 |}
      |...
-3337 |pub extend DuplicateTreatment with Debug::{to_repr}
+3444 |pub extend DuplicateTreatment with Debug::{to_repr}
      |...
-3340 |pub extend DuplicateTreatment with Eq::{not_equal, equal}
+3447 |pub extend DuplicateTreatment with Eq::{not_equal, equal}
      |...
-3343 |pub extend ExecuteStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3450 |pub extend ExecuteStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3346 |pub extend ExecuteStmt with Debug::{to_repr}
+3453 |pub extend ExecuteStmt with Debug::{to_repr}
      |...
-3349 |pub extend ExecuteStmt with Eq::{not_equal, equal}
+3456 |pub extend ExecuteStmt with Eq::{not_equal, equal}
      |...
-3352 |pub extend Expr with @moonbit-community/prettyprinter.Pretty::{pretty}
+3459 |pub extend Expr with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3355 |pub extend Expr with Debug::{to_repr}
+3462 |pub extend Expr with Debug::{to_repr}
      |...
-3358 |pub extend Expr with Eq::{not_equal, equal}
+3465 |pub extend Expr with Eq::{not_equal, equal}
      |...
-3361 |pub extend FunctionParameter with @moonbit-community/prettyprinter.Pretty::{
-3362 |  pretty,
-3363 |}
+3468 |pub extend FunctionParameter with @moonbit-community/prettyprinter.Pretty::{
+3469 |  pretty,
+3470 |}
      |...
-3366 |pub extend FunctionParameter with Debug::{to_repr}
+3473 |pub extend FunctionParameter with Debug::{to_repr}
      |...
-3369 |pub extend FunctionParameter with Eq::{not_equal, equal}
+3476 |pub extend FunctionParameter with Eq::{not_equal, equal}
      |...
-3372 |pub extend GrantStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3479 |pub extend GrantStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3375 |pub extend GrantStmt with Debug::{to_repr}
+3482 |pub extend GrantStmt with Debug::{to_repr}
      |...
-3378 |pub extend GrantStmt with Eq::{not_equal, equal}
+3485 |pub extend GrantStmt with Eq::{not_equal, equal}
      |...
-3381 |pub extend IndexColumn with @moonbit-community/prettyprinter.Pretty::{pretty}
+3488 |pub extend IndexColumn with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3384 |pub extend IndexColumn with Debug::{to_repr}
+3491 |pub extend IndexColumn with Debug::{to_repr}
      |...
-3387 |pub extend IndexColumn with Eq::{not_equal, equal}
+3494 |pub extend IndexColumn with Eq::{not_equal, equal}
      |...
-3390 |pub extend IndexMethod with @moonbit-community/prettyprinter.Pretty::{pretty}
+3497 |pub extend IndexMethod with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3393 |pub extend IndexMethod with Debug::{to_repr}
+3500 |pub extend IndexMethod with Debug::{to_repr}
      |...
-3396 |pub extend IndexMethod with Eq::{not_equal, equal}
+3503 |pub extend IndexMethod with Eq::{not_equal, equal}
      |...
-3399 |pub extend IndexParameter with @moonbit-community/prettyprinter.Pretty::{pretty}
+3506 |pub extend IndexParameter with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3402 |pub extend IndexParameter with Debug::{to_repr}
+3509 |pub extend IndexParameter with Debug::{to_repr}
      |...
-3405 |pub extend IndexParameter with Eq::{not_equal, equal}
+3512 |pub extend IndexParameter with Eq::{not_equal, equal}
      |...
-3408 |pub extend InsertSource with @moonbit-community/prettyprinter.Pretty::{pretty}
+3515 |pub extend InsertSource with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3411 |pub extend InsertSource with Debug::{to_repr}
+3518 |pub extend InsertSource with Debug::{to_repr}
      |...
-3414 |pub extend InsertSource with Eq::{not_equal, equal}
+3521 |pub extend InsertSource with Eq::{not_equal, equal}
      |...
-3417 |pub extend InsertStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3524 |pub extend InsertStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3420 |pub extend InsertStmt with Debug::{to_repr}
+3527 |pub extend InsertStmt with Debug::{to_repr}
      |...
-3423 |pub extend InsertStmt with Eq::{not_equal, equal}
+3530 |pub extend InsertStmt with Eq::{not_equal, equal}
      |...
-3426 |pub extend IntervalQualifier with @moonbit-community/prettyprinter.Pretty::{
-3427 |  pretty,
-3428 |}
+3533 |pub extend IntervalQualifier with @moonbit-community/prettyprinter.Pretty::{
+3534 |  pretty,
+3535 |}
      |...
-3431 |pub extend IntervalQualifier with Debug::{to_repr}
+3538 |pub extend IntervalQualifier with Debug::{to_repr}
      |...
-3434 |pub extend IntervalQualifier with Eq::{not_equal, equal}
+3541 |pub extend IntervalQualifier with Eq::{not_equal, equal}
      |...
-3437 |pub extend Join with @moonbit-community/prettyprinter.Pretty::{pretty}
+3544 |pub extend Join with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3440 |pub extend Join with Debug::{to_repr}
+3547 |pub extend Join with Debug::{to_repr}
      |...
-3443 |pub extend Join with Eq::{not_equal, equal}
+3550 |pub extend Join with Eq::{not_equal, equal}
      |...
-3446 |pub extend JoinConstraint with @moonbit-community/prettyprinter.Pretty::{pretty}
+3553 |pub extend JoinConstraint with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3449 |pub extend JoinConstraint with Debug::{to_repr}
+3556 |pub extend JoinConstraint with Debug::{to_repr}
      |...
-3452 |pub extend JoinConstraint with Eq::{not_equal, equal}
+3559 |pub extend JoinConstraint with Eq::{not_equal, equal}
      |...
-3455 |pub extend JoinOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
+3562 |pub extend JoinOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3458 |pub extend JoinOperator with Debug::{to_repr}
+3565 |pub extend JoinOperator with Debug::{to_repr}
      |...
-3461 |pub extend JoinOperator with Eq::{not_equal, equal}
+3568 |pub extend JoinOperator with Eq::{not_equal, equal}
      |...
-3464 |pub extend Literal with @moonbit-community/prettyprinter.Pretty::{pretty}
+3571 |pub extend Literal with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3467 |pub extend Literal with Debug::{to_repr}
+3574 |pub extend Literal with Debug::{to_repr}
      |...
-3470 |pub extend Literal with Eq::{not_equal, equal}
+3577 |pub extend Literal with Eq::{not_equal, equal}
      |...
-3473 |pub extend LoadDataDuplicateHandling with @moonbit-community/prettyprinter.Pretty::{
-3474 |  pretty,
-3475 |}
+3580 |pub extend LoadDataDuplicateHandling with @moonbit-community/prettyprinter.Pretty::{
+3581 |  pretty,
+3582 |}
      |...
-3478 |pub extend LoadDataDuplicateHandling with Debug::{to_repr}
+3585 |pub extend LoadDataDuplicateHandling with Debug::{to_repr}
      |...
-3481 |pub extend LoadDataDuplicateHandling with Eq::{not_equal, equal}
+3588 |pub extend LoadDataDuplicateHandling with Eq::{not_equal, equal}
      |...
-3484 |pub extend LoadDataFieldsOptions with @moonbit-community/prettyprinter.Pretty::{
-3485 |  pretty,
-3486 |}
+3591 |pub extend LoadDataFieldsOptions with @moonbit-community/prettyprinter.Pretty::{
+3592 |  pretty,
+3593 |}
      |...
-3489 |pub extend LoadDataFieldsOptions with Debug::{to_repr}
+3596 |pub extend LoadDataFieldsOptions with Debug::{to_repr}
      |...
-3492 |pub extend LoadDataFieldsOptions with Eq::{not_equal, equal}
+3599 |pub extend LoadDataFieldsOptions with Eq::{not_equal, equal}
      |...
-3495 |pub extend LoadDataLinesOptions with @moonbit-community/prettyprinter.Pretty::{
-3496 |  pretty,
-3497 |}
+3602 |pub extend LoadDataLinesOptions with @moonbit-community/prettyprinter.Pretty::{
+3603 |  pretty,
+3604 |}
      |...
-3500 |pub extend LoadDataLinesOptions with Debug::{to_repr}
+3607 |pub extend LoadDataLinesOptions with Debug::{to_repr}
      |...
-3503 |pub extend LoadDataLinesOptions with Eq::{not_equal, equal}
+3610 |pub extend LoadDataLinesOptions with Eq::{not_equal, equal}
      |...
-3506 |pub extend LoadDataStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3613 |pub extend LoadDataStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3509 |pub extend LoadDataStmt with Debug::{to_repr}
+3616 |pub extend LoadDataStmt with Debug::{to_repr}
      |...
-3512 |pub extend LoadDataStmt with Eq::{not_equal, equal}
+3619 |pub extend LoadDataStmt with Eq::{not_equal, equal}
      |...
-3515 |pub extend MergeAction with @moonbit-community/prettyprinter.Pretty::{pretty}
+3622 |pub extend MergeAction with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3518 |pub extend MergeAction with Debug::{to_repr}
+3625 |pub extend MergeAction with Debug::{to_repr}
      |...
-3521 |pub extend MergeAction with Eq::{not_equal, equal}
+3628 |pub extend MergeAction with Eq::{not_equal, equal}
      |...
-3524 |pub extend MergeMatchType with @moonbit-community/prettyprinter.Pretty::{pretty}
+3631 |pub extend MergeMatchType with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3527 |pub extend MergeMatchType with Debug::{to_repr}
+3634 |pub extend MergeMatchType with Debug::{to_repr}
      |...
-3530 |pub extend MergeMatchType with Eq::{not_equal, equal}
+3637 |pub extend MergeMatchType with Eq::{not_equal, equal}
      |...
-3533 |pub extend MergeSource with @moonbit-community/prettyprinter.Pretty::{pretty}
+3640 |pub extend MergeSource with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3536 |pub extend MergeSource with Debug::{to_repr}
+3643 |pub extend MergeSource with Debug::{to_repr}
      |...
-3539 |pub extend MergeSource with Eq::{not_equal, equal}
+3646 |pub extend MergeSource with Eq::{not_equal, equal}
      |...
-3542 |pub extend MergeStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3649 |pub extend MergeStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3545 |pub extend MergeStmt with Debug::{to_repr}
+3652 |pub extend MergeStmt with Debug::{to_repr}
      |...
-3548 |pub extend MergeStmt with Eq::{not_equal, equal}
+3655 |pub extend MergeStmt with Eq::{not_equal, equal}
      |...
-3551 |pub extend MergeWhenClause with @moonbit-community/prettyprinter.Pretty::{
-3552 |  pretty,
-3553 |}
+3658 |pub extend MergeWhenClause with @moonbit-community/prettyprinter.Pretty::{
+3659 |  pretty,
+3660 |}
      |...
-3556 |pub extend MergeWhenClause with Debug::{to_repr}
+3663 |pub extend MergeWhenClause with Debug::{to_repr}
      |...
-3559 |pub extend MergeWhenClause with Eq::{not_equal, equal}
+3666 |pub extend MergeWhenClause with Eq::{not_equal, equal}
      |...
-3562 |pub extend ObjectName with @moonbit-community/prettyprinter.Pretty::{pretty}
+3669 |pub extend ObjectName with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3565 |pub extend ObjectName with Debug::{to_repr}
+3672 |pub extend ObjectName with Debug::{to_repr}
      |...
-3568 |pub extend ObjectName with Eq::{not_equal, equal}
+3675 |pub extend ObjectName with Eq::{not_equal, equal}
      |...
-3571 |pub extend OnConflictClause with @moonbit-community/prettyprinter.Pretty::{
-3572 |  pretty,
-3573 |}
+3678 |pub extend OnConflictClause with @moonbit-community/prettyprinter.Pretty::{
+3679 |  pretty,
+3680 |}
      |...
-3576 |pub extend OnConflictClause with Debug::{to_repr}
+3683 |pub extend OnConflictClause with Debug::{to_repr}
      |...
-3579 |pub extend OnConflictClause with Eq::{not_equal, equal}
+3686 |pub extend OnConflictClause with Eq::{not_equal, equal}
      |...
-3582 |pub extend OnInsert with @moonbit-community/prettyprinter.Pretty::{pretty}
+3689 |pub extend OnInsert with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3585 |pub extend OnInsert with Debug::{to_repr}
+3692 |pub extend OnInsert with Debug::{to_repr}
      |...
-3588 |pub extend OnInsert with Eq::{not_equal, equal}
+3695 |pub extend OnInsert with Eq::{not_equal, equal}
      |...
-3591 |pub extend OrderByExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
+3698 |pub extend OrderByExpr with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3594 |pub extend OrderByExpr with Debug::{to_repr}
+3701 |pub extend OrderByExpr with Debug::{to_repr}
      |...
-3597 |pub extend OrderByExpr with Eq::{not_equal, equal}
+3704 |pub extend OrderByExpr with Eq::{not_equal, equal}
      |...
-3600 |pub extend ParameterMode with @moonbit-community/prettyprinter.Pretty::{pretty}
+3707 |pub extend ParameterMode with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3603 |pub extend ParameterMode with Debug::{to_repr}
+3710 |pub extend ParameterMode with Debug::{to_repr}
      |...
-3606 |pub extend ParameterMode with Eq::{not_equal, equal}
+3713 |pub extend ParameterMode with Eq::{not_equal, equal}
      |...
-3609 |pub extend PrepareStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3716 |pub extend PrepareStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3612 |pub extend PrepareStmt with Debug::{to_repr}
+3719 |pub extend PrepareStmt with Debug::{to_repr}
      |...
-3615 |pub extend PrepareStmt with Eq::{not_equal, equal}
+3722 |pub extend PrepareStmt with Eq::{not_equal, equal}
      |...
-3618 |pub extend PrimaryDatetimeField with @moonbit-community/prettyprinter.Pretty::{
-3619 |  pretty,
-3620 |}
+3725 |pub extend PrimaryDatetimeField with @moonbit-community/prettyprinter.Pretty::{
+3726 |  pretty,
+3727 |}
      |...
-3623 |pub extend PrimaryDatetimeField with Debug::{to_repr}
+3730 |pub extend PrimaryDatetimeField with Debug::{to_repr}
      |...
-3626 |pub extend PrimaryDatetimeField with Eq::{not_equal, equal}
+3733 |pub extend PrimaryDatetimeField with Eq::{not_equal, equal}
      |...
-3629 |pub extend Privilege with @moonbit-community/prettyprinter.Pretty::{pretty}
+3736 |pub extend Privilege with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3632 |pub extend Privilege with Debug::{to_repr}
+3739 |pub extend Privilege with Debug::{to_repr}
      |...
-3635 |pub extend Privilege with Eq::{not_equal, equal}
+3742 |pub extend Privilege with Eq::{not_equal, equal}
      |...
-3638 |pub extend Projection with @moonbit-community/prettyprinter.Pretty::{pretty}
+3745 |pub extend Projection with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3641 |pub extend Projection with Debug::{to_repr}
+3748 |pub extend Projection with Debug::{to_repr}
      |...
-3644 |pub extend Projection with Eq::{not_equal, equal}
+3751 |pub extend Projection with Eq::{not_equal, equal}
      |...
-3647 |pub extend QueryStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3754 |pub extend QueryStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3650 |pub extend QueryStmt with Debug::{to_repr}
+3757 |pub extend QueryStmt with Debug::{to_repr}
      |...
-3653 |pub extend QueryStmt with Eq::{not_equal, equal}
+3760 |pub extend QueryStmt with Eq::{not_equal, equal}
      |...
-3656 |pub extend ReleaseSavepointStmt with @moonbit-community/prettyprinter.Pretty::{
-3657 |  pretty,
-3658 |}
+3763 |pub extend ReleaseSavepointStmt with @moonbit-community/prettyprinter.Pretty::{
+3764 |  pretty,
+3765 |}
      |...
-3661 |pub extend ReleaseSavepointStmt with Debug::{to_repr}
+3768 |pub extend ReleaseSavepointStmt with Debug::{to_repr}
      |...
-3664 |pub extend ReleaseSavepointStmt with Eq::{not_equal, equal}
+3771 |pub extend ReleaseSavepointStmt with Eq::{not_equal, equal}
      |...
-3667 |pub extend RevokeOption with @moonbit-community/prettyprinter.Pretty::{pretty}
+3774 |pub extend RevokeOption with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3670 |pub extend RevokeOption with Debug::{to_repr}
+3777 |pub extend RevokeOption with Debug::{to_repr}
      |...
-3673 |pub extend RevokeOption with Eq::{not_equal, equal}
+3780 |pub extend RevokeOption with Eq::{not_equal, equal}
      |...
-3676 |pub extend RevokeStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3783 |pub extend RevokeStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3679 |pub extend RevokeStmt with Debug::{to_repr}
+3786 |pub extend RevokeStmt with Debug::{to_repr}
      |...
-3682 |pub extend RevokeStmt with Eq::{not_equal, equal}
+3789 |pub extend RevokeStmt with Eq::{not_equal, equal}
      |...
-3685 |pub extend RollbackStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3792 |pub extend RollbackStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3688 |pub extend RollbackStmt with Debug::{to_repr}
+3795 |pub extend RollbackStmt with Debug::{to_repr}
      |...
-3691 |pub extend RollbackStmt with Eq::{not_equal, equal}
+3798 |pub extend RollbackStmt with Eq::{not_equal, equal}
      |...
-3694 |pub extend SavepointStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3801 |pub extend SavepointStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3697 |pub extend SavepointStmt with Debug::{to_repr}
+3804 |pub extend SavepointStmt with Debug::{to_repr}
      |...
-3700 |pub extend SavepointStmt with Eq::{not_equal, equal}
+3807 |pub extend SavepointStmt with Eq::{not_equal, equal}
      |...
-3703 |pub extend SelectStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3810 |pub extend SelectStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3706 |pub extend SelectStmt with Debug::{to_repr}
+3813 |pub extend SelectStmt with Debug::{to_repr}
      |...
-3709 |pub extend SelectStmt with Eq::{not_equal, equal}
+3816 |pub extend SelectStmt with Eq::{not_equal, equal}
      |...
-3712 |pub extend SequenceLimit with @moonbit-community/prettyprinter.Pretty::{pretty}
+3819 |pub extend SequenceLimit with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3715 |pub extend SequenceLimit with Debug::{to_repr}
+3822 |pub extend SequenceLimit with Debug::{to_repr}
      |...
-3718 |pub extend SequenceLimit with Eq::{not_equal, equal}
+3825 |pub extend SequenceLimit with Eq::{not_equal, equal}
      |...
-3721 |pub extend SequenceOwnedBy with @moonbit-community/prettyprinter.Pretty::{
-3722 |  pretty,
-3723 |}
+3828 |pub extend SequenceOwnedBy with @moonbit-community/prettyprinter.Pretty::{
+3829 |  pretty,
+3830 |}
      |...
-3726 |pub extend SequenceOwnedBy with Debug::{to_repr}
+3833 |pub extend SequenceOwnedBy with Debug::{to_repr}
      |...
-3729 |pub extend SequenceOwnedBy with Eq::{not_equal, equal}
+3836 |pub extend SequenceOwnedBy with Eq::{not_equal, equal}
      |...
-3732 |pub extend SetAssignment with @moonbit-community/prettyprinter.Pretty::{pretty}
+3839 |pub extend SetAssignment with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3735 |pub extend SetAssignment with Debug::{to_repr}
+3842 |pub extend SetAssignment with Debug::{to_repr}
      |...
-3738 |pub extend SetAssignment with Eq::{not_equal, equal}
+3845 |pub extend SetAssignment with Eq::{not_equal, equal}
      |...
-3741 |pub extend SetExpr with Debug::{to_repr}
+3848 |pub extend SetExpr with Debug::{to_repr}
      |...
-3744 |pub extend SetExpr with Eq::{not_equal, equal}
+3851 |pub extend SetExpr with Eq::{not_equal, equal}
      |...
-3747 |pub extend SetOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
+3854 |pub extend SetOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3750 |pub extend SetOperator with Debug::{to_repr}
+3857 |pub extend SetOperator with Debug::{to_repr}
      |...
-3753 |pub extend SetOperator with Eq::{not_equal, equal}
+3860 |pub extend SetOperator with Eq::{not_equal, equal}
      |...
-3756 |pub extend SetScope with Debug::{to_repr}
+3863 |pub extend SetScope with Debug::{to_repr}
      |...
-3759 |pub extend SetScope with Eq::{not_equal, equal}
+3866 |pub extend SetScope with Eq::{not_equal, equal}
      |...
-3762 |pub extend SetStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3869 |pub extend SetStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3765 |pub extend SetStmt with Debug::{to_repr}
+3872 |pub extend SetStmt with Debug::{to_repr}
      |...
-3768 |pub extend SetStmt with Eq::{not_equal, equal}
+3875 |pub extend SetStmt with Eq::{not_equal, equal}
      |...
-3771 |pub extend ShowFilter with @moonbit-community/prettyprinter.Pretty::{pretty}
+3878 |pub extend ShowFilter with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3774 |pub extend ShowFilter with Debug::{to_repr}
+3881 |pub extend ShowFilter with Debug::{to_repr}
      |...
-3777 |pub extend ShowFilter with Eq::{not_equal, equal}
+3884 |pub extend ShowFilter with Eq::{not_equal, equal}
      |...
-3780 |pub extend ShowStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3887 |pub extend ShowStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3783 |pub extend ShowStmt with Debug::{to_repr}
+3890 |pub extend ShowStmt with Debug::{to_repr}
      |...
-3786 |pub extend ShowStmt with Eq::{not_equal, equal}
+3893 |pub extend ShowStmt with Eq::{not_equal, equal}
      |...
-3789 |pub extend ShowType with @moonbit-community/prettyprinter.Pretty::{pretty}
+3896 |pub extend ShowType with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3792 |pub extend ShowType with Debug::{to_repr}
+3899 |pub extend ShowType with Debug::{to_repr}
      |...
-3795 |pub extend ShowType with Eq::{not_equal, equal}
+3902 |pub extend ShowType with Eq::{not_equal, equal}
      |...
-3798 |pub extend SqliteOnConflict with @moonbit-community/prettyprinter.Pretty::{
-3799 |  pretty,
-3800 |}
+3905 |pub extend SqliteOnConflict with @moonbit-community/prettyprinter.Pretty::{
+3906 |  pretty,
+3907 |}
      |...
-3803 |pub extend SqliteOnConflict with Debug::{to_repr}
+3910 |pub extend SqliteOnConflict with Debug::{to_repr}
      |...
-3806 |pub extend SqliteOnConflict with Eq::{not_equal, equal}
+3913 |pub extend SqliteOnConflict with Eq::{not_equal, equal}
      |...
-3809 |pub extend Statement with @moonbit-community/prettyprinter.Pretty::{pretty}
+3916 |pub extend Statement with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3812 |pub extend Statement with Debug::{to_repr}
+3919 |pub extend Statement with Debug::{to_repr}
      |...
-3815 |pub extend Statement with Eq::{not_equal, equal}
+3922 |pub extend Statement with Eq::{not_equal, equal}
      |...
-3818 |pub extend Statements with @moonbit-community/prettyprinter.Pretty::{pretty}
+3925 |pub extend Statements with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3821 |pub extend Statements with Debug::{to_repr}
+3928 |pub extend Statements with Debug::{to_repr}
      |...
-3824 |pub extend Statements with Eq::{not_equal, equal}
+3931 |pub extend Statements with Eq::{not_equal, equal}
      |...
-3827 |pub extend Subscript with @moonbit-community/prettyprinter.Pretty::{pretty}
+3934 |pub extend Subscript with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3830 |pub extend Subscript with Debug::{to_repr}
+3937 |pub extend Subscript with Debug::{to_repr}
      |...
-3833 |pub extend Subscript with Eq::{not_equal, equal}
+3940 |pub extend Subscript with Eq::{not_equal, equal}
      |...
-3836 |pub extend TableAlias with @moonbit-community/prettyprinter.Pretty::{pretty}
+3943 |pub extend TableAlias with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3839 |pub extend TableAlias with Debug::{to_repr}
+3946 |pub extend TableAlias with Debug::{to_repr}
      |...
-3842 |pub extend TableAlias with Eq::{not_equal, equal}
+3949 |pub extend TableAlias with Eq::{not_equal, equal}
      |...
-3845 |pub extend TableConstraint with @moonbit-community/prettyprinter.Pretty::{
-3846 |  pretty,
-3847 |}
+3952 |pub extend TableConstraint with @moonbit-community/prettyprinter.Pretty::{
+3953 |  pretty,
+3954 |}
      |...
-3850 |pub extend TableConstraint with Debug::{to_repr}
+3957 |pub extend TableConstraint with Debug::{to_repr}
      |...
-3853 |pub extend TableConstraint with Eq::{not_equal, equal}
+3960 |pub extend TableConstraint with Eq::{not_equal, equal}
      |...
-3856 |pub extend TableFactor with @moonbit-community/prettyprinter.Pretty::{pretty}
+3963 |pub extend TableFactor with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3859 |pub extend TableFactor with Debug::{to_repr}
+3966 |pub extend TableFactor with Debug::{to_repr}
      |...
-3862 |pub extend TableFactor with Eq::{not_equal, equal}
+3969 |pub extend TableFactor with Eq::{not_equal, equal}
      |...
-3865 |pub extend TableRef with @moonbit-community/prettyprinter.Pretty::{pretty}
+3972 |pub extend TableRef with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3868 |pub extend TableRef with Debug::{to_repr}
+3975 |pub extend TableRef with Debug::{to_repr}
      |...
-3871 |pub extend TableRef with Eq::{not_equal, equal}
+3978 |pub extend TableRef with Eq::{not_equal, equal}
      |...
-3874 |pub extend Top with @moonbit-community/prettyprinter.Pretty::{pretty}
+3981 |pub extend Top with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3877 |pub extend Top with Debug::{to_repr}
+3984 |pub extend Top with Debug::{to_repr}
      |...
-3880 |pub extend Top with Eq::{not_equal, equal}
+3987 |pub extend Top with Eq::{not_equal, equal}
      |...
-3883 |pub extend TruncateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+3990 |pub extend TruncateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3886 |pub extend TruncateStmt with Debug::{to_repr}
+3993 |pub extend TruncateStmt with Debug::{to_repr}
      |...
-3889 |pub extend TruncateStmt with Eq::{not_equal, equal}
+3996 |pub extend TruncateStmt with Eq::{not_equal, equal}
      |...
-3892 |pub extend UnaryOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
+3999 |pub extend UnaryOperator with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3895 |pub extend UnaryOperator with Debug::{to_repr}
+4002 |pub extend UnaryOperator with Debug::{to_repr}
      |...
-3898 |pub extend UnaryOperator with Eq::{not_equal, equal}
+4005 |pub extend UnaryOperator with Eq::{not_equal, equal}
      |...
-3901 |pub extend UpdateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+4008 |pub extend UpdateStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3904 |pub extend UpdateStmt with Debug::{to_repr}
+4011 |pub extend UpdateStmt with Debug::{to_repr}
      |...
-3907 |pub extend UpdateStmt with Eq::{not_equal, equal}
+4014 |pub extend UpdateStmt with Eq::{not_equal, equal}
      |...
-3910 |pub extend UseStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
+4017 |pub extend UseStmt with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3913 |pub extend UseStmt with Debug::{to_repr}
+4020 |pub extend UseStmt with Debug::{to_repr}
      |...
-3916 |pub extend UseStmt with Eq::{not_equal, equal}
+4023 |pub extend UseStmt with Eq::{not_equal, equal}
      |...
-3919 |pub extend ViewColumnDef with @moonbit-community/prettyprinter.Pretty::{pretty}
+4026 |pub extend ViewColumnDef with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3922 |pub extend ViewColumnDef with Debug::{to_repr}
+4029 |pub extend ViewColumnDef with Debug::{to_repr}
      |...
-3925 |pub extend ViewColumnDef with Eq::{not_equal, equal}
+4032 |pub extend ViewColumnDef with Eq::{not_equal, equal}
      |...
-3928 |pub extend WindowFrameBound with @moonbit-community/prettyprinter.Pretty::{
-3929 |  pretty,
-3930 |}
+4035 |pub extend WindowFrameBound with @moonbit-community/prettyprinter.Pretty::{
+4036 |  pretty,
+4037 |}
      |...
-3933 |pub extend WindowFrameBound with Debug::{to_repr}
+4040 |pub extend WindowFrameBound with Debug::{to_repr}
      |...
-3936 |pub extend WindowFrameBound with Eq::{not_equal, equal}
+4043 |pub extend WindowFrameBound with Eq::{not_equal, equal}
      |...
-3939 |pub extend WindowFrameClause with @moonbit-community/prettyprinter.Pretty::{
-3940 |  pretty,
-3941 |}
+4046 |pub extend WindowFrameClause with @moonbit-community/prettyprinter.Pretty::{
+4047 |  pretty,
+4048 |}
      |...
-3944 |pub extend WindowFrameClause with Debug::{to_repr}
+4051 |pub extend WindowFrameClause with Debug::{to_repr}
      |...
-3947 |pub extend WindowFrameClause with Eq::{not_equal, equal}
+4054 |pub extend WindowFrameClause with Eq::{not_equal, equal}
      |...
-3950 |pub extend WindowFrameUnits with Debug::{to_repr}
+4057 |pub extend WindowFrameUnits with Debug::{to_repr}
      |...
-3953 |pub extend WindowFrameUnits with Eq::{not_equal, equal}
+4060 |pub extend WindowFrameUnits with Eq::{not_equal, equal}
      |...
-3956 |pub extend WindowSpec with @moonbit-community/prettyprinter.Pretty::{pretty}
+4063 |pub extend WindowSpec with @moonbit-community/prettyprinter.Pretty::{pretty}
      |...
-3959 |pub extend WindowSpec with Debug::{to_repr}
+4066 |pub extend WindowSpec with Debug::{to_repr}
      |...
-3962 |pub extend WindowSpec with Eq::{not_equal, equal}
+4069 |pub extend WindowSpec with Eq::{not_equal, equal}
      |...
 "" (escaped)
 ```
@@ -1622,108 +1729,110 @@ $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/generic.mbt'
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' outline 'src/lexer.mbt'
-  2 |suberror LexerError {
+  2 |#derive(Debug)
+  3 |suberror LexerError {
     |...
-  8 |pub(all) enum Token {
+  9 |#derive(Eq, Debug)
+ 10 |pub(all) enum Token {
     |...
- 50 |priv struct Lexer {
+ 52 |priv struct Lexer {
     |...
- 55 |pub fn tokenize(
- 56 |  dialect~ : &Dialect = MySQL::{ },
- 57 |  input : String,
- 58 |) -> Array[Token] raise LexerError {
+ 57 |pub fn tokenize(
+ 58 |  dialect~ : &Dialect = MySQL::{ },
+ 59 |  input : String,
+ 60 |) -> Array[Token] raise LexerError {
     |...
- 75 |fn Lexer::next_token(
- 76 |  self : Lexer,
- 77 |  input : StringView,
- 78 |) -> (Token, StringView) raise LexerError {
+ 77 |fn Lexer::next_token(
+ 78 |  self : Lexer,
+ 79 |  input : StringView,
+ 80 |) -> (Token, StringView) raise LexerError {
     |...
-136 |fn skip_whitespace(input : StringView) -> StringView {
+138 |fn skip_whitespace(input : StringView) -> StringView {
     |...
-146 |fn read_while(
-147 |  input : StringView,
-148 |  idx : Int32,
-149 |  predicate : (Char) -> Bool,
-150 |) -> (Int32, StringView) {
+148 |fn read_while(
+149 |  input : StringView,
+150 |  idx : Int32,
+151 |  predicate : (Char) -> Bool,
+152 |) -> (Int32, StringView) {
     |...
-160 |fn read_frac(input : StringView) -> (Token, StringView) {
+162 |fn read_frac(input : StringView) -> (Token, StringView) {
     |...
-170 |fn read_number(input : StringView) -> (Token, StringView) {
+172 |fn read_number(input : StringView) -> (Token, StringView) {
     |...
-180 |fn Lexer::read_identifier_or_keyword(
-181 |  self : Lexer,
-182 |  input : StringView,
-183 |) -> (Token, StringView) {
+182 |fn Lexer::read_identifier_or_keyword(
+183 |  self : Lexer,
+184 |  input : StringView,
+185 |) -> (Token, StringView) {
     |...
-411 |fn is_ascii_alphabetic_or_digit(ch : Char) -> Bool {
+413 |fn is_ascii_alphabetic_or_digit(ch : Char) -> Bool {
     |...
-417 |fn Lexer::read_dollar_placeholder(
-418 |  _self : Lexer,
-419 |  input : StringView,
-420 |) -> (Token, StringView) {
+419 |fn Lexer::read_dollar_placeholder(
+420 |  _self : Lexer,
+421 |  input : StringView,
+422 |) -> (Token, StringView) {
     |...
-435 |fn Lexer::read_colon_parameter(
-436 |  _self : Lexer,
-437 |  input : StringView,
-438 |) -> (Token, StringView) {
+437 |fn Lexer::read_colon_parameter(
+438 |  _self : Lexer,
+439 |  input : StringView,
+440 |) -> (Token, StringView) {
     |...
-454 |fn Lexer::read_at_parameter(
-455 |  _self : Lexer,
-456 |  input : StringView,
-457 |) -> (Token, StringView) {
+456 |fn Lexer::read_at_parameter(
+457 |  _self : Lexer,
+458 |  input : StringView,
+459 |) -> (Token, StringView) {
     |...
-471 |fn Lexer::read_single_quoted_string(
-472 |  self : Lexer,
-473 |  input : StringView,
-474 |) -> (Token, StringView) raise LexerError {
+473 |fn Lexer::read_single_quoted_string(
+474 |  self : Lexer,
+475 |  input : StringView,
+476 |) -> (Token, StringView) raise LexerError {
     |...
-518 |fn Lexer::read_double_quoted_string(
-519 |  self : Lexer,
-520 |  input : StringView,
-521 |) -> (Token, StringView) raise LexerError {
+520 |fn Lexer::read_double_quoted_string(
+521 |  self : Lexer,
+522 |  input : StringView,
+523 |) -> (Token, StringView) raise LexerError {
     |...
-561 |fn Lexer::read_backtick_quoted_identifier(
-562 |  self : Lexer,
-563 |  input : StringView,
-564 |) -> (Token, StringView) raise LexerError {
+563 |fn Lexer::read_backtick_quoted_identifier(
+564 |  self : Lexer,
+565 |  input : StringView,
+566 |) -> (Token, StringView) raise LexerError {
     |...
-592 |test "Double quoted string" {
+594 |test "Double quoted string" {
     |...
-604 |fn skip_line_comment(input : StringView) -> StringView {
+606 |fn skip_line_comment(input : StringView) -> StringView {
     |...
-615 |test "Lexing one keyword" {
+617 |test "Lexing one keyword" {
     |...
-622 |test "Lexing two keywords" {
+624 |test "Lexing two keywords" {
     |...
-629 |test "Lexing simple query" {
+631 |test "Lexing simple query" {
     |...
-651 |test "Lexing single quoted string" {
+653 |test "Lexing single quoted string" {
     |...
-669 |test "Lexing single quoted string with escaped quotes" {
+671 |test "Lexing single quoted string with escaped quotes" {
     |...
-687 |test "Lexing binary operators" {
+689 |test "Lexing binary operators" {
     |...
-697 |test "Skip line comment" {
+699 |test "Skip line comment" {
     |...
-720 |test "Skip line comment 2" {
+722 |test "Skip line comment 2" {
     |...
-743 |test "Decimal point only" {
+745 |test "Decimal point only" {
     |...
-765 |test "Decimal point" {
+767 |test "Decimal point" {
     |...
-785 |test "Complicated" {
+787 |test "Complicated" {
     |...
-797 |test "Single quoted string with escaped backslash" {
+799 |test "Single quoted string with escaped backslash" {
     |...
-815 |test "MySQL backtick quoted identifiers" {
+817 |test "MySQL backtick quoted identifiers" {
     |...
-833 |test "MySQL backtick with escaped backticks" {
+835 |test "MySQL backtick with escaped backticks" {
     |...
-851 |pub extend LexerError with Debug::{to_repr}
+853 |pub extend LexerError with Debug::{to_repr}
     |...
-854 |pub extend Token with Debug::{to_repr}
+856 |pub extend Token with Debug::{to_repr}
     |...
-857 |pub extend Token with Eq::{not_equal, equal}
+859 |pub extend Token with Eq::{not_equal, equal}
     |...
 "" (escaped)
 ```
