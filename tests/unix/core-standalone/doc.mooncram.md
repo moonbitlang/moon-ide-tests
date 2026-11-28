@@ -97,32 +97,37 @@ pub fn String::split(String, StringView) -> Iter[StringView]
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::new
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
-pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
+#label_migration(capacity, alias=size_hint, msg="Use capacity= instead")
+pub fn StringBuilder::StringBuilder(capacity? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
-   * `size_hint` : An optional initial capacity hint for the internal buffer,
+   * `capacity` : The initial capacity of the internal buffer,
    in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
-   buffer. `size_hint` may be ignored on some platforms, JS for example.
+   buffer; its first write still reserves at least 8 code units. `capacity`
+   may be ignored on some platforms, JS for example.
    Returns a new `StringBuilder` instance.
-   Aborts if `size_hint` is negative.
+   Aborts if `capacity` is negative.
 // target is:
 
 package "moonbitlang/core/builtin"
 #alias(new, deprecated)
-pub fn StringBuilder::StringBuilder(size_hint? : Int32) -> Self
+#label_migration(capacity, alias=size_hint, msg="Use capacity= instead")
+pub fn StringBuilder::StringBuilder(capacity? : Int32) -> Self
   Creates a new string builder with an optional initial capacity hint.
    Parameters:
-   * `size_hint` : An optional initial capacity hint for the internal buffer,
+   * `capacity` : The initial capacity of the internal buffer,
    in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
-   buffer. `size_hint` may be ignored on some platforms, JS for example.
+   buffer; its first write still reserves at least 8 code units. `capacity`
+   may be ignored on some platforms, JS for example.
    Returns a new `StringBuilder` instance.
-   Aborts if `size_hint` is negative.
+   Aborts if `capacity` is negative.
 ```
 
 ```mooncram
 $ moonx '../../../scripts/run-moon-ide.mbtx' doc StringBuilder::write_string
 package "moonbitlang/core/builtin"
 pub fn StringBuilder::write_string(Self, String) -> Unit
+  Writes a string to the StringBuilder.
 // target is:
 
 package "moonbitlang/core/builtin"
@@ -260,7 +265,7 @@ enum List[A] {
   pub fn[A, B] List::filter_map(Self[A], (A) -> B? raise?) -> Self[B] raise?
   pub fn[A] List::find(Self[A], (A) -> Bool raise?) -> A? raise?
   pub fn[A] List::find_index(Self[A], (A) -> Bool raise?) -> Int32? raise?
-  pub fn[A] List::findi(Self[A], (A, Int32) -> Bool raise?) -> A? raise?
+  pub fn[A] List::find_with_index(Self[A], (Int32, A) -> Bool raise?) -> A? raise?
   pub fn[A, B] List::flat_map(Self[A], (A) -> Self[B] raise?) -> Self[B] raise?
   pub fn[A] List::flatten(Self[Self[A]]) -> Self[A]
   pub fn[A, B] List::fold(Self[A], init~ : B, (B, A) -> B raise?) -> B raise?
@@ -366,4 +371,6 @@ pub fn[K, V, V2] HashMap::map(Self[K, V], (K, V) -> V2 raise?) -> Self[K, V2] ra
   Applies a function to each key-value pair in the map and
    returns a new map with the results, using the original keys.
    `f` may raise; the error propagates and `self` is left unchanged.
+   `f` must not modify `self`: the result is then unspecified (it may, for
+   example, hold a key twice), though memory-safe.
 ```

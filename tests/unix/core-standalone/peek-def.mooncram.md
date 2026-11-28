@@ -4,8 +4,8 @@
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::map'
 Found 1 symbols matching 'Array::map':
 
-`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1454-1475
-1454 | ///|
+`pub fn Array::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1456-1477
+1456 | ///|
      | /// Maps a function over the elements of the array.
      | ///
      | /// # Example
@@ -33,8 +33,8 @@ Found 1 symbols matching 'Array::map':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::filter'
 Found 1 symbols matching 'Array::filter':
 
-`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1547-1577
-1547 | ///|
+`pub fn Array::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:1549-1579
+1549 | ///|
      | /// Creates a new array containing all elements from the input array that satisfy
      | /// the given predicate function.
      | ///
@@ -71,8 +71,8 @@ Found 1 symbols matching 'Array::filter':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Array::fold'
 Found 1 symbols matching 'Array::fold':
 
-`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:2195-2225
-2195 | ///|
+`pub fn Array::fold` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/array.mbt:2197-2227
+2197 | ///|
      | /// Fold out values from an array according to certain rules.
      | /// This method traverses the array through `self.iter()`, so the traversal
      | /// bounds are fixed when folding starts.
@@ -109,8 +109,8 @@ Found 1 symbols matching 'Array::fold':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'String::length'
 Found 1 symbols matching 'String::length':
 
-`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1812-1833
-1812 | ///|
+`pub fn String::length` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/intrinsics.mbt:1723-1744
+1723 | ///|
      | /// Returns the number of UTF-16 code units in the string. Note that this is not
      | /// necessarily equal to the number of Unicode characters (code points) in the
      | /// string, as some characters may be represented by multiple UTF-16 code units.
@@ -138,8 +138,8 @@ Found 1 symbols matching 'String::length':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'String::split'
 Found 1 symbols matching 'String::split':
 
-`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1728-1739
-1728 | ///|
+`pub fn String::split` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/string_methods.mbt:1883-1894
+1883 | ///|
      | /// Splits the string into all substrings separated by the given separator.
      | /// 
      | /// If the string does not contain the separator and the separator is not empty,
@@ -157,24 +157,26 @@ Found 1 symbols matching 'String::split':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'StringBuilder::new'
 Found 1 symbols matching 'StringBuilder::new':
 
-`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:22-40
+`pub fn alias StringBuilder::new` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/stringbuilder_buffer.mbt:22-42
 22 | ///|
    | /// Creates a new string builder with an optional initial capacity hint.
    | ///
    | /// Parameters:
    | ///
-   | /// * `size_hint` : An optional initial capacity hint for the internal buffer,
+   | /// * `capacity` : The initial capacity of the internal buffer,
    | /// in UTF-16 code units. Defaults to 8. Use 0 to request an empty initial
-   | /// buffer. `size_hint` may be ignored on some platforms, JS for example.
+   | /// buffer; its first write still reserves at least 8 code units. `capacity`
+   | /// may be ignored on some platforms, JS for example.
    | ///
    | /// Returns a new `StringBuilder` instance.
    | ///
-   | /// Aborts if `size_hint` is negative.
+   | /// Aborts if `capacity` is negative.
    | ///
    | #alias(new, deprecated="Use `StringBuilder()` instead")
-   | pub fn StringBuilder::StringBuilder(size_hint~ : Int32 = 8) -> StringBuilder {
-   |   guard size_hint >= 0 else { abort("size_hint must be non-negative") }
-   |   let data : UninitializedArray[UInt16] = UninitializedArray::make(size_hint)
+   | #label_migration(capacity, alias=size_hint, msg="Use capacity= instead")
+   | pub fn StringBuilder::StringBuilder(capacity~ : Int32 = 8) -> StringBuilder {
+   |   guard capacity >= 0 else { abort("capacity must be non-negative") }
+   |   let data : UninitializedArray[UInt16] = UninitializedArray::make(capacity)
    |   { data, len: 0, }
    | } (no-eol)
 ```
@@ -348,8 +350,8 @@ Found 1 symbols matching 'Result::map':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::map'
 Found 1 symbols matching 'Iter::map':
 
-`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:339-366
-339 | ///|
+`pub fn Iter::map` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:340-367
+340 | ///|
     | /// Transforms the elements of the iterator using a mapping function.
     | ///
     | /// # Type Parameters
@@ -383,8 +385,8 @@ Found 1 symbols matching 'Iter::map':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::filter'
 Found 1 symbols matching 'Iter::filter':
 
-`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:309-337
-309 | ///|
+`pub fn Iter::filter` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:310-338
+310 | ///|
     | /// Filters the elements of the iterator based on a predicate function.
     | ///
     | /// # Type Parameters
@@ -403,7 +405,7 @@ Found 1 symbols matching 'Iter::filter':
     | /// # Note
     | /// The old iterator `self` must not be used again after calling `filter`.
     | pub fn[X] Iter::filter(self : Iter[X], f : (X) -> Bool) -> Iter[X] {
-    |   Iter::new(fn() {
+    |   Iter(fn() {
     |     for x in self {
     |       if f(x) {
     |         break Some(x)
@@ -419,8 +421,8 @@ Found 1 symbols matching 'Iter::filter':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def 'Iter::to_array'
 Found 1 symbols matching 'Iter::to_array':
 
-`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:809-822
-809 | ///|
+`pub fn Iter::to_array` in package moonbitlang/core/builtin at <MOON_HOME>/lib/core/builtin/iterator.mbt:810-823
+810 | ///|
     | /// Collects the elements of the iterator into an array.
     | /// The old iterator `self` must not be used again.
     | #alias(collect)
@@ -495,8 +497,8 @@ Found 1 symbols matching '@moonbitlang/core/list.List::map':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/hashmap.HashMap::get'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 
-`pub fn HashMap::get` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:208-241
-208 | ///|
+`pub fn HashMap::get` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:219-252
+219 | ///|
     | /// Retrieves the value associated with a given key in the hash map.
     | ///
     | /// Parameters:
@@ -531,8 +533,8 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
     |   }
     | }
 
-`pub fn HashMap::get` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:70-78
-70 | ///|
+`pub fn HashMap::get` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:73-81
+73 | ///|
    | /// Lookup a key from a hash map
    | #alias(find, deprecated)
    | pub fn[K : Eq + Hash, V] HashMap::get(self : HashMap[K, V], key : K) -> V? {
@@ -547,31 +549,35 @@ Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::get':
 $ moonx '../../../scripts/run-moon-ide.mbtx' peek-def '@moonbitlang/core/hashmap.HashMap::map'
 Found 2 symbols matching '@moonbitlang/core/hashmap.HashMap::map':
 
-`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:862-886
-862 | ///|
+`pub fn HashMap::map` in package moonbitlang/core/hashmap at <MOON_HOME>/lib/core/hashmap/hashmap.mbt:873-901
+873 | ///|
     | /// Applies a function to each key-value pair in the map and
     | /// returns a new map with the results, using the original keys.
     | ///
     | /// `f` may raise; the error propagates and `self` is left unchanged.
+    | ///
+    | /// `f` must not modify `self`: the result is then unspecified (it may, for
+    | /// example, hold a key twice), though memory-safe.
     | pub fn[K, V, V2] HashMap::map(
     |   self : HashMap[K, V],
     |   f : (K, V) -> V2 raise?,
     | ) -> HashMap[K, V2] raise? {
-    |   let other = {
-    |     capacity: self.capacity,
-    |     entries: FixedArray::make(self.capacity, None),
-    |     size: self.size,
-    |     capacity_mask: self.capacity_mask,
-    |   }
-    |   if self.size == 0 {
-    |     return other
-    |   }
-    |   for i in 0..<self.capacity {
-    |     if self.entries[i] is Some({ key, value, hash, psl, }) {
-    |       other.entries[i] = Some({ psl, key, value: f(key, value), hash, })
+    |   // `f` may modify `self`, so read the table captured here (a grow replaces
+    |   // `self.entries` but leaves this one intact) and count the entries actually
+    |   // written rather than trusting `self.size`.
+    |   let { entries, capacity, capacity_mask, .. } = self
+    |   let other_entries = FixedArray::make(capacity, None)
+    |   let mut size = 0
+    |   for i in 0..<capacity {
+    |     if entries[i] is Some({ key, value, hash, .. }) {
+    |       // Derive `psl` from the slot: a grow reuses entries and updates their
+    |       // stored `psl` for the new table.
+    |       let psl = (i - hash) & capacity_mask
+    |       other_entries[i] = Some({ psl, key, value: f(key, value), hash, })
+    |       size += 1
     |     }
     |   }
-    |   other
+    |   { capacity, entries: other_entries, size, capacity_mask, }
     | }
 
 `pub fn HashMap::map` in package moonbitlang/core/immut/hashmap at <MOON_HOME>/lib/core/immut/hashmap/HAMT.mbt:415-437
